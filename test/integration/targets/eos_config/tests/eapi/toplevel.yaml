@@ -1,0 +1,37 @@
+---
+- debug: msg="START eapi/toplevel.yaml"
+
+- name: setup
+  arista.eos.eos_config:
+    lines: hostname {{ inventory_hostname_short }}
+    match: none
+  become: yes
+
+- name: configure top level command
+  arista.eos.eos_config:
+    lines: hostname foo
+  become: yes
+  register: result
+
+- assert:
+    that:
+      - "result.changed == true"
+      - "'hostname foo' in result.updates"
+
+- name: configure top level command idempotent check
+  arista.eos.eos_config:
+    lines: hostname foo
+  become: yes
+  register: result
+
+- assert:
+    that:
+      - "result.changed == false"
+
+- name: teardown
+  arista.eos.eos_config:
+    lines: hostname {{ inventory_hostname_short }}
+    match: none
+  become: yes
+
+- debug: msg="END eapi/toplevel.yaml"
