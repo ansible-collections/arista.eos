@@ -181,7 +181,6 @@ def validate_privilege(value, module):
 
 def map_obj_to_commands(updates, module):
     commands = list()
-    state = module.params["state"]
     update_password = module.params["update_password"]
 
     for update in updates:
