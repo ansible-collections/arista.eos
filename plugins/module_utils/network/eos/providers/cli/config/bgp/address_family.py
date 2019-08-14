@@ -14,8 +14,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.c
     AFNeighbors,
 )
 
-from ansible.module_utils.common.network import to_netmask
-
 
 class AddressFamily(CliProvider):
     def render(self, config=None):
