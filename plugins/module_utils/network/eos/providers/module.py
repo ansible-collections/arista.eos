@@ -7,7 +7,6 @@ from ansible.module_utils.connection import Connection
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers import (
     providers,
 )
-
 from ansible.module_utils._text import to_text
 
 

@@ -133,7 +133,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
     run_commands,
 )
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
     check_args,

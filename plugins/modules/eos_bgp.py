@@ -317,7 +317,6 @@ from ansible.module_utils._text import to_text
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.module import (
     NetworkModule,
 )
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.process import (
     REDISTRIBUTE_PROTOCOLS,
 )

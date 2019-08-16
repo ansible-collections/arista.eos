@@ -20,7 +20,7 @@
 
   always:
   - name: Cleanup fake interface
-    cli_config:
+    network.cli.cli_config:
       config: no interface Management0
     become: yes
 
