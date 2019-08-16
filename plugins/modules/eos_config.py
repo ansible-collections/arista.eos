@@ -303,15 +303,12 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
     get_connection,
 )
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     run_commands,
 )
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
 )
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     check_args,
 )

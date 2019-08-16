@@ -9,19 +9,15 @@ from ansible.module_utils.network.common.utils import to_list
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
     register_provider,
 )
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
     CliProvider,
 )
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.neighbors import (
     Neighbors,
 )
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.address_family import (
     AddressFamily,
 )
-
 
 REDISTRIBUTE_PROTOCOLS = frozenset(
     ["ospf", "ospf3", "rip", "isis", "static", "connected"]
