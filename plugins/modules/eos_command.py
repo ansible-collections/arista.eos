@@ -165,7 +165,6 @@ from ansible.module_utils.network.common.utils import (
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     run_commands,
 )
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
 )
