@@ -18,6 +18,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.fac
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.interfaces.interfaces import (
     InterfacesFacts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.vlans.vlans import (
+    VlansFacts,
+)
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.legacy.base import (
     Default,
     Hardware,
@@ -29,7 +32,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.legac
 FACT_LEGACY_SUBSETS = dict(
     default=Default, hardware=Hardware, interfaces=Interfaces, config=Config
 )
-FACT_RESOURCE_SUBSETS = dict(interfaces=InterfacesFacts)
+FACT_RESOURCE_SUBSETS = dict(interfaces=InterfacesFacts, vlans=VlansFacts)
 
 
 class Facts(FactsBase):
