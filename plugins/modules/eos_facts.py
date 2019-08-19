@@ -50,7 +50,7 @@ options:
         can also be used with an initial C(M(!)) to specify that a
         specific subset should not be collected.
     required: false
-    choices: ['all', '!all', 'interfaces', '!interfaces']
+    choices: ['all', '!all', 'interfaces', '!interfaces', 'vlans', '!vlans']
     type: list
     version_added: "2.9"
 """
