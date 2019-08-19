@@ -9,7 +9,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-CHOICES = ["all", "!all", "interfaces", "!interfaces"]
+CHOICES = ["all", "!all", "interfaces", "!interfaces", "vlans", "!vlans"]
 
 
 class FactsArgs(object):
