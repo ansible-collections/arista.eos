@@ -30,6 +30,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.lacp.
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.lag_interfaces.lag_interfaces import (
     Lag_interfacesFacts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.lldp_global.lldp_global import (
+    Lldp_globalFacts,
+)
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.vlans.vlans import (
     VlansFacts,
 )
@@ -50,6 +53,7 @@ FACT_RESOURCE_SUBSETS = dict(
     l3_interfaces=L3_interfacesFacts,
     lacp=LacpFacts,
     lag_interfaces=Lag_interfacesFacts,
+    lldp_global=Lldp_globalFacts,
     vlans=VlansFacts,
 )
 
