@@ -54,7 +54,7 @@ options:
     choices: [
         'all', '!all', 'interfaces', '!interfaces', 'l2_interfaces', '!l2_interfaces',
         'l3_interfaces', '!l3_interfaces', 'lacp', '!lacp', 'lag_interfaces', '!lag_interfaces',
-        'vlans', '!vlans',
+        'lldp_global', '!lldp_global', 'vlans', '!vlans',
     ]
     version_added: "2.9"
 """
