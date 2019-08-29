@@ -1,9 +1,10 @@
+#
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 """
-The eos_vlans class
+The eos_lldp_interfaces class
 It is in this file where the current configuration (as dict)
 is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to it's desired end-state is
@@ -25,16 +26,16 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts
 )
 
 
-class Vlans(ConfigBase):
+class Lldp_interfaces(ConfigBase):
     """
-    The eos_vlans class
+    The eos_lldp_interfaces class
     """
 
     gather_subset = ["!all", "!min"]
 
-    gather_network_resources = ["vlans"]
+    gather_network_resources = ["lldp_interfaces"]
 
-    def get_vlans_facts(self):
+    def get_lldp_interfaces_facts(self):
         """ Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
@@ -43,10 +44,12 @@ class Vlans(ConfigBase):
         facts, _warnings = Facts(self._module).get_facts(
             self.gather_subset, self.gather_network_resources
         )
-        vlans_facts = facts["ansible_network_resources"].get("vlans")
-        if not vlans_facts:
+        lldp_interfaces_facts = facts["ansible_network_resources"].get(
+            "lldp_interfaces"
+        )
+        if not lldp_interfaces_facts:
             return []
-        return vlans_facts
+        return lldp_interfaces_facts
 
     def execute_module(self):
         """ Execute the module
@@ -58,24 +61,24 @@ class Vlans(ConfigBase):
         warnings = list()
         commands = list()
 
-        existing_vlans_facts = self.get_vlans_facts()
-        commands.extend(self.set_config(existing_vlans_facts))
+        existing_lldp_interfaces_facts = self.get_lldp_interfaces_facts()
+        commands.extend(self.set_config(existing_lldp_interfaces_facts))
         if commands:
             if not self._module.check_mode:
                 self._connection.edit_config(commands)
             result["changed"] = True
         result["commands"] = commands
 
-        changed_vlans_facts = self.get_vlans_facts()
+        changed_lldp_interfaces_facts = self.get_lldp_interfaces_facts()
 
-        result["before"] = existing_vlans_facts
+        result["before"] = existing_lldp_interfaces_facts
         if result["changed"]:
-            result["after"] = changed_vlans_facts
+            result["after"] = changed_lldp_interfaces_facts
 
         result["warnings"] = warnings
         return result
 
-    def set_config(self, existing_vlans_facts):
+    def set_config(self, existing_lldp_interfaces_facts):
         """ Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
@@ -84,7 +87,7 @@ class Vlans(ConfigBase):
                   to the desired configuration
         """
         want = self._module.params["config"]
-        have = existing_vlans_facts
+        have = existing_lldp_interfaces_facts
         resp = self.set_state(want, have)
         return to_list(resp)
 
@@ -98,8 +101,8 @@ class Vlans(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
-        want = param_list_to_dict(want, "vlan_id", False)
-        have = param_list_to_dict(have, "vlan_id", False)
+        want = param_list_to_dict(want, remove_key=False)
+        have = param_list_to_dict(have, remove_key=False)
         if state == "overridden":
             commands = self._state_overridden(want, have)
         elif state == "deleted":
@@ -123,7 +126,7 @@ class Vlans(ConfigBase):
             if key in have:
                 extant = have[key]
             else:
-                extant = dict(vlan_id=key)
+                extant = dict(name=key)
 
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
@@ -145,7 +148,7 @@ class Vlans(ConfigBase):
             if key in want:
                 desired = want[key]
             else:
-                desired = dict(vlan_id=key)
+                desired = dict(name=key)
 
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
@@ -167,7 +170,7 @@ class Vlans(ConfigBase):
             if key in have:
                 extant = have[key]
             else:
-                extant = dict(vlan_id=key)
+                extant = dict(name=key)
 
             add_config = dict_diff(extant, desired)
 
@@ -185,11 +188,11 @@ class Vlans(ConfigBase):
         """
         commands = []
         for key in want.keys():
-            desired = dict(vlan_id=key)
+            desired = dict(name=key)
             if key in have:
                 extant = have[key]
             else:
-                extant = dict(vlan_id=key)
+                extant = dict(name=key)
 
             del_config = dict_diff(desired, extant)
 
@@ -198,18 +201,19 @@ class Vlans(ConfigBase):
         return commands
 
 
-def generate_commands(vlan_id, to_set, to_remove):
+def generate_commands(name, to_set, to_remove):
     commands = []
     for key, value in to_set.items():
         if value is None:
             continue
 
-        commands.append("{0} {1}".format(key, value))
+        prefix = "" if value else "no "
+        commands.append("{0}lldp {1}".format(prefix, key))
 
-    for key in to_remove.keys():
-        commands.append("no {0}".format(key))
+    for key in to_remove:
+        commands.append("lldp {0}".format(key))
 
     if commands:
-        commands.insert(0, "vlan {0}".format(vlan_id))
+        commands.insert(0, "interface {0}".format(name))
 
     return commands
