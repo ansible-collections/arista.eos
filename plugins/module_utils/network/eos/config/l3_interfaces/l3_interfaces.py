@@ -14,11 +14,16 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from ansible.module_utils.network.common.utils import to_list
-
 from ansible.module_utils.network.common.cfg.base import ConfigBase
+from ansible.module_utils.network.common.utils import (
+    to_list,
+    param_list_to_dict,
+)
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
+    normalize_interface,
 )
 
 
@@ -97,6 +102,8 @@ class L3_interfaces(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
+        want = param_list_to_dict(want)
+        have = param_list_to_dict(have)
         if state == "overridden":
             commands = self._state_overridden(want, have)
         elif state == "deleted":
@@ -116,18 +123,18 @@ class L3_interfaces(ConfigBase):
                   to the desired configuration
         """
         commands = []
-        for interface in want:
-            for extant in have:
-                if interface["name"] == extant["name"]:
-                    break
+        for key, desired in want.items():
+            interface_name = normalize_interface(key)
+            if interface_name in have:
+                extant = have[interface_name]
             else:
-                extant = dict(name=interface["name"])
+                extant = dict()
 
-            intf_commands = set_interface(interface, extant)
-            intf_commands.extend(clear_interface(interface, extant))
+            intf_commands = set_interface(desired, extant)
+            intf_commands.extend(clear_interface(desired, extant))
 
             if intf_commands:
-                commands.append("interface {0}".format(interface["name"]))
+                commands.append("interface {0}".format(interface_name))
                 commands.extend(intf_commands)
 
         return commands
@@ -141,22 +148,21 @@ class L3_interfaces(ConfigBase):
                   to the desired configuration
         """
         commands = []
-        for extant in have:
-            for interface in want:
-                if extant["name"] == interface["name"]:
-                    break
+        for key, extant in have.items():
+            if key in want:
+                desired = want[key]
             else:
-                interface = dict(name=extant["name"])
-            if interface.get("ipv4"):
-                for ipv4 in interface["ipv4"]:
+                desired = dict()
+            if desired.get("ipv4"):
+                for ipv4 in desired["ipv4"]:
                     if ipv4["secondary"] is None:
                         del ipv4["secondary"]
 
-            intf_commands = set_interface(interface, extant)
-            intf_commands.extend(clear_interface(interface, extant))
+            intf_commands = set_interface(desired, extant)
+            intf_commands.extend(clear_interface(desired, extant))
 
             if intf_commands:
-                commands.append("interface {0}".format(interface["name"]))
+                commands.append("interface {0}".format(key))
                 commands.extend(intf_commands)
 
         return commands
@@ -170,17 +176,17 @@ class L3_interfaces(ConfigBase):
                   the current configuration
         """
         commands = []
-        for interface in want:
-            for extant in have:
-                if extant["name"] == interface["name"]:
-                    break
+        for key, desired in want.items():
+            interface_name = normalize_interface(key)
+            if interface_name in have:
+                extant = have[interface_name]
             else:
-                extant = dict(name=interface["name"])
+                extant = dict()
 
-            intf_commands = set_interface(interface, extant)
+            intf_commands = set_interface(desired, extant)
 
             if intf_commands:
-                commands.append("interface {0}".format(interface["name"]))
+                commands.append("interface {0}".format(interface_name))
                 commands.extend(intf_commands)
 
         return commands
@@ -194,19 +200,17 @@ class L3_interfaces(ConfigBase):
                   of the provided objects
         """
         commands = []
-        for interface in want:
-            for extant in have:
-                if extant["name"] == interface["name"]:
-                    break
+        for key in want:
+            desired = dict()
+            if key in have:
+                extant = have[key]
             else:
                 continue
 
-            # Clearing all args, send empty dictionary
-            interface = dict(name=interface["name"])
-            intf_commands = clear_interface(interface, extant)
+            intf_commands = clear_interface(desired, extant)
 
             if intf_commands:
-                commands.append("interface {0}".format(interface["name"]))
+                commands.append("interface {0}".format(key))
                 commands.extend(intf_commands)
 
         return commands

@@ -1,4 +1,3 @@
-#
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
@@ -24,6 +23,9 @@ from ansible.module_utils.network.common.utils import (
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
+    normalize_interface,
+)
 
 
 class Lacp_interfaces(ConfigBase):
@@ -34,9 +36,6 @@ class Lacp_interfaces(ConfigBase):
     gather_subset = ["!all", "!min"]
 
     gather_network_resources = ["lacp_interfaces"]
-
-    def __init__(self, module):
-        super(Lacp_interfaces, self).__init__(module)
 
     def get_lacp_interfaces_facts(self):
         """ Get the 'facts' (the current configuration)
@@ -126,8 +125,9 @@ class Lacp_interfaces(ConfigBase):
         """
         commands = []
         for key, desired in want.items():
-            if key in have:
-                extant = have[key]
+            interface_name = normalize_interface(key)
+            if interface_name in have:
+                extant = have[interface_name]
             else:
                 extant = dict()
 
@@ -170,8 +170,9 @@ class Lacp_interfaces(ConfigBase):
         """
         commands = []
         for key, desired in want.items():
-            if key in have:
-                extant = have[key]
+            interface_name = normalize_interface(key)
+            if interface_name in have:
+                extant = have[interface_name]
             else:
                 extant = dict()
 
@@ -190,12 +191,12 @@ class Lacp_interfaces(ConfigBase):
                   of the provided objects
         """
         commands = []
-        for key in want.keys():
+        for key in want:
             desired = dict()
             if key in have:
                 extant = have[key]
             else:
-                extant = dict()
+                continue
 
             del_config = dict_diff(desired, extant)
 
