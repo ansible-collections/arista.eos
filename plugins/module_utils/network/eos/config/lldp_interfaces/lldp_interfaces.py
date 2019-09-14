@@ -1,4 +1,3 @@
-#
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
@@ -23,6 +22,9 @@ from ansible.module_utils.network.common.utils import (
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
+    normalize_interface,
 )
 
 
@@ -123,15 +125,18 @@ class Lldp_interfaces(ConfigBase):
         """
         commands = []
         for key, desired in want.items():
-            if key in have:
-                extant = have[key]
+            interface_name = normalize_interface(key)
+            if interface_name in have:
+                extant = have[interface_name]
             else:
-                extant = dict(name=key)
+                extant = dict(name=interface_name)
 
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
 
-            commands.extend(generate_commands(key, add_config, del_config))
+            commands.extend(
+                generate_commands(interface_name, add_config, del_config)
+            )
 
         return commands
 
@@ -167,14 +172,15 @@ class Lldp_interfaces(ConfigBase):
         """
         commands = []
         for key, desired in want.items():
-            if key in have:
-                extant = have[key]
+            interface_name = normalize_interface(key)
+            if interface_name in have:
+                extant = have[interface_name]
             else:
-                extant = dict(name=key)
+                extant = dict(name=interface_name)
 
             add_config = dict_diff(extant, desired)
 
-            commands.extend(generate_commands(key, add_config, {}))
+            commands.extend(generate_commands(interface_name, add_config, {}))
 
         return commands
 
@@ -188,15 +194,16 @@ class Lldp_interfaces(ConfigBase):
         """
         commands = []
         for key in want.keys():
-            desired = dict(name=key)
-            if key in have:
-                extant = have[key]
+            interface_name = normalize_interface(key)
+            desired = dict(name=interface_name)
+            if interface_name in have:
+                extant = have[interface_name]
             else:
-                extant = dict(name=key)
+                continue
 
             del_config = dict_diff(desired, extant)
 
-            commands.extend(generate_commands(key, {}, del_config))
+            commands.extend(generate_commands(interface_name, {}, del_config))
 
         return commands
 
