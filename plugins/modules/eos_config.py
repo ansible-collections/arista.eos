@@ -413,7 +413,7 @@ def main():
     flags = ["all"] if module.params["defaults"] else []
     connection = get_connection(module)
 
-    # Refuse to diff_against: session if essions are disabled
+    # Refuse to diff_against: session if sessions are disabled
     if (
         module.params["diff_against"] == "session"
         and not connection.supports_sessions
