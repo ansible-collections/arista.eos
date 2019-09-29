@@ -139,7 +139,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
-    check_args,
 )
 
 
@@ -380,7 +379,6 @@ def main():
     )
 
     warnings = list()
-    check_args(module, warnings)
 
     result = {"changed": False}
 
