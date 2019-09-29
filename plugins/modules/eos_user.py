@@ -165,7 +165,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
-    check_args,
 )
 from ansible.module_utils.six import iteritems
 
@@ -387,8 +386,6 @@ def main():
             'The "password" argument is used to authenticate the current connection. '
             + 'To set a user password use "configured_password" instead.'
         )
-
-    check_args(module, warnings)
 
     result = {"changed": False}
     if warnings:

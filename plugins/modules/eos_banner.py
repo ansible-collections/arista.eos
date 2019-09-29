@@ -96,7 +96,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
-    check_args,
 )
 from ansible.module_utils.six import string_types
 from ansible.module_utils._text import to_text
@@ -193,7 +192,6 @@ def main():
     )
 
     warnings = list()
-    check_args(module, warnings)
 
     result = {"changed": False}
     if warnings:
