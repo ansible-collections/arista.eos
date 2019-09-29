@@ -309,9 +309,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    check_args,
-)
 
 
 def get_candidate(module):
@@ -401,7 +398,6 @@ def main():
     )
 
     warnings = list()
-    check_args(module, warnings)
 
     result = {"changed": False}
     if warnings:
