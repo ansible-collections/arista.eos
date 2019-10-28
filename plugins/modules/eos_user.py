@@ -381,11 +381,6 @@ def main():
     )
 
     warnings = list()
-    if module.params["password"] and not module.params["configured_password"]:
-        warnings.append(
-            'The "password" argument is used to authenticate the current connection. '
-            + 'To set a user password use "configured_password" instead.'
-        )
 
     result = {"changed": False}
     if warnings:
