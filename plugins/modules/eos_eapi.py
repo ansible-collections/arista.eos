@@ -103,6 +103,12 @@ options:
     type: bool
     default: 'no'
     aliases: ['enable_socket']
+  timeout:
+    description:
+      - The time (in seconds) to wait for the eAPI configuration to be
+        reflected in the running-config.
+    type: int
+    default: 30
   vrf:
     description:
       - The C(vrf) argument will configure eAPI to listen for connections
@@ -185,10 +191,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
 
 
 def check_transport(module):
-    transport = module.params["transport"]
-    provider_transport = (module.params["provider"] or {}).get("transport")
+    transport = (module.params["provider"] or {}).get("transport")
 
-    if "eapi" in (transport, provider_transport):
+    if transport == "eapi":
         module.fail_json(
             msg="eos_eapi module is only supported over cli transport"
         )
@@ -284,7 +289,7 @@ def map_obj_to_commands(updates, module, warnings):
         else:
             add("protocol unix-socket")
 
-    if needs_update("state") and not needs_update("vrf"):
+    if needs_update("state"):
         if want["state"] == "stopped":
             add("shutdown")
         elif want["state"] == "started":
@@ -356,7 +361,7 @@ def verify_state(updates, module):
         ("socket", "unixSocketServer"),
     ]
 
-    timeout = module.params["timeout"] or 30
+    timeout = module.params["timeout"]
     state = module.params["state"]
 
     while invalid_state:
@@ -404,6 +409,7 @@ def main():
         local_http=dict(aliases=["enable_local_http"], type="bool"),
         local_http_port=dict(type="int"),
         socket=dict(aliases=["enable_socket"], type="bool"),
+        timeout=dict(type="int", default=30),
         vrf=dict(default="default"),
         config=dict(),
         state=dict(default="started", choices=["stopped", "started"]),
