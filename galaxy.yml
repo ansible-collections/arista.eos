@@ -6,4 +6,3 @@ name: eos
 namespace: arista
 readme: README.rst
 repository: https://github.com/ansible-network/ansible_collections.arista.eos
-version: 0.0.1
