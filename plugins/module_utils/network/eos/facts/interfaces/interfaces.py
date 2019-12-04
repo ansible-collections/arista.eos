@@ -40,6 +40,9 @@ class InterfacesFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_device_data(self, connection):
+        return connection.get("show running-config | section ^interface")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for interfaces
 
@@ -50,7 +53,7 @@ class InterfacesFacts(object):
         :returns: facts
         """
         if not data:
-            data = connection.get("show running-config | section ^interface")
+            data = self.get_device_data(connection)
 
         # operate on a collection of resource x
         config = data.split("interface ")
