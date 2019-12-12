@@ -1,66 +1,51 @@
 ---
 - debug: msg="START cli/basic-login.yaml on connection={{ ansible_connection }}"
-
 - name: Remove previous login banner
-  arista.eos.eos_config:
+  eos_config:
     lines: no banner login
-  become: yes
-
+  become: true
 - name: Create login banner
-  arista.eos.eos_banner: &multiline
+  eos_banner: &id001
     banner: login
-    text: |
-      Junk login banner
+    text: 'Junk login banner
+
       over multiple lines
+
+      '
     state: present
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == true"
-      - "'banner login' in result.commands[0]" # does this break due to "contains?"
-      # Ensure sessions contains epoc. Will fail after 18th May 2033
-      - "'ansible_1' in result.session_name"
-
+      - result.changed == true
+      - '''banner login'' in result.commands[0]'
+      - '''ansible_1'' in result.session_name'
 - name: Create login banner again (idempotent)
-  arista.eos.eos_banner: *multiline
-  become: yes
+  eos_banner: *id001
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == false"
-      - "result.commands | length == 0"
-      # Ensure sessions contains epoc. Will fail after 18th May 2033
-      - "result.session_name is not defined"
-
+      - result.changed == false
+      - result.commands | length == 0
+      - result.session_name is not defined
 - name: Remove login
-  arista.eos.eos_banner: &remove
+  eos_banner: &id002
     banner: login
     state: absent
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == true"
-      - "'no banner login' in result.commands" # does this break due to "contains?"
-      # Ensure sessions contains epoc. Will fail after 18th May 2033
-      - "'ansible_1' in result.session_name"
-
+      - result.changed == true
+      - '''no banner login'' in result.commands'
+      - '''ansible_1'' in result.session_name'
 - name: Remove login again (idempotent)
-  arista.eos.eos_banner: *remove
-  become: yes
+  eos_banner: *id002
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == false"
-      - "result.commands | length == 0"
-      # Ensure sessions contains epoc. Will fail after 18th May 2033
-      - "result.session_name is not defined"
-
-# FIXME add in tests for everything defined in docs
-# FIXME Test state:absent + test:
-# FIXME Without powers ensure "privileged mode required"
+      - result.changed == false
+      - result.commands | length == 0
+      - result.session_name is not defined

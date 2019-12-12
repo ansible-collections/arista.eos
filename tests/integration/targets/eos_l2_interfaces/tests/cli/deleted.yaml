@@ -1,37 +1,32 @@
 ---
 - include_tasks: reset_config.yml
-
 - set_fact:
     config:
       - name: Ethernet1
       - name: Ethernet2
-
 - eos_facts:
     gather_network_resources: l2_interfaces
-  become: yes
-
+  become: true
 - name: Delete EOS L2 interfaces as in given arguments.
-  arista.eos.eos_l2_interfaces:
-    config: "{{ config }}"
+  eos_l2_interfaces:
+    config: '{{ config }}'
     state: deleted
   register: result
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before) == []"
-
+      - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before)
+        == []
 - eos_facts:
     gather_network_resources: l2_interfaces
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.after) == []"
-
+      - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.after)
+        == []
 - set_fact:
-    expected_config: "{{ config }} + [{'name': 'Management1'}]"
-
+    expected_config: '{{ config }} + [{''name'': ''Management1''}]'
 - assert:
     that:
-      - "ansible_facts.network_resources.l2_interfaces|symmetric_difference(expected_config) == []"
+      - ansible_facts.network_resources.l2_interfaces|symmetric_difference(expected_config)
+        == []

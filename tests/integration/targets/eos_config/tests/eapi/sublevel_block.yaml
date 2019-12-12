@@ -1,8 +1,7 @@
 ---
 - debug: msg="START eapi/sublevel_block.yaml"
-
 - name: setup
-  arista.eos.eos_config:
+  eos_config:
     lines:
       - 10 permit ip host 192.0.2.1 any log
       - 20 permit ip host 192.0.2.2 any log
@@ -10,10 +9,9 @@
     parents: ip access-list test
     before: no ip access-list test
     match: none
-  become: yes
-
+  become: true
 - name: configure sub level command using block resplace
-  arista.eos.eos_config:
+  eos_config:
     lines:
       - 10 permit ip host 192.0.2.1 any log
       - 20 permit ip host 192.0.2.2 any log
@@ -22,20 +20,18 @@
     parents: ip access-list test
     after: end
     replace: block
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == true"
-      - "'ip access-list test' in result.updates"
-      - "'10 permit ip host 192.0.2.1 any log' in result.updates"
-      - "'20 permit ip host 192.0.2.2 any log' in result.updates"
-      - "'30 permit ip host 192.0.2.3 any log' in result.updates"
-      - "'40 permit ip host 192.0.2.4 any log' in result.updates"
-
+      - result.changed == true
+      - '''ip access-list test'' in result.updates'
+      - '''10 permit ip host 192.0.2.1 any log'' in result.updates'
+      - '''20 permit ip host 192.0.2.2 any log'' in result.updates'
+      - '''30 permit ip host 192.0.2.3 any log'' in result.updates'
+      - '''40 permit ip host 192.0.2.4 any log'' in result.updates'
 - name: check sub level command using block replace
-  arista.eos.eos_config:
+  eos_config:
     lines:
       - 10 permit ip host 192.0.2.1 any log
       - 20 permit ip host 192.0.2.2 any log
@@ -43,17 +39,14 @@
       - 40 permit ip host 192.0.2.4 any log
     parents: ip access-list test
     replace: block
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == false"
-
+      - result.changed == false
 - name: teardown
-  arista.eos.eos_config:
+  eos_config:
     lines: no ip access-list test
     match: none
-  become: yes
-
+  become: true
 - debug: msg="END eapi/sublevel_block.yaml"

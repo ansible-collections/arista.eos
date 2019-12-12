@@ -36,18 +36,16 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """
----
-module: eos_lacp
-version_added: 2.9
-short_description: Manage Global Link Aggregation Control Protocol (LACP) on Arista EOS devices.
+DOCUMENTATION = """module: eos_lacp
+short_description: Manage Global Link Aggregation Control Protocol (LACP) on Arista
+  EOS devices.
 description:
-  - This module manages Global Link Aggregation Control Protocol (LACP) on Arista EOS devices.
+- This module manages Global Link Aggregation Control Protocol (LACP) on Arista EOS
+  devices.
 author: Nathaniel Case (@Qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
-- This module works with connection C(network_cli). See the
-  L(EOS Platform Options,../network/user_guide/platform_eos.html).
+- This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
     description: LACP global options.
@@ -59,13 +57,13 @@ options:
         suboptions:
           priority:
             description:
-              - The system priority to use in LACP negotiations.
-              - Lower value is higher priority.
-              - Refer to vendor documentation for valid values.
+            - The system priority to use in LACP negotiations.
+            - Lower value is higher priority.
+            - Refer to vendor documentation for valid values.
             type: int
   state:
     description:
-      - The state of the configuration after module completion.
+    - The state of the configuration after module completion.
     type: str
     choices:
     - merged

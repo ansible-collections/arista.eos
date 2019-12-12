@@ -1,6 +1,5 @@
 ---
 - include_tasks: reset_config.yml
-
 - set_fact:
     config:
       - name: Ethernet1
@@ -9,31 +8,27 @@
       - name: Ethernet2
         ipv4:
           - address: 203.0.113.227/31
-
 - eos_facts:
     gather_network_resources: l3_interfaces
-  become: yes
-
+  become: true
 - name: Merge provided configuration with device configuration.
-  arista.eos.eos_l3_interfaces:
-    config: "{{ config }}"
+  eos_l3_interfaces:
+    config: '{{ config }}'
     state: merged
   register: result
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before) == []"
-
+      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
+        == []
 - eos_facts:
     gather_network_resources: l3_interfaces
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after) == []"
-  become: yes
-
+      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after)
+        == []
+  become: true
 - set_fact:
     expected_config:
       - name: Ethernet1
@@ -49,7 +44,7 @@
       - name: Management1
         ipv4:
           - address: dhcp
-
 - assert:
     that:
-      - "ansible_facts.network_resources.l3_interfaces|symmetric_difference(expected_config) == []"
+      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(expected_config)
+        == []
