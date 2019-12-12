@@ -1,34 +1,27 @@
 ---
 - include_tasks: reset_config.yml
-
 - set_fact:
     config:
       system:
         priority: 20
-
 - eos_facts:
     gather_network_resources: lacp
-  become: yes
-
+  become: true
 - name: Merge provided lacp configuration with device configuration
-  arista.eos.eos_lacp:
-    config: "{{ config }}"
+  eos_lacp:
+    config: '{{ config }}'
     state: merged
   register: result
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.lacp == result.before"
-
+      - ansible_facts.network_resources.lacp == result.before
 - eos_facts:
     gather_network_resources: lacp
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.lacp == result.after"
-
+      - ansible_facts.network_resources.lacp == result.after
 - assert:
     that:
-      - "config == ansible_facts.network_resources.lacp"
+      - config == ansible_facts.network_resources.lacp

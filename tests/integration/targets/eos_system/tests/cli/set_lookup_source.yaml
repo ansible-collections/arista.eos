@@ -1,68 +1,58 @@
 ---
-- debug: msg="START cli/set_lookup_source.yaml on connection={{ ansible_connection }}"
-
+- debug: msg="START cli/set_lookup_source.yaml on connection={{ ansible_connection
+    }}"
 - name: setup
-  arista.eos.eos_config:
+  eos_config:
     lines:
       - no ip domain lookup source-interface
       - vrf definition ansible
     match: none
-  become: yes
-
+  become: true
 - name: configure lookup_source
-  arista.eos.eos_system:
+  eos_system:
     lookup_source: Management1
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
       - result.changed == true
-      - "'ip domain lookup source-interface Management1' in result.commands"
-
+      - '''ip domain lookup source-interface Management1'' in result.commands'
 - name: verify lookup_source
-  arista.eos.eos_system:
+  eos_system:
     lookup_source: Management1
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
       - result.changed == false
-
 - name: change to vrf
-  arista.eos.eos_system:
+  eos_system:
     lookup_source:
       - interface: Management1
         vrf: ansible
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
       - result.changed == true
-      - "'no ip domain lookup source-interface Management1' in result.commands"
-      - "'ip domain lookup vrf ansible source-interface Management1' in result.commands"
+      - '''no ip domain lookup source-interface Management1'' in result.commands'
+      - '''ip domain lookup vrf ansible source-interface Management1'' in result.commands'
       - result.commands|length == 2
-
 - name: verify change to vrf
-  arista.eos.eos_system:
+  eos_system:
     lookup_source:
       - interface: Management1
         vrf: ansible
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
       - result.changed == false
-
 - name: teardown
-  arista.eos.eos_config:
+  eos_config:
     lines:
       - no ip domain lookup source-interface
       - no vrf definition ansible
     match: none
-  become: yes
-
+  become: true
 - debug: msg="END cli/set_lookup_source.yaml on connection={{ ansible_connection }}"

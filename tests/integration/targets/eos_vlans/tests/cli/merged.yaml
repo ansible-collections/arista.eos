@@ -1,34 +1,29 @@
 ---
 - include_tasks: reset_config.yml
-
 - set_fact:
     config:
       - vlan_id: 20
         state: suspend
-
 - eos_facts:
     gather_network_resources: vlans
-  become: yes
-
+  become: true
 - name: Merge provided configuration with device configuration
-  arista.eos.eos_vlans:
-    config: "{{ config }}"
+  eos_vlans:
+    config: '{{ config }}'
     state: merged
   register: result
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.vlans|symmetric_difference(result.before) == []"
-
+      - ansible_facts.network_resources.vlans|symmetric_difference(result.before) ==
+        []
 - eos_facts:
     gather_network_resources: vlans
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.vlans|symmetric_difference(result.after) == []"
-
+      - ansible_facts.network_resources.vlans|symmetric_difference(result.after) ==
+        []
 - set_fact:
     expected_config:
       - vlan_id: 10
@@ -36,7 +31,7 @@
       - vlan_id: 20
         name: twenty
         state: suspend
-
 - assert:
     that:
-      - "expected_config|symmetric_difference(ansible_facts.network_resources.vlans) == []"
+      - expected_config|symmetric_difference(ansible_facts.network_resources.vlans)
+        == []

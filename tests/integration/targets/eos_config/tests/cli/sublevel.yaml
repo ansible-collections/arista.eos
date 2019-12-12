@@ -1,40 +1,33 @@
 ---
 - debug: msg="START cli/sublevel.yaml on connection={{ ansible_connection }}"
-
 - name: setup
-  arista.eos.eos_config:
+  eos_config:
     lines: no vlan 10
     match: none
-  become: yes
-
+  become: true
 - name: configure sub level command
-  arista.eos.eos_config:
+  eos_config:
     lines: name test
     parents: vlan 10
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == true"
-      - "'vlan 10' in result.updates"
-      - "'name test' in result.updates"
-
+      - result.changed == true
+      - '''vlan 10'' in result.updates'
+      - '''name test'' in result.updates'
 - name: configure sub level command idempotent check
-  arista.eos.eos_config:
+  eos_config:
     lines: name test
     parents: vlan 10
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == false"
-
+      - result.changed == false
 - name: teardown
-  arista.eos.eos_config:
+  eos_config:
     lines: no vlan 10
     match: none
-  become: yes
-
+  become: true
 - debug: msg="END cli/sublevel.yaml on connection={{ ansible_connection }}"
