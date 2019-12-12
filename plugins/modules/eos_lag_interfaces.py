@@ -37,17 +37,14 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """
----
-module: eos_lag_interfaces
-version_added: 2.9
+DOCUMENTATION = """module: eos_lag_interfaces
 short_description: Manages link aggregation groups on Arista EOS devices
-description: This module manages attributes of link aggregation groups on Arista EOS devices.
+description: This module manages attributes of link aggregation groups on Arista EOS
+  devices.
 author: Nathaniel Case (@Qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
-- This module works with connection C(network_cli). See the
-  L(EOS Platform Options,../network/user_guide/platform_eos.html).
+- This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
     description: A list of link aggregation group configurations.
@@ -56,30 +53,31 @@ options:
     suboptions:
       name:
         description:
-          - Name of the port-channel interface of the link aggregation group (LAG) e.g., Port-Channel5.
+        - Name of the port-channel interface of the link aggregation group (LAG) e.g.,
+          Port-Channel5.
         type: str
-        required: True
+        required: true
       members:
         description:
-          - Ethernet interfaces that are part of the group.
+        - Ethernet interfaces that are part of the group.
         type: list
         elements: dict
         suboptions:
           member:
             description:
-              - Name of ethernet interface that is a member of the LAG.
+            - Name of ethernet interface that is a member of the LAG.
             type: str
           mode:
             description:
-              - LAG mode for this interface.
+            - LAG mode for this interface.
             type: str
             choices:
-              - active
-              - "on"
-              - passive
+            - active
+            - 'on'
+            - passive
   state:
     description:
-      - The state of the configuration after module completion.
+    - The state of the configuration after module completion.
     type: str
     choices:
     - merged

@@ -1,44 +1,39 @@
 ---
 - include_tasks: reset_config.yml
-
 - set_fact:
     config:
       - name: Ethernet1
-        transmit: False
+        transmit: false
       - name: Ethernet2
-        transmit: False
-
+        transmit: false
 - eos_facts:
     gather_network_resources: lldp_interfaces
-  become: yes
-
+  become: true
 - name: Merge provided configuration with device configuration
-  arista.eos.eos_lldp_interfaces:
-    config: "{{ config }}"
+  eos_lldp_interfaces:
+    config: '{{ config }}'
     state: merged
   register: result
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.before) == []"
-
+      - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.before)
+        == []
 - eos_facts:
     gather_network_resources: lldp_interfaces
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.after) == []"
-
+      - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.after)
+        == []
 - set_fact:
     expected_config:
       - name: Ethernet1
-        transmit: False
-        receive: False
+        transmit: false
+        receive: false
       - name: Ethernet2
-        transmit: False
-
+        transmit: false
 - assert:
     that:
-      - "expected_config|symmetric_difference(ansible_facts.network_resources.lldp_interfaces) == []"
+      - expected_config|symmetric_difference(ansible_facts.network_resources.lldp_interfaces)
+        == []

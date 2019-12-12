@@ -1,25 +1,19 @@
 ---
 - name: Reset state
-  network.cli.cli_config:
-    config: |
-      interface Ethernet1
-         channel-group 5 mode on
-      interface Ethernet2
-         no channel-group
-      no interface Port-Channel10
-  become: yes
-
+  cli_config:
+    config: "interface Ethernet1\n   channel-group 5 mode on\ninterface Ethernet2\n\
+      \   no channel-group\nno interface Port-Channel10\n"
+  become: true
 - eos_facts:
     gather_network_resources: lag_interfaces
-  become: yes
-
+  become: true
 - set_fact:
     expected_config:
-      - name: "Port-Channel5"
+      - name: Port-Channel5
         members:
           - member: Ethernet1
-            mode: "on"
-
+            mode: 'on'
 - assert:
     that:
-      - "ansible_facts.network_resources.lag_interfaces|symmetric_difference(expected_config)|length == 0"
+      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(expected_config)|length
+        == 0

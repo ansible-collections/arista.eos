@@ -1,23 +1,14 @@
 ---
 - name: Reset state
-  network.cli.cli_config:
-    config: |
-      interface Ethernet1
-         ip address 192.0.2.12/24
-         ip address 203.0.113.27/31 secondary
-         no ipv6 address
-      interface Ethernet2
-         no ip address
-         ipv6 address 2001:db8::1/64
-      interface Management1
-         ip address dhcp
-         no ipv6 address
-  become: yes
-
+  cli_config:
+    config: "interface Ethernet1\n   ip address 192.0.2.12/24\n   ip address 203.0.113.27/31\
+      \ secondary\n   no ipv6 address\ninterface Ethernet2\n   no ip address\n   ipv6\
+      \ address 2001:db8::1/64\ninterface Management1\n   ip address dhcp\n   no ipv6\
+      \ address\n"
+  become: true
 - eos_facts:
     gather_network_resources: l3_interfaces
-  become: yes
-
+  become: true
 - set_fact:
     expected_config:
       - name: Ethernet1
@@ -31,7 +22,7 @@
       - name: Management1
         ipv4:
           - address: dhcp
-
 - assert:
     that:
-      - "ansible_facts.network_resources.l3_interfaces|symmetric_difference(expected_config) == []"
+      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(expected_config)
+        == []

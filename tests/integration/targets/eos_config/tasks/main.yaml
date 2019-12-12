@@ -1,4 +1,10 @@
 ---
-- { include: cli.yaml, tags: ['cli'] }
-- { include: cli_config.yaml, tags: ['cli_config'] }
-- { include: eapi.yaml, tags: ['eapi'] }
+- include: cli.yaml
+  tags:
+    - cli
+- include: cli_config.yaml
+  tags:
+    - cli_config
+- include: eapi.yaml
+  tags:
+    - eapi
