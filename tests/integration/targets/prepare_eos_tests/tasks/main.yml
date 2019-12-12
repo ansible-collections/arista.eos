@@ -1,27 +1,26 @@
+---
 - name: Enable Ethernet1 interface and disable switchport
-  arista.eos.eos_config:
+  eos_config:
     lines:
       - no shutdown
       - no switchport
     parents: int Ethernet1
-  become: yes
+  become: true
   connection: network_cli
-
 - name: Enable Ethernet2 interface and disable switchport
-  arista.eos.eos_config:
+  eos_config:
     lines:
       - no shutdown
       - no switchport
     parents: int Ethernet2
-  become: yes
+  become: true
   connection: network_cli
-
 - name: enable eapi
-  arista.eos.eos_eapi:
-    http: yes
-    https: yes
-    local_http: no
-    enable_socket: yes
-  become: yes
+  eos_eapi:
+    http: true
+    https: true
+    local_http: false
+    enable_socket: true
+  become: true
   connection: network_cli
   tags: eapi

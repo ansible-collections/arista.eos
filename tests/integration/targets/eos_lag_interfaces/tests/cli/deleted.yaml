@@ -1,29 +1,24 @@
 ---
 - include_tasks: reset_config.yml
-
 - set_fact:
     config:
-      - name: "Port-Channel5"
-
+      - name: Port-Channel5
 - eos_facts:
     gather_network_resources: lag_interfaces
-  become: yes
-
+  become: true
 - name: Delete EOS L3 interfaces as in given arguments.
-  arista.eos.eos_lag_interfaces:
-    config: "{{ config }}"
+  eos_lag_interfaces:
+    config: '{{ config }}'
     state: deleted
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
-      - "ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length == 0"
-
+      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length
+        == 0
 - eos_facts:
     gather_network_resources: lag_interfaces
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.lag_interfaces == []"
+      - ansible_facts.network_resources.lag_interfaces == []

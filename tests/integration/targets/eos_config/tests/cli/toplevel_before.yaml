@@ -1,44 +1,37 @@
 ---
 - debug: msg="START cli/toplevel_before.yaml on connection={{ ansible_connection }}"
-
 - name: setup
-  arista.eos.eos_config:
+  eos_config:
     lines:
-      - "snmp-server contact ansible"
-      - "hostname {{ inventory_hostname_short }}"
+      - snmp-server contact ansible
+      - hostname {{ inventory_hostname_short }}
     match: none
-  become: yes
-
+  become: true
 - name: configure top level command with before
-  arista.eos.eos_config:
+  eos_config:
     lines: hostname foo
     before: snmp-server contact bar
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == true"
-      - "'hostname foo' in result.updates"
-      - "'snmp-server contact bar' in result.updates"
-
+      - result.changed == true
+      - '''hostname foo'' in result.updates'
+      - '''snmp-server contact bar'' in result.updates'
 - name: configure top level command with before idempotent check
-  arista.eos.eos_config:
+  eos_config:
     lines: hostname foo
     before: snmp-server contact foo
-  become: yes
+  become: true
   register: result
-
 - assert:
     that:
-      - "result.changed == false"
-
+      - result.changed == false
 - name: teardown
-  arista.eos.eos_config:
+  eos_config:
     lines:
       - no snmp-server contact
-      - "hostname {{ inventory_hostname_short }}"
+      - hostname {{ inventory_hostname_short }}
     match: none
-  become: yes
-
+  become: true
 - debug: msg="END cli/toplevel_before.yaml on connection={{ ansible_connection }}"

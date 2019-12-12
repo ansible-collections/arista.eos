@@ -38,17 +38,15 @@ ANSIBLE_METADATA = {
 }
 
 
-DOCUMENTATION = """
----
-module: eos_interfaces
-version_added: 2.9
+DOCUMENTATION = """module: eos_interfaces
 short_description: Manages interface attributes of Arista EOS interfaces
-description: ['This module manages the interface attributes of Arista EOS interfaces.']
-author: ['Nathaniel Case (@qalthos)']
+description:
+- This module manages the interface attributes of Arista EOS interfaces.
+author:
+- Nathaniel Case (@qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
-- This module works with connection C(network_cli). See the
-  L(EOS Platform Options,../network/user_guide/platform_eos.html).
+- This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
     description: The provided configuration
@@ -95,7 +93,6 @@ options:
     description:
     - The state of the configuration after module completion.
     type: str
-
 """
 
 EXAMPLES = """

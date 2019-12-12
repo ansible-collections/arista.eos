@@ -1,38 +1,34 @@
 ---
 - include_tasks: reset_config.yml
-
 - set_fact:
     config:
       - name: Ethernet2
         access:
           vlan: 30
-
 - eos_facts:
     gather_network_resources: l2_interfaces
-  become: yes
-
-- name: Override device configuration of all L2 interfaces on device with provided configuration.
-  arista.eos.eos_l2_interfaces:
-    config: "{{ config }}"
+  become: true
+- name: Override device configuration of all L2 interfaces on device with provided
+    configuration.
+  eos_l2_interfaces:
+    config: '{{ config }}'
     state: overridden
   register: result
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before) == []"
-
+      - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before)
+        == []
 - eos_facts:
     gather_network_resources: l2_interfaces
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.after) == []"
-
+      - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.after)
+        == []
 - set_fact:
-    expected_config: "{{ config }} + [{'name': 'Ethernet1'}, {'name': 'Management1'}]"
-
+    expected_config: '{{ config }} + [{''name'': ''Ethernet1''}, {''name'': ''Management1''}]'
 - assert:
     that:
-      - "ansible_facts.network_resources.l2_interfaces|symmetric_difference(expected_config) == []"
+      - ansible_facts.network_resources.l2_interfaces|symmetric_difference(expected_config)
+        == []

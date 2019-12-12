@@ -36,17 +36,14 @@ ANSIBLE_METADATA = {
     "supported_by": "network",
 }
 
-DOCUMENTATION = """
----
-module: eos_vlans
-version_added: 2.9
+DOCUMENTATION = """module: eos_vlans
 short_description: Manage VLANs on Arista EOS devices.
-description: This module provides declarative management of VLANs on Arista EOS network devices.
+description: This module provides declarative management of VLANs on Arista EOS network
+  devices.
 author: Nathaniel Case (@qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
-- This module works with connection C(network_cli). See the
-  L(EOS Platform Options,../network/user_guide/platform_eos.html).
+- This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
     description: A dictionary of VLANs options

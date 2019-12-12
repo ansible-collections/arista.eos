@@ -1,35 +1,32 @@
 ---
-- debug: msg="START cli_config/cli_basic.yaml on connection={{ ansible_connection }}"
-
+- debug: msg="START cli_config/cli_basic.yaml on connection={{ ansible_connection
+    }}"
 - name: setup
-  network.cli.cli_config: &rm
-    config: |
-      interface Ethernet2
+  cli_config: &id002
+    config: 'interface Ethernet2
+
       no description
+
       no shutdown
-  become: yes
 
+      '
+  become: true
 - name: configure device with config
-  network.cli.cli_config: &conf
-    config: "{{ lookup('template', 'basic/config.j2') }}"
+  cli_config: &id001
+    config: '{{ lookup(''template'', ''basic/config.j2'') }}'
   register: result
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "result.changed == true"
-
+      - result.changed == true
 - name: Idempotence
-  network.cli.cli_config: *conf
+  cli_config: *id001
   register: result
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "result.changed == false"
-
+      - result.changed == false
 - name: teardown
-  network.cli.cli_config: *rm
-  become: yes
-
+  cli_config: *id002
+  become: true
 - debug: msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection }}"

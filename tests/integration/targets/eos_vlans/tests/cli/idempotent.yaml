@@ -1,21 +1,19 @@
 ---
 - eos_facts:
     gather_network_resources: vlans
-  become: yes
-
+  become: true
 - name: Ensures that facts are idempotent through replace
-  arista.eos.eos_vlans:
-    config: "{{ ansible_facts.network_resources.vlans }}"
+  eos_vlans:
+    config: '{{ ansible_facts.network_resources.vlans }}'
     state: replaced
   register: result
-  become: yes
-
+  become: true
 - eos_facts:
     gather_network_resources: vlans
-  become: yes
-
+  become: true
 - assert:
     that:
-      - "result.changed == False"
-      - "result.commands == []"
-      - "ansible_facts.network_resources.vlans|symmetric_difference(result.before) == []"
+      - result.changed == False
+      - result.commands == []
+      - ansible_facts.network_resources.vlans|symmetric_difference(result.before) ==
+        []
