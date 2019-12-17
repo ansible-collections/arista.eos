@@ -1,5 +1,6 @@
 ---
 - debug: msg="START cli/notequal.yaml on connection={{ ansible_connection }}"
+
 - name: test neq operator
   eos_command:
     commands:
@@ -8,10 +9,12 @@
     wait_for:
       - result[1].interfaces.Management1.name neq Ethernet
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.stdout is defined
+
 - name: test != operator
   eos_command:
     commands:
@@ -20,8 +23,10 @@
     wait_for:
       - result[1].interfaces.Management1.name != Ethernet
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.stdout is defined
+
 - debug: msg="END cli/notequal.yaml on connection={{ ansible_connection }}"

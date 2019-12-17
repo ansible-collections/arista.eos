@@ -1,9 +1,11 @@
 ---
 - debug: msg="START eos eapi/net_banner.yaml on connection={{ ansible_connection }}"
+
 - name: Remove previous motd banner (setup)
   eos_config:
     lines: no banner motd
   become: true
+
 - name: create motd
   net_banner:
     banner: motd
@@ -11,13 +13,16 @@
     state: present
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''this is my motd banner configure by net_banner'' in result.commands'
       - '''ansible_1'' in result.session_name'
+
 - name: Remove previous motd banner (teardown)
   eos_config:
     lines: no banner motd
   become: true
+
 - debug: msg="END eos eapi/net_banner.yaml on connection={{ ansible_connection }}"

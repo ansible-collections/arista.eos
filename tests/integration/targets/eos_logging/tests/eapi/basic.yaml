@@ -1,5 +1,6 @@
 ---
 - debug: msg="START eapi/basic.yaml on connection={{ ansible_connection }}"
+
 - name: Set up host logging
   eos_logging:
     dest: host
@@ -7,10 +8,12 @@
     state: present
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '"logging host 172.16.0.1" in result.commands'
+
 - name: Set up host logging again (idempotent)
   eos_logging:
     dest: host
@@ -18,9 +21,11 @@
     state: present
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Delete/disable host logging
   eos_logging:
     dest: host
@@ -28,10 +33,12 @@
     state: absent
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '"no logging host 172.16.0.1" in result.commands'
+
 - name: Delete/disable host logging (idempotent)
   eos_logging:
     dest: host
@@ -39,9 +46,11 @@
     state: absent
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Console logging with level warnings
   eos_logging:
     dest: console
@@ -49,20 +58,24 @@
     state: present
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '"logging console warnings" in result.commands'
+
 - name: Configure buffer size
   eos_logging:
     dest: buffered
     size: 480000
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '"logging buffered 480000" in result.commands'
+
 - name: remove logging as collection tearDown
   eos_logging:
     aggregate:
@@ -74,6 +87,7 @@
         state: absent
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true

@@ -1,5 +1,6 @@
 ---
 - debug: msg="START eapi/invalid_subset.yaml on connection={{ ansible_connection }}"
+
 - name: test invalid subset (foobar)
   eos_facts:
     gather_subset:
@@ -8,9 +9,11 @@
   become: true
   register: result
   ignore_errors: true
+
 - assert:
     that:
       - result.changed == false
       - result.failed == true
       - '''Subset must be one of'' in result.msg'
+
 - debug: msg="END eapi/invalid_subset.yaml on connection={{ ansible_connection }}"

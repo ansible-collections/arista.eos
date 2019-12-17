@@ -1,5 +1,6 @@
 ---
 - debug: msg="START eapi/src_match_none.yaml"
+
 - name: setup
   eos_config:
     commands:
@@ -9,23 +10,28 @@
       - interface Ethernet2
     match: none
   become: true
+
 - name: configure device with config
   eos_config:
     src: basic/config.j2
     match: none
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - result.updates is defined
+
 - name: check device with config
   eos_config:
     src: basic/config.j2
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.updates is not defined
+
 - debug: msg="END eapi/src_match_none.yaml"

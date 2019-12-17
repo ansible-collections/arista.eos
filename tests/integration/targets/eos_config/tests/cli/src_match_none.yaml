@@ -1,5 +1,6 @@
 ---
 - debug: msg="START cli/src_match_none.yaml on connection={{ ansible_connection }}"
+
 - name: setup
   eos_config:
     commands:
@@ -9,23 +10,28 @@
       - interface Ethernet2
     match: none
   become: true
+
 - name: configure device with config
   eos_config:
     src: basic/config.j2
     match: none
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
+
 - name: check device with config
   eos_config:
     src: basic/config.j2
     defaults: true
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.updates is not defined
+
 - debug: msg="END cli/src_match_none.yaml on connection={{ ansible_connection }}"

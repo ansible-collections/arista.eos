@@ -1,5 +1,6 @@
 ---
 - include_tasks: reset_config.yml
+
 - set_fact:
     config:
       - name: Ethernet1
@@ -8,29 +9,36 @@
       - name: Management1
         ipv4:
           - address: dhcp
+
 - eos_facts:
     gather_network_resources: l3_interfaces
   become: true
+
 - name: Delete EOS L3 interfaces as in given arguments.
   eos_l3_interfaces:
     config: '{{ config }}'
     state: deleted
   register: result
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
         == []
+
 - eos_facts:
     gather_network_resources: l3_interfaces
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after)
         == []
   become: true
+
 - set_fact:
     expected_config: '{{ config }} + {{ other_config }}'
+
 - assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(expected_config)

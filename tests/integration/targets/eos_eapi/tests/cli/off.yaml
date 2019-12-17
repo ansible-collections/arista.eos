@@ -1,5 +1,6 @@
 ---
 - debug: msg="START CLI/OFF.YAML"
+
 - name: Turn all endpoints off
   eos_eapi:
     enable_http: false
@@ -9,13 +10,17 @@
     provider: '{{ cli }}'
   become: true
   register: eos_eapi_output
+
 - debug: var=eos_eapi_output
+
 - eos_command:
     commands:
       - show management api http-commands | json
     provider: '{{ cli }}'
   register: http_config
+
 - debug: var=http_config
+
 - name: Expect all EAPI endpoints to be in off state
   assert:
     that:
@@ -23,6 +28,7 @@
       - http_config.stdout[0].httpsServer.running == false
       - http_config.stdout[0].localHttpServer.running == false
       - http_config.stdout[0].unixSocketServer.running == false
+
 - name: Turn all endpoints off again
   eos_eapi:
     enable_http: false
@@ -32,10 +38,13 @@
     provider: '{{ cli }}'
   become: true
   register: eos_eapi_output
+
 - debug: var=eos_eapi_output
   when: debug
+
 - name: Expect action to be idempotent
   assert:
     that:
       - eos_eapi_output.changed == false
+
 - debug: msg="END CLI/OFF.YAML"

@@ -1,5 +1,6 @@
 ---
 - debug: msg="START cli/sublevel_block.yaml on connection={{ ansible_connection }}"
+
 - name: setup
   eos_config:
     lines:
@@ -11,6 +12,7 @@
     after: exit
     match: none
   become: true
+
 - name: configure sub level command using block resplace
   eos_config:
     lines:
@@ -23,6 +25,7 @@
     after: exit
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -31,6 +34,7 @@
       - '''20 permit ip host 192.0.2.2 any log'' in result.updates'
       - '''30 permit ip host 192.0.2.3 any log'' in result.updates'
       - '''40 permit ip host 192.0.2.4 any log'' in result.updates'
+
 - name: check sub level command using block replace
   eos_config:
     lines:
@@ -43,12 +47,15 @@
     after: exit
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: teardown
   eos_config:
     lines: no ip access-list test
     match: none
   become: true
+
 - debug: msg="END cli/sublevel_block.yaml on connection={{ ansible_connection }}"
