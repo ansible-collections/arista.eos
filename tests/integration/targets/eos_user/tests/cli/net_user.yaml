@@ -1,11 +1,13 @@
 ---
 - debug: msg="START eos cli/net_user.yaml on connection={{ ansible_connection }}"
+
 - name: Set Up
   eos_config:
     lines:
       - no username ansibletest1
     provider: '{{ cli }}'
   become: true
+
 - name: Create user with role using platform agnostic module
   net_user:
     name: ansibletest1
@@ -16,6 +18,7 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -23,10 +26,12 @@
       - '"secret" in result.commands[0]'
       - '"role network-operator" in result.commands[1]'
       - '"privilege 15" in result.commands[2]'
+
 - name: Teardown
   eos_config:
     lines:
       - no username ansibletest1
     provider: '{{ cli }}'
   become: true
+
 - debug: msg="END eos cli/net_user.yaml on connection={{ ansible_connection }}"

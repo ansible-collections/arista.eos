@@ -1,17 +1,20 @@
 ---
 - name: Reset initial config
-  cli_config:
-    config: "no vlan 1-4094\nvlan 10\n   name ten\nvlan 20\n   name twenty\n"
   become: true
+  ansible.netcommon.cli_config:
+    config: "no vlan 1-4094\nvlan 10\n   name ten\nvlan 20\n   name twenty\n"
+
 - eos_facts:
     gather_network_resources: vlans
   become: true
+
 - set_fact:
     expected_config:
       - vlan_id: 10
         name: ten
       - vlan_id: 20
         name: twenty
+
 - assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.vlans)

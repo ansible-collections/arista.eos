@@ -1,5 +1,6 @@
 ---
 - debug: msg="START eapi/set_domain_list.yaml"
+
 - name: setup
   eos_config:
     lines:
@@ -7,6 +8,7 @@
       - no ip domain-list redhat.com
     match: none
   become: true
+
 - name: configure domain_list
   eos_system:
     domain_list:
@@ -14,11 +16,13 @@
       - redhat.com
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''ip domain-list ansible.com'' in result.commands'
       - '''ip domain-list redhat.com'' in result.commands'
+
 - name: verify domain_list
   eos_system:
     domain_list:
@@ -26,28 +30,34 @@
       - redhat.com
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: remove one entry
   eos_system:
     domain_list:
       - ansible.com
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''no ip domain-list redhat.com'' in result.commands'
+
 - name: verify remove one entry
   eos_system:
     domain_list:
       - ansible.com
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: add one entry
   eos_system:
     domain_list:
@@ -55,10 +65,12 @@
       - redhat.com
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''ip domain-list redhat.com'' in result.commands'
+
 - name: verify add one entry
   eos_system:
     domain_list:
@@ -66,9 +78,11 @@
       - redhat.com
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: add and remove one entry
   eos_system:
     domain_list:
@@ -76,12 +90,14 @@
       - eng.ansible.com
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''no ip domain-list redhat.com'' in result.commands'
       - '''ip domain-list eng.ansible.com'' in result.commands'
       - result.commands|length == 2
+
 - name: verify add and remove one entry
   eos_system:
     domain_list:
@@ -89,9 +105,11 @@
       - eng.ansible.com
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: teardown
   eos_config:
     lines:
@@ -100,4 +118,5 @@
       - no ip domain-list eng.ansible.com
     match: none
   become: true
+
 - debug: msg="END eapi/set_domain_list.yaml"

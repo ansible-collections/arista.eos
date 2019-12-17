@@ -1,8 +1,10 @@
 ---
 - debug: msg="START cli_config/cli_basic.yaml on connection={{ ansible_connection
     }}"
+
 - name: setup
-  cli_config: &id002
+  become: true
+  ansible.netcommon.cli_config: &id002
     config: 'interface Ethernet2
 
       no description
@@ -10,23 +12,28 @@
       no shutdown
 
       '
-  become: true
+
 - name: configure device with config
-  cli_config: &id001
-    config: '{{ lookup(''template'', ''basic/config.j2'') }}'
   register: result
   become: true
+  ansible.netcommon.cli_config: &id001
+    config: '{{ lookup(''template'', ''basic/config.j2'') }}'
+
 - assert:
     that:
       - result.changed == true
+
 - name: Idempotence
-  cli_config: *id001
   register: result
   become: true
+  ansible.netcommon.cli_config: *id001
+
 - assert:
     that:
       - result.changed == false
+
 - name: teardown
-  cli_config: *id002
   become: true
+  ansible.netcommon.cli_config: *id002
+
 - debug: msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection }}"

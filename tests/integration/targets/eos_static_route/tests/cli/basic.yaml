@@ -1,5 +1,6 @@
 ---
 - debug: msg="START cli/basic.yaml on connection={{ ansible_connection }}"
+
 - name: setup - remove config used in test
   eos_config:
     lines:
@@ -8,6 +9,7 @@
       - no ip route 192.168.5.0/24 192.168.0.1
     provider: '{{ cli }}'
   become: true
+
 - name: configure static route
   eos_static_route: &id001
     address: 192.168.3.0/24
@@ -16,17 +18,21 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''ip route 192.168.3.0/24 192.168.0.1 2'' in result.commands'
+
 - name: configure static route(Idempotence)
   eos_static_route: *id001
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: delete static route
   eos_static_route: &id002
     address: 192.168.3.0/24
@@ -36,17 +42,21 @@
     state: absent
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''no ip route 192.168.3.0/24 192.168.0.1'' in result.commands'
+
 - name: delete static route
   eos_static_route: *id002
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: configure static routes using aggregate
   eos_static_route: &id003
     aggregate:
@@ -57,18 +67,22 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''ip route 192.168.4.0/24 192.168.0.1 1'' in result.commands'
       - '''ip route 192.168.5.0/24 192.168.0.1 1'' in result.commands'
+
 - name: configure static routes using aggregate(Idemporence)
   eos_static_route: *id003
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: delete static routes using aggregate
   eos_static_route: &id004
     aggregate:
@@ -80,18 +94,22 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''no ip route 192.168.4.0/24 192.168.0.1'' in result.commands'
       - '''no ip route 192.168.5.0/24 192.168.0.1'' in result.commands'
+
 - name: delete static routes using aggregate(Idempotence)
   eos_static_route: *id004
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: teardown
   eos_config:
     lines:
@@ -100,4 +118,5 @@
       - no ip route 192.168.5.0/24 192.168.0.1
     provider: '{{ cli }}'
   become: true
+
 - debug: msg="END cli/basic.yaml on connection={{ ansible_connection }}"

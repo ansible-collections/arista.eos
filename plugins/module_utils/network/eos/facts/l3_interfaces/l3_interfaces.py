@@ -16,7 +16,9 @@ __metaclass__ = type
 from copy import deepcopy
 import re
 
-from ansible.module_utils.network.common import utils
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
+    utils,
+)
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.l3_interfaces.l3_interfaces import (
     L3_interfacesArgs,
 )

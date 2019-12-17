@@ -1,5 +1,6 @@
 ---
 - debug: msg="START eapi/toplevel_before.yaml"
+
 - name: setup
   eos_config:
     lines:
@@ -7,26 +8,31 @@
       - hostname {{ inventory_hostname_short }}
     match: none
   become: true
+
 - name: configure top level command with before
   eos_config:
     lines: hostname foo
     before: snmp-server contact bar
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''hostname foo'' in result.updates'
       - '''snmp-server contact bar'' in result.updates'
+
 - name: configure top level command with before idempotent check
   eos_config:
     lines: hostname foo
     before: snmp-server contact foo
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: teardown
   eos_config:
     lines:
@@ -34,4 +40,5 @@
       - hostname {{ inventory_hostname_short }}
     match: none
   become: true
+
 - debug: msg="END eapi/toplevel_before.yaml"

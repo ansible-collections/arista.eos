@@ -124,7 +124,9 @@ session_name:
 import re
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.network.common.utils import ComplexList
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    ComplexList,
+)
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     load_config,
     get_config,

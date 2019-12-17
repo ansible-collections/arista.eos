@@ -1,5 +1,6 @@
 ---
 - include_tasks: reset_config.yml
+
 - set_fact:
     config:
       - name: Ethernet1
@@ -9,26 +10,32 @@
         description: Configured by Ansible
         duplex: auto
         enabled: false
+
 - eos_facts:
     gather_network_resources: interfaces
   become: true
+
 - name: Replaces device configuration of listed interfaces with provided configuration
   eos_interfaces:
     config: '{{ config }}'
     state: replaced
   register: result
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.before)|length
         == 0
+
 - eos_facts:
     gather_network_resources: interfaces
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.after)|length
         == 0
+
 - assert:
     that:
       - config|difference(ansible_facts.network_resources.interfaces)|length == 0
