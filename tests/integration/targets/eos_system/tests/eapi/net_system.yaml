@@ -2,12 +2,12 @@
 - debug: msg="START eos eapi/net_system.yaml on connection={{ ansible_connection }}"
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no ip domain-list ansible.com
       - no ip domain-list redhat.com
     match: none
-  become: true
 
 - name: configure domain_list using platform agnostic module
   net_system:
@@ -24,11 +24,11 @@
       - '''ip domain-list redhat.com'' in result.commands'
 
 - name: teardown
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no ip domain-list ansible.com
       - no ip domain-list redhat.com
     match: none
-  become: true
 
 - debug: msg="END eos eapi/net_system.yaml on connection={{ ansible_connection }}"

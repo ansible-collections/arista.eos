@@ -9,14 +9,14 @@
   connection: local
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     commands:
       - no description
       - no shutdown
     parents:
       - interface Ethernet2
     match: none
-  become: true
 
 - name: collect any backup files
   find:
@@ -32,11 +32,11 @@
   with_items: '{{backup_files.files|default([])}}'
 
 - name: configure device with config
-  eos_config:
-    src: basic/config.j2
-    backup: true
   become: true
   register: result
+  arista.eos.eos_config:
+    src: basic/config.j2
+    backup: true
 
 - assert:
     that:
@@ -63,13 +63,13 @@
     - '{{ role_path }}/backup/backup.cfg'
 
 - name: take configuration backup in custom filename and directory path
-  eos_config:
+  become: true
+  register: result
+  arista.eos.eos_config:
     backup: true
     backup_options:
       filename: backup.cfg
       dir_path: '{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}'
-  become: true
-  register: result
 
 - assert:
     that:
@@ -86,12 +86,12 @@
       - backup_file.files is defined
 
 - name: take configuration backup in custom filename
-  eos_config:
+  become: true
+  register: result
+  arista.eos.eos_config:
     backup: true
     backup_options:
       filename: backup.cfg
-  become: true
-  register: result
 
 - assert:
     that:
@@ -108,12 +108,12 @@
       - backup_file.files is defined
 
 - name: take configuration backup in custom path and default filename
-  eos_config:
+  become: true
+  register: result
+  arista.eos.eos_config:
     backup: true
     backup_options:
       dir_path: '{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}'
-  become: true
-  register: result
 
 - assert:
     that:

@@ -11,25 +11,25 @@
         duplex: full
         enabled: false
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: interfaces
-  become: true
 
 - name: Merge provided configuration with device configuration
-  eos_interfaces:
-    config: '{{ config }}'
-    state: merged
   register: result
   become: true
+  arista.eos.eos_interfaces:
+    config: '{{ config }}'
+    state: merged
 
 - assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.before)|length
         == 0
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: interfaces
-  become: true
 
 - assert:
     that:

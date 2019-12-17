@@ -7,9 +7,9 @@
       \ address 2001:db8::1/64\ninterface Management1\n   ip address dhcp\n   no ipv6\
       \ address\n"
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
-  become: true
 
 - set_fact:
     expected_config:

@@ -10,25 +10,25 @@
         ipv4:
           - address: 203.0.113.227/31
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
-  become: true
 
 - name: Merge provided configuration with device configuration.
-  eos_l3_interfaces:
-    config: '{{ config }}'
-    state: merged
   register: result
   become: true
+  arista.eos.eos_l3_interfaces:
+    config: '{{ config }}'
+    state: merged
 
 - assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
         == []
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
-  become: true
 
 - assert:
     that:

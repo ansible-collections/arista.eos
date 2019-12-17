@@ -2,18 +2,18 @@
 - debug: msg="START eapi/set_lookup_source.yaml"
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no ip domain lookup source-interface
       - vrf definition ansible
     match: none
-  become: true
 
 - name: configure lookup_source
-  eos_system:
-    lookup_source: Management1
   become: true
   register: result
+  arista.eos.eos_system:
+    lookup_source: Management1
 
 - assert:
     that:
@@ -21,22 +21,22 @@
       - '''ip domain lookup source-interface Management1'' in result.commands'
 
 - name: verify lookup_source
-  eos_system:
-    lookup_source: Management1
   become: true
   register: result
+  arista.eos.eos_system:
+    lookup_source: Management1
 
 - assert:
     that:
       - result.changed == false
 
 - name: change to vrf
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     lookup_source:
       - interface: Management1
         vrf: ansible
-  become: true
-  register: result
 
 - assert:
     that:
@@ -46,23 +46,23 @@
       - result.commands|length == 2
 
 - name: verify change to vrf
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     lookup_source:
       - interface: Management1
         vrf: ansible
-  become: true
-  register: result
 
 - assert:
     that:
       - result.changed == false
 
 - name: teardown
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no ip domain lookup source-interface
       - no vrf definition ansible
     match: none
-  become: true
 
 - debug: msg="END eapi/set_lookup_source.yaml"

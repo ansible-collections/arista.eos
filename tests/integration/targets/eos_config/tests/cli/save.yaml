@@ -2,29 +2,29 @@
 - debug: msg="START cli/save.yaml on connection={{ ansible_connection }}"
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     commands:
       - no description
       - no shutdown
     parents:
       - interface Ethernet2
     match: none
-  become: true
 
 - name: save config always
-  eos_config: &id001
-    save_when: always
   become: true
   register: result
+  arista.eos.eos_config: &id001
+    save_when: always
 
 - assert: &id002
     that:
       - result.changed == true
 
 - name: save should always run
-  eos_config: *id001
   become: true
   register: result
+  arista.eos.eos_config: *id001
 
 - assert: *id002
 

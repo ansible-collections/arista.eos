@@ -6,9 +6,9 @@
       \   no mtu\n   speed forced 40gfull\ninterface Ethernet2\n   no description\n\
       \   no shutdown\n   mtu 3000\n   speed auto\n"
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: interfaces
-  become: true
 
 - set_fact:
     expected_config:

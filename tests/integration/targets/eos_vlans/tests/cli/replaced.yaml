@@ -9,25 +9,25 @@
       - vlan_id: 10
         name: ten
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: vlans
-  become: true
 
 - name: Replaces device configuration of listed vlans with provided configuration
-  eos_vlans:
-    config: '{{ config }}'
-    state: replaced
   register: result
   become: true
+  arista.eos.eos_vlans:
+    config: '{{ config }}'
+    state: replaced
 
 - assert:
     that:
       - ansible_facts.network_resources.vlans|symmetric_difference(result.before) ==
         []
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: vlans
-  become: true
 
 - assert:
     that:

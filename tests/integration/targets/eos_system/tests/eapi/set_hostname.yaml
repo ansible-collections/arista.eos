@@ -2,35 +2,35 @@
 - debug: msg="START eapi/set_hostname.yaml"
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines: hostname switch
     match: none
-  become: true
 
 - name: configure hostname
-  eos_system:
-    hostname: foo
   become: true
   register: result
+  arista.eos.eos_system:
+    hostname: foo
 
 - assert:
     that:
       - result.changed == true
 
 - name: verify hostname
-  eos_system:
-    hostname: foo
   become: true
   register: result
+  arista.eos.eos_system:
+    hostname: foo
 
 - assert:
     that:
       - result.changed == false
 
 - name: teardown
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines: hostname {{ inventory_hostname }}
     match: none
-  become: true
 
 - debug: msg="END eapi/set_hostname.yaml"

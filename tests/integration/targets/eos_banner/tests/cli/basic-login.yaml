@@ -2,12 +2,14 @@
 - debug: msg="START cli/basic-login.yaml on connection={{ ansible_connection }}"
 
 - name: Remove previous login banner
-  eos_config:
-    lines: no banner login
   become: true
+  arista.eos.eos_config:
+    lines: no banner login
 
 - name: Create login banner
-  eos_banner: &id001
+  become: true
+  register: result
+  arista.eos.eos_banner: &id001
     banner: login
     text: 'Junk login banner
 
@@ -15,8 +17,6 @@
 
       '
     state: present
-  become: true
-  register: result
 
 - assert:
     that:
@@ -25,9 +25,9 @@
       - '''ansible_1'' in result.session_name'
 
 - name: Create login banner again (idempotent)
-  eos_banner: *id001
   become: true
   register: result
+  arista.eos.eos_banner: *id001
 
 - assert:
     that:
@@ -36,11 +36,11 @@
       - result.session_name is not defined
 
 - name: Remove login
-  eos_banner: &id002
-    banner: login
-    state: absent
   become: true
   register: result
+  arista.eos.eos_banner: &id002
+    banner: login
+    state: absent
 
 - assert:
     that:
@@ -49,9 +49,9 @@
       - '''ansible_1'' in result.session_name'
 
 - name: Remove login again (idempotent)
-  eos_banner: *id002
   become: true
   register: result
+  arista.eos.eos_banner: *id002
 
 - assert:
     that:

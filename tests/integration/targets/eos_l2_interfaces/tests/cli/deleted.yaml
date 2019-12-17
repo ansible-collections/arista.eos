@@ -6,25 +6,25 @@
       - name: Ethernet1
       - name: Ethernet2
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
-  become: true
 
 - name: Delete EOS L2 interfaces as in given arguments.
-  eos_l2_interfaces:
-    config: '{{ config }}'
-    state: deleted
   register: result
   become: true
+  arista.eos.eos_l2_interfaces:
+    config: '{{ config }}'
+    state: deleted
 
 - assert:
     that:
       - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before)
         == []
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
-  become: true
 
 - assert:
     that:

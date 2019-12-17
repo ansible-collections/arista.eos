@@ -2,13 +2,13 @@
 - debug: msg="START eapi/invalid_subset.yaml on connection={{ ansible_connection }}"
 
 - name: test invalid subset (foobar)
-  eos_facts:
-    gather_subset:
-      - foobar
-    provider: '{{ eapi }}'
   become: true
   register: result
   ignore_errors: true
+  arista.eos.eos_facts:
+    gather_subset:
+      - foobar
+    provider: '{{ eapi }}'
 
 - assert:
     that:

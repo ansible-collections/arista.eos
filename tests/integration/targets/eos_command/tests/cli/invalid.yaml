@@ -2,11 +2,11 @@
 - debug: msg="START cli/invalid.yaml on connection={{ ansible_connection }}"
 
 - name: run invalid command
-  eos_command:
-    commands:
-      - show foo
   register: result
   ignore_errors: true
+  arista.eos.eos_command:
+    commands:
+      - show foo
 
 - assert:
     that:
@@ -14,12 +14,12 @@
       - result.msg is defined
 
 - name: run commands that include invalid command
-  eos_command:
+  register: result
+  ignore_errors: true
+  arista.eos.eos_command:
     commands:
       - show version
       - show foo
-  register: result
-  ignore_errors: true
 
 - assert:
     that:

@@ -16,25 +16,25 @@
         ipv4:
           - address: dhcp
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
-  become: true
 
 - name: Replace device configuration of specified L3 interfaces with provided configuration.
-  eos_l3_interfaces:
-    config: '{{ config }}'
-    state: replaced
   register: result
   become: true
+  arista.eos.eos_l3_interfaces:
+    config: '{{ config }}'
+    state: replaced
 
 - assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
         == []
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
-  become: true
 
 - assert:
     that:

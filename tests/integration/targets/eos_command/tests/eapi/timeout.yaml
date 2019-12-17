@@ -2,14 +2,14 @@
 - debug: msg="START eapi/timeout.yaml"
 
 - name: test bad condition
-  eos_command:
+  register: result
+  ignore_errors: true
+  arista.eos.eos_command:
     commands:
       - show version
     wait_for:
       - result[0].version foo 4.15
     retries: 1
-  register: result
-  ignore_errors: true
 
 - assert:
     that:

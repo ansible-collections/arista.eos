@@ -7,9 +7,9 @@
       \ no switchport access vlan\n   switchport trunk native vlan 20\n   switchport\
       \ mode trunk\n"
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
-  become: true
 
 - set_fact:
     expected_config:
