@@ -6,9 +6,9 @@
       \ management-address \nno lldp tlv-select system-description\nlldp tlv-select\
       \ port-description\n"
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lldp_global
-  become: true
 
 - set_fact:
     expected_config:

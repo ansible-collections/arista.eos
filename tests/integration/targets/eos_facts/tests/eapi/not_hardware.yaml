@@ -2,12 +2,12 @@
 - debug: msg="START eapi/not_hardware.yaml on connection={{ ansible_connection }}"
 
 - name: test not hardware
-  eos_facts:
+  become: true
+  register: result
+  arista.eos.eos_facts:
     gather_subset:
       - '!hardware'
     provider: '{{ eapi }}'
-  become: true
-  register: result
 
 - assert:
     that:

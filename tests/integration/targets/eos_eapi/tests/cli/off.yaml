@@ -2,22 +2,22 @@
 - debug: msg="START CLI/OFF.YAML"
 
 - name: Turn all endpoints off
-  eos_eapi:
+  become: true
+  register: eos_eapi_output
+  arista.eos.eos_eapi:
     enable_http: false
     enable_https: false
     enable_local_http: false
     enable_socket: false
     provider: '{{ cli }}'
-  become: true
-  register: eos_eapi_output
 
 - debug: var=eos_eapi_output
 
-- eos_command:
+- register: http_config
+  arista.eos.eos_command:
     commands:
       - show management api http-commands | json
     provider: '{{ cli }}'
-  register: http_config
 
 - debug: var=http_config
 
@@ -30,14 +30,14 @@
       - http_config.stdout[0].unixSocketServer.running == false
 
 - name: Turn all endpoints off again
-  eos_eapi:
+  become: true
+  register: eos_eapi_output
+  arista.eos.eos_eapi:
     enable_http: false
     enable_https: false
     enable_local_http: false
     enable_socket: false
     provider: '{{ cli }}'
-  become: true
-  register: eos_eapi_output
 
 - debug: var=eos_eapi_output
   when: debug

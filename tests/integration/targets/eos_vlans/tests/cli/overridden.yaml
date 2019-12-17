@@ -8,25 +8,25 @@
       - vlan_id: 50
         name: fifty
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: vlans
-  become: true
 
 - name: Overrides device configuration of all vlans with provided configuration
-  eos_vlans:
-    config: '{{ config }}'
-    state: overridden
   register: result
   become: true
+  arista.eos.eos_vlans:
+    config: '{{ config }}'
+    state: overridden
 
 - assert:
     that:
       - ansible_facts.network_resources.vlans|symmetric_difference(result.before) ==
         []
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: vlans
-  become: true
 
 - assert:
     that:

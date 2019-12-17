@@ -2,20 +2,20 @@
 - debug: msg="START CLI/ON.YAML"
 
 - name: Turn on all endpoints
-  eos_eapi:
+  become: true
+  register: eos_eapi_output
+  arista.eos.eos_eapi:
     enable_http: true
     enable_https: true
     enable_local_http: true
     enable_socket: true
     provider: '{{ cli }}'
-  become: true
-  register: eos_eapi_output
 
-- eos_command:
+- register: http_config
+  arista.eos.eos_command:
     commands:
       - show management api http-commands | json
     provider: '{{ cli }}'
-  register: http_config
 
 - debug: var=http_config
   when: debug
@@ -29,14 +29,14 @@
       - http_config.stdout[0].unixSocketServer.running == true
 
 - name: Turn on all endpoints again
-  eos_eapi:
+  become: true
+  register: eos_eapi_output
+  arista.eos.eos_eapi:
     enable_http: true
     enable_https: true
     enable_local_http: true
     enable_socket: true
     provider: '{{ cli }}'
-  become: true
-  register: eos_eapi_output
 
 - debug: var=eos_eapi_output
 

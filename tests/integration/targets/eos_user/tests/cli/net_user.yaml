@@ -2,11 +2,11 @@
 - debug: msg="START eos cli/net_user.yaml on connection={{ ansible_connection }}"
 
 - name: Set Up
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no username ansibletest1
     provider: '{{ cli }}'
-  become: true
 
 - name: Create user with role using platform agnostic module
   net_user:
@@ -28,10 +28,10 @@
       - '"privilege 15" in result.commands[2]'
 
 - name: Teardown
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no username ansibletest1
     provider: '{{ cli }}'
-  become: true
 
 - debug: msg="END eos cli/net_user.yaml on connection={{ ansible_connection }}"

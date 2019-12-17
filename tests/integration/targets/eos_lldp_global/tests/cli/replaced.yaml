@@ -9,24 +9,24 @@
         port_description: false
         system_description: true
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lldp_global
-  become: true
 
 - name: Replaces device configuration with provided LLDP configuration
-  eos_lldp_global:
-    config: '{{ config }}'
-    state: replaced
   register: result
   become: true
+  arista.eos.eos_lldp_global:
+    config: '{{ config }}'
+    state: replaced
 
 - assert:
     that:
       - ansible_facts.network_resources.lldp_global == result.before
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lldp_global
-  become: true
 
 - assert:
     that:

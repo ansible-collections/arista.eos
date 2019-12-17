@@ -2,9 +2,9 @@
 - debug: msg="START eos eapi/net_banner.yaml on connection={{ ansible_connection }}"
 
 - name: Remove previous motd banner (setup)
-  eos_config:
-    lines: no banner motd
   become: true
+  arista.eos.eos_config:
+    lines: no banner motd
 
 - name: create motd
   net_banner:
@@ -21,8 +21,8 @@
       - '''ansible_1'' in result.session_name'
 
 - name: Remove previous motd banner (teardown)
-  eos_config:
-    lines: no banner motd
   become: true
+  arista.eos.eos_config:
+    lines: no banner motd
 
 - debug: msg="END eos eapi/net_banner.yaml on connection={{ ansible_connection }}"

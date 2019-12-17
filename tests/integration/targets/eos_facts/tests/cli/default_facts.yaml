@@ -2,10 +2,10 @@
 - debug: msg="START cli/default_facts.yaml on connection={{ ansible_connection }}"
 
 - name: test getting default facts
-  eos_facts:
-    provider: '{{ cli }}'
   become: true
   register: result
+  arista.eos.eos_facts:
+    provider: '{{ cli }}'
 
 - assert:
     that:

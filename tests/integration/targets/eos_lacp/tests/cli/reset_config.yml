@@ -6,9 +6,9 @@
 
       '
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lacp
-  become: true
 
 - set_fact:
     expected_config:

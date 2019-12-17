@@ -11,25 +11,25 @@
         duplex: auto
         enabled: false
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: interfaces
-  become: true
 
 - name: Replaces device configuration of listed interfaces with provided configuration
-  eos_interfaces:
-    config: '{{ config }}'
-    state: replaced
   register: result
   become: true
+  arista.eos.eos_interfaces:
+    config: '{{ config }}'
+    state: replaced
 
 - assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.before)|length
         == 0
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: interfaces
-  become: true
 
 - assert:
     that:

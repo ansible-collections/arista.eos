@@ -13,25 +13,25 @@
           - member: Ethernet1
             mode: 'on'
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lag_interfaces
-  become: true
 
 - name: Replace device configuration of specified LAGs with provided configuration.
-  eos_lag_interfaces:
-    config: '{{ config }}'
-    state: replaced
   become: true
   register: result
+  arista.eos.eos_lag_interfaces:
+    config: '{{ config }}'
+    state: replaced
 
 - assert:
     that:
       - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length
         == 0
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lag_interfaces
-  become: true
 
 - assert:
     that:

@@ -3,10 +3,10 @@
 
 - block:
     - name: Expect transport other than cli to fail
-      eos_eapi:
-        provider: '{{ eapi }}'
       register: eos_eapi_output
       ignore_errors: true
+      arista.eos.eos_eapi:
+        provider: '{{ eapi }}'
     - assert:
         that: eos_eapi_output.failed == true
   when: ansible_connection == 'local'

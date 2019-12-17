@@ -6,24 +6,24 @@
       system:
         priority: 20
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lacp
-  become: true
 
 - name: Replaces device lacp configuration with provided configuration
-  eos_lacp:
-    config: '{{ config }}'
-    state: replaced
   register: result
   become: true
+  arista.eos.eos_lacp:
+    config: '{{ config }}'
+    state: replaced
 
 - assert:
     that:
       - ansible_facts.network_resources.lacp == result.before
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lacp
-  become: true
 
 - assert:
     that:

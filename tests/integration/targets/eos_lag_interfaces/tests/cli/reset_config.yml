@@ -5,9 +5,9 @@
     config: "interface Ethernet1\n   channel-group 5 mode on\ninterface Ethernet2\n\
       \   no channel-group\nno interface Port-Channel10\n"
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lag_interfaces
-  become: true
 
 - set_fact:
     expected_config:

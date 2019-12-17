@@ -5,9 +5,9 @@
     config: "interface Ethernet1\n   no lldp receive\n   lldp transmit\ninterface\
       \ Ethernet2\n   lldp receive\n   no lldp transmit\n"
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lldp_interfaces
-  become: true
 
 - set_fact:
     expected_config:
