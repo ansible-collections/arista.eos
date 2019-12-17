@@ -4,9 +4,9 @@
   ansible.netcommon.cli_config:
     config: "no vlan 1-4094\nvlan 10\n   name ten\nvlan 20\n   name twenty\n"
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: vlans
-  become: true
 
 - set_fact:
     expected_config:

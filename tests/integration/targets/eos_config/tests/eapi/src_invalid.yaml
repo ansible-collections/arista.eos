@@ -2,10 +2,10 @@
 - debug: msg="START eapi/src_invalid.yaml"
 
 - name: configure with invalid src
-  eos_config:
-    src: basic/foobar.j2
   register: result
   ignore_errors: true
+  arista.eos.eos_config:
+    src: basic/foobar.j2
 
 - assert:
     that:

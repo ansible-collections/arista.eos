@@ -2,12 +2,14 @@
 - debug: msg="START eapi/basic-motd.yaml on connection={{ ansible_connection }}"
 
 - name: Remove previous motd banner
-  eos_config:
-    lines: no banner motd
   become: true
+  arista.eos.eos_config:
+    lines: no banner motd
 
 - name: Set motd
-  eos_banner:
+  become: true
+  register: result
+  arista.eos.eos_banner:
     banner: motd
     text: 'this is my motd banner
 
@@ -17,8 +19,6 @@
 
       '
     state: present
-  become: true
-  register: result
 
 - assert:
     that:
@@ -28,7 +28,9 @@
       - '''ansible_1'' in result.session_name'
 
 - name: Set motd again (idempotent)
-  eos_banner:
+  become: true
+  register: result
+  arista.eos.eos_banner:
     banner: motd
     text: 'this is my motd banner
 
@@ -38,8 +40,6 @@
 
       '
     state: present
-  become: true
-  register: result
 
 - assert:
     that:
@@ -48,7 +48,9 @@
       - result.session_name is not defined
 
 - name: Remove motd
-  eos_banner:
+  become: true
+  register: result
+  arista.eos.eos_banner:
     banner: motd
     text: 'this is my motd banner
 
@@ -58,8 +60,6 @@
 
       '
     state: absent
-  become: true
-  register: result
 
 - assert:
     that:
@@ -68,7 +68,9 @@
       - '''ansible_1'' in result.session_name'
 
 - name: Remove motd again (idempotent)
-  eos_banner:
+  become: true
+  register: result
+  arista.eos.eos_banner:
     banner: motd
     text: 'this is my motd banner
 
@@ -78,8 +80,6 @@
 
       '
     state: absent
-  become: true
-  register: result
 
 - assert:
     that:

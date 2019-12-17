@@ -13,26 +13,26 @@
         ipv4:
           - address: dhcp
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
-  become: true
 
 - name: Override device configuration of all L3 interfaces on device with provided
     configuration.
-  eos_l3_interfaces:
-    config: '{{ config }}'
-    state: overridden
   register: result
   become: true
+  arista.eos.eos_l3_interfaces:
+    config: '{{ config }}'
+    state: overridden
 
 - assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
         == []
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
-  become: true
 
 - assert:
     that:

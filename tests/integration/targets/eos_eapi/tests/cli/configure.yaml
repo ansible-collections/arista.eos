@@ -2,7 +2,9 @@
 - debug: msg="START CLI/CONFIGURE.YAML"
 
 - name: Change endpoint ports
-  eos_eapi:
+  become: true
+  register: eos_eapi_output
+  arista.eos.eos_eapi:
     enable_http: false
     http_port: 81
     https_port: 4443
@@ -10,14 +12,12 @@
     enable_https: true
     local_http_port: 8181
     provider: '{{ cli }}'
-  become: true
-  register: eos_eapi_output
 
-- eos_command:
+- register: http_config
+  arista.eos.eos_command:
     commands:
       - show management api http-commands | json
     provider: '{{ cli }}'
-  register: http_config
 
 - name: Expect endpoint ports to be set
   assert:
@@ -27,14 +27,14 @@
       - http_config.stdout[0].localHttpServer.port == 8181
 
 - name: Change endpoint ports again
-  eos_eapi:
+  become: true
+  register: eos_eapi_output
+  arista.eos.eos_eapi:
     http_port: 80
     https_port: 4443
     enable_local_http: true
     local_http_port: 8181
     provider: '{{ cli }}'
-  become: true
-  register: eos_eapi_output
 
 - name: Expect action to be idempotent
   assert:

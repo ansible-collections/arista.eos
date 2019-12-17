@@ -2,25 +2,25 @@
 - debug: msg="START cli/config.yaml on connection={{ ansible_connection }}"
 
 - name: Setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines: no management api http-commands
     match: none
     provider: '{{ cli }}'
-  become: true
 
 - name: Get running-config
-  eos_command:
+  become: true
+  register: config
+  arista.eos.eos_command:
     commands: show running-config
     provider: '{{ cli }}'
-  become: true
-  register: config
 
 - name: Set config
-  eos_eapi:
-    config: '{{ config.stdout[0] }}'
-    provider: '{{ cli }}'
   become: true
   register: config
+  arista.eos.eos_eapi:
+    config: '{{ config.stdout[0] }}'
+    provider: '{{ cli }}'
 
 - name: Ensure that this triggered a change
   assert:
@@ -28,18 +28,18 @@
       - config.changed == true
 
 - name: Get running-config again
-  eos_command:
+  become: true
+  register: config
+  arista.eos.eos_command:
     commands: show running-config
     provider: '{{ cli }}'
-  become: true
-  register: config
 
 - name: Set config
-  eos_eapi:
-    config: '{{ config.stdout[0] }}'
-    provider: '{{ cli }}'
   become: true
   register: config
+  arista.eos.eos_eapi:
+    config: '{{ config.stdout[0] }}'
+    provider: '{{ cli }}'
 
 - name: Idempotency check
   assert:

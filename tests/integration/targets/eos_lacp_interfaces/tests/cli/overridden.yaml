@@ -6,25 +6,25 @@
       - name: Ethernet1
         rate: fast
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lacp_interfaces
-  become: true
 
 - name: Overrides device configuration of all vlans with provided configuration
-  eos_lacp_interfaces:
-    config: '{{ config }}'
-    state: overridden
   register: result
   become: true
+  arista.eos.eos_lacp_interfaces:
+    config: '{{ config }}'
+    state: overridden
 
 - assert:
     that:
       - ansible_facts.network_resources.lacp_interfaces|symmetric_difference(result.before)
         == []
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lacp_interfaces
-  become: true
 
 - assert:
     that:

@@ -3,16 +3,16 @@
     msg: START cli/check_mode.yaml on connection={{ ansible_connection }}
 
 - name: invalid configuration in check mode
-  eos_config:
-    lines:
-      - ip address 119.31.1.1 255.255.255.256
-    parents: interface Loopback911
   become: true
   check_mode: 1
   vars:
     ansible_eos_use_sessions: 1
   register: result
   ignore_errors: true
+  arista.eos.eos_config:
+    lines:
+      - ip address 119.31.1.1 255.255.255.256
+    parents: interface Loopback911
 
 - assert:
     that:
@@ -21,69 +21,69 @@
       - '''Invalid input'' in result.msg'
 
 - name: valid configuration in check mode
-  eos_config:
-    before:
-      - no ip access-list test
-    src: basic/cmds.j2
   become: true
   check_mode: true
   register: config
+  arista.eos.eos_config:
+    before:
+      - no ip access-list test
+    src: basic/cmds.j2
 
 - name: check if session is removed
-  eos_command:
-    commands:
-      - show configuration sessions | json
   become: true
   register: result
+  arista.eos.eos_command:
+    commands:
+      - show configuration sessions | json
 
 - assert:
     that:
       - config.session not in result.stdout[0].sessions
 
 - name: configuration in check mode + no config session
-  eos_config:
-    lines:
-      - ip address 119.31.1.1 255.255.255.254
-    parents: interface Loopback911
   become: true
   check_mode: 1
   vars:
     ansible_eos_use_sessions: 0
   register: result
   ignore_errors: true
+  arista.eos.eos_config:
+    lines:
+      - ip address 119.31.1.1 255.255.255.254
+    parents: interface Loopback911
 
 - assert:
     that:
       - result.failed == true
 
 - name: invalid configuration in check mode + no config session
-  eos_config:
-    lines:
-      - ip address 119.31.1.1 255.255.255.256
-    parents: interface Loopback911
-    diff_against: running
   become: true
   check_mode: 1
   vars:
     ansible_eos_use_sessions: 0
   register: result
   ignore_errors: true
+  arista.eos.eos_config:
+    lines:
+      - ip address 119.31.1.1 255.255.255.256
+    parents: interface Loopback911
+    diff_against: running
 
 - assert:
     that:
       - result.changed == true
 
 - name: valid configuration in check mode + no config session
-  eos_config:
-    lines:
-      - ip address 119.31.1.1 255.255.255.255
-    parents: interface Loopback911
-    diff_against: running
   become: true
   check_mode: true
   register: result
   vars:
     ansible_eos_use_sessions: 0
+  arista.eos.eos_config:
+    lines:
+      - ip address 119.31.1.1 255.255.255.255
+    parents: interface Loopback911
+    diff_against: running
 
 - assert:
     that:

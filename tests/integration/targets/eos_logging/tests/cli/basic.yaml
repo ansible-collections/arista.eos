@@ -2,12 +2,12 @@
 - debug: msg="START cli/basic.yaml on connection={{ ansible_connection }}"
 
 - name: Set up host logging
-  eos_logging:
+  become: true
+  register: result
+  arista.eos.eos_logging:
     dest: host
     name: 172.16.0.1
     state: present
-  become: true
-  register: result
 
 - assert:
     that:
@@ -15,24 +15,24 @@
       - '"logging host 172.16.0.1" in result.commands'
 
 - name: Set up host logging again (idempotent)
-  eos_logging:
+  become: true
+  register: result
+  arista.eos.eos_logging:
     dest: host
     name: 172.16.0.1
     state: present
-  become: true
-  register: result
 
 - assert:
     that:
       - result.changed == false
 
 - name: Delete/disable host logging
-  eos_logging:
+  become: true
+  register: result
+  arista.eos.eos_logging:
     dest: host
     name: 172.16.0.1
     state: absent
-  become: true
-  register: result
 
 - assert:
     that:
@@ -40,24 +40,24 @@
       - '"no logging host 172.16.0.1" in result.commands'
 
 - name: Delete/disable host logging (idempotent)
-  eos_logging:
+  become: true
+  register: result
+  arista.eos.eos_logging:
     dest: host
     name: 172.16.0.1
     state: absent
-  become: true
-  register: result
 
 - assert:
     that:
       - result.changed == false
 
 - name: Console logging with level warnings
-  eos_logging:
+  become: true
+  register: result
+  arista.eos.eos_logging:
     dest: console
     level: warnings
     state: present
-  become: true
-  register: result
 
 - assert:
     that:
@@ -65,11 +65,11 @@
       - '"logging console warnings" in result.commands'
 
 - name: Configure buffer size
-  eos_logging:
-    dest: buffered
-    size: 480000
   become: true
   register: result
+  arista.eos.eos_logging:
+    dest: buffered
+    size: 480000
 
 - assert:
     that:
@@ -77,14 +77,14 @@
       - '"logging buffered 480000" in result.commands'
 
 - name: Set up logging destination and facility at the same time
-  eos_logging:
+  become: true
+  register: result
+  arista.eos.eos_logging:
     dest: buffered
     size: 4096
     facility: local7
     level: informational
     state: present
-  become: true
-  register: result
 
 - assert:
     that:
@@ -93,25 +93,25 @@
       - '"logging facility local7" in result.commands'
 
 - name: Set up logging destination and facility at the same time again (idempotent)
-  eos_logging:
+  become: true
+  register: result
+  arista.eos.eos_logging:
     dest: buffered
     size: 4096
     facility: local7
     level: informational
     state: present
-  become: true
-  register: result
 
 - assert:
     that:
       - result.changed == false
 
 - name: Set up logging facility alone
-  eos_logging:
-    facility: local2
-    state: present
   become: true
   register: result
+  arista.eos.eos_logging:
+    facility: local2
+    state: present
 
 - assert:
     that:
@@ -119,18 +119,20 @@
       - '"logging facility local2" in result.commands'
 
 - name: Set up logging facility (idempotent)
-  eos_logging:
-    facility: local2
-    state: present
   become: true
   register: result
+  arista.eos.eos_logging:
+    facility: local2
+    state: present
 
 - assert:
     that:
       - result.changed == false
 
 - name: remove logging as collection tearDown
-  eos_logging:
+  become: true
+  register: result
+  arista.eos.eos_logging:
     aggregate:
       - dest: console
         level: warnings
@@ -141,8 +143,6 @@
         state: absent
       - facility: local2
         state: absent
-  become: true
-  register: result
 
 - assert:
     that:

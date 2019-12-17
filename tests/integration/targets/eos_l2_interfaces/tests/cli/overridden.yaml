@@ -7,26 +7,26 @@
         access:
           vlan: 30
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
-  become: true
 
 - name: Override device configuration of all L2 interfaces on device with provided
     configuration.
-  eos_l2_interfaces:
-    config: '{{ config }}'
-    state: overridden
   register: result
   become: true
+  arista.eos.eos_l2_interfaces:
+    config: '{{ config }}'
+    state: overridden
 
 - assert:
     that:
       - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before)
         == []
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
-  become: true
 
 - assert:
     that:

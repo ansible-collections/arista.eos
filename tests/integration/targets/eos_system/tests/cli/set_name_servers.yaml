@@ -3,21 +3,21 @@
     }}"
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no ip name-server
       - vrf definition ansible
     match: none
-  become: true
 
 - name: configure name_servers
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     name_servers:
       - 192.0.2.1
       - 192.0.2.2
       - 192.0.2.3
-  become: true
-  register: result
 
 - assert:
     that:
@@ -28,25 +28,25 @@
       - '''ip name-server 192.0.2.3'' in result.commands'
 
 - name: verify name_servers
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     name_servers:
       - 192.0.2.1
       - 192.0.2.2
       - 192.0.2.3
-  become: true
-  register: result
 
 - assert:
     that:
       - result.changed == false
 
 - name: remove one
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     name_servers:
       - 192.0.2.1
       - 192.0.2.2
-  become: true
-  register: result
 
 - assert:
     that:
@@ -55,11 +55,11 @@
       - '''no ip name-server 192.0.2.3'' in result.commands'
 
 - name: teardown
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no ip domain lookup source-interface
       - no vrf definition ansible
     match: none
-  become: true
 
 - debug: msg="END cli/set_name_servers.yaml on connection={{ ansible_connection }}"
