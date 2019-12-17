@@ -1,5 +1,6 @@
 ---
 - debug: msg="START eos cli/net_logging.yaml on connection={{ ansible_connection }}"
+
 - name: Delete/disable host logging- setup
   net_logging:
     dest: host
@@ -7,6 +8,7 @@
     state: absent
   become: true
   register: result
+
 - name: Set up host logging using platform agnostic module
   net_logging:
     dest: host
@@ -14,10 +16,12 @@
     state: present
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '"logging host 172.16.0.1" in result.commands'
+
 - name: Delete/disable host logging- teardown
   net_logging:
     dest: host
@@ -25,4 +29,5 @@
     state: absent
   become: true
   register: result
+
 - debug: msg="END eos cli/net_logging.yaml on connection={{ ansible_connection }}"

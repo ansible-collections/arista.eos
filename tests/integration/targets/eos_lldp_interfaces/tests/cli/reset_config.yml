@@ -1,18 +1,21 @@
 ---
 - name: Reset initial config
-  cli_config:
+  become: true
+  ansible.netcommon.cli_config:
     config: "interface Ethernet1\n   no lldp receive\n   lldp transmit\ninterface\
       \ Ethernet2\n   lldp receive\n   no lldp transmit\n"
-  become: true
+
 - eos_facts:
     gather_network_resources: lldp_interfaces
   become: true
+
 - set_fact:
     expected_config:
       - name: Ethernet1
         receive: false
       - name: Ethernet2
         transmit: false
+
 - assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.lldp_interfaces)

@@ -1,10 +1,12 @@
 ---
 - debug: msg="START eos cli/eos_bgp.yaml on connection={{ ansible_connection }}"
+
 - name: Clear existing BGP config
   eos_bgp: &id011
     operation: delete
   become: true
   ignore_errors: true
+
 - name: Configure BGP with AS 64496 and a router-id
   eos_bgp: &id001
     operation: merge
@@ -13,18 +15,22 @@
       router_id: 192.0.2.2
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''router bgp 64496'' in result.commands'
       - '''router-id 192.0.2.2'' in result.commands'
+
 - name: Configure BGP with AS 64496 and a router-id (idempotent)
   eos_bgp: *id001
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Configure BGP neighbors
   eos_bgp: &id002
     operation: merge
@@ -44,6 +50,7 @@
           ebgp_multihop: 150
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -55,13 +62,16 @@
       - '''neighbor 192.0.2.15 remote-as 64496'' in result.commands'
       - '''neighbor 192.0.2.15 description IBGP_NBR_2'' in result.commands'
       - '''neighbor 192.0.2.15 ebgp-multihop 150'' in result.commands'
+
 - name: Configure BGP neighbors (idempotent)
   eos_bgp: *id002
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Configure BGP neighbors with operation replace
   eos_bgp: &id003
     operation: replace
@@ -77,19 +87,23 @@
           description: EBGP_NBR_1
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''neighbor 203.0.113.10 remote-as 64511'' in result.commands'
       - '''neighbor 203.0.113.10 description EBGP_NBR_1'' in result.commands'
       - '''no neighbor 192.0.2.10'' in result.commands'
+
 - name: Configure BGP neighbors with operation replace (idempotent)
   eos_bgp: *id003
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Configure root-level networks for BGP
   eos_bgp: &id004
     operation: merge
@@ -104,19 +118,23 @@
           route_map: RMAP_2
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == True
       - '''router bgp 64496'' in result.commands'
       - '''network 203.0.113.0/27 route-map RMAP_1'' in result.commands'
       - '''network 203.0.113.32/27 route-map RMAP_2'' in result.commands'
+
 - name: Configure root-level networks for BGP (idempotent)
   eos_bgp: *id004
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Configure root-level networks for BGP with operation replace
   eos_bgp: &id005
     operation: replace
@@ -130,19 +148,23 @@
           masklen: 28
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == True
       - '''router bgp 64496'' in result.commands'
       - '''network 198.51.100.16/28'' in result.commands'
       - '''no network 203.0.113.32/27'' in result.commands'
+
 - name: Configure root-level networks for BGP with operation replace (idempotent)
   eos_bgp: *id005
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Configure BGP route redistribute information
   eos_bgp: &id006
     operation: merge
@@ -154,19 +176,23 @@
         - protocol: rip
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''router bgp 64496'' in result.commands'
       - '''redistribute ospf route-map RMAP_1'' in result.commands'
       - '''redistribute rip'' in result.commands'
+
 - name: Configure BGP route redistribute information (idempotent)
   eos_bgp: *id006
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Configure BGP route redistribute information with operation replace
   eos_bgp: &id007
     operation: replace
@@ -179,18 +205,22 @@
           route_map: RMAP_2
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''redistribute static route-map RMAP_2'' in result.commands'
       - '''no redistribute rip'' in result.commands'
+
 - name: Configure BGP route redistribute information with operation replace (idempotent)
   eos_bgp: *id007
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Configure BGP neighbors under address family mode
   eos_bgp: &id008
     operation: merge
@@ -207,6 +237,7 @@
               graceful_restart: true
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -216,13 +247,16 @@
       - '''neighbor 203.0.113.10 default-originate'' in result.commands'
       - '''neighbor 192.0.2.15 activate'' in result.commands'
       - '''neighbor 192.0.2.15 graceful-restart'' in result.commands'
+
 - name: Configure BGP neighbors under address family mode (idempotent)
   eos_bgp: *id008
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Configure networks under address family
   eos_bgp: &id009
     operation: merge
@@ -245,6 +279,7 @@
               masklen: 33
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -255,13 +290,16 @@
       - '''network 203.0.113.160/27 route-map RMAP_2'' in result.commands'
       - '''address-family ipv6'' in result.commands'
       - '''network 2001:db8::/33'' in result.commands'
+
 - name: Configure networks under address family (idempotent)
   eos_bgp: *id009
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Configure networks under address family with operation replace
   eos_bgp: &id010
     operation: replace
@@ -282,6 +320,7 @@
               masklen: 37
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -294,13 +333,16 @@
       - '"address-family ipv6" in result.commands'
       - '"network 2001:db8:1000::/37" in result.commands'
       - '"no network 2001:db8::/33" in result.commands'
+
 - name: Configure networks under address family with operation replace (idempotent)
   eos_bgp: *id010
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: Override all the exisiting BGP config
   eos_bgp:
     operation: override
@@ -310,6 +352,7 @@
       log_neighbor_changes: true
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -317,19 +360,24 @@
       - '''router bgp 64497'' in result.commands'
       - '''router-id 192.0.2.10'' in result.commands'
       - '''bgp log-neighbor-changes'' in result.commands'
+
 - name: Teardown
   eos_bgp: *id011
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''no router bgp 64497'' in result.commands'
+
 - name: Teardown again (idempotent)
   eos_bgp: *id011
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - debug: msg="END eos cli/eos_bgp.yaml on connection={{ ansible_connection }}"

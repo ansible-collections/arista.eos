@@ -94,11 +94,11 @@ import re
 from copy import deepcopy
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.network.common.utils import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     is_masklen,
     validate_ip_address,
 )
-from ansible.module_utils.network.common.utils import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
     validate_prefix,
 )

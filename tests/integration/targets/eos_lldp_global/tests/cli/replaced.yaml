@@ -1,5 +1,6 @@
 ---
 - include_tasks: reset_config.yml
+
 - set_fact:
     config:
       holdtime: 100
@@ -7,30 +8,37 @@
         management_address: false
         port_description: false
         system_description: true
+
 - eos_facts:
     gather_network_resources: lldp_global
   become: true
+
 - name: Replaces device configuration with provided LLDP configuration
   eos_lldp_global:
     config: '{{ config }}'
     state: replaced
   register: result
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_global == result.before
+
 - eos_facts:
     gather_network_resources: lldp_global
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_global == result.after
+
 - set_fact:
     expected_config:
       holdtime: 100
       tlv_select:
         management_address: false
         port_description: false
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_global == expected_config

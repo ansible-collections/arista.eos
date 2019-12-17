@@ -1,6 +1,7 @@
 ---
 - debug:
     msg: START cli/check_mode.yaml on connection={{ ansible_connection }}
+
 - name: invalid configuration in check mode
   eos_config:
     lines:
@@ -12,11 +13,13 @@
     ansible_eos_use_sessions: 1
   register: result
   ignore_errors: true
+
 - assert:
     that:
       - result.msg is defined
       - result.failed == true
       - '''Invalid input'' in result.msg'
+
 - name: valid configuration in check mode
   eos_config:
     before:
@@ -25,15 +28,18 @@
   become: true
   check_mode: true
   register: config
+
 - name: check if session is removed
   eos_command:
     commands:
       - show configuration sessions | json
   become: true
   register: result
+
 - assert:
     that:
       - config.session not in result.stdout[0].sessions
+
 - name: configuration in check mode + no config session
   eos_config:
     lines:
@@ -45,9 +51,11 @@
     ansible_eos_use_sessions: 0
   register: result
   ignore_errors: true
+
 - assert:
     that:
       - result.failed == true
+
 - name: invalid configuration in check mode + no config session
   eos_config:
     lines:
@@ -60,9 +68,11 @@
     ansible_eos_use_sessions: 0
   register: result
   ignore_errors: true
+
 - assert:
     that:
       - result.changed == true
+
 - name: valid configuration in check mode + no config session
   eos_config:
     lines:
@@ -74,8 +84,10 @@
   register: result
   vars:
     ansible_eos_use_sessions: 0
+
 - assert:
     that:
       - result.changed == true
       - '''session'' not in result'
+
 - debug: msg="END cli/check_mode.yaml on connection={{ ansible_connection }}"

@@ -1,5 +1,6 @@
 ---
 - debug: msg="START eapi/sublevel_block.yaml"
+
 - name: setup
   eos_config:
     lines:
@@ -10,6 +11,7 @@
     before: no ip access-list test
     match: none
   become: true
+
 - name: configure sub level command using block resplace
   eos_config:
     lines:
@@ -22,6 +24,7 @@
     replace: block
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -30,6 +33,7 @@
       - '''20 permit ip host 192.0.2.2 any log'' in result.updates'
       - '''30 permit ip host 192.0.2.3 any log'' in result.updates'
       - '''40 permit ip host 192.0.2.4 any log'' in result.updates'
+
 - name: check sub level command using block replace
   eos_config:
     lines:
@@ -41,12 +45,15 @@
     replace: block
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
+
 - name: teardown
   eos_config:
     lines: no ip access-list test
     match: none
   become: true
+
 - debug: msg="END eapi/sublevel_block.yaml"

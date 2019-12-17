@@ -1,5 +1,6 @@
 ---
 - debug: msg="START cli/bad_operator.yaml on connection={{ ansible_connection }}"
+
 - name: test bad operator
   eos_command:
     commands:
@@ -9,8 +10,10 @@
       - result[1].interfaces.Management1.name foo Management
   register: result
   ignore_errors: true
+
 - assert:
     that:
       - result.failed == true
       - result.msg is defined
+
 - debug: msg="END cli/bad_operator.yaml on connection={{ ansible_connection }}"

@@ -12,6 +12,7 @@
     - test3
     - test4
     - test5
+
 - name: Create vrf
   eos_vrf:
     name: test
@@ -20,12 +21,14 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''vrf definition test'' in result.commands'
       - '''rd 1:200'' in result.commands'
       - '''ansible_1'' in result.session_name'
+
 - name: Create vrf again (idempotent)
   eos_vrf:
     name: test
@@ -34,11 +37,13 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.commands | length == 0
       - result.session_name is not defined
+
 - name: Modify rd
   eos_vrf:
     name: test
@@ -47,12 +52,14 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''vrf definition test'' in result.commands'
       - '''rd 1:201'' in result.commands'
       - '''ansible_1'' in result.session_name'
+
 - name: Modify rd again (idempotent)
   eos_vrf:
     name: test
@@ -61,11 +68,13 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.commands | length == 0
       - result.session_name is not defined
+
 - name: Add Ethernet2 to vrf and check interface assigned state
   eos_vrf:
     name: test
@@ -78,12 +87,14 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''interface ethernet2'' in result.commands'
       - '''vrf forwarding test'' in result.commands'
       - '''ansible_1'' in result.session_name'
+
 - name: Add Ethernet2 to vrf again (idempotent)
   eos_vrf:
     name: test
@@ -94,11 +105,13 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.commands | length == 0
       - '''session_name'' not in result.commands'
+
 - name: vrf interface intent fail
   eos_vrf:
     name: test
@@ -109,9 +122,11 @@
   become: true
   register: result
   ignore_errors: true
+
 - assert:
     that:
       - result.failed == True
+
 - name: Add multiple interfaces to vrf
   eos_vrf:
     name: test1
@@ -128,6 +143,7 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -146,6 +162,7 @@
       - '''interface loopback1000'' in result.commands'
       - '''vrf forwarding test1'' in result.commands'
       - '''ansible_1'' in result.session_name'
+
 - name: Add multiple interfaces to vrf (idempotent)
   eos_vrf:
     name: test1
@@ -162,10 +179,12 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.commands | length == 0
+
 - name: setup - remove vrf
   eos_vrf:
     name: '{{ item }}'
@@ -176,6 +195,7 @@
     - test1
     - test2
     - test3
+
 - name: Create aggregate of VRFs
   eos_vrf:
     aggregate:
@@ -187,6 +207,7 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -195,6 +216,7 @@
       - '''vrf definition test3'' in result.commands'
       - '''rd 1:203'' in result.commands'
       - '''ansible_1'' in result.session_name'
+
 - name: Create aggregate of VRFs again (idempotent)
   eos_vrf:
     aggregate:
@@ -206,11 +228,13 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.commands | length == 0
       - result.session_name is not defined
+
 - name: Create aggregate of VRFs with purge
   eos_vrf:
     aggregate:
@@ -223,6 +247,7 @@
     provider: '{{ cli }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
@@ -234,18 +259,21 @@
       - '''no vrf definition test2'' in result.commands'
       - '''no vrf definition test3'' in result.commands'
       - '''ansible_1'' in result.session_name'
+
 - name: Delete VRFs
   eos_vrf:
     name: test
     state: absent
     provider: '{{ cli }}'
   become: true
+
 - name: Delete VRFs again (idempotent)
   eos_vrf:
     name: test
     state: absent
     provider: '{{ cli }}'
   become: true
+
 - name: Delete aggregate of VRFs
   eos_vrf:
     aggregate:
@@ -257,6 +285,7 @@
     state: absent
     provider: '{{ cli }}'
   become: true
+
 - name: Delete VRFs again (idempotent)
   eos_vrf:
     aggregate:

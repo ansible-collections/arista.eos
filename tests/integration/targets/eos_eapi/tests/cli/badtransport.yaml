@@ -1,5 +1,6 @@
 ---
 - debug: msg="START CLI/BADTRANSPORT.YAML"
+
 - block:
     - name: Expect transport other than cli to fail
       eos_eapi:
@@ -9,4 +10,5 @@
     - assert:
         that: eos_eapi_output.failed == true
   when: ansible_connection == 'local'
+
 - debug: msg="START CLI/BADTRANSPORT.YAML"

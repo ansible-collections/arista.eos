@@ -1,5 +1,6 @@
 ---
 - debug: msg="START eapi/save.yaml"
+
 - name: setup
   eos_config:
     commands:
@@ -9,17 +10,22 @@
       - interface Ethernet2
     match: none
   become: true
+
 - name: save config always
   eos_config: &id001
     save_when: always
   become: true
   register: result
+
 - assert: &id002
     that:
       - result.changed == true
+
 - name: save should always run
   eos_config: *id001
   become: true
   register: result
+
 - assert: *id002
+
 - debug: msg="END eapi/save.yaml"

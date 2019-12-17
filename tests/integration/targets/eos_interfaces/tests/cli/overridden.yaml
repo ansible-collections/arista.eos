@@ -1,5 +1,6 @@
 ---
 - include_tasks: reset_config.yml
+
 - set_fact:
     config:
       - name: Ethernet1
@@ -11,26 +12,32 @@
         enabled: false
       - name: Management1
         enabled: true
+
 - eos_facts:
     gather_network_resources: interfaces
   become: true
+
 - name: Overrides device configuration of all interfaces with provided configuration
   eos_interfaces:
     config: '{{ config }}'
     state: overridden
   register: result
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.before)|length
         == 0
+
 - eos_facts:
     gather_network_resources: interfaces
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.after)|length
         == 0
+
 - assert:
     that:
       - config|difference(ansible_facts.network_resources.interfaces)|length == 0

@@ -1,5 +1,6 @@
 ---
 - include_tasks: reset_config.yml
+
 - set_fact:
     config:
       holdtime: 100
@@ -7,24 +8,30 @@
         management_address: false
         port_description: false
         system_description: true
+
 - eos_facts:
     gather_network_resources: lldp_global
   become: true
+
 - name: Merge provided LLDP configuration with device configuration
   eos_lldp_global:
     config: '{{ config }}'
     state: merged
   register: result
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_global == result.before
+
 - eos_facts:
     gather_network_resources: lldp_global
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_global == result.after
+
 - set_fact:
     expected_config:
       timer: 3000
@@ -33,6 +40,7 @@
       tlv_select:
         management_address: false
         port_description: false
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_global == expected_config
