@@ -5,25 +5,25 @@
     config:
       - name: Ethernet1
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: interfaces
-  become: true
 
 - name: Returns interfaces to default parameters
-  eos_interfaces:
-    config: '{{ config }}'
-    state: deleted
   register: result
   become: true
+  arista.eos.eos_interfaces:
+    config: '{{ config }}'
+    state: deleted
 
 - assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.before)|length
         == 0
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: interfaces
-  become: true
 
 - assert:
     that:

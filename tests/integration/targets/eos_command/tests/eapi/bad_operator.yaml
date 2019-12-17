@@ -2,14 +2,14 @@
 - debug: msg="START eapi/bad_operator.yaml"
 
 - name: test bad operator
-  eos_command:
+  register: result
+  ignore_errors: true
+  arista.eos.eos_command:
     commands:
       - show version
       - show interfaces Management1
     wait_for:
       - result[1].interfaces.Management1.name foo Management
-  register: result
-  ignore_errors: true
 
 - assert:
     that:

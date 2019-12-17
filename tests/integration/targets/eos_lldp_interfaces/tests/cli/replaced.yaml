@@ -9,26 +9,26 @@
       - name: Ethernet2
         transmit: false
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lldp_interfaces
-  become: true
 
 - name: Replace existing LLDP configuration of specified interfaces with provided
     configuration
-  eos_lldp_interfaces:
-    config: '{{ config }}'
-    state: replaced
   register: result
   become: true
+  arista.eos.eos_lldp_interfaces:
+    config: '{{ config }}'
+    state: replaced
 
 - assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.before)
         == []
 
-- eos_facts:
+- become: true
+  arista.eos.eos_facts:
     gather_network_resources: lldp_interfaces
-  become: true
 
 - assert:
     that:

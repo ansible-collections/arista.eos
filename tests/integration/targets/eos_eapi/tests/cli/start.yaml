@@ -2,17 +2,17 @@
 - debug: msg="START CLI/START.YAML"
 
 - name: Set state to started
-  eos_eapi:
-    state: started
-    provider: '{{ cli }}'
   become: true
   register: eos_eapi_output
+  arista.eos.eos_eapi:
+    state: started
+    provider: '{{ cli }}'
 
-- eos_command:
+- register: http_config
+  arista.eos.eos_command:
     commands:
       - show management api http-commands | json
     provider: '{{ cli }}'
-  register: http_config
 
 - debug: var=http_config
   when: debug
@@ -22,11 +22,11 @@
     that: http_config.stdout[0].enabled == true
 
 - name: Set state to running again
-  eos_eapi:
-    state: started
-    provider: '{{ cli }}'
   become: true
   register: eos_eapi_output
+  arista.eos.eos_eapi:
+    state: started
+    provider: '{{ cli }}'
 
 - debug: var=eos_eapi_output
   when: debug

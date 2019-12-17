@@ -2,7 +2,8 @@
 - debug: msg="START eapi/sublevel_strict.yaml"
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - 10 permit ip host 192.0.2.1 any log
       - 20 permit ip host 192.0.2.2 any log
@@ -12,10 +13,11 @@
     parents: ip access-list test
     before: no ip access-list test
     match: none
-  become: true
 
 - name: configure sub level command using strict match
-  eos_config:
+  become: true
+  register: result
+  arista.eos.eos_config:
     lines:
       - 10 permit ip host 192.0.2.1 any log
       - 20 permit ip host 192.0.2.3 any log
@@ -26,8 +28,6 @@
     after: exit
     match: strict
     replace: block
-  become: true
-  register: result
 
 - assert:
     that:
@@ -40,7 +40,9 @@
       - '''50 permit ip host 192.0.2.5 any log'' not in result.updates'
 
 - name: check sub level command using strict match
-  eos_config:
+  become: true
+  register: result
+  arista.eos.eos_config:
     lines:
       - 10 permit ip host 192.0.2.1 any log
       - 20 permit ip host 192.0.2.3 any log
@@ -48,17 +50,15 @@
       - 40 permit ip host 192.0.2.4 any log
     parents: ip access-list test
     match: strict
-  become: true
-  register: result
 
 - assert:
     that:
       - result.changed == false
 
 - name: teardown
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines: no ip access-list test
     match: none
-  become: true
 
 - debug: msg="END eapi/sublevel_strict.yaml"

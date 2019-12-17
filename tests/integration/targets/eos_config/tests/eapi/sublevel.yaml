@@ -2,18 +2,18 @@
 - debug: msg="START eapi/sublevel.yaml"
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines: no ip access-list test
     match: none
-  become: true
 
 - name: configure sub level command
-  eos_config:
+  become: true
+  register: result
+  arista.eos.eos_config:
     lines: 10 permit ip any any log
     parents: ip access-list test
     after: exit
-  become: true
-  register: result
 
 - assert:
     that:
@@ -22,20 +22,20 @@
       - '''10 permit ip any any log'' in result.updates'
 
 - name: configure sub level command idempotent check
-  eos_config:
-    lines: 10 permit ip any any log
-    parents: ip access-list test
   become: true
   register: result
+  arista.eos.eos_config:
+    lines: 10 permit ip any any log
+    parents: ip access-list test
 
 - assert:
     that:
       - result.changed == false
 
 - name: teardown
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines: no ip access-list test
     match: none
-  become: true
 
 - debug: msg="END eapi/sublevel.yaml"

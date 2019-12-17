@@ -2,20 +2,20 @@
 - debug: msg="START cli/set_domain_list.yaml on connection={{ ansible_connection }}"
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no ip domain-list ansible.com
       - no ip domain-list redhat.com
     match: none
-  become: true
 
 - name: configure domain_list
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     domain_list:
       - ansible.com
       - redhat.com
-  become: true
-  register: result
 
 - assert:
     that:
@@ -24,23 +24,23 @@
       - '''ip domain-list redhat.com'' in result.commands'
 
 - name: verify domain_list
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     domain_list:
       - ansible.com
       - redhat.com
-  become: true
-  register: result
 
 - assert:
     that:
       - result.changed == false
 
 - name: remove one entry
-  eos_system:
-    domain_list:
-      - ansible.com
   become: true
   register: result
+  arista.eos.eos_system:
+    domain_list:
+      - ansible.com
 
 - assert:
     that:
@@ -48,23 +48,23 @@
       - '''no ip domain-list redhat.com'' in result.commands'
 
 - name: verify remove one entry
-  eos_system:
-    domain_list:
-      - ansible.com
   become: true
   register: result
+  arista.eos.eos_system:
+    domain_list:
+      - ansible.com
 
 - assert:
     that:
       - result.changed == false
 
 - name: add one entry
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     domain_list:
       - ansible.com
       - redhat.com
-  become: true
-  register: result
 
 - assert:
     that:
@@ -72,24 +72,24 @@
       - '''ip domain-list redhat.com'' in result.commands'
 
 - name: verify add one entry
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     domain_list:
       - ansible.com
       - redhat.com
-  become: true
-  register: result
 
 - assert:
     that:
       - result.changed == false
 
 - name: add and remove one entry
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     domain_list:
       - ansible.com
       - eng.ansible.com
-  become: true
-  register: result
 
 - assert:
     that:
@@ -99,24 +99,24 @@
       - result.commands|length == 2
 
 - name: verify add and remove one entry
-  eos_system:
+  become: true
+  register: result
+  arista.eos.eos_system:
     domain_list:
       - ansible.com
       - eng.ansible.com
-  become: true
-  register: result
 
 - assert:
     that:
       - result.changed == false
 
 - name: teardown
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     lines:
       - no ip domain-list ansible.com
       - no ip domain-list redhat.com
       - no ip domain-list eng.ansible.com
     match: none
-  become: true
 
 - debug: msg="END cli/set_domain_list.yaml on connection={{ ansible_connection }}"

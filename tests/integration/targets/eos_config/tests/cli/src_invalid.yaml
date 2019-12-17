@@ -2,11 +2,11 @@
 - debug: msg="START cli/src_invalid.yaml on connection={{ ansible_connection }}"
 
 - name: configure with invalid src
-  eos_config:
-    src: basic/foobar.j2
   become: true
   register: result
   ignore_errors: true
+  arista.eos.eos_config:
+    src: basic/foobar.j2
 
 - assert:
     that:

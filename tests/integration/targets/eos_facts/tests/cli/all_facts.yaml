@@ -2,12 +2,12 @@
 - debug: msg="START cli/all_facts.yaml on connection={{ ansible_connection }}"
 
 - name: test getting all facts
-  eos_facts:
+  become: true
+  register: result
+  arista.eos.eos_facts:
     gather_subset:
       - all
     provider: '{{ cli }}'
-  become: true
-  register: result
 
 - assert:
     that:

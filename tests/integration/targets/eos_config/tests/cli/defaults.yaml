@@ -2,21 +2,21 @@
 - debug: msg="START cli/defaults.yaml on connection={{ ansible_connection }}"
 
 - name: setup
-  eos_config:
+  become: true
+  arista.eos.eos_config:
     commands:
       - no description
       - shutdown
     parents:
       - interface Ethernet2
     match: none
-  become: true
 
 - name: configure device with defaults included
-  eos_config:
-    src: defaults/config.j2
-    defaults: true
   become: true
   register: result
+  arista.eos.eos_config:
+    src: defaults/config.j2
+    defaults: true
 
 - debug: var=result
 
@@ -26,11 +26,11 @@
       - result.updates is defined
 
 - name: check device with defaults included
-  eos_config:
-    src: defaults/config.j2
-    defaults: true
   become: true
   register: result
+  arista.eos.eos_config:
+    src: defaults/config.j2
+    defaults: true
 
 - debug: var=result
 
