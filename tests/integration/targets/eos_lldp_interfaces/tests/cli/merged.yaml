@@ -1,31 +1,38 @@
 ---
 - include_tasks: reset_config.yml
+
 - set_fact:
     config:
       - name: Ethernet1
         transmit: false
       - name: Ethernet2
         transmit: false
+
 - eos_facts:
     gather_network_resources: lldp_interfaces
   become: true
+
 - name: Merge provided configuration with device configuration
   eos_lldp_interfaces:
     config: '{{ config }}'
     state: merged
   register: result
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.before)
         == []
+
 - eos_facts:
     gather_network_resources: lldp_interfaces
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.after)
         == []
+
 - set_fact:
     expected_config:
       - name: Ethernet1
@@ -33,6 +40,7 @@
         receive: false
       - name: Ethernet2
         transmit: false
+
 - assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.lldp_interfaces)

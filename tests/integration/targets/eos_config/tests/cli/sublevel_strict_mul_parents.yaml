@@ -2,6 +2,7 @@
 - debug:
     msg: START cli/sublevel_strict_mul_parents.yaml on connection={{ ansible_connection
       }}
+
 - name: setup
   eos_config:
     lines:
@@ -14,6 +15,7 @@
       - no class-map type qos match-any c1
     match: none
   become: true
+
 - block:
     - name: configure sub level command using strict match
       eos_config:
@@ -72,5 +74,6 @@
           - no class-map type qos match-any c1
         match: none
       become: true
+
 - debug: msg="END cli/sublevel_strict_mul_parents.yaml on connection={{ ansible_connection
     }}"

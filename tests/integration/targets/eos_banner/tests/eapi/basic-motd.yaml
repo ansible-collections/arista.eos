@@ -1,9 +1,11 @@
 ---
 - debug: msg="START eapi/basic-motd.yaml on connection={{ ansible_connection }}"
+
 - name: Remove previous motd banner
   eos_config:
     lines: no banner motd
   become: true
+
 - name: Set motd
   eos_banner:
     banner: motd
@@ -17,12 +19,14 @@
     state: present
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''this is my motd banner'' in result.commands'
       - '''that has a multiline'' in result.commands'
       - '''ansible_1'' in result.session_name'
+
 - name: Set motd again (idempotent)
   eos_banner:
     banner: motd
@@ -36,11 +40,13 @@
     state: present
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
       - result.commands | length == 0
       - result.session_name is not defined
+
 - name: Remove motd
   eos_banner:
     banner: motd
@@ -54,11 +60,13 @@
     state: absent
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == true
       - '''no banner motd'' in result.commands'
       - '''ansible_1'' in result.session_name'
+
 - name: Remove motd again (idempotent)
   eos_banner:
     banner: motd
@@ -72,6 +80,7 @@
     state: absent
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false

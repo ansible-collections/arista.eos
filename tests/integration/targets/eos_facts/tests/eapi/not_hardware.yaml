@@ -1,5 +1,6 @@
 ---
 - debug: msg="START eapi/not_hardware.yaml on connection={{ ansible_connection }}"
+
 - name: test not hardware
   eos_facts:
     gather_subset:
@@ -7,6 +8,7 @@
     provider: '{{ eapi }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
@@ -16,4 +18,5 @@
       - '''hardware'' not in result.ansible_facts.ansible_net_gather_subset'
       - result.ansible_facts.ansible_net_interfaces.Management1
       - result.ansible_facts.ansible_net_filesystems is not defined
+
 - debug: msg="END eapi/not_hardware.yaml on connection={{ ansible_connection }}"

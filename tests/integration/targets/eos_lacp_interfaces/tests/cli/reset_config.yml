@@ -1,18 +1,21 @@
 ---
 - name: Reset initial config
-  cli_config:
+  become: true
+  ansible.netcommon.cli_config:
     config: "interface Ethernet1\n   lacp port-priority 30\n   lacp rate normal\n\
       interface Ethernet2\n   no lacp port-priority\n   lacp rate fast\n"
-  become: true
+
 - eos_facts:
     gather_network_resources: lacp_interfaces
   become: true
+
 - set_fact:
     expected_config:
       - name: Ethernet1
         port_priority: 30
       - name: Ethernet2
         rate: fast
+
 - assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.lacp_interfaces)

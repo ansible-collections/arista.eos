@@ -1,14 +1,16 @@
 ---
 - name: Reset state
-  cli_config:
+  become: true
+  ansible.netcommon.cli_config:
     config: "interface Ethernet1\n   switchport access vlan 20\n   no switchport trunk\
       \ native vlan\n   no switchport trunk allowed vlan\ninterface Ethernet2\n  \
       \ no switchport access vlan\n   switchport trunk native vlan 20\n   switchport\
       \ mode trunk\n"
-  become: true
+
 - eos_facts:
     gather_network_resources: l2_interfaces
   become: true
+
 - set_fact:
     expected_config:
       - name: Ethernet1
@@ -18,6 +20,7 @@
         trunk:
           native_vlan: 20
       - name: Management1
+
 - assert:
     that:
       - ansible_facts.network_resources.l2_interfaces|symmetric_difference(expected_config)

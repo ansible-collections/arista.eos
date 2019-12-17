@@ -6,7 +6,8 @@
       - no switchport
     parents: int Ethernet1
   become: true
-  connection: network_cli
+  connection: ansible.netcommon.network_cli
+
 - name: Enable Ethernet2 interface and disable switchport
   eos_config:
     lines:
@@ -14,7 +15,8 @@
       - no switchport
     parents: int Ethernet2
   become: true
-  connection: network_cli
+  connection: ansible.netcommon.network_cli
+
 - name: enable eapi
   eos_eapi:
     http: true
@@ -22,5 +24,5 @@
     local_http: false
     enable_socket: true
   become: true
-  connection: network_cli
+  connection: ansible.netcommon.network_cli
   tags: eapi

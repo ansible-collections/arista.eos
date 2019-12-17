@@ -1,29 +1,36 @@
 ---
 - include_tasks: reset_config.yml
+
 - set_fact:
     config:
       - name: Ethernet1
         transmit: false
+
 - eos_facts:
     gather_network_resources: lldp_interfaces
   become: true
+
 - name: Override the LLDP configuration of all interfaces with provided configuration
   eos_lldp_interfaces:
     config: '{{ config }}'
     state: overridden
   register: result
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.before)
         == []
+
 - eos_facts:
     gather_network_resources: lldp_interfaces
   become: true
+
 - assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.after)
         == []
+
 - assert:
     that:
       - config|symmetric_difference(ansible_facts.network_resources.lldp_interfaces)

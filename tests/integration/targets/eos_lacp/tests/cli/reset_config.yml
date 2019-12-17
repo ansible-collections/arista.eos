@@ -1,17 +1,20 @@
 ---
 - name: Reset initial config
-  cli_config:
+  become: true
+  ansible.netcommon.cli_config:
     config: 'lacp system-priority 10
 
       '
-  become: true
+
 - eos_facts:
     gather_network_resources: lacp
   become: true
+
 - set_fact:
     expected_config:
       system:
         priority: 10
+
 - assert:
     that:
       - expected_config == ansible_facts.network_resources.lacp

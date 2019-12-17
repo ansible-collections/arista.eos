@@ -1,10 +1,12 @@
 ---
 - debug: msg="START eapi/default_facts.yaml on connection={{ ansible_connection }}"
+
 - name: test getting default facts
   eos_facts:
     provider: '{{ eapi }}'
   become: true
   register: result
+
 - assert:
     that:
       - result.changed == false
@@ -17,4 +19,5 @@
       - result.ansible_facts.ansible_net_memtotal_mb > 10
       - result.ansible_facts.ansible_net_interfaces.Management1
       - result.ansible_facts.ansible_net_config is not defined
+
 - debug: msg="END eapi/default_facts.yaml on connection={{ ansible_connection }}"
