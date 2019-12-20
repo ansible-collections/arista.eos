@@ -3,10 +3,12 @@
 
 - set_fact:
     config:
+
       - name: Ethernet1
         rate: fast
         port_priority: 45
     other_config:
+
       - name: Ethernet2
         rate: fast
 

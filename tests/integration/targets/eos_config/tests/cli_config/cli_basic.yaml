@@ -6,11 +6,8 @@
   become: true
   ansible.netcommon.cli_config: &id002
     config: 'interface Ethernet2
-
       no description
-
       no shutdown
-
       '
 
 - name: configure device with config
@@ -36,4 +33,5 @@
   become: true
   ansible.netcommon.cli_config: *id002
 
-- debug: msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection }}"
+- debug: msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection
+    }}"

@@ -3,13 +3,16 @@
 
 - set_fact:
     config:
+
       - name: Ethernet1
         duplex: auto
         enabled: true
+
       - name: Ethernet2
         duplex: auto
         description: Configured by Ansible
         enabled: false
+
       - name: Management1
         enabled: true
 
@@ -40,4 +43,5 @@
 
 - assert:
     that:
-      - config|difference(ansible_facts.network_resources.interfaces)|length == 0
+      - config|difference(ansible_facts.network_resources.interfaces)|length ==
+        0

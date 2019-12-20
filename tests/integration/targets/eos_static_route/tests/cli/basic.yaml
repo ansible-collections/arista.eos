@@ -62,8 +62,10 @@
   register: result
   arista.eos.eos_static_route: &id003
     aggregate:
+
       - address: 192.168.4.0/24
         next_hop: 192.168.0.1
+
       - address: 192.168.5.0/24
         next_hop: 192.168.0.1
     provider: '{{ cli }}'
@@ -88,8 +90,10 @@
   register: result
   arista.eos.eos_static_route: &id004
     aggregate:
+
       - address: 192.168.4.0/24
         next_hop: 192.168.0.1
+
       - address: 192.168.5.0/24
         next_hop: 192.168.0.1
     state: absent

@@ -12,11 +12,8 @@
   arista.eos.eos_banner:
     banner: motd
     text: 'this is my motd banner
-
       that has a multiline
-
       string
-
       '
     state: present
 
@@ -33,11 +30,8 @@
   arista.eos.eos_banner:
     banner: motd
     text: 'this is my motd banner
-
       that has a multiline
-
       string
-
       '
     state: present
 
@@ -53,11 +47,8 @@
   arista.eos.eos_banner:
     banner: motd
     text: 'this is my motd banner
-
       that has a multiline
-
       string
-
       '
     state: absent
 
@@ -73,11 +64,8 @@
   arista.eos.eos_banner:
     banner: motd
     text: 'this is my motd banner
-
       that has a multiline
-
       string
-
       '
     state: absent
 

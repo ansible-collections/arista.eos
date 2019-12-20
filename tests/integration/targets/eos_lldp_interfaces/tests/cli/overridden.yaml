@@ -3,6 +3,7 @@
 
 - set_fact:
     config:
+
       - name: Ethernet1
         transmit: false
 

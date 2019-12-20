@@ -35,6 +35,7 @@
   register: result
   arista.eos.eos_system:
     lookup_source:
+
       - interface: Management1
         vrf: ansible
 
@@ -50,6 +51,7 @@
   register: result
   arista.eos.eos_system:
     lookup_source:
+
       - interface: Management1
         vrf: ansible
 

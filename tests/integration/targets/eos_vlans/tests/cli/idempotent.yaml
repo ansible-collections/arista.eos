@@ -18,5 +18,5 @@
     that:
       - result.changed == False
       - result.commands == []
-      - ansible_facts.network_resources.vlans|symmetric_difference(result.before) ==
-        []
+      - ansible_facts.network_resources.vlans|symmetric_difference(result.before)
+        == []

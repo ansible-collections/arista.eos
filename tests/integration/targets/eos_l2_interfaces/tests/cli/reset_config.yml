@@ -2,9 +2,9 @@
 - name: Reset state
   become: true
   ansible.netcommon.cli_config:
-    config: "interface Ethernet1\n   switchport access vlan 20\n   no switchport trunk\
-      \ native vlan\n   no switchport trunk allowed vlan\ninterface Ethernet2\n  \
-      \ no switchport access vlan\n   switchport trunk native vlan 20\n   switchport\
+    config: "interface Ethernet1\n   switchport access vlan 20\n   no switchport\
+      \ trunk native vlan\n   no switchport trunk allowed vlan\ninterface Ethernet2\n\
+      \   no switchport access vlan\n   switchport trunk native vlan 20\n   switchport\
       \ mode trunk\n"
 
 - become: true
@@ -13,12 +13,15 @@
 
 - set_fact:
     expected_config:
+
       - name: Ethernet1
         access:
           vlan: 20
+
       - name: Ethernet2
         trunk:
           native_vlan: 20
+
       - name: Management1
 
 - assert:

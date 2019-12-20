@@ -3,9 +3,11 @@
 
 - set_fact:
     config:
+
       - name: Ethernet1
         transmit: false
     other_config:
+
       - name: Ethernet2
         transmit: false
 
