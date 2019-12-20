@@ -12,9 +12,7 @@
   arista.eos.eos_banner: &id001
     banner: login
     text: 'Junk login banner
-
       over multiple lines
-
       '
     state: present
 

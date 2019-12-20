@@ -3,8 +3,10 @@
 
 - set_fact:
     config:
+
       - name: Ethernet1
     other_config:
+
       - name: Ethernet2
         rate: fast
 

@@ -1,5 +1,6 @@
 ---
-- debug: msg="START eos_lldp eapi/basic.yaml on connection={{ ansible_connection }}"
+- debug: msg="START eos_lldp eapi/basic.yaml on connection={{ ansible_connection
+    }}"
 
 - name: Make sure LLDP is not running before tests
   become: true

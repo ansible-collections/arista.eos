@@ -3,8 +3,10 @@
 
 - set_fact:
     config:
+
       - vlan_id: 20
         state: suspend
+
       - vlan_id: 50
         name: fifty
 
@@ -21,8 +23,8 @@
 
 - assert:
     that:
-      - ansible_facts.network_resources.vlans|symmetric_difference(result.before) ==
-        []
+      - ansible_facts.network_resources.vlans|symmetric_difference(result.before)
+        == []
 
 - become: true
   arista.eos.eos_facts:
@@ -30,8 +32,8 @@
 
 - assert:
     that:
-      - ansible_facts.network_resources.vlans|symmetric_difference(result.after) ==
-        []
+      - ansible_facts.network_resources.vlans|symmetric_difference(result.after)
+        == []
 
 - set_fact:
     expected_config: '{{ config }}'

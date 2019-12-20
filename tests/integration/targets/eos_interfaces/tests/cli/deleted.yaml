@@ -3,6 +3,7 @@
 
 - set_fact:
     config:
+
       - name: Ethernet1
 
 - become: true
@@ -32,9 +33,11 @@
 
 - set_fact:
     expected_config:
+
       - name: Ethernet1
         duplex: auto
         enabled: true
+
       - name: Ethernet2
         duplex: auto
         enabled: true

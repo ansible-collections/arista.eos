@@ -30,4 +30,5 @@
       - result.changed == false
       - result.stdout is defined
 
-- debug: msg="END eapi/lessthanorequal.yaml on connection={{ ansible_connection }}"
+- debug: msg="END eapi/lessthanorequal.yaml on connection={{ ansible_connection
+    }}"

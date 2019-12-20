@@ -39,6 +39,7 @@
     config:
       bgp_as: 64496
       neighbors:
+
         - neighbor: 192.0.2.10
           remote_as: 64496
           description: IBGP_NBR_1
@@ -46,6 +47,7 @@
           timers:
             keepalive: 300
             holdtime: 360
+
         - neighbor: 192.0.2.15
           remote_as: 64496
           description: IBGP_NBR_2
@@ -80,10 +82,12 @@
     config:
       bgp_as: 64496
       neighbors:
+
         - neighbor: 192.0.2.15
           remote_as: 64496
           description: IBGP_NBR_2
           ebgp_multihop: 150
+
         - neighbor: 203.0.113.10
           remote_as: 64511
           description: EBGP_NBR_1
@@ -112,9 +116,11 @@
     config:
       bgp_as: 64496
       networks:
+
         - prefix: 203.0.113.0
           masklen: 27
           route_map: RMAP_1
+
         - prefix: 203.0.113.32
           masklen: 27
           route_map: RMAP_2
@@ -143,9 +149,11 @@
     config:
       bgp_as: 64496
       networks:
+
         - prefix: 203.0.113.0
           masklen: 27
           route_map: RMAP_1
+
         - prefix: 198.51.100.16
           masklen: 28
 
@@ -173,8 +181,10 @@
     config:
       bgp_as: 64496
       redistribute:
+
         - protocol: ospf
           route_map: RMAP_1
+
         - protocol: rip
 
 - assert:
@@ -201,8 +211,10 @@
     config:
       bgp_as: 64496
       redistribute:
+
         - protocol: ospf
           route_map: RMAP_1
+
         - protocol: static
           route_map: RMAP_2
 
@@ -229,11 +241,14 @@
     config:
       bgp_as: 64496
       address_family:
+
         - afi: ipv4
           neighbors:
+
             - neighbor: 203.0.113.10
               activate: true
               default_originate: true
+
             - neighbor: 192.0.2.15
               activate: true
               graceful_restart: true
@@ -265,18 +280,24 @@
     config:
       bgp_as: 64496
       address_family:
+
         - afi: ipv4
           networks:
+
             - prefix: 198.51.100.48
               masklen: 28
               route_map: RMAP_1
+
             - prefix: 192.0.2.64
               masklen: 27
+
             - prefix: 203.0.113.160
               masklen: 27
               route_map: RMAP_2
+
         - afi: ipv6
           networks:
+
             - prefix: '2001:db8::'
               masklen: 33
 
@@ -308,16 +329,22 @@
     config:
       bgp_as: 64496
       address_family:
+
         - afi: ipv4
           networks:
+
             - prefix: 198.51.100.80
               masklen: 28
+
             - prefix: 192.0.2.64
               masklen: 27
+
             - prefix: 203.0.113.192
               masklen: 27
+
         - afi: ipv6
           networks:
+
             - prefix: '2001:db8:1000::'
               masklen: 37
 

@@ -12,11 +12,8 @@
   arista.eos.eos_banner: &id001
     banner: login
     text: 'this is my login banner
-
       that has a multiline
-
       string
-
       '
     state: present
 
@@ -43,11 +40,8 @@
   arista.eos.eos_banner: &id002
     banner: login
     text: 'this is my login banner
-
       that has a multiline
-
       string
-
       '
     state: absent
 

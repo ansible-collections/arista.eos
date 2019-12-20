@@ -3,14 +3,20 @@
 
 - set_fact:
     config:
+
       - name: Ethernet1
         ipv6:
+
           - address: 2001:db8:feed::1/96
+
       - name: Ethernet2
         ipv6:
+
           - address: 2001:db8::1/64
+
       - name: Management1
         ipv4:
+
           - address: dhcp
 
 - become: true

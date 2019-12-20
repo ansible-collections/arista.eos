@@ -10,13 +10,13 @@
     provider: '{{ cli }}'
 
 - name: configure static route using platform agnostic module
-  net_static_route:
+  become: true
+  register: result
+  ansible.netcommon.net_static_route:
     address: 192.168.3.0/24
     next_hop: 192.168.0.1
     admin_distance: 2
     provider: '{{ cli }}'
-  become: true
-  register: result
 
 - assert:
     that:

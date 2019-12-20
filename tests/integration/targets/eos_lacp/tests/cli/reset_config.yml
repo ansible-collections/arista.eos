@@ -3,7 +3,6 @@
   become: true
   ansible.netcommon.cli_config:
     config: 'lacp system-priority 10
-
       '
 
 - become: true

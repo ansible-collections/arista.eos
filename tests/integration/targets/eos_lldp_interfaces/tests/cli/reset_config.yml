@@ -11,8 +11,10 @@
 
 - set_fact:
     expected_config:
+
       - name: Ethernet1
         receive: false
+
       - name: Ethernet2
         transmit: false
 
