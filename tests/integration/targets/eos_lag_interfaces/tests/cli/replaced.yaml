@@ -3,13 +3,17 @@
 
 - set_fact:
     config:
+
       - name: Port-Channel10
         members:
+
           - member: Ethernet2
             mode: 'on'
     other_config:
+
       - name: Port-Channel5
         members:
+
           - member: Ethernet1
             mode: 'on'
 

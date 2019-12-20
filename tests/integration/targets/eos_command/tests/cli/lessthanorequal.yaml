@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli/lessthanorequal.yaml on connection={{ ansible_connection }}"
+- debug: msg="START cli/lessthanorequal.yaml on connection={{ ansible_connection
+    }}"
 
 - name: test le operator
   register: result

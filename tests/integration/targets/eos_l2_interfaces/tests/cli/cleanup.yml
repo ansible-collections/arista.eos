@@ -10,4 +10,5 @@
     - Ethernet2
   become: true
   ansible.netcommon.cli_config:
-    config: "interface {{ item }}\n  no switchport mode\n  no switchport access vlan\n"
+    config: "interface {{ item }}\n  no switchport mode\n  no switchport access\
+      \ vlan\n"

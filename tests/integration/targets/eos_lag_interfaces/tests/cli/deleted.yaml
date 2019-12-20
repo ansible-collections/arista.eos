@@ -3,6 +3,7 @@
 
 - set_fact:
     config:
+
       - name: Port-Channel5
 
 - become: true

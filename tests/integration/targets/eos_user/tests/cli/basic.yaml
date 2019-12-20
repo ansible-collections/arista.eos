@@ -53,8 +53,10 @@
   register: result
   arista.eos.eos_user:
     aggregate:
+
       - name: ansibletest2
         configured_password: test2
+
       - name: ansibletest3
         configured_password: test3
     state: present

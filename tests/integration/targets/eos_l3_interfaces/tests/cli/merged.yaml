@@ -3,11 +3,15 @@
 
 - set_fact:
     config:
+
       - name: Ethernet1
         ipv4:
+
           - address: 198.51.100.14/24
+
       - name: Ethernet2
         ipv4:
+
           - address: 203.0.113.227/31
 
 - become: true
@@ -38,18 +42,26 @@
 
 - set_fact:
     expected_config:
+
       - name: Ethernet1
         ipv4:
+
           - address: 198.51.100.14/24
+
           - address: 203.0.113.27/31
             secondary: true
+
       - name: Ethernet2
         ipv4:
+
           - address: 203.0.113.227/31
         ipv6:
+
           - address: 2001:db8::1/64
+
       - name: Management1
         ipv4:
+
           - address: dhcp
 
 - assert:

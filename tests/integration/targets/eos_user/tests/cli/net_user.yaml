@@ -9,15 +9,15 @@
     provider: '{{ cli }}'
 
 - name: Create user with role using platform agnostic module
-  net_user:
+  become: true
+  register: result
+  ansible.netcommon.net_user:
     name: ansibletest1
     privilege: 15
     role: network-operator
     state: present
     configured_password: test1
     provider: '{{ cli }}'
-  become: true
-  register: result
 
 - assert:
     that:

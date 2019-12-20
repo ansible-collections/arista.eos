@@ -3,7 +3,9 @@
 
 - set_fact:
     config:
+
       - name: Ethernet1
+
       - name: Ethernet2
 
 - become: true
