@@ -1,5 +1,6 @@
 ---
-- debug: msg="START eapi/default_facts.yaml on connection={{ ansible_connection }}"
+- debug: msg="START eapi/default_facts.yaml on connection={{ ansible_connection
+    }}"
 
 - name: test getting default facts
   become: true

@@ -134,13 +134,16 @@
   register: result
   arista.eos.eos_logging:
     aggregate:
+
       - dest: console
         level: warnings
         state: absent
+
       - dest: buffered
         level: informational
         size: 4096
         state: absent
+
       - facility: local2
         state: absent
 

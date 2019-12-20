@@ -3,6 +3,7 @@
 
 - set_fact:
     config:
+
       - name: Ethernet2
         access:
           vlan: 30

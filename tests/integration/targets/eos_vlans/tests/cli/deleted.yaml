@@ -3,6 +3,7 @@
 
 - set_fact:
     config:
+
       - vlan_id: 20
 
 - become: true
@@ -18,8 +19,8 @@
 
 - assert:
     that:
-      - ansible_facts.network_resources.vlans|symmetric_difference(result.before) ==
-        []
+      - ansible_facts.network_resources.vlans|symmetric_difference(result.before)
+        == []
 
 - become: true
   arista.eos.eos_facts:
@@ -27,11 +28,12 @@
 
 - assert:
     that:
-      - ansible_facts.network_resources.vlans|symmetric_difference(result.after) ==
-        []
+      - ansible_facts.network_resources.vlans|symmetric_difference(result.after)
+        == []
 
 - set_fact:
     expected_config:
+
       - vlan_id: 10
         name: ten
 

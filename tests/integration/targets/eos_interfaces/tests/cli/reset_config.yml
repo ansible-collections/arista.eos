@@ -12,11 +12,13 @@
 
 - set_fact:
     expected_config:
+
       - name: Ethernet1
         description: Interface 1
         speed: 40g
         duplex: full
         enabled: true
+
       - name: Ethernet2
         enabled: true
         mtu: '3000'
@@ -24,4 +26,5 @@
 
 - assert:
     that:
-      - expected_config|difference(ansible_facts.network_resources.interfaces) == []
+      - expected_config|difference(ansible_facts.network_resources.interfaces) ==
+        []

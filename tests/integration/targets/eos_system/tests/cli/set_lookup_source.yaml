@@ -36,6 +36,7 @@
   register: result
   arista.eos.eos_system:
     lookup_source:
+
       - interface: Management1
         vrf: ansible
 
@@ -51,6 +52,7 @@
   register: result
   arista.eos.eos_system:
     lookup_source:
+
       - interface: Management1
         vrf: ansible
 
@@ -66,4 +68,5 @@
       - no vrf definition ansible
     match: none
 
-- debug: msg="END cli/set_lookup_source.yaml on connection={{ ansible_connection }}"
+- debug: msg="END cli/set_lookup_source.yaml on connection={{ ansible_connection
+    }}"

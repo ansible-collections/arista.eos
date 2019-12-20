@@ -11,8 +11,10 @@
 
 - set_fact:
     expected_config:
+
       - name: Port-Channel5
         members:
+
           - member: Ethernet1
             mode: 'on'
 

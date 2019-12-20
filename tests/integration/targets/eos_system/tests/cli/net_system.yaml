@@ -1,5 +1,6 @@
 ---
-- debug: msg="START eos cli/net_system.yaml on connection={{ ansible_connection }}"
+- debug: msg="START eos cli/net_system.yaml on connection={{ ansible_connection
+    }}"
 
 - name: setup
   become: true
@@ -10,12 +11,12 @@
     match: none
 
 - name: configure domain_list using platform agnostic module
-  net_system:
+  become: true
+  register: result
+  ansible.netcommon.net_system:
     domain_list:
       - ansible.com
       - redhat.com
-  become: true
-  register: result
 
 - assert:
     that:

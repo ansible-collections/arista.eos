@@ -1,5 +1,6 @@
 ---
-- debug: msg="START eos cli/net_banner.yaml on connection={{ ansible_connection }}"
+- debug: msg="START eos cli/net_banner.yaml on connection={{ ansible_connection
+    }}"
 
 - name: Remove previous motd banner (setup)
   become: true
@@ -7,12 +8,12 @@
     lines: no banner motd
 
 - name: create motd
-  net_banner:
+  become: true
+  register: result
+  ansible.netcommon.net_banner:
     banner: motd
     text: this is my motd banner configure by net_banner
     state: present
-  become: true
-  register: result
 
 - assert:
     that:
