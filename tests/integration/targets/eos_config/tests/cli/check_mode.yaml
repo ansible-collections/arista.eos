@@ -18,7 +18,7 @@
     that:
       - result.msg is defined
       - result.failed == true
-      - '''Invalid input'' in result.msg'
+      - "'Invalid input' in result.msg"
 
 - name: valid configuration in check mode
   become: true
@@ -88,6 +88,6 @@
 - assert:
     that:
       - result.changed == true
-      - '''session'' not in result'
+      - "'session' not in result"
 
 - debug: msg="END cli/check_mode.yaml on connection={{ ansible_connection }}"

@@ -19,8 +19,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''router bgp 64496'' in result.commands'
-      - '''router-id 192.0.2.2'' in result.commands'
+      - "'router bgp 64496' in result.commands"
+      - "'router-id 192.0.2.2' in result.commands"
 
 - name: Configure BGP with AS 64496 and a router-id (idempotent)
   become: true
@@ -56,14 +56,14 @@
 - assert:
     that:
       - result.changed == true
-      - '''router bgp 64496'' in result.commands'
-      - '''neighbor 192.0.2.10 remote-as 64496'' in result.commands'
-      - '''neighbor 192.0.2.10 description IBGP_NBR_1'' in result.commands'
-      - '''neighbor 192.0.2.10 ebgp-multihop 100'' in result.commands'
-      - '''neighbor 192.0.2.10 timers 300 360'' in result.commands'
-      - '''neighbor 192.0.2.15 remote-as 64496'' in result.commands'
-      - '''neighbor 192.0.2.15 description IBGP_NBR_2'' in result.commands'
-      - '''neighbor 192.0.2.15 ebgp-multihop 150'' in result.commands'
+      - "'router bgp 64496' in result.commands"
+      - "'neighbor 192.0.2.10 remote-as 64496' in result.commands"
+      - "'neighbor 192.0.2.10 description IBGP_NBR_1' in result.commands"
+      - "'neighbor 192.0.2.10 ebgp-multihop 100' in result.commands"
+      - "'neighbor 192.0.2.10 timers 300 360' in result.commands"
+      - "'neighbor 192.0.2.15 remote-as 64496' in result.commands"
+      - "'neighbor 192.0.2.15 description IBGP_NBR_2' in result.commands"
+      - "'neighbor 192.0.2.15 ebgp-multihop 150' in result.commands"
 
 - name: Configure BGP neighbors (idempotent)
   become: true
@@ -95,9 +95,9 @@
 - assert:
     that:
       - result.changed == true
-      - '''neighbor 203.0.113.10 remote-as 64511'' in result.commands'
-      - '''neighbor 203.0.113.10 description EBGP_NBR_1'' in result.commands'
-      - '''no neighbor 192.0.2.10'' in result.commands'
+      - "'neighbor 203.0.113.10 remote-as 64511' in result.commands"
+      - "'neighbor 203.0.113.10 description EBGP_NBR_1' in result.commands"
+      - "'no neighbor 192.0.2.10' in result.commands"
 
 - name: Configure BGP neighbors with operation replace (idempotent)
   become: true
@@ -128,9 +128,9 @@
 - assert:
     that:
       - result.changed == True
-      - '''router bgp 64496'' in result.commands'
-      - '''network 203.0.113.0/27 route-map RMAP_1'' in result.commands'
-      - '''network 203.0.113.32/27 route-map RMAP_2'' in result.commands'
+      - "'router bgp 64496' in result.commands"
+      - "'network 203.0.113.0/27 route-map RMAP_1' in result.commands"
+      - "'network 203.0.113.32/27 route-map RMAP_2' in result.commands"
 
 - name: Configure root-level networks for BGP (idempotent)
   become: true
@@ -160,9 +160,9 @@
 - assert:
     that:
       - result.changed == True
-      - '''router bgp 64496'' in result.commands'
-      - '''network 198.51.100.16/28'' in result.commands'
-      - '''no network 203.0.113.32/27'' in result.commands'
+      - "'router bgp 64496' in result.commands"
+      - "'network 198.51.100.16/28' in result.commands"
+      - "'no network 203.0.113.32/27' in result.commands"
 
 - name: Configure root-level networks for BGP with operation replace (idempotent)
   become: true
@@ -190,9 +190,9 @@
 - assert:
     that:
       - result.changed == true
-      - '''router bgp 64496'' in result.commands'
-      - '''redistribute ospf route-map RMAP_1'' in result.commands'
-      - '''redistribute rip'' in result.commands'
+      - "'router bgp 64496' in result.commands"
+      - "'redistribute ospf route-map RMAP_1' in result.commands"
+      - "'redistribute rip' in result.commands"
 
 - name: Configure BGP route redistribute information (idempotent)
   become: true
@@ -221,8 +221,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''redistribute static route-map RMAP_2'' in result.commands'
-      - '''no redistribute rip'' in result.commands'
+      - "'redistribute static route-map RMAP_2' in result.commands"
+      - "'no redistribute rip' in result.commands"
 
 - name: Configure BGP route redistribute information with operation replace (idempotent)
   become: true
@@ -256,12 +256,12 @@
 - assert:
     that:
       - result.changed == true
-      - '''router bgp 64496'' in result.commands'
-      - '''address-family ipv4'' in result.commands'
-      - '''neighbor 203.0.113.10 activate'' in result.commands'
-      - '''neighbor 203.0.113.10 default-originate'' in result.commands'
-      - '''neighbor 192.0.2.15 activate'' in result.commands'
-      - '''neighbor 192.0.2.15 graceful-restart'' in result.commands'
+      - "'router bgp 64496' in result.commands"
+      - "'address-family ipv4' in result.commands"
+      - "'neighbor 203.0.113.10 activate' in result.commands"
+      - "'neighbor 203.0.113.10 default-originate' in result.commands"
+      - "'neighbor 192.0.2.15 activate' in result.commands"
+      - "'neighbor 192.0.2.15 graceful-restart' in result.commands"
 
 - name: Configure BGP neighbors under address family mode (idempotent)
   become: true
@@ -304,13 +304,13 @@
 - assert:
     that:
       - result.changed == true
-      - '''router bgp 64496'' in result.commands'
-      - '''address-family ipv4'' in result.commands'
-      - '''network 198.51.100.48/28 route-map RMAP_1'' in result.commands'
-      - '''network 192.0.2.64/27'' in result.commands'
-      - '''network 203.0.113.160/27 route-map RMAP_2'' in result.commands'
-      - '''address-family ipv6'' in result.commands'
-      - '''network 2001:db8::/33'' in result.commands'
+      - "'router bgp 64496' in result.commands"
+      - "'address-family ipv4' in result.commands"
+      - "'network 198.51.100.48/28 route-map RMAP_1' in result.commands"
+      - "'network 192.0.2.64/27' in result.commands"
+      - "'network 203.0.113.160/27 route-map RMAP_2' in result.commands"
+      - "'address-family ipv6' in result.commands"
+      - "'network 2001:db8::/33' in result.commands"
 
 - name: Configure networks under address family (idempotent)
   become: true
@@ -383,10 +383,10 @@
 - assert:
     that:
       - result.changed == true
-      - '''no router bgp 64496'' in result.commands'
-      - '''router bgp 64497'' in result.commands'
-      - '''router-id 192.0.2.10'' in result.commands'
-      - '''bgp log-neighbor-changes'' in result.commands'
+      - "'no router bgp 64496' in result.commands"
+      - "'router bgp 64497' in result.commands"
+      - "'router-id 192.0.2.10' in result.commands"
+      - "'bgp log-neighbor-changes' in result.commands"
 
 - name: Teardown
   become: true
@@ -396,7 +396,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''no router bgp 64497'' in result.commands'
+      - "'no router bgp 64497' in result.commands"
 
 - name: Teardown again (idempotent)
   become: true

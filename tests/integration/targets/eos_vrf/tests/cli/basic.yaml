@@ -25,9 +25,9 @@
 - assert:
     that:
       - result.changed == true
-      - '''vrf definition test'' in result.commands'
-      - '''rd 1:200'' in result.commands'
-      - '''ansible_1'' in result.session_name'
+      - "'vrf definition test' in result.commands"
+      - "'rd 1:200' in result.commands"
+      - "'ansible_1' in result.session_name"
 
 - name: Create vrf again (idempotent)
   become: true
@@ -56,9 +56,9 @@
 - assert:
     that:
       - result.changed == true
-      - '''vrf definition test'' in result.commands'
-      - '''rd 1:201'' in result.commands'
-      - '''ansible_1'' in result.session_name'
+      - "'vrf definition test' in result.commands"
+      - "'rd 1:201' in result.commands"
+      - "'ansible_1' in result.session_name"
 
 - name: Modify rd again (idempotent)
   become: true
@@ -91,9 +91,9 @@
 - assert:
     that:
       - result.changed == true
-      - '''interface ethernet2'' in result.commands'
-      - '''vrf forwarding test'' in result.commands'
-      - '''ansible_1'' in result.session_name'
+      - "'interface ethernet2' in result.commands"
+      - "'vrf forwarding test' in result.commands"
+      - "'ansible_1' in result.session_name"
 
 - name: Add Ethernet2 to vrf again (idempotent)
   become: true
@@ -110,7 +110,7 @@
     that:
       - result.changed == false
       - result.commands | length == 0
-      - '''session_name'' not in result.commands'
+      - "'session_name' not in result.commands"
 
 - name: vrf interface intent fail
   become: true
@@ -147,21 +147,21 @@
 - assert:
     that:
       - result.changed == true
-      - '''interface loopback10'' in result.commands'
-      - '''vrf forwarding test1'' in result.commands'
-      - '''interface loopback11'' in result.commands'
-      - '''vrf forwarding test1'' in result.commands'
-      - '''interface loopback12'' in result.commands'
-      - '''vrf forwarding test1'' in result.commands'
-      - '''interface loopback13'' in result.commands'
-      - '''vrf forwarding test1'' in result.commands'
-      - '''interface loopback14'' in result.commands'
-      - '''vrf forwarding test1'' in result.commands'
-      - '''interface loopback15'' in result.commands'
-      - '''vrf forwarding test1'' in result.commands'
-      - '''interface loopback1000'' in result.commands'
-      - '''vrf forwarding test1'' in result.commands'
-      - '''ansible_1'' in result.session_name'
+      - "'interface loopback10' in result.commands"
+      - "'vrf forwarding test1' in result.commands"
+      - "'interface loopback11' in result.commands"
+      - "'vrf forwarding test1' in result.commands"
+      - "'interface loopback12' in result.commands"
+      - "'vrf forwarding test1' in result.commands"
+      - "'interface loopback13' in result.commands"
+      - "'vrf forwarding test1' in result.commands"
+      - "'interface loopback14' in result.commands"
+      - "'vrf forwarding test1' in result.commands"
+      - "'interface loopback15' in result.commands"
+      - "'vrf forwarding test1' in result.commands"
+      - "'interface loopback1000' in result.commands"
+      - "'vrf forwarding test1' in result.commands"
+      - "'ansible_1' in result.session_name"
 
 - name: Add multiple interfaces to vrf (idempotent)
   become: true
@@ -213,11 +213,11 @@
 - assert:
     that:
       - result.changed == true
-      - '''vrf definition test2'' in result.commands'
-      - '''rd 1:202'' in result.commands'
-      - '''vrf definition test3'' in result.commands'
-      - '''rd 1:203'' in result.commands'
-      - '''ansible_1'' in result.session_name'
+      - "'vrf definition test2' in result.commands"
+      - "'rd 1:202' in result.commands"
+      - "'vrf definition test3' in result.commands"
+      - "'rd 1:203' in result.commands"
+      - "'ansible_1' in result.session_name"
 
 - name: Create aggregate of VRFs again (idempotent)
   become: true
@@ -257,14 +257,14 @@
 - assert:
     that:
       - result.changed == true
-      - '''vrf definition test4'' in result.commands'
-      - '''rd 1:204'' in result.commands'
-      - '''vrf definition test5'' in result.commands'
-      - '''rd 1:205'' in result.commands'
-      - '''no vrf definition test'' in result.commands'
-      - '''no vrf definition test2'' in result.commands'
-      - '''no vrf definition test3'' in result.commands'
-      - '''ansible_1'' in result.session_name'
+      - "'vrf definition test4' in result.commands"
+      - "'rd 1:204' in result.commands"
+      - "'vrf definition test5' in result.commands"
+      - "'rd 1:205' in result.commands"
+      - "'no vrf definition test' in result.commands"
+      - "'no vrf definition test2' in result.commands"
+      - "'no vrf definition test3' in result.commands"
+      - "'ansible_1' in result.session_name"
 
 - name: Delete VRFs
   become: true

@@ -18,8 +18,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''ip access-list test'' in result.updates'
-      - '''10 permit ip any any log'' in result.updates'
+      - "'ip access-list test' in result.updates"
+      - "'10 permit ip any any log' in result.updates"
 
 - name: configure sub level command idempotent check
   become: true

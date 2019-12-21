@@ -34,8 +34,8 @@
     - assert:
         that:
           - result.changed == true
-          - '''set cos 1'' in result.updates'
-          - '''set dscp 62'' in result.updates'
+          - "'set cos 1' in result.updates"
+          - "'set dscp 62' in result.updates"
 
     - name: change sub level command order and config with strict match
       register: result
@@ -53,8 +53,8 @@
     - assert:
         that:
           - result.changed == true
-          - '''set cos 1'' in result.updates'
-          - '''set dscp 62'' in result.updates'
+          - "'set cos 1' in result.updates"
+          - "'set dscp 62' in result.updates"
 
     - name: Config sub level command with strict match (Idempotency)
       register: result

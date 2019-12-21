@@ -17,8 +17,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''vlan 10'' in result.updates'
-      - '''name test'' in result.updates'
+      - "'vlan 10' in result.updates"
+      - "'name test' in result.updates"
 
 - name: configure sub level command idempotent check
   become: true
