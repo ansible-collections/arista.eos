@@ -22,7 +22,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''ip route 192.168.3.0/24 192.168.0.1 2'' in result.commands'
+      - "'ip route 192.168.3.0/24 192.168.0.1 2' in result.commands"
 
 - name: configure static route(Idempotence)
   become: true
@@ -46,7 +46,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''no ip route 192.168.3.0/24 192.168.0.1'' in result.commands'
+      - "'no ip route 192.168.3.0/24 192.168.0.1' in result.commands"
 
 - name: delete static route
   become: true
@@ -73,8 +73,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''ip route 192.168.4.0/24 192.168.0.1 1'' in result.commands'
-      - '''ip route 192.168.5.0/24 192.168.0.1 1'' in result.commands'
+      - "'ip route 192.168.4.0/24 192.168.0.1 1' in result.commands"
+      - "'ip route 192.168.5.0/24 192.168.0.1 1' in result.commands"
 
 - name: configure static routes using aggregate(Idemporence)
   become: true
@@ -102,8 +102,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''no ip route 192.168.4.0/24 192.168.0.1'' in result.commands'
-      - '''no ip route 192.168.5.0/24 192.168.0.1'' in result.commands'
+      - "'no ip route 192.168.4.0/24 192.168.0.1' in result.commands"
+      - "'no ip route 192.168.5.0/24 192.168.0.1' in result.commands"
 
 - name: delete static routes using aggregate(Idempotence)
   become: true

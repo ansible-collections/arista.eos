@@ -5,16 +5,13 @@
 - name: setup
   become: true
   ansible.netcommon.cli_config: &id002
-    config: 'interface Ethernet2
-      no description
-      no shutdown
-      '
+    config: "interface Ethernet2\nno description\nno shutdown\n"
 
 - name: configure device with config
   register: result
   become: true
   ansible.netcommon.cli_config: &id001
-    config: '{{ lookup(''template'', ''basic/config.j2'') }}'
+    config: "{{ lookup('template', 'basic/config.j2') }}"
 
 - assert:
     that:

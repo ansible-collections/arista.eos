@@ -12,10 +12,10 @@
 - assert:
     that:
       - result.changed == false
-      - '''config'' in result.ansible_facts.ansible_net_gather_subset'
-      - '''hardware'' in result.ansible_facts.ansible_net_gather_subset'
-      - '''default'' in result.ansible_facts.ansible_net_gather_subset'
-      - '''interfaces'' in result.ansible_facts.ansible_net_gather_subset'
+      - "'config' in result.ansible_facts.ansible_net_gather_subset"
+      - "'hardware' in result.ansible_facts.ansible_net_gather_subset"
+      - "'default' in result.ansible_facts.ansible_net_gather_subset"
+      - "'interfaces' in result.ansible_facts.ansible_net_gather_subset"
       - result.ansible_facts.ansible_net_filesystems is defined
       - result.ansible_facts.ansible_net_memfree_mb > 1
       - result.ansible_facts.ansible_net_memtotal_mb > 1
