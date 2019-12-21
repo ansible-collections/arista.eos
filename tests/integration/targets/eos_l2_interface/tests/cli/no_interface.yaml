@@ -18,7 +18,7 @@
         state: absent
 
     - assert:
-        that: '''Interface does not exist'' in result.warnings[0]'
+        that: "'Interface does not exist' in result.warnings[0]"
   always:
 
     - name: Cleanup fake interface

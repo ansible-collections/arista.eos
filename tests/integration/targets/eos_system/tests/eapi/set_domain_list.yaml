@@ -20,8 +20,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''ip domain-list ansible.com'' in result.commands'
-      - '''ip domain-list redhat.com'' in result.commands'
+      - "'ip domain-list ansible.com' in result.commands"
+      - "'ip domain-list redhat.com' in result.commands"
 
 - name: verify domain_list
   become: true
@@ -45,7 +45,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''no ip domain-list redhat.com'' in result.commands'
+      - "'no ip domain-list redhat.com' in result.commands"
 
 - name: verify remove one entry
   become: true
@@ -69,7 +69,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''ip domain-list redhat.com'' in result.commands'
+      - "'ip domain-list redhat.com' in result.commands"
 
 - name: verify add one entry
   become: true
@@ -94,8 +94,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''no ip domain-list redhat.com'' in result.commands'
-      - '''ip domain-list eng.ansible.com'' in result.commands'
+      - "'no ip domain-list redhat.com' in result.commands"
+      - "'ip domain-list eng.ansible.com' in result.commands"
       - result.commands|length == 2
 
 - name: verify add and remove one entry

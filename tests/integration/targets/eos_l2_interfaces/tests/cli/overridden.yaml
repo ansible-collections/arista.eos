@@ -35,7 +35,7 @@
         == []
 
 - set_fact:
-    expected_config: '{{ config }} + [{''name'': ''Ethernet1''}, {''name'': ''Management1''}]'
+    expected_config: "{{ config }} + [{'name': 'Ethernet1'}, {'name': 'Management1'}]"
 
 - assert:
     that:

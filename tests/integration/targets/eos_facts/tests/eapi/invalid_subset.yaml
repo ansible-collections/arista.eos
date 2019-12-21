@@ -15,6 +15,6 @@
     that:
       - result.changed == false
       - result.failed == true
-      - '''Subset must be one of'' in result.msg'
+      - "'Subset must be one of' in result.msg"
 
 - debug: msg="END eapi/invalid_subset.yaml on connection={{ ansible_connection }}"
