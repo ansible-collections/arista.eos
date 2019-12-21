@@ -11,16 +11,14 @@
   register: result
   arista.eos.eos_banner: &id001
     banner: login
-    text: 'Junk login banner
-      over multiple lines
-      '
+    text: "Junk login banner\nover multiple lines\n"
     state: present
 
 - assert:
     that:
       - result.changed == true
-      - '''banner login'' in result.commands[0]'
-      - '''ansible_1'' in result.session_name'
+      - "'banner login' in result.commands[0]"
+      - "'ansible_1' in result.session_name"
 
 - name: Create login banner again (idempotent)
   become: true
@@ -43,8 +41,8 @@
 - assert:
     that:
       - result.changed == true
-      - '''no banner login'' in result.commands'
-      - '''ansible_1'' in result.session_name'
+      - "'no banner login' in result.commands"
+      - "'ansible_1' in result.session_name"
 
 - name: Remove login again (idempotent)
   become: true

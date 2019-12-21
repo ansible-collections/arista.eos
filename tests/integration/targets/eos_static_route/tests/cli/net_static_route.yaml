@@ -21,7 +21,7 @@
 - assert:
     that:
       - result.changed == true
-      - '''ip route 192.168.3.0/24 192.168.0.1 2'' in result.commands'
+      - "'ip route 192.168.3.0/24 192.168.0.1 2' in result.commands"
 
 - name: teardown - remove config used in test
   become: true

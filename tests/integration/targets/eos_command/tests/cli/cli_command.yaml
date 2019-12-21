@@ -59,7 +59,7 @@
     - assert:
         that:
           - result.failed == true
-          - '''Connection type local is not valid for this module'' in result.msg'
+          - "'Connection type local is not valid for this module' in result.msg"
   when: ansible_connection == 'local'
 
 - debug: msg="END cli/cli_command.yaml on connection={{ ansible_connection }}"
