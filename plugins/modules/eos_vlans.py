@@ -91,7 +91,7 @@ EXAMPLES = """
 #    name twenty
 
 - name: Delete attributes of the given VLANs.
-  ios_vlans:
+  eos_vlans:
     config:
       - vlan_id: 20
     state: deleted
@@ -117,7 +117,7 @@ EXAMPLES = """
 #    name twenty
 
 - name: Merge given VLAN attributes with device configuration
-  ios_vlans:
+  eos_vlans:
     config:
       - vlan_id: 20
         state: suspend
@@ -148,7 +148,7 @@ EXAMPLES = """
 #    name twenty
 
 - name: Override device configuration of all VLANs with provided configuration
-  ios_vlans:
+  eos_vlans:
     config:
       - vlan_id: 20
         state: suspend
@@ -175,7 +175,7 @@ EXAMPLES = """
 #    name twenty
 
 - name: Replace all attributes of specified VLANs with provided configuration
-  ios_vlans:
+  eos_vlans:
     config:
       - vlan_id: 20
         state: suspend
