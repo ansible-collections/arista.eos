@@ -181,7 +181,8 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
 
 
 def main():
-    """ Main entry point for module execution
+    """
+    Main entry point for module execution
 
     :returns: ansible_facts
     """
@@ -192,10 +193,11 @@ def main():
         argument_spec=argument_spec, supports_check_mode=True
     )
 
-    warnings = [
-        "default value for `gather_subset` "
-        "will be changed to `min` from `!config` v2.11 onwards"
-    ]
+    warnings = []
+    if module.params["gather_subset"] == "!config":
+        warnings.append(
+            "default value for `gather_subset` will be changed to `min` from `!config` v2.11 onwards"
+        )
 
     result = Facts(module).get_facts()
 
