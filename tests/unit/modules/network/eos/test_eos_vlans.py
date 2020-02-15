@@ -109,11 +109,11 @@ class TestEosVlansModule(TestEosModule):
         self.execute_show_command.return_value = []
         set_module_args(
             dict(
-                config=[dict(vlan_id=30, name="thirty", state="suspend")],
+                config=[dict(vlan_id=10, name="tenreplaced", state="suspend")],
                 state="replaced",
             )
         )
-        commands = ["vlan 30", "name thirty", "state suspend"]
+        commands = ["vlan 10", "name tenreplaced", "state suspend"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_vlan_replaced_idempotent(self):
