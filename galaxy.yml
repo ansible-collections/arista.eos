@@ -5,4 +5,4 @@ license_file: LICENSE
 name: eos
 namespace: arista
 readme: README.rst
-repository: https://github.com/ansible-network/ansible_collections.arista.eos
+repository: https://github.com/ansible-collections/eos
