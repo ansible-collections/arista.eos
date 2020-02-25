@@ -47,6 +47,12 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.legac
     Config,
     Interfaces,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.acl_interfaces.acl_interfaces import (
+    Acl_interfacesFacts,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.acls.acls import (
+    AclsFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -62,6 +68,8 @@ FACT_RESOURCE_SUBSETS = dict(
     lldp_global=Lldp_globalFacts,
     lldp_interfaces=Lldp_interfacesFacts,
     vlans=VlansFacts,
+    acl_interfaces=Acl_interfacesFacts,
+    acls=AclsFacts,
 )
 
 

@@ -1,0 +1,8 @@
+---
+- name: Setup
+  become: true
+  vars:
+    lines: "ip access-list test1\n35 deny tcp 20.0.0.0/8 any log \n45 remark Run\
+      \ by ansible\n55 permit tcp any any\n"
+  ansible.netcommon.cli_config:
+    config: '{{ lines }}'
