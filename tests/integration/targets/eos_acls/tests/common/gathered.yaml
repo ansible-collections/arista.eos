@@ -1,0 +1,38 @@
+---
+- debug:
+    msg: START eos_acls gathered integration tests on connection={{ ansible_connection
+      }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Gathered the provided configuration with the exisiting running configuration
+      become: true
+      register: result
+      arista.eos.eos_acls: &id001
+        config:
+        state: gathered
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: acls
+
+    - name: Assert
+      assert:
+        that:
+          - ansible_facts.network_resources.acls | symmetric_difference(result.gathered)
+            == []
+
+    - name: Gather the existing running configuration (IDEMPOTENT)
+      become: true
+      register: result
+      arista.eos.eos_acls: *id001
+
+    - name: Assert that the previous task was idempotent
+      assert:
+        that:
+          - result['changed'] == false
+  always:
+
+    - include_tasks: _remove_config.yaml

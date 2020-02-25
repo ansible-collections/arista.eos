@@ -1,0 +1,43 @@
+---
+- debug:
+    msg: Start eos_acl_interfaces overridden integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: override given acl interfaces configuration
+      become: true
+      register: result
+      arista.eos.eos_acl_interfaces: &id001
+        config:
+
+          - name: "{{ Interfaces['int2'] }}"
+            access_groups:
+
+              - afi: ipv4
+                acls:
+
+                  - name: aclv401
+                    direction: in
+        state: overridden
+
+    - assert:
+        that:
+          - result.commands|length == 7
+          - result.changed == true
+          - result.commands|symmetric_difference(overridden.commands) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_acl_interfaces: *id001
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml

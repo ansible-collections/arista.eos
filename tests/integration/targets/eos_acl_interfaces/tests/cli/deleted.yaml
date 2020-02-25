@@ -1,0 +1,63 @@
+---
+- debug:
+    msg: Start eos_acl_interfaces deleted integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Delete attributes of given acl_interfaces of an afi.
+      register: result
+      arista.eos.eos_acl_interfaces:
+        config:
+
+          - name: "{{ Interfaces['int1'] }}"
+            access_groups:
+
+              - afi: ipv6
+        state: deleted
+
+    - assert:
+        that:
+          - result.commands|length == 2
+          - result.changed == true
+          - "'no ipv6 traffic-filter aclv601 out' in result.commands"
+
+    - name: Delete attributes of given acl_interfaces configuration.
+      register: result
+      arista.eos.eos_acl_interfaces:
+        config:
+
+          - name: "{{ Interfaces['int1'] }}"
+            access_groups:
+
+              - afi: ipv4
+                acls:
+
+                  - name: aclv401
+                    direction: in
+        state: deleted
+
+    - assert:
+        that:
+          - result.commands|length == 2
+          - result.changed == true
+          - "'no ip access-group aclv401 in' in result.commands"
+
+    - name: Delete attributes of given acl_interfaces of an interface.
+      register: result
+      arista.eos.eos_acl_interfaces:
+        config:
+
+          - name: "{{ Interfaces['int1'] }}"
+        state: deleted
+
+    - assert:
+        that:
+          - result.commands|length == 2
+          - result.changed == true
+          - "'no ip access-group aclv402 out' in result.commands"
+  always:
+
+    - include_tasks: _remove_config.yaml

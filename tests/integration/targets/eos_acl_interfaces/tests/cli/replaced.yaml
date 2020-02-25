@@ -1,0 +1,43 @@
+---
+- debug:
+    msg: Start eos_acl_interfaces replced integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: replace given acl interfaces configuration
+      become: true
+      register: result
+      arista.eos.eos_acl_interfaces: &id001
+        config:
+
+          - name: "{{ Interfaces['int2'] }}"
+            access_groups:
+
+              - afi: ipv4
+                acls:
+
+                  - name: aclv401
+                    direction: in
+        state: replaced
+
+    - assert:
+        that:
+          - result.commands|length == 3
+          - result.changed == true
+          - result.commands|symmetric_difference(replaced.commands) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_acl_interfaces: *id001
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml
