@@ -5,6 +5,7 @@
     config:
 
       - name: Ethernet1
+        mode: trunk
         trunk:
           native_vlan: 10
 
@@ -41,12 +42,14 @@
     expected_config:
 
       - name: Ethernet1
+        mode: trunk
         access:
           vlan: 20
         trunk:
           native_vlan: 10
 
       - name: Ethernet2
+        mode: trunk
         access:
           vlan: 30
         trunk:
