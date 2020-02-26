@@ -104,7 +104,11 @@ class TestEosL2InterfacesModule(TestEosModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="Ethernet2", trunk=dict(native_vlan=50)),
+                    dict(
+                        name="Ethernet2",
+                        mode="trunk",
+                        trunk=dict(native_vlan=50),
+                    ),
                     dict(name="Ethernet3", access=dict(vlan=30)),
                 ],
                 state="replaced",
@@ -122,7 +126,11 @@ class TestEosL2InterfacesModule(TestEosModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="Ethernet2", trunk=dict(native_vlan=20)),
+                    dict(
+                        name="Ethernet2",
+                        mode="trunk",
+                        trunk=dict(native_vlan=20),
+                    ),
                     dict(name="Ethernet1", access=dict(vlan=20)),
                 ],
                 state="replaced",
@@ -133,15 +141,21 @@ class TestEosL2InterfacesModule(TestEosModule):
     def test_eos_l2_interfaces_overridden(self):
         set_module_args(
             dict(
-                config=[dict(name="Ethernet2", trunk=dict(native_vlan=50))],
+                config=[
+                    dict(
+                        name="Ethernet2",
+                        mode="trunk",
+                        trunk=dict(native_vlan=50),
+                    )
+                ],
                 state="overridden",
             )
         )
         commands = [
-            "interface Ethernet1",
-            "no switchport access vlan",
             "interface Ethernet2",
             "switchport trunk native vlan 50",
+            "interface Ethernet1",
+            "no switchport access vlan",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -149,7 +163,11 @@ class TestEosL2InterfacesModule(TestEosModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="Ethernet2", trunk=dict(native_vlan=20)),
+                    dict(
+                        name="Ethernet2",
+                        mode="trunk",
+                        trunk=dict(native_vlan=20),
+                    ),
                     dict(name="Ethernet1", access=dict(vlan=20)),
                 ],
                 state="overridden",
@@ -161,16 +179,21 @@ class TestEosL2InterfacesModule(TestEosModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="Ethernet2", trunk=dict(native_vlan=20)),
+                    dict(
+                        name="Ethernet2",
+                        mode="trunk",
+                        trunk=dict(native_vlan=20),
+                    ),
                     dict(name="Ethernet1", access=dict(vlan=20)),
                 ],
                 state="deleted",
             )
         )
         commands = [
+            "interface Ethernet2",
+            "no switchport mode",
+            "no switchport trunk native vlan",
             "interface Ethernet1",
             "no switchport access vlan",
-            "interface Ethernet2",
-            "no switchport trunk native vlan",
         ]
         self.execute_module(changed=True, commands=commands)
