@@ -3,9 +3,9 @@
   become: true
   ansible.netcommon.cli_config:
     config: "interface Ethernet1\n   switchport access vlan 20\n   no switchport\
-      \ trunk native vlan\n   no switchport trunk allowed vlan\ninterface Ethernet2\n\
-      \   no switchport access vlan\n   switchport trunk native vlan 20\n   switchport\
-      \ mode trunk\n"
+      \ mode\n   no switchport trunk native vlan\n   no switchport trunk allowed\
+      \ vlan\ninterface Ethernet2\n   no switchport access vlan\n   switchport trunk\
+      \ native vlan 20\n   switchport mode trunk\n"
 
 - become: true
   arista.eos.eos_facts:
@@ -18,7 +18,8 @@
         access:
           vlan: 20
 
-      - name: Ethernet2
+      - mode: trunk
+        name: Ethernet2
         trunk:
           native_vlan: 20
 
