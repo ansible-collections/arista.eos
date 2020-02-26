@@ -54,13 +54,6 @@ plugins/modules/eos_logging.py validate-modules:doc-required-mismatch
 plugins/modules/eos_logging.py validate-modules:missing-suboption-docs
 plugins/modules/eos_logging.py validate-modules:parameter-type-not-in-doc
 plugins/modules/eos_logging.py validate-modules:undocumented-parameter
-plugins/modules/eos_static_route.py validate-modules:doc-choices-do-not-match-spec
-plugins/modules/eos_static_route.py validate-modules:doc-elements-mismatch
-plugins/modules/eos_static_route.py validate-modules:doc-missing-type
-plugins/modules/eos_static_route.py validate-modules:doc-required-mismatch
-plugins/modules/eos_static_route.py validate-modules:missing-suboption-docs
-plugins/modules/eos_static_route.py validate-modules:parameter-type-not-in-doc
-plugins/modules/eos_static_route.py validate-modules:undocumented-parameter
 plugins/modules/eos_system.py future-import-boilerplate
 plugins/modules/eos_system.py metaclass-boilerplate
 plugins/modules/eos_system.py validate-modules:doc-missing-type
