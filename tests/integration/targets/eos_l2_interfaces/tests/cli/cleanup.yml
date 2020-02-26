@@ -11,4 +11,4 @@
   become: true
   ansible.netcommon.cli_config:
     config: "interface {{ item }}\n  no switchport mode\n  no switchport access\
-      \ vlan\n"
+      \ vlan\n  no switchport trunk native vlan\n"
