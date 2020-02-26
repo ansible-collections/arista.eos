@@ -1,0 +1,38 @@
+---
+- debug:
+    msg: START eos_static_routes parsed integration tests on connection={{ ansible_connection
+      }}
+
+- include_tasks: _populate.yaml
+
+- name: Gather static_routes facts
+  become: true
+  register: static_routes_facts
+  arista.eos.eos_facts:
+    gather_subset:
+      - default
+    gather_network_resources:
+      - static_routes
+
+- name: Provide the running configuration for parsing (config to be parsed)
+  become: true
+  register: result
+  arista.eos.eos_static_routes: &id001
+    running_config: "{{ lookup('file', '_parsed.cfg') }}"
+    state: parsed
+
+- assert:
+    that:
+      - "{{ ansible_facts['network_resources']['static_routes'] | symmetric_difference(result['parsed'])\
+        \ |length == 0 }}"
+
+- name: Gather the existing running configuration (IDEMPOTENT)
+  become: true
+  register: result
+  arista.eos.eos_static_routes: *id001
+
+- assert:
+    that:
+      - result['changed'] == false
+
+- include_tasks: _remove_config.yaml
