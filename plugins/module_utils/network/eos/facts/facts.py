@@ -53,6 +53,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.acl_i
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.acls.acls import (
     AclsFacts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.static_routes.static_routes import (
+    Static_routesFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -70,6 +73,7 @@ FACT_RESOURCE_SUBSETS = dict(
     vlans=VlansFacts,
     acl_interfaces=Acl_interfacesFacts,
     acls=AclsFacts,
+    static_routes=Static_routesFacts,
 )
 
 
