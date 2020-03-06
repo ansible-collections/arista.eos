@@ -8,3 +8,4 @@ name: eos
 namespace: arista
 readme: README.rst
 repository: https://github.com/ansible-collections/eos
+tags: [arista, eos, networking, eapi]
