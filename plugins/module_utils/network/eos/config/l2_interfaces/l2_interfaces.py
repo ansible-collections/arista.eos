@@ -238,7 +238,7 @@ def set_interface(want, have):
 
         allowed_vlans = want["trunk"].get("trunk_allowed_vlans")
         if allowed_vlans:
-            allowed_vlans = ",".join(allowed_vlans)
+            allowed_vlans = ",".join(['{0}'.format(vlan) for vlan in allowed_vlans])
             commands.append(
                 "switchport trunk allowed vlan {0}".format(allowed_vlans)
             )
