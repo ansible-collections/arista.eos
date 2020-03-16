@@ -218,6 +218,12 @@ def set_interface(want, have):
     commands = []
 
     want_mode = want.get("mode")
+    if not want_mode:
+        if want.get("trunk"):
+            want_mode = "trunk"
+        elif want.get("access"):
+            want_mode = "access"
+
     if want_mode and want_mode != have.get("mode"):
         commands.append("switchport mode {0}".format(want_mode))
 
