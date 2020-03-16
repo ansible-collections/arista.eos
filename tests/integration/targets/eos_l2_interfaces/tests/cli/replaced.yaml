@@ -9,6 +9,7 @@
           native_vlan: 20
           trunk_allowed_vlans:
             - 5-10
+            - 13
             - '15'
 
 - become: true
