@@ -11,7 +11,7 @@
     provider: '{{ eapi }}'
   register: result
 - assert:
-  that: result.changed == true
+    that: result.changed == true
 
 - name: set PREFIX-LIST config.
   arista.eos.eos_config:
@@ -20,7 +20,7 @@
     provider: '{{ eapi }}'
   register: result  
 - assert:
-  that: result.changed == true
+    that: result.changed == true
 
 - name: set VLAN.
   arista.eos.eos_config:
@@ -29,7 +29,7 @@
     provider: '{{ eapi }}'
   register: result  
 - assert:
-  that: result.changed == true
+    that: result.changed == true
 
 - name: run BEFORE tests.
   arista.eos.eos_pyateos:
@@ -64,7 +64,7 @@
       - vlan 999
     provider: '{{ eapi }}'
 - assert:
-  that: result.changed == true
+    that: result.changed == true
 
 - name: clear MAC table.
   arista.eos.eos_command:
@@ -72,7 +72,7 @@
       - clear mac address-table dynamic
     provider: '{{ eapi }}'
 - assert:
-  that: result.changed == false
+    that: result.changed == false
 
 - name: run AFTER tests.
   arista.eos.eos_pyateos:
