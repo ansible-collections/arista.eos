@@ -9,6 +9,7 @@
       - snmp-server host 8.8.8.4 version 2c public
       - snmp-server host 8.8.8.8 version 2c public
     provider: '{{ eapi }}'
+  become: true
   register: result
 - assert:
     that: result.changed == true
@@ -18,7 +19,8 @@
     lines:
       - ip prefix-list T666 seq 10 permit 8.8.8.8/32
     provider: '{{ eapi }}'
-  register: result  
+  register: result
+  become: true
 - assert:
     that: result.changed == true
 
@@ -28,6 +30,7 @@
       - vlan 666
     provider: '{{ eapi }}'
   register: result  
+  become: true
 - assert:
     that: result.changed == true
 
@@ -63,6 +66,7 @@
       - no vlan 666
       - vlan 999
     provider: '{{ eapi }}'
+  become: true
 - assert:
     that: result.changed == true
 
@@ -71,6 +75,7 @@
     commands:
       - clear mac address-table dynamic
     provider: '{{ eapi }}'
+  become: true
 - assert:
     that: result.changed == false
 
@@ -123,3 +128,4 @@
       - no snmp-server host 1.1.1.1 version 2c public  
       - no ip prefix-list T666 seq 15 permit 8.8.4.4/32
       - no vlan 999
+  become: true
