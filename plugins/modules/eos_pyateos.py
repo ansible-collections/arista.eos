@@ -200,7 +200,7 @@ import re
 import sys
 import json
 import time
-from ansible_collections.arista.eos.plugins.module_utils.basic import AnsibleModule, missing_required_lib
+from ansible.module_utils.basic import AnsibleModule, missing_required_lib
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import run_commands
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import eos_argument_spec
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import get_connection
