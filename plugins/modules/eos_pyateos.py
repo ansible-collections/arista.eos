@@ -12,7 +12,7 @@ ANSIBLE_METADATA = {
 DOCUMENTATION = """
 ---
 module: eos_pyateos
-version_added: "2.9"
+version_added: "2.10"
 author:
   - "Federico Olivieri (@Federico87)"
 
@@ -200,21 +200,19 @@ import re
 import sys
 import json
 import time
-from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.network.eos.eos import run_commands
-from ansible.module_utils.network.eos.eos import eos_argument_spec
-from ansible.module_utils.network.eos.eos import get_connection
+from ansible_collections.arista.eos.plugins.module_utils.basic import AnsibleModule, missing_required_lib
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import run_commands
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import eos_argument_spec
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import get_connection
 
 try:
     from jsondiff import diff
-
     HAS_JSONDIFF = True
 except ImportError:
     HAS_JSONDIFF = False
 
 try:
     from jmespath import search
-
     HAS_JMESPATH = True
 except ImportError:
     HAS_JMESPATH = False
@@ -495,14 +493,10 @@ def main():
     )
 
     if not HAS_JSONDIFF:
-        return module.fail_json(
-            msg="jsondiff is not installed, try 'pip install jsondiff'"
-        )
+        return module.fail_json(msg=missing_required_lib("jsondiff"))
 
     if not HAS_JMESPATH:
-        return module.fail_json(
-            msg="jmespath is not installed, try 'pip install jmespath'"
-        )
+        return module.fail_json(msg=missing_required_lib("jmespath"))
 
     list_ids = list()
     group = module.params.get("group")
