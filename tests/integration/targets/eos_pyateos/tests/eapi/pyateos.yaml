@@ -8,7 +8,6 @@
       - ntp server 216.239.35.4
       - snmp-server host 8.8.8.4 version 2c public
       - snmp-server host 8.8.8.8 version 2c public
-    provider: '{{ eapi }}'
   become: true
   register: result
 - assert:
@@ -18,7 +17,6 @@
   arista.eos.eos_config:
     lines:
       - ip prefix-list T666 seq 10 permit 8.8.8.8/32
-    provider: '{{ eapi }}'
   register: result
   become: true
 - assert:
@@ -28,7 +26,6 @@
   arista.eos.eos_config:
     lines:
       - vlan 666
-    provider: '{{ eapi }}'
   register: result  
   become: true
 - assert:
@@ -44,7 +41,6 @@
       - vlan
       - arp
     hostname: "{{ inventory_hostname }}"
-    provider: '{{ eapi }}'
   register: result
 - assert:
     that: (result.before_file_ids|lenght==5)
@@ -65,7 +61,6 @@
       - no ip prefix-list T666 seq 10 permit 8.8.8.8/32
       - no vlan 666
       - vlan 999
-    provider: '{{ eapi }}'
   become: true
 - assert:
     that: result.changed == true
@@ -74,7 +69,6 @@
   arista.eos.eos_command:
     commands:
       - clear mac address-table dynamic
-    provider: '{{ eapi }}'
   become: true
 - assert:
     that: result.changed == false
@@ -89,7 +83,6 @@
       - vlan
       - arp
     hostname: "{{ inventory_hostname }}"
-    provider: '{{ eapi }}'
   register: result
 - assert:
     that:
@@ -110,7 +103,6 @@
       - vlan
       - arp
     hostname: "{{ inventory_hostname }}"
-    provider: '{{ eapi }}'
     filter: true
     files: 
       - "{{ before_ids }}"
