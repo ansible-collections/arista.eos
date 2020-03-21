@@ -47,7 +47,7 @@
     provider: '{{ eapi }}'
   register: result
 - assert:
-    that: (result.before_file_ids|lenght=5)
+    that: (result.before_file_ids|lenght==5)
 
 - name: save BEFORE file IDs.
   delegate_to: 127.0.0.1
@@ -93,7 +93,7 @@
   register: result
 - assert:
     that:
-      - (result.after_file_ids|lenght=5)
+      - (result.after_file_ids|lenght==5)
 
 - name: save AFTER file IDs.
   delegate_to: 127.0.0.1

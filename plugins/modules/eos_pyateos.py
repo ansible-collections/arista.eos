@@ -20,7 +20,6 @@ short_description: Operational status tests on Arista device.
 description: A snapshot of the operational status of a switch is taken before a
     config or network change and compare against a second snapshot taken after the change.
     A diff file is generated in .json format.
-extends_documentation_fragment: eos
 options:
     test:
         description:
