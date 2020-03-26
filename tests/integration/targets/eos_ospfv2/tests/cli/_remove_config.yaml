@@ -1,0 +1,10 @@
+---
+- name: Delete instance
+  arista.eos.eos_ospfv2:
+    config:
+      processes:
+        - process_id: 1
+        - process_id: 2
+        - process_id: 3
+    state: deleted
+  become: true
