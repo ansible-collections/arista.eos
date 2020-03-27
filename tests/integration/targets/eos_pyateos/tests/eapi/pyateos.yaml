@@ -1,21 +1,6 @@
 ---
 - debug: msg="START eapi/eos_pyateos.yaml on connection={{ ansible_connection }}"
 
-- name: imstall python3-pip
-  package:
-    name: python3-pip
-    state: latest
-  delegate_to: 127.0.0.1
-
-
-- name: install jsondiff,jmespath
-  delegate_to: 127.0.0.1
-  pip:
-    name: "{{ item }}"
-  loop:
-    - jsondiff
-    - jmespath
-
 - name: set NTP, SNMP config.
   arista.eos.eos_config:
     lines:
