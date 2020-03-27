@@ -7,5 +7,5 @@ license_file: LICENSE
 name: eos
 namespace: arista
 readme: README.rst
-repository: https://github.com/ansible-collections/eos
+repository: https://github.com/ansible-collections/arista.eos
 tags: [arista, eos, networking, eapi]
