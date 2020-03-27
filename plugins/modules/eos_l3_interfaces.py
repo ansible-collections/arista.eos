@@ -157,10 +157,10 @@ EXAMPLES = """
     config:
       - name: Ethernet1
         ipv4:
-          address: 198.51.100.14/24
+          - address: 198.51.100.14/24
       - name: Ethernet2
-    ipv4:
-      address: 203.0.113.27/24
+        ipv4:
+          - address: 203.0.113.27/24
     state: merged
 
 # After state:
@@ -200,10 +200,10 @@ EXAMPLES = """
     config:
       - name: Ethernet1
         ipv6:
-          address: 2001:db8:feed::1/96
+          - address: 2001:db8:feed::1/96
       - name: Management1
         ipv4:
-          address: dhcp
+          - address: dhcp
     ipv6: auto-config
     state: overridden
 
@@ -242,7 +242,7 @@ EXAMPLES = """
     config:
       - name: Ethernet2
         ipv4:
-          address: 203.0.113.27/24
+          - address: 203.0.113.27/24
     state: replaced
 
 # After state:
