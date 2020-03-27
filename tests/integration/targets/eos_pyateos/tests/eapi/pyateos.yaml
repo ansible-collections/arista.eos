@@ -1,12 +1,12 @@
 ---
 - debug: msg="START eapi/eos_pyateos.yaml on connection={{ ansible_connection }}"
 
-- name: install python3-pip
-  delegate_to: 127.0.0.1
-  yum:
+- name: imstall python3-pip
+  package:
     name: python3-pip
-    state: present
-  become: yes
+    state: latest
+  delegate_to: 127.0.0.1
+
 
 - name: install jsondiff,jmespath
   delegate_to: 127.0.0.1
