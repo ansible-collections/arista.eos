@@ -1,7 +1,7 @@
 ---
 - debug: msg="START eapi/eos_pyateos.yaml on connection={{ ansible_connection }}"
 
-- name: set NTP, SNMP config.
+- name: CONF | set NTP, SNMP config.
   arista.eos.eos_config:
     lines:
       - ntp server 216.239.35.8
@@ -13,7 +13,7 @@
 - assert:
     that: result.changed == true
 
-- name: set PREFIX-LIST config.
+- name: CONF | set PREFIX-LIST config.
   arista.eos.eos_config:
     lines:
       - ip prefix-list T666 seq 10 permit 8.8.8.8/32
@@ -22,7 +22,7 @@
 - assert:
     that: result.changed == true
 
-- name: set VLAN.
+- name: CONF | set VLAN.
   arista.eos.eos_config:
     lines:
       - vlan 666
@@ -50,7 +50,7 @@
   set_fact:
     before_ids: "{{ result.before_file_ids }}"
 
-- name: change NTP, SNMP, PREFIX-LIST and VLAN config.
+- name: CONF | change NTP, SNMP, PREFIX-LIST and VLAN config.
   arista.eos.eos_config:
     lines:
       - no ntp server 216.239.35.8
@@ -65,7 +65,7 @@
 - assert:
     that: result.changed == true
 
-- name: clear MAC table.
+- name: CONF | clear MAC table.
   arista.eos.eos_command:
     commands:
       - clear mac address-table dynamic
@@ -111,7 +111,7 @@
     that:
       - result.compare is defined
 
-- name: restore config.
+- name: CONF | restore config.
   arista.eos.eos_config:
     lines:
       - no ntp server 216.239.35.12
