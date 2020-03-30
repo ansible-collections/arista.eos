@@ -1,13 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright 2020 Red Hat
-# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
+# Copyright: (c) 2020, Federico Olivieri (lvrfrc87@gmail.com)
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 DOCUMENTATION = """
 ---
@@ -100,7 +95,7 @@ requirements:
 EXAMPLES = """
 ---
 - name: run BEFORE tests.
-  eos_pyateos:
+  arista.eos.eos_pyateos:
     before: true
     test:
       - acl
@@ -122,7 +117,7 @@ EXAMPLES = """
       - ntp server vrf mgmt 216.239.35.4
 
 - name: run AFTER tests.
-  eos_pyateos:
+  arista.eos.eos_pyateos:
     after: true
     test:
       - acl
@@ -138,7 +133,7 @@ EXAMPLES = """
     before_ids: "{{ result.after_file_ids }}"
 
 - name: run DIFF result.
-  eos_pyateos:
+  arista.eos.eos_pyateos:
     compare: true
     group:
       - mgmt
