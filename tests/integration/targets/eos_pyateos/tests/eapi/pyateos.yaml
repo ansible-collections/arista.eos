@@ -1,6 +1,21 @@
 ---
 - debug: msg="START eapi/eos_pyateos.yaml on connection={{ ansible_connection }}"
 
+- name: CONF | prepare test environment.
+  arista.eos.eos_config:
+    lines:
+      - no ntp server 216.239.35.12
+      - no ntp server 216.239.35.4
+      - no ntp server 216.239.35.8
+      - no snmp-server host 8.8.8.4 version 2c public
+      - no snmp-server host 8.8.8.8 version 2c public
+      - no snmp-server host 1.1.1.1 version 2c public  
+      - no ip prefix-list T666 seq 15 permit 8.8.4.4/32
+      - no ip prefix-list T666 seq 10 permit 8.8.8.8/32
+      - no vlan 999
+      - no vlan 666
+  become: true
+
 - name: CONF | set NTP, SNMP config.
   arista.eos.eos_config:
     lines:
@@ -43,7 +58,7 @@
     hostname: "{{ inventory_hostname }}"
   register: result
 - assert:
-    that: (result.before_file_ids|lenght==5)
+    that: (result.before_file_ids|length==5)
 
 - name: save BEFORE file IDs.
   delegate_to: 127.0.0.1
@@ -53,8 +68,8 @@
 - name: CONF | change NTP, SNMP, PREFIX-LIST and VLAN config.
   arista.eos.eos_config:
     lines:
-      - no ntp server 216.239.35.8
-      - ntp server 216.239.35.12
+      - no ntp server  216.239.35.8
+      - ntp server  216.239.35.12
       - no snmp-server host 8.8.8.4 version 2c public
       - snmp-server host 1.1.1.1 version 2c public
       - ip prefix-list T666 seq 15 permit 8.8.4.4/32
@@ -62,6 +77,7 @@
       - no vlan 666
       - vlan 999
   become: true
+  register: result
 - assert:
     that: result.changed == true
 
@@ -70,6 +86,7 @@
     commands:
       - clear mac address-table dynamic
   become: true
+  register: result
 - assert:
     that: result.changed == false
 
@@ -86,7 +103,7 @@
   register: result
 - assert:
     that:
-      - (result.after_file_ids|lenght==5)
+      - (result.after_file_ids|length==5)
 
 - name: save AFTER file IDs.
   delegate_to: 127.0.0.1
@@ -107,6 +124,7 @@
     files: 
       - "{{ before_ids }}"
       - "{{ after_ids }}"
+  register: result
 - assert:
     that:
       - result.compare is defined
@@ -114,8 +132,8 @@
 - name: CONF | restore config.
   arista.eos.eos_config:
     lines:
-      - no ntp server 216.239.35.12
-      - no ntp server 216.239.35.4
+      - no ntp server  216.239.35.12
+      - no ntp server  216.239.35.4
       - no snmp-server host 8.8.8.4 version 2c public
       - no snmp-server host 1.1.1.1 version 2c public  
       - no ip prefix-list T666 seq 15 permit 8.8.4.4/32
