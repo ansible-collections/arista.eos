@@ -280,8 +280,7 @@ def run_test(module, test):
         result = Test(module).show(cmds.get(test))
 
     with open(
-        "{0}/{1}.json".format(destination, file_name), "w", encoding="utf-8"
-    ) as file:
+        "{0}/{1}.json".format(destination, file_name), "w") as file:
         json.dump(result, file, ensure_ascii=False, indent=4)
 
     return result, file_name
