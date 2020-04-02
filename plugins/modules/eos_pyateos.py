@@ -4,17 +4,21 @@
 # Copyright: (c) 2020, Federico Olivieri (lvrfrc87@gmail.com)
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
+from __future__ import absolute_import, division, print_function
+
+__metaclass__ = type
+
 DOCUMENTATION = """
----
 module: eos_pyateos
 version_added: "2.10"
-author:
-  - "Federico Olivieri (@Federico87)"
-
+author: "Federico Olivieri (@Federico87)"
 short_description: Operational status tests on Arista device.
-description: A snapshot of the operational status of a switch is taken before a
+description:
+    - A snapshot of the operational status of a switch is taken before a
     config or network change and compare against a second snapshot taken after the change.
     A diff file is generated in .json format.
+notes:
+    - Tested against EOS 4.18
 options:
     test:
         description:
@@ -194,10 +198,17 @@ import re
 import sys
 import json
 import time
-from ansible.module_utils.basic import AnsibleModule, missing_required_lib
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import run_commands
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import eos_argument_spec
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import get_connection
+from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.basic import missing_required_lib
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    run_commands,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    eos_argument_spec,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    get_connection,
+)
 
 try:
     from jsondiff import diff
@@ -370,7 +381,7 @@ def run_compare(module, count, test):
         if test not in skip_list:
             for integer in re.findall(r"\d+:\s", sub_applied):
                 sub_applied = sub_applied.replace(
-                    integer, f'"{integer[:-1]}": '
+                    integer, '"{0}": '.format(integer[:-1])
                 )
 
         return sub_applied
