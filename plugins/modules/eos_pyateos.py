@@ -404,7 +404,7 @@ def run_compare(module, count, test):
                 "r",
             )
         except FileNotFoundError as error:
-            return error
+            module.fail_json(msg=error)
 
         try:
             after = open(
@@ -414,7 +414,7 @@ def run_compare(module, count, test):
                 "r",
             )
         except FileNotFoundError as error:
-            return error
+            module.fail_json(msg=error)
 
         destination = "./tests/diff/{test}/{host}/".format(
             test=test, host=host
@@ -430,9 +430,13 @@ def run_compare(module, count, test):
             final_diff = json.loads(legal_json_diff)
 
         if filter_flag:
-            final_diff = CustomFilter().filter_jmespath(
-                test, json.loads(legal_json_diff)
-            )
+            try:
+                final_diff = CustomFilter().filter_jmespath(
+                    test, json.loads(legal_json_diff)
+                )
+            except ValueError as error:
+                module.fail_json(msg="Diff file not legal:\n{}".format(final_diff))
+
 
         diff_file_id = str(
             (int(before_file[count]) - int(after_file[count])) * -1
