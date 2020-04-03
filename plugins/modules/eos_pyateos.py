@@ -279,9 +279,11 @@ def run_test(module, test):
     if test:
         result = Test(module).show(cmds.get(test))
 
-    with open(
-        "{0}/{1}.json".format(destination, file_name), "w") as file:
-        json.dump(result, file, ensure_ascii=False, indent=4)
+    try:
+        with open("{0}/{1}.json".format(destination, file_name), "w") as file:
+            json.dump(result, file, ensure_ascii=False, indent=4)
+    except:
+        module.fail_json(msg="Something went wrong when writing to the file")
 
     return result, file_name
 
@@ -436,13 +438,15 @@ def run_compare(module, count, test):
             (int(before_file[count]) - int(after_file[count])) * -1
         )
 
-        with open("{destination}{diff_file_id}.json".format(
-            destination=destination, 
-            diff_file_id=diff_file_id
-            ),
-            "w") as file:
-
-            json.dump(final_diff, file, ensure_ascii=False, indent=4)
+        try:
+            with open(
+                "{destination}{diff_file_id}.json".format(
+                    destination=destination, 
+                    diff_file_id=diff_file_id
+                ),"w") as file:
+                json.dump(final_diff, file, ensure_ascii=False, indent=4)
+        except:
+            module.fail_json(msg="Something went wrong when writing to the file")
 
     return final_diff
 
