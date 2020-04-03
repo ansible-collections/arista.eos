@@ -434,13 +434,12 @@ def run_compare(module, count, test):
             (int(before_file[count]) - int(after_file[count])) * -1
         )
 
-        with open(
-            "{destination}{diff_file_id}.json".format(
-                destination=destination, diff_file_id=diff_file_id
+        with open("{destination}{diff_file_id}.json".format(
+            destination=destination, 
+            diff_file_id=diff_file_id
             ),
-            "w",
-            encoding="utf-8",
-        ) as file:
+            "w") as file:
+
             json.dump(final_diff, file, ensure_ascii=False, indent=4)
 
     return final_diff
