@@ -367,6 +367,7 @@ def run_compare(module, count, test):
             "False": "false",
             "(": "[",
             ")": "]",
+            "u'": "\"",
         }
 
         skip_list = ["vrf"]
