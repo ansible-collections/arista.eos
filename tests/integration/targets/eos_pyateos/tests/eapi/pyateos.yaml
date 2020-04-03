@@ -61,7 +61,7 @@
     that: (result.before_file_ids|length==5)
 
 - name: save BEFORE file IDs.
-  delegate_to: 127.0.0.1
+  # delegate_to: 127.0.0.1
   set_fact:
     before_ids: "{{ result.before_file_ids }}"
 
@@ -106,7 +106,7 @@
       - (result.after_file_ids|length==5)
 
 - name: save AFTER file IDs.
-  delegate_to: 127.0.0.1
+  # delegate_to: 127.0.0.1
   set_fact:
     after_ids: "{{ result.after_file_ids }}"
 
