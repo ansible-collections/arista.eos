@@ -426,16 +426,16 @@ def run_compare(module, count, test):
         json_diff = str(diff(before, after, load=True, syntax="symmetric"))
         legal_json_diff = replace(json_diff, test)
 
-        if not filter_flag:
-            final_diff = json.loads(legal_json_diff)
+        try:
+            if not filter_flag:
+                final_diff = json.loads(legal_json_diff)
 
-        if filter_flag:
-            try:
-                final_diff = CustomFilter().filter_jmespath(
-                    test, json.loads(legal_json_diff)
-                )
-            except ValueError as error:
-                module.fail_json(msg="Diff file not legal:\n{}".format(final_diff))
+            if filter_flag:
+                    final_diff = CustomFilter().filter_jmespath(
+                        test, json.loads(legal_json_diff)
+                    )
+        except ValueError as error:
+            module.fail_json(msg="Diff file not legal:\n{}".format(legal_json_diff))
 
 
         diff_file_id = str(
