@@ -388,7 +388,7 @@ def run_compare(module, count, test):
         if test not in skip_list:
             for integer in re.findall(r"\d+:\s", sub_applied):
                 sub_applied = sub_applied.replace(
-                    integer, '"{0}": '.format(integer[:-1])
+                    integer, '"{0}": '.format(integer[:-2])
                 )
 
         return sub_applied
