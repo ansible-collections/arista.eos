@@ -105,8 +105,7 @@
       - (result.after_file_ids|length==5)
 
 - name: save AFTER file IDs.
-
-- set_fact:
+  set_fact:
     after_ids: "{{ result.after_file_ids }}"
 
 - name: run DIFF result .
