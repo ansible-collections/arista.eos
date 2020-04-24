@@ -376,7 +376,12 @@ options:
               source:
                 description: The packet's source address
                 type: dict
-                suboptions:
+                mutually_exclusive:
+                - ["address", "subnet_address", "any", "host",]
+                - ["wildcard_bits", "subnet_address", "any", "host",]
+                required_together:
+                - ["address", "wildcard_bits"] 
+                suboptions: &addr_params
                   address:
                     description: dotted decimal notation of IP address
                     type: str
@@ -399,26 +404,12 @@ options:
               destination:
                 description: The packet's destination address
                 type: dict
-                suboptions:
-                  address:
-                    description: dotted decimal notation of IP address
-                    type: str
-                  wildcard_bits:
-                    description: Source wildcard bits
-                    type: str
-                  subnet_address:
-                    description: A subnet address
-                    type: str
-                  host:
-                    description: Host IP address
-                    type: str
-                  any:
-                    description: Rule matches all source addresses
-                    type: bool
-                  port_protocol:
-                    description: Specify dest port/protocol, along with operator .
-                      (comes with tcp/udp).
-                    type: dict
+                mutually_exclusive:
+                - ["address", "subnet_address", "any", "host", ]
+                - ["wildcard_bits", "subnet_address", "any", "host",]
+                required_together:
+                - ["address", "wildcard_bits"]
+                suboptions: *addr_params
               ttl:
                 description: Compares the TTL (time-to-live) value in the packet to
                   a specified value
@@ -498,7 +489,7 @@ EXAMPLES = """
              protocol: "ospf"
              source:
                subnet_address: 20.0.0.0/8
-             destnation:
+             destination:
                any: true
     state: merged
 
@@ -905,13 +896,14 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.acls.acls import (
-    AclsArgs,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.acls.acls import (
     Acls,
 )
 
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    convert_doc_to_module_argument_spec,
+)
 
 def main():
     """
@@ -919,6 +911,7 @@ def main():
 
     :returns: the result form module invocation
     """
+    argument_spec = convert_doc_to_module_argument_spec(DOCUMENTATION)
 
     required_if = [
         ("state", "merged", ("config",)),
@@ -930,7 +923,7 @@ def main():
     mutually_exclusive = [("config", "running_config")]
 
     module = AnsibleModule(
-        argument_spec=AclsArgs.argument_spec,
+        argument_spec=argument_spec,
         required_if=required_if,
         supports_check_mode=True,
         mutually_exclusive=mutually_exclusive,
