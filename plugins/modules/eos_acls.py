@@ -462,6 +462,18 @@ options:
     - rendered
     - parsed
     default: merged
+
+required_if:
+- ["state", "merged", ["config",]]
+- ["state", "replaced", ["config",]]
+- ["state", "overridden", ["config",]]
+- ["state", "rendered", ["config",]]
+- ["state", "parsed", ["running_config",]]
+
+mutually_exclusive:
+ - ["config", "running_config"]
+
+supports_check_mode: True
 """
 EXAMPLES = """
 # Using merged
@@ -902,7 +914,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.acls
 )
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    convert_doc_to_module_argument_spec,
+    convert_doc_to_ansible_module_kwargs,
 )
 
 def main():
@@ -911,23 +923,9 @@ def main():
 
     :returns: the result form module invocation
     """
-    argument_spec = convert_doc_to_module_argument_spec(DOCUMENTATION)
+    kwargs = convert_doc_to_ansible_module_kwargs(DOCUMENTATION)
 
-    required_if = [
-        ("state", "merged", ("config",)),
-        ("state", "replaced", ("config",)),
-        ("state", "overridden", ("config",)),
-        ("state", "rendered", ("config",)),
-        ("state", "parsed", ("running_config",)),
-    ]
-    mutually_exclusive = [("config", "running_config")]
-
-    module = AnsibleModule(
-        argument_spec=argument_spec,
-        required_if=required_if,
-        supports_check_mode=True,
-        mutually_exclusive=mutually_exclusive,
-    )
+    module = AnsibleModule(**kwargs)
 
     result = Acls(module).execute_module()
     module.exit_json(**result)
