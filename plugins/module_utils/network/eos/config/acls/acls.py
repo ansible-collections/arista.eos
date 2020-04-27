@@ -200,8 +200,7 @@ class Acls(ConfigBase):
             commands = self._state_replaced(want, have)
         return commands
 
-    @staticmethod
-    def _state_replaced(want, have):
+    def _state_replaced(self, want, have):
         """ The command generator when state is replaced
 
         :rtype: A list
@@ -250,8 +249,7 @@ class Acls(ConfigBase):
         [commandset.append(cmd) for cmd in commands if cmd not in commandset]
         return commandset
 
-    @staticmethod
-    def _state_overridden(want, have):
+    def _state_overridden(self, want, have):
         """ The command generator when state is overridden
 
         :rtype: A list
@@ -314,8 +312,7 @@ class Acls(ConfigBase):
             commands = list(itertools.chain(*commands))
         return commands
 
-    @staticmethod
-    def _state_merged(want, have):
+    def _state_merged(self, want, have):
         """ The command generator when state is merged
 
         :rtype: A list
@@ -324,8 +321,7 @@ class Acls(ConfigBase):
         """
         return set_commands(want, have)
 
-    @staticmethod
-    def _state_deleted(want, have):
+    def _state_deleted(self, want, have):
         """ The command generator when state is deleted
 
         :rtype: A list
@@ -341,8 +337,12 @@ class Acls(ConfigBase):
                     commands.append(command)
         else:
             for w in want:
-                return_command = del_commands(w, have)
-                commands.append(return_command)
+                return_command = del_commands(w, have, True)
+                if "Warn" in return_command:
+                    self._module.warn(" ".join(return_command.split()[1:])) 
+                    return return_command
+                else:
+                    commands.append(return_command)
         commands = list(itertools.chain(*commands))
         return commands
 
@@ -513,7 +513,7 @@ def add_commands(want):
     return commandset
 
 
-def del_commands(want, have):
+def del_commands(want, have, name_only=False):
     commandset = []
     command = ""
     have_command = []
@@ -539,6 +539,9 @@ def del_commands(want, have):
             ace_present = False
             commandset.append("no " + command)
     if ace_present:
+        if name_only:
+            msg = "Deleted operation allows deletion of access-list only and not the entries !!"
+            return "Warn " + msg
         return_command = add_commands(want)
         for cmd in return_command:
             if "access-list" in cmd:

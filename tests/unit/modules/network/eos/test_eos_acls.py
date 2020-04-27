@@ -321,8 +321,7 @@ class TestEosAclsModule(TestEosModule):
                 state="deleted",
             )
         )
-        commands = ["ip access-list test1", "no 45"]
-        self.execute_module(changed=True, commands=commands)
+        self.execute_module(changed=False, commands=[])
 
     def test_eos_acls_deletedacls(self):
         set_module_args(
