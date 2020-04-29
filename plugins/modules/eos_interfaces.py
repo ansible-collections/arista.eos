@@ -39,7 +39,7 @@ ANSIBLE_METADATA = {
 
 
 DOCUMENTATION = """module: eos_interfaces
-short_description: Manages interface attributes of Arista EOS interfaces
+short_description: Interfaces resource module.
 description:
 - This module manages the interface attributes of Arista EOS interfaces.
 author:
@@ -83,12 +83,26 @@ options:
         description:
         - Interface link speed. Applicable for Ethernet interfaces only.
         type: str
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the NX-OS device by executing
+        the command B(show running-config | section ^interface).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
+    version_added: "1.0.0"
+
   state:
     choices:
     - merged
     - replaced
     - overridden
     - deleted
+    - parsed
+    - rendered
+    - gathered
     default: merged
     description:
     - The state of the configuration after module completion.
@@ -115,7 +129,7 @@ EXAMPLES = """
 # !
 
 - name: Merge provided configuration with device configuration
-  eos_interfaces:
+  arista.eos.eos_interfaces:
     config:
       - name: Ethernet1
         enabled: True
@@ -157,7 +171,7 @@ EXAMPLES = """
 # !
 
 - name: Replaces device configuration of listed interfaces with provided configuration
-  eos_interfaces:
+  arista.eos.eos_interfaces:
     config:
       - name: Ethernet1
         enabled: True
@@ -198,7 +212,7 @@ EXAMPLES = """
 # !
 
 - name: Overrides all device configuration with provided configuration
-  eos_interfaces:
+  arista.eos.eos_interfaces:
     config:
       - name: Ethernet1
         enabled: True
@@ -238,7 +252,7 @@ EXAMPLES = """
 # !
 
 - name: Delete or return interface parameters to default settings
-  eos_interfaces:
+  arista.eos.eos_interfaces:
     config:
       - name: Ethernet1
     state: deleted
@@ -255,6 +269,78 @@ EXAMPLES = """
 #    description "Management interface"
 #    ip address dhcp
 # !
+
+# Using rendered
+
+- name: Use Rendered to convert the structured data to native config
+  arista.eos.eos_interfaces:
+    config:
+      - name: Ethernet1
+        enabled: True
+      - name: Ethernet2
+        description: 'Configured by Ansible'
+        enabled: False
+    state: merged
+
+# Output:
+# ------------
+
+# - "interface Ethernet1"
+# - "description "Interface 1""
+# - "interface Ethernet2"
+# - "description "Configured by Ansible""
+# - "shutdown"
+# - "interface Management1"
+# - "description "Management interface""
+# - "ip address dhcp"
+
+# Using parsed
+# parsed.cfg
+
+# interface Ethernet1
+#    description "Interface 1"
+# !
+# interface Ethernet2
+#    description "Configured by Ansible"
+#    shutdown
+# !
+
+- name: Use parsed to convert native configs to structured data
+  arista.eos.interfaces:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# Output
+# parsed:
+#     - name: Ethernet1
+#       enabled: True
+#     - name: Ethernet2
+#       description: 'Configured by Ansible'
+#       enabled: False
+
+# Using gathered:
+
+# Existing config on the device
+# -----------------------------
+# interface Ethernet1
+#    description "Interface 1"
+# !
+# interface Ethernet2
+#    description "Configured by Ansible"
+#    shutdown
+# !
+
+- name: Gather interfaces facts from the device
+  arista.eos.interfaces:
+    state: gathered
+
+# output
+# gathered:
+#      - name: Ethernet1
+#        enabled: True
+#      - name: Ethernet2
+#        description: 'Configured by Ansible'
+#        enabled: False
 """
 
 RETURN = """
@@ -291,8 +377,21 @@ def main():
 
     :returns: the result form module invocation
     """
+
+    required_if = [
+        ("state", "merged", ("config",)),
+        ("state", "replaced", ("config",)),
+        ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
+    ]
+    mutually_exclusive = [("config", "running_config")]
+
     module = AnsibleModule(
-        argument_spec=InterfacesArgs.argument_spec, supports_check_mode=True
+        argument_spec=InterfacesArgs.argument_spec,
+        required_if=required_if,
+        supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Interfaces(module).execute_module()
