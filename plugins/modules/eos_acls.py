@@ -380,7 +380,7 @@ options:
                 - ["address", "subnet_address", "any", "host",]
                 - ["wildcard_bits", "subnet_address", "any", "host",]
                 required_together:
-                - ["address", "wildcard_bits"] 
+                - ["address", "wildcard_bits"]
                 suboptions: &addr_params
                   address:
                     description: dotted decimal notation of IP address
