@@ -498,7 +498,7 @@ EXAMPLES = """
              protocol: "ospf"
              source:
                subnet_address: 20.0.0.0/8
-             destnation:
+             destination:
                any: true
     state: merged
 
