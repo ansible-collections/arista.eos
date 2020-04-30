@@ -36,7 +36,7 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_l2_interfaces
-short_description: Manages Layer-2 interface attributes of Arista EOS devices
+short_description: L2_interfaces resource module.
 description: This module provides declarative management of Layer-2 interface on Arista
   EOS devices.
 author: Nathaniel Case (@qalthos)
@@ -84,17 +84,30 @@ options:
         - Access mode is not shown in interface facts, so idempotency will not be
           maintained for switchport mode access and every time the output will come
           as changed=True.
-        version_added: '2.10'
+        version_added: '1.0.0'
         type: str
         choices:
         - access
         - trunk
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the NX-OS device by executing
+        the command B(show running-config | section ^interface).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
+    version_added: "1.0.0"
   state:
     choices:
     - merged
     - replaced
     - overridden
     - deleted
+    - parsed
+    - rendered
+    - gathered
     default: merged
     description:
     - The state of the configuration after module completion
@@ -123,7 +136,7 @@ EXAMPLES = """
 # !
 
 - name: Merge provided configuration with device configuration.
-  eos_l2_interfaces:
+  arista.eos.eos_l2_interfaces:
     config:
       - name: Ethernet1
         trunk:
@@ -168,7 +181,7 @@ EXAMPLES = """
 # !
 
 - name: Replace device configuration of specified L2 interfaces with provided configuration.
-  eos_l2_interfaces:
+  arista.eos.eos_l2_interfaces:
     config:
       - name: Ethernet1
         trunk:
@@ -213,7 +226,7 @@ EXAMPLES = """
 # !
 
 - name: Override device configuration of all L2 interfaces on device with provided configuration.
-  eos_l2_interfaces:
+  arista.eos.eos_l2_interfaces:
     config:
       - name: Ethernet2
         access:
@@ -253,7 +266,7 @@ EXAMPLES = """
 # !
 
 - name: Delete EOS L2 interfaces as in given arguments.
-  eos_l2_interfaces:
+  arista.eos.eos_l2_interfaces:
     config:
       - name: Ethernet1
       - name: Ethernet2
@@ -270,6 +283,84 @@ EXAMPLES = """
 # interface Management1
 #    ip address dhcp
 #    ipv6 address auto-config
+
+# using rendered
+
+- name: Use Rendered to convert the structured data to native config
+  arista.eos.eos_l2_interfaces:
+    config:
+      - name: Ethernet1
+        trunk:
+          native_vlan: 10
+      - name: Ethernet2
+        access:
+          vlan: 30
+    state: merged
+
+# Output :
+# ------------
+#
+# - "interface Ethernet1"
+# - "switchport trunk native vlan 10"
+# - "switchport mode trunk"
+# - "interface Ethernet2"
+# - "switchport access vlan 30"
+# - "interface Management1"
+# - "ip address dhcp"
+# - "ipv6 address auto-config"
+
+
+# using parsed
+
+# parsed.cfg
+
+# interface Ethernet1
+#    switchport trunk native vlan 10
+#    switchport mode trunk
+# !
+# interface Ethernet2
+#    switchport access vlan 30
+# !
+
+- name: Use parsed to convert native configs to structured data
+  arista.eos.l2_interfaces:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# Output:
+#   parsed:
+#      - name: Ethernet1
+#        trunk:
+#          native_vlan: 10
+#      - name: Ethernet2
+#        access:
+#          vlan: 30
+
+
+# Using gathered:
+# Existing config on the device:
+#
+# veos#show running-config | section interface
+# interface Ethernet1
+#    switchport trunk native vlan 10
+#    switchport mode trunk
+# !
+# interface Ethernet2
+#    switchport access vlan 30
+# !
+
+- name: Gather interfaces facts from the device
+  arista.eos.l2_interfaces:
+    state: gathered
+# output:
+#   gathered:
+#      - name: Ethernet1
+#        trunk:
+#          native_vlan: 10
+#      - name: Ethernet2
+#        access:
+#          vlan: 30
+
 """
 
 RETURN = """
@@ -306,8 +397,20 @@ def main():
 
     :returns: the result form module invocation
     """
+    required_if = [
+        ("state", "merged", ("config",)),
+        ("state", "replaced", ("config",)),
+        ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
+    ]
+    mutually_exclusive = [("config", "running_config")]
+
     module = AnsibleModule(
-        argument_spec=L2_interfacesArgs.argument_spec, supports_check_mode=True
+        argument_spec=L2_interfacesArgs.argument_spec,
+        required_if=required_if,
+        supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = L2_interfaces(module).execute_module()
