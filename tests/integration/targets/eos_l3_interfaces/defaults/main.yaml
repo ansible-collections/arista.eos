@@ -1,2 +1,3 @@
 ---
-testcase: '*'
+testcase: '[^_].*'
+test_items: []
