@@ -37,7 +37,7 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_l3_interfaces
-short_description: Manages L3 interface attributes of Arista EOS devices.
+short_description: L3_interfaces resource module.
 description: This module provides declarative management of Layer 3 interfaces on
   Arista EOS devices.
 author: Nathaniel Case (@qalthos)
@@ -85,6 +85,16 @@ options:
               eg. 2001:db8:2201:1::1/64 or C(auto-config) to use SLAAC to chose an
               address.
             type: str
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the NX-OS device by executing
+        the command B(show running-config | section ^interface).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
+    version_added: "2.10"
   state:
     description:
     - The state of the configuration after module completion
@@ -117,7 +127,7 @@ EXAMPLES = """
 #    ipv6 address auto-config
 
 - name: Delete L3 attributes of given interfaces.
-  eos_l3_interfaces:
+  arista.eos.eos_l3_interfaces:
     config:
       - name: Ethernet1
       - name: Ethernet2
@@ -153,7 +163,7 @@ EXAMPLES = """
 #    ipv6 address auto-config
 
 - name: Merge provided configuration with device configuration.
-  eos_l3_interfaces:
+  arista.eos.eos_l3_interfaces:
     config:
       - name: Ethernet1
         ipv4:
@@ -196,7 +206,7 @@ EXAMPLES = """
 #    ipv6 address auto-config
 
 - name: Override device configuration of all L2 interfaces on device with provided configuration.
-  eos_l3_interfaces:
+  arista.eos.eos_l3_interfaces:
     config:
       - name: Ethernet1
         ipv6:
@@ -238,7 +248,7 @@ EXAMPLES = """
 #    ipv6 address auto-config
 
 - name: Replace device configuration of specified L2 interfaces with provided configuration.
-  eos_l3_interfaces:
+  arista.eos.eos_l3_interfaces:
     config:
       - name: Ethernet2
         ipv4:
@@ -258,6 +268,78 @@ EXAMPLES = """
 # interface Management1
 #    ip address dhcp
 #    ipv6 address auto-config
+
+# Using parsed:
+
+# parsed.cfg
+# ------------
+#
+# veos#show running-config | section interface
+# interface Ethernet1
+#    ip address 198.51.100.14/24
+# !
+# interface Ethernet2
+#    ip address 203.0.113.27/24
+# !
+
+- name: Use parsed to convert native configs to structured data
+  arista.eos.interfaces:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# Output:
+
+# parsed:
+#    - name: Ethernet1
+#      ipv4:
+#        - address: 198.51.100.14/24
+#    - name: Ethernet2
+#      ipv4:
+#        - address: 203.0.113.27/24
+
+# Using rendered:
+
+- name:  Use Rendered to convert the structured data to native config
+  arista.eos.eos_l3_interfaces:
+    config:
+      - name: Ethernet1
+        ipv4:
+          - address: 198.51.100.14/24
+      - name: Ethernet2
+        ipv4:
+          - address: 203.0.113.27/24
+    state: rendered
+
+# Output
+# ------------
+#rendered:
+#   - "interface Ethernet1"
+#   - "ip address 198.51.100.14/24"
+#   - "interface Ethernet2"
+#   - "ip address 203.0.113.27/24"
+
+# using gathered:
+
+# Native COnfig:
+# veos#show running-config | section interface
+# interface Ethernet1
+#    ip address 198.51.100.14/24
+# !
+# interface Ethernet2
+#    ip address 203.0.113.27/24
+# !
+
+- name: Gather l3 interfaces facts from the device
+  arista.eos.l3_interfaces:
+    state: gathered
+
+#    gathered:
+#      - name: Ethernet1
+#        ipv4:
+#          - address: 198.51.100.14/24
+#      - name: Ethernet2
+#        ipv4:
+#          - address: 203.0.113.27/24
 
 
 """
@@ -299,8 +381,20 @@ def main():
 
     :returns: the result form module invocation
     """
+
+    required_if = [
+        ("state", "merged", ("config",)),
+        ("state", "replaced", ("config",)),
+        ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
+    ]
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
-        argument_spec=L3_interfacesArgs.argument_spec, supports_check_mode=True
+        argument_spec=L3_interfacesArgs.argument_spec,
+        required_if=required_if,
+        supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = L3_interfaces(module).execute_module()
