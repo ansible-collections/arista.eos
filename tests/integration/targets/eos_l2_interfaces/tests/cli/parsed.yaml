@@ -1,0 +1,26 @@
+---
+- debug:
+    msg: START eos_l2_interfaces parsed integration tests on connection={{ ansible_connection
+      }}
+
+- set_fact:
+    config:
+      - name: Ethernet1
+        mode: trunk
+        trunk:
+          native_vlan: 10
+      - name: Ethernet2
+        access:
+          vlan: 30
+
+- name: Provide the running configuration for parsing (config to be parsed)
+  become: true
+  register: result
+  arista.eos.eos_l2_interfaces:
+    running_config: "{{ lookup('file', '_parsed.cfg') }}"
+    state: parsed
+
+- assert:
+    that:
+      - result.changed == false
+      - config|symmetric_difference(result['parsed']) == []
