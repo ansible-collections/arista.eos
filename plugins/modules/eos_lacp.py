@@ -37,8 +37,7 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_lacp
-short_description: Manage Global Link Aggregation Control Protocol (LACP) on Arista
-  EOS devices.
+short_description: Lacp resource module.
 description:
 - This module manages Global Link Aggregation Control Protocol (LACP) on Arista EOS
   devices.
@@ -61,6 +60,16 @@ options:
             - Lower value is higher priority.
             - Refer to vendor documentation for valid values.
             type: int
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the NX-OS device by executing
+        the command B(show running-config | section ^lacp).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
+    version_added: "1.0.0"
   state:
     description:
     - The state of the configuration after module completion.
@@ -69,6 +78,9 @@ options:
     - merged
     - replaced
     - deleted
+    - parsed
+    - rendered
+    - gathered
     default: merged
 """
 EXAMPLES = """
@@ -80,7 +92,7 @@ EXAMPLES = """
 # lacp system-priority 10
 
 - name: Merge provided global LACP attributes with device attributes
-  eos_lacp:
+  arista.eos.eos_lacp:
     config:
       system:
         priority: 20
@@ -101,7 +113,7 @@ EXAMPLES = """
 # lacp system-priority 10
 
 - name: Replace device global LACP attributes with provided attributes
-  eos_lacp:
+  arista.eos.eos_lacp:
     config:
       system:
         priority: 20
@@ -122,7 +134,7 @@ EXAMPLES = """
 # lacp system-priority 10
 
 - name: Delete global LACP attributes
-  eos_lacp:
+  arista.eos.eos_lacp:
     state: deleted
 
 # After state:
@@ -130,6 +142,50 @@ EXAMPLES = """
 # veos# show running-config | include lacp
 #
 
+#Using rendered:
+
+- name: Use Rendered to convert the structured data to native config
+  arista.eos.eos_lacp:
+    config:
+      system:
+        priority: 20
+    state: rendered
+
+# Output:
+# ------------
+# rendered:
+#   - "lacp system-priority 20"
+#
+
+# Using parsed:
+
+# parsed.cfg
+# lacp system-priority 20
+
+- name: Use parsed to convert native configs to structured data
+  arista.eos.eos_lacp:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# Output:
+# parsed:
+#   system:
+#     priority: 20
+ 
+# Using gathered:
+# nathive config:
+# -------------
+# lacp system-priority 10
+
+- name: Gather lacp facts from the device
+  arista.eos.eos_lacp:
+    state: gathered
+
+# Output:
+# gathered:
+#   system:
+#     priority: 10
+# 
 
 """
 RETURN = """
@@ -170,8 +226,19 @@ def main():
 
     :returns: the result form module invocation
     """
+    required_if = [
+        ("state", "merged", ("config",)),
+        ("state", "replaced", ("config",)),
+        ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
+    ]
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
-        argument_spec=LacpArgs.argument_spec, supports_check_mode=True
+        argument_spec=LacpArgs.argument_spec,
+        required_if=required_if,
+        supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lacp(module).execute_module()
