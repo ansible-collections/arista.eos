@@ -1,0 +1,24 @@
+---
+- debug:
+    msg: START eos_l3_interfaces gathered integration tests on connection={{ ansible_connection
+      }}
+
+- include_tasks: _reset_config.yaml
+
+- block:
+
+    - name: Gathered the provided configuration with the exisiting running configuration
+      become: true
+      register: result
+      arista.eos.eos_l3_interfaces:
+        config:
+        state: gathered
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: l3_interfaces
+
+    - assert:
+        that:
+          - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.gathered)|length
+            == 0

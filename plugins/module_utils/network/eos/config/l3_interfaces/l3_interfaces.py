@@ -72,7 +72,7 @@ class L3_interfaces(ConfigBase):
         if self.state in self.ACTION_STATES or self.state == "rendered":
             commands.extend(self.set_config(existing_l3_interfaces_facts))
 
-        if commands and self.state in self.ACTION_STATES
+        if commands and self.state in self.ACTION_STATES:
             if not self._module.check_mode:
                 self._connection.edit_config(commands)
             result["changed"] = True
