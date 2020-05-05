@@ -171,7 +171,7 @@ EXAMPLES = """
 # parsed:
 #   system:
 #     priority: 20
- 
+
 # Using gathered:
 # nathive config:
 # -------------
@@ -185,7 +185,7 @@ EXAMPLES = """
 # gathered:
 #   system:
 #     priority: 10
-# 
+#
 
 """
 RETURN = """
