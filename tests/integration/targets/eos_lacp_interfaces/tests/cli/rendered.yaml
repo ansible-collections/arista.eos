@@ -1,0 +1,31 @@
+---
+- debug:
+    msg: START eos_lacp_interfaces rendered integration tests on connection={{ ansible_connection
+      }}
+
+- set_fact:
+    config:
+      - name: Ethernet1
+        rate: fast
+      - name: Ethernet2
+        rate: normal
+
+- name: Use rendered state to convert task input to device specific commands
+  register: result
+  become: true
+  arista.eos.eos_lacp_interfaces:
+    config: '{{ config }}'
+    state: rendered
+
+- set_fact:
+    rendered:
+      - "interface Ethernet1"
+      - "lacp rate fast"
+      - "interface Ethernet2"
+      - "lacp rate normal"
+
+- name: Assert
+  assert:
+    that:
+      - rendered|symmetric_difference(result.rendered) == []
+      - result['changed'] == false
