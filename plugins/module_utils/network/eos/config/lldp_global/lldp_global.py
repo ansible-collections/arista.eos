@@ -39,14 +39,14 @@ class Lldp_global(ConfigBase):
     def __init__(self, module):
         super(Lldp_global, self).__init__(module)
 
-    def get_lldp_global_facts(self):
+    def get_lldp_global_facts(self, data=None):
         """ Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources
+            self.gather_subset, self.gather_network_resources, data=data
         )
         lldp_global_facts = facts["ansible_network_resources"].get(
             "lldp_global"
