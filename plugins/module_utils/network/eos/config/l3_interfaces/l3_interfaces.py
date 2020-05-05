@@ -91,7 +91,9 @@ class L3_interfaces(ConfigBase):
                 self._module.fail_json(
                     msg="value of running_config parameter must not be empty for state parsed"
                 )
-            result["parsed"] = self.get_l3_interfaces_facts(data=running_config)
+            result["parsed"] = self.get_l3_interfaces_facts(
+                data=running_config
+            )
 
         if self.state in self.ACTION_STATES:
             result["before"] = existing_l3_interfaces_facts
