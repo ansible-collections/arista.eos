@@ -37,8 +37,7 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_lacp_interfaces
-short_description: Manage Link Aggregation Control Protocol (LACP) attributes of interfaces
-  on Arista EOS devices.
+short_description: Lacp_interfaces resource module.
 description:
 - This module manages Link Aggregation Control Protocol (LACP) attributes of interfaces
   on Arista EOS devices.
@@ -69,6 +68,16 @@ options:
         choices:
         - fast
         - normal
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the NX-OS device by executing
+        the command B(show running-config | section ^interfaces).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
+    version_added: "1.0.0"
   state:
     description:
     - The state of the configuration after module completion.
@@ -78,6 +87,9 @@ options:
     - replaced
     - overridden
     - deleted
+    - parsed
+    - rendered
+    - gathered
     default: merged
 """
 EXAMPLES = """
@@ -164,7 +176,7 @@ EXAMPLES = """
 #    lacp rate fast
 
 - name: Override the LACP configuration of all the interfaces with provided configuration
-  eos_lacp_interfaces:
+  arista.eos.eos_lacp_interfaces:
     config:
       - name: Ethernet1
         rate: fast
@@ -196,7 +208,7 @@ EXAMPLES = """
 #    lacp rate fast
 
 - name: Delete LACP attributes of given interfaces (or all interfaces if none specified).
-  eos_lacp_interfaces:
+  arista.eos.eos_lacp_interfaces:
     state: deleted
 
 #
@@ -208,6 +220,61 @@ EXAMPLES = """
 # interface Ethernet1
 # interface Ethernet2
 
+# using rendered:
+
+- name: Use Rendered to convert the structured data to native config
+  eos_lacp_interfaces:
+    config:
+      - name: Ethernet1
+        rate: fast
+      - name: Ethernet2
+        rate: normal
+    state: rendered
+
+#
+# -----------
+# Output
+# -----------
+# rendered:
+#   - "interface Ethernet1"
+#   - "lacp rate fast"
+
+# Using parsed:
+
+# parsed.cfg:
+#    "interface Ethernet1"
+#    "lacp rate fast"
+#    "interface Ethernet2"
+
+- name: Use parsed to convert native configs to structured data
+  arista.eos.eos_lacp_interfaces:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# Output:
+# parsed:
+#   - name: Ethernet1
+#     rate: fast
+#   - name: Ethernet2
+#     rate: normal
+
+# Using gathered:
+# native config:
+#  veos#show run | section ^interface
+# interface Ethernet1
+#    lacp port-priority 30
+# interface Ethernet2
+#    lacp rate fast
+
+- name: Gather lacp facts from the device
+  arista.eos.eos_lacp_interfaces:
+    state: gathered
+
+# Output:
+# gathered:
+#   - name: Ethernet1
+#   - name: Ethernet2
+#     rate: fast
 
 """
 RETURN = """
@@ -248,9 +315,19 @@ def main():
 
     :returns: the result form module invocation
     """
+    required_if = [
+        ("state", "merged", ("config",)),
+        ("state", "replaced", ("config",)),
+        ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
+    ]
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
         argument_spec=Lacp_interfacesArgs.argument_spec,
+        required_if=required_if,
         supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lacp_interfaces(module).execute_module()
