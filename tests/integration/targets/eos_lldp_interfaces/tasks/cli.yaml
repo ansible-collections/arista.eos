@@ -1,11 +1,11 @@
 ---
-<<<<<<< HEAD
 - name: collect all cli test cases
   find:
     paths: '{{ role_path }}/tests/cli'
     patterns: '{{ testcase }}.yaml'
-  delegate_to: localhost
+    use_regex: true
   register: test_cases
+  delegate_to: localhost
 
 - name: set test_items
   set_fact: test_items="{{ test_cases.files | map(attribute='path') | list }}"
@@ -15,12 +15,3 @@
   with_items: '{{ test_items }}'
   loop_control:
     loop_var: test_case_to_run
-  tags: network_cli
-=======
-- include: cli.yaml
-  tags:
-    - cli
-- include: eapi.yaml
-  tags:
-    - eapi
->>>>>>> new states

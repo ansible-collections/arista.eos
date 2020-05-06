@@ -65,19 +65,40 @@ class Lldp_global(ConfigBase):
         warnings = list()
         commands = list()
 
-        existing_lldp_global_facts = self.get_lldp_global_facts()
-        commands.extend(self.set_config(existing_lldp_global_facts))
-        if commands:
+        if self.state in self.ACTION_STATES:
+            existing_lldp_global_facts = self.get_lldp_global_facts()
+        else:
+            existing_lldp_global_facts = {}
+
+        if self.state in self.ACTION_STATES or self.state == "rendered":
+            commands.extend(self.set_config(existing_lldp_global_facts))
+
+        if commands and self.state in self.ACTION_STATES:
             if not self._module.check_mode:
                 self._connection.edit_config(commands)
             result["changed"] = True
-        result["commands"] = commands
+        if self.state in self.ACTION_STATES:
+            result["commands"] = commands
 
-        changed_lldp_global_facts = self.get_lldp_global_facts()
+        if self.state in self.ACTION_STATES or self.state == "gathered":
+            changed_lldp_global_facts = self.get_lldp_global_facts()
+        elif self.state == "rendered":
+            result["rendered"] = commands
+        elif self.state == "parsed":
+            running_config = self._module.params["running_config"]
+            if not running_config:
+                self._module.fail_json(
+                    msg="value of running_config parameter must not be empty for state parsed"
+                )
+            result["parsed"] = self.get_lldp_global_facts(data=running_config)
 
-        result["before"] = existing_lldp_global_facts
-        if result["changed"]:
-            result["after"] = changed_lldp_global_facts
+        if self.state in self.ACTION_STATES:
+            result["before"] = existing_lldp_global_facts
+            if result["changed"]:
+                result["after"] = changed_lldp_global_facts
+
+        elif self.state == "gathered":
+            result["gathered"] = changed_lldp_global_facts
 
         result["warnings"] = warnings
         return result
@@ -105,9 +126,18 @@ class Lldp_global(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
+        if (
+            state in ("merged", "replaced", "overridden", "rendered")
+            and not want
+        ):
+            self._module.fail_json(
+                msg="value of config parameter must not be empty for state {0}".format(
+                    state
+                )
+            )
         if state == "deleted":
             commands = state_deleted(want, have)
-        elif state == "merged":
+        elif state == "merged" or state == "rendered":
             commands = state_merged(want, have)
         elif state == "replaced":
             commands = state_replaced(want, have)
