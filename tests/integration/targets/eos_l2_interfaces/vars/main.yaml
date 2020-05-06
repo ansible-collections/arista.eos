@@ -1,6 +1,0 @@
-rendered:
-  - "interface Ethernet2"
-  - "switchport mode trunk"
-  - "switchport trunk native vlan 20"
-  - "interface Ethernet1"
-  - "switchport access vlan 20"
