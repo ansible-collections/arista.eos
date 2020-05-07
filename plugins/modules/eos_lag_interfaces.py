@@ -38,7 +38,8 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_lag_interfaces
-short_description: Manages link aggregation groups on Arista EOS devices
+short_description: Lag interfaces resource module.
+version_added: "1.0.0"
 description: This module manages attributes of link aggregation groups on Arista EOS
   devices.
 author: Nathaniel Case (@Qalthos)
@@ -75,6 +76,15 @@ options:
             - active
             - 'on'
             - passive
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the NX-OS device by executing
+        the command B(show running-config | section interfaces).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
   state:
     description:
     - The state of the configuration after module completion.
@@ -84,6 +94,9 @@ options:
     - replaced
     - overridden
     - deleted
+    - rendered
+    - gathered
+    - parsed
     default: merged
 """
 
@@ -97,11 +110,11 @@ EXAMPLES = """
 #
 # veos#show running-config | section interface
 # interface Ethernet1
-#   channel group 5 mode on
+#   channel-group 5 mode on
 # interface Ethernet2
 
 - name: Merge provided LAG attributes with existing device configuration
-  eos_lag_interfaces:
+  arista.eos.eos_lag_interfaces:
     config:
       - name: 5
         members:
@@ -114,9 +127,9 @@ EXAMPLES = """
 #
 # veos#show running-config | section interface
 # interface Ethernet1
-#   channel group 5 mode on
+#   channel-group 5 mode on
 # interface Ethernet2
-#   channel group 5 mode on
+#   channel-group 5 mode on
 
 
 # Using replaced
@@ -126,11 +139,11 @@ EXAMPLES = """
 #
 # veos#show running-config | section interface
 # interface Ethernet1
-#   channel group 5 mode on
+#   channel-group 5 mode on
 # interface Ethernet2
 
 - name: Replace all device configuration of specified LAGs with provided configuration
-  eos_lag_interfaces:
+  arista.eos.eos_lag_interfaces:
     config:
       - name: 5
         members:
@@ -144,7 +157,7 @@ EXAMPLES = """
 # veos#show running-config | section interface
 # interface Ethernet1
 # interface Ethernet2
-#   channel group 5 mode on
+#   channel-group 5 mode on
 
 
 # Using overridden
@@ -154,11 +167,11 @@ EXAMPLES = """
 #
 # veos#show running-config | section interface
 # interface Ethernet1
-#   channel group 5 mode on
+#   channel-group 5 mode on
 # interface Ethernet2
 
 - name: Override all device configuration of all LAG attributes with provided configuration
-  eos_lag_interfaces:
+  arista.eos.eos_lag_interfaces:
     config:
       - name: 10
         members:
@@ -172,7 +185,7 @@ EXAMPLES = """
 # veos#show running-config | section interface
 # interface Ethernet1
 # interface Ethernet2
-#   channel group 10 mode on
+#   channel-group 10 mode on
 
 
 # Using deleted
@@ -182,12 +195,12 @@ EXAMPLES = """
 #
 # veos#show running-config | section interface
 # interface Ethernet1
-#   channel group 5 mode on
+#   channel-group 5 mode on
 # interface Ethernet2
-#   channel group 5 mode on
+#   channel-group 5 mode on
 
 - name: Delete LAG attributes of the given interfaces.
-  eos_lag_interfaces:
+  arista.eos.eos_lag_interfaces:
     config:
       - name: 5
         members:
@@ -200,8 +213,74 @@ EXAMPLES = """
 # veos#show running-config | section interface
 # interface Ethernet1
 # interface Ethernet2
-#   channel group 5 mode on
+#   channel-group 5 mode on
 
+# Using parsed:
+
+# parsed.cfg
+# interface Ethernet1
+#   channel-group 5 mode on
+# interface Ethernet2
+#   channel-group 5 mode on
+
+- name: Use parsed to convert native configs to structured data
+  arista.eos.lag_interfaces:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# Output:
+#   parsed:
+#     - name: 5
+#       members:
+#         - member: Ethernet2
+#           mode: on
+#         - member: Ethernet1
+#           mode: on
+
+# using rendered:
+
+- name: Use Rendered to convert the structured data to native config
+  arista.eos.eos_lag_interfaces:
+    config:
+        - name: 5
+          members:
+            - member: Ethernet2
+              mode: on
+            - member: Ethernet1
+              mode: on
+    state: rendered
+# -----------
+# Output
+# -----------
+#
+# rendered: 
+
+# interface Ethernet1
+#   channel-group 5 mode on
+# interface Ethernet2
+#   channel-group 5 mode on
+
+
+# Using gathered:
+
+# native config:
+# interface Ethernet1
+#   channel-group 5 mode on
+# interface Ethernet2
+#   channel-group 5 mode on
+
+- name: Gather lldp_global facts from the device
+  arista.eos.lldp_global:
+    state: gathered
+
+# Output:
+#   gathered:
+#     - name: 5
+#       members:
+#         - member: Ethernet2
+#           mode: on
+#         - member: Ethernet1
+#           mode: on
 
 """
 
@@ -243,9 +322,19 @@ def main():
 
     :returns: the result form module invocation
     """
+    required_if = [
+        ("state", "merged", ("config",)),
+        ("state", "replaced", ("config",)),
+        ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
+    ]
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
         argument_spec=Lag_interfacesArgs.argument_spec,
+        required_if=required_if,
         supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lag_interfaces(module).execute_module()

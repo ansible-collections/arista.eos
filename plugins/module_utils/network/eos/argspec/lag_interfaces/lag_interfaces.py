@@ -56,9 +56,18 @@ class Lag_interfacesArgs(object):
             },
             "type": "list",
         },
+        "running_config": {"type": "str"},
         "state": {
             "default": "merged",
-            "choices": ["merged", "replaced", "overridden", "deleted"],
+            "choices": [
+                "merged",
+                "replaced",
+                "overridden",
+                "deleted",
+                "gathered",
+                "rendered",
+                "parsed",
+            ],
             "type": "str",
         },
     }
