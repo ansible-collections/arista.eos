@@ -40,6 +40,7 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = """module: eos_interfaces
 short_description: Interfaces resource module.
+version_added: "1.0.0"
 description:
 - This module manages the interface attributes of Arista EOS interfaces.
 author:
@@ -92,8 +93,6 @@ options:
         it into Ansible structured data as per the resource module's argspec and the value is then
         returned in the I(parsed) key within the result.
     type: str
-    version_added: "1.0.0"
-
   state:
     choices:
     - merged
