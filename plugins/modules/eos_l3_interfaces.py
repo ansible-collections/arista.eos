@@ -38,6 +38,7 @@ ANSIBLE_METADATA = {
 
 DOCUMENTATION = """module: eos_l3_interfaces
 short_description: L3_interfaces resource module.
+version_added: "1.0.0"
 description: This module provides declarative management of Layer 3 interfaces on
   Arista EOS devices.
 author: Nathaniel Case (@qalthos)
@@ -94,7 +95,6 @@ options:
         it into Ansible structured data as per the resource module's argspec and the value is then
         returned in the I(parsed) key within the result.
     type: str
-    version_added: "1.0.0"
   state:
     description:
     - The state of the configuration after module completion
