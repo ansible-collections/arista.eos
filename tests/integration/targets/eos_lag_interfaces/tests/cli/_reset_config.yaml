@@ -1,0 +1,24 @@
+---
+- name: Reset state
+  become: true
+  ansible.netcommon.cli_config:
+    config: "interface Ethernet1\n   channel-group 5 mode on\ninterface Ethernet2\n\
+      \   no channel-group\nno interface Port-Channel10\n"
+
+- become: true
+  arista.eos.eos_facts:
+    gather_network_resources: lag_interfaces
+
+- set_fact:
+    expected_config:
+
+      - name: Port-Channel5
+        members:
+
+          - member: Ethernet1
+            mode: 'on'
+
+- assert:
+    that:
+      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(expected_config)|length
+        == 0

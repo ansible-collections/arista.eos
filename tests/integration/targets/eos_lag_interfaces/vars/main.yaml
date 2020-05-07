@@ -1,0 +1,15 @@
+---
+parsed:
+  config:
+    - name: "Port-Channel5"
+      members:
+        - member: Ethernet1
+          mode: "on"
+        - member: Ethernet2
+          mode: "on"
+
+rendered:
+  - "interface Ethernet1"
+  - "channel-group 5 mode on"
+  - "interface Ethernet2"
+  - "channel-group 5 mode on"
