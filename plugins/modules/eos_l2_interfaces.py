@@ -40,6 +40,7 @@ short_description: L2_interfaces resource module.
 description: This module provides declarative management of Layer-2 interface on Arista
   EOS devices.
 author: Nathaniel Case (@qalthos)
+version_added: "1.0.0"
 notes:
 - Tested against Arista EOS 4.20.10M
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
@@ -84,7 +85,6 @@ options:
         - Access mode is not shown in interface facts, so idempotency will not be
           maintained for switchport mode access and every time the output will come
           as changed=True.
-        version_added: '1.0.0'
         type: str
         choices:
         - access
@@ -98,7 +98,6 @@ options:
         it into Ansible structured data as per the resource module's argspec and the value is then
         returned in the I(parsed) key within the result.
     type: str
-    version_added: "1.0.0"
   state:
     choices:
     - merged
