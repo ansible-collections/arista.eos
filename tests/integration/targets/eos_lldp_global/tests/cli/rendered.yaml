@@ -17,5 +17,5 @@
 - name: Assert
   assert:
     that:
-      - rendered == result.rendered
+      - rendered.sort() == result.rendered.sort()
       - result['changed'] == false
