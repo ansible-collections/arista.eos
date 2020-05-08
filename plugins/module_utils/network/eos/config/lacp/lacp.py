@@ -121,7 +121,7 @@ class Lacp(ConfigBase):
         """
         state = self._module.params["state"]
         if (
-            state in ("merged", "replaced", "overridden", "rendered")
+            state in ("merged", "replaced", "rendered")
             and not want
         ):
             self._module.fail_json(
