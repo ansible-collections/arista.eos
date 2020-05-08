@@ -253,7 +253,7 @@ EXAMPLES = """
 # Output
 # -----------
 #
-# rendered: 
+# rendered:
 
 # interface Ethernet1
 #   channel-group 5 mode on
