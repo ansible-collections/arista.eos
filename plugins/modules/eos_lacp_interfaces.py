@@ -37,7 +37,8 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_lacp_interfaces
-short_description: Lacp_interfaces resource module.
+short_description: LACP interfaces resource module.
+version_added: "1.0.0"
 description:
 - This module manages Link Aggregation Control Protocol (LACP) attributes of interfaces
   on Arista EOS devices.
@@ -77,7 +78,6 @@ options:
         it into Ansible structured data as per the resource module's argspec and the value is then
         returned in the I(parsed) key within the result.
     type: str
-    version_added: "1.0.0"
   state:
     description:
     - The state of the configuration after module completion.
@@ -266,7 +266,7 @@ EXAMPLES = """
 # interface Ethernet2
 #    lacp rate fast
 
-- name: Gather lacp facts from the device
+- name: Gather LACP facts from the device
   arista.eos.eos_lacp_interfaces:
     state: gathered
 
