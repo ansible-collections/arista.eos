@@ -227,7 +227,7 @@ EXAMPLES = """
 # Output
 # -----------
 #
-# rendered: 
+# rendered:
 #   - "lldp holdtime 100"
 #   - "no lldp tlv-select management-address"
 #   - "no lldp tlv-select port-description"
