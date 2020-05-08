@@ -37,7 +37,8 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_vlans
-short_description: Manage VLANs on Arista EOS devices.
+short_description: Vlans resource module.
+version_added: "1.0.0"
 description: This module provides declarative management of VLANs on Arista EOS network
   devices.
 author: Nathaniel Case (@qalthos)
@@ -59,6 +60,15 @@ options:
         - ID of the VLAN. Range 1-4094
         type: int
         required: true
+      running_config:
+        description:
+        - This option is used only with state I(parsed).
+        - The value of this option should be the output received from the NX-OS device by executing
+          the command B(show running-config | section vlan).
+        - The state I(parsed) reads the configuration from C(running_config) option and transforms
+          it into Ansible structured data as per the resource module's argspec and the value is then
+          returned in the I(parsed) key within the result.
+        type: str
       state:
         description:
         - Operational state of the VLAN
@@ -75,6 +85,9 @@ options:
     - replaced
     - overridden
     - deleted
+    - rendered
+    - gathered
+    - parsed
     default: merged
 """
 EXAMPLES = """
@@ -91,7 +104,7 @@ EXAMPLES = """
 #    name twenty
 
 - name: Delete attributes of the given VLANs.
-  eos_vlans:
+  arista.eos.eos_vlans:
     config:
       - vlan_id: 20
     state: deleted
@@ -117,7 +130,7 @@ EXAMPLES = """
 #    name twenty
 
 - name: Merge given VLAN attributes with device configuration
-  eos_vlans:
+  arista.eos.eos_vlans:
     config:
       - vlan_id: 20
         state: suspend
@@ -148,7 +161,7 @@ EXAMPLES = """
 #    name twenty
 
 - name: Override device configuration of all VLANs with provided configuration
-  eos_vlans:
+  arista.eos.eos_vlans:
     config:
       - vlan_id: 20
         state: suspend
@@ -175,7 +188,7 @@ EXAMPLES = """
 #    name twenty
 
 - name: Replace all attributes of specified VLANs with provided configuration
-  eos_vlans:
+  arista.eos.eos_vlans:
     config:
       - vlan_id: 20
         state: suspend
@@ -191,6 +204,69 @@ EXAMPLES = """
 # vlan 20
 #    state suspend
 
+# using parsed
+
+# parsed.cfg
+# vlan 10
+#    name ten
+# !
+# vlan 20
+#    name twenty
+#    state suspend
+
+- name: Use parsed to convert native configs to structured data
+  arista.eos.eos_vlans:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# Output:
+# -------
+#   parsed:
+#     - vlan_id: 10
+#       name: ten
+#     - vlan_id: 20
+#       state: suspend
+
+# Using rendered:
+
+- name: Use Rendered to convert the structured data to native config
+  arista.eos.eos_vlans:
+    config:
+      - vlan_id: 10
+        name: ten
+      - vlan_id: 20
+        state: suspend
+    state: rendered
+
+# Output:
+# ------
+# rendered:
+#   - "vlan 10"
+#   - "name ten"
+#   - "vlan 20"
+#   - "state suspend"
+
+# Using gathered:
+# native_config:
+# vlan 10
+#    name ten
+# !
+# vlan 20
+#    name twenty
+#    state suspend
+
+- name: Gather vlans facts from the device
+  arista.eos.eos_vlans:
+    state: gathered
+
+# Output:
+# ------
+
+# gathered:
+#   - vlan_id: 10
+#     name: ten
+#   - vlan_id: 20
+#     state: suspend
 
 """
 RETURN = """
@@ -231,8 +307,19 @@ def main():
 
     :returns: the result form module invocation
     """
+    required_if = [
+        ("state", "merged", ("config",)),
+        ("state", "replaced", ("config",)),
+        ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
+    ]
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
-        argument_spec=VlansArgs.argument_spec, supports_check_mode=True
+        argument_spec=VlansArgs.argument_spec,
+        required_if=required_if,
+        supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Vlans(module).execute_module()
