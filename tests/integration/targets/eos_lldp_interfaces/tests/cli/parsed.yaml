@@ -6,9 +6,9 @@
 - set_fact:
     config:
       - name: Ethernet1
-        transmit: False
+        transmit: false
       - name: Ethernet2
-        transmit: False
+        transmit: false
 
 - name: Provide the running configuration for parsing (config to be parsed)
   become: true

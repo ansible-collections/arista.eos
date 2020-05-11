@@ -1,12 +1,12 @@
 ---
 parsed:
   config:
-     holdtime: 100
-     timer: 3000
-     reinit: 5
-     tlv_select:
-       management_address: False
-       system_description: False
+    holdtime: 100
+    timer: 3000
+    reinit: 5
+    tlv_select:
+      management_address: false
+      system_description: false
 
 rendered:
   - "lldp holdtime 100"
