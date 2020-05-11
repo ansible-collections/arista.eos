@@ -26,7 +26,7 @@ You can also include it in a `requirements.yml` file and install it with `ansibl
 ---
 collections:
   - name: arista.eos
-    version: 0.0.3
+    version: 0.0.1
 ```
 ## Using this collection
 
