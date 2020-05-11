@@ -4,9 +4,9 @@
       - name: 5
         members:
           - member: Ethernet2
-            mode: on
+            mode: "on"
           - member: Ethernet1
-            mode: on
+            mode: "on"
 
 - name: Use rendered state to convert task input to device specific commands
   register: result
