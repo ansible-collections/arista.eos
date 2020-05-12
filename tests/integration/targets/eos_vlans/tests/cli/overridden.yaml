@@ -9,6 +9,7 @@
 
       - vlan_id: 50
         name: fifty
+        state: active
 
 - become: true
   arista.eos.eos_facts:
