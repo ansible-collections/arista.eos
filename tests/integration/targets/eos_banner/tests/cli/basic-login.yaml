@@ -11,7 +11,7 @@
   register: result
   arista.eos.eos_banner: &id001
     banner: login
-    text: "Junk login banner\nover multiple lines\n"
+    text: "Junk login banner\n   \nover multiple lines\n"
     state: present
 
 - assert:
