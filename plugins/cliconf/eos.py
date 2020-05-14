@@ -114,6 +114,7 @@ class Cliconf(CliconfBase):
         requests = []
         multiline = False
         for line in to_list(candidate):
+            # not line added to accomodate empty lines in banner
             if not isinstance(line, Mapping):
                 line = {"command": line}
 
@@ -128,7 +129,7 @@ class Cliconf(CliconfBase):
             if multiline:
                 line["sendonly"] = True
 
-            if cmd != "end" and cmd[0] != "!":
+            if cmd != "end" and not cmd.startswith("!"):
                 try:
                     results.append(self.send_command(**line))
                     requests.append(cmd)
