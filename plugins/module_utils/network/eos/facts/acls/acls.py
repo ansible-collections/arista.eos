@@ -20,8 +20,8 @@ from copy import deepcopy
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.acls.acls import (
-    AclsArgs,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    convert_doc_to_ansible_module_kwargs,
 )
 
 
@@ -31,7 +31,15 @@ class AclsFacts(object):
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
-        self.argument_spec = AclsArgs.argument_spec
+
+        from ansible_collections.arista.eos.plugins.modules.eos_acls import (
+            DOCUMENTATION,
+        )
+
+        self.argument_spec = convert_doc_to_ansible_module_kwargs(
+            DOCUMENTATION
+        ).get("argument_spec")
+
         spec = deepcopy(self.argument_spec)
         if subspec:
             if options:
