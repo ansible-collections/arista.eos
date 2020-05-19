@@ -1,8 +1,9 @@
 ---
 - name: Reset initial config
   become: true
-  ansible.netcommon.cli_config:
-    config: "lacp system-priority 10\n"
+  arista.eos.eos_config:
+    lines:
+      - "lacp system-priority 10"
 
 - become: true
   arista.eos.eos_facts:
