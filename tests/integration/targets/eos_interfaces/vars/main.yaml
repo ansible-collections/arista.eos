@@ -1,0 +1,17 @@
+---
+parsed:
+  config:
+    - name: Ethernet1
+      description: 'Interface 1'
+      enabled: true
+    - name: Ethernet2
+      description: 'Configured by Ansible'
+      enabled: false
+
+rendered:
+  - "interface Ethernet2"
+  - "speed 10full"
+  - "description Configured by Ansible"
+  - "shutdown"
+  - "interface Ethernet1"
+  - "no shutdown"
