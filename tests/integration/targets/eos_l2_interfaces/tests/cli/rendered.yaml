@@ -1,0 +1,31 @@
+---
+- include_tasks: _reset_config.yaml
+
+- set_fact:
+    config:
+
+      - name: Ethernet1
+        mode: trunk
+        trunk:
+          native_vlan: 10
+
+      - name: Ethernet2
+        access:
+          vlan: 30
+
+- become: true
+  arista.eos.eos_facts:
+    gather_network_resources: l2_interfaces
+
+- name: Use rendered state to convert task input to device specific commands
+  register: result
+  become: true
+  arista.eos.eos_l2_interfaces:
+    config: '{{ config }}'
+    state: rendered
+
+- name: Assert
+  assert:
+    that:
+      - rendered|symmetric_difference(result.rendered) == []
+      - result['changed'] == false

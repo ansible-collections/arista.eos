@@ -1,0 +1,17 @@
+---
+rendered:
+  - "interface Ethernet2"
+  - "switchport access vlan 30"
+  - "interface Ethernet1"
+  - "switchport mode trunk"
+  - "switchport trunk native vlan 10"
+
+parsed:
+  config:
+    - name: Ethernet1
+      mode: trunk
+      trunk:
+        native_vlan: 10
+    - name: Ethernet2
+      access:
+        vlan: 30
