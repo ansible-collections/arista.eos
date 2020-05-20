@@ -333,7 +333,6 @@ def del_commands(want, have):
                 commandset.append(command)
 
     elif want["address_families"]:
-        vrf = want["vrf"] if "vrf" in want.keys() and want["vrf"] else None
         for address_family in want["address_families"]:
             for command in haveconfigs:
                 afi = "ip " if address_family["afi"] == "ipv4" else "ipv6"
