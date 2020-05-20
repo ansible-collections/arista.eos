@@ -114,7 +114,6 @@ class Cliconf(CliconfBase):
         requests = []
         multiline = False
         for line in to_list(candidate):
-            # not line added to accomodate empty lines in banner
             if not isinstance(line, Mapping):
                 line = {"command": line}
 
