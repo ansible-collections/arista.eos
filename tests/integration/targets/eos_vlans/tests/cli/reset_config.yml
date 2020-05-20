@@ -13,9 +13,11 @@
 
       - vlan_id: 10
         name: ten
+        state: active
 
       - vlan_id: 20
         name: twenty
+        state: active
 
 - assert:
     that:
