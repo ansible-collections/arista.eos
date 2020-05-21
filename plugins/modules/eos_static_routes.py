@@ -148,7 +148,6 @@ options:
       - The state I(parsed) reads the configuration from C(running_config) option and transforms
         it into Ansible structured data as per the resource module's argspec and the value is then
         returned in the I(parsed) key within the result.
-      command
     type: str
   state:
     description:
