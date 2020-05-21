@@ -128,7 +128,7 @@ class Cliconf(CliconfBase):
             if multiline:
                 line["sendonly"] = True
 
-            if cmd != "end" and cmd[0] != "!":
+            if cmd != "end" and not cmd.startswith("!"):
                 try:
                     results.append(self.send_command(**line))
                     requests.append(cmd)
