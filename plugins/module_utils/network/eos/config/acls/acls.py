@@ -338,8 +338,8 @@ class Acls(ConfigBase):
         else:
             for w in want:
                 return_command = del_commands(w, have, True)
-                if "Warn" in return_command:
-                    self._module.warn(" ".join(return_command.split()[1:]))
+                if return_command[:5] == "Warn ":
+                    self._module.warn(return_command[5:])
                     return commands
                 else:
                     commands.append(return_command)
