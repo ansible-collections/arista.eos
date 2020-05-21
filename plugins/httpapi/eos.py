@@ -25,6 +25,7 @@ options:
 """
 
 import json
+import time
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.connection import ConnectionError
@@ -73,11 +74,11 @@ class HttpApi(HttpApiBase):
             self.connection.queue_message("vvvv", "firing event: on_become")
             data.insert(0, {"cmd": "enable", "input": self._become_pass})
 
-        output = message_kwargs.get("output", "text")
+        output = message_kwargs.get("output") or "text"
         request = request_builder(data, output)
         headers = {"Content-Type": "application/json-rpc"}
 
-        response, response_data = self.connection.send(
+        _response, response_data = self.connection.send(
             "/command-api", request, headers=headers, method="POST"
         )
 
@@ -145,13 +146,40 @@ class HttpApi(HttpApiBase):
 
         return json.dumps(result)
 
+    # Shims for resource module support
+    def get(self, command, output=None):
+        # This method is ONLY here to support resource modules. Therefore most
+        # arguments are unsupported and not present.
+
+        return self.send_request(data=command, output=output)
+
+    def edit_config(self, candidate):
+        # This method is ONLY here to support resource modules. Therefore most
+        # arguments are unsupported and not present.
+
+        session = None
+        if self.supports_sessions():
+            session = "ansible_%d" % int(time.time())
+            candidate = ["configure session %s" % session] + candidate
+        else:
+            candidate = ["configure"] + candidate
+        candidate.append("commit")
+
+        try:
+            responses = self.send_request(candidate)
+        except ConnectionError:
+            if session:
+                self.send_request(["configure session %s" % session, "abort"])
+
+        return [resp for resp in to_list(responses) if resp != "{}"]
+
 
 def handle_response(response):
     if "error" in response:
         error = response["error"]
 
         error_text = []
-        for data in error["data"]:
+        for data in error.get("data", []):
             error_text.extend(data.get("errors", []))
         error_text = "\n".join(error_text) or error["message"]
 
