@@ -47,8 +47,16 @@ class LacpArgs(object):
             },
             "type": "dict",
         },
+        "running_config": {"type": "str"},
         "state": {
-            "choices": ["merged", "replaced", "deleted"],
+            "choices": [
+                "merged",
+                "replaced",
+                "deleted",
+                "gathered",
+                "rendered",
+                "parsed",
+            ],
             "default": "merged",
             "type": "str",
         },
