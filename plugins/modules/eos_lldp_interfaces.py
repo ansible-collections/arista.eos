@@ -64,7 +64,7 @@ options:
         description:
         - Enable/disable LLDP TX on an interface.
         type: bool
-   running_config:
+  running_config:
     description:
       - This option is used only with state I(parsed).
       - The value of this option should be the output received from the EOS device by executing
