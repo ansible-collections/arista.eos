@@ -1,8 +1,13 @@
 ---
 - name: Reset initial config
   become: true
-  ansible.netcommon.cli_config:
-    config: "no vlan 1-4094\nvlan 10\n   name ten\nvlan 20\n   name twenty\n"
+  arista.eos.eos_config:
+    lines:
+      - "no vlan 1-4094"
+      - "vlan 10"
+      - "   name ten"
+      - "vlan 20"
+      - "   name twenty"
 
 - become: true
   arista.eos.eos_facts:
