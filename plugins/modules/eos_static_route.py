@@ -13,8 +13,8 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: eos_static_route
 author: Trishna Guha (@trishnaguha)
-short_description: (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) Manage static IP routes on Arista EOS network devices
+short_description: (deprecated, removed after 2022-06-01) Manage static IP
+  routes on Arista EOS network devices
 description:
 - This module provides declarative management of static IP routes on Arista EOS network
   devices.
