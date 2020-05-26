@@ -1,10 +1,7 @@
 ---
-- name: Delete instance
-  arista.eos.eos_ospfv2:
-    config:
-      processes:
-        - process_id: 1
-        - process_id: 2
-        - process_id: 3
-    state: deleted
-  become: true
+  - name: Cleanup
+    become: true
+    vars:
+      lines: "no router ospf 1\nno router ospf 2\nno router ospf 3\n"
+    ansible.netcommon.cli_config:
+      config: '{{ lines }}'
