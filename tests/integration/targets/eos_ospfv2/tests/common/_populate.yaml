@@ -1,15 +1,21 @@
 ---
   - name: Setup
     become: true
-    vars:
-      lines: "router ospf 1\nadjacency exchange-start threshold 20045623\n\
-      \ area 0.0.0.2 filter 10.1.1.0/24\narea 0.0.0.50  range 172.20.0.0/16 cost 34\n\
-      \ default-information originate metric 100 metric-type 1\n\
-      \ distance ospf intra-area 85\n max-lsa  8000 40 ignore-count 3\
-      \ ignore-time 6  reset-time 20\nnetwork 10.10.2.0/24 area 0.0.0.0\n\
-      \ network 10.10.3.0/24 area 0.0.0.0\nredistribute static\n\
-      \ router-id 170.21.0.4\nrouter ospf 2 vrf vrf01\narea 0.0.0.9 default-cost 20\n\
-      \ max-lsa  80000 40 ignore-count 3  ignore-time 6  reset-time 20\n\
-      \ router ospf 3 vrf vrf02\nredistribute connected\n"
-    ansible.netcommon.cli_config:
-      config: '{{ lines }}'
+    arista.eos.eos_config:
+      lines:
+        - "router ospf 1"
+        - "adjacency exchange-start threshold 20045623"
+        - "area 0.0.0.2 filter 10.1.1.0/24"
+        - "area 0.0.0.50  range 172.20.0.0/16 cost 34"
+        - "default-information originate metric 100 metric-type 1"
+        - "distance ospf intra-area 85"
+        - "max-lsa  8000 40 ignore-count 3 ignore-time 6  reset-time 20"
+        - "network 10.10.2.0/24 area 0.0.0.0"
+        - "network 10.10.3.0/24 area 0.0.0.0"
+        - "redistribute static"
+        - "router-id 170.21.0.4"
+        - "router ospf 2 vrf vrf01"
+        - "area 0.0.0.9 default-cost 20"
+        - "max-lsa  80000 40 ignore-count 3  ignore-time 6  reset-time 20"
+        - "router ospf 3 vrf vrf02"
+        - "redistribute connected"

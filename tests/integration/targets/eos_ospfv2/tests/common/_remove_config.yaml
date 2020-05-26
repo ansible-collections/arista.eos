@@ -1,7 +1,8 @@
 ---
   - name: Cleanup
     become: true
-    vars:
-      lines: "no router ospf 1\nno router ospf 2\nno router ospf 3\n"
-    ansible.netcommon.cli_config:
-      config: '{{ lines }}'
+    arista.eos.eos_config:
+      lines:
+        - "no router ospf 1"
+        - "no router ospf 2"
+        - "no router ospf 3"
