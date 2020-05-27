@@ -1,0 +1,22 @@
+---
+- set_fact:
+    config:
+      - name: 5
+        members:
+          - member: Ethernet2
+            mode: "on"
+          - member: Ethernet1
+            mode: "on"
+
+- name: Use rendered state to convert task input to device specific commands
+  register: result
+  become: true
+  arista.eos.eos_lag_interfaces:
+    config: '{{ config }}'
+    state: rendered
+
+- name: Assert
+  assert:
+    that:
+      - rendered.sort() == result.rendered.sort()
+      - result['changed'] == false
