@@ -333,74 +333,11 @@ def del_commands(want, have):
                 commandset.append(command)
 
     elif want["address_families"]:
-        vrf = want["vrf"] if "vrf" in want.keys() and want["vrf"] else None
         for address_family in want["address_families"]:
-            if "routes" not in address_family.keys():
-                for command in haveconfigs:
-                    afi = "ip " if address_family["afi"] == "ipv4" else "ipv6"
-                    if afi in command:
-                        if vrf:
-                            if vrf in command:
-                                commandset.append(command)
-                        else:
-                            commandset.append(command)
-            else:
-                for route in address_family["routes"]:
-                    if not re.search(r"/", route["dest"]):
-                        mask = route["dest"].split()[1]
-                        cidr = get_net_size(mask)
-                        destination = route["dest"].split()[0] + "/" + cidr
-                    else:
-                        destination = route["dest"]
-                    if "next_hops" not in route.keys():
-                        for command in haveconfigs:
-                            if destination in command:
-                                if vrf:
-                                    if vrf in command:
-                                        commandset.append(command)
-                                else:
-                                    commandset.append(command)
-                    else:
-                        for next_hop in route["next_hops"]:
-                            commands = []
-                            if address_family["afi"] == "ipv4":
-                                commands.append("no ip route")
-                            else:
-                                commands.append("no ipv6 route")
-                            if vrf:
-                                commands.append(" vrf " + vrf)
-                            commands.append(" " + destination)
-                            if "interface" in next_hop.keys():
-                                commands.append(" " + next_hop["interface"])
-                            if "nexhop_grp" in next_hop.keys():
-                                commands.append(
-                                    " Nexthop-Group"
-                                    + " "
-                                    + next_hop["nexthop_grp"]
-                                )
-                            if "forward_router_address" in next_hop.keys():
-                                commands.append(
-                                    " " + next_hop["forward_router_address"]
-                                )
-                            if "mpls_label" in next_hop.keys():
-                                commands.append(
-                                    " label " + str(next_hop["mpls_label"])
-                                )
-                            if "track" in next_hop.keys():
-                                commands.append(" track " + next_hop["track"])
-                            if "admin_distance" in next_hop.keys():
-                                commands.append(
-                                    " " + str(next_hop["admin_distance"])
-                                )
-                            if "description" in next_hop.keys():
-                                commands.append(
-                                    " name " + str(next_hop["description"])
-                                )
-                            if "tag" in next_hop.keys():
-                                commands.append(" tag " + str(next_hop["tag"]))
-
-                            config_commands = "".join(commands)
-                            commandset.append(config_commands)
+            for command in haveconfigs:
+                afi = "ip " if address_family["afi"] == "ipv4" else "ipv6"
+                if afi in command:
+                    commandset.append(command)
     return commandset
 
 

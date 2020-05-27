@@ -1,7 +1,7 @@
 ---
 - name: collect all common test cases
   find:
-    paths: '{{ role_path }}/tests/common'
+    paths: '{{ role_path }}/tests/eapi'
     patterns: '{{ testcase }}.yaml'
     use_regex: true
   register: test_cases

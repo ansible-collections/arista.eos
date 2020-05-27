@@ -296,34 +296,6 @@ class TestEosAclsModule(TestEosModule):
         )
         self.execute_module(changed=False, commands=[])
 
-    def test_eos_acls_deletedaces(self):
-        set_module_args(
-            dict(
-                config=[
-                    dict(
-                        afi="ipv4",
-                        acls=[
-                            dict(
-                                name="test1",
-                                aces=[
-                                    dict(
-                                        grant="permit",
-                                        sequence="45",
-                                        source=dict(any="true"),
-                                        destination=dict(any="true"),
-                                        protocol=6,
-                                    )
-                                ],
-                            )
-                        ],
-                    )
-                ],
-                state="deleted",
-            )
-        )
-        commands = ["ip access-list test1", "no 45"]
-        self.execute_module(changed=True, commands=commands)
-
     def test_eos_acls_deletedacls(self):
         set_module_args(
             dict(

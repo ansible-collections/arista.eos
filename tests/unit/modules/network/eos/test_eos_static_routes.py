@@ -353,41 +353,17 @@ class TestEosStaticRoutesModule(TestEosModule):
         )
         self.execute_module(changed=False, commands=[])
 
-    def test_eos_static_routes_deletedvrf(self):
-        set_module_args(dict(config=[dict(vrf="testvrf")], state="deleted"))
-        commands = ["no ip route vrf testvrf 120.1.1.0/24 Ethernet1 23"]
-        self.execute_module(changed=True, commands=commands)
-
-    def test_eos_static_routes_deletedroute(self):
-        set_module_args(
-            dict(
-                config=[
-                    dict(
-                        vrf="testvrf",
-                        address_families=[
-                            dict(
-                                afi="ipv4", routes=[dict(dest="120.1.1.0/24")]
-                            )
-                        ],
-                    )
-                ],
-                state="deleted",
-            )
-        )
-        commands = ["no ip route vrf testvrf 120.1.1.0/24 Ethernet1 23"]
-
-        self.execute_module(changed=True, commands=commands)
-
     def test_eos_static_routes_deletedafi(self):
         set_module_args(
             dict(
-                config=[
-                    dict(vrf="testvrf", address_families=[dict(afi="ipv4")])
-                ],
+                config=[dict(address_families=[dict(afi="ipv4")])],
                 state="deleted",
             )
         )
-        commands = ["no ip route vrf testvrf 120.1.1.0/24 Ethernet1 23"]
+        commands = [
+            "no ip route 10.1.1.0/24 Management1",
+            "no ip route vrf testvrf 120.1.1.0/24 Ethernet1 23",
+        ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_static_routes_gathered(self):
