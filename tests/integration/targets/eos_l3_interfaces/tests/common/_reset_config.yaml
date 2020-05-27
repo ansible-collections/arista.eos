@@ -1,11 +1,8 @@
 ---
 - name: Reset state
   become: true
-  ansible.netcommon.cli_config:
-    config: "interface Ethernet1\n   ip address 192.0.2.12/24\n   ip address 203.0.113.27/31\
-      \ secondary\n   no ipv6 address\ninterface Ethernet2\n   no ip address\n \
-      \  ipv6 address 2001:db8::1/64\ninterface Management1\n   ip address dhcp\n\
-      \   no ipv6 address\n"
+  arista.eos.eos_config:
+    src: reset.cfg
 
 - become: true
   arista.eos.eos_facts:
@@ -34,5 +31,4 @@
 
 - assert:
     that:
-      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(expected_config)
-        == []
+      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(expected_config) == []
