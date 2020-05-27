@@ -1,0 +1,16 @@
+---
+- debug:
+    msg: START eos_nterfaces parsed integration tests on connection={{ ansible_connection
+      }}
+
+- name: Provide the running configuration for parsing (config to be parsed)
+  become: true
+  register: result
+  arista.eos.eos_lag_interfaces:
+    running_config: "{{ lookup('file', '_parsed.cfg') }}"
+    state: parsed
+
+- assert:
+    that:
+      - result.changed == false
+      - parsed['config']|symmetric_difference(result['parsed']) == []
