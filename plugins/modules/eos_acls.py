@@ -37,7 +37,8 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_acls
-short_description: Manages IP access-list attributes of Arista EOS interfaces
+short_description: Acls resource module.
+version_added: "1.0.0"
 description: This module manages the IP access-list attributes of Arista EOS interfaces.
 author: Gomathiselvi S (@GomathiselviS)
 notes:
@@ -450,13 +451,12 @@ options:
                 type: dict
   running_config:
     description:
-    - The module, by default, will connect to the remote device and retrieve the current
-      running-config to use as a base for comparing against the contents of source.
-      There are times when it is not desirable to have the task get the current running-config
-      for every task in a playbook.  The I(running_config) argument allows the implementer
-      to pass in the configuration to use as the base config for comparison. This
-      value of this option should be the output received from device by executing
-      command
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the EOS device by executing
+        the command B(show running-config | section access-list).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -646,8 +646,7 @@ EXAMPLES = """
 #    35 permit ospf 20.0.0.0/8 any
 # !
 
-
-# Using deleted
+# Using deleted:
 
 # Before state:
 # -------------
@@ -657,30 +656,22 @@ EXAMPLES = """
 #    20 permit ip 10.30.10.0/24 host 10.20.10.1
 #    30 deny tcp host 10.10.20.1 eq finger www any syn log
 #    40 permit ip any any
-# !
 # ipv6 access-list test2
 #     10 deny icmpv6 any any reject-route hop-limit eq 20
 
+# !
 
 - name: Delete provided configuration
   eos_acls:
     config:
-      - afi: "ipv4"
-        acls:
-          - name: test1
-            aces:
-              - sequence: 30
+     - afi: "ipv4"
     state: deleted
 
 # After state:
 # ------------
 #
 # show running-config | section access-list
-# ip access-list test1
-#    10 permit ip 10.10.10.0/24 any ttl eq 200
-#    20 permit ip 10.30.10.0/24 host 10.20.10.1
-#    40 permit ip any any
-# !
+
 # ipv6 access-list test2
 #     10 deny icmpv6 any any reject-route hop-limit eq 20
 
