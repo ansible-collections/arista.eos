@@ -37,8 +37,8 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_lldp_interfaces
-short_description: Manage Link Layer Discovery Protocol (LLDP) attributes of interfaces
-  on Arista EOS devices.
+short_description: Lldp_interfaces resource module.
+version_added: "1.0.0"
 description:
 - This module manages Link Layer Discovery Protocol (LLDP) attributes of interfaces
   on Arista EOS devices.
@@ -64,6 +64,15 @@ options:
         description:
         - Enable/disable LLDP TX on an interface.
         type: bool
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the EOS device by executing
+        the command B(show running-config | section ^interface).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
   state:
     description:
     - The state of the configuration after module completion.
@@ -73,6 +82,9 @@ options:
     - replaced
     - overridden
     - deleted
+    - parsed
+    - gathered
+    - rendered
     default: merged
 """
 EXAMPLES = """
@@ -91,7 +103,7 @@ EXAMPLES = """
 #    no lldp transmit
 
 - name: Merge provided configuration with running configuration
-  eos_lldp_interfaces:
+  arista.eos.eos_lldp_interfaces:
     config:
       - name: Ethernet1
         transmit: False
@@ -127,7 +139,7 @@ EXAMPLES = """
 #    no lldp transmit
 
 - name: Replace existing LLDP configuration of specified interfaces with provided configuration
-  eos_lldp_interfaces:
+  arista.eos.eos_lldp_interfaces:
     config:
       - name: Ethernet1
         transmit: False
@@ -160,7 +172,7 @@ EXAMPLES = """
 #    no lldp transmit
 
 - name: Override the LLDP configuration of all the interfaces with provided configuration
-  eos_lldp_interfaces:
+  arista.eos.eos_lldp_interfaces:
     config:
       - name: Ethernet1
         transmit: False
@@ -192,7 +204,7 @@ EXAMPLES = """
 #    no lldp transmit
 
 - name: Delete LLDP configuration of specified interfaces (or all interfaces if none are specified)
-  eos_lldp_interfaces:
+  arista.eos.eos_lldp_interfaces:
     state: deleted
 
 #
@@ -204,6 +216,72 @@ EXAMPLES = """
 # interface Ethernet1
 # interface Ethernet2
 
+# using rendered:
+
+- name: Use Rendered to convert the structured data to native config
+  eos_lldp_interfaces:
+    config:
+      - name: Ethernet1
+        transmit: False
+      - name: Ethernet2
+        transmit: False
+    state: rendered
+
+#
+# ------------
+# Output
+# ------------
+#
+# interface Ethernet1
+#    no lldp transmit
+# interface Ethernet2
+#    no lldp transmit
+
+# Using parsed
+# parsed.cfg
+
+# interface Ethernet1
+#    no lldp transmit
+# interface Ethernet2
+#    no lldp transmit
+
+
+- name: Use parsed to convert native configs to structured data
+  arista.eos.lldp_interfaces:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# ------------
+# Output
+# ------------
+
+#   parsed:
+#     - name: Ethernet1
+#       transmit: False
+#     - name: Ethernet2
+#       transmit: False
+
+# Using gathered:
+
+# native config:
+# interface Ethernet1
+#    no lldp transmit
+# interface Ethernet2
+#    no lldp transmit
+
+- name: Gather lldp interfaces facts from the device
+  arista.eos.lldp_interfaces:
+    state: gathered
+
+# ------------
+# Output
+# ------------
+
+#   gathered:
+#     - name: Ethernet1
+#       transmit: False
+#     - name: Ethernet2
+#       transmit: False
 
 """
 RETURN = """
@@ -244,9 +322,19 @@ def main():
 
     :returns: the result form module invocation
     """
+    required_if = [
+        ("state", "merged", ("config",)),
+        ("state", "replaced", ("config",)),
+        ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
+    ]
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
         argument_spec=Lldp_interfacesArgs.argument_spec,
+        required_if=required_if,
         supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lldp_interfaces(module).execute_module()
