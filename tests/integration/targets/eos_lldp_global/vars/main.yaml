@@ -1,0 +1,17 @@
+---
+parsed:
+  config:
+    holdtime: 100
+    timer: 3000
+    reinit: 5
+    tlv_select:
+      management_address: false
+      system_description: false
+
+rendered:
+  - "lldp holdtime 100"
+  - "lldp timer None"
+  - "no lldp tlv-select port-description"
+  - "lldp tlv-select system-description"
+  - "no lldp tlv-select management-address"
+  - "lldp reinit None"

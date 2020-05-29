@@ -1,0 +1,21 @@
+---
+- set_fact:
+    config:
+      holdtime: 100
+      tlv_select:
+        management_address: false
+        port_description: false
+        system_description: true
+
+- name: Use rendered state to convert task input to device specific commands
+  register: result
+  become: true
+  arista.eos.eos_lldp_global:
+    config: '{{ config }}'
+    state: rendered
+
+- name: Assert
+  assert:
+    that:
+      - rendered.sort() == result.rendered.sort()
+      - result['changed'] == false

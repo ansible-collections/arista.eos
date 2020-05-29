@@ -37,7 +37,7 @@ ANSIBLE_METADATA = {
 }
 
 DOCUMENTATION = """module: eos_lldp_global
-short_description: Manage Global Link Layer Discovery Protocol (LLDP) settings on
+short_description: Lldp global resource module.
   Arista EOS devices.
 description:
 - This module manages Global Link Layer Discovery Protocol (LLDP) settings on Arista
@@ -96,6 +96,16 @@ options:
             description:
             - Enable or disable system name TLV.
             type: bool
+  running_config:
+    description:
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the EOS device by executing
+        the command B(show running-config | section lldp).
+      - The state I(parsed) reads the configuration from C(running_config) option and transforms
+        it into Ansible structured data as per the resource module's argspec and the value is then
+        returned in the I(parsed) key within the result.
+    type: str
+    version_added: "1.0.0"
   state:
     description:
     - The state of the configuration after module completion.
@@ -104,6 +114,9 @@ options:
     - merged
     - replaced
     - deleted
+    - rendered
+    - gathered
+    - parsed
     default: merged
 """
 EXAMPLES = """
@@ -121,7 +134,7 @@ EXAMPLES = """
 # no lldp tlv-select system-description
 
 - name: Merge provided LLDP configuration with the existing configuration
-  eos_lldp_global:
+  arista.eos.eos_lldp_global:
     config:
       holdtime: 100
       tlv_select:
@@ -156,7 +169,7 @@ EXAMPLES = """
 # no lldp tlv-select system-description
 
 - name: Replace existing LLDP device configuration with provided configuration
-  eos_lldp_global:
+  arista.eos.eos_lldp_global:
     config:
       holdtime: 100
       tlv_select:
@@ -189,7 +202,7 @@ EXAMPLES = """
 # no lldp tlv-select system-description
 
 - name: Delete existing LLDP configurations from the device
-  eos_lldp_global:
+  arista.eos.eos_lldp_global:
     state: deleted
 
 # -----------
@@ -198,6 +211,80 @@ EXAMPLES = """
 #
 # veos# show run | section ^lldp
 
+# Using rendered:
+
+- name: Use Rendered to convert the structured data to native config
+  arista.eos.eos_lldp_global:
+    config:
+      holdtime: 100
+      tlv_select:
+        management_address: False
+        port_description: False
+        system_description: True
+    state: rendered
+
+# -----------
+# Output
+# -----------
+#
+# rendered:
+#   - "lldp holdtime 100"
+#   - "no lldp tlv-select management-address"
+#   - "no lldp tlv-select port-description"
+
+# Using parsed
+
+# parsed.cfg
+
+# lldp timer 3000
+# lldp holdtime 100
+# lldp reinit 5
+# no lldp tlv-select management-address
+# no lldp tlv-select system-description
+
+- name: Use parsed to convert native configs to structured data
+  arista.eos.lldp_global:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+    state: parsed
+
+# -----------
+# Output
+# -----------
+
+#    parsed:
+#      holdtime: 100
+#      timer 3000
+#      reinit 5
+#      tlv_select:
+#        management_address: False
+#        port_description: False
+#        system_description: True
+
+# Using gathered:
+# native config:
+# lldp timer 3000
+# lldp holdtime 100
+# lldp reinit 5
+# no lldp tlv-select management-address
+# no lldp tlv-select system-description
+
+
+- name: Gather lldp_global facts from the device
+  arista.eos.lldp_global:
+    state: gathered
+
+# -----------
+# Output
+# -----------
+
+#    gathered:
+#      holdtime: 100
+#      timer 3000
+#      reinit 5
+#      tlv_select:
+#        management_address: False
+#        port_description: False
+#        system_description: True
 
 """
 RETURN = """
@@ -238,8 +325,20 @@ def main():
 
     :returns: the result form module invocation
     """
+
+    required_if = [
+        ("state", "merged", ("config",)),
+        ("state", "replaced", ("config",)),
+        ("state", "overridden", ("config",)),
+        ("state", "rendered", ("config",)),
+        ("state", "parsed", ("running_config",)),
+    ]
+    mutually_exclusive = [("config", "running_config")]
     module = AnsibleModule(
-        argument_spec=Lldp_globalArgs.argument_spec, supports_check_mode=True
+        argument_spec=Lldp_globalArgs.argument_spec,
+        required_if=required_if,
+        supports_check_mode=True,
+        mutually_exclusive=mutually_exclusive,
     )
 
     result = Lldp_global(module).execute_module()
