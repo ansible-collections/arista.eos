@@ -12,8 +12,10 @@ merged:
     - network 10.10.3.0/24 area 0.0.0.0
     - redistribute static
     - router-id 170.21.0.4
+    - exit
     - router ospf 2 vrf vrf01
     - area 0.0.0.9 default-cost 20
+    - exit
     - router ospf 3 vrf vrf02
     - redistribute connected
   after:
@@ -109,6 +111,7 @@ replaced:
     - router ospf 2 vrf vrf01
     - no area 0.0.0.9 default-cost 20
     - redistribute isis level-1
+    - exit
   before:
     processes:
       - process_id: 1
@@ -216,6 +219,7 @@ overridden:
     - router ospf 2 vrf vrf01
     - no area 0.0.0.9 default-cost 20
     - redistribute isis level-1
+    - exit
     - no router ospf 1
     - no router ospf 3
   after:

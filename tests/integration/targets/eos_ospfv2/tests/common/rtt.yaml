@@ -59,7 +59,7 @@
 
     - assert:
         that:
-          - base_config.commands|length == 15
+          - base_config.commands|length == 18
           - base_config.changed == true
           - base_config.commands|symmetric_difference(merged.commands) == []
 

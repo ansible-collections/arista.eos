@@ -32,7 +32,7 @@
 
     - assert:
         that:
-          - result.commands|length == 3
+          - result.commands|length == 4
           - result.changed == true
           - result.commands|symmetric_difference(replaced.commands) == []
           - result.after.processes|symmetric_difference(replaced.after.processes) == []

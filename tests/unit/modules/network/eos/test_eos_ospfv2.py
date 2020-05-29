@@ -214,9 +214,11 @@ class TestEosOspfv2Module(TestEosModule):
             "router ospf 1",
             "area 0.0.0.12 filter 10.2.1.0/24",
             "redistribute isis level-1",
+            "exit",
             "router ospf 4 vrf vrftest",
             "area 0.0.0.9 default-cost 20",
             "network 10.10.3.0/24 area 0.0.0.0",
+            "exit",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -264,10 +266,12 @@ class TestEosOspfv2Module(TestEosModule):
             "no router-id 170.21.0.4",
             "area 0.0.0.12 filter 10.2.1.0/24",
             "redistribute isis level-1",
+            "exit",
             "router ospf 3 vrf vrf02",
             "no redistribute static",
             "area 0.0.0.9 default-cost 20",
             "network 10.10.3.0/24 area 0.0.0.0",
+            "exit",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -379,11 +383,13 @@ class TestEosOspfv2Module(TestEosModule):
             "no router-id 170.21.0.4",
             "area 0.0.0.12 filter 10.2.1.0/24",
             "redistribute isis level-1",
+            "exit",
             "no router ospf 2",
             "router ospf 3 vrf vrf02",
             "no redistribute static",
             "area 0.0.0.9 default-cost 20",
             "network 10.10.3.0/24 area 0.0.0.0",
+            "exit",
         ]
 
         self.execute_module(changed=True, commands=commands)
@@ -597,11 +603,14 @@ class TestEosOspfv2Module(TestEosModule):
             "network 10.10.3.0/24 area 0.0.0.0",
             "redistribute static",
             "router-id 170.21.0.4",
+            "exit",
             "router ospf 2 vrf vrf01",
             "area 0.0.0.9 default-cost 20",
             "max-lsa  80000 40 ignore-count 3  ignore-time 6  reset-time 20",
+            "exit",
             "router ospf 3 vrf vrf02",
             "redistribute static",
+            "exit",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
@@ -621,8 +630,10 @@ class TestEosOspfv2Module(TestEosModule):
             "network 10.10.3.0/24 area 0.0.0.0",
             "redistribute static",
             "router-id 170.21.0.4",
+            "exit",
             "router ospf 3 vrf vrf02",
             "redistribute static",
+            "exit",
         ]
         parsed_str = "\n".join(commands)
         set_module_args(dict(running_config=parsed_str, state="parsed"))
@@ -740,5 +751,6 @@ class TestEosOspfv2Module(TestEosModule):
             "no router ospf 1",
             "router ospf 3 vrf vrf02",
             "no redistribute static",
+            "exit",
         ]
         self.execute_module(changed=True, commands=commands)

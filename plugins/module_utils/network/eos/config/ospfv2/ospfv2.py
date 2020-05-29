@@ -176,7 +176,8 @@ class Ospfv2(ConfigBase):
 
             return_command = self.del_commands(del_cmds, have)
             for command in return_command:
-                commands.append(command)
+                if "exit" not in command:
+                    commands.append(command)
             return_command = self.add_commands(add_cmds, have)
             for command in return_command:
                 if "router ospf" in command:
@@ -184,7 +185,16 @@ class Ospfv2(ConfigBase):
                         commands.append(command)
                 else:
                     commands.append(command)
-        return commands
+        commandset = []
+        if commands:
+            commandset.append(commands[0])
+            for cmd in commands[1::]:
+                if "router ospf" in cmd and commandset[-1] != "exit":
+                    commandset.append("exit")
+                commandset.append(cmd)
+            if commandset[-1] != "exit":
+                commandset.append("exit")
+        return commandset
 
     def _state_overridden(self, want, have):
         """ The command generator when state is overridden
@@ -228,6 +238,8 @@ class Ospfv2(ConfigBase):
         return_command = self.del_commands(want, have)
         if return_command:
             for cmd in return_command:
+                if "no exit" in cmd:
+                    cmd = "exit"
                 commands.append(cmd)
         return commands
 
@@ -436,6 +448,7 @@ class Ospfv2(ConfigBase):
                 command_list = _parse_timers(ospf_params["timers"])
                 for c in command_list:
                     commands.append(c)
+            commands.append("exit")
         commandset = []
         for command in commands:
             commandset.append(command.strip())
