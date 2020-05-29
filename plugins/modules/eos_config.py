@@ -197,7 +197,7 @@ options:
           in C(filename) within I(backup) directory.
         type: path
     type: dict
-"""
+"""  # noqa: E501
 
 EXAMPLES = """
 - name: configure top level settings
