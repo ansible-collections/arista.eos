@@ -289,8 +289,8 @@ def get_channel(group, module):
     config = get_config(module, flags=["| section channel-group"])
 
     for line in config.split("\n"):
-        l = line.strip()
-        match = re.search(r"interface (\S+)", l, re.M)
+        stripped = line.strip()
+        match = re.search(r"interface (\S+)", stripped, re.M)
 
         if match:
             member = match.group(1)
@@ -320,8 +320,8 @@ def map_config_to_obj(module):
     config = get_config(module, flags=["| section port-channel"])
 
     for line in config.split("\n"):
-        l = line.strip()
-        match = re.search(r"interface Port-Channel(\S+)", l, re.M)
+        stripped = line.strip()
+        match = re.search(r"interface Port-Channel(\S+)", stripped, re.M)
         if match:
             obj = {}
             group = match.group(1)

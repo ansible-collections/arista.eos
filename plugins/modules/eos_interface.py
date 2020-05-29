@@ -436,7 +436,8 @@ def check_declarative_intent_params(module, want, result):
                         break
 
                 if col and col < len(lines) - 1:
-                    for items in lines[col + 1 :]:
+                    idx = col + 1
+                    for items in lines[idx:]:
                         value = re.split(r"\s+", items)
                         try:
                             have_port.append(value[2])

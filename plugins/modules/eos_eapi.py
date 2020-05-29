@@ -212,10 +212,10 @@ def validate_vrf(value, module):
     out = run_commands(module, ["show vrf"])
     configured_vrfs = []
     lines = out[0].strip().splitlines()[3:]
-    for l in lines:
-        if not l:
+    for line in lines:
+        if not line:
             continue
-        splitted_line = re.split(r"\s{2,}", l.strip())
+        splitted_line = re.split(r"\s{2,}", line.strip())
         if len(splitted_line) > 2:
             configured_vrfs.append(splitted_line[0])
 
