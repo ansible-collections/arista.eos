@@ -123,15 +123,17 @@ class Interfaces(FactsBase):
 
         self.facts["all_ipv4_addresses"] = list()
         self.facts["all_ipv6_addresses"] = list()
-
+        
         data = self.responses[0]
-        self.facts["interfaces"] = self.populate_interfaces(data)
-
-        data = self.responses[1]
-        if data:
-            self.facts["neighbors"] = self.populate_neighbors(
-                data["lldpNeighbors"]
-            )
+        if data and "LLDP is not enabled" not in data:
+            self.facts["interfaces"] = self.populate_interfaces(data)
+        
+        if len(self.responses) > 1:
+            data = self.responses[1]
+            if data:
+                self.facts["neighbors"] = self.populate_neighbors(
+                    data["lldpNeighbors"]
+                )
 
     def populate_interfaces(self, data):
         facts = dict()
