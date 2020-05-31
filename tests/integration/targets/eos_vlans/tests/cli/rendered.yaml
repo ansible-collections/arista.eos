@@ -1,0 +1,20 @@
+---
+- set_fact:
+    config:
+      - vlan_id: 10
+        name: ten
+      - vlan_id: 20
+        state: suspend
+
+- name: Use rendered state to convert task input to device specific commands
+  register: result
+  become: true
+  arista.eos.eos_vlans:
+    config: '{{ config }}'
+    state: rendered
+
+- name: Assert
+  assert:
+    that:
+      - rendered.sort() == result.rendered.sort()
+      - result['changed'] == false

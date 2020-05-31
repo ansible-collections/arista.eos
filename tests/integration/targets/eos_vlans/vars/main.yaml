@@ -1,0 +1,16 @@
+---
+parsed:
+  config:
+    - vlan_id: 10
+      name: ten
+      state: active
+    - vlan_id: 20
+      state: suspend
+      name: twenty
+
+
+rendered:
+  - "vlan 10"
+  - "name ten"
+  - "vlan 20"
+  - "state suspend"
