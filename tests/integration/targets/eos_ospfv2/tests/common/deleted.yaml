@@ -13,8 +13,7 @@
       arista.eos.eos_ospfv2: &deleted
         config:
           processes:
-            - process_id: 2
-              vrf: "vrf01"
+            - process_id: 1
         state: deleted
 
     - become: true
@@ -25,7 +24,7 @@
         that:
           - result.commands|length == 1
           - result.changed == true
-          - "'no router ospf 2 vrf vrf01' in result.commands"
+          - "'no router ospf 1' in result.commands"
           - ansible_facts.network_resources.ospfv2 == result.after
           - result.after.processes|symmetric_difference(deleted.after.processes) == []
           - result.before.processes|symmetric_difference(replaced.before.processes) == []
