@@ -1,0 +1,75 @@
+---
+- debug:
+    msg: Start eos_ospfv2 merged integration tests ansible_connection={{
+      ansible_connection }}
+
+- block:
+
+    - name: merge given ospfv2 configuration
+      become: true
+      register: result
+      arista.eos.eos_ospfv2: &merged
+        config:
+          processes:
+            - process_id: 1
+              adjacency:
+                exchange_start:
+                  threshold: 20045623
+              areas:
+                - filter:
+                    address: "10.1.1.0/24"
+                  area_id: "0.0.0.2"
+                - area_id: "0.0.0.50"
+                  range:
+                    address: "172.20.0.0/16"
+                    cost: 34
+              default_information:
+                metric: 100
+                metric_type: 1
+                originate: true
+              distance:
+                intra_area: 85
+              max_lsa:
+                count: 80000
+                ignore_count: 3
+                ignore_time: 6
+                reset_time: 20
+                threshold: 40
+              networks:
+                - area: "0.0.0.0"
+                  prefix: 10.10.2.0/24
+                - area: "0.0.0.0"
+                  prefix: "10.10.3.0/24"
+              redistribute:
+                - routes: "static"
+              router_id: "170.21.0.4"
+            - process_id: 2
+              vrf: "vrf01"
+              areas:
+                - area_id: "0.0.0.9"
+                  default_cost: 20
+            - process_id: 3
+              vrf: "vrf02"
+              redistribute:
+                - routes: "connected"
+
+    - assert:
+        that:
+          - result.commands|length == 18
+          - result.changed == true
+          - result.commands|symmetric_difference(merged.commands) == []
+          - result.after.processes|symmetric_difference(merged.after.processes) == []
+          - result.before == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_ospfv2: *merged
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml

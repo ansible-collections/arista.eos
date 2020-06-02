@@ -170,6 +170,7 @@ class HttpApi(HttpApiBase):
         except ConnectionError:
             if session:
                 self.send_request(["configure session %s" % session, "abort"])
+            raise
 
         return [resp for resp in to_list(responses) if resp != "{}"]
 

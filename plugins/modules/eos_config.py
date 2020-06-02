@@ -439,10 +439,8 @@ def main():
             module.fail_json(msg=to_text(exc, errors="surrogate_then_replace"))
 
         config_diff = response["config_diff"]
-
         if config_diff:
             commands = config_diff.split("\n")
-
             if module.params["before"]:
                 commands[:0] = module.params["before"]
 

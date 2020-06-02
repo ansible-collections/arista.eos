@@ -1,0 +1,52 @@
+---
+- debug:
+    msg: Start eos_ospfv2 replaced integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: replace given ospfv2 configuration
+      become: true
+      register: result
+      arista.eos.eos_ospfv2: &replaced
+        config:
+          processes:
+            - process_id: 2
+              vrf: "vrf01"
+              max_lsa:
+                count: 80000
+                ignore_count: 3
+                ignore_time: 6
+                reset_time: 20
+                threshold: 40
+              redistribute:
+                - routes: "isis"
+                  isis_level: "level-1"
+        state: replaced
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: ospfv2
+
+    - assert:
+        that:
+          - result.commands|length == 4
+          - result.changed == true
+          - result.commands|symmetric_difference(replaced.commands) == []
+          - result.after.processes|symmetric_difference(replaced.after.processes) == []
+          - result.before.processes|symmetric_difference(replaced.before.processes) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_ospfv2: *replaced
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml

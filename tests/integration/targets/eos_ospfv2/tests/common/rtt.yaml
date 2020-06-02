@@ -1,0 +1,100 @@
+---
+- debug:
+    msg: Start eos_ospfv2 round trip integration tests ansible_connection={{ ansible_connection
+      }}
+
+- block:
+
+    - name: merge attributes of given ospfv2(apply base config).
+      become: true
+      register: base_config
+      arista.eos.eos_ospfv2:
+        config:
+          processes:
+            - process_id: 1
+              adjacency:
+                exchange_start:
+                  threshold: 20045623
+              areas:
+                - filter:
+                    address: "10.1.1.0/24"
+                  area_id: "0.0.0.2"
+                - area_id: "0.0.0.50"
+                  range:
+                    address: "172.20.0.0/16"
+                    cost: 34
+              default_information:
+                metric: 100
+                metric_type: 1
+                originate: true
+              distance:
+                intra_area: 85
+              max_lsa:
+                count: 80000
+                ignore_count: 3
+                ignore_time: 6
+                reset_time: 20
+                threshold: 40
+              networks:
+                - area: "0.0.0.0"
+                  prefix: 10.10.2.0/24
+                - area: "0.0.0.0"
+                  prefix: "10.10.3.0/24"
+              redistribute:
+                - routes: "static"
+              router_id: "170.21.0.4"
+            - process_id: 2
+              vrf: "vrf01"
+              areas:
+                - area_id: "0.0.0.9"
+                  default_cost: 20
+            - process_id: 3
+              vrf: "vrf02"
+              redistribute:
+                - routes: "connected"
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: ospfv2
+
+    - assert:
+        that:
+          - base_config.commands|length == 18
+          - base_config.changed == true
+          - base_config.commands|symmetric_difference(merged.commands) == []
+
+    - name: Apply the provided configuration (config to be reverted)
+      become: true
+      register: result
+      arista.eos.eos_ospfv2:
+        config:
+          processes:
+            - process_id: 1
+              areas:
+                - area_id: "0.0.0.9"
+                  default_cost: 20
+              redistribute:
+                - routes: "isis"
+                  isis_level: "level-1"
+            - process_id: 3
+              vrf: "vrf02"
+              default_information:
+                metric: 100
+                metric_type: 1
+                originate: true
+              distance:
+                intra_area: 85
+
+    - name: Revert back to base config using facts round trip
+      become: true
+      register: revert
+      arista.eos.eos_ospfv2:
+        config: "{{ ansible_facts['network_resources']['ospfv2'] }}"
+        state: overridden
+
+    - name: Assert that config was reverted
+      assert:
+        that: base_config.after == revert.after
+  always:
+
+    - include_tasks: _remove_config.yaml

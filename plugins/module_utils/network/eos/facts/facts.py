@@ -56,6 +56,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.acls.
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.static_routes.static_routes import (
     Static_routesFacts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospfv2.ospfv2 import (
+    Ospfv2Facts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -74,6 +77,7 @@ FACT_RESOURCE_SUBSETS = dict(
     acl_interfaces=Acl_interfacesFacts,
     acls=AclsFacts,
     static_routes=Static_routesFacts,
+    ospfv2=Ospfv2Facts,
 )
 
 
