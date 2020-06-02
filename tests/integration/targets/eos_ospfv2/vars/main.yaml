@@ -1,0 +1,318 @@
+---
+merged:
+  commands:
+    - router ospf 1
+    - adjacency exchange-start threshold 20045623
+    - area 0.0.0.2 filter 10.1.1.0/24
+    - area 0.0.0.50  range 172.20.0.0/16 cost 34
+    - default-information originate metric 100 metric-type 1
+    - distance ospf intra-area 85
+    - max-lsa  80000 40 ignore-count 3  ignore-time 6  reset-time 20
+    - network 10.10.2.0/24 area 0.0.0.0
+    - network 10.10.3.0/24 area 0.0.0.0
+    - redistribute static
+    - router-id 170.21.0.4
+    - exit
+    - router ospf 2 vrf vrf01
+    - area 0.0.0.9 default-cost 20
+    - exit
+    - router ospf 3 vrf vrf02
+    - redistribute connected
+  after:
+    processes:
+      - process_id: 1
+        adjacency:
+          exchange_start:
+            threshold: 20045623
+        areas:
+          - filter:
+              address: "10.1.1.0/24"
+            area_id: "0.0.0.2"
+          - area_id: "0.0.0.50"
+            range:
+              address: "172.20.0.0/16"
+              cost: 34
+        default_information:
+          metric: 100
+          metric_type: 1
+          originate: true
+        distance:
+          intra_area: 85
+        max_lsa:
+          count: 80000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+        networks:
+          - area: "0.0.0.0"
+            prefix: "10.10.2.0/24"
+          - area: "0.0.0.0"
+            prefix: "10.10.3.0/24"
+        redistribute:
+          - routes: "static"
+        router_id: "170.21.0.4"
+      - process_id: 2
+        vrf: "vrf01"
+        areas:
+          - area_id: "0.0.0.9"
+            default_cost: 20
+        max_lsa:
+          count: 12000
+      - process_id: 3
+        vrf: "vrf02"
+        redistribute:
+          - routes: "connected"
+        max_lsa:
+          count: 12000
+deleted:
+  after:
+    processes:
+      - process_id: 2
+        vrf: "vrf01"
+        areas:
+          - area_id: "0.0.0.9"
+            default_cost: 20
+        max_lsa:
+          count: 80000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+      - process_id: 3
+        vrf: "vrf02"
+        redistribute:
+          - routes: "connected"
+        max_lsa:
+          count: 12000
+replaced:
+  commands:
+    - router ospf 2 vrf vrf01
+    - no area 0.0.0.9 default-cost 20
+    - redistribute isis level-1
+    - exit
+  before:
+    processes:
+      - process_id: 1
+        adjacency:
+          exchange_start:
+            threshold: 20045623
+        areas:
+          - filter:
+              address: "10.1.1.0/24"
+            area_id: "0.0.0.2"
+          - area_id: "0.0.0.50"
+            range:
+              address: "172.20.0.0/16"
+              cost: 34
+        default_information:
+          metric: 100
+          metric_type: 1
+          originate: true
+        distance:
+          intra_area: 85
+        max_lsa:
+          count: 8000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+        networks:
+          - area: "0.0.0.0"
+            prefix: "10.10.2.0/24"
+          - area: "0.0.0.0"
+            prefix: "10.10.3.0/24"
+        redistribute:
+          - routes: "static"
+        router_id: "170.21.0.4"
+      - process_id: 2
+        vrf: "vrf01"
+        areas:
+          - area_id: "0.0.0.9"
+            default_cost: 20
+        max_lsa:
+          count: 80000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+      - process_id: 3
+        vrf: "vrf02"
+        redistribute:
+          - routes: "connected"
+        max_lsa:
+          count: 12000
+  after:
+    processes:
+      - process_id: 1
+        adjacency:
+          exchange_start:
+            threshold: 20045623
+        areas:
+          - filter:
+              address: "10.1.1.0/24"
+            area_id: "0.0.0.2"
+          - area_id: "0.0.0.50"
+            range:
+              address: "172.20.0.0/16"
+              cost: 34
+        default_information:
+          metric: 100
+          metric_type: 1
+          originate: true
+        distance:
+          intra_area: 85
+        max_lsa:
+          count: 8000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+        networks:
+          - area: "0.0.0.0"
+            prefix: "10.10.2.0/24"
+          - area: "0.0.0.0"
+            prefix: "10.10.3.0/24"
+        redistribute:
+          - routes: "static"
+        router_id: "170.21.0.4"
+      - process_id: 2
+        vrf: "vrf01"
+        redistribute:
+          - routes: "isis"
+            isis_level: "level-1"
+        max_lsa:
+          count: 80000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+      - process_id: 3
+        vrf: "vrf02"
+        redistribute:
+          - routes: "connected"
+        max_lsa:
+          count: 12000
+overridden:
+  commands:
+    - router ospf 2 vrf vrf01
+    - no area 0.0.0.9 default-cost 20
+    - redistribute isis level-1
+    - exit
+    - no router ospf 1
+    - no router ospf 3
+  after:
+    processes:
+      - process_id: 2
+        vrf: "vrf01"
+        redistribute:
+          - routes: "isis"
+            isis_level: "level-1"
+        max_lsa:
+          count: 80000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+gathered:
+  config:
+    processes:
+      - process_id: 1
+        adjacency:
+          exchange_start:
+            threshold: 20045623
+        areas:
+          - filter:
+              address: "10.1.1.0/24"
+            area_id: "0.0.0.2"
+          - area_id: "0.0.0.50"
+            range:
+              address: "172.20.0.0/16"
+              cost: 34
+        default_information:
+          metric: 100
+          metric_type: 1
+          originate: true
+        distance:
+          intra_area: 85
+        max_lsa:
+          count: 8000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+        networks:
+          - area: "0.0.0.0"
+            prefix: "10.10.2.0/24"
+          - area: "0.0.0.0"
+            prefix: "10.10.3.0/24"
+        redistribute:
+          - routes: "static"
+        router_id: "170.21.0.4"
+      - process_id: 2
+        vrf: "vrf01"
+        areas:
+          - area_id: "0.0.0.9"
+            default_cost: 20
+        max_lsa:
+          count: 80000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+      - process_id: 3
+        vrf: "vrf02"
+        redistribute:
+          - routes: "connected"
+        max_lsa:
+          count: 12000
+parsed:
+  config:
+    processes:
+      - adjacency:
+          exchange_start:
+            threshold: 20045623
+        areas:
+          - filter:
+              address: "10.1.1.0/24"
+            area_id: "0.0.0.2"
+          - area_id: "0.0.0.50"
+            range:
+              address: "172.20.0.0/16"
+              cost: 34
+        default_information:
+          metric: 100
+          metric_type: 1
+          originate: true
+        distance:
+          intra_area: 85
+        max_lsa:
+          count: 80000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+        networks:
+          - area: "0.0.0.0"
+            prefix: "10.10.2.0/24"
+          - area: "0.0.0.0"
+            prefix: "10.10.3.0/24"
+        process_id: 1
+        redistribute:
+          - routes: "static"
+        router_id: "170.21.0.4"
+      - process_id: 2
+        vrf: "vrf01"
+        areas:
+          - area_id: "0.0.0.9"
+            default_cost: 20
+        max_lsa:
+          count: 80000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+      - process_id: 3
+        vrf: "vrf02"
+        redistribute:
+          - routes: "connected"

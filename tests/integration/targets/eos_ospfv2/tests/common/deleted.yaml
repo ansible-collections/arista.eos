@@ -1,0 +1,43 @@
+---
+- debug:
+    msg: Start eos_ospfv2 deleted integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Delete given ospfv2 configuration
+      become: true
+      register: result
+      arista.eos.eos_ospfv2: &deleted
+        config:
+          processes:
+            - process_id: 1
+        state: deleted
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: ospfv2
+
+    - assert:
+        that:
+          - result.commands|length == 1
+          - result.changed == true
+          - "'no router ospf 1' in result.commands"
+          - ansible_facts.network_resources.ospfv2 == result.after
+          - result.after.processes|symmetric_difference(deleted.after.processes) == []
+          - result.before.processes|symmetric_difference(replaced.before.processes) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_ospfv2: *deleted
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml
