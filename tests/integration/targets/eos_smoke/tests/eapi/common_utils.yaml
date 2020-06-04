@@ -10,18 +10,18 @@
   arista.eos.eos_config:
     lines:
       - no ip route 192.168.3.0/24 192.168.0.1
-    authorize: yes
+    authorize: true
     provider: "{{ eapi }}"
-  become: yes
+  become: true
 
 - name: configure static route
   arista.eos.eos_static_route:
     address: 192.168.3.0/24
     next_hop: 192.168.0.1
     admin_distance: 2
-    authorize: yes
+    authorize: true
     provider: "{{ eapi }}"
-  become: yes
+  become: true
   register: result
 
 - assert:
@@ -34,11 +34,11 @@
     address: 192.168.3.0/250
     next_hop: 192.168.0.1
     admin_distance: 2
-    authorize: yes
+    authorize: true
     provider: "{{ eapi }}"
-  become: yes
+  become: true
   register: result
-  ignore_errors: yes
+  ignore_errors: true
 
 - assert:
     that:
@@ -48,9 +48,9 @@
   arista.eos.eos_config:
     lines:
       - no ip route 192.168.3.0/24 192.168.0.1
-    authorize: yes
+    authorize: true
     provider: "{{ eapi }}"
-  become: yes
+  become: true
 
 - debug: msg="END cli/common_utils.yaml on connection={{ ansible_connection }}"
 
@@ -65,7 +65,7 @@
     state: up
     tx_rate: ge(0)
     rx_rate: ge(0)
-    authorize: yes
+    authorize: true
     provider: "{{ eapi }}"
-  become: yes
+  become: true
   register: result

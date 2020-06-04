@@ -8,8 +8,8 @@
       answer:
         - "no"
         - ""
-      check_all: yes
-    become: yes
+      check_all: true
+    become: true
 
   - wait_for_connection:
       delay: 20

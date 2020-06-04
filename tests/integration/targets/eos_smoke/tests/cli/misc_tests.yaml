@@ -8,8 +8,8 @@
       arista.eos.eos_command:
         commands: show running-config
         provider: "{{ cli }}"
-      become: no
-      ignore_errors: yes
+      become: false
+      ignore_errors: true
       register: result
 
     - assert:
@@ -21,7 +21,7 @@
       arista.eos.eos_command:
         commands: show uptime
         provider: "{{ cli }}"
-      become: no
+      become: false
 
     # Test that transport values are properly ignored
     - name: wrong transport specified

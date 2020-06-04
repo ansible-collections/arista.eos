@@ -8,13 +8,13 @@
     lines: hostname {{ inventory_hostname_short }}
     match: none
     provider: "{{ cli }}"
-  become: yes
+  become: true
 
 - name: get current running-config
   arista.eos.eos_command:
     commands: show running-config
     provider: "{{ cli }}"
-  become: yes
+  become: true
   register: config
 
 - name: configure hostname
@@ -22,7 +22,7 @@
     lines: hostname foo
     config: "{{ config.stdout[0] }}"
     provider: "{{ cli }}"
-  become: yes
+  become: true
   register: result
 
 - assert:
@@ -34,7 +34,7 @@
   arista.eos.eos_command:
     commands: show running-config
     provider: "{{ cli }}"
-  become: yes
+  become: true
   register: config
 
 - name: teardown
@@ -42,7 +42,7 @@
     lines: hostname {{ inventory_hostname_short }}
     match: none
     provider: "{{ cli }}"
-  become: yes
+  become: true
 
 # hit block and diffs
 - block:
@@ -57,7 +57,7 @@
         after: exit
         match: strict
         provider: "{{ cli }}"
-      become: yes
+      become: true
 
     - name: configure sub level command using block replace
       arista.eos.eos_config:
@@ -71,7 +71,7 @@
         after: exit
         provider: "{{ cli }}"
         match: line
-      become: yes
+      become: true
       register: result
 
     - assert:
@@ -95,7 +95,7 @@
         after: exit
         provider: "{{ cli }}"
         match: exact
-      become: yes
+      become: true
       register: result
 
   always:
@@ -104,6 +104,6 @@
         lines: no ip access-list test
         match: none
         provider: "{{ cli }}"
-      become: yes
+      become: true
 
 - debug: msg="END cli/common_config.yaml on connection={{ ansible_connection }}"
