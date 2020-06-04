@@ -7,7 +7,6 @@
     - name: command that does require become (should fail)
       arista.eos.eos_command:
         commands: show running-config
-        provider: "{{ cli }}"
       become: false
       ignore_errors: true
       register: result
@@ -20,14 +19,7 @@
     - name: command that doesn't require become
       arista.eos.eos_command:
         commands: show uptime
-        provider: "{{ cli }}"
       become: false
-
-    # Test that transport values are properly ignored
-    - name: wrong transport specified
-      arista.eos.eos_command:
-        commands: show version
-        transport: eapi
 
     - name: wrong transport specified in provider
       arista.eos.eos_command:
