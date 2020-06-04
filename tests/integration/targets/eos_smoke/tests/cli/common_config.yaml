@@ -1,24 +1,24 @@
 ---
-# eos_config -> NetworkConfig, dumps
+# arista.eos.eos_config -> NetworkConfig, dumps
 
 - debug: msg="START cli/common_config.yaml on connection={{ ansible_connection }}"
 
 - name: setup
-  eos_config:
+  arista.eos.eos_config:
     lines: hostname {{ inventory_hostname_short }}
     match: none
     provider: "{{ cli }}"
   become: yes
 
 - name: get current running-config
-  eos_command:
+  arista.eos.eos_command:
     commands: show running-config
     provider: "{{ cli }}"
   become: yes
   register: config
 
 - name: configure hostname
-  eos_config:
+  arista.eos.eos_config:
     lines: hostname foo
     config: "{{ config.stdout[0] }}"
     provider: "{{ cli }}"
@@ -31,14 +31,14 @@
       - "'hostname foo' in result.updates"
 
 - name: get current running-config
-  eos_command:
+  arista.eos.eos_command:
     commands: show running-config
     provider: "{{ cli }}"
   become: yes
   register: config
 
 - name: teardown
-  eos_config:
+  arista.eos.eos_config:
     lines: hostname {{ inventory_hostname_short }}
     match: none
     provider: "{{ cli }}"
@@ -47,7 +47,7 @@
 # hit block and diffs
 - block:
     - name: setup
-      eos_config:
+      arista.eos.eos_config:
         lines:
           - 10 permit ip host 192.0.2.1 any log
           - 20 permit ip host 192.0.2.2 any log
@@ -60,7 +60,7 @@
       become: yes
 
     - name: configure sub level command using block replace
-      eos_config:
+      arista.eos.eos_config:
         lines:
           - 10 permit ip host 192.0.2.1 any log
           - 20 permit ip host 192.0.2.2 any log
@@ -84,7 +84,7 @@
           - "'40 permit ip host 192.0.2.4 any log' in result.updates"
 
     - name: check sub level command using block replace
-      eos_config:
+      arista.eos.eos_config:
         lines:
           - 10 permit ip host 192.0.2.1 any log
           - 20 permit ip host 192.0.2.2 any log
@@ -100,7 +100,7 @@
 
   always:
     - name: teardown
-      eos_config:
+      arista.eos.eos_config:
         lines: no ip access-list test
         match: none
         provider: "{{ cli }}"
