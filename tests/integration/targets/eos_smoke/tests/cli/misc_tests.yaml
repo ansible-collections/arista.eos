@@ -1,0 +1,29 @@
+---
+- debug: msg="START cli/misc_tests.yaml on connection={{ ansible_connection }}"
+
+
+# test become and unbecome
+- block:
+    - name: command that does require become (should fail)
+      arista.eos.eos_command:
+        commands: show running-config
+      become: false
+      ignore_errors: true
+      register: result
+
+    - assert:
+        that:
+          - 'result.failed == true'
+          - '"privileged mode required" in result.msg'
+
+    - name: command that doesn't require become
+      arista.eos.eos_command:
+        commands: show uptime
+      become: false
+
+    - name: wrong transport specified in provider
+      arista.eos.eos_command:
+        commands: show version
+        provider: "{{ eapi }}"
+
+  when: "ansible_connection != 'local'"
