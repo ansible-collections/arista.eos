@@ -19,22 +19,30 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["deprecated"],
-    "supported_by": "network",
-}
 
-
-DOCUMENTATION = """module: eos_vlan
+DOCUMENTATION = """
+module: eos_vlan
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
-short_description: Manage VLANs on Arista EOS network devices
+short_description: (deprecated, removed after 2022-06-01) (deprecated, removed after
+  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
+  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
+  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
+  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
+  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
+  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
+  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
+  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
+  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
+  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
+  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
+  after 2022-06-01) Manage VLANs on Arista EOS network devices
 description:
 - This module provides declarative management of VLANs on Arista EOS network devices.
+version_added: 1.0.0
 deprecated:
-  removed_in: '2.13'
   alternative: eos_vlans
   why: Updated modules released with more functionality
+  removed_at_date: '2022-06-01'
 notes:
 - Tested against EOS 4.15
 options:
@@ -78,45 +86,72 @@ options:
     - suspend
 extends_documentation_fragment:
 - arista.eos.eos
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 """
 
 EXAMPLES = """
 - name: Create vlan
-  eos_vlan:
+  arista.eos.eos_vlan:
     vlan_id: 4000
     name: vlan-4000
     state: present
 
 - name: Add interfaces to vlan
-  eos_vlan:
+  arista.eos.eos_vlan:
     vlan_id: 4000
     state: present
     interfaces:
-      - Ethernet1
-      - Ethernet2
+    - Ethernet1
+    - Ethernet2
 
 - name: Check if interfaces is assigned to vlan
-  eos_vlan:
+  arista.eos.eos_vlan:
     vlan_id: 4000
     associated_interfaces:
-      - Ethernet1
-      - Ethernet2
+    - Ethernet1
+    - Ethernet2
 
 - name: Suspend vlan
-  eos_vlan:
+  arista.eos.eos_vlan:
     vlan_id: 4000
     state: suspend
 
 - name: Unsuspend vlan
-  eos_vlan:
+  arista.eos.eos_vlan:
     vlan_id: 4000
     state: active
 
 - name: Create aggregate of vlans
-  eos_vlan:
+  arista.eos.eos_vlan:
     aggregate:
-      - vlan_id: 4000
-      - {vlan_id: 4001, name: vlan-4001}
+    - vlan_id: 4000
+    - {vlan_id: 4001, name: vlan-4001}
 """
 
 RETURN = """

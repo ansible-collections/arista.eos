@@ -5,17 +5,13 @@
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: eos_logging
+DOCUMENTATION = """
+module: eos_logging
 author: Trishna Guha (@trishnaguha)
 short_description: Manage logging on network devices
 description:
 - This module provides declarative management of logging on Arista Eos devices.
+version_added: 1.0.0
 notes:
 - Tested against EOS 4.15
 options:
@@ -23,7 +19,7 @@ options:
     description:
     - Destination of the logs.
     choices:
-    - 'on'
+    - on
     - host
     - console
     - monitor
@@ -65,38 +61,38 @@ extends_documentation_fragment:
 
 EXAMPLES = """
 - name: configure host logging
-  eos_logging:
+  arista.eos.eos_logging:
     dest: host
     name: 172.16.0.1
     state: present
 
 - name: remove host logging configuration
-  eos_logging:
+  arista.eos.eos_logging:
     dest: host
     name: 172.16.0.1
     state: absent
 
 - name: configure console logging level and facility
-  eos_logging:
+  arista.eos.eos_logging:
     dest: console
     facility: local7
     level: debugging
     state: present
 
 - name: enable logging to all
-  eos_logging:
-    dest : on
+  arista.eos.eos_logging:
+    dest: on
 
 - name: configure buffer size
-  eos_logging:
+  arista.eos.eos_logging:
     dest: buffered
     size: 5000
 
 - name: Configure logging using aggregate
-  eos_logging:
+  arista.eos.eos_logging:
     aggregate:
-      - { dest: console, level: warnings }
-      - { dest: buffered, size: 480000 }
+    - {dest: console, level: warnings}
+    - {dest: buffered, size: 480000}
     state: present
 """
 

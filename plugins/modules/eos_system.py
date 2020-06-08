@@ -16,20 +16,16 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-
-DOCUMENTATION = """module: eos_system
+DOCUMENTATION = """
+module: eos_system
 author: Peter Sprygada (@privateip)
 short_description: Manage the system attributes on Arista EOS devices
 description:
 - This module provides declarative management of node system attributes on Arista
   EOS devices.  It provides an option to configure host system parameters or remove
   those parameters from the device active configuration.
+version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 notes:
@@ -74,37 +70,37 @@ options:
 
 EXAMPLES = """
 - name: configure hostname and domain-name
-  eos_system:
+  arista.eos.eos_system:
     hostname: eos01
     domain_name: test.example.com
 
 - name: remove configuration
-  eos_system:
+  arista.eos.eos_system:
     state: absent
 
 - name: configure DNS lookup sources
-  eos_system:
+  arista.eos.eos_system:
     lookup_source: Management1
 
 - name: configure DNS lookup sources with VRF support
-  eos_system:
-      lookup_source:
-        - interface: Management1
-          vrf: mgmt
-        - interface: Ethernet1
-          vrf: myvrf
+  arista.eos.eos_system:
+    lookup_source:
+    - interface: Management1
+      vrf: mgmt
+    - interface: Ethernet1
+      vrf: myvrf
 
 - name: configure name servers
-  eos_system:
+  arista.eos.eos_system:
     name_servers:
-      - 8.8.8.8
-      - 8.8.4.4
+    - 8.8.8.8
+    - 8.8.4.4
 
 - name: configure name servers with VRF support
-  eos_system:
+  arista.eos.eos_system:
     name_servers:
-      - { server: 8.8.8.8, vrf: mgmt }
-      - { server: 8.8.4.4, vrf: mgmt }
+    - {server: 8.8.8.8, vrf: mgmt}
+    - {server: 8.8.4.4, vrf: mgmt}
 """
 
 RETURN = """

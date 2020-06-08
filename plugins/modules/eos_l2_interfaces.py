@@ -29,18 +29,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: eos_l2_interfaces
-short_description: L2_interfaces resource module.
+DOCUMENTATION = """
+module: eos_l2_interfaces
+short_description: L2 interfaces resource module
 description: This module provides declarative management of Layer-2 interface on Arista
   EOS devices.
+version_added: 1.0.0
 author: Nathaniel Case (@qalthos)
-version_added: "1.0.0"
 notes:
 - Tested against Arista EOS 4.20.10M
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
@@ -91,12 +87,12 @@ options:
         - trunk
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | section ^interface).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | section ^interface).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     choices:
@@ -111,10 +107,10 @@ options:
     description:
     - The state of the configuration after module completion
     type: str
+
 """
 
 EXAMPLES = """
----
 
 # Using merged
 
@@ -137,12 +133,12 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration.
   arista.eos.eos_l2_interfaces:
     config:
-      - name: Ethernet1
-        trunk:
-          native_vlan: 10
-      - name: Ethernet2
-        access:
-          vlan: 30
+    - name: Ethernet1
+      trunk:
+        native_vlan: 10
+    - name: Ethernet2
+      access:
+        vlan: 30
     state: merged
 
 # After state:
@@ -182,10 +178,10 @@ EXAMPLES = """
 - name: Replace device configuration of specified L2 interfaces with provided configuration.
   arista.eos.eos_l2_interfaces:
     config:
-      - name: Ethernet1
-        trunk:
-          native_vlan: 20
-          trunk_vlans: 5-10, 15
+    - name: Ethernet1
+      trunk:
+        native_vlan: 20
+        trunk_vlans: 5-10, 15
     state: replaced
 
 # After state:
@@ -224,12 +220,13 @@ EXAMPLES = """
 #    ipv6 address auto-config
 # !
 
-- name: Override device configuration of all L2 interfaces on device with provided configuration.
+- name: Override device configuration of all L2 interfaces on device with provided
+    configuration.
   arista.eos.eos_l2_interfaces:
     config:
-      - name: Ethernet2
-        access:
-          vlan: 30
+    - name: Ethernet2
+      access:
+        vlan: 30
     state: overridden
 
 # After state:
@@ -267,8 +264,8 @@ EXAMPLES = """
 - name: Delete EOS L2 interfaces as in given arguments.
   arista.eos.eos_l2_interfaces:
     config:
-      - name: Ethernet1
-      - name: Ethernet2
+    - name: Ethernet1
+    - name: Ethernet2
     state: deleted
 
 # After state:
@@ -288,12 +285,12 @@ EXAMPLES = """
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_l2_interfaces:
     config:
-      - name: Ethernet1
-        trunk:
-          native_vlan: 10
-      - name: Ethernet2
-        access:
-          vlan: 30
+    - name: Ethernet1
+      trunk:
+        native_vlan: 10
+    - name: Ethernet2
+      access:
+        vlan: 30
     state: merged
 
 # Output :
