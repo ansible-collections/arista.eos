@@ -74,8 +74,7 @@ class Static_routes(ConfigBase):
 
         if commands and self.state in self.ACTION_STATES:
             if not self._module.check_mode:
-                for command in commands:
-                    self._connection.edit_config(command)
+                self._connection.edit_config(commands)
             result["changed"] = True
         if self.state in self.ACTION_STATES:
             result["commands"] = commands
