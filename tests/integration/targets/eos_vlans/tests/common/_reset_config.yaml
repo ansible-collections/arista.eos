@@ -8,6 +8,7 @@
       - "   name ten"
       - "vlan 20"
       - "   name twenty"
+    match: none
 
 - become: true
   arista.eos.eos_facts:
