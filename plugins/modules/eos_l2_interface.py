@@ -12,8 +12,8 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: eos_l2_interface
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
-short_description: (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) Manage L2 interfaces on Arista EOS network devices.
+short_description: (deprecated, removed after 2022-06-01) Manage L2
+  interfaces on Arista EOS network devices.
 description:
 - This module provides declarative management of L2 interfaces on Arista EOS network
   devices.

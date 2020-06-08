@@ -12,19 +12,8 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: eos_l3_interface
 author: Ganesh Nalawade (@ganeshrn)
-short_description: (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) Manage L3 interfaces on Arista EOS network devices.
+short_description: (deprecated, removed after 2022-06-01) Manage L3 interfaces on
+  Arista EOS network devices.
 description:
 - This module provides declarative management of L3 interfaces on Arista EOS network
   devices.
@@ -63,6 +52,7 @@ options:
     - absent
 extends_documentation_fragment:
 - arista.eos.eos
+
 
 
 

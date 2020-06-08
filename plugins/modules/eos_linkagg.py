@@ -12,19 +12,8 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: eos_linkagg
 author: Trishna Guha (@trishnaguha)
-short_description: (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) Manage link aggregation groups on Arista EOS network devices
+short_description: (deprecated, removed after 2022-06-01) Manage link aggregation
+  groups on Arista EOS network devices
 description:
 - This module provides declarative management of link aggregation groups on Arista
   EOS network devices.
@@ -69,6 +58,7 @@ options:
     type: bool
 extends_documentation_fragment:
 - arista.eos.eos
+
 
 
 

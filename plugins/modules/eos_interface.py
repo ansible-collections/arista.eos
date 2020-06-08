@@ -12,19 +12,8 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: eos_interface
 author: Ganesh Nalawade (@ganeshrn)
-short_description: (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) Manage Interface on Arista EOS network devices
+short_description: (deprecated, removed after 2022-06-01) Manage Interface on Arista
+  EOS network devices
 description:
 - This module provides declarative management of Interfaces on Arista EOS network
   devices.
@@ -111,6 +100,7 @@ options:
     - down
 extends_documentation_fragment:
 - arista.eos.eos
+
 
 
 

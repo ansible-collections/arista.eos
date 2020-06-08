@@ -23,19 +23,8 @@
 DOCUMENTATION = """
 module: eos_vlan
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
-short_description: (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01)
-  (deprecated, removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated,
-  removed after 2022-06-01) (deprecated, removed after 2022-06-01) (deprecated, removed
-  after 2022-06-01) Manage VLANs on Arista EOS network devices
+short_description: (deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS
+  network devices
 description:
 - This module provides declarative management of VLANs on Arista EOS network devices.
 version_added: 1.0.0
@@ -86,6 +75,7 @@ options:
     - suspend
 extends_documentation_fragment:
 - arista.eos.eos
+
 
 
 
