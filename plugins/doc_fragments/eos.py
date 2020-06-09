@@ -106,7 +106,6 @@ class ModuleDocFragment(object):
           be ignored.
         type: bool
         default: true
-        version_added: '2.5'
 notes:
 - For information on using CLI, eAPI and privileged mode see the :ref:`EOS Platform
   Options guide <eos_platform_options>`
