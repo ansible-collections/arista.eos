@@ -12,7 +12,8 @@ class ModuleDocFragment(object):
     description:
     - B(Deprecated)
     - 'Starting with Ansible 2.5 we recommend using C(connection: network_cli).'
-    - This option is only required if you are using eAPI.
+    - 'Starting with Ansible 2.6 we recommend using C(connection: httpapi) for eAPI.'
+    - This option will be removed in a release after 2022-06-01.
     - For more information please see the L(EOS Platform Options guide, ../network/user_guide/platform_eos.html).
     - HORIZONTALLINE
     - A dict object containing connection details.
@@ -106,7 +107,6 @@ class ModuleDocFragment(object):
           be ignored.
         type: bool
         default: true
-        version_added: '2.5'
 notes:
 - For information on using CLI, eAPI and privileged mode see the :ref:`EOS Platform
   Options guide <eos_platform_options>`
