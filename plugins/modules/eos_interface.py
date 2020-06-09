@@ -101,33 +101,6 @@ options:
 extends_documentation_fragment:
 - arista.eos.eos
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """
 
 EXAMPLES = """
