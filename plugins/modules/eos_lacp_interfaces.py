@@ -30,18 +30,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: eos_lacp_interfaces
-short_description: LACP interfaces resource module.
-version_added: "1.0.0"
+DOCUMENTATION = """
+module: eos_lacp_interfaces
+short_description: LACP interfaces resource module
 description:
 - This module manages Link Aggregation Control Protocol (LACP) attributes of interfaces
   on Arista EOS devices.
+version_added: 1.0.0
 author: Nathaniel Case (@Qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
@@ -71,12 +67,12 @@ options:
         - normal
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | section ^interfaces).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | section ^interfaces).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -91,6 +87,7 @@ options:
     - rendered
     - gathered
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -108,12 +105,12 @@ EXAMPLES = """
 #    lacp rate fast
 
 - name: Merge provided configuration with device configuration
-  eos_lacp_interfaces:
+  arista.eos.eos_lacp_interfaces:
     config:
-      - name: Ethernet1
-        rate: fast
-      - name: Ethernet2
-        rate: normal
+    - name: Ethernet1
+      rate: fast
+    - name: Ethernet2
+      rate: normal
     state: merged
 
 #
@@ -142,11 +139,12 @@ EXAMPLES = """
 # interface Ethernet2
 #    lacp rate fast
 
-- name: Replace existing LACP configuration of specified interfaces with provided configuration
-  eos_lacp_interfaces:
+- name: Replace existing LACP configuration of specified interfaces with provided
+    configuration
+  arista.eos.eos_lacp_interfaces:
     config:
-      - name: Ethernet1
-        rate: fast
+    - name: Ethernet1
+      rate: fast
     state: replaced
 
 #
@@ -178,8 +176,8 @@ EXAMPLES = """
 - name: Override the LACP configuration of all the interfaces with provided configuration
   arista.eos.eos_lacp_interfaces:
     config:
-      - name: Ethernet1
-        rate: fast
+    - name: Ethernet1
+      rate: fast
     state: overridden
 
 #
@@ -223,12 +221,12 @@ EXAMPLES = """
 # using rendered:
 
 - name: Use Rendered to convert the structured data to native config
-  eos_lacp_interfaces:
+  arista.eos.eos_lacp_interfaces:
     config:
-      - name: Ethernet1
-        rate: fast
-      - name: Ethernet2
-        rate: normal
+    - name: Ethernet1
+      rate: fast
+    - name: Ethernet2
+      rate: normal
     state: rendered
 
 #

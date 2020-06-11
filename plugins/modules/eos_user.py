@@ -16,14 +16,9 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-
-DOCUMENTATION = """module: eos_user
+DOCUMENTATION = """
+module: eos_user
 author: Peter Sprygada (@privateip)
 short_description: Manage the collection of local users on EOS devices
 description:
@@ -31,6 +26,7 @@ description:
   Arista EOS devices.  It allows playbooks to manage either individual usernames or
   the collection of usernames in the current running config.  It also supports purging
   usernames from the configuration that are not explicitly defined.
+version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 notes:
@@ -104,27 +100,27 @@ options:
 
 EXAMPLES = """
 - name: create a new user
-  eos_user:
+  arista.eos.eos_user:
     name: ansible
     sshkey: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
     state: present
 
 - name: remove all users except admin
-  eos_user:
+  arista.eos.eos_user:
     purge: yes
 
 - name: set multiple users to privilege level 15
-  eos_user:
+  arista.eos.eos_user:
     aggregate:
-      - name: netop
-      - name: netend
+    - name: netop
+    - name: netend
     privilege: 15
     state: present
 
 - name: Change Password for User netop
-  eos_user:
+  arista.eos.eos_user:
     username: netop
-    configured_password: "{{ new_password }}"
+    configured_password: '{{ new_password }}'
     update_password: always
     state: present
 """

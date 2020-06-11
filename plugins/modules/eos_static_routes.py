@@ -30,18 +30,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: eos_static_routes
-short_description: Static routes resource module.
-  platforms.
+DOCUMENTATION = """
+module: eos_static_routes
+short_description: Static routes resource module
 description: This module configures and manages the attributes of static routes on
   Arista EOS platforms.
-version: "1.0.0"
+version_added: 1.0.0
+version: 1.0.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
 - Tested against Arista EOS 4.20.10M
@@ -142,12 +138,12 @@ options:
                     type: str
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | grep routes).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | grep routes).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -162,6 +158,7 @@ options:
     - rendered
     - parsed
     default: merged
+
 """
 EXAMPLES = """
 # Using deleted
@@ -178,12 +175,12 @@ EXAMPLES = """
 # veos(config)#
 
 - name: Delete afi
-  eos_static_routes:
+  arista.eos.eos_static_routes:
     config:
-      - vrf: "testvrf"
-        address_families:
-        - afi: "ipv4"
-    state: "deleted"
+    - vrf: testvrf
+      address_families:
+      - afi: ipv4
+    state: deleted
 
 #    "after": [
 #        {
@@ -385,16 +382,16 @@ EXAMPLES = """
 # veos(config)#
 
 - name: Merge new static route configuration
-  eos_static_routes:
+  arista.eos.eos_static_routes:
     config:
-      - vrf: testvrf
-        address_families:
-          - afi: ipv6
-            routes:
-              - dest: 2211::0/64
-                next_hop:
-                  - forward_router_address: 100:1::2
-                    interface: "Ethernet1"
+    - vrf: testvrf
+      address_families:
+      - afi: ipv6
+        routes:
+        - dest: 2211::0/64
+          next_hop:
+          - forward_router_address: 100:1::2
+            interface: Ethernet1
     state: merged
 
 # After State
@@ -561,14 +558,14 @@ EXAMPLES = """
 # veos(config)#
 
 - name: Overridden static route configuration
-  eos_static_routes:
+  arista.eos.eos_static_routes:
     config:
-      - address_families:
-          - afi: ipv4
-            routes:
-              - dest: 10.2.2.0/24
-                next_hop:
-                  - interface: "Ethernet1"
+    - address_families:
+      - afi: ipv4
+        routes:
+        - dest: 10.2.2.0/24
+          next_hop:
+          - interface: Ethernet1
     state: replaced
 
 # After State
@@ -699,17 +696,17 @@ EXAMPLES = """
 #    ]
 
 - name: Replace nexthop
-  eos_static_routes:
+  arista.eos.eos_static_routes:
     config:
-      - vrf: testvrf
-        address_families:
-          - afi: ipv6
-            routes:
-              - dest: 2222:6::/64
-                next_hops:
-                  - admin_distance: 55
-                    interface: "Ethernet1"
-    state: "replaced"
+    - vrf: testvrf
+      address_families:
+      - afi: ipv6
+        routes:
+        - dest: 2222:6::/64
+          next_hops:
+          - admin_distance: 55
+            interface: Ethernet1
+    state: replaced
 
 # After State
 # -----------
@@ -812,11 +809,11 @@ EXAMPLES = """
 
 
 - name: Gather the exisitng condiguration
-  eos_static_routes:
+  arista.eos.eos_static_routes:
     state: gathered
 
 # returns :
-#  eos_static_routes:
+#  arista.eos.eos_static_routes:
 #    config:
 #      - address_families:
 #          - afi: ipv4
@@ -835,7 +832,7 @@ EXAMPLES = """
 
 # Using rendered
 
-#   eos_static_routes:
+#   arista.eos.eos_static_routes:
 #    config:
 #      - address_families:
 #          - afi: ipv4

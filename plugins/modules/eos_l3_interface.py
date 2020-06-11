@@ -9,22 +9,19 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["deprecated"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: eos_l3_interface
+DOCUMENTATION = """
+module: eos_l3_interface
 author: Ganesh Nalawade (@ganeshrn)
-short_description: Manage L3 interfaces on Arista EOS network devices.
+short_description: (deprecated, removed after 2022-06-01) Manage L3 interfaces on
+  Arista EOS network devices.
 description:
 - This module provides declarative management of L3 interfaces on Arista EOS network
   devices.
+version_added: 1.0.0
 deprecated:
-  removed_in: '2.13'
   alternative: eos_l3_interfaces
   why: Updated modules released with more functionality
+  removed_at_date: '2022-06-01'
 notes:
 - Tested against EOS 4.15
 options:
@@ -55,40 +52,41 @@ options:
     - absent
 extends_documentation_fragment:
 - arista.eos.eos
+
 """
 
 EXAMPLES = """
 - name: Remove ethernet1 IPv4 and IPv6 address
-  eos_l3_interface:
+  arista.eos.eos_l3_interface:
     name: ethernet1
     state: absent
 
 - name: Set ethernet1 IPv4 address
-  eos_l3_interface:
+  arista.eos.eos_l3_interface:
     name: ethernet1
     ipv4: 192.168.0.1/24
 
 - name: Set ethernet1 IPv6 address
-  eos_l3_interface:
+  arista.eos.eos_l3_interface:
     name: ethernet1
-    ipv6: "fd5d:12c9:2201:1::1/64"
+    ipv6: fd5d:12c9:2201:1::1/64
 
 - name: Set interface Vlan1 (SVI) IPv4 address
-  eos_l3_interface:
+  arista.eos.eos_l3_interface:
     name: Vlan1
     ipv4: 192.168.0.5/24
 
 - name: Set IP addresses on aggregate
-  eos_l3_interface:
+  arista.eos.eos_l3_interface:
     aggregate:
-      - { name: ethernet1, ipv4: 192.168.2.10/24 }
-      - { name: ethernet1, ipv4: 192.168.3.10/24, ipv6: "fd5d:12c9:2201:1::1/64" }
+    - {name: ethernet1, ipv4: 192.168.2.10/24}
+    - {name: ethernet1, ipv4: 192.168.3.10/24, ipv6: fd5d:12c9:2201:1::1/64}
 
 - name: Remove IP addresses on aggregate
-  eos_l3_interface:
+  arista.eos.eos_l3_interface:
     aggregate:
-      - { name: ethernet1, ipv4: 192.168.2.10/24 }
-      - { name: ethernet1, ipv4: 192.168.3.10/24, ipv6: "fd5d:12c9:2201:1::1/64" }
+    - {name: ethernet1, ipv4: 192.168.2.10/24}
+    - {name: ethernet1, ipv4: 192.168.3.10/24, ipv6: fd5d:12c9:2201:1::1/64}
     state: absent
 """
 

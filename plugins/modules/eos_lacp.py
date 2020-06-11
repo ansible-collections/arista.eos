@@ -30,17 +30,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: eos_lacp
-short_description: Lacp resource module.
+DOCUMENTATION = """
+module: eos_lacp
+short_description: LACP resource module
 description:
 - This module manages Global Link Aggregation Control Protocol (LACP) on Arista EOS
   devices.
+version_added: 1.0.0
 author: Nathaniel Case (@Qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
@@ -62,14 +59,13 @@ options:
             type: int
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | section ^lacp).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | section ^lacp).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
-    version_added: "1.0.0"
   state:
     description:
     - The state of the configuration after module completion.
@@ -82,6 +78,7 @@ options:
     - rendered
     - gathered
     default: merged
+
 """
 EXAMPLES = """
 # Using merged

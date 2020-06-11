@@ -16,19 +16,15 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-
-DOCUMENTATION = """module: eos_banner
+DOCUMENTATION = """
+module: eos_banner
 author: Peter Sprygada (@privateip)
 short_description: Manage multiline banners on Arista EOS devices
 description:
 - This will configure both login and motd banners on remote devices running Arista
   EOS.  It allows playbooks to add or remote banner text from the active running configuration.
+version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 notes:
@@ -57,7 +53,7 @@ options:
 
 EXAMPLES = """
 - name: configure the login banner
-  eos_banner:
+  arista.eos.eos_banner:
     banner: login
     text: |
       this is my login banner
@@ -66,7 +62,7 @@ EXAMPLES = """
     state: present
 
 - name: remove the motd banner
-  eos_banner:
+  arista.eos.eos_banner:
     banner: motd
     state: absent
 """

@@ -9,19 +9,14 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: eos_lldp
+DOCUMENTATION = """
+module: eos_lldp
 author: Ganesh Nalawade (@ganeshrn)
 short_description: Manage LLDP configuration on Arista EOS network devices
 description:
 - This module provides declarative management of LLDP service on Arista EOS network
   devices.
+version_added: 1.0.0
 notes:
 - Tested against EOS 4.15
 options:
@@ -39,11 +34,11 @@ extends_documentation_fragment:
 
 EXAMPLES = """
 - name: Enable LLDP service
-  eos_lldp:
+  arista.eos.eos_lldp:
     state: present
 
 - name: Disable LLDP service
-  eos_lldp:
+  arista.eos.eos_lldp:
     state: absent
 """
 

@@ -9,22 +9,19 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["deprecated"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: eos_linkagg
+DOCUMENTATION = """
+module: eos_linkagg
 author: Trishna Guha (@trishnaguha)
-short_description: Manage link aggregation groups on Arista EOS network devices
+short_description: (deprecated, removed after 2022-06-01) Manage link aggregation
+  groups on Arista EOS network devices
 description:
 - This module provides declarative management of link aggregation groups on Arista
   EOS network devices.
+version_added: 1.0.0
 deprecated:
-  removed_in: '2.13'
   alternative: eos_lag_interfaces
   why: Updated modules released with more functionality
+  removed_at_date: '2022-06-01'
 notes:
 - Tested against EOS 4.15
 options:
@@ -36,7 +33,7 @@ options:
     - Mode of the link aggregation group.
     choices:
     - active
-    - 'on'
+    - on
     - passive
   members:
     description:
@@ -61,47 +58,48 @@ options:
     type: bool
 extends_documentation_fragment:
 - arista.eos.eos
+
 """
 
 EXAMPLES = """
 - name: create link aggregation group
-  eos_linkagg:
+  arista.eos.eos_linkagg:
     group: 10
     state: present
 
 - name: delete link aggregation group
-  eos_linkagg:
+  arista.eos.eos_linkagg:
     group: 10
     state: absent
 
 - name: set link aggregation group to members
-  eos_linkagg:
+  arista.eos.eos_linkagg:
     group: 200
     min_links: 3
     mode: active
     members:
-      - Ethernet0
-      - Ethernet1
+    - Ethernet0
+    - Ethernet1
 
 - name: remove link aggregation group from Ethernet0
-  eos_linkagg:
+  arista.eos.eos_linkagg:
     group: 200
     min_links: 3
     mode: active
     members:
-      - Ethernet1
+    - Ethernet1
 
 - name: Create aggregate of linkagg definitions
-  eos_linkagg:
+  arista.eos.eos_linkagg:
     aggregate:
-      - { group: 3, mode: on, members: [Ethernet1] }
-      - { group: 100, mode: passive, min_links: 3, members: [Ethernet2] }
+    - {group: 3, mode: on, members: [Ethernet1]}
+    - {group: 100, mode: passive, min_links: 3, members: [Ethernet2]}
 
 - name: Remove aggregate of linkagg definitions
-  eos_linkagg:
+  arista.eos.eos_linkagg:
     aggregate:
-      - { group: 3, mode: on, members: [Ethernet1] }
-      - { group: 100, mode: passive, min_links: 3, members: [Ethernet2] }
+    - {group: 3, mode: on, members: [Ethernet1]}
+    - {group: 100, mode: passive, min_links: 3, members: [Ethernet2]}
     state: absent
 """
 

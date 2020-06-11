@@ -30,18 +30,13 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
 DOCUMENTATION = """
----
 module: eos_ospfv2
-version_added: "1.0.0"
-short_description: OSPFv2 resource module.
-description: This module configures and manages the attributes of ospfv2 on Arista EOS platforms.
+short_description: OSPFv2 resource module
+description: This module configures and manages the attributes of ospfv2 on Arista
+  EOS platforms.
+version_added: 1.0.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
 - Tested against Arista EOS 4.23.0F
@@ -59,7 +54,7 @@ options:
           process_id:
             description: ID of OSPFV2 process.
             type: int
-            required: True
+            required: true
           vrf:
             description: VRF name .
             type: str
@@ -75,7 +70,7 @@ options:
                 type: dict
                 suboptions:
                   threshold:
-                    description:  Number of peers to bring up simultaneously.
+                    description: Number of peers to bring up simultaneously.
                     type: int
           router_id:
             description: 32-bit number assigned to a router running OSPFv2.
@@ -91,14 +86,16 @@ options:
                 description: percentage of <count> , when a warning should be raised.
                 type: int
               ignore_time:
-                description: time in minutes, for which the switch shoud be shutdown on max-lsa warning
+                description: time in minutes, for which the switch shoud be shutdown
+                  on max-lsa warning
                 type: int
               ignore_count:
-                description: No. of times the switch can shut down temporarily on warning
+                description: No. of times the switch can shut down temporarily on
+                  warning
                 type: int
               reset_time:
-                 description: Time in minutes, after which the shutdown counter resets.
-                 type: int
+                description: Time in minutes, after which the shutdown counter resets.
+                type: int
           max_metric:
             description: Set maximum metric.
             type: dict
@@ -109,7 +106,7 @@ options:
                 suboptions:
                   set:
                     description:
-                      - Set router-lsa attribute.
+                    - Set router-lsa attribute.
                     type: bool
                   external_lsa:
                     description: Override external-lsa metric with max-metric value.
@@ -117,11 +114,11 @@ options:
                     suboptions:
                       set:
                         description:
-                          - Set external-lsa attribute.
+                        - Set external-lsa attribute.
                         type: bool
                       max_metric_value:
                         description:
-                          - Set max metric value for external LSAs.
+                        - Set max metric value for external LSAs.
                         type: int
                   include_stub:
                     description: Set maximum metric for stub links in router-LSAs.
@@ -130,31 +127,33 @@ options:
                     description: Set maximum metric temporarily after reboot.
                     type: dict
                     suboptions:
-                        set:
-                            description: Set on-startup attribute.
-                            type: bool
-                        wait_period:
-                            description:
-                                - Wait period in seconds after startup.
-                            type: int
+                      set:
+                        description: Set on-startup attribute.
+                        type: bool
+                      wait_period:
+                        description:
+                        - Wait period in seconds after startup.
+                        type: int
                   summary_lsa:
                     description: Override summary-lsa metric with max-metric value.
                     type: dict
                     suboptions:
-                        set:
-                            description:
-                                - Set external-lsa attribute.
-                            type: bool
-                        max_metric_value:
-                            description:
-                                - Set max metric value for external LSAs.
-                            type: int
+                      set:
+                        description:
+                        - Set external-lsa attribute.
+                        type: bool
+                      max_metric_value:
+                        description:
+                        - Set max metric value for external LSAs.
+                        type: int
           log_adjacency_changes:
-            description: To configure link-state changes and transitions of OSPFv2 neighbors.
+            description: To configure link-state changes and transitions of OSPFv2
+              neighbors.
             type: dict
             suboptions:
               detail:
-                description: If true , configures the switch to log all link-state changes.
+                description: If true , configures the switch to log all link-state
+                  changes.
                 type: bool
           maximum_paths:
             description: Maximum number of next-hops in an ECMP route.
@@ -190,10 +189,11 @@ options:
                 description: If True, Set all interfaces to passive by default
                 type: bool
           point_to_point:
-            description:  Configure Point-to-point specific features.
+            description: Configure Point-to-point specific features.
             type: bool
           rfc1583compatibility:
-            description: Specifies different methods for calculating summary route metrics.
+            description: Specifies different methods for calculating summary route
+              metrics.
             type: bool
           distance:
             description: Specifies the administrative distance for routes.
@@ -241,10 +241,12 @@ options:
             elements: dict
             suboptions:
               id:
-                description: Specifies a 32 bit number expressed in decimal or dotted-decimal notation.
+                description: Specifies a 32 bit number expressed in decimal or dotted-decimal
+                  notation.
                 type: str
               default_cost:
-                description: Specify the cost for default summary route in stub/NSSA area.
+                description: Specify the cost for default summary route in stub/NSSA
+                  area.
                 type: int
               filter:
                 description: Specify the filter for incoming summary LSAs.
@@ -351,14 +353,16 @@ options:
             description: Configure the default metric for redistributed routes
             type: int
           dn_bit_ignore:
-            description: If True, Disable dn-bit check for Type-3 LSAs in non-default VRFs.
+            description: If True, Disable dn-bit check for Type-3 LSAs in non-default
+              VRFs.
             type: bool
           graceful_restart:
             description: Enable graceful restart mode.
             type: dict
             suboptions:
               grace_period:
-                description: Specify maximum time to wait for graceful-restart to complete.
+                description: Specify maximum time to wait for graceful-restart to
+                  complete.
                 type: int
               set:
                 description: When true sets the grace_fulrestart config alone.
@@ -415,13 +419,16 @@ options:
                         type: dict
                         suboptions:
                           initial:
-                            description: Delay to generate first occurrence of LSA in msecs.
+                            description: Delay to generate first occurrence of LSA
+                              in msecs.
                             type: int
                           min:
-                            description: Min delay between originating the same LSA in msecs.
+                            description: Min delay between originating the same LSA
+                              in msecs.
                             type: int
                           max:
-                            description: Maximum delay between originating the same LSA in msecs.
+                            description: Maximum delay between originating the same
+                              LSA in msecs.
                             type: int
               out_delay:
                 description: Configure out-delay timer.
@@ -450,21 +457,19 @@ options:
             type: str
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | section ospf).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | section ospf).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
-      - The state the configuration should be left in.
+    - The state the configuration should be left in.
     type: str
-    choices:
-      ['deleted', 'merged', 'overridden', 'replaced', 'gathered', 'rendered', 'parsed']
-    default:
-      merged
+    choices: [deleted, merged, overridden, replaced, gathered, rendered, parsed]
+    default: merged
 """
 EXAMPLES = """
 # Using merged
@@ -474,7 +479,7 @@ EXAMPLES = """
 # localhost#show running-config | section ospf
 # localhost#
 
- arista.eos.eos_ospfv2:
+arista.eos.eos_ospfv2:
       config:
         - processes:
             - process_id: 1
@@ -516,6 +521,25 @@ EXAMPLES = """
                   default_cost: 20
               max_lsa:
                 count: 8000
+               ignore_count: 3
+                ignore_time: 6
+                reset_time: 20
+                threshold: 40
+              networks:
+                - area: "0.0.0.0"
+                  prefix: 10.10.2.0/24
+                - area: "0.0.0.0"
+                  prefix: "10.10.3.0/24"
+              redistribute:
+                - routes: "static"
+              router_id: "170.21.0.4"
+            - process_id: 2
+              vrf: "vrf01"
+              areas:
+                - id: "0.0.0.9"
+                  default_cost: 20
+              max_lsa:
+                count: 8000
                 ignore_count: 3
                 ignore_time: 6
                 reset_time: 20
@@ -524,6 +548,7 @@ EXAMPLES = """
               vrf: "vrf02"
               redistribute:
                 - routes: "connected"
+
 # After state:
 # localhost#show running-config | section ospf
 # router ospf 1
@@ -633,7 +658,7 @@ EXAMPLES = """
 #                 }
 #             ]
 #         }
-#     ],
+#     ]
 #
 
 
@@ -754,19 +779,18 @@ EXAMPLES = """
 #         }
 #     ]
 #
-
   - name: replace Ospf configs
     arista.eos.eos_ospfv2:
-      config:
-        - processes:
-            - process_id: 2
-              vrf: "vrf01"
-              point_to_point: True
-              redistribute:
-                - routes: "isis"
-                  isis_level: "level-1"
+          config:
+            - processes:
+                - process_id: 2
+                  vrf: "vrf01"
+                  point_to_point: True
+                  redistribute:
+                    - routes: "isis"
+                      isis_level: "level-1"
 
-      state: replaced
+          state: replaced
 
 # After State:
 # -----------
@@ -975,15 +999,15 @@ EXAMPLES = """
 #         }
 #     ]
 
-  - name: override Ospf configs
-    arista.eos.eos_ospfv2:
-      config:
-        - processes:
-            - process_id: 2
-              vrf: "vrf01"
-              redistribute:
-                - routes: "connected"
-      state: overridden
+- name: override Ospf configs
+  arista.eos.eos_ospfv2:
+    config:
+    - processes:
+      - process_id: 2
+        vrf: vrf01
+        redistribute:
+        - routes: connected
+    state: overridden
 
 # After State:
 
@@ -1133,12 +1157,12 @@ EXAMPLES = """
 #         }
 #     ]
 
-  - name: Delete instance
-    arista.eos.eos_ospfv2:
-      config:
-        - processes:
-            - process_id: 1
-      state: deleted
+- name: Delete instance
+  arista.eos.eos_ospfv2:
+    config:
+    - processes:
+      - process_id: 1
+    state: deleted
 
 # After State:
 # Commands:
@@ -1197,9 +1221,9 @@ EXAMPLES = """
 #    max-lsa 12000
 # localhost#
 
-  - name: Gather
-    arista.eos.eos_ospfv2:
-      state: gathered
+- name: Gather
+  arista.eos.eos_ospfv2:
+    state: gathered
 
 # "gathered": [
 #         {
@@ -1263,9 +1287,9 @@ EXAMPLES = """
 # router ospf 3 vrf vrf02
 #    redistribute static
 
-  - name: parse configs
-    arista.eos.eos_ospfv2:
-      running_config: "{{ lookup('file', './parsed.cfg') }}"
+- name: parse configs
+  arista.eos.eos_ospfv2:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
 
 # "parsed": [
 #         {
@@ -1357,43 +1381,43 @@ EXAMPLES = """
 # Using rendered:
 # --------------
 
-  - name: render Ospf configs
-    arista.eos.eos_ospfv2:
-      config:
-        - processes:
-            - process_id: 1
-              adjacency:
-                exchange_start:
-                    threshold: 20045623
-              areas:
-                - filter:
-                    address: "10.1.1.0/24"
-                  id: "0.0.0.2"
-                - id: "0.0.0.50"
-                  range:
-                    address: "172.20.0.0/16"
-                    cost: 34
-              default_information:
-                metric: 100
-                metric_type: 1
-                originate: True
-              distance:
-                intra_area: 85
-              max_lsa:
-                count: 8000
-                ignore_count: 3
-                ignore_time: 6
-                reset_time: 20
-                threshold: 40
-              networks:
-                - area: "0.0.0.0"
-                  prefix: 10.10.2.0/24
-                - area: "0.0.0.0"
-                  prefix: "10.10.3.0/24"
-              redistribute:
-                - routes: "static"
-              router_id: "170.21.0.4"
-      state: rendered
+- name: render Ospf configs
+  arista.eos.eos_ospfv2:
+    config:
+    - processes:
+      - process_id: 1
+        adjacency:
+          exchange_start:
+            threshold: 20045623
+        areas:
+        - filter:
+            address: 10.1.1.0/24
+          id: 0.0.0.2
+        - id: 0.0.0.50
+          range:
+            address: 172.20.0.0/16
+            cost: 34
+        default_information:
+          metric: 100
+          metric_type: 1
+          originate: true
+        distance:
+          intra_area: 85
+        max_lsa:
+          count: 8000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+        networks:
+        - area: 0.0.0.0
+          prefix: 10.10.2.0/24
+        - area: 0.0.0.0
+          prefix: 10.10.3.0/24
+        redistribute:
+        - routes: static
+        router_id: 170.21.0.4
+    state: rendered
 
 # "rendered": [
 #         "router ospf 1",

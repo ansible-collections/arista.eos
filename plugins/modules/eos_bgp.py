@@ -10,19 +10,14 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: eos_bgp
+DOCUMENTATION = """
+module: eos_bgp
 author: Nilashish Chakraborty (@NilashishC)
 short_description: Configure global BGP protocol settings on Arista EOS.
 description:
 - This module provides configuration management of global BGP parameters on Arista
   EOS devices.
+version_added: 1.0.0
 notes:
 - Tested against Arista vEOS Version 4.15.9M.
 options:
@@ -38,7 +33,7 @@ options:
       router_id:
         description:
         - Configures the BGP routing process router-id value.
-        default: null
+        default:
       log_neighbor_changes:
         description:
         - Enable/disable logging neighbor up/down and reset reason.
@@ -224,83 +219,83 @@ options:
 
 EXAMPLES = """
 - name: configure global bgp as 64496
-  eos_bgp:
+  arista.eos.eos_bgp:
     config:
       bgp_as: 64496
       router_id: 192.0.2.1
-      log_neighbor_changes: True
+      log_neighbor_changes: true
       neighbors:
-        - neighbor: 203.0.113.5
-          remote_as: 64511
-          timers:
-            keepalive: 300
-            holdtime: 360
-        - neighbor: 198.51.100.2
-          remote_as: 64498
+      - neighbor: 203.0.113.5
+        remote_as: 64511
+        timers:
+          keepalive: 300
+          holdtime: 360
+      - neighbor: 198.51.100.2
+        remote_as: 64498
       networks:
-        - prefix: 198.51.100.0
-          route_map: RMAP_1
-        - prefix: 192.0.2.0
-          masklen: 23
+      - prefix: 198.51.100.0
+        route_map: RMAP_1
+      - prefix: 192.0.2.0
+        masklen: 23
       address_family:
-        - afi: ipv4
-          safi: unicast
-          redistribute:
-            - protocol: isis
-              route_map: RMAP_1
+      - afi: ipv4
+        safi: unicast
+        redistribute:
+        - protocol: isis
+          route_map: RMAP_1
     operation: merge
 
 - name: Configure BGP neighbors
-  eos_bgp:
+  arista.eos.eos_bgp:
     config:
       bgp_as: 64496
       neighbors:
-        - neighbor: 192.0.2.10
-          remote_as: 64496
-          description: IBGP_NBR_1
-          ebgp_multihop: 100
-          timers:
-            keepalive: 300
-            holdtime: 360
+      - neighbor: 192.0.2.10
+        remote_as: 64496
+        description: IBGP_NBR_1
+        ebgp_multihop: 100
+        timers:
+          keepalive: 300
+          holdtime: 360
 
-        - neighbor: 192.0.2.15
-          remote_as: 64496
-          description: IBGP_NBR_2
-          ebgp_multihop: 150
+      - neighbor: 192.0.2.15
+        remote_as: 64496
+        description: IBGP_NBR_2
+        ebgp_multihop: 150
     operation: merge
 
 - name: Configure root-level networks for BGP
-  eos_bgp:
+  arista.eos.eos_bgp:
     config:
       bgp_as: 64496
       networks:
-        - prefix: 203.0.113.0
-          masklen: 27
-          route_map: RMAP_1
+      - prefix: 203.0.113.0
+        masklen: 27
+        route_map: RMAP_1
 
-        - prefix: 203.0.113.32
-          masklen: 27
-          route_map: RMAP_2
+      - prefix: 203.0.113.32
+        masklen: 27
+        route_map: RMAP_2
     operation: merge
 
 - name: Configure BGP neighbors under address family mode
-  eos_bgp:
+  arista.eos.eos_bgp:
     config:
       bgp_as: 64496
       address_family:
-        - afi: ipv4
-          neighbors:
-            - neighbor: 203.0.113.10
-              activate: yes
-              default_originate: True
+      - afi: ipv4
+        neighbors:
+        - neighbor: 203.0.113.10
+          activate: yes
+          default_originate: true
 
-            - neighbor: 192.0.2.15
-              activate: yes
-              graceful_restart: True
+        - neighbor: 192.0.2.15
+          activate: yes
+          graceful_restart: true
     operation: merge
 
 - name: remove bgp as 64496 from config
-  eos_bgp:
+  arista.eos.eos_bgp:
     config:
       bgp_as: 64496
     operation: delete
