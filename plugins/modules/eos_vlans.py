@@ -30,17 +30,13 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: eos_vlans
-short_description: Vlans resource module.
-version_added: "1.0.0"
+DOCUMENTATION = """
+module: eos_vlans
+short_description: VLANs resource module
 description: This module provides declarative management of VLANs on Arista EOS network
   devices.
+version_added: 1.0.0
 author: Nathaniel Case (@qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
@@ -63,11 +59,11 @@ options:
       running_config:
         description:
         - This option is used only with state I(parsed).
-        - The value of this option should be the output received from the EOS device by executing
-          the command B(show running-config | section vlan).
-        - The state I(parsed) reads the configuration from C(running_config) option and transforms
-          it into Ansible structured data as per the resource module's argspec and the value is then
-          returned in the I(parsed) key within the result.
+        - The value of this option should be the output received from the EOS device
+          by executing the command B(show running-config | section vlan).
+        - The state I(parsed) reads the configuration from C(running_config) option
+          and transforms it into Ansible structured data as per the resource module's
+          argspec and the value is then returned in the I(parsed) key within the result.
         type: str
       state:
         description:
@@ -89,6 +85,7 @@ options:
     - gathered
     - parsed
     default: merged
+
 """
 EXAMPLES = """
 # Using deleted
@@ -106,7 +103,7 @@ EXAMPLES = """
 - name: Delete attributes of the given VLANs.
   arista.eos.eos_vlans:
     config:
-      - vlan_id: 20
+    - vlan_id: 20
     state: deleted
 
 # After state:
@@ -132,8 +129,8 @@ EXAMPLES = """
 - name: Merge given VLAN attributes with device configuration
   arista.eos.eos_vlans:
     config:
-      - vlan_id: 20
-        state: suspend
+    - vlan_id: 20
+      state: suspend
     state: merged
 
 # After state:
@@ -163,8 +160,8 @@ EXAMPLES = """
 - name: Override device configuration of all VLANs with provided configuration
   arista.eos.eos_vlans:
     config:
-      - vlan_id: 20
-        state: suspend
+    - vlan_id: 20
+      state: suspend
     state: overridden
 
 # After state:
@@ -190,8 +187,8 @@ EXAMPLES = """
 - name: Replace all attributes of specified VLANs with provided configuration
   arista.eos.eos_vlans:
     config:
-      - vlan_id: 20
-        state: suspend
+    - vlan_id: 20
+      state: suspend
     state: replaced
 
 # After state:
@@ -232,10 +229,10 @@ EXAMPLES = """
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_vlans:
     config:
-      - vlan_id: 10
-        name: ten
-      - vlan_id: 20
-        state: suspend
+    - vlan_id: 10
+      name: ten
+    - vlan_id: 20
+      state: suspend
     state: rendered
 
 # Output:

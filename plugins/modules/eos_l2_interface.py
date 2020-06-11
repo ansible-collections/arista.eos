@@ -9,22 +9,19 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["deprecated"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: eos_l2_interface
+DOCUMENTATION = """
+module: eos_l2_interface
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
-short_description: Manage L2 interfaces on Arista EOS network devices.
+short_description: (deprecated, removed after 2022-06-01) Manage L2
+  interfaces on Arista EOS network devices.
 description:
 - This module provides declarative management of L2 interfaces on Arista EOS network
   devices.
+version_added: 1.0.0
 deprecated:
-  removed_in: '2.13'
   alternative: eos_l2_interfaces
   why: Updated modules released with more functionality
+  removed_at_date: '2022-06-01'
 notes:
 - Tested against EOS 4.15
 options:
@@ -67,32 +64,34 @@ options:
     - unconfigured
 extends_documentation_fragment:
 - arista.eos.eos
+
 """
 
 EXAMPLES = """
 - name: Ensure Ethernet1 does not have any switchport
-  eos_l2_interface:
+  arista.eos.eos_l2_interface:
     name: Ethernet1
     state: absent
 
 - name: Ensure Ethernet1 is configured for access vlan 20
-  eos_l2_interface:
+  arista.eos.eos_l2_interface:
     name: Ethernet1
     mode: access
     access_vlan: 20
 
-- name: Ensure Ethernet1 is a trunk port and ensure 2-50 are being tagged (doesn't mean others aren't also being tagged)
-  eos_l2_interface:
+- name: Ensure Ethernet1 is a trunk port and ensure 2-50 are being tagged (doesn't
+    mean others aren't also being tagged)
+  arista.eos.eos_l2_interface:
     name: Ethernet1
     mode: trunk
     native_vlan: 10
     trunk_allowed_vlans: 2-50
 
 - name: Set switchports on aggregate
-  eos_l2_interface:
+  arista.eos.eos_l2_interface:
     aggregate:
-      - { name: ethernet1, mode: access, access_vlan: 20}
-      - { name: ethernet2, mode: trunk, native_vlan: 10}
+    - {name: ethernet1, mode: access, access_vlan: 20}
+    - {name: ethernet2, mode: trunk, native_vlan: 10}
 """
 
 RETURN = """

@@ -30,18 +30,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: eos_lldp_interfaces
-short_description: Lldp_interfaces resource module.
-version_added: "1.0.0"
+DOCUMENTATION = """
+module: eos_lldp_interfaces
+short_description: LLDP interfaces resource module
 description:
 - This module manages Link Layer Discovery Protocol (LLDP) attributes of interfaces
   on Arista EOS devices.
+version_added: 1.0.0
 author: Nathaniel Case (@Qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
@@ -66,12 +62,12 @@ options:
         type: bool
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | section ^interface).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | section ^interface).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -86,6 +82,7 @@ options:
     - gathered
     - rendered
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -105,10 +102,10 @@ EXAMPLES = """
 - name: Merge provided configuration with running configuration
   arista.eos.eos_lldp_interfaces:
     config:
-      - name: Ethernet1
-        transmit: False
-      - name: Ethernet2
-        transmit: False
+    - name: Ethernet1
+      transmit: false
+    - name: Ethernet2
+      transmit: false
     state: merged
 
 #
@@ -138,11 +135,12 @@ EXAMPLES = """
 # interface Ethernet2
 #    no lldp transmit
 
-- name: Replace existing LLDP configuration of specified interfaces with provided configuration
+- name: Replace existing LLDP configuration of specified interfaces with provided
+    configuration
   arista.eos.eos_lldp_interfaces:
     config:
-      - name: Ethernet1
-        transmit: False
+    - name: Ethernet1
+      transmit: false
     state: replaced
 
 #
@@ -174,8 +172,8 @@ EXAMPLES = """
 - name: Override the LLDP configuration of all the interfaces with provided configuration
   arista.eos.eos_lldp_interfaces:
     config:
-      - name: Ethernet1
-        transmit: False
+    - name: Ethernet1
+      transmit: false
     state: overridden
 
 #
@@ -203,7 +201,8 @@ EXAMPLES = """
 # interface Ethernet2
 #    no lldp transmit
 
-- name: Delete LLDP configuration of specified interfaces (or all interfaces if none are specified)
+- name: Delete LLDP configuration of specified interfaces (or all interfaces if none
+    are specified)
   arista.eos.eos_lldp_interfaces:
     state: deleted
 
@@ -219,12 +218,12 @@ EXAMPLES = """
 # using rendered:
 
 - name: Use Rendered to convert the structured data to native config
-  eos_lldp_interfaces:
+  arista.eos.eos_lldp_interfaces:
     config:
-      - name: Ethernet1
-        transmit: False
-      - name: Ethernet2
-        transmit: False
+    - name: Ethernet1
+      transmit: false
+    - name: Ethernet2
+      transmit: false
     state: rendered
 
 #

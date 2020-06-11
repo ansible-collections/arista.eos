@@ -16,14 +16,9 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-
-DOCUMENTATION = """module: eos_command
+DOCUMENTATION = """
+module: eos_command
 author: Peter Sprygada (@privateip)
 short_description: Run arbitrary commands on an Arista EOS device
 description:
@@ -31,6 +26,7 @@ description:
   the device.  This module includes an argument that will cause the module to wait
   for a specific condition before returning or timing out if the condition is not
   met.
+version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 notes:
@@ -79,48 +75,49 @@ options:
 
 EXAMPLES = """
 - name: run show version on remote devices
-  eos_command:
+  arista.eos.eos_command:
     commands: show version
 
 - name: run show version and check to see if output contains Arista
-  eos_command:
+  arista.eos.eos_command:
     commands: show version
     wait_for: result[0] contains Arista
 
 - name: run multiple commands on remote nodes
-  eos_command:
+  arista.eos.eos_command:
     commands:
-      - show version
-      - show interfaces
+    - show version
+    - show interfaces
 
 - name: run multiple commands and evaluate the output
-  eos_command:
+  arista.eos.eos_command:
     commands:
-      - show version
-      - show interfaces
+    - show version
+    - show interfaces
     wait_for:
-      - result[0] contains Arista
-      - result[1] contains Loopback0
+    - result[0] contains Arista
+    - result[1] contains Loopback0
 
 - name: run commands and specify the output format
-  eos_command:
+  arista.eos.eos_command:
     commands:
-      - command: show version
-        output: json
+    - command: show version
+      output: json
 
 - name: using cli transport, check whether the switch is in maintenance mode
-  eos_command:
+  arista.eos.eos_command:
     commands: show maintenance
     wait_for: result[0] contains 'Under Maintenance'
 
-- name: using cli transport, check whether the switch is in maintenance mode using json output
-  eos_command:
+- name: using cli transport, check whether the switch is in maintenance mode using
+    json output
+  arista.eos.eos_command:
     commands: show maintenance | json
     wait_for: result[0].units.System.state eq 'underMaintenance'
 
-- name: "using eapi transport check whether the switch is in maintenance,
-         with 8 retries and 2 second interval between retries"
-  eos_command:
+- name: using eapi transport check whether the switch is in maintenance, with 8 retries
+    and 2 second interval between retries
+  arista.eos.eos_command:
     commands: show maintenance
     wait_for: result[0]['units']['System']['state'] eq 'underMaintenance'
     interval: 2

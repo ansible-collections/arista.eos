@@ -16,25 +16,22 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-
-DOCUMENTATION = """module: eos_config
+DOCUMENTATION = """
+module: eos_config
 author: Peter Sprygada (@privateip)
 short_description: Manage Arista EOS configuration sections
 description:
 - Arista EOS configurations use a simple block indent file syntax for segmenting configuration
   into sections.  This module provides an implementation for working with EOS configuration
   sections in a deterministic way.  This module works with either CLI or eAPI transports.
+version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 notes:
 - Tested against EOS 4.15
-- Abbreviated commands are NOT idempotent, see L(Network FAQ,../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
+- Abbreviated commands are NOT idempotent, see
+  L(Network FAQ,../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
 options:
   lines:
     description:
@@ -103,7 +100,7 @@ options:
       playbook root directory or role root directory, if playbook is part of an ansible
       role. If the directory does not exist, it is created.
     type: bool
-    default: 'no'
+    default: no
   running_config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -121,7 +118,7 @@ options:
       the running-config is append with the all keyword.  When the value is set to
       false, the command is issued without the all keyword
     type: bool
-    default: 'no'
+    default: no
   save_when:
     description:
     - When changes are made to the device running-configuration, the changes are not
@@ -197,48 +194,49 @@ options:
           in C(filename) within I(backup) directory.
         type: path
     type: dict
-"""  # noqa: E501
+"""
+# noqa: E501
 
 EXAMPLES = """
 - name: configure top level settings
-  eos_config:
+  arista.eos.eos_config:
     lines: hostname {{ inventory_hostname }}
 
 - name: load an acl into the device
-  eos_config:
+  arista.eos.eos_config:
     lines:
-      - 10 permit ip host 192.0.2.1 any log
-      - 20 permit ip host 192.0.2.2 any log
-      - 30 permit ip host 192.0.2.3 any log
-      - 40 permit ip host 192.0.2.4 any log
+    - 10 permit ip host 192.0.2.1 any log
+    - 20 permit ip host 192.0.2.2 any log
+    - 30 permit ip host 192.0.2.3 any log
+    - 40 permit ip host 192.0.2.4 any log
     parents: ip access-list test
     before: no ip access-list test
     replace: block
 
 - name: load configuration from file
-  eos_config:
+  arista.eos.eos_config:
     src: eos.cfg
 
 - name: render a Jinja2 template onto an Arista switch
-  eos_config:
+  arista.eos.eos_config:
     backup: yes
     src: eos_template.j2
 
 - name: diff the running config against a master config
-  eos_config:
+  arista.eos.eos_config:
     diff_against: intended
     intended_config: "{{ lookup('file', 'master.cfg') }}"
 
 - name: for idempotency, use full-form commands
-  eos_config:
+  arista.eos.eos_config:
     lines:
       # - shut
-      - shutdown
+    - shutdown
     # parents: int eth1
     parents: interface Ethernet1
 
 - name: configurable backup path
-  eos_config:
+  arista.eos.eos_config:
     src: eos_template.j2
     backup: yes
     backup_options:

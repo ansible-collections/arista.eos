@@ -31,18 +31,12 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: eos_interfaces
-short_description: Interfaces resource module.
-version_added: "1.0.0"
+DOCUMENTATION = """
+module: eos_interfaces
+short_description: Interfaces resource module
 description:
 - This module manages the interface attributes of Arista EOS interfaces.
+version_added: 1.0.0
 author:
 - Nathaniel Case (@qalthos)
 notes:
@@ -86,12 +80,12 @@ options:
         type: str
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | section ^interface).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | section ^interface).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     choices:
@@ -106,10 +100,10 @@ options:
     description:
     - The state of the configuration after module completion.
     type: str
+
 """
 
 EXAMPLES = """
----
 
 # Using merged
 
@@ -130,11 +124,11 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   arista.eos.eos_interfaces:
     config:
-      - name: Ethernet1
-        enabled: True
-      - name: Ethernet2
-        description: 'Configured by Ansible'
-        enabled: False
+    - name: Ethernet1
+      enabled: true
+    - name: Ethernet2
+      description: Configured by Ansible
+      enabled: false
     state: merged
 
 # After state:
@@ -172,11 +166,11 @@ EXAMPLES = """
 - name: Replaces device configuration of listed interfaces with provided configuration
   arista.eos.eos_interfaces:
     config:
-      - name: Ethernet1
-        enabled: True
-      - name: Ethernet2
-        description: 'Configured by Ansible'
-        enabled: False
+    - name: Ethernet1
+      enabled: true
+    - name: Ethernet2
+      description: Configured by Ansible
+      enabled: false
     state: replaced
 
 # After state:
@@ -213,11 +207,11 @@ EXAMPLES = """
 - name: Overrides all device configuration with provided configuration
   arista.eos.eos_interfaces:
     config:
-      - name: Ethernet1
-        enabled: True
-      - name: Ethernet2
-        description: 'Configured by Ansible'
-        enabled: False
+    - name: Ethernet1
+      enabled: true
+    - name: Ethernet2
+      description: Configured by Ansible
+      enabled: false
     state: overridden
 
 # After state:
@@ -253,7 +247,7 @@ EXAMPLES = """
 - name: Delete or return interface parameters to default settings
   arista.eos.eos_interfaces:
     config:
-      - name: Ethernet1
+    - name: Ethernet1
     state: deleted
 
 # After state:
@@ -274,11 +268,11 @@ EXAMPLES = """
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_interfaces:
     config:
-      - name: Ethernet1
-        enabled: True
-      - name: Ethernet2
-        description: 'Configured by Ansible'
-        enabled: False
+    - name: Ethernet1
+      enabled: true
+    - name: Ethernet2
+      description: Configured by Ansible
+      enabled: false
     state: merged
 
 # Output:

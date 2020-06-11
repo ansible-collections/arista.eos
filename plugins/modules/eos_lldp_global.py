@@ -30,18 +30,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: eos_lldp_global
-short_description: Lldp global resource module.
-  Arista EOS devices.
+DOCUMENTATION = """
+module: eos_lldp_global
+short_description: LLDP resource module
 description:
 - This module manages Global Link Layer Discovery Protocol (LLDP) settings on Arista
   EOS devices.
+version_added: 1.0.0
 author: Nathaniel Case (@Qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
@@ -98,14 +94,13 @@ options:
             type: bool
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | section lldp).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | section lldp).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
-    version_added: "1.0.0"
   state:
     description:
     - The state of the configuration after module completion.
@@ -118,6 +113,7 @@ options:
     - gathered
     - parsed
     default: merged
+
 """
 EXAMPLES = """
 # Using merged
@@ -138,9 +134,9 @@ EXAMPLES = """
     config:
       holdtime: 100
       tlv_select:
-        management_address: False
-        port_description: False
-        system_description: True
+        management_address: false
+        port_description: false
+        system_description: true
     state: merged
 
 # -----------
@@ -173,9 +169,9 @@ EXAMPLES = """
     config:
       holdtime: 100
       tlv_select:
-        management_address: False
-        port_description: False
-        system_description: True
+        management_address: false
+        port_description: false
+        system_description: true
     state: replaced
 
 # -----------
@@ -218,9 +214,9 @@ EXAMPLES = """
     config:
       holdtime: 100
       tlv_select:
-        management_address: False
-        port_description: False
-        system_description: True
+        management_address: false
+        port_description: false
+        system_description: true
     state: rendered
 
 # -----------

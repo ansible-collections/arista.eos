@@ -30,18 +30,14 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: eos_acl_interfaces
-short_description: Manage adding and removing Access Control Lists (ACLs) from interfaces
-  on devices running EOS software.
+DOCUMENTATION = """
+module: eos_acl_interfaces
+short_description: ACL interfaces resource module
 description:
 - This module manages adding and removing Access Control Lists (ACLs) from interfaces
   on devices running EOS software.
+version_added: 1.0.0
 author: GomathiSelvi S (@GomathiselviS)
 options:
   config:
@@ -111,6 +107,7 @@ options:
     - parsed
     - rendered
     default: merged
+
 """
 EXAMPLES = """
 # Using Merged
@@ -123,19 +120,19 @@ EXAMPLES = """
 # interface Ethernet2
 # interface Ethernet3
 
-- name: "Merge module attributes of given access-groups"
-  eos_acl_interfaces:
+- name: Merge module attributes of given access-groups
+  arista.eos.eos_acl_interfaces:
     config:
-      - name: Ethernet2
-        access_groups:
-          - afi: ipv4
-            acls:
-              name: acl01
-              direction: in
-          - afi: ipv6
-            acls:
-              name: acl03
-              direction: out
+    - name: Ethernet2
+      access_groups:
+      - afi: ipv4
+        acls:
+          name: acl01
+          direction: in
+      - afi: ipv6
+        acls:
+          name: acl03
+          direction: out
     state: merged
 
 # Commands Fired:
@@ -170,15 +167,15 @@ EXAMPLES = """
 # interface Ethernet3
 #  ip access-group acl01 in
 
-- name: "Replace module attributes of given access-groups"
-  eos_acl_interfaces:
+- name: Replace module attributes of given access-groups
+  arista.eos.eos_acl_interfaces:
     config:
-      - name: Ethernet2
-        access_groups:
-          - afi: ipv4
-            acls:
-              name: acl01
-              direction: out
+    - name: Ethernet2
+      access_groups:
+      - afi: ipv4
+        acls:
+          name: acl01
+          direction: out
     state: replaced
 
 # Commands Fired:
@@ -214,15 +211,15 @@ EXAMPLES = """
 # interface Ethernet3
 #  ip access-group acl01 in
 
-- name: "Override module attributes of given access-groups"
-  eos_acl_interfaces:
+- name: Override module attributes of given access-groups
+  arista.eos.eos_acl_interfaces:
     config:
-      - name: Ethernet2
-        access_groups:
-          - afi: ipv4
-            acls:
-              name: acl01
-              direction: out
+    - name: Ethernet2
+      access_groups:
+      - afi: ipv4
+        acls:
+          name: acl01
+          direction: out
     state: overridden
 
 # Commands Fired:
@@ -259,19 +256,19 @@ EXAMPLES = """
 # interface Ethernet3
 #  ip access-group acl01 out
 
-- name: "Delete module attributes of given access-groups"
-  eos_acl_interfaces:
+- name: Delete module attributes of given access-groups
+  arista.eos.eos_acl_interfaces:
     config:
-      - name: Ethernet2
-        access_groups:
-          - afi: ipv4
-            acls:
-              name: acl01
-              direction: in
-          - afi: ipv6
-            acls:
-              name: acl03
-              direction: out
+    - name: Ethernet2
+      access_groups:
+      - afi: ipv4
+        acls:
+          name: acl01
+          direction: in
+      - afi: ipv6
+        acls:
+          name: acl03
+          direction: out
     state: deleted
 
 # Commands Fired:
@@ -303,8 +300,8 @@ EXAMPLES = """
 # interface Ethernet3
 #  ip access-group acl01 out
 
-- name: "Delete module attributes of given access-groups from ALL Interfaces"
-  eos_acl_interfaces:
+- name: Delete module attributes of given access-groups from ALL Interfaces
+  arista.eos.eos_acl_interfaces:
     config:
     state: deleted
 
@@ -337,15 +334,15 @@ EXAMPLES = """
 # interface Ethernet3
 #  ip access-group acl01 out
 
-- name: "Delete acls under afi"
-  eos_acl_interfaces:
+- name: Delete acls under afi
+  arista.eos.eos_acl_interfaces:
     config:
-      - name: Ethernet3
-        access_groups:
-          - afi: "ipv4"
-      - name: Ethernet2
-        access_groups:
-          - afi: "ipv6"
+    - name: Ethernet3
+      access_groups:
+      - afi: ipv4
+    - name: Ethernet2
+      access_groups:
+      - afi: ipv6
     state: deleted
 
 # Commands Fired:

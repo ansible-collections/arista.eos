@@ -16,14 +16,9 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-
-DOCUMENTATION = """module: eos_eapi
+DOCUMENTATION = """
+module: eos_eapi
 author: Peter Sprygada (@privateip)
 short_description: Manage and configure Arista EOS eAPI.
 requirements:
@@ -35,6 +30,7 @@ description:
   on port 443, disable local HTTP, and disable Unix socket server. Use the options
   listed below to override the default configuration.
 - Requires EOS v4.12 or greater.
+version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 options:
@@ -46,7 +42,7 @@ options:
       is disabled. By default, when eAPI is first configured, the HTTP protocol is
       disabled.
     type: bool
-    default: 'no'
+    default: no
     aliases:
     - enable_http
   http_port:
@@ -63,7 +59,7 @@ options:
       is disabled. By default, when eAPI is first configured, the HTTPS protocol is
       enabled.
     type: bool
-    default: 'yes'
+    default: yes
     aliases:
     - enable_https
   https_port:
@@ -80,7 +76,7 @@ options:
       only.  When the value is set to False, the HTTP local protocol is disabled.
     - Note is value is independent of the C(http) argument
     type: bool
-    default: 'no'
+    default: no
     aliases:
     - enable_local_http
   local_http_port:
@@ -97,7 +93,7 @@ options:
       UDS will not be available to handle requests.  By default when eAPI is first
       configured, the UDS is disabled.
     type: bool
-    default: 'no'
+    default: no
     aliases:
     - enable_socket
   timeout:
@@ -133,11 +129,12 @@ options:
 
 EXAMPLES = """
 - name: Enable eAPI access with default configuration
-  eos_eapi:
+  arista.eos.eos_eapi:
     state: started
 
-- name: Enable eAPI with no HTTP, HTTPS at port 9443, local HTTP at port 80, and socket enabled
-  eos_eapi:
+- name: Enable eAPI with no HTTP, HTTPS at port 9443, local HTTP at port 80, and socket
+    enabled
+  arista.eos.eos_eapi:
     state: started
     http: false
     https_port: 9443
@@ -146,7 +143,7 @@ EXAMPLES = """
     socket: yes
 
 - name: Shutdown eAPI access
-  eos_eapi:
+  arista.eos.eos_eapi:
     state: stopped
 """
 

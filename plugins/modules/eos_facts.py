@@ -7,14 +7,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-
-DOCUMENTATION = """module: eos_facts
+DOCUMENTATION = """
+module: eos_facts
 author:
 - Peter Sprygada (@privateip)
 - Nathaniel Case (@Qalthos)
@@ -24,6 +19,7 @@ description:
   places the facts gathered in the fact tree keyed by the respective resource name.  The
   facts module will always collect a base set of facts from the device and can enable
   or disable collection of additional facts.
+version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 options:
@@ -52,34 +48,34 @@ options:
 
 EXAMPLES = """
 - name: Gather all legacy facts
-- eos_facts:
+- arista.eos.eos_facts:
     gather_subset: all
 
 - name: Gather only the config and default facts
-  eos_facts:
+  arista.eos.eos_facts:
     gather_subset:
-      - config
+    - config
 
 - name: Do not gather hardware facts
-  eos_facts:
+  arista.eos.eos_facts:
     gather_subset:
-      - "!hardware"
+    - '!hardware'
 
 - name: Gather legacy and resource facts
-  eos_facts:
+  arista.eos.eos_facts:
     gather_subset: all
     gather_network_resources: all
 
 - name: Gather only the interfaces resource facts and no legacy facts
-- eos_facts:
+- arista.eos.eos_facts:
     gather_subset:
-      - '!all'
-      - '!min'
+    - '!all'
+    - '!min'
     gather_network_resources:
-      - interfaces
+    - interfaces
 
 - name: Gather all resource facts and minimal legacy facts
-  eos_facts:
+  arista.eos.eos_facts:
     gather_subset: min
     gather_network_resources: all
 """

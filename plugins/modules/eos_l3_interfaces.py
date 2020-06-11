@@ -30,17 +30,13 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-DOCUMENTATION = """module: eos_l3_interfaces
-short_description: L3_interfaces resource module.
-version_added: "1.0.0"
+DOCUMENTATION = """
+module: eos_l3_interfaces
+short_description: L3 interfaces resource module
 description: This module provides declarative management of Layer 3 interfaces on
   Arista EOS devices.
+version_added: 1.0.0
 author: Nathaniel Case (@qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
@@ -88,12 +84,12 @@ options:
             type: str
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | section ^interface).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | section ^interface).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -105,10 +101,10 @@ options:
     - overridden
     - deleted
     default: merged
+
 """
 
 EXAMPLES = """
----
 
 # Using deleted
 
@@ -129,8 +125,8 @@ EXAMPLES = """
 - name: Delete L3 attributes of given interfaces.
   arista.eos.eos_l3_interfaces:
     config:
-      - name: Ethernet1
-      - name: Ethernet2
+    - name: Ethernet1
+    - name: Ethernet2
     state: deleted
 
 # After state:
@@ -165,12 +161,12 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration.
   arista.eos.eos_l3_interfaces:
     config:
-      - name: Ethernet1
-        ipv4:
-          - address: 198.51.100.14/24
-      - name: Ethernet2
-        ipv4:
-          - address: 203.0.113.27/24
+    - name: Ethernet1
+      ipv4:
+      - address: 198.51.100.14/24
+    - name: Ethernet2
+      ipv4:
+      - address: 203.0.113.27/24
     state: merged
 
 # After state:
@@ -205,15 +201,16 @@ EXAMPLES = """
 #    ip address dhcp
 #    ipv6 address auto-config
 
-- name: Override device configuration of all L2 interfaces on device with provided configuration.
+- name: Override device configuration of all L2 interfaces on device with provided
+    configuration.
   arista.eos.eos_l3_interfaces:
     config:
-      - name: Ethernet1
-        ipv6:
-          - address: 2001:db8:feed::1/96
-      - name: Management1
-        ipv4:
-          - address: dhcp
+    - name: Ethernet1
+      ipv6:
+      - address: 2001:db8:feed::1/96
+    - name: Management1
+      ipv4:
+      - address: dhcp
     ipv6: auto-config
     state: overridden
 
@@ -250,9 +247,9 @@ EXAMPLES = """
 - name: Replace device configuration of specified L2 interfaces with provided configuration.
   arista.eos.eos_l3_interfaces:
     config:
-      - name: Ethernet2
-        ipv4:
-          - address: 203.0.113.27/24
+    - name: Ethernet2
+      ipv4:
+      - address: 203.0.113.27/24
     state: replaced
 
 # After state:
@@ -299,15 +296,15 @@ EXAMPLES = """
 
 # Using rendered:
 
-- name:  Use Rendered to convert the structured data to native config
+- name: Use Rendered to convert the structured data to native config
   arista.eos.eos_l3_interfaces:
     config:
-      - name: Ethernet1
-        ipv4:
-          - address: 198.51.100.14/24
-      - name: Ethernet2
-        ipv4:
-          - address: 203.0.113.27/24
+    - name: Ethernet1
+      ipv4:
+      - address: 198.51.100.14/24
+    - name: Ethernet2
+      ipv4:
+      - address: 203.0.113.27/24
     state: rendered
 
 # Output

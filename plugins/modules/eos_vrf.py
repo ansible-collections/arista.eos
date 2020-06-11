@@ -19,18 +19,14 @@
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
 
-
-DOCUMENTATION = """module: eos_vrf
+DOCUMENTATION = """
+module: eos_vrf
 author: Ricardo Carrillo Cruz (@rcarrillocruz)
 short_description: Manage VRFs on Arista EOS network devices
 description:
 - This module provides declarative management of VRFs on Arista EOS network devices.
+version_added: 1.0.0
 notes:
 - Tested against EOS 4.15
 options:
@@ -77,33 +73,33 @@ extends_documentation_fragment:
 
 EXAMPLES = """
 - name: Create vrf
-  eos_vrf:
+  arista.eos.eos_vrf:
     name: test
     rd: 1:200
     interfaces:
-      - Ethernet2
+    - Ethernet2
     state: present
 
 - name: Delete VRFs
-  eos_vrf:
+  arista.eos.eos_vrf:
     name: test
     state: absent
 
 - name: Create aggregate of VRFs with purge
-  eos_vrf:
+  arista.eos.eos_vrf:
     aggregate:
-      - { name: test4, rd: "1:204" }
-      - { name: test5, rd: "1:205" }
+    - {name: test4, rd: 1:204}
+    - {name: test5, rd: 1:205}
     state: present
     purge: yes
 
 - name: Delete aggregate of VRFs
-  eos_vrf:
+  arista.eos.eos_vrf:
     aggregate:
-      - name: test2
-      - name: test3
-      - name: test4
-      - name: test5
+    - name: test2
+    - name: test3
+    - name: test4
+    - name: test5
     state: absent
 """
 

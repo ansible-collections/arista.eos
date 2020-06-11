@@ -31,17 +31,12 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["preview"],
-    "supported_by": "network",
-}
-
-DOCUMENTATION = """module: eos_lag_interfaces
-short_description: Lag interfaces resource module.
-version_added: "1.0.0"
+DOCUMENTATION = """
+module: eos_lag_interfaces
+short_description: LAG interfaces resource module
 description: This module manages attributes of link aggregation groups on Arista EOS
   devices.
+version_added: 1.0.0
 author: Nathaniel Case (@Qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
@@ -74,16 +69,16 @@ options:
             type: str
             choices:
             - active
-            - 'on'
+            - on
             - passive
   running_config:
     description:
-      - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the EOS device by executing
-        the command B(show running-config | section interfaces).
-      - The state I(parsed) reads the configuration from C(running_config) option and transforms
-        it into Ansible structured data as per the resource module's argspec and the value is then
-        returned in the I(parsed) key within the result.
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device by
+      executing the command B(show running-config | section interfaces).
+    - The state I(parsed) reads the configuration from C(running_config) option and
+      transforms it into Ansible structured data as per the resource module's argspec
+      and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
@@ -98,10 +93,10 @@ options:
     - gathered
     - parsed
     default: merged
+
 """
 
 EXAMPLES = """
----
 
 # Using merged
 
@@ -116,10 +111,10 @@ EXAMPLES = """
 - name: Merge provided LAG attributes with existing device configuration
   arista.eos.eos_lag_interfaces:
     config:
-      - name: 5
-        members:
-          - member: Ethernet2
-            mode: on
+    - name: 5
+      members:
+      - member: Ethernet2
+        mode: on
     state: merged
 
 # After state:
@@ -145,10 +140,10 @@ EXAMPLES = """
 - name: Replace all device configuration of specified LAGs with provided configuration
   arista.eos.eos_lag_interfaces:
     config:
-      - name: 5
-        members:
-          - member: Ethernet2
-            mode: on
+    - name: 5
+      members:
+      - member: Ethernet2
+        mode: on
     state: replaced
 
 # After state:
@@ -173,10 +168,10 @@ EXAMPLES = """
 - name: Override all device configuration of all LAG attributes with provided configuration
   arista.eos.eos_lag_interfaces:
     config:
-      - name: 10
-        members:
-          - member: Ethernet2
-            mode: on
+    - name: 10
+      members:
+      - member: Ethernet2
+        mode: on
     state: overridden
 
 # After state:
@@ -202,9 +197,9 @@ EXAMPLES = """
 - name: Delete LAG attributes of the given interfaces.
   arista.eos.eos_lag_interfaces:
     config:
-      - name: 5
-        members:
-          - member: Ethernet1
+    - name: 5
+      members:
+      - member: Ethernet1
     state: deleted
 
 # After state:
@@ -242,12 +237,12 @@ EXAMPLES = """
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_lag_interfaces:
     config:
-        - name: 5
-          members:
-            - member: Ethernet2
-              mode: on
-            - member: Ethernet1
-              mode: on
+    - name: 5
+      members:
+      - member: Ethernet2
+        mode: on
+      - member: Ethernet1
+        mode: on
     state: rendered
 # -----------
 # Output

@@ -9,23 +9,19 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 
-ANSIBLE_METADATA = {
-    "metadata_version": "1.1",
-    "status": ["deprecated"],
-    "supported_by": "network",
-}
-
-
-DOCUMENTATION = """module: eos_interface
+DOCUMENTATION = """
+module: eos_interface
 author: Ganesh Nalawade (@ganeshrn)
-short_description: Manage Interface on Arista EOS network devices
+short_description: (deprecated, removed after 2022-06-01) Manage Interface on Arista
+  EOS network devices
 description:
 - This module provides declarative management of Interfaces on Arista EOS network
   devices.
+version_added: 1.0.0
 deprecated:
-  removed_in: '2.13'
   alternative: eos_interfaces
   why: Updated modules released with more functionality
+  removed_at_date: '2022-06-01'
 notes:
 - Tested against EOS 4.15
 options:
@@ -104,61 +100,63 @@ options:
     - down
 extends_documentation_fragment:
 - arista.eos.eos
+
 """
 
 EXAMPLES = """
 - name: configure interface
-  eos_interface:
-      name: ethernet1
-      description: test-interface
-      speed: 100full
-      mtu: 512
+  arista.eos.eos_interface:
+    name: ethernet1
+    description: test-interface
+    speed: 100full
+    mtu: 512
 
 - name: remove interface
-  eos_interface:
+  arista.eos.eos_interface:
     name: ethernet1
     state: absent
 
 - name: make interface up
-  eos_interface:
+  arista.eos.eos_interface:
     name: ethernet1
-    enabled: True
+    enabled: true
 
 - name: make interface down
-  eos_interface:
+  arista.eos.eos_interface:
     name: ethernet1
-    enabled: False
+    enabled: false
 
 - name: Check intent arguments
-  eos_interface:
+  arista.eos.eos_interface:
     name: ethernet1
     state: up
     tx_rate: ge(0)
     rx_rate: le(0)
 
 - name: Check neighbors intent arguments
-  eos_interface:
+  arista.eos.eos_interface:
     name: ethernet1
     neighbors:
     - port: eth0
       host: netdev
 
-- name: Configure interface in disabled state and check if the operational state is disabled or not
-  eos_interface:
+- name: Configure interface in disabled state and check if the operational state is
+    disabled or not
+  arista.eos.eos_interface:
     name: ethernet1
-    enabled: False
+    enabled: false
     state: down
 
 - name: Add interface using aggregate
-  eos_interface:
+  arista.eos.eos_interface:
     aggregate:
-    - { name: ethernet1, mtu: 256, description: test-interface-1 }
-    - { name: ethernet2, mtu: 516, description: test-interface-2 }
+    - {name: ethernet1, mtu: 256, description: test-interface-1}
+    - {name: ethernet2, mtu: 516, description: test-interface-2}
     speed: 100full
     state: present
 
 - name: Delete interface using aggregate
-  eos_interface:
+  arista.eos.eos_interface:
     aggregate:
     - name: loopback9
     - name: loopback10
