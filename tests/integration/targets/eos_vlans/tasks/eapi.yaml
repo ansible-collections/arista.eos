@@ -1,10 +1,23 @@
 ---
+- name: collect all common test cases
+  find:
+    paths: '{{ role_path }}/tests/common'
+    patterns: '{{ testcase }}.yaml'
+    use_regex: true
+  register: test_cases
+  delegate_to: localhost
+
 - name: collect all eapi test cases
   find:
     paths: '{{ role_path }}/tests/eapi'
     patterns: '{{ testcase }}.yaml'
+    use_regex: true
+  register: eapi_cases
   delegate_to: localhost
-  register: test_cases
+
+- set_fact:
+    test_cases:
+      files: '{{ test_cases.files }} + {{ eapi_cases.files }}'
 
 - name: set test_items
   set_fact: test_items="{{ test_cases.files | map(attribute='path') | list }}"
