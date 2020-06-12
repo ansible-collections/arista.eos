@@ -90,6 +90,10 @@ plugin_routing:
       redirect: arista.eos.eos
     logging:
       redirect: arista.eos.eos
+    eos_ospfv2:
+      redirect: arista.eos.eos
+    ospfv2:
+      redirect: arista.eos.eos
     eos_static_route:
       redirect: arista.eos.eos
     static_route:
@@ -138,36 +142,34 @@ plugin_routing:
     interface:
       redirect: arista.eos.eos_interface
       deprecation:
-        warning_text: arista.eos.interface has been deprecated and will be removed
-          in a release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     eos_interface:
       deprecation:
-        warning_text: arista.eos.eos_interface has been deprecated and will be removed
-          in a release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     interfaces:
       redirect: arista.eos.eos_interfaces
     l2_interface:
       redirect: arista.eos.eos_l2_interface
       deprecation:
-        warning_text: arista.eos.l2_interface has been deprecated and will be removed
-          in a release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     eos_l2_interface:
       deprecation:
-        warning_text: arista.eos.eos_l2_interface has been deprecated and will be
-          removed in a release after 2022-6-01. See the plugin documentation for more
-          details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     l2_interfaces:
       redirect: arista.eos.eos_l2_interfaces
     l3_interface:
       redirect: arista.eos.eos_l3_interface
       deprecation:
-        warning_text: arista.eos.l3_interface has been deprecated and will be removed
-          in a release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     eos_l3_interface:
       deprecation:
-        warning_text: arista.eos.eos_l3_interface has been deprecated and will be
-          removed in a release after 2022-6-01. See the plugin documentation for more
-          details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     l3_interfaces:
       redirect: arista.eos.eos_l3_interfaces
     lacp:
@@ -179,12 +181,12 @@ plugin_routing:
     linkagg:
       redirect: arista.eos.eos_linkagg
       deprecation:
-        warning_text: arista.eos.linkagg has been deprecated and will be removed in
-          a release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     eos_linkagg:
       deprecation:
-        warning_text: arista.eos.eos_linkagg has been deprecated and will be removed
-          in a release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     lldp:
       redirect: arista.eos.eos_lldp
     lldp_global:
@@ -193,16 +195,17 @@ plugin_routing:
       redirect: arista.eos.eos_lldp_interfaces
     logging:
       redirect: arista.eos.eos_logging
+    ospfv2:
+      redirect: arista.eos.eos_ospfv2
     static_route:
       redirect: arista.eos.eos_static_route
       deprecation:
-        warning_text: arista.eos.static_route has been deprecated and will be removed
-          in a release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     eos_static_route:
       deprecation:
-        warning_text: arista.eos.eos_static_route has been deprecated and will be
-          removed in a release after 2022-6-01. See the plugin documentation for more
-          details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     static_routes:
       redirect: arista.eos.eos_static_routes
     system:
@@ -212,12 +215,12 @@ plugin_routing:
     vlan:
       redirect: arista.eos.eos_vlan
       deprecation:
-        warning_text: arista.eos.vlan has been deprecated and will be removed in a
-          release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     eos_vlan:
       deprecation:
-        warning_text: arista.eos.eos_vlan has been deprecated and will be removed
-          in a release after 2022-6-01. See the plugin documentation for more details
+        removal_date: '2022-06-01'
+        warning_text: See the plugin documentation for more details
     vlans:
       redirect: arista.eos.eos_vlans
     vrf:
