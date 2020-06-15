@@ -121,7 +121,7 @@ class Cliconf(CliconfBase):
             cmd = line["command"]
             if cmd == "end":
                 continue
-            elif cmd.startswith("banner") or multiline:
+            if cmd.startswith("banner") or multiline:
                 multiline = True
             elif cmd == "EOF" and multiline:
                 multiline = False

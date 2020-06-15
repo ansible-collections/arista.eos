@@ -100,6 +100,9 @@ options:
     - replaced
     - overridden
     - deleted
+    - parsed
+    - gathered
+    - rendered
     default: merged
 
 """

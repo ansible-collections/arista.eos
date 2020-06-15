@@ -68,9 +68,9 @@ options:
             - LAG mode for this interface.
             type: str
             choices:
-            - active
-            - on
-            - passive
+            - 'active'
+            - 'on'
+            - 'passive'
   running_config:
     description:
     - This option is used only with state I(parsed).

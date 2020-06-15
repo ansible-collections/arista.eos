@@ -46,12 +46,13 @@ options:
   config:
     description: The provided configuration
     type: list
-    suboptions:
+    elements: dict
+    subotions:
       name:
         description:
         - Full name of the interface, e.g. GigabitEthernet1.
         type: str
-        required: true
+        required: True
       description:
         description:
         - Interface description

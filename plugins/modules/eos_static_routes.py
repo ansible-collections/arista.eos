@@ -37,7 +37,6 @@ short_description: Static routes resource module
 description: This module configures and manages the attributes of static routes on
   Arista EOS platforms.
 version_added: 1.0.0
-version: 1.0.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
 - Tested against Arista EOS 4.20.10M

@@ -207,11 +207,10 @@ class AclsFacts(object):
                                     or addr
                                 ):
                                     break
-                                else:
-                                    src_port = (
-                                        src_port + " " + config_remainder
-                                    )
-                                    dev_config_remainder.pop(0)
+                                src_port = (
+                                    src_port + " " + config_remainder
+                                )
+                                dev_config_remainder.pop(0)
                             src_port = src_port.strip()
                             port_dict.update({src_opr: src_port})
                             source_dict.update({"port_protocol": port_dict})
@@ -262,11 +261,10 @@ class AclsFacts(object):
                                     or config_remainder in others
                                 ):
                                     break
-                                else:
-                                    dest_port = (
-                                        dest_port + " " + config_remainder
-                                    )
-                                    dev_config_remainder.pop(0)
+                                dest_port = (
+                                    dest_port + " " + config_remainder
+                                )
+                                dev_config_remainder.pop(0)
                             dest_port = dest_port.strip()
                             port_dict.update({dest_opr: dest_port})
                             dest_dict.update({"port_protocol": port_dict})
@@ -291,9 +289,8 @@ class AclsFacts(object):
                             for config_remainder in flaglist:
                                 if config_remainder not in flags:
                                     break
-                                else:
-                                    flags_dict.update({config_remainder: True})
-                                    dev_config_remainder.pop(0)
+                                flags_dict.update({config_remainder: True})
+                                dev_config_remainder.pop(0)
                         if bool(flags_dict):
                             tcp_dict.update({"flags": flags_dict})
                     if bool(tcp_dict):
