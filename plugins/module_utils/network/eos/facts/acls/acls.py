@@ -209,9 +209,7 @@ class AclsFacts(object):
                                     or addr
                                 ):
                                     break
-                                src_port = (
-                                    src_port + " " + config_remainder
-                                )
+                                src_port = src_port + " " + config_remainder
                                 dev_config_remainder.pop(0)
                             src_port = src_port.strip()
                             port_dict.update({src_opr: src_port})
@@ -263,9 +261,7 @@ class AclsFacts(object):
                                     or config_remainder in others
                                 ):
                                     break
-                                dest_port = (
-                                    dest_port + " " + config_remainder
-                                )
+                                dest_port = dest_port + " " + config_remainder
                                 dev_config_remainder.pop(0)
                             dest_port = dest_port.strip()
                             port_dict.update({dest_opr: dest_port})
