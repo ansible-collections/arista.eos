@@ -117,6 +117,8 @@ plugins/modules/eos_static_route.py validate-modules:parameter-type-not-in-doc
 plugins/modules/eos_static_route.py validate-modules:undocumented-parameter
 plugins/modules/eos_static_route.py validate-modules:doc-required-mismatch
 plugins/modules/eos_static_route.py validate-modules:doc-elements-mismatch
+plugins/modules/eos_interfaces.py validate-modules:doc-elements-mismatch
+plugins/modules/eos_interfaces.py validate-modules:parameter-list-no-elements
 plugins/modules/eos_facts.py validate-modules:doc-required-mismatch
 plugins/modules/eos_facts.py validate-modules:parameter-list-no-elements
 plugins/action/eos.py action-plugin-docs # base class for deprecated network platform modules using `connection: local`

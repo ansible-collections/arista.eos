@@ -47,7 +47,7 @@ options:
     description: The provided configuration
     type: list
     elements: dict
-    subotions:
+    suboptions:
       name:
         description:
         - Full name of the interface, e.g. GigabitEthernet1.

@@ -59,7 +59,9 @@ class AclsFacts(object):
 
         # split the config into instances of the resource
         find_pattern = r"(?:^|\n)(?:ip|ipv6) access\-list.*?(?=(?:^|\n)(?:ip|ipv6) access\-list|$)"
-        resources = [p for p in re.findall(find_pattern, data, re.DOTALL)]
+        resources = []
+        for p in re.findall(find_pattern, data, re.DOTALL):
+            resources.append(p)
 
         objs = []
         ipv4list = []

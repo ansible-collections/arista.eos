@@ -38,7 +38,6 @@ class InterfacesArgs(object):
 
     argument_spec = {
         "config": {
-            "elements": "dict",
             "options": {
                 "name": {"required": True, "type": "str"},
                 "description": {"required": False, "type": "str"},
