@@ -158,8 +158,10 @@ class Ospfv2(ConfigBase):
             del_cmds = w.copy()
             add_cmds = {}
             for h in have["processes"]:
-                if h["process_id"] == w["process_id"]:
-                    if w.get("vrf") and w["vrf"] != h["vrf"]:
+                if h["process_id"] != w["process_id"]:
+                    continue
+                if w.get("vrf"):
+                    if w["vrf"] != h["vrf"]:
                         self._module.fail_json(
                             msg="Value of vrf and process_id does not match the config present in the device"
                         )
