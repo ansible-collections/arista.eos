@@ -67,6 +67,10 @@ You can also join us on:
 
 See the [Ansible Community Guide](https://docs.ansible.com/ansible/latest/community/index.html) for details on contributing to Ansible.
 
+### Code of Conduct
+This collection follows the Ansible project's
+[Code of Conduct](https://docs.ansible.com/ansible/devel/community/code_of_conduct.html).
+Please read and familiarize yourself with this document.
 
 ## Changelogs
 <!--Add a link to a changelog.md file or an external docsite to cover this information. -->
