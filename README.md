@@ -26,7 +26,6 @@ You can also include it in a `requirements.yml` file and install it with `ansibl
 ---
 collections:
   - name: arista.eos
-    version: 0.0.1
 ```
 ## Using this collection
 
@@ -50,25 +49,7 @@ The following example task replaces configuration changes in the existing config
       state: replaced
 ```
 
-Alternately, you can call modules by their short name if you list the `arista.eos` collection in the playbook's `collections`, as follows:
-
-```yaml
----
-- hosts: eos01
-  gather_facts: false
-  connection: network_cli
-
-  collections:
-    - arista.eos
-
-  tasks:
-    - name: Delete vrf
-      eos_static_routes:
-        config:
-          - vrf: testvrf
-        state: "deleted"
-```
-
+**NOTE**: For Ansible 2.9, you may not see deprecation warnings when you run your playbooks with this collection. Use this documentation to track when a module is deprecated.
 
 ### See Also:
 
@@ -77,7 +58,7 @@ Alternately, you can call modules by their short name if you list the `arista.eo
 
 ## Contributing to this collection
 
-We welcome community contributions to this collection. If you find problems, please open an issue or create a PR against the [Arista EOS collection repository](https://github.com/ansible-collections/arista.eos).
+We welcome community contributions to this collection. If you find problems, please open an issue or create a PR against the [Arista EOS collection repository](https://github.com/ansible-collections/arista.eos). See [Contributing to Ansible-maintained collections](https://docs.ansible.com/ansible/devel/community/contributing_maintained_collections.html#contributing-maintained-collections) for complete details.
 
 You can also join us on:
 
