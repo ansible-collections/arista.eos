@@ -814,17 +814,18 @@ EXAMPLES = """
 #         }
 #     ]
 #
-- name: Replace Ospf configs
-  arista.eos.eos_ospfv2:
-    config:
-    - processes:
-      - process_id: 2
-        vrf: vrf01
-        point_to_point: true
-        redistribute:
-        - routes: isis
-          isis_level: level-1
-    state: replaced
+  - name: replace Ospf configs
+    arista.eos.eos_ospfv2:
+          config:
+            - processes:
+                - process_id: 2
+                  vrf: "vrf01"
+                  point_to_point: True
+                  redistribute:
+                    - routes: "isis"
+                      isis_level: "level-1"
+
+          state: replaced
 
 # After State:
 # -----------
