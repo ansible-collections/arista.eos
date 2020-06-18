@@ -1,5 +1,3 @@
-:orphan:
-
 .. _arista.eos.eos_l2_interfaces_module:
 
 

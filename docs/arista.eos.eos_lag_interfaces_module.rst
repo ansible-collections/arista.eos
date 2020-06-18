@@ -1,5 +1,3 @@
-:orphan:
-
 .. _arista.eos.eos_lag_interfaces_module:
 
 

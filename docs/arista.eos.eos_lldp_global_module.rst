@@ -1,5 +1,3 @@
-:orphan:
-
 .. _arista.eos.eos_lldp_global_module:
 
 
