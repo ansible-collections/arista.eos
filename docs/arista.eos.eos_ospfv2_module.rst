@@ -145,6 +145,24 @@ Parameters
                                     <td class="elbow-placeholder"></td>
                                                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>area_id</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Specifies a 32 bit number expressed in decimal or dotted-decimal notation.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>default_cost</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -258,19 +276,196 @@ Parameters
                                     <td class="elbow-placeholder"></td>
                                                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>id</b>
+                    <b>not_so_stubby</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">string</span>
+                        <span style="color: purple">dictionary</span>
                                                                     </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
                                                                 <td>
-                                            <div>Specifies a 32 bit number expressed in decimal or dotted-decimal notation.</div>
+                                            <div>Configures NSSA parameters.</div>
+                                                        </td>
+            </tr>
+                                                            <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>default_information_originate</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">dictionary</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Originate default Type 7 LSA.</div>
+                                                        </td>
+            </tr>
+                                                            <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>metric</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Metric for default route.</div>
                                                         </td>
             </tr>
                                 <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>metric_type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Metric type for default route.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>nssa_only</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Limit default advertisement to this NSSA area.</div>
+                                                        </td>
+            </tr>
+                    
+                                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>lsa</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>lsa parameters</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>no_summary</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Filter all type-3 LSAs in the nssa area.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>nssa_only</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Disable Type-7 LSA p-bit setting</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>set</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Set config up to not-so-stubby</div>
+                                                        </td>
+            </tr>
+                    
+                                                <tr>
                                                     <td class="elbow-placeholder"></td>
                                     <td class="elbow-placeholder"></td>
                                     <td class="elbow-placeholder"></td>
@@ -425,7 +620,7 @@ Parameters
                                     <td class="elbow-placeholder"></td>
                                                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>translate</b>
+                    <b>set</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -438,7 +633,7 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
-                                            <div>Enable LSA translation.</div>
+                                            <div>Set config up to nssa</div>
                                                         </td>
             </tr>
                     
@@ -585,7 +780,7 @@ Parameters
                                     <td class="elbow-placeholder"></td>
                                                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>summary_lsa</b>
+                    <b>no_summary</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -598,6 +793,30 @@ Parameters
                                                                                     </ul>
                                                                             </td>
                                                                 <td>
+                                            <div>If False , Filter all type-3 LSAs in the stub area.</div>
+                                                        </td>
+            </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>set</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>When true sets the stub config alone.</div>
                                                         </td>
             </tr>
                     
@@ -1201,6 +1420,28 @@ Parameters
                                             <div>percentage of &lt;count&gt; , when a warning should be raised.</div>
                                                         </td>
             </tr>
+                                <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>warning</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>Only give warning message when limit is exceeded</div>
+                                                        </td>
+            </tr>
                     
                                                 <tr>
                                                     <td class="elbow-placeholder"></td>
@@ -1344,30 +1585,6 @@ Parameters
                                                         </td>
             </tr>
                                                             <tr>
-                                                    <td class="elbow-placeholder"></td>
-                                    <td class="elbow-placeholder"></td>
-                                    <td class="elbow-placeholder"></td>
-                                    <td class="elbow-placeholder"></td>
-                                    <td class="elbow-placeholder"></td>
-                                                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>set</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                                                                                                                                                <li>no</li>
-                                                                                                                                                                                                <li>yes</li>
-                                                                                    </ul>
-                                                                            </td>
-                                                                <td>
-                                            <div>Set on-startup attribute.</div>
-                                                        </td>
-            </tr>
-                                <tr>
                                                     <td class="elbow-placeholder"></td>
                                     <td class="elbow-placeholder"></td>
                                     <td class="elbow-placeholder"></td>
@@ -1622,7 +1839,48 @@ Parameters
                                             <div>Include interface but without actively running OSPF.</div>
                                                         </td>
             </tr>
+                                                            <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>default</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                                                                                                                                                <li>no</li>
+                                                                                                                                                                                                <li>yes</li>
+                                                                                    </ul>
+                                                                            </td>
+                                                                <td>
+                                            <div>If True, Set all interfaces to passive by default</div>
+                                                        </td>
+            </tr>
                                 <tr>
+                                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                    <td class="elbow-placeholder"></td>
+                                                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>interface_list</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                                                                    </div>
+                                    </td>
+                                <td>
+                                                                                                                                                            </td>
+                                                                <td>
+                                            <div>Interface range.</div>
+                                                        </td>
+            </tr>
+                    
+                                                <tr>
                                                     <td class="elbow-placeholder"></td>
                                     <td class="elbow-placeholder"></td>
                                                 <td colspan="5">
@@ -1652,7 +1910,7 @@ Parameters
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
-                                                 / <span style="color: red">required</span>                    </div>
+                                                                    </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -1778,8 +2036,8 @@ Parameters
                     <b>router_id</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">-</span>
-                         / <span style="color: purple">elements=string</span>                                            </div>
+                        <span style="color: purple">string</span>
+                                                                    </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -1946,8 +2204,8 @@ Parameters
                     <b>timers</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                                                                    </div>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>                                            </div>
                                     </td>
                                 <td>
                                                                                                                                                             </td>
@@ -2357,7 +2615,8 @@ Examples
     # localhost#show running-config | section ospf
     # localhost#
 
-    arista.eos.eos_ospfv2:
+      - name: replace Ospf configs
+        arista.eos.eos_ospfv2:
           config:
             - processes:
                 - process_id: 1
@@ -2399,7 +2658,7 @@ Examples
                       default_cost: 20
                   max_lsa:
                     count: 8000
-                   ignore_count: 3
+                    ignore_count: 3
                     ignore_time: 6
                     reset_time: 20
                     threshold: 40
@@ -2657,17 +2916,18 @@ Examples
     #         }
     #     ]
     #
-    - name: Replace Ospf configs
-      arista.eos.eos_ospfv2:
-        config:
-        - processes:
-          - process_id: 2
-            vrf: vrf01
-            point_to_point: true
-            redistribute:
-            - routes: isis
-              isis_level: level-1
-        state: replaced
+      - name: replace Ospf configs
+        arista.eos.eos_ospfv2:
+              config:
+                - processes:
+                    - process_id: 2
+                      vrf: "vrf01"
+                      point_to_point: True
+                      redistribute:
+                        - routes: "isis"
+                          isis_level: "level-1"
+
+              state: replaced
 
     # After State:
     # -----------
@@ -2876,15 +3136,16 @@ Examples
     #         }
     #     ]
 
-    - name: override Ospf configs
-      arista.eos.eos_ospfv2:
-        config:
-        - processes:
-          - process_id: 2
-            vrf: vrf01
-            redistribute:
-            - routes: connected
-        state: overridden
+      - name: override Ospf configs
+        arista.eos.eos_ospfv2:
+              config:
+                - processes:
+                    - process_id: 2
+                      vrf: "vrf01"
+                      redistribute:
+                        - routes: "connected"
+
+              state: override
 
     # After State:
 
@@ -3034,12 +3295,13 @@ Examples
     #         }
     #     ]
 
-    - name: Delete instance
-      arista.eos.eos_ospfv2:
-        config:
-        - processes:
-          - process_id: 1
-        state: deleted
+      - name: Delete Ospf configs
+        arista.eos.eos_ospfv2:
+              config:
+                - processes:
+                    - process_id: 1
+
+              state: deleted
 
     # After State:
     # Commands:
@@ -3098,9 +3360,9 @@ Examples
     #    max-lsa 12000
     # localhost#
 
-    - name: Gather
-      arista.eos.eos_ospfv2:
-        state: gathered
+      - name: replace Ospf configs
+        arista.eos.eos_ospfv2:
+              state: gathered
 
     # "gathered": [
     #         {
@@ -3164,9 +3426,10 @@ Examples
     # router ospf 3 vrf vrf02
     #    redistribute static
 
-    - name: parse configs
-      arista.eos.eos_ospfv2:
-        running_config: "{{ lookup('file', './parsed.cfg') }}"
+      - name: Parse Ospf configs
+        arista.eos.eos_ospfv2:
+              running_config: "{{ lookup('file', './parsed.cfg') }}"
+              state: parsed
 
     # "parsed": [
     #         {
@@ -3258,43 +3521,43 @@ Examples
     # Using rendered:
     # --------------
 
-    - name: render Ospf configs
-      arista.eos.eos_ospfv2:
-        config:
-        - processes:
-          - process_id: 1
-            adjacency:
-              exchange_start:
-                threshold: 20045623
-            areas:
-            - filter:
-                address: 10.1.1.0/24
-              id: 0.0.0.2
-            - id: 0.0.0.50
-              range:
-                address: 172.20.0.0/16
-                cost: 34
-            default_information:
-              metric: 100
-              metric_type: 1
-              originate: true
-            distance:
-              intra_area: 85
-            max_lsa:
-              count: 8000
-              ignore_count: 3
-              ignore_time: 6
-              reset_time: 20
-              threshold: 40
-            networks:
-            - area: 0.0.0.0
-              prefix: 10.10.2.0/24
-            - area: 0.0.0.0
-              prefix: 10.10.3.0/24
-            redistribute:
-            - routes: static
-            router_id: 170.21.0.4
-        state: rendered
+      - name: replace Ospf configs
+        arista.eos.eos_ospfv2:
+              config:
+                - processes:
+                  - process_id: 1
+                    adjacency:
+                      exchange_start:
+                        threshold: 20045623
+                    areas:
+                    - filter:
+                        address: 10.1.1.0/24
+                      id: 0.0.0.2
+                    - id: 0.0.0.50
+                      range:
+                        address: 172.20.0.0/16
+                        cost: 34
+                    default_information:
+                      metric: 100
+                      metric_type: 1
+                      originate: true
+                    distance:
+                      intra_area: 85
+                    max_lsa:
+                      count: 8000
+                      ignore_count: 3
+                      ignore_time: 6
+                      reset_time: 20
+                      threshold: 40
+                    networks:
+                    - area: 0.0.0.0
+                      prefix: 10.10.2.0/24
+                    - area: 0.0.0.0
+                      prefix: 10.10.3.0/24
+                    redistribute:
+                    - routes: static
+                    router_id: 170.21.0.4
+              state: rendered
 
     # "rendered": [
     #         "router ospf 1",
@@ -3333,7 +3596,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <b>after</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">-</span>
+                      <span style="color: purple">list</span>
                                           </div>
                                     </td>
                 <td>when changed</td>
@@ -3351,7 +3614,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <b>before</b>
                     <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
                     <div style="font-size: small">
-                      <span style="color: purple">-</span>
+                      <span style="color: purple">list</span>
                                           </div>
                                     </td>
                 <td>always</td>

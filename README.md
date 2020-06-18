@@ -10,7 +10,7 @@ This collection has been tested against Arista EOS 4.20.10M.
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.9,<2.11**.
+This collection has been tested against following Ansible versions: **>=2.9.10,<2.11**.
 
 Plugins and modules within a collection may be tested with only specific Ansible versions. 
 A collection may contain metadata that identifies these versions. 
@@ -27,10 +27,12 @@ The Arista EOS collection supports ``network_cli``  and ``httpapi`` connections.
 Name | Description
 --- | ---
 [arista.eos.eos](https://github.com/ansible-collections/arista.eos/blob/master/docs/arista.eos.eos_cliconf.rst)|Use eos cliconf to run command on Arista EOS platform
+
 ### Httpapi plugins
 Name | Description
 --- | ---
 [arista.eos.eos](https://github.com/ansible-collections/arista.eos/blob/master/docs/arista.eos.eos_httpapi.rst)|Use eAPI to run command on eos platform
+
 ### Modules
 Name | Description
 --- | ---
@@ -64,6 +66,7 @@ Name | Description
 [arista.eos.eos_vlan](https://github.com/ansible-collections/arista.eos/blob/master/docs/arista.eos.eos_vlan_module.rst)|(deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS network devices
 [arista.eos.eos_vlans](https://github.com/ansible-collections/arista.eos/blob/master/docs/arista.eos.eos_vlans_module.rst)|VLANs resource module
 [arista.eos.eos_vrf](https://github.com/ansible-collections/arista.eos/blob/master/docs/arista.eos.eos_vrf_module.rst)|Manage VRFs on Arista EOS network devices
+
 <!--end collection content-->
 
 Click the ``Content`` button to see the list of content included in this collection.

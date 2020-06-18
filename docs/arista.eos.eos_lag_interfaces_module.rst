@@ -97,7 +97,7 @@ Parameters
                                 <td>
                                                                                                                             <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                                                                                                                                                 <li>active</li>
-                                                                                                                                                                                                                                                                    <li>yes</li>
+                                                                                                                                                                                                <li>on</li>
                                                                                                                                                                                                 <li>passive</li>
                                                                                     </ul>
                                                                             </td>
