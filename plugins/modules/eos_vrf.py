@@ -18,6 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
+# pylint: skip-file
 
 
 DOCUMENTATION = """
@@ -211,27 +212,26 @@ def map_config_to_obj(module):
         if len(splitted_line) == 1:
             index += 1
             continue
-        else:
-            obj = dict()
-            obj["name"] = splitted_line[0]
-            obj["rd"] = splitted_line[1]
+        obj = dict()
+        obj["name"] = splitted_line[0]
+        obj["rd"] = splitted_line[1]
+        obj["interfaces"] = []
+
+        if len(splitted_line) > 4:
             obj["interfaces"] = []
+            interfaces = splitted_line[4]
+            if interfaces.endswith(","):
+                while interfaces.endswith(","):
+                    # gather all comma separated interfaces
+                    if out_len <= index:
+                        break
+                    index += 1
+                    line = lines[index]
+                    vrf_line = re.split(r"\s{2,}", line.strip())
+                    interfaces += vrf_line[-1]
 
-            if len(splitted_line) > 4:
-                obj["interfaces"] = []
-                interfaces = splitted_line[4]
-                if interfaces.endswith(","):
-                    while interfaces.endswith(","):
-                        # gather all comma separated interfaces
-                        if out_len <= index:
-                            break
-                        index += 1
-                        line = lines[index]
-                        vrf_line = re.split(r"\s{2,}", line.strip())
-                        interfaces += vrf_line[-1]
-
-                for i in interfaces.split(","):
-                    obj["interfaces"].append(i.strip().lower())
+            for i in interfaces.split(","):
+                obj["interfaces"].append(i.strip().lower())
         index += 1
         objs.append(obj)
 

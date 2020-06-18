@@ -1,3 +1,4 @@
+# pylint: skip-file
 import json
 
 from ansible_collections.arista.eos.tests.unit.compat import unittest

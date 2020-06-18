@@ -3,6 +3,7 @@
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# pylint: skip-file
 """
 The eos acls fact class
 It is in this file the configuration is collected from the device
@@ -59,7 +60,9 @@ class AclsFacts(object):
 
         # split the config into instances of the resource
         find_pattern = r"(?:^|\n)(?:ip|ipv6) access\-list.*?(?=(?:^|\n)(?:ip|ipv6) access\-list|$)"
-        resources = [p for p in re.findall(find_pattern, data, re.DOTALL)]
+        resources = []
+        for p in re.findall(find_pattern, data, re.DOTALL):
+            resources.append(p)
 
         objs = []
         ipv4list = []
@@ -207,11 +210,8 @@ class AclsFacts(object):
                                     or addr
                                 ):
                                     break
-                                else:
-                                    src_port = (
-                                        src_port + " " + config_remainder
-                                    )
-                                    dev_config_remainder.pop(0)
+                                src_port = src_port + " " + config_remainder
+                                dev_config_remainder.pop(0)
                             src_port = src_port.strip()
                             port_dict.update({src_opr: src_port})
                             source_dict.update({"port_protocol": port_dict})
@@ -262,11 +262,8 @@ class AclsFacts(object):
                                     or config_remainder in others
                                 ):
                                     break
-                                else:
-                                    dest_port = (
-                                        dest_port + " " + config_remainder
-                                    )
-                                    dev_config_remainder.pop(0)
+                                dest_port = dest_port + " " + config_remainder
+                                dev_config_remainder.pop(0)
                             dest_port = dest_port.strip()
                             port_dict.update({dest_opr: dest_port})
                             dest_dict.update({"port_protocol": port_dict})
@@ -291,9 +288,8 @@ class AclsFacts(object):
                             for config_remainder in flaglist:
                                 if config_remainder not in flags:
                                     break
-                                else:
-                                    flags_dict.update({config_remainder: True})
-                                    dev_config_remainder.pop(0)
+                                flags_dict.update({config_remainder: True})
+                                dev_config_remainder.pop(0)
                         if bool(flags_dict):
                             tcp_dict.update({"flags": flags_dict})
                     if bool(tcp_dict):

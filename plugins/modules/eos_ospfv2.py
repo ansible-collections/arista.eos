@@ -3,6 +3,7 @@
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# pylint: skip-file
 
 #############################################
 #                WARNING                    #
@@ -54,7 +55,6 @@ options:
           process_id:
             description: ID of OSPFV2 process.
             type: int
-            required: true
           vrf:
             description: VRF name .
             type: str
@@ -74,7 +74,7 @@ options:
                     type: int
           router_id:
             description: 32-bit number assigned to a router running OSPFv2.
-            elements: str
+            type: str
           max_lsa:
             description: Specifies the switch behavior on reaching max lsa count.
             type: dict
@@ -96,6 +96,9 @@ options:
               reset_time:
                 description: Time in minutes, after which the shutdown counter resets.
                 type: int
+              warning:
+                description: Only give warning message when limit is exceeded
+                type: bool
           max_metric:
             description: Set maximum metric.
             type: dict
@@ -127,9 +130,6 @@ options:
                     description: Set maximum metric temporarily after reboot.
                     type: dict
                     suboptions:
-                      set:
-                        description: Set on-startup attribute.
-                        type: bool
                       wait_period:
                         description:
                         - Wait period in seconds after startup.
@@ -181,7 +181,7 @@ options:
           passive_interface:
             description: Include interface but without actively running OSPF.
             type: dict
-            suboption:
+            suboptions:
               interface_list:
                 description: Interface range.
                 type: str
@@ -240,7 +240,7 @@ options:
             type: list
             elements: dict
             suboptions:
-              id:
+              area_id:
                 description: Specifies a 32 bit number expressed in decimal or dotted-decimal
                   notation.
                 type: str
@@ -287,8 +287,37 @@ options:
                   nssa_only:
                     description: Disable Type-7 LSA p-bit setting
                     type: bool
-                  translate:
-                    description: Enable LSA translation.
+                  set:
+                    description: Set config up to nssa
+                    type: bool
+              not_so_stubby:
+                description: Configures NSSA parameters.
+                type: dict
+                suboptions:
+                  default_information_originate:
+                    description: Originate default Type 7 LSA.
+                    type: dict
+                    suboptions:
+                      metric:
+                        description: Metric for default route.
+                        type: int
+                      metric_type:
+                        description: Metric type for default route.
+                        type: int
+                      nssa_only:
+                        description: Limit default advertisement to this NSSA area.
+                        type: bool
+                  lsa:
+                    description: lsa parameters
+                    type: bool
+                  no_summary:
+                    description: Filter all type-3 LSAs in the nssa area.
+                    type: bool
+                  nssa_only:
+                    description: Disable Type-7 LSA p-bit setting
+                    type: bool
+                  set:
+                    description: Set config up to not-so-stubby
                     type: bool
               range:
                 description: Configure route summarization.
@@ -313,8 +342,11 @@ options:
                 description: Stub area.
                 type: dict
                 suboptions:
-                  summary_lsa:
-                    desctiption: If False , Filter all type-3 LSAs in the stub area.
+                  no_summary:
+                    description: If False , Filter all type-3 LSAs in the stub area.
+                    type: bool
+                  set:
+                    description: When true sets the stub config alone.
                     type: bool
           auto_cost:
             description: Set auto-cost.
@@ -397,7 +429,8 @@ options:
                 type: int
           timers:
             description: Configure OSPF timers.
-            type: dict
+            type: list
+            elements: dict
             suboptions:
               lsa:
                 description: Configure OSPF LSA timers.
@@ -479,7 +512,8 @@ EXAMPLES = """
 # localhost#show running-config | section ospf
 # localhost#
 
-arista.eos.eos_ospfv2:
+  - name: replace Ospf configs
+    arista.eos.eos_ospfv2:
       config:
         - processes:
             - process_id: 1
@@ -521,7 +555,7 @@ arista.eos.eos_ospfv2:
                   default_cost: 20
               max_lsa:
                 count: 8000
-               ignore_count: 3
+                ignore_count: 3
                 ignore_time: 6
                 reset_time: 20
                 threshold: 40
@@ -999,15 +1033,16 @@ arista.eos.eos_ospfv2:
 #         }
 #     ]
 
-- name: override Ospf configs
-  arista.eos.eos_ospfv2:
-    config:
-    - processes:
-      - process_id: 2
-        vrf: vrf01
-        redistribute:
-        - routes: connected
-    state: overridden
+  - name: override Ospf configs
+    arista.eos.eos_ospfv2:
+          config:
+            - processes:
+                - process_id: 2
+                  vrf: "vrf01"
+                  redistribute:
+                    - routes: "connected"
+
+          state: override
 
 # After State:
 
@@ -1157,12 +1192,13 @@ arista.eos.eos_ospfv2:
 #         }
 #     ]
 
-- name: Delete instance
-  arista.eos.eos_ospfv2:
-    config:
-    - processes:
-      - process_id: 1
-    state: deleted
+  - name: Delete Ospf configs
+    arista.eos.eos_ospfv2:
+          config:
+            - processes:
+                - process_id: 1
+
+          state: deleted
 
 # After State:
 # Commands:
@@ -1221,9 +1257,9 @@ arista.eos.eos_ospfv2:
 #    max-lsa 12000
 # localhost#
 
-- name: Gather
-  arista.eos.eos_ospfv2:
-    state: gathered
+  - name: replace Ospf configs
+    arista.eos.eos_ospfv2:
+          state: gathered
 
 # "gathered": [
 #         {
@@ -1287,9 +1323,10 @@ arista.eos.eos_ospfv2:
 # router ospf 3 vrf vrf02
 #    redistribute static
 
-- name: parse configs
-  arista.eos.eos_ospfv2:
-    running_config: "{{ lookup('file', './parsed.cfg') }}"
+  - name: Parse Ospf configs
+    arista.eos.eos_ospfv2:
+          running_config: "{{ lookup('file', './parsed.cfg') }}"
+          state: parsed
 
 # "parsed": [
 #         {
@@ -1381,43 +1418,43 @@ arista.eos.eos_ospfv2:
 # Using rendered:
 # --------------
 
-- name: render Ospf configs
-  arista.eos.eos_ospfv2:
-    config:
-    - processes:
-      - process_id: 1
-        adjacency:
-          exchange_start:
-            threshold: 20045623
-        areas:
-        - filter:
-            address: 10.1.1.0/24
-          id: 0.0.0.2
-        - id: 0.0.0.50
-          range:
-            address: 172.20.0.0/16
-            cost: 34
-        default_information:
-          metric: 100
-          metric_type: 1
-          originate: true
-        distance:
-          intra_area: 85
-        max_lsa:
-          count: 8000
-          ignore_count: 3
-          ignore_time: 6
-          reset_time: 20
-          threshold: 40
-        networks:
-        - area: 0.0.0.0
-          prefix: 10.10.2.0/24
-        - area: 0.0.0.0
-          prefix: 10.10.3.0/24
-        redistribute:
-        - routes: static
-        router_id: 170.21.0.4
-    state: rendered
+  - name: replace Ospf configs
+    arista.eos.eos_ospfv2:
+          config:
+            - processes:
+              - process_id: 1
+                adjacency:
+                  exchange_start:
+                    threshold: 20045623
+                areas:
+                - filter:
+                    address: 10.1.1.0/24
+                  id: 0.0.0.2
+                - id: 0.0.0.50
+                  range:
+                    address: 172.20.0.0/16
+                    cost: 34
+                default_information:
+                  metric: 100
+                  metric_type: 1
+                  originate: true
+                distance:
+                  intra_area: 85
+                max_lsa:
+                  count: 8000
+                  ignore_count: 3
+                  ignore_time: 6
+                  reset_time: 20
+                  threshold: 40
+                networks:
+                - area: 0.0.0.0
+                  prefix: 10.10.2.0/24
+                - area: 0.0.0.0
+                  prefix: 10.10.3.0/24
+                redistribute:
+                - routes: static
+                router_id: 170.21.0.4
+          state: rendered
 
 # "rendered": [
 #         "router ospf 1",
@@ -1442,12 +1479,14 @@ before:
   sample: >
     The configuration returned will always be in the same format
      of the parameters above.
+  type: list
 after:
   description: The resulting configuration model invocation.
   returned: when changed
   sample: >
     The configuration returned will always be in the same format
      of the parameters above.
+  type: list
 commands:
   description: The set of commands pushed to the remote device.
   returned: always

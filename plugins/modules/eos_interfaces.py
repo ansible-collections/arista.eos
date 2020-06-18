@@ -3,6 +3,7 @@
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# pylint: skip-file
 
 ##############################################
 #                 WARNING                    #
@@ -46,12 +47,13 @@ options:
   config:
     description: The provided configuration
     type: list
+    elements: dict
     suboptions:
       name:
         description:
         - Full name of the interface, e.g. GigabitEthernet1.
         type: str
-        required: true
+        required: True
       description:
         description:
         - Interface description

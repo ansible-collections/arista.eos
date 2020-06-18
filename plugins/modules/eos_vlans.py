@@ -3,6 +3,7 @@
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# pylint: skip-file
 
 #############################################
 #                WARNING                    #
@@ -56,15 +57,6 @@ options:
         - ID of the VLAN. Range 1-4094
         type: int
         required: true
-      running_config:
-        description:
-        - This option is used only with state I(parsed).
-        - The value of this option should be the output received from the EOS device
-          by executing the command B(show running-config | section vlan).
-        - The state I(parsed) reads the configuration from C(running_config) option
-          and transforms it into Ansible structured data as per the resource module's
-          argspec and the value is then returned in the I(parsed) key within the result.
-        type: str
       state:
         description:
         - Operational state of the VLAN
@@ -72,6 +64,15 @@ options:
         choices:
         - active
         - suspend
+  running_config:
+    description:
+    - This option is used only with state I(parsed).
+    - The value of this option should be the output received from the EOS device
+      by executing the command B(show running-config | section vlan).
+    - The state I(parsed) reads the configuration from C(running_config) option
+      and transforms it into Ansible structured data as per the resource module's
+      argspec and the value
+    type: str
   state:
     description:
     - The state of the configuration after module completion

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# pylint: skip-file
 
 ##############################################
 #                 WARNING                    #
@@ -49,7 +50,10 @@ class L2_interfacesArgs(object):
                 "trunk": {
                     "options": {
                         "native_vlan": {"type": "int"},
-                        "trunk_allowed_vlans": {"type": "list"},
+                        "trunk_allowed_vlans": {
+                            "type": "list",
+                            "elements": "str",
+                        },
                     },
                     "type": "dict",
                 },
