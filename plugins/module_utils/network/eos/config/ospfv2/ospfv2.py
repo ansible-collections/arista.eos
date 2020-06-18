@@ -3,6 +3,7 @@
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# pylint: skip-file
 """
 The eos_ospfv2 class
 It is in this file where the current configuration (as dict)
@@ -160,13 +161,12 @@ class Ospfv2(ConfigBase):
             for h in have["processes"]:
                 if h["process_id"] != w["process_id"]:
                     continue
-                else:
-                    if w.get("vrf"):
-                        if w["vrf"] != h["vrf"]:
-                            self._module.fail_json(
-                                msg="Value of vrf and process_id does not match the config present in the device"
-                            )
-                            break
+                if w.get("vrf"):
+                    if w["vrf"] != h["vrf"]:
+                        self._module.fail_json(
+                            msg="Value of vrf and process_id does not match the config present in the device"
+                        )
+                        break
                 del_instance_list = self.compare_dicts(h, w)
                 if del_instance_list:
                     del_cmds = {"processes": del_instance_list}

@@ -1,4 +1,6 @@
 ---
+- include_tasks: _reset_config.yaml
+
 - become: true
   arista.eos.eos_facts:
     gather_network_resources: vlans

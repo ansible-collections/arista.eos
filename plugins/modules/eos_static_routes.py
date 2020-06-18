@@ -3,6 +3,7 @@
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# pylint: skip-file
 
 #############################################
 #                WARNING                    #
@@ -37,7 +38,6 @@ short_description: Static routes resource module
 description: This module configures and manages the attributes of static routes on
   Arista EOS platforms.
 version_added: 1.0.0
-version: 1.0.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
 - Tested against Arista EOS 4.20.10M

@@ -16,6 +16,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Ansible.  If not, see <http://www.gnu.org/licenses/>.
 #
+# pylint: skip-file
+
 from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
@@ -121,7 +123,7 @@ class Cliconf(CliconfBase):
             cmd = line["command"]
             if cmd == "end":
                 continue
-            elif cmd.startswith("banner") or multiline:
+            if cmd.startswith("banner") or multiline:
                 multiline = True
             elif cmd == "EOF" and multiline:
                 multiline = False

@@ -3,6 +3,7 @@
 # Copyright 2019 Red Hat
 # GNU General Public License v3.0+
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+# pylint: skip-file
 
 #############################################
 #                WARNING                    #
@@ -100,6 +101,9 @@ options:
     - replaced
     - overridden
     - deleted
+    - parsed
+    - gathered
+    - rendered
     default: merged
 
 """
