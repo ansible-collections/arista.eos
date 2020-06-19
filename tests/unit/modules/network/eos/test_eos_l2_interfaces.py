@@ -108,7 +108,9 @@ class TestEosL2InterfacesModule(TestEosModule):
                     dict(
                         name="Ethernet2",
                         mode="trunk",
-                        trunk=dict(native_vlan=50),
+                        trunk=dict(
+                            native_vlan=50, trunk_allowed_vlans=[3, "5"]
+                        ),
                     ),
                     dict(name="Ethernet3", access=dict(vlan=30)),
                 ],
@@ -118,6 +120,7 @@ class TestEosL2InterfacesModule(TestEosModule):
         commands = [
             "interface Ethernet2",
             "switchport trunk native vlan 50",
+            "switchport trunk allowed vlan 3,5",
             "interface Ethernet3",
             "switchport access vlan 30",
         ]
