@@ -3,7 +3,6 @@
 
 # Copyright: (c) 2017, Ansible by Red Hat, inc
 # GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
-# pylint: skip-file
 
 from __future__ import absolute_import, division, print_function
 
@@ -13,8 +12,8 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: eos_static_route
 author: Trishna Guha (@trishnaguha)
-short_description: (deprecated, removed after 2022-06-01) (deprecated, removed after
-  2022-06-01) Manage static IP routes on Arista EOS network devices
+short_description: (deprecated, removed after 2022-06-01) Manage static IP
+  routes on Arista EOS network devices
 description:
 - This module provides declarative management of static IP routes on Arista EOS network
   devices.

@@ -1,4 +1,3 @@
-
 .. _arista.eos.eos_httpapi:
 
 

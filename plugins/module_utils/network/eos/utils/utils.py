@@ -4,7 +4,6 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 # utils
-# pylint: skip-file
 
 from __future__ import absolute_import, division, print_function
 
