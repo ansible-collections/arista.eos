@@ -1,0 +1,110 @@
+ancestor: null
+releases:
+  1.0.0:
+    modules:
+    - description: ACL interfaces resource module
+      name: eos_acl_interfaces
+      namespace: ''
+    - description: ACLs resource module
+      name: eos_acls
+      namespace: ''
+    - description: Manage multiline banners on Arista EOS devices
+      name: eos_banner
+      namespace: ''
+    - description: Configure global BGP protocol settings on Arista EOS.
+      name: eos_bgp
+      namespace: ''
+    - description: Run arbitrary commands on an Arista EOS device
+      name: eos_command
+      namespace: ''
+    - description: Manage Arista EOS configuration sections
+      name: eos_config
+      namespace: ''
+    - description: Manage and configure Arista EOS eAPI.
+      name: eos_eapi
+      namespace: ''
+    - description: Collect facts from remote devices running Arista EOS
+      name: eos_facts
+      namespace: ''
+    - description: (deprecated, removed after 2022-06-01) Manage Interface on Arista
+        EOS network devices
+      name: eos_interface
+      namespace: ''
+    - description: Interfaces resource module
+      name: eos_interfaces
+      namespace: ''
+    - description: (deprecated, removed after 2022-06-01) Manage L2 interfaces on
+        Arista EOS network devices.
+      name: eos_l2_interface
+      namespace: ''
+    - description: L2 interfaces resource module
+      name: eos_l2_interfaces
+      namespace: ''
+    - description: (deprecated, removed after 2022-06-01) Manage L3 interfaces on
+        Arista EOS network devices.
+      name: eos_l3_interface
+      namespace: ''
+    - description: L3 interfaces resource module
+      name: eos_l3_interfaces
+      namespace: ''
+    - description: LACP resource module
+      name: eos_lacp
+      namespace: ''
+    - description: LACP interfaces resource module
+      name: eos_lacp_interfaces
+      namespace: ''
+    - description: LAG interfaces resource module
+      name: eos_lag_interfaces
+      namespace: ''
+    - description: (deprecated, removed after 2022-06-01) Manage link aggregation
+        groups on Arista EOS network devices
+      name: eos_linkagg
+      namespace: ''
+    - description: Manage LLDP configuration on Arista EOS network devices
+      name: eos_lldp
+      namespace: ''
+    - description: LLDP resource module
+      name: eos_lldp_global
+      namespace: ''
+    - description: LLDP interfaces resource module
+      name: eos_lldp_interfaces
+      namespace: ''
+    - description: Manage logging on network devices
+      name: eos_logging
+      namespace: ''
+    - description: OSPFv2 resource module
+      name: eos_ospfv2
+      namespace: ''
+    - description: (deprecated, removed after 2022-06-01) Manage static IP routes
+        on Arista EOS network devices
+      name: eos_static_route
+      namespace: ''
+    - description: Static routes resource module
+      name: eos_static_routes
+      namespace: ''
+    - description: Manage the system attributes on Arista EOS devices
+      name: eos_system
+      namespace: ''
+    - description: Manage the collection of local users on EOS devices
+      name: eos_user
+      namespace: ''
+    - description: (deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS
+        network devices
+      name: eos_vlan
+      namespace: ''
+    - description: VLANs resource module
+      name: eos_vlans
+      namespace: ''
+    - description: Manage VRFs on Arista EOS network devices
+      name: eos_vrf
+      namespace: ''
+    plugins:
+      cliconf:
+      - description: Use eos cliconf to run command on Arista EOS platform
+        name: eos
+        namespace: null
+      httpapi:
+      - description: Use eAPI to run command on eos platform
+        name: eos
+        namespace: null
+    release_date: '2020-06-23'
