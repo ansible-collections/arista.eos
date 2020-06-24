@@ -177,20 +177,13 @@ class AFNeighbors(CliProvider):
 
     def _render_graceful_restart(self, item, config=None):
         cmd = "neighbor %s graceful-restart" % item["neighbor"]
+        if item["graceful_restart"] is False:
+            cmd = "no " + cmd
         if config:
             config_el = [x.strip() for x in config.split('\n')]
-        if item["graceful_restart"] is False:
-            no_cmd = "no " + cmd
-            if config:
-                if no_cmd in config_el:
-                    return 
-                else:
-                    return no_cmd
-            else:
-                return no_cmd 
-        else:
-            if not config or cmd not in config_el:
-                return cmd
+            if cmd in config_el:
+                return 
+        return cmd
 
     def _render_weight(self, item, config=None):
         cmd = "neighbor %s weight %s" % (item["neighbor"], item["weight"])
