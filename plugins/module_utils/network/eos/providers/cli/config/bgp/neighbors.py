@@ -14,6 +14,8 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
     CliProvider,
 )
+
+
 class Neighbors(CliProvider):
     def render(self, config=None, nbr_list=None):
         commands = list()
@@ -180,9 +182,9 @@ class AFNeighbors(CliProvider):
         if item["graceful_restart"] is False:
             cmd = "no " + cmd
         if config:
-            config_el = [x.strip() for x in config.split('\n')]
+            config_el = [x.strip() for x in config.split("\n")]
             if cmd in config_el:
-                return 
+                return
         return cmd
 
     def _render_weight(self, item, config=None):
