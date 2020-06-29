@@ -38,7 +38,6 @@ class Neighbors(CliProvider):
                         resp = meth(item, config)
                         if resp:
                             neighbor_commands.extend(to_list(resp))
-
             commands.extend(neighbor_commands)
             safe_list.append(context)
 
@@ -171,7 +170,7 @@ class AFNeighbors(CliProvider):
 
     def _render_default_originate(self, item, config=None):
         cmd = "neighbor %s default-originate" % item["neighbor"]
-        if item["activate"] is False:
+        if item["default_originate"] is False:
             if not config or cmd in config:
                 cmd = "no %s" % cmd
                 return cmd
@@ -180,12 +179,13 @@ class AFNeighbors(CliProvider):
 
     def _render_graceful_restart(self, item, config=None):
         cmd = "neighbor %s graceful-restart" % item["neighbor"]
-        if item["activate"] is False:
-            if not config or cmd in config:
-                cmd = "no %s" % cmd
-                return cmd
-        elif not config or cmd not in config:
-            return cmd
+        if item["graceful_restart"] is False:
+            cmd = "no " + cmd
+        if config:
+            config_el = [x.strip() for x in config.split("\n")]
+            if cmd in config_el:
+                return
+        return cmd
 
     def _render_weight(self, item, config=None):
         cmd = "neighbor %s weight %s" % (item["neighbor"], item["weight"])

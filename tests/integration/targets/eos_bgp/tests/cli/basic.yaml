@@ -251,7 +251,7 @@
 
             - neighbor: 192.0.2.15
               activate: true
-              graceful_restart: true
+              graceful_restart: false
 
 - assert:
     that:
@@ -261,7 +261,7 @@
       - "'neighbor 203.0.113.10 activate' in result.commands"
       - "'neighbor 203.0.113.10 default-originate' in result.commands"
       - "'neighbor 192.0.2.15 activate' in result.commands"
-      - "'neighbor 192.0.2.15 graceful-restart' in result.commands"
+      - "'no neighbor 192.0.2.15 graceful-restart' in result.commands"
 
 - name: Configure BGP neighbors under address family mode (idempotent)
   become: true
