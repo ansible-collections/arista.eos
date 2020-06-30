@@ -81,4 +81,3 @@
   assert:
     that: "{{ baseconfig['after'] | symmetric_difference(revert['after']) |length\
       \ == 0 }}"
-
