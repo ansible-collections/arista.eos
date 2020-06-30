@@ -255,10 +255,10 @@ def set_interface(want, have):
     commands = []
 
     want_ipv4 = set(
-        tuple(address.items()) for address in want.get("ipv4") or []
+        tuple(sorted(address.items())) for address in want.get("ipv4") or []
     )
     have_ipv4 = set(
-        tuple(address.items()) for address in have.get("ipv4") or []
+        tuple(sorted(address.items())) for address in have.get("ipv4") or []
     )
     for address in want_ipv4 - have_ipv4:
         address = dict(address)
@@ -286,12 +286,11 @@ def set_interface(want, have):
 
 def clear_interface(want, have):
     commands = []
-
     want_ipv4 = set(
-        tuple(address.items()) for address in want.get("ipv4") or []
+        tuple(sorted(address.items())) for address in want.get("ipv4") or []
     )
     have_ipv4 = set(
-        tuple(address.items()) for address in have.get("ipv4") or []
+        tuple(sorted(address.items())) for address in have.get("ipv4") or []
     )
     if not want_ipv4 and have_ipv4:
         commands.append("no ip address")
