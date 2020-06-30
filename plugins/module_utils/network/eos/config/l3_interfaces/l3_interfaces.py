@@ -255,10 +255,10 @@ def set_interface(want, have):
     commands = []
 
     want_ipv4 = set(
-        tuple(address.items()) for address in want.get("ipv4") or []
+        tuple(sorted(address.items())) for address in want.get("ipv4") or []
     )
     have_ipv4 = set(
-        tuple(address.items()) for address in have.get("ipv4") or []
+        tuple(sorted(address.items())) for address in have.get("ipv4") or []
     )
     for address in want_ipv4 - have_ipv4:
         address = dict(address)
@@ -273,10 +273,10 @@ def set_interface(want, have):
         commands.append(address_cmd)
 
     want_ipv6 = set(
-        tuple(address.items()) for address in want.get("ipv6") or []
+        tuple(sorted(address.items())) for address in want.get("ipv6") or []
     )
     have_ipv6 = set(
-        tuple(address.items()) for address in have.get("ipv6") or []
+        tuple(sorted(address.items())) for address in have.get("ipv6") or []
     )
     for address in want_ipv6 - have_ipv6:
         address = dict(address)
@@ -288,10 +288,10 @@ def clear_interface(want, have):
     commands = []
 
     want_ipv4 = set(
-        tuple(address.items()) for address in want.get("ipv4") or []
+        tuple(sorted(address.items())) for address in want.get("ipv4") or []
     )
     have_ipv4 = set(
-        tuple(address.items()) for address in have.get("ipv4") or []
+        tuple(sorted(address.items())) for address in have.get("ipv4") or []
     )
     if not want_ipv4 and have_ipv4:
         commands.append("no ip address")
@@ -312,10 +312,10 @@ def clear_interface(want, have):
                 break
 
     want_ipv6 = set(
-        tuple(address.items()) for address in want.get("ipv6") or []
+        tuple(sorted(address.items())) for address in want.get("ipv6") or []
     )
     have_ipv6 = set(
-        tuple(address.items()) for address in have.get("ipv6") or []
+        tuple(sorted(address.items())) for address in have.get("ipv6") or []
     )
     for address in have_ipv6 - want_ipv6:
         address = dict(address)
