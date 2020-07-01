@@ -79,5 +79,4 @@
 
 - name: Assert that config was reverted
   assert:
-    that: "{{ baseconfig['after'] | symmetric_difference(revert['after']) |length\
-      \ == 0 }}"
+    that: "{{ baseconfig['after'] | symmetric_difference(revert['after']) == [] }}"
