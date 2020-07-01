@@ -63,8 +63,7 @@
     - name: Assert that changes were applied
       assert:
         that:
-          - "{{ round_trip['commands'] | symmetric_difference(result['commands'])\
-            \ |length == 0 }}"
+          - "{{ round_trip['commands'] | symmetric_difference(result['commands']) == [] }}"
 
     - name: Revert back to base config using facts round trip
       become: true
@@ -75,8 +74,7 @@
 
     - name: Assert that config was reverted
       assert:
-        that: "{{ base_config['after'] | symmetric_difference(revert['after']) |length\
-          \ == 0 }}"
+        that: "{{ base_config['after'] | symmetric_difference(revert['after']) == [] }}"
 
 
   always:
