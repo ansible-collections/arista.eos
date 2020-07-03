@@ -26,8 +26,7 @@
 
 - assert:
     that:
-      - ansible_facts.network_resources.interfaces|symmetric_difference(baseconfig.after)|length
-        == 0
+      - ansible_facts.network_resources.interfaces|symmetric_difference(baseconfig.after) == []
 
 - name: Apply the provided configuration (config to be reverted)
   become: true
@@ -54,8 +53,7 @@
 
 - assert:
     that:
-      - expected_config|difference(result.after)|length
-        == 0
+      - expected_config|difference(result.after) == []
 
 - name: Revert back to base config using facts round trip
   become: true
