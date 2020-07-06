@@ -8,7 +8,6 @@
         state: suspend
 
     config2:
-      
       - vlan_id: 30
         name: thirty
 
