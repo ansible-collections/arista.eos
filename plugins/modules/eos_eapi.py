@@ -54,6 +54,7 @@ options:
       protocol is enabled.  This argument accepts integer values in the valid range
       of 1 to 65535.
     default: 80
+    type: int
   https:
     description:
     - The C(https) argument controls the operating state of the HTTPS transport protocol
@@ -71,6 +72,7 @@ options:
       protocol is enabled.  This argument accepts integer values in the valid range
       of 1 to 65535.
     default: 443
+    type: int
   local_http:
     description:
     - The C(local_http) argument controls the operating state of the local HTTP transport
@@ -88,6 +90,7 @@ options:
       protocol is enabled.  This argument accepts integer values in the valid range
       of 1 to 65535.
     default: 8080
+    type: int
   socket:
     description:
     - The C(socket) argument controls the operating state of the UNIX Domain Socket
@@ -112,6 +115,7 @@ options:
       table.  This value requires the VRF to already be created otherwise the task
       will fail.
     default: default
+    type: str
   config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -119,11 +123,13 @@ options:
       are times when it is not desirable to have the task get the current running-config
       for every task in a playbook.  The I(config) argument allows the implementer
       to pass in the configuration to use as the base config for comparison.
+    type: str
   state:
     description:
     - The C(state) argument controls the operational state of eAPI on the remote device.  When
       this argument is set to C(started), eAPI is enabled to receive requests and
       when this argument is C(stopped), eAPI is disabled and will not receive requests.
+    type: str
     default: started
     choices:
     - started
@@ -396,11 +402,11 @@ def main():
     """
     argument_spec = dict(
         http=dict(aliases=["enable_http"], type="bool"),
-        http_port=dict(type="int"),
-        https=dict(aliases=["enable_https"], type="bool"),
-        https_port=dict(type="int"),
+        http_port=dict(type="int", default=80),
+        https=dict(aliases=["enable_https"], type="bool", default=True),
+        https_port=dict(type="int", default=443),
         local_http=dict(aliases=["enable_local_http"], type="bool"),
-        local_http_port=dict(type="int"),
+        local_http_port=dict(type="int", default=8080),
         socket=dict(aliases=["enable_socket"], type="bool"),
         timeout=dict(type="int", default=30),
         vrf=dict(default="default"),

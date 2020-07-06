@@ -28,12 +28,14 @@ options:
   name:
     description:
     - Name of the interface
+    type: str
     required: true
     aliases:
     - interface
   mode:
     description:
     - Mode in which interface needs to be configured.
+    type: str
     choices:
     - access
     - trunk
@@ -41,27 +43,70 @@ options:
     description:
     - Configure given VLAN in access port. If C(mode=access), used as the access VLAN
       ID.
+    type: str
   native_vlan:
     description:
     - Native VLAN to be configured in trunk port. If C(mode=trunk), used as the trunk
       native VLAN ID.
+    type: str
   trunk_allowed_vlans:
     description:
     - List of allowed VLANs in a given trunk port. If C(mode=trunk), these are the
       ONLY VLANs that will be configured on the trunk, i.e. C(2-10,15).
+    type: str
     aliases:
     - trunk_vlans
   aggregate:
     description:
     - List of Layer-2 interface definitions.
+    type: list
+    elements: dict
+    suboptions:
+      name:
+        description:
+        - Name of the interface
+        type: str
+        required: true
+      access_vlan:
+        description:
+        - Configure given VLAN in access port. If C(mode=access), used as the access VLAN
+          ID.
+        type: str
+      native_vlan:
+        description:
+        - Native VLAN to be configured in trunk port. If C(mode=trunk), used as the trunk
+          native VLAN ID.
+        type: str
+      trunk_allowed_vlans:
+        description:
+        - List of allowed VLANs in a given trunk port. If C(mode=trunk), these are the
+          ONLY VLANs that will be configured on the trunk, i.e. C(2-10,15).
+        type: str
+        aliases:
+        - trunk_vlans
+      mode:
+        description:
+        - Mode in which interface needs to be configured.
+        type: str
+        choices:
+        - access
+        - trunk
+      state:
+        description:
+        - Manage the state of the Layer-2 Interface configuration.
+        type: str
+        default: present
+        choices:
+        - present
+        - absent
   state:
     description:
     - Manage the state of the Layer-2 Interface configuration.
+    type: str
     default: present
     choices:
     - present
     - absent
-    - unconfigured
 extends_documentation_fragment:
 - arista.eos.eos
 
@@ -367,7 +412,7 @@ def main():
     """ main entry point for module execution
     """
     element_spec = dict(
-        name=dict(type="str", aliases=["interface"]),
+        name=dict(type="str", aliases=["interface"], required=True),
         mode=dict(choices=["access", "trunk"]),
         access_vlan=dict(type="str"),
         native_vlan=dict(type="str"),
@@ -379,15 +424,13 @@ def main():
     aggregate_spec["name"] = dict(required=True)
 
     # remove default in aggregate spec, to handle common arguments
-    remove_default_spec(aggregate_spec)
+    # remove_default_spec(aggregate_spec)
 
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec)
     )
-
     argument_spec.update(element_spec)
     argument_spec.update(eos_argument_spec)
-
     module = AnsibleModule(
         argument_spec=argument_spec,
         mutually_exclusive=[

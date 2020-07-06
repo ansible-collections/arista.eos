@@ -44,11 +44,15 @@ options:
       modified by the device config parser.
     aliases:
     - commands
+    type: list
+    elements: str
   parents:
     description:
     - The ordered set of parents that uniquely identify the section or hierarchy the
       commands should be checked against.  If the parents argument is omitted, the
       commands are checked against the set of top level or global commands.
+    type: list
+    elements: str
   src:
     description:
     - The I(src) argument provides a path to the configuration file to load into the
@@ -57,17 +61,22 @@ options:
       or playbook. This argument is mutually exclusive with the I(lines) and I(parents)
       arguments. It can be a Jinja2 template as well. src file must have same indentation
       as a live switch config. Arista EOS device config has 3 spaces indentation.
+    type: path
   before:
     description:
     - The ordered set of commands to push on to the command stack if a change needs
       to be made.  This allows the playbook designer the opportunity to perform configuration
       commands prior to pushing any changes without affecting how the set of commands
       are matched against the system.
+    type: list
+    elements: str
   after:
     description:
     - The ordered set of commands to append to the end of the command stack if a change
       needs to be made.  Just like with I(before) this allows the playbook designer
       to append a set of commands to be executed after the command set.
+    type: list
+    elements: str
   match:
     description:
     - Instructs the module on the way to perform the matching of the set of commands
@@ -77,6 +86,7 @@ options:
       an equal match.  Finally, if match is set to I(none), the module will not attempt
       to compare the source configuration with the running configuration on the remote
       device.
+    type: str
     default: line
     choices:
     - line
@@ -90,6 +100,7 @@ options:
       the device in configuration mode.  If the replace argument is set to I(block)
       then the entire command block is pushed to the device in configuration mode
       if any line is not correct.
+    type: str
     default: line
     choices:
     - line
@@ -135,6 +146,7 @@ options:
       then the running-config will only be copied to the startup-config if the task
       has made a change. I(changed) was added in Ansible 2.5.
     default: never
+    type: str
     choices:
     - always
     - never
@@ -155,6 +167,7 @@ options:
     - When this option is configured as C(session), the diff returned will be based
       on the configuration session.
     default: session
+    type: str
     choices:
     - startup
     - running
@@ -166,6 +179,8 @@ options:
       the diff.  This is used for lines in the configuration that are automatically
       updated by the system.  This argument takes a list of regular expressions or
       exact line matches.
+    type: list
+    elements: str
   intended_config:
     description:
     - The C(intended_config) provides the master configuration that the node should
@@ -186,6 +201,7 @@ options:
         - The filename to be used to store the backup configuration. If the filename
           is not given it will be generated based on the hostname, current time and
           date in format defined by <hostname>_config.<current-date>@<current-time>
+        type: str
       dir_path:
         description:
         - This option provides the path ending with directory name in which the backup
@@ -348,10 +364,10 @@ def main():
     backup_spec = dict(filename=dict(), dir_path=dict(type="path"))
     argument_spec = dict(
         src=dict(type="path"),
-        lines=dict(aliases=["commands"], type="list"),
-        parents=dict(type="list"),
-        before=dict(type="list"),
-        after=dict(type="list"),
+        lines=dict(aliases=["commands"], type="list", elements="str"),
+        parents=dict(type="list", elements="str"),
+        before=dict(type="list", elements="str"),
+        after=dict(type="list", elements="str"),
         match=dict(
             default="line", choices=["line", "strict", "exact", "none"]
         ),
@@ -366,7 +382,7 @@ def main():
             choices=["startup", "session", "intended", "running"],
             default="session",
         ),
-        diff_ignore_lines=dict(type="list"),
+        diff_ignore_lines=dict(type="list", elements="str"),
         running_config=dict(aliases=["config"]),
         intended_config=dict(),
     )

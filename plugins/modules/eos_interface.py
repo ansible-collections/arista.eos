@@ -68,18 +68,94 @@ options:
     - Check the operational state of given interface C(name) for LLDP neighbor.
     - The following suboptions are available.
     type: list
+    elements: dict
     suboptions:
       host:
         description:
         - LLDP neighbor host for given interface C(name).
+        type: str
       port:
         description:
         - LLDP neighbor port to which given interface C(name) is connected.
+        type: str
   aggregate:
     description:
     - List of Interfaces definitions. Each of the entry in aggregate list should define
       name of interface C(name) and other options as required.
     type: list
+    elements: dict
+    suboptions:
+      name:
+        description:
+        - Name of the Interface to be configured on remote device. The name of interface
+          should be in expanded format and not abbreviated.
+        type: str
+        required: true
+      description:
+        description:
+        - Description of Interface upto 240 characters.
+        type: str
+      enabled:
+        description:
+        - Interface link status. If the value is I(True) the interface state will be enabled,
+          else if value is I(False) interface will be in disable (shutdown) state.
+        default: true
+        type: bool
+      speed:
+        description:
+        - This option configures autoneg and speed/duplex/flowcontrol for the interface
+          given in C(name) option.
+        type: str
+      mtu:
+        description:
+        - Set maximum transmission unit size in bytes of transmit packet for the interface
+          given in C(name) option.
+        type: str
+      tx_rate:
+        description:
+        - Transmit rate in bits per second (bps) for the interface given in C(name) option.
+        - This is state check parameter only.
+        - Supports conditionals, see L(Conditionals in Networking Modules,../network/user_guide/network_working_with_command_output.html)
+        type: str
+      rx_rate:
+        description:
+        - Receiver rate in bits per second (bps) for the interface given in C(name) option.
+        - This is state check parameter only.
+        - Supports conditionals, see L(Conditionals in Networking Modules,../network/user_guide/network_working_with_command_output.html)
+        type: str
+      neighbors:
+        description:
+        - Check the operational state of given interface C(name) for LLDP neighbor.
+        - The following suboptions are available.
+        type: list
+        elements: dict
+        suboptions:
+          host:
+            description:
+            - LLDP neighbor host for given interface C(name).
+            type: str
+          port:
+            description:
+            - LLDP neighbor port to which given interface C(name) is connected.
+            type: str
+      delay:
+        description:
+        - Time in seconds to wait before checking for the operational state on remote
+          device. This wait is applicable for operational state argument which are I(state)
+          with values C(up)/C(down), I(tx_rate) and I(rx_rate).
+        default: 10
+        type: int
+      state:
+        description:
+        - State of the Interface configuration, C(up) means present and operationally
+          up and C(down) means present and operationally C(down)
+        default: present
+        type: str
+        choices:
+        - present
+        - absent
+        - up
+        - down
   delay:
     description:
     - Time in seconds to wait before checking for the operational state on remote
@@ -459,7 +535,7 @@ def main():
     neighbors_spec = dict(host=dict(), port=dict())
 
     element_spec = dict(
-        name=dict(),
+        name=dict(required=True),
         description=dict(),
         speed=dict(),
         mtu=dict(),
@@ -477,7 +553,7 @@ def main():
     aggregate_spec["name"] = dict(required=True)
 
     # remove default in aggregate spec, to handle common arguments
-    remove_default_spec(aggregate_spec)
+    # remove_default_spec(aggregate_spec)
 
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec)

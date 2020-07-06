@@ -43,16 +43,77 @@ options:
     aliases:
     - users
     - collection
+    type: list
+    elements: dict
+    suboptions:
+      name:
+        description:
+        - The username to be configured on the remote Arista EOS device.  This argument
+          accepts a stringv value and is mutually exclusive with the C(aggregate) argument.
+          Please note that this option is not same as C(provider username).
+        type: str
+      configured_password:
+        description:
+        - The password to be configured on the remote Arista EOS device. The password
+          needs to be provided in clear and it will be encrypted on the device. Please
+          note that this option is not same as C(provider password).
+        type: str
+      update_password:
+        description:
+        - Since passwords are encrypted in the device running config, this argument will
+          instruct the module when to change the password.  When set to C(always), the
+          password will always be updated in the device and when set to C(on_create) the
+          password will be updated only if the username is created.
+        default: always
+        type: str
+        choices:
+        - on_create
+        - always
+      privilege:
+        description:
+        - The C(privilege) argument configures the privilege level of the user when logged
+          into the system.  This argument accepts integer values in the range of 1 to
+          15.
+        type: int
+      role:
+        description:
+        - Configures the role for the username in the device running configuration.  The
+          argument accepts a string value defining the role name.  This argument does
+          not check if the role has been configured on the device.
+        type: str
+      sshkey:
+        description:
+        - Specifies the SSH public key to configure for the given username.  This argument
+          accepts a valid SSH key value.
+        type: str
+      nopassword:
+        description:
+        - Defines the username without assigning a password.  This will allow the user
+          to login to the system without being authenticated by a password.
+        type: bool
+      state:
+        description:
+        - Configures the state of the username definition as it relates to the device
+          operational configuration.  When set to I(present), the username(s) should be
+          configured in the device active configuration and when set to I(absent) the
+          username(s) should not be in the device active configuration
+        type: str
+        default: present
+        choices:
+        - present
+        - absent
   name:
     description:
     - The username to be configured on the remote Arista EOS device.  This argument
       accepts a stringv value and is mutually exclusive with the C(aggregate) argument.
       Please note that this option is not same as C(provider username).
+    type: str
   configured_password:
     description:
     - The password to be configured on the remote Arista EOS device. The password
       needs to be provided in clear and it will be encrypted on the device. Please
       note that this option is not same as C(provider password).
+    type: str
   update_password:
     description:
     - Since passwords are encrypted in the device running config, this argument will
@@ -60,6 +121,7 @@ options:
       password will always be updated in the device and when set to C(on_create) the
       password will be updated only if the username is created.
     default: always
+    type: str
     choices:
     - on_create
     - always
@@ -68,15 +130,18 @@ options:
     - The C(privilege) argument configures the privilege level of the user when logged
       into the system.  This argument accepts integer values in the range of 1 to
       15.
+    type: int
   role:
     description:
     - Configures the role for the username in the device running configuration.  The
       argument accepts a string value defining the role name.  This argument does
       not check if the role has been configured on the device.
+    type: str
   sshkey:
     description:
     - Specifies the SSH public key to configure for the given username.  This argument
       accepts a valid SSH key value.
+    type: str
   nopassword:
     description:
     - Defines the username without assigning a password.  This will allow the user
@@ -95,6 +160,7 @@ options:
       operational configuration.  When set to I(present), the username(s) should be
       configured in the device active configuration and when set to I(absent) the
       username(s) should not be in the device active configuration
+    type: str
     default: present
     choices:
     - present
@@ -351,7 +417,7 @@ def main():
     aggregate_spec = deepcopy(element_spec)
 
     # remove default in aggregate spec, to handle common arguments
-    remove_default_spec(aggregate_spec)
+    # remove_default_spec(aggregate_spec)
 
     argument_spec = dict(
         aggregate=dict(

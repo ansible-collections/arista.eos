@@ -37,22 +37,69 @@ options:
     description:
     - Name of the VRF.
     required: true
+    type: str
   rd:
     description:
     - Route distinguisher of the VRF
+    type: str
   interfaces:
     description:
     - Identifies the set of interfaces that should be configured in the VRF. Interfaces
       must be routed interfaces in order to be placed into a VRF. The name of interface
       should be in expanded format and not abbreviated.
+    type: list
+    elements: str
   associated_interfaces:
     description:
     - This is a intent option and checks the operational state of the for given vrf
       C(name) for associated interfaces. If the value in the C(associated_interfaces)
       does not match with the operational state of vrf interfaces on device it will
       result in failure.
+    type: list
+    elements: str
   aggregate:
     description: List of VRFs definitions
+    type: list
+    elements: dict
+    suboptions:
+      name:
+        description:
+        - Name of the VRF.
+        required: true
+        type: str
+      rd:
+        description:
+        - Route distinguisher of the VRF
+        type: str
+      interfaces:
+        description:
+        - Identifies the set of interfaces that should be configured in the VRF. Interfaces
+          must be routed interfaces in order to be placed into a VRF. The name of interface
+          should be in expanded format and not abbreviated.
+        type: list
+        elements: str
+      associated_interfaces:
+        description:
+        - This is a intent option and checks the operational state of the for given vrf
+          C(name) for associated interfaces. If the value in the C(associated_interfaces)
+          does not match with the operational state of vrf interfaces on device it will
+          result in failure.
+        type: list
+        elements: str
+      delay:
+        description:
+        - Time in seconds to wait before checking for the operational state on remote
+          device. This wait is applicable for operational state arguments.
+        default: 10
+        type: int
+      state:
+        description:
+        - State of the VRF configuration.
+        default: present
+        type: str
+        choices:
+        - present
+        - absent
   purge:
     description:
     - Purge VRFs not defined in the I(aggregate) parameter.
@@ -63,10 +110,12 @@ options:
     - Time in seconds to wait before checking for the operational state on remote
       device. This wait is applicable for operational state arguments.
     default: 10
+    type: int
   state:
     description:
     - State of the VRF configuration.
     default: present
+    type: str
     choices:
     - present
     - absent
@@ -319,9 +368,9 @@ def main():
     """ main entry point for module execution
     """
     element_spec = dict(
-        name=dict(),
-        interfaces=dict(type="list"),
-        associated_interfaces=dict(type="list"),
+        name=dict(required=True),
+        interfaces=dict(type="list", elements="str"),
+        associated_interfaces=dict(type="list", elements="str"),
         delay=dict(default=10, type="int"),
         rd=dict(),
         state=dict(default="present", choices=["present", "absent"]),
@@ -331,6 +380,8 @@ def main():
 
     # remove default in aggregate spec, to handle common arguments
     remove_default_spec(aggregate_spec)
+    aggregate_spec["state"].update(default="present")
+    aggregate_spec["delay"].update(default=10)
 
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec),
