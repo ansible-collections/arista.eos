@@ -337,7 +337,9 @@ def main():
     argument_spec = dict(
         hostname=dict(),
         domain_name=dict(),
-        domain_list=dict(type="list", aliases=["domain_search"], elements="str"),
+        domain_list=dict(
+            type="list", aliases=["domain_search"], elements="str"
+        ),
         # { interface: <str>, vrf: <str> }
         lookup_source=dict(type="list", elements="str"),
         # { server: <str>; vrf: <str> }

@@ -18,6 +18,8 @@ class FactsArgs(object):
         pass
 
     argument_spec = {
-        "gather_subset": dict(default=["!config"], type="list", elements="str"),
+        "gather_subset": dict(
+            default=["!config"], type="list", elements="str"
+        ),
         "gather_network_resources": dict(type="list", elements="str"),
     }
