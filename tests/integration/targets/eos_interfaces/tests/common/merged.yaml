@@ -37,24 +37,3 @@
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.after)|length
         == 0
-
-- set_fact:
-    expected_config:
-
-      - name: Ethernet1
-        description: Interface 1
-        speed: 40g
-        duplex: full
-        enabled: true
-
-      - name: Ethernet2
-        description: Configured by Ansible
-        speed: '10'
-        duplex: full
-        enabled: false
-        mtu: '3000'
-
-- assert:
-    that:
-      - expected_config|difference(ansible_facts.network_resources.interfaces)|length
-        == 0

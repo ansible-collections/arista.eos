@@ -95,7 +95,6 @@ options:
         description:
         - Manage the state of the Layer-2 Interface configuration.
         type: str
-        default: present
         choices:
         - present
         - absent
@@ -424,7 +423,7 @@ def main():
     aggregate_spec["name"] = dict(required=True)
 
     # remove default in aggregate spec, to handle common arguments
-    # remove_default_spec(aggregate_spec)
+    remove_default_spec(aggregate_spec)
 
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec)

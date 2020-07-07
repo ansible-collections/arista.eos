@@ -70,7 +70,6 @@ options:
         - State of the L3 interface configuration. It indicates if the configuration should
           be present or absent on remote device.
         type: str
-        default: present
         choices:
         - present
         - absent
@@ -326,7 +325,7 @@ def main():
     aggregate_spec["name"] = dict(required=True)
 
     # remove default in aggregate spec, to handle common arguments
-    # remove_default_spec(aggregate_spec)
+    remove_default_spec(aggregate_spec)
 
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec)

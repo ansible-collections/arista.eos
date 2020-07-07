@@ -64,7 +64,6 @@ options:
           instruct the module when to change the password.  When set to C(always), the
           password will always be updated in the device and when set to C(on_create) the
           password will be updated only if the username is created.
-        default: always
         type: str
         choices:
         - on_create
@@ -98,7 +97,6 @@ options:
           configured in the device active configuration and when set to I(absent) the
           username(s) should not be in the device active configuration
         type: str
-        default: present
         choices:
         - present
         - absent
@@ -417,7 +415,7 @@ def main():
     aggregate_spec = deepcopy(element_spec)
 
     # remove default in aggregate spec, to handle common arguments
-    # remove_default_spec(aggregate_spec)
+    remove_default_spec(aggregate_spec)
 
     argument_spec = dict(
         aggregate=dict(

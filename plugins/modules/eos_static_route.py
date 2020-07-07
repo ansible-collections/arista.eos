@@ -70,12 +70,10 @@ options:
       admin_distance:
         description:
         - Admin distance of the static route.
-        default: 1
         type: int
       state:
         description:
         - State of the static route configuration.
-        default: present
         choices:
         - present
         - absent
@@ -311,8 +309,9 @@ def main():
     aggregate_spec["address"] = dict(required=True, aliases=["prefix"])
 
     # remove default in aggregate spec, to handle common arguments
-    # remove_default_spec(aggregate_spec)
+    remove_default_spec(aggregate_spec)
 
+    aggregate_spec["vrf"].update(default="default")
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec)
     )

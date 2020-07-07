@@ -30,7 +30,6 @@ options:
     - Name of the Interface to be configured on remote device. The name of interface
       should be in expanded format and not abbreviated.
     type: str
-    required: true
   description:
     description:
     - Description of Interface upto 240 characters.
@@ -99,7 +98,6 @@ options:
         description:
         - Interface link status. If the value is I(True) the interface state will be enabled,
           else if value is I(False) interface will be in disable (shutdown) state.
-        default: true
         type: bool
       speed:
         description:
@@ -149,7 +147,6 @@ options:
         description:
         - State of the Interface configuration, C(up) means present and operationally
           up and C(down) means present and operationally C(down)
-        default: present
         type: str
         choices:
         - present
@@ -535,7 +532,7 @@ def main():
     neighbors_spec = dict(host=dict(), port=dict())
 
     element_spec = dict(
-        name=dict(required=True),
+        name=dict(),
         description=dict(),
         speed=dict(),
         mtu=dict(),
@@ -553,7 +550,8 @@ def main():
     aggregate_spec["name"] = dict(required=True)
 
     # remove default in aggregate spec, to handle common arguments
-    # remove_default_spec(aggregate_spec)
+    remove_default_spec(aggregate_spec)
+    aggregate_spec["delay"].update(default=10)
 
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec)

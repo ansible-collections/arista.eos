@@ -3,25 +3,3 @@
   become: true
   arista.eos.eos_config:
     src: reset.cfg
-
-- become: true
-  arista.eos.eos_facts:
-    gather_network_resources: interfaces
-
-- set_fact:
-    expected_config:
-
-      - name: Ethernet1
-        description: Interface 1
-        speed: 40g
-        duplex: full
-        enabled: true
-
-      - name: Ethernet2
-        enabled: true
-        mtu: '3000'
-        duplex: auto
-
-- assert:
-    that:
-      - expected_config|difference(ansible_facts.network_resources.interfaces) == []

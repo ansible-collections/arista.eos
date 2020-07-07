@@ -94,6 +94,7 @@ class TestEosEapiModule(TestEosModule):
         commands = [
             "management api http-commands",
             "protocol http port 80",
+            "protocol https port 443",
             "no shutdown",
         ]
         self.start_unconfigured(changed=True, commands=commands)
@@ -136,6 +137,7 @@ class TestEosEapiModule(TestEosModule):
         commands = [
             "management api http-commands",
             "protocol http localhost port 8080",
+            "protocol https port 443",
             "no shutdown",
         ]
         self.start_unconfigured(changed=True, commands=commands)
@@ -160,6 +162,7 @@ class TestEosEapiModule(TestEosModule):
         set_module_args(dict(vrf="test"))
         commands = [
             "management api http-commands",
+            "protocol https port 443",
             "no shutdown",
             "vrf test",
             "no shutdown",

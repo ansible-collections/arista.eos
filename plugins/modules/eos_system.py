@@ -44,13 +44,13 @@ options:
       should be in the dotted name form and will be appended to the C(hostname) to
       create a fully-qualified domain name.
     type: str
-  domain_search:
+  domain_list:
     description:
     - Provides the list of domain suffixes to append to the hostname for the purpose
       of doing name resolution. This argument accepts a list of names and will be
       reconciled with the current active configuration on the running node.
     aliases:
-    - domain_list
+    - domain_search
     type: list
     elements: str
   lookup_source:
@@ -59,8 +59,15 @@ options:
       interface provided in C(lookup_source) can only exist in a single VRF.  This
       argument accepts either a list of interface names or a list of hashes that configure
       the interface name and VRF name.  See examples.
-    elements: str
+    elements: dict
     type: list
+    suboptions:
+      interfaces:
+        description: Interface name
+        type: str
+      vrf:
+        description: vrf name
+        type: str
   name_servers:
     description:
     - List of DNS name servers by IP address to use to perform name resolution lookups.  This
@@ -341,7 +348,7 @@ def main():
             type="list", aliases=["domain_search"], elements="str"
         ),
         # { interface: <str>, vrf: <str> }
-        lookup_source=dict(type="list", elements="str"),
+        lookup_source=dict(type="list", elements="dict"),
         # { server: <str>; vrf: <str> }
         name_servers=dict(type="list", elements="str"),
         state=dict(default="present", choices=["present", "absent"]),

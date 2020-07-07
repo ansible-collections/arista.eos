@@ -77,7 +77,11 @@ class TestEosInterfacesModule(TestEosModule):
                 state="merged",
             )
         )
-        commands = ["interface Ethernet3", "description Ethernet_3"]
+        commands = [
+            "interface Ethernet3",
+            "description Ethernet_3",
+            "no shutdown",
+        ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_interfaces_merged_idempotent(self):
@@ -102,6 +106,7 @@ class TestEosInterfacesModule(TestEosModule):
             "interface Ethernet3",
             "description Ethernet_3",
             "mtu 1000",
+            "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -138,7 +143,6 @@ class TestEosInterfacesModule(TestEosModule):
             "interface Ethernet1",
             "description Interface_1",
             "speed forced 40gfull",
-            "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -160,7 +164,6 @@ class TestEosInterfacesModule(TestEosModule):
             "interface Ethernet1",
             "description Interface_1",
             "speed 1000gfull",
-            "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -182,7 +185,6 @@ class TestEosInterfacesModule(TestEosModule):
             "interface Ethernet1",
             "description Interface_1",
             "speed auto",
-            "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -204,7 +206,6 @@ class TestEosInterfacesModule(TestEosModule):
             "interface Ethernet1",
             "description Interface_1",
             "speed 1000ghalf",
-            "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
 
