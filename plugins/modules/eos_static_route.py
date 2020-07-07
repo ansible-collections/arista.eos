@@ -28,7 +28,6 @@ options:
   address:
     description:
     - Network address with prefix of the static route.
-    required: true
     aliases:
     - prefix
     type: str
@@ -54,10 +53,10 @@ options:
       address:
         description:
         - Network address with prefix of the static route.
-        required: true
         aliases:
         - prefix
         type: str
+        required: True
       next_hop:
         description:
         - Next hop IP of the static route.
@@ -298,7 +297,7 @@ def main():
     """ main entry point for module execution
     """
     element_spec = dict(
-        address=dict(type="str", aliases=["prefix"], required=True),
+        address=dict(type="str", aliases=["prefix"]),
         next_hop=dict(type="str"),
         vrf=dict(type="str", default="default"),
         admin_distance=dict(default=1, type="int"),

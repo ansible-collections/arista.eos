@@ -59,15 +59,8 @@ options:
       interface provided in C(lookup_source) can only exist in a single VRF.  This
       argument accepts either a list of interface names or a list of hashes that configure
       the interface name and VRF name.  See examples.
-    elements: dict
+    elements: raw
     type: list
-    suboptions:
-      interfaces:
-        description: Interface name
-        type: str
-      vrf:
-        description: vrf name
-        type: str
   name_servers:
     description:
     - List of DNS name servers by IP address to use to perform name resolution lookups.  This
@@ -348,7 +341,7 @@ def main():
             type="list", aliases=["domain_search"], elements="str"
         ),
         # { interface: <str>, vrf: <str> }
-        lookup_source=dict(type="list", elements="dict"),
+        lookup_source=dict(type="list", elements="raw"),
         # { server: <str>; vrf: <str> }
         name_servers=dict(type="list", elements="str"),
         state=dict(default="present", choices=["present", "absent"]),

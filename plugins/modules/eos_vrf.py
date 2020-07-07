@@ -36,7 +36,6 @@ options:
   name:
     description:
     - Name of the VRF.
-    required: true
     type: str
   rd:
     description:
@@ -368,7 +367,7 @@ def main():
     """ main entry point for module execution
     """
     element_spec = dict(
-        name=dict(required=True),
+        name=dict(),
         interfaces=dict(type="list", elements="str"),
         associated_interfaces=dict(type="list", elements="str"),
         delay=dict(default=10, type="int"),
@@ -377,6 +376,7 @@ def main():
     )
 
     aggregate_spec = deepcopy(element_spec)
+    aggregate_spec["name"] = dict(required=True)
 
     # remove default in aggregate spec, to handle common arguments
     remove_default_spec(aggregate_spec)

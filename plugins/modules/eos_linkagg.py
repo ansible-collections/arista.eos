@@ -78,7 +78,6 @@ options:
       state:
         description:
         - State of the link aggregation group.
-        default: present
         type: str
         choices:
         - present
@@ -387,7 +386,6 @@ def main():
 
     # remove default in aggregate spec, to handle common arguments
     remove_default_spec(aggregate_spec)
-    aggregate_spec["state"].update(default="present")
 
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec),
