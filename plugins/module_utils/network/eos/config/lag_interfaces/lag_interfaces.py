@@ -12,6 +12,8 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+import re
+
 __metaclass__ = type
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
@@ -241,15 +243,16 @@ def set_config(want, have):
     commands = []
     to_set = dict_diff(have, want)
     for member in to_set.get("members", []):
-        channel_id = want["name"][12:]
-        commands.extend(
-            [
-                "interface {0}".format(member["member"]),
-                "channel-group {0} mode {1}".format(
-                    channel_id, member["mode"]
-                ),
-            ]
-        )
+        channel_id = re.search(r"\d.*", want["name"])
+        if channel_id:
+            commands.extend(
+                [
+                    "interface {0}".format(member["member"]),
+                    "channel-group {0} mode {1}".format(
+                        channel_id.group(0), member["mode"]
+                    ),
+                ]
+            )
 
     return commands
 
