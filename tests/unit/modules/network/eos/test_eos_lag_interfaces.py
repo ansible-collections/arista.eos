@@ -11,7 +11,7 @@ from ansible_collections.arista.eos.plugins.modules import eos_lag_interfaces
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
-from .eos_module import TestEosModule
+from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosLagInterfacesModule(TestEosModule):
@@ -50,7 +50,7 @@ class TestEosLagInterfacesModule(TestEosModule):
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.config.lag_interfaces.lag_interfaces.Lag_interfaces.get_lag_interfaces_facts"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.lag_interfaces.lag_interfaces.Lag_interfacesFacts.get_device_data"
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -62,6 +62,12 @@ class TestEosLagInterfacesModule(TestEosModule):
         self.mock_get_config.stop()
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
+
+    def load_fixtures(self, commands=None, transport="cli"):
+        def load_from_file(*args, **kwargs):
+            return load_fixture("eos_lag_interfaces_config.cfg")
+
+        self.execute_show_command.side_effect = load_from_file
 
     def test_eos_lag_interfaces_digit_name_only(self):
         set_module_args(
