@@ -114,7 +114,7 @@ class HttpApi(HttpApiBase):
         device_info["network_os_version"] = data["version"]
         device_info["network_os_model"] = data["modelName"]
 
-        reply = self.send_request("show hostname | json")
+        reply = self.send_request("show hostname", output="json")
         data = json.loads(reply)
 
         device_info["network_os_hostname"] = data["hostname"]
