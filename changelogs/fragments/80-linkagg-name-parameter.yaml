@@ -1,0 +1,6 @@
+---
+bugfixes:
+  - Fixes mismatch in documentation and code for using eos_lag_interfaces
+    where the code required 'Port-Channel\d.*:' but the docs did
+    not document this. The module now supports both 'Port-Channel\d.*:'
+    and '\d.*:'.
