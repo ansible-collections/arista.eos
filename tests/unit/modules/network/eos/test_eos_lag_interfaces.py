@@ -121,9 +121,7 @@ class TestEosLagInterfacesModule(TestEosModule):
                 config=[
                     dict(
                         name="Port-Channel5",
-                        members=[
-                            dict(member="Ethernet3", mode="passive"),
-                        ],
+                        members=[dict(member="Ethernet3", mode="passive")],
                     )
                 ],
                 state="merged",
@@ -137,18 +135,13 @@ class TestEosLagInterfacesModule(TestEosModule):
                 config=[
                     dict(
                         name="Port-Channel1",
-                        members=[
-                            dict(member="Ethernet3", mode="on"),
-                        ],
+                        members=[dict(member="Ethernet3", mode="on")],
                     )
                 ],
                 state="replaced",
             )
         )
-        commands = [
-            "interface Ethernet3",
-            "channel-group 1 mode on",
-        ]
+        commands = ["interface Ethernet3", "channel-group 1 mode on"]
 
         self.execute_module(changed=True, commands=commands)
 
@@ -158,9 +151,7 @@ class TestEosLagInterfacesModule(TestEosModule):
                 config=[
                     dict(
                         name="Port-Channel5",
-                        members=[
-                            dict(member="Ethernet3", mode="passive"),
-                        ],
+                        members=[dict(member="Ethernet3", mode="passive")],
                     )
                 ],
                 state="replaced",
@@ -174,9 +165,7 @@ class TestEosLagInterfacesModule(TestEosModule):
                 config=[
                     dict(
                         name="Port-Channel1",
-                        members=[
-                            dict(member="Ethernet2", mode="on"),
-                        ],
+                        members=[dict(member="Ethernet2", mode="on")],
                     )
                 ],
                 state="overridden",
@@ -186,7 +175,6 @@ class TestEosLagInterfacesModule(TestEosModule):
             "interface Ethernet2",
             "channel-group 1 mode on",
             "no interface Port-Channel5",
-            
         ]
 
         self.execute_module(changed=True, commands=commands)
@@ -197,9 +185,7 @@ class TestEosLagInterfacesModule(TestEosModule):
                 config=[
                     dict(
                         name="Port-Channel5",
-                        members=[
-                            dict(member="Ethernet2", mode="on"),
-                        ],
+                        members=[dict(member="Ethernet2", mode="on")],
                     )
                 ],
                 state="overridden",
@@ -220,9 +206,7 @@ class TestEosLagInterfacesModule(TestEosModule):
                 config=[
                     dict(
                         name="Port-Channel5",
-                        members=[
-                            dict(member="Ethernet3", mode="passive"),
-                        ],
+                        members=[dict(member="Ethernet3", mode="passive")],
                     )
                 ],
                 state="overridden",
@@ -236,17 +220,13 @@ class TestEosLagInterfacesModule(TestEosModule):
                 config=[
                     dict(
                         name="Port-Channel5",
-                        members=[
-                            dict(member="Ethernet3", mode="passive"),
-                        ],
+                        members=[dict(member="Ethernet3", mode="passive")],
                     )
                 ],
                 state="deleted",
             )
         )
-        commands = [
-            "no interface Port-Channel5",
-        ]
+        commands = ["no interface Port-Channel5"]
 
         self.execute_module(changed=True, commands=commands)
 
@@ -288,18 +268,11 @@ class TestEosLagInterfacesModule(TestEosModule):
         result = self.execute_module(changed=False)
         parsed_list = [
             {
-                "name" : "Port-Channel1",
-                "members":
-                    [
-                        {
-                            "member" : "Ethernet1",
-                            "mode": "on"
-                        },
-                        {
-                            "member" : "Ethernet2",
-                            "mode": "on"
-                        }
-                    ]
+                "name": "Port-Channel1",
+                "members": [
+                    {"member": "Ethernet1", "mode": "on"},
+                    {"member": "Ethernet2", "mode": "on"},
+                ],
             }
         ]
         self.assertEqual(parsed_list, result["parsed"])
@@ -309,14 +282,8 @@ class TestEosLagInterfacesModule(TestEosModule):
         result = self.execute_module(changed=False)
         gather_list = [
             {
-                "name" : "Port-Channel5",
-                "members":
-                    [
-                        {
-                            "member" : "Ethernet3",
-                            "mode": "passive"
-                        }
-                    ]
+                "name": "Port-Channel5",
+                "members": [{"member": "Ethernet3", "mode": "passive"}],
             }
         ]
-        self.assertEqual(gather_list, result["gathered"]) 
+        self.assertEqual(gather_list, result["gathered"])
