@@ -1,0 +1,67 @@
+---
+- include_tasks: _reset_config.yaml
+
+- set_fact:
+    config1:
+
+      - vlan_id: 20
+        state: suspend
+
+    config2:
+      - vlan_id: 30
+        name: thirty
+
+- name: Merge provided configuration with device configuration(base config).
+  register: baseconfig
+  become: true
+  arista.eos.eos_vlans:
+    config: '{{ config1 }}'
+    state: merged
+
+- become: true
+  arista.eos.eos_facts:
+    gather_network_resources: vlans
+
+- assert:
+    that:
+      - ansible_facts.network_resources.vlans|symmetric_difference(baseconfig.after)
+        == []
+
+- name: Merge provided configuration with device configuration(config to be reverted).
+  register: result
+  become: true
+  arista.eos.eos_vlans:
+    config: '{{ config2 }}'
+    state: merged
+
+
+- set_fact:
+    expected_config:
+
+      - vlan_id: 10
+        name: ten
+        state: active
+
+      - vlan_id: 20
+        name: twenty
+        state: suspend
+
+      - vlan_id: 30
+        name: thirty
+        state: active
+
+- assert:
+    that:
+      - expected_config|symmetric_difference(result.after)
+        == []
+
+- name: Revert back to base config using facts round trip
+  become: true
+  register: revert
+  arista.eos.eos_vlans:
+    config: "{{ ansible_facts['network_resources']['vlans'] }}"
+    state: overridden
+
+- name: Assert that config was reverted
+  assert:
+    that: baseconfig.after == revert.after
