@@ -114,3 +114,209 @@ class TestEosLagInterfacesModule(TestEosModule):
             "channel-group 1 mode on",
         ]
         self.execute_module(changed=True, commands=commands)
+
+    def test_eos_lag_interfaces_merged_idempotent(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Port-Channel5",
+                        members=[
+                            dict(member="Ethernet3", mode="passive"),
+                        ],
+                    )
+                ],
+                state="merged",
+            )
+        )
+        self.execute_module(changed=False)
+
+    def test_eos_lag_interfaces_replaced(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Port-Channel1",
+                        members=[
+                            dict(member="Ethernet3", mode="on"),
+                        ],
+                    )
+                ],
+                state="replaced",
+            )
+        )
+        commands = [
+            "interface Ethernet3",
+            "channel-group 1 mode on",
+        ]
+
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_lag_interfaces_replaced_idempotent(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Port-Channel5",
+                        members=[
+                            dict(member="Ethernet3", mode="passive"),
+                        ],
+                    )
+                ],
+                state="replaced",
+            )
+        )
+        self.execute_module(changed=False)
+
+    def test_eos_lag_interfaces_overridden_newchannel(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Port-Channel1",
+                        members=[
+                            dict(member="Ethernet2", mode="on"),
+                        ],
+                    )
+                ],
+                state="overridden",
+            )
+        )
+        commands = [
+            "interface Ethernet2",
+            "channel-group 1 mode on",
+            "no interface Port-Channel5",
+            
+        ]
+
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_lag_interfaces_overridden_samechannel(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Port-Channel5",
+                        members=[
+                            dict(member="Ethernet2", mode="on"),
+                        ],
+                    )
+                ],
+                state="overridden",
+            )
+        )
+        commands = [
+            "interface Ethernet2",
+            "channel-group 5 mode on",
+            "interface Ethernet3",
+            "no channel-group",
+        ]
+
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_lag_interfaces_overridden_idempotent(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Port-Channel5",
+                        members=[
+                            dict(member="Ethernet3", mode="passive"),
+                        ],
+                    )
+                ],
+                state="overridden",
+            )
+        )
+        self.execute_module(changed=False)
+
+    def test_eos_lag_interfaces_deleted(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Port-Channel5",
+                        members=[
+                            dict(member="Ethernet3", mode="passive"),
+                        ],
+                    )
+                ],
+                state="deleted",
+            )
+        )
+        commands = [
+            "no interface Port-Channel5",
+        ]
+
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_lag_interfaces_rendered(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Port-Channel1",
+                        members=[
+                            dict(member="Ethernet1", mode="on"),
+                            dict(member="Ethernet2", mode="on"),
+                        ],
+                    )
+                ],
+                state="rendered",
+            )
+        )
+        commands = [
+            "interface Ethernet1",
+            "channel-group 1 mode on",
+            "interface Ethernet2",
+            "channel-group 1 mode on",
+        ]
+        result = self.execute_module(changed=False)
+        self.assertEqual(
+            sorted(result["rendered"]), sorted(commands), result["rendered"]
+        )
+
+    def test_eos_lag_interfaces_parsed(self):
+        commands = [
+            "interface Ethernet1",
+            "channel-group 1 mode on",
+            "interface Ethernet2",
+            "channel-group 1 mode on",
+        ]
+        parsed_str = "\n".join(commands)
+        set_module_args(dict(running_config=parsed_str, state="parsed"))
+        result = self.execute_module(changed=False)
+        parsed_list = [
+            {
+                "name" : "Port-Channel1",
+                "members":
+                    [
+                        {
+                            "member" : "Ethernet1",
+                            "mode": "on"
+                        },
+                        {
+                            "member" : "Ethernet2",
+                            "mode": "on"
+                        }
+                    ]
+            }
+        ]
+        self.assertEqual(parsed_list, result["parsed"])
+
+    def test_eos_lag_interfaces_gathered(self):
+        set_module_args(dict(state="gathered"))
+        result = self.execute_module(changed=False)
+        gather_list = [
+            {
+                "name" : "Port-Channel5",
+                "members":
+                    [
+                        {
+                            "member" : "Ethernet3",
+                            "mode": "passive"
+                        }
+                    ]
+            }
+        ]
+        self.assertEqual(gather_list, result["gathered"]) 
