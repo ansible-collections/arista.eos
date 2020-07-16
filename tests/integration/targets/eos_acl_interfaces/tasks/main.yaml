@@ -6,3 +6,4 @@
 - include: eapi.yaml
   tags:
     - httpapi
+    - eapi
