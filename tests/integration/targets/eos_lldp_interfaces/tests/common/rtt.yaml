@@ -1,0 +1,63 @@
+---
+- include_tasks: _reset_config.yaml
+
+- set_fact:
+    config1:
+
+      - name: Ethernet1
+        transmit: false
+
+    config2:
+
+      - name: Ethernet2
+        receive: false
+
+- name: Merge provided configuration with device configuration(base config).
+  register: baseconfig
+  become: true
+  arista.eos.eos_lldp_interfaces:
+    config: '{{ config1 }}'
+    state: merged
+
+- become: true
+  arista.eos.eos_facts:
+    gather_network_resources: lldp_interfaces
+
+- assert:
+    that:
+      - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(baseconfig.after)
+        == []
+
+- name: Merge provided configuration with device configuration(config to be reverted).
+  register: result
+  become: true
+  arista.eos.eos_lldp_interfaces:
+    config: '{{ config2 }}'
+    state: merged
+
+
+- set_fact:
+    expected_config:
+
+      - name: Ethernet1
+        transmit: false
+        receive: false
+
+      - name: Ethernet2
+        transmit: false
+        receive: false
+
+- assert:
+    that:
+      - expected_config|symmetric_difference(result.after) == []
+
+- name: Revert back to base config using facts round trip
+  become: true
+  register: revert
+  arista.eos.eos_lldp_interfaces:
+    config: "{{ ansible_facts['network_resources']['lldp_interfaces'] }}"
+    state: overridden
+
+- name: Assert that config was reverted
+  assert:
+    that: baseconfig.after == revert.after

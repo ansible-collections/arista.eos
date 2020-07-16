@@ -30,6 +30,10 @@ overridden:
     - interface GigabitEthernet0/1
     - no ipv6 traffic-filter aclv601 in
     - ip access-group aclv401 in
+roundtrip:
+  commands:
+    - interface GigabitEthernet0/1
+    - ip access-group aclv401 in
 gathered:
   config:
     - name: Loopback888
