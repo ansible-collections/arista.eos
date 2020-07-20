@@ -3,6 +3,7 @@
 
 - name: Use src with module alias
   register: result
+  become: true
   arista.eos.config:
     src: basic/config.j2
 
@@ -14,6 +15,7 @@
 
 - name: use module alias to take configuration backup
   register: result
+  become: true
   arista.eos.config:
     backup: true
     backup_options:
