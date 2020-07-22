@@ -53,7 +53,6 @@ options:
     - Configures the HTTP port that will listen for connections when the HTTP transport
       protocol is enabled.  This argument accepts integer values in the valid range
       of 1 to 65535.
-    default: 80
     type: int
   https:
     description:
@@ -63,7 +62,6 @@ options:
       is disabled. By default, when eAPI is first configured, the HTTPS protocol is
       enabled.
     type: bool
-    default: yes
     aliases:
     - enable_https
   https_port:
@@ -71,7 +69,6 @@ options:
     - Configures the HTTP port that will listen for connections when the HTTP transport
       protocol is enabled.  This argument accepts integer values in the valid range
       of 1 to 65535.
-    default: 443
     type: int
   local_http:
     description:
@@ -89,7 +86,6 @@ options:
     - Configures the HTTP port that will listen for connections when the HTTP transport
       protocol is enabled.  This argument accepts integer values in the valid range
       of 1 to 65535.
-    default: 8080
     type: int
   socket:
     description:
@@ -402,11 +398,11 @@ def main():
     """
     argument_spec = dict(
         http=dict(aliases=["enable_http"], type="bool"),
-        http_port=dict(type="int", default=80),
-        https=dict(aliases=["enable_https"], type="bool", default=True),
-        https_port=dict(type="int", default=443),
+        http_port=dict(type="int"),
+        https=dict(aliases=["enable_https"], type="bool"),
+        https_port=dict(type="int"),
         local_http=dict(aliases=["enable_local_http"], type="bool"),
-        local_http_port=dict(type="int", default=8080),
+        local_http_port=dict(type="int"),
         socket=dict(aliases=["enable_socket"], type="bool"),
         timeout=dict(type="int", default=30),
         vrf=dict(default="default"),
