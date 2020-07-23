@@ -43,7 +43,7 @@ options:
       the number of I(retries) has been exceeded.
     required: true
     type: list
-    elements: str
+    elements: raw
   wait_for:
     description:
     - Specifies what to evaluate from the output of the command and what conditionals
@@ -198,7 +198,7 @@ def main():
     """entry point for module execution
     """
     argument_spec = dict(
-        commands=dict(type="list", required=True, elements="str"),
+        commands=dict(type="list", required=True, elements="raw"),
         wait_for=dict(type="list", aliases=["waitfor"], elements="str"),
         match=dict(default="all", choices=["all", "any"]),
         retries=dict(default=10, type="int"),
