@@ -10,8 +10,7 @@
 - assert:
     that:
       # make sure that the template content was read and not the path
-      - result.changed == true
-      - result.updates is defined
+      - result.failed == false
 
 - name: use module alias to take configuration backup
   register: result
