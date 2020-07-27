@@ -29,7 +29,6 @@ options:
     description:
     - Name of the interface
     type: str
-    required: true
     aliases:
     - interface
   mode:
@@ -411,7 +410,7 @@ def main():
     """ main entry point for module execution
     """
     element_spec = dict(
-        name=dict(type="str", aliases=["interface"], required=True),
+        name=dict(type="str", aliases=["interface"]),
         mode=dict(choices=["access", "trunk"]),
         access_vlan=dict(type="str"),
         native_vlan=dict(type="str"),
