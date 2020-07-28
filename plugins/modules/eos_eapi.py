@@ -53,7 +53,7 @@ options:
     - Configures the HTTP port that will listen for connections when the HTTP transport
       protocol is enabled.  This argument accepts integer values in the valid range
       of 1 to 65535.
-    default: 80
+    type: int
   https:
     description:
     - The C(https) argument controls the operating state of the HTTPS transport protocol
@@ -62,7 +62,6 @@ options:
       is disabled. By default, when eAPI is first configured, the HTTPS protocol is
       enabled.
     type: bool
-    default: yes
     aliases:
     - enable_https
   https_port:
@@ -70,7 +69,7 @@ options:
     - Configures the HTTP port that will listen for connections when the HTTP transport
       protocol is enabled.  This argument accepts integer values in the valid range
       of 1 to 65535.
-    default: 443
+    type: int
   local_http:
     description:
     - The C(local_http) argument controls the operating state of the local HTTP transport
@@ -87,7 +86,7 @@ options:
     - Configures the HTTP port that will listen for connections when the HTTP transport
       protocol is enabled.  This argument accepts integer values in the valid range
       of 1 to 65535.
-    default: 8080
+    type: int
   socket:
     description:
     - The C(socket) argument controls the operating state of the UNIX Domain Socket
@@ -112,6 +111,7 @@ options:
       table.  This value requires the VRF to already be created otherwise the task
       will fail.
     default: default
+    type: str
   config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -119,11 +119,13 @@ options:
       are times when it is not desirable to have the task get the current running-config
       for every task in a playbook.  The I(config) argument allows the implementer
       to pass in the configuration to use as the base config for comparison.
+    type: str
   state:
     description:
     - The C(state) argument controls the operational state of eAPI on the remote device.  When
       this argument is set to C(started), eAPI is enabled to receive requests and
       when this argument is C(stopped), eAPI is disabled and will not receive requests.
+    type: str
     default: started
     choices:
     - started

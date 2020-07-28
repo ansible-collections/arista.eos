@@ -25,9 +25,12 @@ options:
     - State of the LLDP configuration. If value is I(present) lldp will be enabled
       else if it is I(absent) it will be disabled.
     default: present
+    type: str
     choices:
     - present
     - absent
+    - enabled
+    - disabled
 extends_documentation_fragment:
 - arista.eos.eos
 """

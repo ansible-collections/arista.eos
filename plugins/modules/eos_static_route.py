@@ -28,23 +28,55 @@ options:
   address:
     description:
     - Network address with prefix of the static route.
-    required: true
     aliases:
     - prefix
+    type: str
   next_hop:
     description:
     - Next hop IP of the static route.
-    required: true
+    type: str
   vrf:
     description:
     - VRF for static route.
     default: default
+    type: str
   admin_distance:
     description:
     - Admin distance of the static route.
     default: 1
+    type: int
   aggregate:
     description: List of static route definitions
+    type: list
+    elements: dict
+    suboptions:
+      address:
+        description:
+        - Network address with prefix of the static route.
+        aliases:
+        - prefix
+        type: str
+        required: True
+      next_hop:
+        description:
+        - Next hop IP of the static route.
+        type: str
+      vrf:
+        description:
+        - VRF for static route.
+        default: default
+        type: str
+      admin_distance:
+        description:
+        - Admin distance of the static route.
+        type: int
+      state:
+        description:
+        - State of the static route configuration.
+        choices:
+        - present
+        - absent
+        type: str
   state:
     description:
     - State of the static route configuration.
@@ -52,6 +84,7 @@ options:
     choices:
     - present
     - absent
+    type: str
 extends_documentation_fragment:
 - arista.eos.eos
 
@@ -272,11 +305,12 @@ def main():
     )
 
     aggregate_spec = deepcopy(element_spec)
-    aggregate_spec["address"] = dict(required=True)
+    aggregate_spec["address"] = dict(required=True, aliases=["prefix"])
 
     # remove default in aggregate spec, to handle common arguments
     remove_default_spec(aggregate_spec)
 
+    aggregate_spec["vrf"].update(default="default")
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec)
     )

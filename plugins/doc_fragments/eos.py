@@ -28,7 +28,6 @@ class ModuleDocFragment(object):
           over the specified transport.  The value of host is used as the destination
           address for the transport.
         type: str
-        required: true
       port:
         description:
         - Specifies the port to use when building the connection to the remote device.  This
@@ -85,7 +84,6 @@ class ModuleDocFragment(object):
         description:
         - Configures the transport connection to use when connecting to the remote
           device.
-        required: true
         type: str
         choices:
         - cli

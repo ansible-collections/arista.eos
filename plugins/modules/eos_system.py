@@ -37,35 +37,44 @@ options:
   hostname:
     description:
     - Configure the device hostname parameter. This option takes an ASCII string value.
+    type: str
   domain_name:
     description:
     - Configure the IP domain name on the remote device to the provided value. Value
       should be in the dotted name form and will be appended to the C(hostname) to
       create a fully-qualified domain name.
-  domain_search:
+    type: str
+  domain_list:
     description:
     - Provides the list of domain suffixes to append to the hostname for the purpose
       of doing name resolution. This argument accepts a list of names and will be
       reconciled with the current active configuration on the running node.
     aliases:
-    - domain_list
+    - domain_search
+    type: list
+    elements: str
   lookup_source:
     description:
     - Provides one or more source interfaces to use for performing DNS lookups.  The
       interface provided in C(lookup_source) can only exist in a single VRF.  This
       argument accepts either a list of interface names or a list of hashes that configure
       the interface name and VRF name.  See examples.
+    elements: raw
+    type: list
   name_servers:
     description:
     - List of DNS name servers by IP address to use to perform name resolution lookups.  This
       argument accepts either a list of DNS servers or a list of hashes that configure
       the name server and VRF name.  See examples.
+    type: list
+    elements: str
   state:
     description:
     - State of the configuration values in the device's current active configuration.  When
       set to I(present), the values should be configured in the device active configuration
       and when set to I(absent) the values should not be in the device active configuration
     default: present
+    type: str
     choices:
     - present
     - absent
@@ -328,11 +337,13 @@ def main():
     argument_spec = dict(
         hostname=dict(),
         domain_name=dict(),
-        domain_list=dict(type="list", aliases=["domain_search"]),
+        domain_list=dict(
+            type="list", aliases=["domain_search"], elements="str"
+        ),
         # { interface: <str>, vrf: <str> }
-        lookup_source=dict(type="list"),
+        lookup_source=dict(type="list", elements="raw"),
         # { server: <str>; vrf: <str> }
-        name_servers=dict(type="list"),
+        name_servers=dict(type="list", elements="str"),
         state=dict(default="present", choices=["present", "absent"]),
     )
 

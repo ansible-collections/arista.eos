@@ -24,6 +24,7 @@ options:
   config:
     description:
     - Specifies the BGP related configuration.
+    type: dict
     suboptions:
       bgp_as:
         description:
@@ -33,7 +34,7 @@ options:
       router_id:
         description:
         - Configures the BGP routing process router-id value.
-        default:
+        type: str
       log_neighbor_changes:
         description:
         - Enable/disable logging neighbor up/down and reset reason.
@@ -41,11 +42,14 @@ options:
       neighbors:
         description:
         - Specifies BGP neighbor related configurations.
+        type: list
+        elements: dict
         suboptions:
           neighbor:
             description:
             - Neighbor router address.
             required: true
+            type: str
           remote_as:
             description:
             - Remote AS of the BGP neighbor to configure.
@@ -54,12 +58,15 @@ options:
           update_source:
             description:
             - Source of the routing updates.
+            type: str
           password:
             description:
             - Password to authenticate the BGP peer connection.
+            type: str
           description:
             description:
             - Neighbor specific description.
+            type: str
           ebgp_multihop:
             description:
             - Specifies the maximum hop count for EBGP neighbors not on directly connected
@@ -69,9 +76,11 @@ options:
           peer_group:
             description:
             - Name of the peer group that the neighbor is a member of.
+            type: str
           timers:
             description:
             - Specifies BGP neighbor timer related configurations.
+            type: dict
             suboptions:
               keepalive:
                 description:
@@ -91,7 +100,7 @@ options:
           route_reflector_client:
             description:
             - Specify a neighbor as a route reflector client.
-            type: bool
+            type: int
           remove_private_as:
             description:
             - Remove the private AS number from outbound updates.
@@ -99,6 +108,7 @@ options:
           enabled:
             description:
             - Administratively shutdown or enable a neighbor.
+            type: bool
           maximum_prefix:
             description:
             - Maximum number of prefixes to accept from this peer.
@@ -107,14 +117,19 @@ options:
       redistribute:
         description:
         - Specifies the redistribute information from another routing protocol.
+        type: list
+        elements: dict
         suboptions:
           protocol:
             description:
             - Specifies the protocol for configuring redistribute information.
             required: true
+            type: str
+            choices: [ospf, ospf3, static, connected, rip, isis]
           route_map:
             description:
             - Specifies the route map reference.
+            type: str
       networks:
         description:
         - Specify Networks to announce via BGP.
@@ -122,24 +137,32 @@ options:
           under address_family.
         - For operation replace, if the device already has an address family activated,
           this option is not allowed.
+        type: list
+        elements: dict
         suboptions:
           prefix:
             description:
             - Network ID to announce via BGP.
             required: true
+            type: str
           masklen:
             description:
             - Subnet mask length for the Network to announce(e.g, 8, 16, 24, etc.).
+            type: int
           route_map:
             description:
             - Route map to modify the attributes.
+            type: str
       address_family:
         description:
         - Specifies BGP address family related configurations.
+        type: list
+        elements: dict
         suboptions:
           afi:
             description:
             - Type of address family to configure.
+            type: str
             choices:
             - ipv4
             - ipv6
@@ -147,39 +170,58 @@ options:
           redistribute:
             description:
             - Specifies the redistribute information from another routing protocol.
+            type: list
+            elements: dict
             suboptions:
               protocol:
                 description:
                 - Specifies the protocol for configuring redistribute information.
                 required: true
+                type: str
+                choices:
+                - ospf3
+                - ospf
+                - isis
+                - static
+                - connected
+                - rip
               route_map:
                 description:
                 - Specifies the route map reference.
+                type: str
           networks:
             description:
             - Specify Networks to announce via BGP.
             - For operation replace, this option is mutually exclusive with root level
               networks option.
+            type: list
+            elements: dict
             suboptions:
               prefix:
                 description:
                 - Network ID to announce via BGP.
                 required: true
+                type: str
               masklen:
                 description:
                 - Subnet mask length for the Network to announce(e.g, 8, 16, 24, etc.).
+                type: int
               route_map:
                 description:
                 - Route map to modify the attributes.
+                type: str
           neighbors:
             description:
             - Specifies BGP neighbor related configurations in Address Family configuration
               mode.
+            type: list
+            elements: dict
             suboptions:
               neighbor:
                 description:
                 - Neighbor router address.
                 required: true
+                type: str
               activate:
                 description:
                 - Enable the Address Family for this Neighbor.
@@ -209,6 +251,7 @@ options:
     - In case of override, all the existing BGP configuration will be removed from
       the device and replaced with the input configuration.
     - In case of delete the existing BGP configuration will be removed from the device.
+    type: str
     default: merge
     choices:
     - merge
@@ -338,7 +381,7 @@ def main():
     }
 
     redistribute_spec = {
-        "protocol": dict(choices=REDISTRIBUTE_PROTOCOLS, required=True),
+        "protocol": dict(choices=list(REDISTRIBUTE_PROTOCOLS), required=True),
         "route_map": dict(),
     }
 

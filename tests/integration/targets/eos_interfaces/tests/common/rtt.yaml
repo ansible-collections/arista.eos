@@ -51,10 +51,6 @@
         enabled: false
         mtu: '3000'
 
-- assert:
-    that:
-      - expected_config|difference(result.after) == []
-
 - name: Revert back to base config using facts round trip
   become: true
   register: revert

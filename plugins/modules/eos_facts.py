@@ -31,6 +31,7 @@ options:
       with an initial C(M(!)) to specify that a specific subset should not be collected.
     required: false
     type: list
+    elements: str
     default: '!config'
   gather_network_resources:
     description:
@@ -44,6 +45,7 @@ options:
       'lldp_global', 'lldp_interfaces', 'vlans', 'acls'.
     required: false
     type: list
+    elements: str
 """
 
 EXAMPLES = """
