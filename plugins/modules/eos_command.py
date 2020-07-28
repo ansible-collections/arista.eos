@@ -41,7 +41,12 @@ options:
       resulting output from the command is returned.  If the I(wait_for) argument
       is provided, the module is not returned until the condition is satisfied or
       the number of I(retries) has been exceeded.
+    - If a command sent to the device requires answering a prompt, it is possible to pass
+      a dict containing command, answer and prompt. Common answers are 'y' or "\\r"
+      (carriage return, must be double quotes). Refer below examples.
     required: true
+    type: list
+    elements: raw
   wait_for:
     description:
     - Specifies what to evaluate from the output of the command and what conditionals
@@ -50,6 +55,8 @@ options:
       retries, the task fails. Note - With I(wait_for) the value in C(result['stdout'])
       can be accessed using C(result), that is to access C(result['stdout'][0]) use
       C(result[0]) See examples.
+    type: list
+    elements: str
     aliases:
     - waitfor
   match:
@@ -58,6 +65,7 @@ options:
       specify the match policy.  Valid values are C(all) or C(any).  If the value
       is set to C(all) then all conditionals in the I(wait_for) must be satisfied.  If
       the value is set to C(any) then only one of the values must be satisfied.
+    type: str
     default: all
     choices:
     - any
@@ -68,12 +76,14 @@ options:
       failed.  The command is run on the target device every retry and evaluated against
       the I(wait_for) conditionals.
     default: 10
+    type: int
   interval:
     description:
     - Configures the interval in seconds to wait between retries of the command.  If
       the command does not pass the specified conditional, the interval indicates
       how to long to wait before trying the command again.
     default: 1
+    type: int
 """
 
 EXAMPLES = """
@@ -191,8 +201,8 @@ def main():
     """entry point for module execution
     """
     argument_spec = dict(
-        commands=dict(type="list", required=True),
-        wait_for=dict(type="list", aliases=["waitfor"]),
+        commands=dict(type="list", required=True, elements="raw"),
+        wait_for=dict(type="list", aliases=["waitfor"], elements="str"),
         match=dict(default="all", choices=["all", "any"]),
         retries=dict(default=10, type="int"),
         interval=dict(default=1, type="int"),

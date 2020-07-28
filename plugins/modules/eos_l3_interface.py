@@ -28,24 +28,56 @@ options:
   name:
     description:
     - Name of the L3 interface to be configured eg. ethernet1
+    type: str
   ipv4:
     description:
     - IPv4 address to be set for the L3 interface mentioned in I(name) option. The
       address format is <ipv4 address>/<mask>, the mask is number in range 0-32 eg.
       192.168.0.1/24
+    type: str
   ipv6:
     description:
     - IPv6 address to be set for the L3 interface mentioned in I(name) option. The
       address format is <ipv6 address>/<mask>, the mask is number in range 0-128 eg.
       fd5d:12c9:2201:1::1/64
+    type: str
   aggregate:
     description:
     - List of L3 interfaces definitions. Each of the entry in aggregate list should
       define name of interface C(name) and a optional C(ipv4) or C(ipv6) address.
+    type: list
+    elements: dict
+    suboptions:
+      name:
+        description:
+        - Name of the L3 interface to be configured eg. ethernet1
+        type: str
+        required: True
+      ipv4:
+        description:
+        - IPv4 address to be set for the L3 interface mentioned in I(name) option. The
+          address format is <ipv4 address>/<mask>, the mask is number in range 0-32 eg.
+          192.168.0.1/24
+        type: str
+      ipv6:
+        description:
+        - IPv6 address to be set for the L3 interface mentioned in I(name) option. The
+          address format is <ipv6 address>/<mask>, the mask is number in range 0-128 eg.
+          fd5d:12c9:2201:1::1/64
+        type: str
+      state:
+        description:
+        - State of the L3 interface configuration. It indicates if the configuration should
+          be present or absent on remote device.
+        type: str
+        choices:
+        - present
+        - absent
   state:
     description:
     - State of the L3 interface configuration. It indicates if the configuration should
       be present or absent on remote device.
+    type: str
     default: present
     choices:
     - present

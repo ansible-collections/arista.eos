@@ -22,21 +22,25 @@ options:
     description:
     - Destination of the logs.
     choices:
-    - on
+    - "on"
     - host
     - console
     - monitor
     - buffered
+    type: str
   name:
     description:
     - The hostname or IP address of the destination.
     - Required when I(dest=host).
+    type: str
   size:
     description:
     - Size of buffer. The acceptable value is in range from 10 to 2147483647 bytes.
+    type: int
   facility:
     description:
     - Set logging facility.
+    type: str
   level:
     description:
     - Set logging severity levels.
@@ -49,12 +53,61 @@ options:
     - notifications
     - informational
     - debugging
+    type: str
   aggregate:
     description: List of logging definitions.
+    type: list
+    elements: dict
+    suboptions:
+      dest:
+        description:
+        - Destination of the logs.
+        choices:
+        - "on"
+        - host
+        - console
+        - monitor
+        - buffered
+        type: str
+      name:
+        description:
+        - The hostname or IP address of the destination.
+        - Required when I(dest=host).
+        type: str
+      size:
+        description:
+        - Size of buffer. The acceptable value is in range from 10 to 2147483647 bytes.
+        type: int
+      facility:
+        description:
+        - Set logging facility.
+        type: str
+      level:
+        description:
+        - Set logging severity levels.
+        choices:
+        - emergencies
+        - alerts
+        - critical
+        - errors
+        - warnings
+        - notifications
+        - informational
+        - debugging
+        type: str
+      state:
+        description:
+        - State of the logging configuration.
+        default: present
+        type: str
+        choices:
+        - present
+        - absent
   state:
     description:
     - State of the logging configuration.
     default: present
+    type: str
     choices:
     - present
     - absent
@@ -409,6 +462,7 @@ def main():
     # remove default in aggregate spec, to handle common arguments
     remove_default_spec(aggregate_spec)
 
+    aggregate_spec["state"].update(default="present")
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec)
     )

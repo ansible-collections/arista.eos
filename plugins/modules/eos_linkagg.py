@@ -28,26 +28,65 @@ options:
   group:
     description:
     - Channel-group number for the port-channel Link aggregation group. Range 1-2000.
+    type: int
   mode:
     description:
     - Mode of the link aggregation group.
+    type: str
     choices:
     - active
-    - on
+    - "on"
     - passive
   members:
     description:
     - List of members of the link aggregation group.
+    type: list
+    elements: str
   min_links:
     description:
     - Minimum number of ports required up before bringing up the link aggregation
       group.
+    type: int
   aggregate:
     description: List of link aggregation definitions.
+    type: list
+    elements: dict
+    suboptions:
+      group:
+        description:
+        - Channel-group number for the port-channel Link aggregation group. Range 1-2000.
+        type: int
+        required: True
+      mode:
+        description:
+        - Mode of the link aggregation group.
+        type: str
+        choices:
+        - active
+        - "on"
+        - passive
+      members:
+        description:
+        - List of members of the link aggregation group.
+        type: list
+        elements: str
+      min_links:
+        description:
+        - Minimum number of ports required up before bringing up the link aggregation
+          group.
+        type: int
+      state:
+        description:
+        - State of the link aggregation group.
+        type: str
+        choices:
+        - present
+        - absent
   state:
     description:
     - State of the link aggregation group.
     default: present
+    type: str
     choices:
     - present
     - absent
@@ -338,12 +377,12 @@ def main():
         group=dict(type="int"),
         mode=dict(choices=["active", "on", "passive"]),
         min_links=dict(type="int"),
-        members=dict(type="list"),
+        members=dict(type="list", elements="str"),
         state=dict(default="present", choices=["present", "absent"]),
     )
 
     aggregate_spec = deepcopy(element_spec)
-    aggregate_spec["group"] = dict(required=True)
+    aggregate_spec["group"] = dict(required=True, type="int")
 
     # remove default in aggregate spec, to handle common arguments
     remove_default_spec(aggregate_spec)
@@ -351,6 +390,7 @@ def main():
     argument_spec = dict(
         aggregate=dict(type="list", elements="dict", options=aggregate_spec),
         purge=dict(default=False, type="bool"),
+        state=dict(default="present", choices=["present", "absent"]),
     )
 
     argument_spec.update(element_spec)

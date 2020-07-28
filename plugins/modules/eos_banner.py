@@ -40,15 +40,18 @@ options:
     choices:
     - login
     - motd
+    type: str
   text:
     description:
     - The banner text that should be present in the remote device running configuration.  This
       argument accepts a multiline string. Requires I(state=present).
+    type: str
   state:
     description:
     - Specifies whether or not the configuration is present in the current devices
       active running configuration.
     default: present
+    type: str
     choices:
     - present
     - absent
