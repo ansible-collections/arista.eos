@@ -52,8 +52,9 @@ class TerminalModule(TerminalBase):
         re.compile(br"% Subnet [0-9a-f.:/]+ overlaps", re.I),
         re.compile(br"Maximum number of pending sessions has been reached"),
         re.compile(br"% Prefix length must be less than"),
+        # terminal error when a configured port-channel's mode is modified.
         re.compile(
-            br"% Cannot change mode; remove all members and try again.", re.I
+            br"% Cannot change mode; remove all members and try again."
         ),
     ]
 
