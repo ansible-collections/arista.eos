@@ -52,7 +52,14 @@ class TerminalModule(TerminalBase):
         re.compile(br"% Subnet [0-9a-f.:/]+ overlaps", re.I),
         re.compile(br"Maximum number of pending sessions has been reached"),
         re.compile(br"% Prefix length must be less than"),
-        # terminal error when a configured port-channel's mode is modified.
+        # terminal error when a configured channel-group's mode is modified.
+        # 
+        # veos(config-if-Et2)#show active 
+        # interface Ethernet2
+        # channel-group 15 mode on
+        # -----------------------------
+        # veos(config-if-Et2)#channel-group 15 mode active
+        # % Cannot change mode; remove all members and try again.
         re.compile(
             br"% Cannot change mode; remove all members and try again."
         ),
