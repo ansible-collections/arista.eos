@@ -5,6 +5,32 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v1.0.2
+======
+
+Release Summary
+---------------
+
+- rereleasing 1.0.1 with updated changelog.
+
+v1.0.1
+======
+
+Minor Changes
+-------------
+
+- Add round trip testcases to the 2.9 resource modules.
+- Add unit testcases to the eos_l3_interfaces resource modules.
+- Add unit testcases to the eos_lag_interfaces resource modules.
+- Sorted the list of params of ip address before forming the tuple.
+- Updated docs.
+
+Bugfixes
+--------
+
+- Fixes mismatch in documentation and code for using eos_lag_interfaces where the code required 'Port-Channel\d.*:' but the docs did not document this. The module now supports both 'Port-Channel\d.*:' and '\d.*:'.
+- Make `src`, `backup` and `backup_options` in eos_config work when module alias is used (https://github.com/ansible-collections/arista.eos/pull/85).
+
 v1.0.0
 ======
 
