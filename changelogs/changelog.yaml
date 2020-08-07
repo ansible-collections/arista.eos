@@ -108,3 +108,33 @@ releases:
         name: eos
         namespace: null
     release_date: '2020-06-23'
+  1.0.1:
+    changes:
+      bugfixes:
+      - Fixes mismatch in documentation and code for using eos_lag_interfaces where
+        the code required 'Port-Channel\d.*:' but the docs did not document this.
+        The module now supports both 'Port-Channel\d.*:' and '\d.*:'.
+      - Make `src`, `backup` and `backup_options` in eos_config work when module alias
+        is used (https://github.com/ansible-collections/arista.eos/pull/85).
+      minor_changes:
+      - Add round trip testcases to the 2.9 resource modules.
+      - Add unit testcases to the eos_l3_interfaces resource modules.
+      - Add unit testcases to the eos_lag_interfaces resource modules.
+      - Sorted the list of params of ip address before forming the tuple.
+      - Updated docs.
+    fragments:
+    - 68-fix-sort-l3-int.yaml
+    - 72-add-rtt.yaml
+    - 80-linkagg-name-parameter.yaml
+    - 89-add-ut-l3_interfaces.yaml
+    - 90-add-ut-lag-interfaces.yaml
+    - 93-update-docs.yaml
+    - fix_src_backup_with_module_alias.yaml
+    release_date: '2020-07-31'
+  1.0.2:
+    changes:
+      release_summary:
+      - rereleasing 1.0.1 with updated changelog.
+    fragments:
+    - 1.0.2.yaml
+    release_date: '2020-08-06'

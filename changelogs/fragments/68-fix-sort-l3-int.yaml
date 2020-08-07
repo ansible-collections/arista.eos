@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Sorted the list of params of ip address before forming the tuple.
