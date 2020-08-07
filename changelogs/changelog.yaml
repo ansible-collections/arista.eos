@@ -117,14 +117,12 @@ releases:
       - Make `src`, `backup` and `backup_options` in eos_config work when module alias
         is used (https://github.com/ansible-collections/arista.eos/pull/85).
       minor_changes:
-      - Add changelogs for 1.0.0 release (https://github.com/ansible-collections/arista.eos/pull/62)
       - Add round trip testcases to the 2.9 resource modules.
       - Add unit testcases to the eos_l3_interfaces resource modules.
       - Add unit testcases to the eos_lag_interfaces resource modules.
       - Sorted the list of params of ip address before forming the tuple.
       - Updated docs.
     fragments:
-    - 62-add-change-log-1.0.0.yaml
     - 68-fix-sort-l3-int.yaml
     - 72-add-rtt.yaml
     - 80-linkagg-name-parameter.yaml
@@ -136,7 +134,7 @@ releases:
   1.0.2:
     changes:
       release_summary:
-      - rereleasing 1.0.2 with updated changelog.
+      - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'

@@ -11,7 +11,7 @@ v1.0.2
 Release Summary
 ---------------
 
-- rereleasing 1.0.2 with updated changelog.
+- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======
@@ -19,7 +19,6 @@ v1.0.1
 Minor Changes
 -------------
 
-- Add changelogs for 1.0.0 release (https://github.com/ansible-collections/arista.eos/pull/62)
 - Add round trip testcases to the 2.9 resource modules.
 - Add unit testcases to the eos_l3_interfaces resource modules.
 - Add unit testcases to the eos_lag_interfaces resource modules.
