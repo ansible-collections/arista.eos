@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Added error pattern to the terminal plugin to handle change mode error seen in lag interfaces config.
