@@ -73,13 +73,20 @@ class TestEosInterfacesModule(TestEosModule):
     def test_eos_interfaces_merged(self):
         set_module_args(
             dict(
-                config=[dict(name="Ethernet3", description="Ethernet_3")],
+                config=[
+                    dict(
+                        name="Ethernet3",
+                        description="Ethernet_3",
+                        mode="layer2",
+                    )
+                ],
                 state="merged",
             )
         )
         commands = [
             "interface Ethernet3",
             "description Ethernet_3",
+            "switchport",
             "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
@@ -97,32 +104,27 @@ class TestEosInterfacesModule(TestEosModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="Ethernet3", description="Ethernet_3", mtu=1000)
+                    dict(name="Ethernet2", description="Ethernet_2", mtu=1000)
                 ],
                 state="replaced",
             )
         )
         commands = [
-            "interface Ethernet3",
-            "description Ethernet_3",
+            "interface Ethernet2",
+            "description Ethernet_2",
             "mtu 1000",
-            "no shutdown",
+            "switchport",
         ]
         self.execute_module(changed=True, commands=commands)
-
-    # Bug : 63805
-    # def test_eos_interfaces_replaced_idempotent(self):
-    #    set_module_args(dict(
-    #        config=[dict(
-    #            name="Ethernet1",
-    #            description="Interface 1"
-    #        )], state="replaced"
-    #    ))
-    #    self.execute_module(changed=False, commands=[])
 
     def test_eos_interfaces_delete(self):
         set_module_args(dict(config=[dict(name="Ethernet1")], state="deleted"))
         commands = ["interface Ethernet1", "no description", "no shutdown"]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_interfaces_delete_switchport(self):
+        set_module_args(dict(config=[dict(name="Ethernet2")], state="deleted"))
+        commands = ["interface Ethernet2", "switchport", "no shutdown"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_interfaces_speed_forced(self):
@@ -133,6 +135,7 @@ class TestEosInterfacesModule(TestEosModule):
                         name="Ethernet1",
                         description="Interface_1",
                         speed="forced 40g",
+                        mode="layer3",
                         duplex="full",
                     )
                 ],
@@ -142,6 +145,7 @@ class TestEosInterfacesModule(TestEosModule):
         commands = [
             "interface Ethernet1",
             "description Interface_1",
+            "no switchport",
             "speed forced 40gfull",
         ]
         self.execute_module(changed=True, commands=commands)
@@ -154,6 +158,7 @@ class TestEosInterfacesModule(TestEosModule):
                         name="Ethernet1",
                         description="Interface_1",
                         speed="1000g",
+                        mode="layer2",
                         duplex="full",
                     )
                 ],
@@ -164,6 +169,7 @@ class TestEosInterfacesModule(TestEosModule):
             "interface Ethernet1",
             "description Interface_1",
             "speed 1000gfull",
+            "switchport",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -209,22 +215,28 @@ class TestEosInterfacesModule(TestEosModule):
         ]
         self.execute_module(changed=True, commands=commands)
 
-    # Bug # 63760
-    # def test_eos_interfaces_overridden(self):
-    #    set_module_args(dict(
-    #        config=[dict(
-    #            name="Ethernet3",
-    #            description="Ethernet_3",
-    #            mtu=1000
-    #        ),
-    #        dict(
-    #        name="Ethernet1",
-    #        description="Ethernet 1"
-    #        )], state="overridden"
-    #    ))
-    #    commands = ['interface Ethernet3', 'description Ethernet_3', 'mtu 1000', 'interface Ethernet1',
-    #                  'description Ethernet 1', 'interface Management1', 'no description', 'no ip address']
-    #    self.execute_module(changed=True, commands=commands)
+    def test_eos_interfaces_overridden(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(name="Ethernet2", description="Ethernet_2", mtu=1000),
+                    dict(name="Ethernet1", description="Ethernet 1"),
+                ],
+                state="overridden",
+            )
+        )
+        commands = [
+            "interface Ethernet2",
+            "description Ethernet_2",
+            "mtu 1000",
+            "switchport",
+            "interface Ethernet1",
+            "description Ethernet 1",
+            "interface Management1",
+            "no description",
+            "no shutdown",
+        ]
+        self.execute_module(changed=True, commands=commands)
 
     # def test_eos_interfaces_overridden_idempotent(self):
     #    set_module_args(dict(
