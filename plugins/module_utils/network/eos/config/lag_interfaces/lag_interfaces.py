@@ -253,7 +253,20 @@ def set_config(want, have):
                     ),
                 ]
             )
-
+    fallback_settings = to_set.get("fallback", {})
+    if fallback_settings:
+        commands.extend(["interface %s" % want["name"]])
+        if "mode" in fallback_settings:
+            commands.extend(
+                ["port-channel lacp fallback %s" % fallback_settings["mode"]]
+            )
+        if "timeout" in fallback_settings:
+            commands.extend(
+                [
+                    "port-channel lacp fallback timeout %s"
+                    % fallback_settings["timeout"]
+                ]
+            )
     return commands
 
 

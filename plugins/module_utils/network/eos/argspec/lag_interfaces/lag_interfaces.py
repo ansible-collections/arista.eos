@@ -53,6 +53,16 @@ class Lag_interfacesArgs(object):
                     },
                     "type": "list",
                 },
+                "fallback": {
+                    "options": {
+                        "mode": {
+                            "choices": ["static", "individual"],
+                            "type": "str",
+                        },
+                        "timeout": {"type": "int"},
+                    },
+                    "type": "dict",
+                },
             },
             "type": "list",
         },

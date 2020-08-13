@@ -277,6 +277,32 @@ class TestEosLagInterfacesModule(TestEosModule):
         ]
         self.assertEqual(parsed_list, result["parsed"])
 
+    def test_eos_lag_interfaces_fallback(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Port-Channel1",
+                        fallback=dict(mode="static", timeout=1),
+                        members=[
+                            dict(member="Ethernet1", mode="on"),
+                            dict(member="Ethernet2", mode="on"),
+                        ],
+                    )
+                ]
+            )
+        )
+        commands = [
+            "interface Ethernet1",
+            "channel-group 1 mode on",
+            "interface Ethernet2",
+            "channel-group 1 mode on",
+            "interface Port-Channel1",
+            "port-channel lacp fallback static",
+            "port-channel lacp fallback timeout 1",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
     def test_eos_lag_interfaces_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(changed=False)
