@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Added 'mode' key to eos_interfaces to handle the layer2/3 switchport mode of an interface.
