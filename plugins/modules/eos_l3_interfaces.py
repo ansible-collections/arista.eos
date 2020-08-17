@@ -41,7 +41,7 @@ author: Nathaniel Case (@qalthos)
 notes:
 - Tested against Arista EOS 4.20.10M
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
-  'eos_l2_interfaces/eos_interfaces' should be used for preparing the node , before applying L3 configurations using
+  'eos_l2_interfaces/eos_interfaces' should be used for preparing the interfaces , before applying L3 configurations using
   this module (eos_l3_interfaces).
 options:
   config:
