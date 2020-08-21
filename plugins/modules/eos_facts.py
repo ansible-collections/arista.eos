@@ -173,10 +173,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.fac
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
-
 
 def main():
     """
@@ -184,18 +180,10 @@ def main():
 
     :returns: ansible_facts
     """
-    argument_spec = FactsArgs.argument_spec
-    argument_spec.update(eos_argument_spec)
-
-    module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
-    )
-
-    warnings = []
-    if module.params["gather_subset"] == "!config":
-        warnings.append(
-            "default value for `gather_subset` will be changed to `min` from `!config` v2.11 onwards"
-        )
+    module = AnsibleModule(argument_spec=FactsArgs.argument_spec,
+                           supports_check_mode=True)
+    warnings = ['default value for `gather_subset` '
+                'will be changed to `min` from `!config` v2.11 onwards']
 
     result = Facts(module).get_facts()
 
@@ -205,5 +193,5 @@ def main():
     module.exit_json(ansible_facts=ansible_facts, warnings=warnings)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

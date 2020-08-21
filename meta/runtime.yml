@@ -94,6 +94,10 @@ plugin_routing:
       redirect: arista.eos.eos
     ospfv2:
       redirect: arista.eos.eos
+    eos_ospfv3:
+      redirect: arista.eos.eos
+    ospfv3:
+      redirect: arista.eos.eos
     eos_static_route:
       redirect: arista.eos.eos
     static_route:
