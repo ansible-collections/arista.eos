@@ -1,0 +1,15 @@
+---
+- block:
+  - arista.eos.eos_command:
+      commands:
+        - reload power force
+    become: true
+
+  - wait_for_connection:
+      delay: 20
+      sleep: 10
+
+  - arista.eos.eos_command:
+      commands:
+        - show version
+  when: not ansible_connection.endswith("local")
