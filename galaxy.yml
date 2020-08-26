@@ -5,6 +5,7 @@ dependencies:
   "ansible.netcommon": "*"
 license_file: LICENSE
 name: eos
+description: Ansible Network Collection for Arista EOS devices.
 namespace: arista
 readme: README.md
 repository: https://github.com/ansible-collections/arista.eos

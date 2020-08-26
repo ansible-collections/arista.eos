@@ -5,6 +5,14 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v1.1.0
+======
+
+Bugfixes
+--------
+
+- Added error pattern to the terminal plugin to handle change mode error seen in lag interfaces config.
+
 v1.0.2
 ======
 
