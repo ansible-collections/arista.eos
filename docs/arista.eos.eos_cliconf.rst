@@ -31,30 +31,30 @@ Parameters
         <tr>
             <th colspan="1">Parameter</th>
             <th>Choices/<font color="blue">Defaults</font></th>
-                            <th>Configuration</th>
-                        <th width="100%">Comments</th>
+                <th>Configuration</th>
+            <th width="100%">Comments</th>
         </tr>
-                    <tr>
-                                                                <td colspan="1">
+            <tr>
+                <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>eos_use_sessions</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
-                                                                    </div>
-                                    </td>
-                                <td>
-                                                                                                                                                                                                                <b>Default:</b><br/><div style="color: blue">"yes"</div>
-                                    </td>
-                                                    <td>
-                                                                                                            <div>env:ANSIBLE_EOS_USE_SESSIONS</div>
-                                                                                                                                        <div>var: ansible_eos_use_sessions</div>
-                                                                        </td>
-                                                <td>
-                                            <div>Specifies if sessions should be used on remote host or not</div>
-                                                        </td>
+                    </div>
+                </td>
+                <td>
+                        <b>Default:</b><br/><div style="color: blue">"yes"</div>
+                </td>
+                    <td>
+                                <div>env:ANSIBLE_EOS_USE_SESSIONS</div>
+                                <div>var: ansible_eos_use_sessions</div>
+                    </td>
+                <td>
+                        <div>Specifies if sessions should be used on remote host or not</div>
+                </td>
             </tr>
-                        </table>
+    </table>
     <br/>
 
 
