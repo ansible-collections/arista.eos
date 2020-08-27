@@ -138,3 +138,11 @@ releases:
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
+  1.0.3:
+    changes:
+      bugfixes:
+      - Added error pattern to the terminal plugin to handle change mode error seen
+        in lag interfaces config.
+    fragments:
+    - 96-changemode-terminalerror.yaml
+    release_date: '2020-08-26'
