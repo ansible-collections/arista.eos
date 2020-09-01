@@ -117,7 +117,10 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                         },
                         "graceful_restart": {
                             "type": "dict",
-                            "options": {"grace_period": {"type": "int"}},
+                            "options": {
+                                        "grace_period": {"type": "int"},
+                                        "set": {"type": "bool"},
+                                      },
                         },
                         "timers": {
                             "type": "dict",
@@ -249,7 +252,7 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                         "route_map": {"type": "str"},
                                     },
                                 },
-                                "afi": {"choices": ["ipv4", "ipv6", "router"]},
+                                "afi": {"choices": ["ipv4", "ipv6"], "type": "str"},
                                 "fips_restrictions": {"type": "bool"},
                                 "default_metric": {"type": "int"},
                                 "maximum_paths": {"type": "int"},

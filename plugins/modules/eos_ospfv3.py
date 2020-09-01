@@ -170,10 +170,10 @@ options:
                   type: dict
                   suboptions:
                     set:
-                      description: True if only stub is set
+                      description: True if only stub is set.
                       type: bool
                     summary_lsa:
-                      desctiption: If False , Filter all type-3 LSAs in the stub area.
+                      description: If False , Filter all type-3 LSAs in the stub area.
                       type: bool
 
           bfd:
@@ -194,7 +194,7 @@ options:
                 description: Specify maximum time to wait for graceful-restart to
                   complete.
                 type: int
-                set:
+              set:
                   description: When true sets the grace_fulrestart config alone.
                   type: bool
           graceful_restart_helper:
@@ -311,8 +311,11 @@ options:
             elements: dict
             suboptions:
               afi:
-                description: address family . Specify 'router' if the following configurations should be in router contxt.
-                choices: [ipv4, ipv6, router]
+                description: address family .
+                type: str
+                choices:
+                - ipv4
+                - ipv6
               adjacency:
                 description: Configure adjacency options for OSPF instance.
                 type: dict
@@ -427,7 +430,7 @@ options:
                           description: True if only nssa is set 
                           type: bool
                   ranges:
-                    description: Configure route summarization(not valid when afi=router).
+                    description: Configure route summarization.
                     type: list
                     elements: dict
                     suboptions:
@@ -454,7 +457,7 @@ options:
                         description: True if only stub is set
                         type: bool
                       summary_lsa:
-                        desctiption: If False , Filter all type-3 LSAs in the stub area.
+                        description: If False , Filter all type-3 LSAs in the stub area.
                         type: bool
 
               bfd:
@@ -465,7 +468,7 @@ options:
                     description: Enable BFD on all interfaces.
                     type: bool
               default_information:
-                description: Control distribution of default information(not valid when afi="router")
+                description: Control distribution of default information.
                 type: dict
                 suboptions:
                   originate:
@@ -484,10 +487,10 @@ options:
                     description: Specify which route-map to use.
                     type: str
               default_metric:
-                description: Configure the default metric for redistributed routes(not valid when afi="router").
+                description: Configure the default metric for redistributed routes.
                 type: int
               distance:
-                description: Specifies the administrative distance for routes(not valid when afi="router").
+                description: Specifies the administrative distance for routes.
                 type: int
               fips_restrictions:
                 description: Use FIPS compliant algorithms
@@ -497,8 +500,7 @@ options:
                 type: dict
                 suboptions:
                   grace_period:
-                    description: Specify maximum time to wait for graceful-restart to
-                      complete.
+                    description: Specify maximum time to wait for graceful-restart to complete.
                     type: int
                   set:
                     description: When true sets the grace_fulrestart config alone.
@@ -570,13 +572,13 @@ options:
                             - Set max metric value for external LSAs.
                             type: int
               maximum_paths:
-                description: Maximum number of next-hops in an ECMP route(not valid when afi="router").
+                description: Maximum number of next-hops in an ECMP route.
                 type: int
               passive_interface:
                description: Include interface but without actively running OSPF.
                type: bool
               redistribute:
-                description: Specifies the routes to be redistributed(not valid when afi="router").
+                description: Specifies the routes to be redistributed.
                 type: list
                 elements: dict
                 suboptions:
@@ -640,13 +642,853 @@ options:
     type: str
     choices: [deleted, merged, overridden, replaced, gathered, rendered, parsed]
     default: merged
-EXAMPLES:
-  - deleted_example_01.txt
-  - merged_example_01.txt
-  - overridden_example_01.txt
-  - replaced_example_01.txt
-  - gathered_example_01.txt
-  - rendered_example_01.txt
+"""
+
+EXAMPLES = """
+
+# Using merged
+
+# Before state
+
+# veos#show running-config | section ospfv3
+# veos#
+
+
+    arista.eos.eos_ospfv3:
+      config:
+        processes:
+          - address_family:
+              - timers:
+                  lsa: 22
+                graceful_restart:
+                  grace_period: 35
+                afi: "ipv6"
+            timers:
+              pacing: 55
+            fips_restrictions: True
+            router_id: "2.2.2.2"
+            vrf: "vrfmerge"
+
+
+# After state
+
+# veos#show running-config | section ospfv3
+# router ospfv3 vrf vrfmerge
+#    router-id 2.2.2.2
+#    fips restrictions
+#    timers pacing flood 55
+#    !
+#    address-family ipv6
+#       fips restrictions
+#       timers lsa arrival 22
+#       graceful-restart grace-period 35
+# veos#
+
+# Module Execution
+#     "after": {
+#         "processes": [
+#             {
+#                 "address_family": [
+#                     {
+#                         "afi": "ipv6",
+#                         "fips_restrictions": true,
+#                         "graceful_restart": {
+#                             "grace_period": 35
+#                         },
+#                         "timers": {
+#                             "lsa": 22
+#                         }
+#                     }
+#                 ],
+#                 "fips_restrictions": true,
+#                 "router_id": "2.2.2.2",
+#                 "timers": {
+#                     "pacing": 55
+#                 },
+#                 "vrf": "vrfmerge"
+#             }
+#         ]
+#     },
+#     "before": {},
+#     "changed": true,
+#     "commands": [
+#         "router ospfv3 vrf vrfmerge",
+#         "address-family ipv6",
+#         "graceful-restart grace-period 35",
+#         "timers lsa arrival 22",
+#         "exit",
+#         "timers pacing flood 55",
+#         "fips restrictions",
+#         "router-id 2.2.2.2",
+#         "exit"
+#     ],
+
+
+# using replaced
+
+# before state
+
+# veos#show running-config | section ospfv3
+# router ospfv3
+#    fips restrictions
+#    area 0.0.0.0 encryption ipsec spi 43 esp null md5 passphrase 7 h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4=
+# !
+# router ospfv3 vrf vrfmerge
+#    router-id 2.2.2.2
+#    fips restrictions
+#    timers pacing flood 55
+#    !
+#    address-family ipv6
+#       fips restrictions
+#       timers lsa arrival 22
+#       graceful-restart grace-period 35
+# veos#
+
+
+    arista.eos.eos_ospfv3:
+      config:
+        processes:
+          - areas:
+              - area_id: "0.0.0.0"
+                encryption:
+                  spi: 43
+                  encryption: "null"
+                  algorithm: "md5"
+                  encrypt_key: False
+                  passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+            vrf: "default"
+            address_family:
+              - afi: "ipv4"
+                router_id: "7.1.1.1"
+      state: replaced
+
+# After state
+# veos#show running-config | section ospfv3
+# router ospfv3
+#    area 0.0.0.0 encryption ipsec spi 43 esp null md5 passphrase 7 h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4=
+# !
+# router ospfv3 vrf vrfmerge
+#    passive-interface default
+#    !
+#    address-family ipv6
+#       area 0.0.0.3 range 10.1.2.0/24
+#       area 0.0.0.3 range 60.1.0.0/16 cost 30
+# veos#
+
+# Module execution
+
+# "after": {
+#     "processes": [
+#         {
+#             "areas": [
+#                 {
+#                     "area_id": "0.0.0.0",
+#                     "encryption": {
+#                         "algorithm": "md5",
+#                         "encryption": "null",
+#                         "hidden_key": true,
+#                         "passphrase": "h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4="
+#                     }
+#                 }
+#             ],
+#             "vrf": "default"
+#         },
+#         {
+#             "address_family": [
+#                 {
+#                     "afi": "ipv6",
+#                     "areas": [
+#                         {
+#                             "area_id": "0.0.0.3",
+#                             "ranges": [
+#                                 {
+#                                     "address": "10.1.2.0/24"
+#                                 },
+#                                 {
+#                                     "address": "60.1.0.0/16",
+#                                     "cost": 30
+#                                 }
+#                             ]
+#                         }
+#                     ]
+#                 }
+#             ],
+#             "passive_interface": true,
+#             "vrf": "vrfmerge"
+#         }
+#     ]
+# },
+# "before": {
+#     "processes": [
+#         {
+#             "areas": [
+#                 {
+#                     "area_id": "0.0.0.0",
+#                     "encryption": {
+#                         "algorithm": "md5",
+#                         "encryption": "null",
+#                         "hidden_key": true,
+#                         "passphrase": "h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4="
+#                     }
+#                 }
+#             ],
+#             "fips_restrictions": true,
+#             "vrf": "default"
+#         },
+#         {
+#             "address_family": [
+#                 {
+#                     "afi": "ipv6",
+#                     "fips_restrictions": true,
+#                     "graceful_restart": {
+#                         "grace_period": 35
+#                     },
+#                     "timers": {
+#                         "lsa": 22
+#                     }
+#                 }
+#             ],
+#             "fips_restrictions": true,
+#             "router_id": "2.2.2.2",
+#             "timers": {
+#                 "pacing": 55
+#             },
+#             "vrf": "vrfmerge"
+#         }
+#     ]
+# },
+# "changed": true,
+# "commands": [
+#     "router ospfv3 vrf vrfmerge",
+#     "address-family ipv6",
+#     "no fips restrictions",
+#     "no graceful-restart",
+#     "no timers lsa arrival 22",
+#     "area 0.0.0.3 range 10.1.2.2/24 advertise",
+#     "area 0.0.0.3 range 60.1.1.1 255.255.0.0 cost 30",
+#     "exit",
+#     "passive-interface default",
+#     "no router-id",
+#     "no fips restrictions",
+#     "no timers pacing flood 55",
+#     "exit"
+# ],
+
+
+# using overridden
+
+# before state
+
+# veos#show running-config | section ospfv3
+# router ospfv3
+#    area 0.0.0.0 encryption ipsec spi 43 esp null md5 passphrase 7 h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4=
+# !
+# router ospfv3 vrf vrfmerge
+#    passive-interface default
+#    !
+#    address-family ipv6
+#       area 0.0.0.3 range 10.1.2.0/24
+#       area 0.0.0.3 range 60.1.0.0/16 cost 30
+# veos#
+
+
+    arista.eos.eos_ospfv3:
+      config:
+        processes:
+          - address_family:
+              - areas:
+                  - area_id: "0.0.0.3"
+                    ranges:
+                      - address: 10.1.2.2/24
+                        advertise: True
+                      - address: 60.1.1.1
+                        subnet_mask: 255.255.0.0
+                        cost: 30
+                afi: "ipv6"
+            passive_interface: True
+            vrf: "vrfmerge"
+      state: overridden
+
+# After state
+
+# veos#show running-config | section ospfv3
+# router ospfv3 vrf vrfmerge
+#    passive-interface default
+#    !
+#    address-family ipv6
+#       area 0.0.0.3 range 10.1.2.0/24
+#       area 0.0.0.3 range 60.1.0.0/16 cost 30
+# veos#
+
+
+
+# Module execution
+
+# "after": {
+#     "processes": [
+#         {
+#             "address_family": [
+#                 {
+#                     "afi": "ipv6",
+#                     "areas": [
+#                         {
+#                             "area_id": "0.0.0.3",
+#                             "ranges": [
+#                                 {
+#                                     "address": "10.1.2.0/24"
+#                                 },
+#                                 {
+#                                     "address": "60.1.0.0/16",
+#                                     "cost": 30
+#                                 }
+#                             ]
+#                         }
+#                     ]
+#                 }
+#             ],
+#             "passive_interface": true,
+#             "vrf": "vrfmerge"
+#         }
+#     ]
+# },
+# "before": {
+#     "processes": [
+#         {
+#             "areas": [
+#                 {
+#                     "area_id": "0.0.0.0",
+#                     "encryption": {
+#                         "algorithm": "md5",
+#                         "encryption": "null",
+#                         "hidden_key": true,
+#                         "passphrase": "h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4="
+#                     }
+#                 }
+#             ],
+#             "vrf": "default"
+#         },
+#         {
+#             "address_family": [
+#                 {
+#                     "afi": "ipv6",
+#                     "areas": [
+#                         {
+#                             "area_id": "0.0.0.3",
+#                             "ranges": [
+#                                 {
+#                                     "address": "10.1.2.0/24"
+#                                 },
+#                                 {
+#                                     "address": "60.1.0.0/16",
+#                                     "cost": 30
+#                                 }
+#                             ]
+#                         }
+#                     ]
+#                 }
+#             ],
+#             "passive_interface": true,
+#             "vrf": "vrfmerge"
+#         }
+#     ]
+# },
+# "changed": true,
+# "commands": [
+#     "no router ospfv3",
+#     "router ospfv3 vrf vrfmerge",
+#     "address-family ipv6",
+#     "no area 0.0.0.3 range 10.1.2.0/24",
+#     "no area 0.0.0.3 range 60.1.0.0/16 cost 30",
+#     "area 0.0.0.3 range 10.1.2.2/24 advertise",
+#     "area 0.0.0.3 range 60.1.1.1 255.255.0.0 cost 30",
+#     "exit",
+#     "exit"
+# ],
+
+# using deleted
+
+# Before state
+
+# veos#show running-config | section ospfv3
+# router ospfv3
+#    area 0.0.0.0 encryption ipsec spi 43 esp null md5 passphrase 7 h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4=
+# !
+# router ospfv3 vrf vrfmerge
+#    passive-interface default
+#    !
+#    address-family ipv4
+#       redistribute connected
+#       redistribute static route-map MAP01
+#       area 0.0.0.3 range 10.1.2.0/24
+#       area 0.0.0.3 range 60.1.0.0/16 cost 30
+#    !
+#    address-family ipv6
+#       area 0.0.0.3 range 10.1.2.0/24
+#       area 0.0.0.3 range 60.1.0.0/16 cost 30
+# veos#
+
+
+    arista.eos.eos_ospfv3:
+      config:
+        processes:
+          - vrf: "default"
+      state: deleted
+
+# After state
+
+# veos#show running-config | section ospfv3
+# router ospfv3 vrf vrfmerge
+#    passive-interface default
+#    !
+#    address-family ipv4
+#       redistribute connected
+#       redistribute static route-map MAP01
+#       area 0.0.0.3 range 10.1.2.0/24
+#       area 0.0.0.3 range 60.1.0.0/16 cost 30
+#    !
+#    address-family ipv6
+#       area 0.0.0.3 range 10.1.2.0/24
+#       area 0.0.0.3 range 60.1.0.0/16 cost 30
+# veos#
+
+
+# Module execution
+# "after": {
+#     "processes": [
+#         {
+#             "address_family": [
+#                 {
+#                     "afi": "ipv4",
+#                     "areas": [
+#                         {
+#                             "area_id": "0.0.0.3",
+#                             "ranges": [
+#                                 {
+#                                     "address": "10.1.2.0/24"
+#                                 },
+#                                 {
+#                                     "address": "60.1.0.0/16",
+#                                     "cost": 30
+#                                 }
+#                             ]
+#                         }
+#                     ],
+#                     "redistribute": [
+#                         {
+#                             "routes": "connected"
+#                         },
+#                         {
+#                             "route_map": "MAP01",
+#                             "routes": "static"
+#                         }
+#                     ]
+#                 },
+#                 {
+#                     "afi": "ipv6",
+#                     "areas": [
+#                         {
+#                             "area_id": "0.0.0.3",
+#                             "ranges": [
+#                                 {
+#                                     "address": "10.1.2.0/24"
+#                                 },
+#                                 {
+#                                     "address": "60.1.0.0/16",
+#                                     "cost": 30
+#                                 }
+#                             ]
+#                         }
+#                     ]
+#                 }
+#             ],
+#             "passive_interface": true,
+#             "vrf": "vrfmerge"
+#         }
+#     ]
+# },
+# "before": {
+#     "processes": [
+#         {
+#             "areas": [
+#                 {
+#                     "area_id": "0.0.0.0",
+#                     "encryption": {
+#                         "algorithm": "md5",
+#                         "encryption": "null",
+#                         "hidden_key": true,
+#                         "passphrase": "h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4="
+#                     }
+#                 }
+#             ],
+#             "vrf": "default"
+#         },
+#         {
+#             "address_family": [
+#                 {
+#                     "afi": "ipv4",
+#                     "areas": [
+#                         {
+#                             "area_id": "0.0.0.3",
+#                             "ranges": [
+#                                 {
+#                                     "address": "10.1.2.0/24"
+#                                 },
+#                                 {
+#                                     "address": "60.1.0.0/16",
+#                                     "cost": 30
+#                                 }
+#                             ]
+#                         }
+#                     ],
+#                     "redistribute": [
+#                         {
+#                             "routes": "connected"
+#                         },
+#                         {
+#                             "route_map": "MAP01",
+#                             "routes": "static"
+#                         }
+#                     ]
+#                 },
+#                 {
+#                     "afi": "ipv6",
+#                     "areas": [
+#                         {
+#                             "area_id": "0.0.0.3",
+#                             "ranges": [
+#                                 {
+#                                     "address": "10.1.2.0/24"
+#                                 },
+#                                 {
+#                                     "address": "60.1.0.0/16",
+#                                     "cost": 30
+#                                 }
+#                             ]
+#                         }
+#                     ]
+#                 }
+#             ],
+#             "passive_interface": true,
+#             "vrf": "vrfmerge"
+#         }
+#     ]
+# },
+# "changed": true,
+# "commands": [
+#     "no router ospfv3"
+# ],
+
+# using parsed
+
+# parsed_ospfv3.cfg
+
+# router ospfv3
+#    fips restrictions
+#    area 0.0.0.20 stub
+#    area 0.0.0.20 authentication ipsec spi 33 sha1 passphrase 7 4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w
+#    area 0.0.0.40 default-cost 45
+#    area 0.0.0.40 stub
+#    timers pacing flood 7
+#    adjacency exchange-start threshold 11
+#    !
+#    address-family ipv4
+#       fips restrictions
+#       redistribute connected
+#    !
+#    address-family ipv6
+#       router-id 10.1.1.1
+#       fips restrictions
+# !
+# router ospfv3 vrf vrf01
+#    bfd all-interfaces
+#    fips restrictions
+#    area 0.0.0.0 encryption ipsec spi 256 esp null sha1 passphrase 7 7hl8FV3lZ6H1mAKpjL47hQ==
+#    log-adjacency-changes detail
+#    !
+#    address-family ipv4
+#       passive-interface default
+#       fips restrictions
+#       redistribute connected route-map MAP01
+#       maximum-paths 100
+#    !
+#    address-family ipv6
+#       fips restrictions
+#       area 0.0.0.10 nssa no-summary
+#       default-information originate route-map DefaultRouteFilter
+#       max-metric router-lsa external-lsa 25 summary-lsa
+# !
+# router ospfv3 vrf vrf02
+#    fips restrictions
+#    !
+#    address-family ipv6
+#       router-id 10.17.0.3
+#       distance ospf intra-area 200
+#       fips restrictions
+#       area 0.0.0.1 stub
+#       timers throttle spf 56 56 56
+#       timers out-delay 10
+
+
+    arista.eos.eos_ospfv3:
+      running_config: "{{ lookup('file', './parsed_ospfv3.cfg') }}"
+      state: parsed
+
+# Module execution
+
+# "parsed": {
+#         "processes": [
+#             {
+#                 "address_family": [
+#                     {
+#                         "afi": "ipv4",
+#                         "fips_restrictions": true,
+#                         "redistribute": [
+#                             {
+#                                 "routes": "connected"
+#                             }
+#                         ]
+#                     },
+#                     {
+#                         "afi": "ipv6",
+#                         "fips_restrictions": true,
+#                         "router_id": "10.1.1.1"
+#                     }
+#                 ],
+#                 "adjacency": {
+#                     "exchange_start": {
+#                         "threshold": 11
+#                     }
+#                 },
+#                 "areas": [
+#                     {
+#                         "area_id": "0.0.0.20",
+#                         "authentication": {
+#                             "algorithm": "sha1",
+#                             "hidden_key": true,
+#                             "passphrase": "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w",
+#                             "spi": 33
+#                         },
+#                         "stub": {
+#                             "set": true
+#                         }
+#                     },
+#                     {
+#                         "area_id": "0.0.0.40",
+#                         "default_cost": 45,
+#                         "stub": {
+#                             "set": true
+#                         }
+#                     }
+#                 ],
+#                 "fips_restrictions": true,
+#                 "timers": {
+#                     "pacing": 7
+#                 },
+#                 "vrf": "default"
+#             },
+#             {
+#                 "address_family": [
+#                     {
+#                         "afi": "ipv4",
+#                         "fips_restrictions": true,
+#                         "maximum_paths": 100,
+#                         "passive_interface": true,
+#                         "redistribute": [
+#                             {
+#                                 "route_map": "MAP01",
+#                                 "routes": "connected"
+#                             }
+#                         ]
+#                     },
+#                     {
+#                         "afi": "ipv6",
+#                         "areas": [
+#                             {
+#                                 "area_id": "0.0.0.10",
+#                                 "nssa": {
+#                                     "no_summary": true
+#                                 }
+#                             }
+#                         ],
+#                         "default_information": {
+#                             "originate": true,
+#                             "route_map": "DefaultRouteFilter"
+#                         },
+#                         "fips_restrictions": true,
+#                         "max_metric": {
+#                             "router_lsa": {
+#                                 "external_lsa": {
+#                                     "max_metric_value": 25
+#                                 },
+#                                 "summary_lsa": {
+#                                     "set": true
+#                                 }
+#                             }
+#                         }
+#                     }
+#                 ],
+#                 "areas": [
+#                     {
+#                         "area_id": "0.0.0.0",
+#                         "encryption": {
+#                             "algorithm": "sha1",
+#                             "encryption": "null",
+#                             "hidden_key": true,
+#                             "passphrase": "7hl8FV3lZ6H1mAKpjL47hQ=="
+#                         }
+#                     }
+#                 ],
+#                 "bfd": {
+#                     "all_interfaces": true
+#                 },
+#                 "fips_restrictions": true,
+#                 "log_adjacency_changes": {
+#                     "detail": true
+#                 },
+#                 "vrf": "vrf01"
+#             },
+#             {
+#                 "address_family": [
+#                     {
+#                         "afi": "ipv6",
+#                         "areas": [
+#                             {
+#                                 "area_id": "0.0.0.1",
+#                                 "stub": {
+#                                     "set": true
+#                                 }
+#                             }
+#                         ],
+#                         "distance": 200,
+#                         "fips_restrictions": true,
+#                         "router_id": "10.17.0.3",
+#                         "timers": {
+#                             "out_delay": 10,
+#                             "throttle": {
+#                                 "initial": 56,
+#                                 "max": 56,
+#                                 "min": 56,
+#                                 "spf": true
+#                             }
+#                         }
+#                     }
+#                 ],
+#                 "fips_restrictions": true,
+#                 "vrf": "vrf02"
+#             }
+#         ]
+
+# using gathered
+
+# native config
+
+# veos#show running-config | section ospfv3
+# router ospfv3 vrf vrfmerge
+#    passive-interface default
+#    !
+#    address-family ipv4
+#       redistribute connected
+#       redistribute static route-map MAP01
+#       area 0.0.0.3 range 10.1.2.0/24
+#       area 0.0.0.3 range 60.1.0.0/16 cost 30
+#    !
+#    address-family ipv6
+#       area 0.0.0.3 range 10.1.2.0/24
+#       area 0.0.0.3 range 60.1.0.0/16 cost 30
+# veos#
+
+
+    arista.eos.eos_ospfv3:
+      state: gathered
+
+# module execution
+
+# "gathered": {
+#     "processes": [
+#         {
+#             "address_family": [
+#                 {
+#                     "afi": "ipv4",
+#                     "areas": [
+#                         {
+#                             "area_id": "0.0.0.3",
+#                             "ranges": [
+#                                 {
+#                                     "address": "10.1.2.0/24"
+#                                 },
+#                                 {
+#                                     "address": "60.1.0.0/16",
+#                                     "cost": 30
+#                                 }
+#                             ]
+#                         }
+#                     ],
+#                     "redistribute": [
+#                         {
+#                             "routes": "connected"
+#                         },
+#                         {
+#                             "route_map": "MAP01",
+#                             "routes": "static"
+#                         }
+#                     ]
+#                 },
+#                 {
+#                     "afi": "ipv6",
+#                     "areas": [
+#                         {
+#                             "area_id": "0.0.0.3",
+#                             "ranges": [
+#                                 {
+#                                     "address": "10.1.2.0/24"
+#                                 },
+#                                 {
+#                                     "address": "60.1.0.0/16",
+#                                     "cost": 30
+#                                 }
+#                             ]
+#                         }
+#                     ]
+#                 }
+#             ],
+#             "passive_interface": true,
+#             "vrf": "vrfmerge"
+#         }
+#     ]
+
+# using rendered
+
+    arista.eos.eos_ospfv3:
+      config:
+        processes:
+          - address_family:
+              - timers:
+                  lsa: 22
+                graceful_restart:
+                  grace_period: 35
+                afi: "ipv6"
+            timers:
+              pacing: 55
+            fips_restrictions: True
+            router_id: "2.2.2.2"
+            vrf: "vrfmerge"
+      state: rendered
+
+# module execution
+
+# "rendered": [
+#         "router ospfv3 vrf vrfmerge",
+#         "address-family ipv6",
+#         "graceful-restart grace-period 35",
+#         "timers lsa arrival 22",
+#         "exit",
+#         "timers pacing flood 55",
+#         "fips restrictions",
+#         "router-id 2.2.2.2",
+#         "exit"
+#     ]
+
+
 """
 
 from ansible.module_utils.basic import AnsibleModule

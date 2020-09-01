@@ -6,6 +6,7 @@
 #
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 """
@@ -98,14 +99,11 @@ class Ospfv3(ResourceModule):
         """
 
         wantd = {
-            entry["vrf"]: entry
-            for entry in self.want.get("processes", [])
+            entry["vrf"]: entry for entry in self.want.get("processes", [])
         }
         haved = {
-            entry["vrf"]: entry
-            for entry in self.have.get("processes", [])
+            entry["vrf"]: entry for entry in self.have.get("processes", [])
         }
-
 
         # turn all lists of dicts into dicts prior to merge
         for entry in wantd, haved:
@@ -125,7 +123,7 @@ class Ospfv3(ResourceModule):
         if self.state in ["overridden", "deleted"]:
             for k, have in iteritems(haved):
                 if k not in wantd and have.get("vrf") == k:
-                    self.commands.append(self._tmplt.render( have, "vrf", True))
+                    self.commands.append(self._tmplt.render(have, "vrf", True))
 
         for k, want in iteritems(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
@@ -142,12 +140,7 @@ class Ospfv3(ResourceModule):
 
         if len(self.commands) != begin or (not have and want):
             self.commands.insert(
-                begin,
-                self._tmplt.render(
-                    want or have,
-                    "vrf",
-                    False,
-                ),
+                begin, self._tmplt.render(want or have, "vrf", False)
             )
             self.commands.append("exit")
 
@@ -156,59 +149,77 @@ class Ospfv3(ResourceModule):
             if name in ["vrf", "address_family"]:
                 continue
             if not isinstance(entry, dict):
-                self.compare(parsers=self.parsers, want={name: entry}, have={name: have.pop(name, None)})
+                self.compare(
+                    parsers=self.parsers,
+                    want={name: entry},
+                    have={name: have.pop(name, None)},
+                )
             else:
                 if name == "areas" and entry:
-                    self._areas_compare(want={name: entry}, have={name: have.get(name, {})})
+                    self._areas_compare(
+                        want={name: entry}, have={name: have.get(name, {})}
+                    )
                 else:
                     # passing dict without vrf, inorder to avoid  no router ospfv3 command
                     h = {i: have[i] for i in have if i != "vrf"}
-                    self.compare(parsers=self.parsers, want={name: entry}, have={name: h.pop(name, {})})
+                    self.compare(
+                        parsers=self.parsers,
+                        want={name: entry},
+                        have={name: h.pop(name, {})},
+                    )
         # remove remaining items in have for replaced
         for name, entry in iteritems(have):
             if name in ["vrf", "address_family"]:
                 continue
             if not isinstance(entry, dict):
-                self.compare(parsers=self.parsers, want={name: want.pop(name, None)}, have={name: entry})
+                self.compare(
+                    parsers=self.parsers,
+                    want={name: want.pop(name, None)},
+                    have={name: entry},
+                )
             else:
                 # passing dict without vrf, inorder to avoid  no router ospfv3 command
                 w = {i: want[i] for i in want if i != "vrf"}
-                self.compare(parsers=self.parsers, want={name: want.pop(name, {})}, have={name: entry})
+                self.compare(
+                    parsers=self.parsers,
+                    want={name: want.pop(name, {})},
+                    have={name: entry},
+                )
 
     def _af_compare(self, want, have):
         wafs = want.get("address_family", {})
-        hafs = have.get("address_family", {}) 
+        hafs = have.get("address_family", {})
         begin = len(self.commands)
         for name, entry in iteritems(wafs):
             self._compare_lists(want=entry, have=hafs.get(name, {}))
             self._areas_compare(want=entry, have=hafs.get(name, {}))
-            self.compare(parsers=self.parsers, want=entry, have=hafs.pop(name, {}))
-            if len(self.commands) != begin and "afi" in entry and entry['afi'] != "router":
+            self.compare(
+                parsers=self.parsers, want=entry, have=hafs.pop(name, {})
+            )
+            if (
+                len(self.commands) != begin
+                and "afi" in entry
+                and entry["afi"] != "router"
+            ):
                 self._rotate_commands(begin=begin)
                 self.commands.insert(
-                    begin,
-                    self._tmplt.render(
-                        entry,
-                        "address_family",
-                        False,
-                    ),
+                    begin, self._tmplt.render(entry, "address_family", False)
                 )
                 self.commands.append("exit")
         for name, entry in iteritems(hafs):
             self.addcmd(entry, "address_family", True)
-    
+
     def _rotate_commands(self, begin=0):
         # move negate commands to beginning
         rotate_cms = []
         for cmd in self.commands[begin::]:
-            negate = re.match(r'^no .*', cmd)
+            negate = re.match(r"^no .*", cmd)
             if negate:
                 self.commands.insert(
-                    begin,
-                    self.commands.pop(self.commands.index(cmd))
+                    begin, self.commands.pop(self.commands.index(cmd))
                 )
-                begin+=1
-                    
+                begin += 1
+
     def _areas_compare(self, want, have):
         wareas = want.get("areas", {})
         hareas = have.get("areas", {})
@@ -240,11 +251,9 @@ class Ospfv3(ResourceModule):
             for entry in hdict.values():
                 entry["area_id"] = have["area_id"]
                 self.addcmd(entry, "area.{0}".format(attrib), True)
-            
+
     def _compare_lists(self, want, have):
-        for attrib in [
-            "redistribute",
-        ]:
+        for attrib in ["redistribute"]:
             wdict = get_from_dict(want, attrib) or {}
             hdict = get_from_dict(have, attrib) or {}
             for key, entry in iteritems(wdict):
@@ -254,21 +263,21 @@ class Ospfv3(ResourceModule):
             for entry in hdict.values():
                 self.addcmd(entry, attrib, True)
 
-
-
     def _ospf_list_to_dict(self, entry):
         for item in entry.values():
             if "address_family" not in item:
                 for area in item.get("areas", []):
                     if "ranges" in area:
                         area["ranges"] = {
-                            entry["address"]: entry for entry in area.get("ranges", [])
+                            entry["address"]: entry
+                            for entry in area.get("ranges", [])
                         }
                 item["areas"] = {
                     entry["area_id"]: entry for entry in item.get("areas", [])
                 }
                 item["redistribute"] = {
-                    entry["routes"]: entry for entry in item.get("redistribute", [])
+                    entry["routes"]: entry
+                    for entry in item.get("redistribute", [])
                 }
             else:
                 for addr_family in item.get("address_family"):
@@ -277,15 +286,18 @@ class Ospfv3(ResourceModule):
                     for area in addr_family.get("areas", []):
                         if "ranges" in area:
                             area["ranges"] = {
-                                entry["address"]: entry for entry in area.get("ranges", [])
+                                entry["address"]: entry
+                                for entry in area.get("ranges", [])
                             }
                     addr_family["areas"] = {
-                        entry["area_id"]: entry for entry in addr_family.get("areas", [])
+                        entry["area_id"]: entry
+                        for entry in addr_family.get("areas", [])
                     }
                     addr_family["redistribute"] = {
-                        entry["routes"]: entry for entry in addr_family.get("redistribute", [])
+                        entry["routes"]: entry
+                        for entry in addr_family.get("redistribute", [])
                     }
                 item["address_family"] = {
-                    entry["afi"]: entry for entry in item.get("address_family", [])
+                    entry["afi"]: entry
+                    for entry in item.get("address_family", [])
                 }
-    

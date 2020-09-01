@@ -4,6 +4,7 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 """
@@ -32,7 +33,7 @@ class Ospfv3Facts(object):
     """ The eos ospfv3 facts class
     """
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Ospfv3Args.argument_spec
         spec = deepcopy(self.argument_spec)
@@ -50,10 +51,7 @@ class Ospfv3Facts(object):
         """Wrapper method for `connection.get()`
         This method exists solely to allow the unit test framework to mock device connection calls.
         """
-        return connection.get(
-            "show running-config | section ospfv3"
-        )
-
+        return connection.get("show running-config | section ospfv3")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for Ospfv3 network resource
@@ -81,7 +79,6 @@ class Ospfv3Facts(object):
             p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
         ]
 
-
         # parse native config using the Ospfv3 template
         ospfv3_facts = {"processes": []}
 
@@ -90,32 +87,30 @@ class Ospfv3Facts(object):
             objs = ospfv3_parser.parse()
 
             for key, sortv in [("address_family", "afi")]:
-                if key in objs['processes'] and objs['processes'][key]:
-                    objs['processes'][key] = list(objs['processes'][key].values())
+                if key in objs["processes"] and objs["processes"][key]:
+                    objs["processes"][key] = list(
+                        objs["processes"][key].values()
+                    )
 
-            for addr_family in objs['processes']['address_family']:
+            for addr_family in objs["processes"]["address_family"]:
                 if "areas" in addr_family:
-                    addr_family['areas'] = list(addr_family["areas"].values())
-            
-            for addr_family in objs['processes']['address_family']:
+                    addr_family["areas"] = list(addr_family["areas"].values())
+
+            for addr_family in objs["processes"]["address_family"]:
                 if not addr_family.get("afi"):
-                    #global vars
+                    # global vars
                     objs["processes"].update(addr_family)
-                    objs['processes']['address_family'].remove(addr_family)
-            
+                    objs["processes"]["address_family"].remove(addr_family)
+
             ospfv3_facts["processes"].append(objs["processes"])
 
-
-        
-
-
-        ansible_facts['ansible_network_resources'].pop('ospfv3', None)
+        ansible_facts["ansible_network_resources"].pop("ospfv3", None)
         params = utils.validate_config(
             self.argument_spec, {"config": ospfv3_facts}
         )
         params = utils.remove_empties(params)
 
-        facts['ospfv3'] = params.get("config", [])
-        ansible_facts['ansible_network_resources'].update(facts)
+        facts["ospfv3"] = params.get("config", [])
+        ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts
