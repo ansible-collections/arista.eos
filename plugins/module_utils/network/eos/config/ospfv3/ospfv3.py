@@ -148,7 +148,7 @@ class Ospfv3(ResourceModule):
         for name, entry in iteritems(want):
             if name in ["vrf", "address_family"]:
                 continue
-            if not isinstance(entry, dict):
+            if not isinstance(entry, dict) and name != "areas":
                 self.compare(
                     parsers=self.parsers,
                     want={name: entry},
@@ -189,8 +189,8 @@ class Ospfv3(ResourceModule):
     def _af_compare(self, want, have):
         wafs = want.get("address_family", {})
         hafs = have.get("address_family", {})
-        begin = len(self.commands)
         for name, entry in iteritems(wafs):
+            begin = len(self.commands)
             self._compare_lists(want=entry, have=hafs.get(name, {}))
             self._areas_compare(want=entry, have=hafs.get(name, {}))
             self.compare(
@@ -264,40 +264,21 @@ class Ospfv3(ResourceModule):
                 self.addcmd(entry, attrib, True)
 
     def _ospf_list_to_dict(self, entry):
-        for item in entry.values():
-            if "address_family" not in item:
-                for area in item.get("areas", []):
-                    if "ranges" in area:
-                        area["ranges"] = {
-                            entry["address"]: entry
-                            for entry in area.get("ranges", [])
-                        }
-                item["areas"] = {
-                    entry["area_id"]: entry for entry in item.get("areas", [])
-                }
-                item["redistribute"] = {
-                    entry["routes"]: entry
-                    for entry in item.get("redistribute", [])
-                }
-            else:
-                for addr_family in item.get("address_family"):
-                    if not addr_family.get("afi"):
-                        addr_family["afi"] = "router"
-                    for area in addr_family.get("areas", []):
-                        if "ranges" in area:
-                            area["ranges"] = {
-                                entry["address"]: entry
-                                for entry in area.get("ranges", [])
-                            }
-                    addr_family["areas"] = {
-                        entry["area_id"]: entry
-                        for entry in addr_family.get("areas", [])
+        for name, proc in iteritems(entry):
+            for area in proc.get("areas", []):
+                if "ranges" in area:
+                    area["ranges"] = {
+                        entry["address"]: entry for entry in area.get("ranges", [])
                     }
-                    addr_family["redistribute"] = {
-                        entry["routes"]: entry
-                        for entry in addr_family.get("redistribute", [])
-                    }
-                item["address_family"] = {
-                    entry["afi"]: entry
-                    for entry in item.get("address_family", [])
+            proc["areas"] = {
+                entry["area_id"]: entry for entry in proc.get("areas", [])
+            }
+            proc["redistribute"] = {
+                entry["routes"]: entry
+                for entry in proc.get("redistribute", [])
+            }
+            if "address_family" in proc:
+                proc["address_family"] = {
+                    entry["afi"]: entry for entry in proc.get("address_family", [])
                 }
+                self._ospf_list_to_dict(proc["address_family"])

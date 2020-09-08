@@ -1,0 +1,55 @@
+---
+- debug:
+    msg: Start eos_ospfv3 overridden integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: override given ospfv3 configuration
+      become: true
+      register: result
+      arista.eos.eos_ospfv3: &overridden
+        state: overridden
+        config:
+          processes:
+            - address_family:
+                - afi: "ipv6"
+                  areas:
+                    - area_id: "0.0.0.1"
+                      stub:
+                        set: true
+                  distance: 200
+                  redistribute:
+                    - routes: "static"
+                - afi: "ipv4"
+                  areas:
+                    - area_id: "0.0.0.3"
+                      ranges:
+                        - address: 60.1.0.0/16
+                          cost: 30
+                  timers:
+                    lsa: 10
+              vrf: "vrf02"
+
+    - assert:
+        that:
+          - result.commands|length == 16
+          - result.changed == true
+          - result.commands|symmetric_difference(overridden.commands) == []
+          - result.after.processes|symmetric_difference(overridden.after.processes) == []
+          - result.before.processes|symmetric_difference(populate.before.processes) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_ospfv3: *overridden
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml

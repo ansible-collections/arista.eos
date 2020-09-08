@@ -38,9 +38,9 @@ def _tmplt_ospf_address_family_cmd(config_data):
 
 
 def _tmplt_ospf_adjacency_cmd(config_data):
-    command = "adjacency exchange-start threshold  "
+    command = "adjacency exchange-start threshold"
     if "adjacency" in config_data:
-        command += " {threshold}".format(**config_data["adjacency"])
+        command += " {threshold}".format(**config_data["adjacency"]["exchange_start"])
     return command
 
 
@@ -452,7 +452,7 @@ class Ospfv3Template(NetworkTemplate):
                                 "{{ area_id }}": {
                                     "area_id": "{{ area_id }}",
                                     "encryption": {
-                                        "spi": "{{ spi }}",
+                                        "spi": "{{ val }}",
                                         "encryption": "{{ encryption }}",
                                         "algorithm": "{{ algorithm }}",
                                         "encrypt_key": "{{ False if type is defined and type == '0'}}",
@@ -470,13 +470,17 @@ class Ospfv3Template(NetworkTemplate):
         {
             "name": "area.nssa",
             "getval": re.compile(
-                r"""\s+area\s(?P<area_id>\S+)
-                    \s(?P<nssa>nssa)*
-                    \s*(?P<def_origin>default-information-originate)*
-                    \s*(?P<metric>metric\s\d+)*
-                    \s*(?P<metric_type>metric-type\s\d+)*
-                    \s*(?P<no_summary>no-summary)*
-                    \s*(?P<translate>translate type7 always)*$""",
+                r"""
+                \s+area\s(?P<area_id>\S+)
+                \s(?P<nssa>nssa)
+                \s*(?P<def_origin>default-information-originate)*
+                \s*(metric)*
+                \s*(?P<metric>\d+)*
+                \s*(metric-type)*
+                \s*(?P<metric_type>\d+)*
+                \s*(?P<no_summary>no-summary)*
+                \s*(?P<translate>translate.*)*
+                $""",
                 re.VERBOSE,
             ),
             "setval": _tmplt_ospf_area_nssa,
@@ -931,17 +935,16 @@ class Ospfv3Template(NetworkTemplate):
             "getval": re.compile(
                 r"""\s+timers
                     \sout-delay
-                    \s(?P<delay>\d+)
+                    \s(?P<out_delay>\d+)
                     *$""",
                 re.VERBOSE,
             ),
-            "setval": "timers out-delay {{ delay }}",
-            "compval": "out_delay",
+            "setval": "timers out-delay {{ timers.out_delay }}",
             "result": {
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "timers": {"out_delay": "{{ delay }}"}
+                            "timers": {"out_delay": "{{ out_delay }}"}
                         }
                     }
                 }
@@ -975,13 +978,12 @@ class Ospfv3Template(NetworkTemplate):
                     \sthrottle
                     \s*(?P<lsa>lsa all)*
                     \s*(?P<initial>\d+)*
-                    \s*(?P<min_delay>\d+)*
-                    \s*(?P<max_delay>\d+)
+                    \s*(?P<min>\d+)*
+                    \s*(?P<max>\d+)
                     *$""",
                 re.VERBOSE,
             ),
-            "setval": "timers throttle lsa all {{ initial }} {{ min_delay }} {{ max_delay }}",
-            "compval": "throttle",
+            "setval": "timers throttle lsa all {{ timers.throttle.initial }} {{ timers.throttle.min }} {{ timers.throttle.max }}",
             "result": {
                 "processes": {
                     "address_family": {
@@ -1006,13 +1008,12 @@ class Ospfv3Template(NetworkTemplate):
                     \sthrottle
                     \s*(?P<spf>spf)
                     \s*(?P<initial>\d+)
-                    \s*(?P<min_delay>\d+)
-                    \s*(?P<max_delay>\d+)
+                    \s*(?P<min>\d+)
+                    \s*(?P<max>\d+)
                     *$""",
                 re.VERBOSE,
             ),
-            "setval": "timers throttle spf {{ initial }} {{ min_delay }} {{ max_delay }}",
-            "compval": "throttle",
+            "setval": "timers throttle spf {{ timers.throttle.initial }} {{ timers.throttle.min }} {{ timers.throttle.max }}",
             "result": {
                 "processes": {
                     "address_family": {
@@ -1021,8 +1022,8 @@ class Ospfv3Template(NetworkTemplate):
                                 "throttle": {
                                     "spf": "{{ True if spf is defined }}",
                                     "initial": "{{ initial }}",
-                                    "min": "{{ min_delay }}",
-                                    "max": "{{ max_delay }}",
+                                    "min": "{{ min }}",
+                                    "max": "{{ max }}",
                                 }
                             }
                         }
