@@ -8,9 +8,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 """
-The Ospfv3 parser templates file. This contains 
-a list of parser definitions and associated functions that 
-facilitates both facts gathering and native command generation for 
+The Ospfv3 parser templates file. This contains
+a list of parser definitions and associated functions that
+facilitates both facts gathering and native command generation for
 the given network resource.
 """
 
@@ -40,7 +40,9 @@ def _tmplt_ospf_address_family_cmd(config_data):
 def _tmplt_ospf_adjacency_cmd(config_data):
     command = "adjacency exchange-start threshold"
     if "adjacency" in config_data:
-        command += " {threshold}".format(**config_data["adjacency"]["exchange_start"])
+        command += " {threshold}".format(
+            **config_data["adjacency"]["exchange_start"]
+        )
     return command
 
 
@@ -150,7 +152,7 @@ def _tmplt_ospf_area_range(config_data):
             if config_data.get("advertise"):
                 command += " advertise"
             else:
-                command += "not-advertise"
+                command += " not-advertise"
         if "cost" in config_data:
             command += " cost {cost}".format(**config_data)
         return command
@@ -693,7 +695,7 @@ class Ospfv3Template(NetworkTemplate):
             },
         },
         {
-            "name": "graceful_restart",
+            "name": "graceful_restart_period",
             "getval": re.compile(
                 r"""
                 \s+graceful-restart
@@ -709,9 +711,28 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "graceful_restart": {
-                                "set": "{{ True if period is not defined }}",
-                                "grace_period": "{{ period|int }}",
+                                "grace_period": "{{ period|int }}"
                             }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "graceful_restart",
+            "getval": re.compile(
+                r"""
+                \s+graceful-restart
+                $""",
+                re.VERBOSE,
+            ),
+            "setval": "graceful-restart",
+            "remval": "graceful-restart",
+            "result": {
+                "processes": {
+                    "address_family": {
+                        '{{ afi|default("router", true) }}': {
+                            "graceful_restart": {"set": "{{ True }}"}
                         }
                     }
                 }

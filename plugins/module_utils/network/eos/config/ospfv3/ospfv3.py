@@ -67,6 +67,7 @@ class Ospfv3(ResourceModule):
             "distance",
             "fips_restrictions",
             "graceful_restart",
+            "graceful_restart_period",
             "graceful_restart_helper",
             "log_adjacency_changes",
             "max_metric",
@@ -268,7 +269,8 @@ class Ospfv3(ResourceModule):
             for area in proc.get("areas", []):
                 if "ranges" in area:
                     area["ranges"] = {
-                        entry["address"]: entry for entry in area.get("ranges", [])
+                        entry["address"]: entry
+                        for entry in area.get("ranges", [])
                     }
             proc["areas"] = {
                 entry["area_id"]: entry for entry in proc.get("areas", [])
@@ -279,6 +281,7 @@ class Ospfv3(ResourceModule):
             }
             if "address_family" in proc:
                 proc["address_family"] = {
-                    entry["afi"]: entry for entry in proc.get("address_family", [])
+                    entry["afi"]: entry
+                    for entry in proc.get("address_family", [])
                 }
                 self._ospf_list_to_dict(proc["address_family"])

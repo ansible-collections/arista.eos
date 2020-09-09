@@ -27,6 +27,7 @@ The module file for eos_ospfv3
 """
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -427,7 +428,7 @@ options:
                           description: Enable LSA translation.
                           type: bool
                         set:
-                          description: True if only nssa is set 
+                          description: True if only nssa is set
                           type: bool
                   ranges:
                     description: Configure route summarization.
@@ -1510,12 +1511,12 @@ def main():
         argument_spec=Ospfv3Args.argument_spec,
         mutually_exclusive=[],
         required_if=[],
-        supports_check_mode=False
+        supports_check_mode=False,
     )
 
     result = Ospfv3(module).execute_module()
     module.exit_json(**result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

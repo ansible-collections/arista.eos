@@ -101,7 +101,7 @@ class Ospfv3Facts(object):
                     # global vars
                     objs["processes"].update(addr_family)
                     objs["processes"]["address_family"].remove(addr_family)
-           
+
             ospfv3_facts["processes"].append(objs["processes"])
 
         ansible_facts["ansible_network_resources"].pop("ospfv3", None)
