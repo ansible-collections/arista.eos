@@ -17,7 +17,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from copy import deepcopy
 import re
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
@@ -180,7 +179,7 @@ class Ospfv3(ResourceModule):
                 )
             else:
                 # passing dict without vrf, inorder to avoid  no router ospfv3 command
-                w = {i: want[i] for i in want if i != "vrf"}
+                # w = {i: want[i] for i in want if i != "vrf"}
                 self.compare(
                     parsers=self.parsers,
                     want={name: want.pop(name, {})},
@@ -212,7 +211,6 @@ class Ospfv3(ResourceModule):
 
     def _rotate_commands(self, begin=0):
         # move negate commands to beginning
-        rotate_cms = []
         for cmd in self.commands[begin::]:
             negate = re.match(r"^no .*", cmd)
             if negate:

@@ -655,7 +655,7 @@ EXAMPLES = """
 # veos#
 
 
-    arista.eos.eos_ospfv3:
+  -  arista.eos.eos_ospfv3:
       config:
         processes:
           - address_family:
@@ -746,7 +746,7 @@ EXAMPLES = """
 # veos#
 
 
-    arista.eos.eos_ospfv3:
+  - arista.eos.eos_ospfv3:
       config:
         processes:
           - areas:
@@ -893,7 +893,7 @@ EXAMPLES = """
 # veos#
 
 
-    arista.eos.eos_ospfv3:
+  -  arista.eos.eos_ospfv3:
       config:
         processes:
           - address_family:
@@ -1029,7 +1029,7 @@ EXAMPLES = """
 # veos#
 
 
-    arista.eos.eos_ospfv3:
+  -  arista.eos.eos_ospfv3:
       config:
         processes:
           - vrf: "default"
@@ -1230,7 +1230,7 @@ EXAMPLES = """
 #       timers out-delay 10
 
 
-    arista.eos.eos_ospfv3:
+  -  arista.eos.eos_ospfv3:
       running_config: "{{ lookup('file', './parsed_ospfv3.cfg') }}"
       state: parsed
 
@@ -1399,7 +1399,7 @@ EXAMPLES = """
 # veos#
 
 
-    arista.eos.eos_ospfv3:
+  -  arista.eos.eos_ospfv3:
       state: gathered
 
 # module execution
@@ -1459,7 +1459,7 @@ EXAMPLES = """
 
 # using rendered
 
-    arista.eos.eos_ospfv3:
+  -  arista.eos.eos_ospfv3:
       config:
         processes:
           - address_family:

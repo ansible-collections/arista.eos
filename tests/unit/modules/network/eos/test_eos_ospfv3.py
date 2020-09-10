@@ -167,66 +167,6 @@ class TestEosOspfv3Module(TestEosModule):
         )
         self.execute_module(changed=False, commands=[])
 
-    def test_eos_ospfv3_merged_wrongparam(self):
-        set_module_args(
-            dict(
-                config=dict(
-                    processes=[
-                        dict(
-                            vrf="default",
-                            areas=[
-                                dict(
-                                    area_id="0.0.0.20",
-                                    authentication=dict(
-                                        algorithm="sha1",
-                                        spi="33",
-                                        hidden_key=True,
-                                        passphrase="4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w",
-                                    ),
-                                )
-                            ],
-                            timers=dict(pacing=7),
-                        ),
-                        dict(
-                            vrf="vrf03",
-                            log_adjacency_changes=dict(detail=True),
-                            areas=[
-                                dict(
-                                    area_id="0.0.0.50",
-                                    ranges=[
-                                        dict(
-                                            address="20.1.1.0/24",
-                                            advertise=False,
-                                        )
-                                    ],
-                                )
-                            ],
-                            fips_restrictions=True,
-                            address_family=[
-                                dict(
-                                    afi="ipv6",
-                                    areas=[
-                                        dict(
-                                            area_id="0.0.0.43",
-                                            nssa=dict(no_summary=True),
-                                        )
-                                    ],
-                                    default_information=dict(
-                                        originate=True,
-                                        route_map="DefaultRouteFilter",
-                                    ),
-                                    graceful_restart=dict(set=True),
-                                )
-                            ],
-                        ),
-                    ]
-                ),
-                state="merged",
-            )
-        )
-        result = self.execute_module(failed=True)
-        self.assertRegex(result["msg"], "Unsupported parameters.*ranges")
-
     def test_eos_ospfv3_merged(self):
         set_module_args(
             dict(
