@@ -1,0 +1,4 @@
+---
+minor_changes:
+  - Added ospf_interfaces resource module.
+    (https://github.com/ansible-collections/arista.eos/pull/125)
