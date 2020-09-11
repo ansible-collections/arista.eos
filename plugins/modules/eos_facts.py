@@ -188,7 +188,7 @@ def main():
     argument_spec.update(eos_argument_spec)
 
     module = AnsibleModule(
-       argument_spec=argument_spec, supports_check_mode=True 
+        argument_spec=argument_spec, supports_check_mode=True
     )
     warnings = [
         "default value for `gather_subset` "
