@@ -49,9 +49,9 @@
                       routes: "connected"
                 - afi: "ipv6"
                   areas:
-                   - area_id: "0.0.0.10"
-                     nssa:
-                       no_summary: true
+                    - area_id: "0.0.0.10"
+                      nssa:
+                        no_summary: true
                   default_information:
                     originate: true
                     route_map: "DefaultRouteFilter"

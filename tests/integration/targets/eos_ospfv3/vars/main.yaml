@@ -1,52 +1,52 @@
 ---
 merged:
   commands:
-        - router ospfv3 vrf vrf01
-        - address-family ipv4
-        - redistribute connected route-map MAP01
-        - fips restrictions
-        - maximum-paths 100
-        - passive-interface default
-        - exit
-        - address-family ipv6
-        - area 0.0.0.10 nssa no-summary
-        - default-information originate route-map DefaultRouteFilter
-        - fips restrictions
-        - max-metric router-lsa external-lsa 25 summary-lsa
-        - exit
-        - area 0.0.0.0 encryption ipsec spi 44 esp null sha1 passphrase 7 7hl8FV3lZ6H1mAKpjL47hQ==
-        - bfd all-interfaces
-        - fips restrictions
-        - log-adjacency-changes detail
-        - exit
-        - router ospfv3
-        - address-family ipv4
-        - redistribute connected
-        - fips restrictions
-        - exit
-        - address-family ipv6
-        - fips restrictions
-        - router-id 10.1.1.1
-        - exit
-        - adjacency exchange-start threshold 11
-        - area 0.0.0.20 authentication ipsec spi 33 sha1 passphrase 7 4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w
-        - area 0.0.0.20 stub
-        - area 0.0.0.40 default-cost 45
-        - area 0.0.0.40 stub
-        - fips restrictions
-        - timers pacing flood 7
-        - exit
-        - router ospfv3 vrf vrf02
-        - address-family ipv6
-        - area 0.0.0.1 stub
-        - distance ospf intra-area 200
-        - fips restrictions
-        - router-id 10.17.0.3
-        - timers out-delay 10
-        - timers throttle spf 56 56 56
-        - exit
-        - fips restrictions
-        - exit
+    - router ospfv3 vrf vrf01
+    - address-family ipv4
+    - redistribute connected route-map MAP01
+    - fips restrictions
+    - maximum-paths 100
+    - passive-interface default
+    - exit
+    - address-family ipv6
+    - area 0.0.0.10 nssa no-summary
+    - default-information originate route-map DefaultRouteFilter
+    - fips restrictions
+    - max-metric router-lsa external-lsa 25 summary-lsa
+    - exit
+    - area 0.0.0.0 encryption ipsec spi 44 esp null sha1 passphrase 7 7hl8FV3lZ6H1mAKpjL47hQ==
+    - bfd all-interfaces
+    - fips restrictions
+    - log-adjacency-changes detail
+    - exit
+    - router ospfv3
+    - address-family ipv4
+    - redistribute connected
+    - fips restrictions
+    - exit
+    - address-family ipv6
+    - fips restrictions
+    - router-id 10.1.1.1
+    - exit
+    - adjacency exchange-start threshold 11
+    - area 0.0.0.20 authentication ipsec spi 33 sha1 passphrase 7 4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w
+    - area 0.0.0.20 stub
+    - area 0.0.0.40 default-cost 45
+    - area 0.0.0.40 stub
+    - fips restrictions
+    - timers pacing flood 7
+    - exit
+    - router ospfv3 vrf vrf02
+    - address-family ipv6
+    - area 0.0.0.1 stub
+    - distance ospf intra-area 200
+    - fips restrictions
+    - router-id 10.17.0.3
+    - timers out-delay 10
+    - timers throttle spf 56 56 56
+    - exit
+    - fips restrictions
+    - exit
   after:
     processes:
       - process_id: 1
@@ -97,13 +97,13 @@ merged:
 deleted:
   after:
     processes:
-      - address_family: 
+      - address_family:
           - afi: "ipv4"
-            fips_restrictions: True
+            fips_restrictions: true
             redistribute:
               - routes: "connected"
           - afi: "ipv6"
-            fips_restrictions: True
+            fips_restrictions: true
             router_id: "10.1.1.1"
         adjacency:
           exchange_start:
@@ -112,17 +112,17 @@ deleted:
           - area_id: "0.0.0.20"
             authentication:
               algorithm: "sha1"
-              hidden_key: True
+              hidden_key: true
               passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
               spi: 33
             stub:
-              set: True
+              set: true
           - area_id: "0.0.0.40"
             default_cost: 45
             stub:
-              set: True
-        fips_restrictions: True
-        timers: 
+              set: true
+        fips_restrictions: true
+        timers:
           pacing: 7
         vrf: "default"
       - address_family:
@@ -130,9 +130,9 @@ deleted:
             areas:
               - area_id: "0.0.0.1"
                 stub:
-                  set: True
+                  set: true
             distance: 200
-            fips_restrictions: True
+            fips_restrictions: true
             router_id: "10.17.0.3"
             timers:
               out_delay: 10
@@ -140,8 +140,8 @@ deleted:
                 initial: 56
                 max: 56
                 min: 56
-                spf: True
-        fips_restrictions: True
+                spf: true
+        fips_restrictions: true
         vrf: "vrf02"
 replaced:
   commands:
@@ -199,9 +199,9 @@ replaced:
                 routes: "connected"
           - afi: "ipv6"
             areas:
-             - area_id: "0.0.0.10"
-               nssa:
-                 no_summary: true
+              - area_id: "0.0.0.10"
+                nssa:
+                  no_summary: true
             default_information:
               originate: true
               route_map: "DefaultRouteFilter"
@@ -280,9 +280,9 @@ replaced:
                 routes: "connected"
           - afi: "ipv6"
             areas:
-             - area_id: "0.0.0.10"
-               nssa:
-                 no_summary: true
+              - area_id: "0.0.0.10"
+                nssa:
+                  no_summary: true
             default_information:
               originate: true
               route_map: "DefaultRouteFilter"
@@ -402,9 +402,9 @@ populate:
                 routes: "connected"
           - afi: "ipv6"
             areas:
-             - area_id: "0.0.0.10"
-               nssa:
-                 no_summary: true
+              - area_id: "0.0.0.10"
+                nssa:
+                  no_summary: true
             default_information:
               originate: true
               route_map: "DefaultRouteFilter"
