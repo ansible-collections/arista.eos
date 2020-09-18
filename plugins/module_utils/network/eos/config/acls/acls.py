@@ -493,10 +493,11 @@ def add_commands(want):
                             + ace["protocol_options"][proto]["nexthop_group"]
                         )
                     elif proto == "tcp":
-                        for flag, val in ace["prtocol_options"][proto][
+                        for flag, val in ace["protocol_options"][proto][
                             "flags"
                         ].items():
-                            command = command + " " + val
+                            if val:
+                                command = command + " " + flag
             if "hop_limit" in ace.keys():
                 for op, val in ace["hop_limit"].items():
                     command = command + " hop-limit " + op + " " + val
