@@ -254,7 +254,6 @@ class TestEosAclsModule(TestEosModule):
             "ip access-list test1",
             "no 35",
             "no 45",
-            "ip access-list test1",
             "10 permit ospf 30.2.0.0/8 any log",
         ]
         self.execute_module(changed=True, commands=commands)
