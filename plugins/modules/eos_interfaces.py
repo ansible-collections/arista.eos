@@ -86,6 +86,7 @@ options:
         choices:
         - layer2
         - layer3
+        default: layer2
         type: str
   running_config:
     description:

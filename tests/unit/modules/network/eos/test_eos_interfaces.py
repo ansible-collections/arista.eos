@@ -238,7 +238,6 @@ class TestEosInterfacesModule(TestEosModule):
             "description Ethernet 1",
             "interface Management1",
             "no description",
-            "switchport",
             "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
