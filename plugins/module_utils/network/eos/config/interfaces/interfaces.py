@@ -256,7 +256,7 @@ def generate_commands(interface, to_set, to_remove):
             # duplex is handled with speed
             continue
         elif key == "mode":
-            if not re.search(r'(M|m)anagement.*', interface):
+            if not re.search(r"(M|m)anagement.*", interface):
                 if value == "layer3":
                     # switching from default (layer2) mode to layer3
                     commands.append("no switchport")
@@ -278,7 +278,7 @@ def generate_commands(interface, to_set, to_remove):
             # duplex is handled with speed
             continue
         elif key == "mode":
-            if not re.search(r'(M|m)anagement.*', interface):
+            if not re.search(r"(M|m)anagement.*", interface):
                 commands.append("switchport")
         else:
             commands.append("no {0}".format(key))

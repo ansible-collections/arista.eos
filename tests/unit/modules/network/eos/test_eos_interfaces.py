@@ -119,7 +119,12 @@ class TestEosInterfacesModule(TestEosModule):
 
     def test_eos_interfaces_delete(self):
         set_module_args(dict(config=[dict(name="Ethernet1")], state="deleted"))
-        commands = ["interface Ethernet1", "no description", "switchport", "no shutdown"]
+        commands = [
+            "interface Ethernet1",
+            "no description",
+            "switchport",
+            "no shutdown",
+        ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_interfaces_delete_switchport(self):
