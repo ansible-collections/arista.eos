@@ -294,7 +294,9 @@ def set_interface(want, have):
             )
             if has_allowed_vlans:
                 commands.append(
-                    "switchport trunk allowed vlan add {0}".format(allowed_vlans)
+                    "switchport trunk allowed vlan add {0}".format(
+                        allowed_vlans
+                    )
                 )
             else:
                 commands.append(
