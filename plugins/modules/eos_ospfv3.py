@@ -35,7 +35,7 @@ module: eos_ospfv3
 short_description: Manages OSPFv3 resource module
 description: This module configures and manages the attributes of ospfv3 on Arista
   EOS platforms.
-version_added: 1.0.0
+version_added: 1.2.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
 - Tested against Arista EOS 4.23.0F
@@ -1509,8 +1509,14 @@ def main():
     """
     module = AnsibleModule(
         argument_spec=Ospfv3Args.argument_spec,
-        mutually_exclusive=[],
-        required_if=[],
+        mutually_exclusive=[["config", "running_config"]],
+        required_if=[
+            ["state", "merged", ["config"]],
+            ["state", "replaced", ["config"]],
+            ["state", "overridden", ["config"]],
+            ["state", "rendered", ["config"]],
+            ["state", "parsed", ["running_config"]],
+        ],
         supports_check_mode=False,
     )
 
