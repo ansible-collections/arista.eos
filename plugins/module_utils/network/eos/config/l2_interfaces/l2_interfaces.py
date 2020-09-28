@@ -26,6 +26,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
     normalize_interface,
+    vlan_range_to_list,
 )
 
 
@@ -240,7 +241,6 @@ class L2_interfaces(ConfigBase):
                 extant = have[key]
             else:
                 continue
-
             intf_commands = clear_interface(desired, extant)
 
             if intf_commands:
@@ -265,22 +265,49 @@ def set_interface(want, have):
 
     wants_trunk = want.get("trunk")
     if wants_trunk:
+        allowed_vlans = []
+        has_allowed_vlans = {}
+        want_allowed_vlans = {}
         has_trunk = have.get("trunk", {})
         native_vlan = wants_trunk.get("native_vlan")
         if native_vlan and native_vlan != has_trunk.get("native_vlan"):
             commands.append(
                 "switchport trunk native vlan {0}".format(native_vlan)
             )
+        for con in [want, have]:
+            expand_trunk_allowed_vlans(con)
+        want_allowed_vlans = want["trunk"].get("trunk_allowed_vlans")
+        if has_trunk:
+            has_allowed_vlans = has_trunk.get("trunk_allowed_vlans")
 
-        allowed_vlans = want["trunk"].get("trunk_allowed_vlans")
+        if want_allowed_vlans and has_allowed_vlans:
+            allowed_vlans = list(
+                set(want_allowed_vlans.split(","))
+                - set(has_allowed_vlans.split(","))
+            )
+        elif want_allowed_vlans:
+            allowed_vlans = want_allowed_vlans.split(",")
         if allowed_vlans:
             allowed_vlans = ",".join(
                 ["{0}".format(vlan) for vlan in allowed_vlans]
             )
+
             commands.append(
                 "switchport trunk allowed vlan {0}".format(allowed_vlans)
             )
     return commands
+
+
+def expand_trunk_allowed_vlans(want):
+    if not want:
+        return None
+    if want.get("trunk"):
+        if "trunk_allowed_vlans" in want["trunk"]:
+            allowed_vlans = vlan_range_to_list(
+                want["trunk"]["trunk_allowed_vlans"]
+            )
+            vlans_list = [str(num) for num in sorted(allowed_vlans)]
+            want["trunk"]["trunk_allowed_vlans"] = ",".join(vlans_list)
 
 
 def clear_interface(want, have):
@@ -299,6 +326,29 @@ def clear_interface(want, have):
         and "trunk_allowed_vlans" not in wants_trunk
     ):
         commands.append("no switchport trunk allowed vlan")
+    if (
+        "trunk_allowed_vlans" in has_trunk
+        and "trunk_allowed_vlans" in wants_trunk
+    ):
+        for con in [want, have]:
+            expand_trunk_allowed_vlans(con)
+        want_allowed_vlans = want["trunk"].get("trunk_allowed_vlans")
+        has_allowed_vlans = has_trunk.get("trunk_allowed_vlans")
+        allowed_vlans = list(
+            set(has_allowed_vlans.split(","))
+            - set(want_allowed_vlans.split(","))
+        )
+        if allowed_vlans:
+            allowed_vlans = ",".join(
+                ["{0}".format(vlan) for vlan in allowed_vlans]
+            )
+
+            commands.append(
+                "switchport trunk allowed vlan remove {0}".format(
+                    allowed_vlans
+                )
+            )
+
     if "native_vlan" in has_trunk and "native_vlan" not in wants_trunk:
         commands.append("no switchport trunk native vlan")
     return commands

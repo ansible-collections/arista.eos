@@ -93,7 +93,11 @@ class TestEosL2InterfacesModule(TestEosModule):
             dict(
                 config=[
                     dict(name="Ethernet2", trunk=dict(native_vlan=20)),
-                    dict(name="Ethernet1", access=dict(vlan=20)),
+                    dict(
+                        name="Ethernet1",
+                        access=dict(vlan=20),
+                        trunk=dict(trunk_allowed_vlans=["7-10"]),
+                    ),
                 ],
                 state="merged",
             )
@@ -134,7 +138,11 @@ class TestEosL2InterfacesModule(TestEosModule):
                         mode="trunk",
                         trunk=dict(native_vlan=20),
                     ),
-                    dict(name="Ethernet1", access=dict(vlan=20)),
+                    dict(
+                        name="Ethernet1",
+                        access=dict(vlan=20),
+                        trunk=dict(trunk_allowed_vlans=["7-10"]),
+                    ),
                 ],
                 state="replaced",
             )
@@ -159,6 +167,7 @@ class TestEosL2InterfacesModule(TestEosModule):
             "switchport trunk native vlan 50",
             "interface Ethernet1",
             "no switchport access vlan",
+            "no switchport trunk allowed vlan",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -171,7 +180,11 @@ class TestEosL2InterfacesModule(TestEosModule):
                         mode="trunk",
                         trunk=dict(native_vlan=20),
                     ),
-                    dict(name="Ethernet1", access=dict(vlan=20)),
+                    dict(
+                        name="Ethernet1",
+                        access=dict(vlan=20),
+                        trunk=dict(trunk_allowed_vlans=["7-10"]),
+                    ),
                 ],
                 state="overridden",
             )
@@ -198,5 +211,6 @@ class TestEosL2InterfacesModule(TestEosModule):
             "no switchport trunk native vlan",
             "interface Ethernet1",
             "no switchport access vlan",
+            "no switchport trunk allowed vlan",
         ]
         self.execute_module(changed=True, commands=commands)
