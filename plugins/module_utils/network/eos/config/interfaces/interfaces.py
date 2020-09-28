@@ -275,12 +275,7 @@ def generate_commands(interface, to_set, to_remove):
             # duplex is handled with speed
             continue
         elif key == "mode":
-            if to_remove.get(key) == "layer3":
-                # remove layer3 and move back to default
-                commands.append("switchport")
-            else:
-                # set the interface to layer 3
-                commands.append("no switchport")
+            commands.append("switchport")
         else:
             commands.append("no {0}".format(key))
 

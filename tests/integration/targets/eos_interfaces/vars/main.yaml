@@ -4,9 +4,11 @@ parsed:
     - name: Ethernet1
       description: 'Interface 1'
       enabled: true
+      mode: 'layer2'
     - name: Ethernet2
       description: 'Configured by Ansible'
       enabled: false
+      mode: 'layer2'
 
 rendered:
   - "interface Ethernet2"
@@ -15,3 +17,4 @@ rendered:
   - "shutdown"
   - "interface Ethernet1"
   - "no shutdown"
+  - "switchport"
