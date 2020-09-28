@@ -53,7 +53,7 @@
 
     - assert:
         that:
-          - result.commands|length == 8
+          - result.commands|length == 7
           - result.changed == true
           - "'ip access-list test1' in result.commands"
           - "'10 permit ospf any any log' in result.commands"

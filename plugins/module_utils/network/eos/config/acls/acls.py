@@ -260,7 +260,6 @@ class Acls(ConfigBase):
         ace_diff = {}
         h_afi_list = []
         w_afi_list = []
-        diff = False
         for h in have:
             h_afi_list.append(h["afi"])
         for w in want:
@@ -285,7 +284,6 @@ class Acls(ConfigBase):
                                         w_ace, h_acl["aces"]
                                     )
                                     if ace_diff:
-                                        diff = True
                                         h = {
                                             "afi": h["afi"],
                                             "acls": [
@@ -297,6 +295,25 @@ class Acls(ConfigBase):
                                         }
                                         remove_cmds = del_commands(h, have)
                                         commands.append(remove_cmds)
+                                        w_diff = [
+                                            {
+                                                "afi": h["afi"],
+                                                "acls": [
+                                                    {
+                                                        "name": h_acl["name"],
+                                                        "aces": [w_ace],
+                                                    }
+                                                ],
+                                            }
+                                        ]
+                                        config_cmds = set_commands(
+                                            w_diff, have
+                                        )
+                                        config_cmds = list(
+                                            itertools.chain(*config_cmds)
+                                        )
+                                        commands.append(config_cmds)
+
                     for hname in h_names:
                         if hname not in w_names:
                             h = {"afi": h["afi"], "acls": [{"name": hname}]}
@@ -304,13 +321,22 @@ class Acls(ConfigBase):
                             if remove_cmds not in commands:
                                 commands.append(remove_cmds)
 
-        if diff:
-            config_cmds = set_commands(want, have)
-            config_cmds = list(itertools.chain(*config_cmds))
-            commands.append(config_cmds)
         if commands:
             commands = list(itertools.chain(*commands))
-        return commands
+        commandset = []
+        for c in commands:
+            access_list = re.findall(r"(ip.*) access-list (.*)", c)
+            if access_list and "no" in c:
+                commandset.append(c)
+                continue
+            if access_list:
+                acl_index = commands.index(c)
+            else:
+                if commands[acl_index] not in commandset:
+                    commandset.append(commands[acl_index])
+                commandset.append(c)
+
+        return commandset
 
     def _state_merged(self, want, have):
         """ The command generator when state is merged
@@ -382,6 +408,8 @@ def set_commands(want, have):
 
 def get_updated_ace(w, h):
     # gives the ace to be updated in case of merge update.
+    if not dict_diff(w, h):
+        return
     w_updated = w.copy()
     for hkey in h.keys():
         if hkey not in w.keys():
