@@ -74,7 +74,7 @@ class TestEosL2InterfacesModule(TestEosModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="Ethernet1", trunk=dict(native_vlan=10)),
+                    dict(name="Ethernet1", trunk=dict(native_vlan=10, trunk_allowed_vlans=["20-25"])),
                     dict(name="Ethernet2", access=dict(vlan=30)),
                 ],
                 state="merged",
@@ -83,6 +83,7 @@ class TestEosL2InterfacesModule(TestEosModule):
         commands = [
             "interface Ethernet1",
             "switchport trunk native vlan 10",
+            "switchport trunk allowed vlan add 20,21,22,23,24,25",
             "interface Ethernet2",
             "switchport access vlan 30",
         ]
