@@ -1,0 +1,449 @@
+---
+merged:
+  commands:
+    - router ospfv3 vrf vrf01
+    - address-family ipv4
+    - redistribute connected route-map MAP01
+    - fips restrictions
+    - maximum-paths 100
+    - passive-interface default
+    - exit
+    - address-family ipv6
+    - area 0.0.0.10 nssa no-summary
+    - default-information originate route-map DefaultRouteFilter
+    - fips restrictions
+    - max-metric router-lsa external-lsa 25 summary-lsa
+    - exit
+    - area 0.0.0.0 encryption ipsec spi 44 esp null sha1 passphrase 7 7hl8FV3lZ6H1mAKpjL47hQ==
+    - bfd all-interfaces
+    - fips restrictions
+    - log-adjacency-changes detail
+    - exit
+    - router ospfv3
+    - address-family ipv4
+    - redistribute connected
+    - fips restrictions
+    - exit
+    - address-family ipv6
+    - fips restrictions
+    - router-id 10.1.1.1
+    - exit
+    - adjacency exchange-start threshold 11
+    - area 0.0.0.20 authentication ipsec spi 33 sha1 passphrase 7 4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w
+    - area 0.0.0.20 stub
+    - area 0.0.0.40 default-cost 45
+    - area 0.0.0.40 stub
+    - fips restrictions
+    - timers pacing flood 7
+    - exit
+    - router ospfv3 vrf vrf02
+    - address-family ipv6
+    - area 0.0.0.1 stub
+    - distance ospf intra-area 200
+    - fips restrictions
+    - router-id 10.17.0.3
+    - timers out-delay 10
+    - timers throttle spf 56 56 56
+    - exit
+    - fips restrictions
+    - exit
+  after:
+    processes:
+      - process_id: 1
+        adjacency:
+          exchange_start:
+            threshold: 20045623
+        areas:
+          - filter:
+              address: "10.1.1.0/24"
+            area_id: "0.0.0.2"
+          - area_id: "0.0.0.50"
+            range:
+              address: "172.20.0.0/16"
+              cost: 34
+        default_information:
+          metric: 100
+          metric_type: 1
+          originate: true
+        distance:
+          intra_area: 85
+        max_lsa:
+          count: 80000
+          ignore_count: 3
+          ignore_time: 6
+          reset_time: 20
+          threshold: 40
+        networks:
+          - area: "0.0.0.0"
+            prefix: "10.10.2.0/24"
+          - area: "0.0.0.0"
+            prefix: "10.10.3.0/24"
+        redistribute:
+          - routes: "static"
+        router_id: "170.21.0.4"
+      - process_id: 2
+        vrf: "vrf01"
+        areas:
+          - area_id: "0.0.0.9"
+            default_cost: 20
+        max_lsa:
+          count: 12000
+      - process_id: 3
+        vrf: "vrf02"
+        redistribute:
+          - routes: "connected"
+        max_lsa:
+          count: 12000
+deleted:
+  after:
+    processes:
+      - address_family:
+          - afi: "ipv4"
+            fips_restrictions: true
+            redistribute:
+              - routes: "connected"
+          - afi: "ipv6"
+            fips_restrictions: true
+            router_id: "10.1.1.1"
+        adjacency:
+          exchange_start:
+            threshold: 11
+        areas:
+          - area_id: "0.0.0.20"
+            authentication:
+              algorithm: "sha1"
+              hidden_key: true
+              passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+              spi: 33
+            stub:
+              set: true
+          - area_id: "0.0.0.40"
+            default_cost: 45
+            stub:
+              set: true
+        fips_restrictions: true
+        timers:
+          pacing: 7
+        vrf: "default"
+      - address_family:
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.1"
+                stub:
+                  set: true
+            distance: 200
+            fips_restrictions: true
+            router_id: "10.17.0.3"
+            timers:
+              out_delay: 10
+              throttle:
+                initial: 56
+                max: 56
+                min: 56
+                spf: true
+        fips_restrictions: true
+        vrf: "vrf02"
+replaced:
+  commands:
+    - router ospfv3 vrf vrf02
+    - address-family ipv6
+    - no fips restrictions
+    - no router-id
+    - no timers out-delay 10
+    - no timers throttle spf 56 56 56
+    - redistribute static
+    - exit
+    - address-family ipv4
+    - area 0.0.0.3 range 60.1.0.0/16 cost 30
+    - timers lsa arrival 10
+    - exit
+    - no fips restrictions
+    - exit
+  before:
+    processes:
+      - address_family:
+          - afi: "ipv4"
+            fips_restrictions: true
+            redistribute:
+              - routes: "connected"
+          - afi: "ipv6"
+            fips_restrictions: true
+            router_id: "10.1.1.1"
+        adjacency:
+          exchange_start:
+            threshold: 11
+        areas:
+          - area_id: "0.0.0.20"
+            authentication:
+              algorithm: "sha1"
+              hidden_key: true
+              passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+              spi: 33
+            stub:
+              set: true
+          - area_id: "0.0.0.40"
+            default_cost: 45
+            stub:
+              set: true
+        fips_restrictions: true
+        timers:
+          pacing: 7
+        vrf: "default"
+      - address_family:
+          - afi: "ipv4"
+            fips_restrictions: true
+            maximum_paths: 100
+            passive_interface: true
+            redistribute:
+              - route_map: "MAP01"
+                routes: "connected"
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.10"
+                nssa:
+                  no_summary: true
+            default_information:
+              originate: true
+              route_map: "DefaultRouteFilter"
+            fips_restrictions: true
+            max_metric:
+              router_lsa:
+                external_lsa:
+                  max_metric_value: 25
+                summary_lsa:
+                  set: true
+        areas:
+          - area_id: "0.0.0.0"
+            encryption:
+              spi: 44
+              algorithm: "sha1"
+              encryption: "null"
+              hidden_key: true
+              passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+        bfd:
+          all_interfaces: true
+        fips_restrictions: true
+        log_adjacency_changes:
+          detail: true
+        vrf: "vrf01"
+      - address_family:
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.1"
+                stub:
+                  set: true
+            distance: 200
+            fips_restrictions: true
+            router_id: "10.17.0.3"
+            timers:
+              out_delay: 10
+              throttle:
+                initial: 56
+                max: 56
+                min: 56
+                spf: true
+        fips_restrictions: true
+        vrf: "vrf02"
+  after:
+    processes:
+      - address_family:
+          - afi: "ipv4"
+            redistribute:
+              - routes: "connected"
+          - afi: "ipv6"
+            router_id: "10.1.1.1"
+        adjacency:
+          exchange_start:
+            threshold: 11
+        areas:
+          - area_id: "0.0.0.20"
+            authentication:
+              algorithm: "sha1"
+              hidden_key: true
+              passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+              spi: 33
+            stub:
+              set: true
+          - area_id: "0.0.0.40"
+            default_cost: 45
+            stub:
+              set: true
+        timers:
+          pacing: 7
+        vrf: "default"
+      - address_family:
+          - afi: "ipv4"
+            maximum_paths: 100
+            passive_interface: true
+            redistribute:
+              - route_map: "MAP01"
+                routes: "connected"
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.10"
+                nssa:
+                  no_summary: true
+            default_information:
+              originate: true
+              route_map: "DefaultRouteFilter"
+            max_metric:
+              router_lsa:
+                external_lsa:
+                  max_metric_value: 25
+                summary_lsa:
+                  set: true
+        areas:
+          - area_id: "0.0.0.0"
+            encryption:
+              spi: 44
+              algorithm: "sha1"
+              encryption: "null"
+              hidden_key: true
+              passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+        bfd:
+          all_interfaces: true
+        log_adjacency_changes:
+          detail: true
+        vrf: "vrf01"
+      - address_family:
+          - afi: "ipv4"
+            areas:
+              - area_id: "0.0.0.3"
+                ranges:
+                  - address: "60.1.0.0/16"
+                    cost: 30
+            timers:
+              lsa: 10
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.1"
+                stub:
+                  set: true
+            distance: 200
+            redistribute:
+              - routes: "static"
+        vrf: "vrf02"
+overridden:
+  commands:
+    - no router ospfv3
+    - no router ospfv3 vrf vrf01
+    - router ospfv3 vrf vrf02
+    - address-family ipv6
+    - no fips restrictions
+    - no router-id
+    - no timers out-delay 10
+    - no timers throttle spf 56 56 56
+    - redistribute static
+    - exit
+    - address-family ipv4
+    - area 0.0.0.3 range 60.1.0.0/16 cost 30
+    - timers lsa arrival 10
+    - exit
+    - no fips restrictions
+    - exit
+  after:
+    processes:
+      - address_family:
+          - afi: "ipv4"
+            areas:
+              - area_id: "0.0.0.3"
+                ranges:
+                  - address: "60.1.0.0/16"
+                    cost: 30
+            timers:
+              lsa: 10
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.1"
+                stub:
+                  set: true
+            distance: 200
+            redistribute:
+              - routes: "static"
+        vrf: "vrf02"
+populate:
+  before:
+    processes:
+      - address_family:
+          - afi: "ipv4"
+            fips_restrictions: true
+            redistribute:
+              - routes: "connected"
+          - afi: "ipv6"
+            fips_restrictions: true
+            router_id: "10.1.1.1"
+        adjacency:
+          exchange_start:
+            threshold: 11
+        areas:
+          - area_id: "0.0.0.20"
+            authentication:
+              algorithm: "sha1"
+              hidden_key: true
+              passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+              spi: 33
+            stub:
+              set: true
+          - area_id: "0.0.0.40"
+            default_cost: 45
+            stub:
+              set: true
+        fips_restrictions: true
+        timers:
+          pacing: 7
+        vrf: "default"
+      - address_family:
+          - afi: "ipv4"
+            fips_restrictions: true
+            maximum_paths: 100
+            passive_interface: true
+            redistribute:
+              - route_map: "MAP01"
+                routes: "connected"
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.10"
+                nssa:
+                  no_summary: true
+            default_information:
+              originate: true
+              route_map: "DefaultRouteFilter"
+            fips_restrictions: true
+            max_metric:
+              router_lsa:
+                external_lsa:
+                  max_metric_value: 25
+                summary_lsa:
+                  set: true
+        areas:
+          - area_id: "0.0.0.0"
+            encryption:
+              spi: 44
+              algorithm: "sha1"
+              encryption: "null"
+              hidden_key: true
+              passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+        bfd:
+          all_interfaces: true
+        fips_restrictions: true
+        log_adjacency_changes:
+          detail: true
+        vrf: "vrf01"
+      - address_family:
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.1"
+                stub:
+                  set: true
+            distance: 200
+            fips_restrictions: true
+            router_id: "10.17.0.3"
+            timers:
+              out_delay: 10
+              throttle:
+                initial: 56
+                max: 56
+                min: 56
+                spf: true
+        fips_restrictions: true
+        vrf: "vrf02"

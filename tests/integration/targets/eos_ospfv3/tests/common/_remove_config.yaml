@@ -1,0 +1,8 @@
+---
+- name: Cleanup
+  become: true
+  arista.eos.eos_config:
+    lines:
+      - "no router ospfv3"
+      - "no router ospfv3 vrf vrf01"
+      - "no router ospfv3 vrf vrf02"
