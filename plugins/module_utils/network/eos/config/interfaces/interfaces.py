@@ -168,8 +168,11 @@ class Interfaces(ConfigBase):
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
 
-            if "speed" in add_config.keys() and "duplex" not in add_config.keys():
-                add_config.update({"duplex": desired.get('duplex')})
+            if (
+                "speed" in add_config.keys()
+                and "duplex" not in add_config.keys()
+            ):
+                add_config.update({"duplex": desired.get("duplex")})
 
             commands.extend(generate_commands(key, add_config, del_config))
 
@@ -193,8 +196,11 @@ class Interfaces(ConfigBase):
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
 
-            if "speed" in add_config.keys() and "duplex" not in add_config.keys():
-                add_config.update({"duplex": desired.get('duplex')})
+            if (
+                "speed" in add_config.keys()
+                and "duplex" not in add_config.keys()
+            ):
+                add_config.update({"duplex": desired.get("duplex")})
 
             commands.extend(generate_commands(key, add_config, del_config))
 
@@ -217,8 +223,11 @@ class Interfaces(ConfigBase):
                 extant = dict()
 
             add_config = dict_diff(extant, desired)
-            if "speed" in add_config.keys() and "duplex" not in add_config.keys():
-                add_config.update({"duplex": desired.get('duplex')})
+            if (
+                "speed" in add_config.keys()
+                and "duplex" not in add_config.keys()
+            ):
+                add_config.update({"duplex": desired.get("duplex")})
             commands.extend(generate_commands(key, add_config, {}))
 
         return commands

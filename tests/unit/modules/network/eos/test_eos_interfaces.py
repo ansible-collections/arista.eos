@@ -103,7 +103,9 @@ class TestEosInterfacesModule(TestEosModule):
     def test_eos_interfaces_merged_speed_idempotent(self):
         set_module_args(
             dict(
-                config=[dict(name="Ethernet4", speed="forced 10", duplex="full")],
+                config=[
+                    dict(name="Ethernet4", speed="forced 10", duplex="full")
+                ],
                 state="merged",
             )
         )
