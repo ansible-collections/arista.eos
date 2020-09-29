@@ -156,10 +156,16 @@ class AclsFacts(object):
                 if seq:
                     ace_dict.update({"sequence": dev_config_remainder.pop(0)})
                     ace_dict.update({"grant": dev_config_remainder.pop(0)})
-                    if dev_config_remainder[0] == "vlan":
+                    if (
+                        dev_config_remainder
+                        and dev_config_remainder[0] == "vlan"
+                    ):
                         vlan_str = ""
                         dev_config_remainder.pop(0)
-                        if dev_config_remainder[0] == "inner":
+                        if (
+                            dev_config_remainder
+                            and dev_config_remainder[0] == "inner"
+                        ):
                             vlan_str = dev_config_remainder.pop(0) + " "
                         vlan_str = (
                             dev_config_remainder.pop(0)
@@ -176,12 +182,18 @@ class AclsFacts(object):
                     src_address = re.search(
                         r"[a-z\d:\.]+", dev_config_remainder[0]
                     )
-                    if dev_config_remainder[0] == "host":
+                    if (
+                        dev_config_remainder
+                        and dev_config_remainder[0] == "host"
+                    ):
                         source_dict.update(
                             {"host": dev_config_remainder.pop(1)}
                         )
                         dev_config_remainder.pop(0)
-                    elif dev_config_remainder[0] == "any":
+                    elif (
+                        dev_config_remainder
+                        and dev_config_remainder[0] == "any"
+                    ):
                         source_dict.update({"any": True})
                         dev_config_remainder.pop(0)
                     elif src_prefix:
@@ -196,7 +208,10 @@ class AclsFacts(object):
                             {"wildcard_bits": dev_config_remainder.pop(0)}
                         )
                     if dev_config_remainder:
-                        if dev_config_remainder[0] in operator:
+                        if (
+                            dev_config_remainder
+                            and dev_config_remainder[0] in operator
+                        ):
                             port_dict = {}
                             src_port = ""
                             src_opr = dev_config_remainder.pop(0)
@@ -232,10 +247,16 @@ class AclsFacts(object):
                     dest_address = re.search(
                         r"[a-z\d:\.]+", dev_config_remainder[0]
                     )
-                    if dev_config_remainder[0] == "host":
+                    if (
+                        dev_config_remainder
+                        and dev_config_remainder[0] == "host"
+                    ):
                         dest_dict.update({"host": dev_config_remainder.pop(1)})
                         dev_config_remainder.pop(0)
-                    elif dev_config_remainder[0] == "any":
+                    elif (
+                        dev_config_remainder
+                        and dev_config_remainder[0] == "any"
+                    ):
                         dest_dict.update({"any": True})
                         dev_config_remainder.pop(0)
                     elif dest_prefix:
@@ -282,7 +303,10 @@ class AclsFacts(object):
                     if protocol == "tcp" or "6":
                         protocol = "tcp"
                         flags_dict = {}
-                        if dev_config_remainder[0] in flags:
+                        if (
+                            dev_config_remainder
+                            and dev_config_remainder[0] in flags
+                        ):
                             flaglist = dev_config_remainder.copy()
                             for config_remainder in flaglist:
                                 if config_remainder not in flags:
@@ -303,13 +327,19 @@ class AclsFacts(object):
                             protocol = "icmp"
                         elif protocol == "58":
                             protocol = "icmpv6"
-                        if dev_config_remainder[0] not in others:
+                        if (
+                            dev_config_remainder
+                            and dev_config_remainder[0] not in others
+                        ):
                             icmp_dict.update({dev_config_remainder[0]: True})
                             dev_config_remainder.pop(0)
                     if bool(icmp_dict):
                         protocol_option_dict.update({protocol: icmp_dict})
-                    if protocol == "ip" or "ipv6":
-                        if dev_config_remainder[0] == "nexthop_group":
+                    if protocol in ["ip", "ipv6"]:
+                        if (
+                            dev_config_remainder
+                            and dev_config_remainder[0] == "nexthop_group"
+                        ):
                             dev_config_remainder.pop(0)
                             ip_dict.update(
                                 {"nexthop_group": dev_config_remainder.pop(0)}
@@ -320,7 +350,10 @@ class AclsFacts(object):
                         ace_dict.update(
                             {"protocol_options": protocol_option_dict}
                         )
-                    if dev_config_remainder[0] == "ttl":
+                    if (
+                        dev_config_remainder
+                        and dev_config_remainder[0] == "ttl"
+                    ):
                         dev_config_remainder.pop(0)
                         op = dev_config_remainder.pop(0)
                         ttl_dict = {op: dev_config_remainder.pop(0)}

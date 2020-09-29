@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fixed typo and index out of range errors while handling protocol_options. (https://github.com/ansible-collections/arista.eos/pull/115)
