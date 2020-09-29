@@ -53,7 +53,6 @@ class InterfacesArgs(object):
                 "mode": {
                     "choices": ["layer2", "layer3"],
                     "type": "str",
-                    "default": "layer2",
                 },
             },
             "type": "list",

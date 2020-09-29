@@ -122,7 +122,6 @@ class TestEosInterfacesModule(TestEosModule):
         commands = [
             "interface Ethernet1",
             "no description",
-            "switchport",
             "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
@@ -163,7 +162,6 @@ class TestEosInterfacesModule(TestEosModule):
                         name="Ethernet1",
                         description="Interface_1",
                         speed="1000g",
-                        mode="layer2",
                         duplex="full",
                     )
                 ],
