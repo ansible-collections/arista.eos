@@ -43,6 +43,9 @@ class Lldp_globalFacts(object):
 
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
+    def get_device_data(self, connection):
+        return connection.get("show running-config | section lldp")
+
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for lldp_global
         :param connection: the device connection
@@ -52,7 +55,7 @@ class Lldp_globalFacts(object):
         :returns: facts
         """
         if not data:
-            data = connection.get("show running-config | section lldp")
+            data = self.get_device_data(connection)
 
         obj = {}
         if data:
