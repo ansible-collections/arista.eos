@@ -50,10 +50,7 @@ class InterfacesArgs(object):
                 "mtu": {"required": False, "type": "int"},
                 "speed": {"required": False, "type": "str"},
                 "duplex": {"required": False, "type": "str"},
-                "mode": {
-                    "choices": ["layer2", "layer3"],
-                    "type": "str",
-                },
+                "mode": {"choices": ["layer2", "layer3"], "type": "str"},
             },
             "type": "list",
         },
