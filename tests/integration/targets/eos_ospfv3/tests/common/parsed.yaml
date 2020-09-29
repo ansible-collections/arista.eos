@@ -1,0 +1,16 @@
+---
+- debug:
+    msg: START eos_ospfv3_interfaces parsed integration tests on connection={{ ansible_connection
+      }}
+
+- name: Provide the running configuration for parsing (config to be parsed)
+  become: true
+  register: result
+  arista.eos.eos_ospfv3:
+    running_config: "{{ lookup('file', '_parsed.cfg') }}"
+    state: parsed
+
+- assert:
+    that:
+      - result.changed == false
+      - result.parsed.processes|symmetric_difference(populate.before.processes) == []
