@@ -101,17 +101,11 @@ class InterfacesFacts(object):
 
         speed_pair = utils.parse_conf_arg(conf, "speed")
         if speed_pair:
-            state = speed_pair.split()
-            if state[0] == "forced":
-                state = state[1]
-            else:
-                state = state[0]
-
+            state = speed_pair
             if state == "auto":
                 config["duplex"] = state
             else:
                 # remaining options are all e.g., 10half or 40gfull
                 config["speed"] = state[:-4]
                 config["duplex"] = state[-4:]
-
         return utils.remove_empties(config)
