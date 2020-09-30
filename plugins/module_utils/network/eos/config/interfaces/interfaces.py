@@ -14,6 +14,8 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+import re
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -253,6 +255,14 @@ def generate_commands(interface, to_set, to_remove):
         elif key == "duplex":
             # duplex is handled with speed
             continue
+        elif key == "mode":
+            if not re.search(r"(M|m)anagement.*", interface):
+                if value == "layer3":
+                    # switching from default (layer2) mode to layer3
+                    commands.append("no switchport")
+                else:
+                    # setting to default (layer 2) mode
+                    commands.append("switchport")
         else:
             commands.append("{0} {1}".format(key, value))
 
@@ -267,6 +277,9 @@ def generate_commands(interface, to_set, to_remove):
         elif key == "duplex":
             # duplex is handled with speed
             continue
+        elif key == "mode":
+            if not re.search(r"(M|m)anagement.*", interface):
+                commands.append("switchport")
         else:
             commands.append("no {0}".format(key))
 

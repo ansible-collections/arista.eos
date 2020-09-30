@@ -5,6 +5,7 @@
     config:
 
       - name: Ethernet1
+        mode: layer3
         enabled: true
 
       - name: Ethernet2
