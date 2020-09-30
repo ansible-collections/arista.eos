@@ -168,7 +168,7 @@ releases:
     - 116-acls-overridden-idempotent.yaml
     - 119-idempotent-l2-interfaces.yaml
     modules:
-    - description: Manages OSPFv3 resource module
+    - description: OSPFv3 resource module
       name: eos_ospfv3
       namespace: .ansible.collections.ansible_collections.arista.eos.plugins.modules
     release_date: '2020-09-30'

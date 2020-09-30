@@ -5,7 +5,7 @@
 arista.eos.eos_ospfv3
 *********************
 
-**Manages OSPFv3 resource module**
+**OSPFv3 resource module**
 
 
 Version added: 1.1.0
