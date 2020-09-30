@@ -74,7 +74,12 @@ class TestEosL2InterfacesModule(TestEosModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="Ethernet1", trunk=dict(native_vlan=10)),
+                    dict(
+                        name="Ethernet1",
+                        trunk=dict(
+                            native_vlan=10, trunk_allowed_vlans=["20-25"]
+                        ),
+                    ),
                     dict(name="Ethernet2", access=dict(vlan=30)),
                 ],
                 state="merged",
@@ -83,6 +88,7 @@ class TestEosL2InterfacesModule(TestEosModule):
         commands = [
             "interface Ethernet1",
             "switchport trunk native vlan 10",
+            "switchport trunk allowed vlan add 20,21,22,23,24,25",
             "interface Ethernet2",
             "switchport access vlan 30",
         ]
@@ -93,7 +99,11 @@ class TestEosL2InterfacesModule(TestEosModule):
             dict(
                 config=[
                     dict(name="Ethernet2", trunk=dict(native_vlan=20)),
-                    dict(name="Ethernet1", access=dict(vlan=20)),
+                    dict(
+                        name="Ethernet1",
+                        access=dict(vlan=20),
+                        trunk=dict(trunk_allowed_vlans=["7-10"]),
+                    ),
                 ],
                 state="merged",
             )
@@ -134,7 +144,11 @@ class TestEosL2InterfacesModule(TestEosModule):
                         mode="trunk",
                         trunk=dict(native_vlan=20),
                     ),
-                    dict(name="Ethernet1", access=dict(vlan=20)),
+                    dict(
+                        name="Ethernet1",
+                        access=dict(vlan=20),
+                        trunk=dict(trunk_allowed_vlans=["7-10"]),
+                    ),
                 ],
                 state="replaced",
             )
@@ -159,6 +173,7 @@ class TestEosL2InterfacesModule(TestEosModule):
             "switchport trunk native vlan 50",
             "interface Ethernet1",
             "no switchport access vlan",
+            "no switchport trunk allowed vlan",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -171,7 +186,11 @@ class TestEosL2InterfacesModule(TestEosModule):
                         mode="trunk",
                         trunk=dict(native_vlan=20),
                     ),
-                    dict(name="Ethernet1", access=dict(vlan=20)),
+                    dict(
+                        name="Ethernet1",
+                        access=dict(vlan=20),
+                        trunk=dict(trunk_allowed_vlans=["7-10"]),
+                    ),
                 ],
                 state="overridden",
             )
@@ -198,5 +217,6 @@ class TestEosL2InterfacesModule(TestEosModule):
             "no switchport trunk native vlan",
             "interface Ethernet1",
             "no switchport access vlan",
+            "no switchport trunk allowed vlan",
         ]
         self.execute_module(changed=True, commands=commands)
