@@ -146,3 +146,29 @@ releases:
     fragments:
     - 96-changemode-terminalerror.yaml
     release_date: '2020-08-26'
+  1.1.0:
+    changes:
+      bugfixes:
+      - Added 'mode' key to eos_interfaces to handle the layer2/3 switchport mode
+        of an interface.
+      - Added fix to maintain the idempotency while using overridden operation.
+      - Check for existing configuration when trunk_allowed_vlans is issued, is added.
+      - Fixed typo and index out of range errors while handling protocol_options.
+        (https://github.com/ansible-collections/arista.eos/pull/115)
+      minor_changes:
+      - Added 'mode' to examples in documentation of eos_l2_interfaces.
+      - Added eos ospfv3 resource module (https://github.com/ansible-collections/arista.eos/pull/109).
+      - Added unit test cases for eos_lldp_global module.
+    fragments:
+    - 105-switchport-mode-interfaces.yaml
+    - 106-lldp_global_unittest.yaml
+    - 109-eos-ospfv3-resource-module.yaml
+    - 113-add-mode-to-examples.yaml
+    - 115-protocol-options-acls.yaml
+    - 116-acls-overridden-idempotent.yaml
+    - 119-idempotent-l2-interfaces.yaml
+    modules:
+    - description: Manages OSPFv3 resource module
+      name: eos_ospfv3
+      namespace: .ansible.collections.ansible_collections.arista.eos.plugins.modules
+    release_date: '2020-09-30'

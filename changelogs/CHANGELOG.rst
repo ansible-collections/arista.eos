@@ -5,6 +5,32 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v1.1.0
+======
+
+Minor Changes
+-------------
+
+- Added 'mode' to examples in documentation of eos_l2_interfaces.
+- Added eos ospfv3 resource module (https://github.com/ansible-collections/arista.eos/pull/109).
+- Added unit test cases for eos_lldp_global module.
+
+Bugfixes
+--------
+
+- Added 'mode' key to eos_interfaces to handle the layer2/3 switchport mode of an interface.
+- Added fix to maintain the idempotency while using overridden operation.
+- Check for existing configuration when trunk_allowed_vlans is issued, is added.
+- Fixed typo and index out of range errors while handling protocol_options. (https://github.com/ansible-collections/arista.eos/pull/115)
+
+New Modules
+-----------
+
+ansible.collections.ansible_collections.arista.eos.plugins.modules
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- .ansible.collections.ansible_collections.arista.eos.plugins.modules.eos_ospfv3 - Manages OSPFv3 resource module
+
 v1.0.3
 ======
 

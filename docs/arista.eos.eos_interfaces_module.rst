@@ -108,6 +108,26 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>mode</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>layer2</li>
+                                    <li>layer3</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Manage Layer2 or Layer3 state of the interface. Applicable for Ethernet and port channel interfaces only.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>mtu</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -234,6 +254,7 @@ Examples
         config:
         - name: Ethernet1
           enabled: true
+          mode: layer3
         - name: Ethernet2
           description: Configured by Ansible
           enabled: false
@@ -245,6 +266,7 @@ Examples
     # veos#show running-config | section interface
     # interface Ethernet1
     #    description "Interface 1"
+    #    no switchport
     # !
     # interface Ethernet2
     #    description "Configured by Ansible"
@@ -344,6 +366,7 @@ Examples
     # veos#show running-config | section interface
     # interface Ethernet1
     #    description "Interface 1"
+    #    no switchport
     # !
     # interface Ethernet2
     # !
@@ -378,6 +401,7 @@ Examples
         config:
         - name: Ethernet1
           enabled: true
+          mode: layer3
         - name: Ethernet2
           description: Configured by Ansible
           enabled: false
@@ -388,6 +412,7 @@ Examples
 
     # - "interface Ethernet1"
     # - "description "Interface 1""
+    # - "no swithcport"
     # - "interface Ethernet2"
     # - "description "Configured by Ansible""
     # - "shutdown"
@@ -415,9 +440,11 @@ Examples
     # parsed:
     #     - name: Ethernet1
     #       enabled: True
+    #       mode: layer2
     #     - name: Ethernet2
     #       description: 'Configured by Ansible'
     #       enabled: False
+    #       mode: layer2
 
     # Using gathered:
 
@@ -439,9 +466,11 @@ Examples
     # gathered:
     #      - name: Ethernet1
     #        enabled: True
+    #        mode: layer2
     #      - name: Ethernet2
     #        description: 'Configured by Ansible'
     #        enabled: False
+    #        mode: layer2
 
 
 
