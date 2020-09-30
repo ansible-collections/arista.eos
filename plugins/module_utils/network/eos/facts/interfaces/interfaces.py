@@ -99,9 +99,8 @@ class InterfacesFacts(object):
             conf, "switchport", "layer2", "layer3"
         )
 
-        speed_pair = utils.parse_conf_arg(conf, "speed")
-        if speed_pair:
-            state = speed_pair
+        state = utils.parse_conf_arg(conf, "speed")
+        if state:
             if state == "auto":
                 config["duplex"] = state
             else:
