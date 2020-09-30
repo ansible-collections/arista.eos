@@ -79,6 +79,14 @@ options:
         description:
         - Interface link speed. Applicable for Ethernet interfaces only.
         type: str
+      mode:
+        description:
+        - Manage Layer2 or Layer3 state of the interface. Applicable for Ethernet
+          and port channel interfaces only.
+        choices:
+        - layer2
+        - layer3
+        type: str
   running_config:
     description:
     - This option is used only with state I(parsed).
@@ -127,6 +135,7 @@ EXAMPLES = """
     config:
     - name: Ethernet1
       enabled: true
+      mode: layer3
     - name: Ethernet2
       description: Configured by Ansible
       enabled: false
@@ -138,6 +147,7 @@ EXAMPLES = """
 # veos#show running-config | section interface
 # interface Ethernet1
 #    description "Interface 1"
+#    no switchport
 # !
 # interface Ethernet2
 #    description "Configured by Ansible"
@@ -237,6 +247,7 @@ EXAMPLES = """
 # veos#show running-config | section interface
 # interface Ethernet1
 #    description "Interface 1"
+#    no switchport
 # !
 # interface Ethernet2
 # !
@@ -271,6 +282,7 @@ EXAMPLES = """
     config:
     - name: Ethernet1
       enabled: true
+      mode: layer3
     - name: Ethernet2
       description: Configured by Ansible
       enabled: false
@@ -281,6 +293,7 @@ EXAMPLES = """
 
 # - "interface Ethernet1"
 # - "description "Interface 1""
+# - "no swithcport"
 # - "interface Ethernet2"
 # - "description "Configured by Ansible""
 # - "shutdown"
@@ -308,9 +321,11 @@ EXAMPLES = """
 # parsed:
 #     - name: Ethernet1
 #       enabled: True
+#       mode: layer2
 #     - name: Ethernet2
 #       description: 'Configured by Ansible'
 #       enabled: False
+#       mode: layer2
 
 # Using gathered:
 
@@ -332,9 +347,11 @@ EXAMPLES = """
 # gathered:
 #      - name: Ethernet1
 #        enabled: True
+#        mode: layer2
 #      - name: Ethernet2
 #        description: 'Configured by Ansible'
 #        enabled: False
+#        mode: layer2
 """
 
 RETURN = """

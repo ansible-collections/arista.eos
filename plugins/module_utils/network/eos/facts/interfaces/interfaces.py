@@ -95,6 +95,9 @@ class InterfacesFacts(object):
         shutdown = utils.parse_conf_cmd_arg(conf, "shutdown", False)
         config["enabled"] = shutdown if shutdown is False else True
         config["mtu"] = utils.parse_conf_arg(conf, "mtu")
+        config["mode"] = utils.parse_conf_cmd_arg(
+            conf, "switchport", "layer2", "layer3"
+        )
 
         speed_pair = utils.parse_conf_arg(conf, "speed")
         if speed_pair:

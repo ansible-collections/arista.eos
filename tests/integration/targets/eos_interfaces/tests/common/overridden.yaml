@@ -9,6 +9,7 @@
         enabled: true
 
       - name: Ethernet2
+        mode: layer2
         duplex: auto
         description: Configured by Ansible
         enabled: false
@@ -40,8 +41,3 @@
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.after)|length
         == 0
-
-- assert:
-    that:
-      - config|difference(ansible_facts.network_resources.interfaces)|length ==
-        0
