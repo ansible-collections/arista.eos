@@ -244,5 +244,8 @@ class TestEosInterfacesModule(TestEosModule):
             "interface Management1",
             "no description",
             "no shutdown",
+            "interface Ethernet4",
+            "speed auto",
+            "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
