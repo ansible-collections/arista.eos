@@ -28,6 +28,10 @@ Name | Description
 --- | ---
 [arista.eos.eos](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_cliconf.rst)|Use eos cliconf to run command on Arista EOS platform
 
+### Filter plugins
+Name | Description
+--- | ---
+
 ### Httpapi plugins
 Name | Description
 --- | ---
@@ -59,6 +63,7 @@ Name | Description
 [arista.eos.eos_lldp_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_interfaces_module.rst)|LLDP interfaces resource module
 [arista.eos.eos_logging](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_logging_module.rst)|Manage logging on network devices
 [arista.eos.eos_ospfv2](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv2_module.rst)|OSPFv2 resource module
+[arista.eos.eos_ospfv3](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv3_module.rst)|OSPFv3 resource module
 [arista.eos.eos_static_route](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_static_route_module.rst)|(deprecated, removed after 2022-06-01) Manage static IP routes on Arista EOS network devices
 [arista.eos.eos_static_routes](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_static_routes_module.rst)|Static routes resource module
 [arista.eos.eos_system](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_system_module.rst)|Manage the system attributes on Arista EOS devices
@@ -66,6 +71,10 @@ Name | Description
 [arista.eos.eos_vlan](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlan_module.rst)|(deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS network devices
 [arista.eos.eos_vlans](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlans_module.rst)|VLANs resource module
 [arista.eos.eos_vrf](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vrf_module.rst)|Manage VRFs on Arista EOS network devices
+
+### Inventory plugins
+Name | Description
+--- | ---
 
 <!--end collection content-->
 
