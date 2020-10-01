@@ -1,0 +1,51 @@
+---
+- debug:
+    msg: Start eos_ospf_interfaces overridden integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: overridde device ocnfiguration with given ospf interfaces configuration
+      become: true
+      register: result
+      arista.eos.eos_ospf_interfaces: &id001
+        config:
+          - name: "Vlan1"
+            address_family:
+              - afi: "ipv6"
+                cost: 44
+                bfd: true
+                ip_params:
+                  - afi: "ipv6"
+                    mtu_ignore: true
+                    network: "point-to-point"
+                    dead_interval: 56
+        state: overridden
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: ospf_interfaces
+
+    - assert:
+        that:
+          - result.commands|length == 18
+          - result.changed == true
+          - result.commands|symmetric_difference(overridden.commands) == []
+          - result.after|symmetric_difference(ansible_facts['network_resources']['ospf_interfaces']) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_ospf_interfaces: *id001
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml

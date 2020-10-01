@@ -1,0 +1,47 @@
+---
+- debug:
+    msg: Start eos_ospf_interfaces rendered integration tests ansible_connection={{
+      ansible_connection }}
+
+
+- block:
+
+    - name: render native config
+      become: true
+      register: result
+      arista.eos.eos_ospf_interfaces: &id001
+        config:
+          - name: "Vlan1"
+            address_family:
+              - afi: "ipv4"
+                dead_interval: 29
+                mtu_ignore: true
+                hello_interval: 66
+              - afi: "ipv6"
+                hello_interval: 77
+                cost: 106
+                transmit_delay: 100
+                ip_params:
+                  - afi: "ipv6"
+                    retransmit_interval: 115
+                    dead_interval: 56
+                    passive_interface: true
+                  - afi: "ipv4"
+                    area:
+                      area_id: "0.0.0.5"
+                    priority: 45
+          - name: "Vlan2"
+            address_family:
+              - afi: "ipv6"
+                ip_params:
+                  - afi: "ipv4"
+                    area:
+                      area_id: "0.0.0.6"
+                    hello_interval: 45
+                    retransmit_interval: 100
+        state: rendered
+
+    - assert:
+        that:
+          - result.changed == false
+          - result.rendered|symmetric_difference(merged.commands) == []

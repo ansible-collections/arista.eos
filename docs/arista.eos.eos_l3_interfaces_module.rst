@@ -96,7 +96,7 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>no</li>
                                     <li>yes</li>
                         </ul>
                 </td>
@@ -208,14 +208,14 @@ Notes
 
 .. note::
    - Tested against Arista EOS 4.20.10M
-   - This module works with connection ``network_cli``. See the `EOS Platform Options <../network/user_guide/platform_eos.html>`_.
+   - This module works with connection ``network_cli``. See the `EOS Platform Options <../network/user_guide/platform_eos.html>`_. 'eos_l2_interfaces/eos_interfaces' should be used for preparing the interfaces , before applying L3 configurations using this module (eos_l3_interfaces).
 
 
 
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     # Using deleted
 

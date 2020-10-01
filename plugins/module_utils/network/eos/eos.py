@@ -60,7 +60,9 @@ eos_provider_spec = {
         fallback=(env_fallback, ["ANSIBLE_NET_SSH_KEYFILE"]), type="path"
     ),
     "authorize": dict(
-        fallback=(env_fallback, ["ANSIBLE_NET_AUTHORIZE"]), type="bool"
+        fallback=(env_fallback, ["ANSIBLE_NET_AUTHORIZE"]),
+        type="bool",
+        default=False,
     ),
     "auth_pass": dict(
         no_log=True, fallback=(env_fallback, ["ANSIBLE_NET_AUTH_PASS"])

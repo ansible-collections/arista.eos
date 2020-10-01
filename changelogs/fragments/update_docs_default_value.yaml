@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - update/remove default values in module docs.(https://github.com/ansible-collections/arista.eos/pull/152)

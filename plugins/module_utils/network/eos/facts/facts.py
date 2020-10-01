@@ -62,7 +62,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospfv
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospfv3.ospfv3 import (
     Ospfv3Facts,
 )
-
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospf_interfaces.ospf_interfaces import (
+    Ospf_interfacesFacts,
+)
 
 FACT_LEGACY_SUBSETS = dict(
     default=Default, hardware=Hardware, interfaces=Interfaces, config=Config
@@ -82,6 +84,7 @@ FACT_RESOURCE_SUBSETS = dict(
     static_routes=Static_routesFacts,
     ospfv2=Ospfv2Facts,
     ospfv3=Ospfv3Facts,
+    ospf_interfaces=Ospf_interfacesFacts,
 )
 
 

@@ -170,5 +170,27 @@ releases:
     modules:
     - description: OSPFv3 resource module
       name: eos_ospfv3
-      namespace: .ansible.collections.ansible_collections.arista.eos.plugins.modules
+      namespace: ''
     release_date: '2020-09-30'
+  1.2.0:
+    changes:
+      bugfixes:
+      - updated config dict, with duplex key when speed changes from 'x' to 'forced
+        x' (https://github.com/ansible-collections/arista.eos/pull/120).
+      minor_changes:
+      - Added ospf_interfaces resource module. (https://github.com/ansible-collections/arista.eos/pull/125)
+      - Documented the necessity to use eos_interfaces and eos_l2_interfaces (for
+        l2 configs) in eos_l3_interfaces module.
+      - modify short description in ospfv3 resource module.
+      - stop integration testing of local connection as it is deprecated.
+    fragments:
+    - 101-l3_interfaces_documentation.yaml
+    - 120-forcedspeed-interfaces-config.yaml
+    - 123-ospfv3-description.yaml
+    - 125-ospf_interfaces_resource_module.yaml
+    - 127-drop-local-connection-testing.yaml
+    modules:
+    - description: ospf_interfaces resource module
+      name: eos_ospf_interfaces
+      namespace: ''
+    release_date: '2020-10-30'

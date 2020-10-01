@@ -307,7 +307,7 @@ class AclsFacts(object):
                             dev_config_remainder
                             and dev_config_remainder[0] in flags
                         ):
-                            flaglist = dev_config_remainder.copy()
+                            flaglist = dev_config_remainder[:]
                             for config_remainder in flaglist:
                                 if config_remainder not in flags:
                                     break

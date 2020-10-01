@@ -373,7 +373,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: run show version on remote devices
       arista.eos.eos_command:

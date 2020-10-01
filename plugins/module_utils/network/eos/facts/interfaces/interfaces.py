@@ -58,7 +58,7 @@ class InterfacesFacts(object):
             data = self.get_device_data(connection)
 
         # operate on a collection of resource x
-        config = data.split("interface ")
+        config = ("\n" + data).split("\ninterface ")
         objs = []
         for conf in config:
             if conf:
@@ -99,19 +99,12 @@ class InterfacesFacts(object):
             conf, "switchport", "layer2", "layer3"
         )
 
-        speed_pair = utils.parse_conf_arg(conf, "speed")
-        if speed_pair:
-            state = speed_pair.split()
-            if state[0] == "forced":
-                state = state[1]
-            else:
-                state = state[0]
-
+        state = utils.parse_conf_arg(conf, "speed")
+        if state:
             if state == "auto":
                 config["duplex"] = state
             else:
                 # remaining options are all e.g., 10half or 40gfull
                 config["speed"] = state[:-4]
                 config["duplex"] = state[-4:]
-
         return utils.remove_empties(config)

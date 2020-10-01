@@ -1,0 +1,8 @@
+---
+- name: Cleanup
+  become: true
+  arista.eos.eos_config:
+    lines:
+      - "no interface Vlan1"
+      - "no interface Vlan2"
+      - "no interface Vlan3"
