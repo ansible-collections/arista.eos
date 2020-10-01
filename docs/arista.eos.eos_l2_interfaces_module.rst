@@ -255,9 +255,11 @@ Examples
       arista.eos.eos_l2_interfaces:
         config:
         - name: Ethernet1
+          mode: trunk
           trunk:
             native_vlan: 10
         - name: Ethernet2
+          mode: access
           access:
             vlan: 30
         state: merged
@@ -300,6 +302,7 @@ Examples
       arista.eos.eos_l2_interfaces:
         config:
         - name: Ethernet1
+          mode: trunk
           trunk:
             native_vlan: 20
             trunk_vlans: 5-10, 15
@@ -346,6 +349,7 @@ Examples
       arista.eos.eos_l2_interfaces:
         config:
         - name: Ethernet2
+          mode: access
           access:
             vlan: 30
         state: overridden
@@ -407,9 +411,11 @@ Examples
       arista.eos.eos_l2_interfaces:
         config:
         - name: Ethernet1
+          mode: trunk
           trunk:
             native_vlan: 10
         - name: Ethernet2
+          mode: access
           access:
             vlan: 30
         state: merged
@@ -447,9 +453,11 @@ Examples
     # Output:
     #   parsed:
     #      - name: Ethernet1
+    #        mode: trunk
     #        trunk:
     #          native_vlan: 10
     #      - name: Ethernet2
+    #        mode: access
     #        access:
     #          vlan: 30
 
@@ -472,9 +480,11 @@ Examples
     # output:
     #   gathered:
     #      - name: Ethernet1
+    #        mode: trunk
     #        trunk:
     #          native_vlan: 10
     #      - name: Ethernet2
+    #        mode: access
     #        access:
     #          vlan: 30
 

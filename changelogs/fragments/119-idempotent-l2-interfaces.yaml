@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Check for existing configuration when trunk_allowed_vlans is issued, is added.

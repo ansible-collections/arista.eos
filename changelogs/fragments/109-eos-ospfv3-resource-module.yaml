@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Added eos ospfv3 resource module (https://github.com/ansible-collections/arista.eos/pull/109).
