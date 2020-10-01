@@ -32,7 +32,7 @@ __metaclass__ = type
 
 DOCUMENTATION = """
 module: eos_ospfv3
-short_description: OSPFv3 resource module
+short_description: Manages OSPFv3 resource module
 description: This module configures and manages the attributes of ospfv3 on Arista
   EOS platforms.
 version_added: 1.1.0
