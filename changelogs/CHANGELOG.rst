@@ -72,12 +72,12 @@ New Plugins
 -----------
 
 Cliconf
-~~~~~~~
+^^^^^^^
 
 - eos - Use eos cliconf to run command on Arista EOS platform
 
 Httpapi
-~~~~~~~
+^^^^^^^
 
 - eos - Use eAPI to run command on eos platform
 
