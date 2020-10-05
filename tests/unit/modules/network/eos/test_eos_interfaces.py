@@ -100,6 +100,17 @@ class TestEosInterfacesModule(TestEosModule):
         )
         self.execute_module(changed=False, commands=[])
 
+    def test_eos_interfaces_merged_speed_idempotent(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(name="Ethernet4", speed="forced 10", duplex="full")
+                ],
+                state="merged",
+            )
+        )
+        self.execute_module(changed=False, commands=[])
+
     def test_eos_interfaces_replaced(self):
         set_module_args(
             dict(
@@ -233,21 +244,8 @@ class TestEosInterfacesModule(TestEosModule):
             "interface Management1",
             "no description",
             "no shutdown",
+            "interface Ethernet4",
+            "speed auto",
+            "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
-
-    # def test_eos_interfaces_overridden_idempotent(self):
-    #    set_module_args(dict(
-    #        config=[dict(
-    #            name="Ethernet1",
-    #            description="Interface 1"
-    #        ),
-    #        dict(
-    #        name="Ethernet2",
-    #        ),
-    #        dict(
-    #        name="Management 1",
-    #        description="Management interface"
-    #        )], state="overridden"
-    #    ))
-    #    self.execute_module(changed=False, commands=[])
