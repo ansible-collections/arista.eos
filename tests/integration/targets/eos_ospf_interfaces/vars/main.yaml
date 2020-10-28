@@ -1,0 +1,126 @@
+---
+deleted:
+  commands:
+    - interface Vlan1
+    - no ip ospf dead-interval 29
+    - no ip ospf hello-interval 66
+    - no ip ospf mtu-ignore
+    - no ospfv3 cost 106
+    - no ospfv3 hello-interval 77
+    - no ospfv3 transmit-delay 100
+    - no ospfv3 ipv4 priority 45
+    - no ospfv3 ipv4 area 0.0.0.5
+    - no ospfv3 ipv6 passive-interface
+    - no ospfv3 ipv6 dead-interval 56
+    - no ospfv3 ipv6 retransmit-interval 115
+merged:
+  commands:
+    - interface Vlan1
+    - ip ospf dead-interval 29
+    - ip ospf mtu-ignore
+    - ip ospf hello-interval 66
+    - ospfv3 hello-interval 77
+    - ospfv3 cost 106
+    - ospfv3 transmit-delay 100
+    - ospfv3 ipv4 area 0.0.0.5
+    - ospfv3 ipv4 priority 45
+    - ospfv3 ipv6 retransmit-interval 115
+    - ospfv3 ipv6 dead-interval 56
+    - ospfv3 ipv6 passive-interface
+    - interface Vlan2
+    - ospfv3 ipv4 area 0.0.0.6
+    - ospfv3 ipv4 hello-interval 45
+    - ospfv3 ipv4 retransmit-interval 100
+replaced:
+  commands:
+    - interface Vlan1
+    - no ip ospf dead-interval 29
+    - no ip ospf hello-interval 66
+    - no ip ospf mtu-ignore
+    - ospfv3 cost 44
+    - ospfv3 bfd
+    - no ospfv3 ipv4 priority 45
+    - no ospfv3 ipv4 area 0.0.0.5
+    - ospfv3 ipv6 mtu-ignore
+    - ospfv3 ipv6 network point-to-point
+    - no ospfv3 ipv6 passive-interface
+    - no ospfv3 ipv6 retransmit-interval 115
+    - no ospfv3 hello-interval 77
+    - no ospfv3 transmit-delay 100
+overridden:
+  commands:
+    - interface Vlan2
+    - no ospfv3 ipv4 hello-interval 45
+    - no ospfv3 ipv4 retransmit-interval 100
+    - no ospfv3 ipv4 area 0.0.0.6
+    - interface Vlan1
+    - no ip ospf dead-interval 29
+    - no ip ospf hello-interval 66
+    - no ip ospf mtu-ignore
+    - ospfv3 cost 44
+    - ospfv3 bfd
+    - no ospfv3 ipv4 priority 45
+    - no ospfv3 ipv4 area 0.0.0.5
+    - ospfv3 ipv6 mtu-ignore
+    - ospfv3 ipv6 network point-to-point
+    - no ospfv3 ipv6 passive-interface
+    - no ospfv3 ipv6 retransmit-interval 115
+    - no ospfv3 hello-interval 77
+    - no ospfv3 transmit-delay 100
+roundtrip:
+  commands:
+    - interface GigabitEthernet0/1
+    - ip access-group aclv401 in
+gathered:
+  config:
+    - name: Loopback888
+    - access_groups:
+        - acls:
+            - direction: in
+              name: aclv401
+            - direction: out
+              name: aclv402
+          afi: ipv4
+        - acls:
+            - direction: out
+              name: aclv601
+          afi: ipv6
+      name: GigabitEthernet0/0
+    - access_groups:
+        - acls:
+            - direction: in
+              name: aclv601
+          afi: ipv6
+      name: GigabitEthernet0/1
+    - name: GigabitEthernet0/2
+    - name: GigabitEthernet0/3
+parsed:
+  config:
+    - name: "Vlan1"
+      address_family:
+        - afi: "ipv4"
+          dead_interval: 29
+          hello_interval: 66
+          mtu_ignore: true
+        - afi: "ipv6"
+          cost: 106
+          hello_interval: 77
+          ip_params:
+            - afi: "ipv4"
+              area:
+                area_id: "0.0.0.5"
+              priority: 45
+            - afi: "ipv6"
+              dead_interval: 56
+              passive_interface: true
+              retransmit_interval: 115
+          transmit_delay: 100
+    - name: "Vlan2"
+      address_family:
+        - afi: "ipv6"
+          ip_params:
+            - afi: "ipv4"
+              area:
+                area_id: "0.0.0.6"
+              hello_interval: 45
+              retransmit_interval: 100

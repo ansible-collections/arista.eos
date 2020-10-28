@@ -56,28 +56,58 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
             "elements": "dict",
             "type": "list",
             "options": {
-                "name": {"required": True, "type": "str"},
+                "name": {"type": "str"},
                 "address_family": {
                     "elements": "dict",
                     "type": "list",
                     "options": {
-                        "ip_params": {"elements": "dict", "type": "list"},
+                        "ip_params": {
+                            "elements": "dict",
+                            "type": "list",
+                            "options": {
+                                "retransmit_interval": {"type": "int"},
+                                "cost": {"type": "int"},
+                                "afi": {
+                                    "required": True,
+                                    "type": "str",
+                                    "choices": ["ipv4", "ipv6"],
+                                },
+                                "area": {
+                                    "type": "dict",
+                                    "options": {
+                                        "area_id": {
+                                            "required": True,
+                                            "type": "str",
+                                        }
+                                    },
+                                },
+                                "bfd": {"type": "bool"},
+                                "mtu_ignore": {"type": "bool"},
+                                "priority": {"type": "int"},
+                                "dead_interval": {"type": "int"},
+                                "hello_interval": {"type": "int"},
+                                "passive_interface": {"type": "bool"},
+                                "transmit_delay": {"type": "int"},
+                                "network": {"type": "str"},
+                            },
+                        },
                         "encryption_v3": {
                             "type": "dict",
                             "options": {
-                                "key": {},
+                                "key": {"type": "str"},
                                 "algorithm": {
                                     "type": "str",
                                     "choices": ["md5", "sha1"],
                                 },
                                 "encryption": {
+                                    "type": "str",
                                     "choices": [
                                         "3des-cbc",
                                         "aes-128-cbc",
                                         "aes-192-cbc",
                                         "aes-256-cbc",
                                         "null",
-                                    ]
+                                    ],
                                 },
                                 "keytype": {"type": "str"},
                                 "spi": {"type": "int"},

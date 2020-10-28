@@ -446,7 +446,7 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                 \s+ip
                 \s+ospf
                 \s+cost
-                \s+(?P<cost>\d+)
+                \s+(?P<val>\d+)
                 *$""",
                 re.VERBOSE,
             ),
@@ -456,7 +456,7 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                 "address_family": {
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
-                        "cost": "{{ cost }}",
+                        "cost": "{{ val }}",
                     }
                 }
             },
