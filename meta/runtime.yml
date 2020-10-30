@@ -208,7 +208,7 @@ plugin_routing:
     ospfv3:
       redirect: arista.eos.eos_ospfv3
     ospf_interfaces:
-          redirect: arista.eos.eos_ospf_interfaces
+      redirect: arista.eos.eos_ospf_interfaces
     static_route:
       redirect: arista.eos.eos_static_route
       deprecation:
