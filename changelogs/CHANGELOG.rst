@@ -21,6 +21,11 @@ Bugfixes
 
 - updated config dict, with duplex key when speed changes from 'x' to 'forced x' (https://github.com/ansible-collections/arista.eos/pull/120).
 
+New Modules
+-----------
+
+- eos_ospf_interfaces - OSPF Interfaces resource module
+
 v1.1.0
 ======
 
@@ -42,10 +47,7 @@ Bugfixes
 New Modules
 -----------
 
-ansible.collections.ansible_collections.arista.eos.plugins.modules
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-- .ansible.collections.ansible_collections.arista.eos.plugins.modules.eos_ospfv3 - OSPFv3 resource module
+- eos_ospfv3 - OSPFV3 resource module
 
 v1.0.3
 ======

@@ -170,7 +170,7 @@ releases:
     modules:
     - description: OSPFv3 resource module
       name: eos_ospfv3
-      namespace: .ansible.collections.ansible_collections.arista.eos.plugins.modules
+      namespace: ''
     release_date: '2020-09-30'
   1.2.0:
     changes:
@@ -189,4 +189,8 @@ releases:
     - 123-ospfv3-description.yaml
     - 125-ospf_interfaces_resource_module.yaml
     - 127-drop-local-connection-testing.yaml
+    modules:
+    - description: ospf_interfaces resource module
+      name: eos_ospf_interfaces
+      namespace: ''
     release_date: '2020-10-30'
