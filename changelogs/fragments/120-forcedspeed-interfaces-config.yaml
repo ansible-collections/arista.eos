@@ -1,3 +1,0 @@
----
-bugfixes:
-  - updated config dict, with duplex key when speed changes from 'x' to 'forced x' (https://github.com/ansible-collections/arista.eos/pull/120).

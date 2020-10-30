@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Documented the necessity to use eos_interfaces and eos_l2_interfaces (for l2 configs) in eos_l3_interfaces module.

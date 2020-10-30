@@ -37,6 +37,10 @@ Name | Description
 --- | ---
 [arista.eos.eos](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_httpapi.rst)|Use eAPI to run command on eos platform
 
+### Inventory plugins
+Name | Description
+--- | ---
+
 ### Modules
 Name | Description
 --- | ---
@@ -62,6 +66,7 @@ Name | Description
 [arista.eos.eos_lldp_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_global_module.rst)|LLDP resource module
 [arista.eos.eos_lldp_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_interfaces_module.rst)|LLDP interfaces resource module
 [arista.eos.eos_logging](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_logging_module.rst)|Manage logging on network devices
+[arista.eos.eos_ospf_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospf_interfaces_module.rst)|OSPF Interfaces Resource Module.
 [arista.eos.eos_ospfv2](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv2_module.rst)|OSPFv2 resource module
 [arista.eos.eos_ospfv3](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv3_module.rst)|OSPFv3 resource module
 [arista.eos.eos_static_route](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_static_route_module.rst)|(deprecated, removed after 2022-06-01) Manage static IP routes on Arista EOS network devices
@@ -71,10 +76,6 @@ Name | Description
 [arista.eos.eos_vlan](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlan_module.rst)|(deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS network devices
 [arista.eos.eos_vlans](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlans_module.rst)|VLANs resource module
 [arista.eos.eos_vrf](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vrf_module.rst)|Manage VRFs on Arista EOS network devices
-
-### Inventory plugins
-Name | Description
---- | ---
 
 <!--end collection content-->
 

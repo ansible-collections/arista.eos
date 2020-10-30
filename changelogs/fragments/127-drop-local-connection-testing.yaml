@@ -1,3 +1,0 @@
----
-minor_changes:
-  - stop integration testing of local connection as it is deprecated.
