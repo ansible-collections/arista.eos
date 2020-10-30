@@ -98,6 +98,10 @@ plugin_routing:
       redirect: arista.eos.eos
     ospfv3:
       redirect: arista.eos.eos
+    eos_ospf_interfaces:
+      redirect: arista.eos.eos
+    ospf_interfaces:
+      redirect: arista.eos.eos
     eos_static_route:
       redirect: arista.eos.eos
     static_route:
@@ -203,6 +207,8 @@ plugin_routing:
       redirect: arista.eos.eos_ospfv2
     ospfv3:
       redirect: arista.eos.eos_ospfv3
+    ospf_interfaces:
+      redirect: arista.eos.eos_ospf_interfaces
     static_route:
       redirect: arista.eos.eos_static_route
       deprecation:

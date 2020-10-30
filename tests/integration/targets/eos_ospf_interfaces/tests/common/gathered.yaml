@@ -1,0 +1,29 @@
+---
+- debug:
+    msg: Start eos_ospf_interfaces gathered integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Gather ospf interfaces configuration
+      become: true
+      register: result
+      arista.eos.eos_ospf_interfaces: &id001
+        state: gathered
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: ospf_interfaces
+
+    - assert:
+        that:
+          - result.changed == false
+          - result.gathered|symmetric_difference(ansible_facts['network_resources']['ospf_interfaces']) == []
+
+  always:
+
+    - include_tasks: _remove_config.yaml
