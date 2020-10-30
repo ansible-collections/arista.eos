@@ -5,6 +5,27 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v1.2.0
+======
+
+Minor Changes
+-------------
+
+- Added ospf_interfaces resource module. (https://github.com/ansible-collections/arista.eos/pull/125)
+- Documented the necessity to use eos_interfaces and eos_l2_interfaces (for l2 configs) in eos_l3_interfaces module.
+- modify short description in ospfv3 resource module.
+- stop integration testing of local connection as it is deprecated.
+
+Bugfixes
+--------
+
+- updated config dict, with duplex key when speed changes from 'x' to 'forced x' (https://github.com/ansible-collections/arista.eos/pull/120).
+
+New Modules
+-----------
+
+- eos_ospf_interfaces - OSPF Interfaces resource module
+
 v1.1.0
 ======
 
@@ -26,7 +47,7 @@ Bugfixes
 New Modules
 -----------
 
-- eos_ospfv3 - OSPFv3 resource module
+- eos_ospfv3 - OSPFV3 resource module
 
 v1.0.3
 ======
