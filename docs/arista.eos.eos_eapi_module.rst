@@ -486,7 +486,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Enable eAPI access with default configuration
       arista.eos.eos_eapi:
