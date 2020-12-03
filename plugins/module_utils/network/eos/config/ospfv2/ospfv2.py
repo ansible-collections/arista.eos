@@ -34,6 +34,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     get_capabilities,
 )
 
+
 class Ospfv2(ConfigBase):
     """
     The eos_ospfv2 class
@@ -362,10 +363,12 @@ class Ospfv2(ConfigBase):
                     "auto-cost reference-bandwidth " + ospf_params["auto_cost"]
                 )
             if ospf_params.get("bfd"):
-                os_version = get_capabilities(self._module)["device_info"]["network_os_version"]
+                os_version = get_capabilities(self._module)["device_info"][
+                    "network_os_version"
+                ]
                 if os_version < "4.23":
                     commands.append("bfd all-interfaces")
-                else: 
+                else:
                     commands.append("bfd default")
             if ospf_params.get("default_information"):
                 commands.append(

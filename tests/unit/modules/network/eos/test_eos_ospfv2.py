@@ -60,10 +60,8 @@ class TestEosOspfv2Module(TestEosModule):
         )
         self.get_capabilities = self.mock_get_capabilities.start()
         self.get_capabilities.return_value = {
-            "device_info": {"network_os_version": "4.20"},
+            "device_info": {"network_os_version": "4.20"}
         }
-
-
 
     def tearDown(self):
         super(TestEosOspfv2Module, self).tearDown()
@@ -771,46 +769,28 @@ class TestEosOspfv2Module(TestEosModule):
             dict(
                 config=dict(
                     processes=[
-                        dict(
-                            process_id="1",
-                            bfd=dict(
-                                all_interfaces=True
-                            ),
-                        ),
+                        dict(process_id="1", bfd=dict(all_interfaces=True))
                     ]
                 ),
                 state="merged",
             )
         )
-        commands = [
-            "router ospf 1",
-            "bfd all-interfaces",
-            "exit"
-        ]
+        commands = ["router ospf 1", "bfd all-interfaces", "exit"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_ospfv2_merged_bfd_4_23(self):
         self.get_capabilities.return_value = {
-            "device_info": {"network_os_version": "4.23"},
+            "device_info": {"network_os_version": "4.23"}
         }
         set_module_args(
             dict(
                 config=dict(
                     processes=[
-                        dict(
-                            process_id="1",
-                            bfd=dict(
-                                all_interfaces=True
-                            ),
-                        ),
+                        dict(process_id="1", bfd=dict(all_interfaces=True))
                     ]
                 ),
                 state="merged",
             )
         )
-        commands = [
-            "router ospf 1",
-            "bfd default",
-            "exit"
-        ]
+        commands = ["router ospf 1", "bfd default", "exit"]
         self.execute_module(changed=True, commands=commands)

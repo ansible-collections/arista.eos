@@ -1,3 +1,3 @@
 ---
 minor_changes:
-  - Add support for syntax changes to ospf bfd command in 4.23
+  - Add support for syntax changes in ospf bfd command in 4.23 (https://github.com/ansible-collections/arista.eos/pull/134/)

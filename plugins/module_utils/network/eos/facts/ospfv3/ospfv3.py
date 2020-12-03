@@ -81,7 +81,9 @@ class Ospfv3Facts(object):
         # parse native config using the Ospfv3 template
         ospfv3_facts = {"processes": []}
         for resource in resources:
-            ospfv3_parser = Ospfv3Template(lines=resource.splitlines(), module=self._module)
+            ospfv3_parser = Ospfv3Template(
+                lines=resource.splitlines(), module=self._module
+            )
             objs = ospfv3_parser.parse()
 
             for key, sortv in [("address_family", "afi")]:
