@@ -55,6 +55,16 @@ class TestEosOspfv2Module(TestEosModule):
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
+        self.mock_get_capabilities = patch(
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.config.ospfv2.ospfv2.get_capabilities"
+        )
+        self.get_capabilities = self.mock_get_capabilities.start()
+        self.get_capabilities.return_value = {
+            "device_info": {"network_os_version": "4.20"},
+        }
+
+
+
     def tearDown(self):
         super(TestEosOspfv2Module, self).tearDown()
         self.mock_get_resource_connection_config.stop()
@@ -63,6 +73,7 @@ class TestEosOspfv2Module(TestEosModule):
         self.mock_get_config.stop()
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
+        self.mock_get_capabilities.stop()
 
     def load_fixtures(self, commands=None, transport="cli", filename=None):
         if filename is None:
@@ -752,5 +763,54 @@ class TestEosOspfv2Module(TestEosModule):
             "router ospf 3 vrf vrf02",
             "no redistribute static",
             "exit",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_ospfv2_merged_bfd_4_20(self):
+        set_module_args(
+            dict(
+                config=dict(
+                    processes=[
+                        dict(
+                            process_id="1",
+                            bfd=dict(
+                                all_interfaces=True
+                            ),
+                        ),
+                    ]
+                ),
+                state="merged",
+            )
+        )
+        commands = [
+            "router ospf 1",
+            "bfd all-interfaces",
+            "exit"
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_ospfv2_merged_bfd_4_23(self):
+        self.get_capabilities.return_value = {
+            "device_info": {"network_os_version": "4.23"},
+        }
+        set_module_args(
+            dict(
+                config=dict(
+                    processes=[
+                        dict(
+                            process_id="1",
+                            bfd=dict(
+                                all_interfaces=True
+                            ),
+                        ),
+                    ]
+                ),
+                state="merged",
+            )
+        )
+        commands = [
+            "router ospf 1",
+            "bfd default",
+            "exit"
         ]
         self.execute_module(changed=True, commands=commands)

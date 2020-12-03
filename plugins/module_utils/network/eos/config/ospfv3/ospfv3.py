@@ -47,7 +47,7 @@ class Ospfv3(ResourceModule):
             facts_module=Facts(module),
             module=module,
             resource="ospfv3",
-            tmplt=Ospfv3Template(),
+            tmplt=Ospfv3Template(module=module),
         )
         self.parsers = [
             "vrf",

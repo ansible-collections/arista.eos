@@ -70,8 +70,6 @@
                     encryption: "null"
                     hidden_key: true
                     passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
-              bfd:
-                all_interfaces: true
               fips_restrictions: true
               log_adjacency_changes:
                 detail: true

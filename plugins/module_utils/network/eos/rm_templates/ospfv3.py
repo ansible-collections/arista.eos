@@ -19,6 +19,9 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
     NetworkTemplate,
 )
 
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    get_capabilities,
+)
 
 def _tmplt_ospf_vrf_cmd(process):
     command = "router ospfv3"
@@ -256,10 +259,26 @@ def _tmplt_ospf_timers_throttle(config_data):
 
         return command
 
+def _tmplt_ospf_bfd(config_data):
+    if os_version < "4.23":
+        command = "bfd all-interfaces"
+    else:
+        command = "bfd default"
+    return command
+ 
+
+os_version = ""
 
 class Ospfv3Template(NetworkTemplate):
-    def __init__(self, lines=None):
-        super(Ospfv3Template, self).__init__(lines=lines, tmplt=self)
+    
+    def __init__(self, lines=None, module=None):
+        global os_version
+        super(Ospfv3Template, self).__init__(lines=lines, tmplt=self, module=module)
+        os_version = get_capabilities(module)["device_info"]["network_os_version"]
+        os_match = re.search(r"([\d\.]+).*", os_version)
+        if os_match:
+          os_version = os_match.group(1)
+
 
     PARSERS = [
         {
@@ -593,7 +612,28 @@ class Ospfv3Template(NetworkTemplate):
                     *$""",
                 re.VERBOSE,
             ),
-            "setval": "bfd all-interfaces",
+            "setval": _tmplt_ospf_bfd,
+            "result": {
+                "processes": {
+                    "address_family": {
+                        '{{ afi|default("router", true) }}': {
+                            "bfd": {
+                                "all_interfaces": "{{ True if bfd is defined }}"
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "bfd",
+            "getval": re.compile(
+                r"""\s+bfd*
+                    \s*(?P<bfd>default)
+                    *$""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_bfd,
             "result": {
                 "processes": {
                     "address_family": {
