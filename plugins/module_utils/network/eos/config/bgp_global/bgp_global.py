@@ -244,13 +244,13 @@ class Bgp_global(ResourceModule):
             if "network" in proc:
                 proc["network"] = {
                     entry["address"]: entry
-                    for entry in proc.get("network"), [])
+                    for entry in proc.get("network", [])
                 }
 
             if "aggregate_address" in proc:
                 proc["aggregate_address"] = {
                     entry["address"]: entry
-                    for entry in proc.get("aggregate_address"), [])
+                    for entry in proc.get("aggregate_address", [])
                 }
 
                         
