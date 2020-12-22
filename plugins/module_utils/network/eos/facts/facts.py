@@ -68,6 +68,10 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospf_
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_address_family.bgp_address_family import (
     Bgp_afFacts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_global.bgp_global import (
+    Bgp_globalFacts,
+)
+
 
 FACT_LEGACY_SUBSETS = dict(
     default=Default, hardware=Hardware, interfaces=Interfaces, config=Config
@@ -89,6 +93,7 @@ FACT_RESOURCE_SUBSETS = dict(
     ospfv3=Ospfv3Facts,
     ospf_interfaces=Ospf_interfacesFacts,
     bgp_address_family=Bgp_afFacts,
+    bgp_global=Bgp_globalFacts,
 )
 
 
