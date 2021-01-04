@@ -83,15 +83,15 @@ class Bgp_globalFacts(object):
                 for vrf in objs["vrfs"]:
                      if "neighbor" in vrf:
                         vrf["neighbor"] = list(vrf["neighbor"].values())
-                     #if "network" in vrf:
-                     #   vrf["network"] = list(vrf["network"].values()) 
+                     if "network" in vrf:
+                        vrf["network"] = list(vrf["network"].values()) 
 
 
             if "neighbor" in objs:
                 objs["neighbor"] = list(objs["neighbor"].values())
 
-            #if "network" in objs:
-            #    objs["network"] = list(objs["network"].values())
+            if "network" in objs:
+                objs["network"] = list(objs["network"].values())
 
                          
 

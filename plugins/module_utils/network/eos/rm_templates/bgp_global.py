@@ -319,9 +319,11 @@ def _tmplt_bgp_neighbor(config_data):
     return command
 
 def _tmplt_bgp_network(config_data):
+    import q
+    q(config_data)
     command = "network {address}".format(**config_data)
     if config_data.get("route_map"):
-        command += "route-map {route_map}".format(**config_data)
+        command += " route-map {route_map}".format(**config_data)
     return command
 
 def _tmplt_bgp_route_target(config_data):
@@ -2599,12 +2601,12 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                        "network": [
-                            {
+                        "network": {
+                            "{{ address }}": {
                                 "address": "{{ address }}",
                                 "route_map": "{{ route_map }}",
                             }
-                        ]
+                        }
                     }
                 }
             },

@@ -223,7 +223,7 @@ class Bgp_global(ResourceModule):
            for the Bgp_global network resource.
         """
         for name, entry in iteritems(want):
-
+            self._compare_network(want, have)
             self.compare(parsers=self.parsers, want={name: entry}, have={name: have.pop(name, None)})
 
         for name, entry in iteritems(have):
@@ -233,6 +233,22 @@ class Bgp_global(ResourceModule):
             self.commands.insert(
                 0, self._tmplt.render({"as_number": want['as_number']}, "router", False)
             )
+
+    def _compare_network(self, want, have):
+        import q
+        q(want, have)
+        wnw = want.get("network", {})
+        hnw = have.get("network", {})
+        for name, entry in iteritems(wnw):
+            self.compare(
+                parsers=self.parsers, want=entry, have=hnw.pop(name, {})
+            )
+        for name, entry in iteritems(hnw):
+            self.addcmd(entry, "network", True)
+            have.pop("network", {})
+        
+
+ 
 
     def _bgp_global_list_to_dict(self, entry):
         for name, proc in iteritems(entry):
