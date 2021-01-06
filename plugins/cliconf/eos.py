@@ -248,13 +248,13 @@ class Cliconf(CliconfBase):
             )
 
         # prepare candidate configuration
-        candidate_obj = NetworkConfig(indent=3)
+        candidate_obj = NetworkConfig(indent=3, comment_tokens=["!"])
         candidate_obj.load(candidate)
 
         if running and diff_match != "none" and diff_replace != "config":
             # running configuration
             running_obj = NetworkConfig(
-                indent=3, contents=running, ignore_lines=diff_ignore_lines
+                indent=3, contents=running, ignore_lines=diff_ignore_lines, comment_tokens=["!"],
             )
             configdiffobjs = candidate_obj.difference(
                 running_obj, path=path, match=diff_match, replace=diff_replace

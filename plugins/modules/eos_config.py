@@ -325,7 +325,7 @@ def get_candidate(module):
     if module.params["src"]:
         candidate = module.params["src"]
     elif module.params["lines"]:
-        candidate_obj = NetworkConfig(indent=3)
+        candidate_obj = NetworkConfig(indent=3, comment_tokens=["!"])
         parents = module.params["parents"] or list()
         candidate_obj.add(module.params["lines"], parents=parents)
         candidate = dumps(candidate_obj, "raw")
