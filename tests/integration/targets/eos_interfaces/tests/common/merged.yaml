@@ -6,6 +6,7 @@
 
       - name: Ethernet1
         mode: layer3
+        description: this is interface for testing
         enabled: true
 
       - name: Ethernet2

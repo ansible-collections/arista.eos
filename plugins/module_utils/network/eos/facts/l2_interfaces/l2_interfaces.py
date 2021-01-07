@@ -58,7 +58,7 @@ class L2_interfacesFacts(object):
             data = self.get_device_data(connection)
 
         # operate on a collection of resource x
-        config = data.split("interface ")
+        config = ("\n" + data).split("\ninterface ")
         objs = []
         for conf in config:
             if conf:
