@@ -71,38 +71,43 @@ class Bgp_afFacts(object):
 
         # remove global configs from bgp_af
         bgp_af_config = []
+        vrf_set = ""
         start = False
         for bgp_line in data.splitlines():
-            if re.search(r'router bgp \S+|vrf \S+', bgp_line):
+            if 'router bgp' in bgp_line:
                 bgp_af_config.append(bgp_line)
+            vrf_present = re.search(r'vrf\s\S+', bgp_line)
+            if vrf_present:
+                vrf_set = vrf_present.group(0)
             if start:
                 bgp_af_config.append(bgp_line)
             if "address-family" in bgp_line:
-                bgp_af_config.append(bgp_line)
+                af_line = vrf_set + bgp_line
+                bgp_af_config.append(af_line)
+                vrf_set = ""
                 start = True
             if start and '!' in bgp_line:
                 start = False
 
         q(bgp_af_config)
+
         # parse native config using the Bgp_af template
         bgp_af_parser = Bgp_afTemplate(lines=bgp_af_config)
         objs = bgp_af_parser.parse()
-        q(objs)
         if objs:
-            global_vals = objs.get("vrfs", {}).pop("vrf_", {})
-            for key, value in iteritems(global_vals):
-                objs[key] = value
-            if "vrfs" in objs:
-                q(objs["vrfs"])
-                objs["vrfs"] = list(objs["vrfs"].values())
-                for vrf in objs["vrfs"]:
-                    if "address_family" in vrf:
-                        vrf["address_family"] = list(vrf["address_family"].values())
-                        for af in vrf["address_family"]:
-                            if "neighbor" in af:
-                                af["neighbor"] = list(af["neighbor"].values())
-                            if "network" in af:
-                                af["network"] = list(af["network"].values())
+            #global_vals = objs.get("vrfs", {}).pop("vrf_", {})
+            #for key, value in iteritems(global_vals):
+            #    objs[key] = value
+            #if "vrfs" in objs:
+            #    objs["vrfs"] = list(objs["vrfs"].values())
+            #    for vrf in objs["vrfs"]:
+            #        if "address_family" in vrf:
+            #            vrf["address_family"] = list(vrf["address_family"].values())
+            #            for af in vrf["address_family"]:
+            #                if "neighbor" in af:
+            #                    af["neighbor"] = list(af["neighbor"].values())
+            #                if "network" in af:
+            #                    af["network"] = list(af["network"].values())
 
             if "address_family" in objs:
                 objs["address_family"] = list(objs["address_family"].values())

@@ -52,7 +52,6 @@ class Bgp_af(ResourceModule):
         self.parsers = [
             "router",
             "address_family",
-            "vrf",
             "bgp_params_additional_paths",
             "bgp_params.nexthop_address_family",
             "bgp_params.nexthop_unchanged",
@@ -99,6 +98,8 @@ class Bgp_af(ResourceModule):
         # turn all lists of dicts into dicts prior to merge
         for entry in wantd, haved:
             self._bgp_af_list_to_dict(entry)
+
+        q(wantd, haved)
         
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
@@ -130,9 +131,7 @@ class Bgp_af(ResourceModule):
            the `want` and `have` data with the `parsers` defined
            for the Bgp_af network resource.
         """
-        q("COM", want, have)
         for name, entry in iteritems(want):
-            q(have.get(name))
             if name != "as_number":
                 self._compare_vrfs({name: entry}, {name: have.get(name, {})})
                 self._compare_af({name: entry}, {name: have.get(name, {})})
@@ -149,11 +148,9 @@ class Bgp_af(ResourceModule):
     def _compare_vrfs(self, want, have):
         wvrfs = want.get("vrfs", {})
         hvrfs = have.get("vrfs", {})
-        q('VRF', wvrfs, hvrfs)
         for name, entry in iteritems(wvrfs):
             begin = len(self.commands)
             self._compare_af(entry, hvrfs.pop(name, {}))
-            q(self.commands)
             if (
                 len(self.commands) != begin
             ):
@@ -168,7 +165,6 @@ class Bgp_af(ResourceModule):
     def _compare_af(self, want, have):
         waf = want.get("address_family", {})
         haf = have.get("address_family", {})
-        q("AF" , waf, haf, have)
         for name, entry in iteritems(waf):
             begin = len(self.commands)
             self._compare_lists(entry, have=haf.get(name, {}))
@@ -183,10 +179,14 @@ class Bgp_af(ResourceModule):
                     begin, self._tmplt.render(entry, "address_family", False)
                 )
                 self.commands.append("exit")
+        for name, entry in iteritems(haf):
+            # skip superfluous configs for replaced
+            if self.state == "replaced":
+                if name in waf.keys():
+                    self.addcmd(entry, "address_family", True)
+            else:
+                self.addcmd(entry, "address_family", True)
             
-        #for name, entry in iteritems(haf):
-        #    self.addcmd(entry, "network", True)
-        #    have.pop("network", {})
 
     def _compare_neighbor(self, want, have):
         parsers = [
@@ -206,7 +206,7 @@ class Bgp_af(ResourceModule):
         for name, entry in iteritems(wneigh):
             self.compare(parsers=parsers, want={"neighbor": entry}, have={"neighbor": hneigh.pop(name, {})})
         for name, entry in iteritems(hneigh):
-            self.compare(parsers=parsers, want={}, have=entry)
+            self.compare(parsers=parsers, want={}, have={"neighbor": entry})
 
 
     def _compare_lists(self, want, have):
@@ -214,15 +214,11 @@ class Bgp_af(ResourceModule):
             "network",
             "redistribute",
         ]
-        q("***********************")
-        q(want, have)
 
         for attrib in ["redistribute", "network"]:
             wdict = get_from_dict(want, attrib) or {}
             hdict = get_from_dict(have, attrib) or {}
-            q(attrib, wdict, hdict)
             for key, entry in iteritems(wdict):
-              q(key, entry)
               #  if entry != hdict.pop(key, {}):
               #      self.addcmd(entry, attrib, False)
               # self.compare(parsers=parsers, want={ attrib: entry }, have=hdict.pop(key, {}))
@@ -232,23 +228,15 @@ class Bgp_af(ResourceModule):
             for entry in hdict.values():
                 self.addcmd(entry, attrib, True)
                 #self.compare(parsers=parsers, want={}, have=entry)
-        q("**************")
 
     def _bgp_af_list_to_dict(self, entry):
         for name, proc in iteritems(entry):
             if "address_family" in proc:
                 proc["address_family"] = {
-                    entry["afi"]: entry
+                    entry["afi"] + "_" + entry.get("vrf",""): entry
                     for entry in proc.get("address_family", [])
                 }
                 self._bgp_af_list_to_dict(proc["address_family"])
-
-            if "vrfs" in proc:
-                proc["vrfs"] = {
-                    entry["name"]: entry
-                    for entry in proc.get("vrfs", [])
-                }
-                self._bgp_af_list_to_dict(proc["vrfs"])
 
             if "neighbor" in proc:
                 proc["neighbor"] = {
