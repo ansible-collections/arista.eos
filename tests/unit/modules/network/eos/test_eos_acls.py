@@ -92,7 +92,12 @@ class TestEosAclsModule(TestEosModule):
                                     dict(
                                         sequence="10",
                                         grant="permit",
-                                        protocol="ospf",
+                                        protocol="tcp",
+                                        protocol_options=dict(
+                                            tcp=dict(
+                                                flags=dict(established="yes")
+                                            )
+                                        ),
                                         source=dict(
                                             subnet_address="30.2.0.0/8"
                                         ),
@@ -109,7 +114,7 @@ class TestEosAclsModule(TestEosModule):
         )
         commands = [
             "ipv6 access-list standard test2",
-            "10 permit ospf 30.2.0.0/8 any log",
+            "10 permit tcp 30.2.0.0/8 any established log",
         ]
         self.execute_module(changed=True, commands=commands)
 
