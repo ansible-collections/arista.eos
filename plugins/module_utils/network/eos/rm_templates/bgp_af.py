@@ -25,9 +25,10 @@ def _tmplt_router_bgp_cmd(config_data):
     return command
 
 def _tmplt_bgp_address_family(config_data):
+    command = ""
     if config_data.get('vrf'):
         command = "vrf {vrf}\n".format(**config_data)
-    command = "address-family {afi}".format(**config_data)
+    command += "address-family {afi}".format(**config_data)
     if config_data.get("safi"):
         command += " {safi}".format(**config_data)
     return command
@@ -53,9 +54,6 @@ def _tmplt_bgp_graceful_restart(config_data):
     return command
 
 def _tmplt_bgp_neighbor(config_data):
-    import q
-    q("NNNNNNNNNNNNNNNNN")
-    q(config_data)
     command = "neighbor {peer}".format(**config_data['neighbor'])
     if config_data['neighbor'].get('additional_paths'):
         command += " additional-paths {additional_paths}".format(**config_data['neighbor'])
@@ -141,7 +139,7 @@ class Bgp_afTemplate(NetworkTemplate):
                     '{{ afi + "_" + vrf|d() }}': {
                         "afi": "{{ afi }}",
                         "safi": "{{ type }}",
-                        "vrf": "{{ vrf }}"
+                        "vrf": "{{ vrf.split(" ")[1] }}"
                     }
                 }
             },

@@ -34,6 +34,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_template
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     get_from_dict,
 )
+import re
 
 import q
 class Bgp_af(ResourceModule):
@@ -99,8 +100,6 @@ class Bgp_af(ResourceModule):
         for entry in wantd, haved:
             self._bgp_af_list_to_dict(entry)
 
-        q(wantd, haved)
-        
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
@@ -114,16 +113,33 @@ class Bgp_af(ResourceModule):
             haved = {
                 k: v for k, v in iteritems(haved) if k in wantd or not wantd
             }
+            for wk, wv in iteritems(wantd):
+                self._compare(want=wv, have=haved.pop(wk,{}))
+                
             wantd = {}
 
-        # remove superfluous config for overridden and deleted
-        if self.state in ["overridden", "deleted"]:
+        # remove superfluous config for overridden
+        if self.state == "overridden":
             for k, have in iteritems(haved):
                 if k not in wantd:
                     self._compare(want={}, have=have)
-
         for k, want in iteritems(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
+
+    def _delete_af(self, want, have):
+        waf = want.get("address_family", {})
+        haf = have.get("address_family", {})
+        for hkey, entry in iteritems(haf):
+            if hkey in waf.keys():
+                af_no_command = self._tmplt.render(entry, "address_family", True).split('\n')
+                if re.search(r'\S+_\S+',hkey):
+                    af_no_command[0] = af_no_command[0][2:]
+                    af_no_command[1] = "no " + af_no_command[1]
+                    for cmd in af_no_command:
+                        self.commands.append(cmd)
+                else:               
+                    self.addcmd(entry, "address_family", True)
+        have = {}
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
@@ -133,34 +149,18 @@ class Bgp_af(ResourceModule):
         """
         for name, entry in iteritems(want):
             if name != "as_number":
-                self._compare_vrfs({name: entry}, {name: have.get(name, {})})
-                self._compare_af({name: entry}, {name: have.get(name, {})})
-            # self.compare(parsers=self.parsers, want={name: entry}, have={name: have.pop(name, None)})
+                if self.state == "deleted":
+                    self._delete_af(want, have)
+                else:
+                    self._compare_af({name: entry}, {name: have.get(name, {})})
 
-        #for name, entry in iteritems(have):
-        #    self.compare(parsers=self.parsers, want={}, have={name: have.get(name)})
+        for name, entry in iteritems(have):
+            self._compare_af(want={}, have={name: entry})
 
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
-                0, self._tmplt.render({"as_number": want['as_number']}, "router", False)
+                0, self._tmplt.render({"as_number": want.get('as_number') or have['as_number']}, "router", False)
             )
-
-    def _compare_vrfs(self, want, have):
-        wvrfs = want.get("vrfs", {})
-        hvrfs = have.get("vrfs", {})
-        for name, entry in iteritems(wvrfs):
-            begin = len(self.commands)
-            self._compare_af(entry, hvrfs.pop(name, {}))
-            if (
-                len(self.commands) != begin
-            ):
-                self.commands.insert(
-                    begin, self._tmplt.render(entry, "vrf", False)
-                )
-                self.commands.append("exit")
-        #for name, entry in iteritems(haf):
-        #    self.addcmd(entry, "network", True)
-        #    have.pop("network", {})
 
     def _compare_af(self, want, have):
         waf = want.get("address_family", {})
@@ -175,18 +175,26 @@ class Bgp_af(ResourceModule):
             if (
                 len(self.commands) != begin
             ):
-                self.commands.insert(
-                    begin, self._tmplt.render(entry, "address_family", False)
-                )
-                self.commands.append("exit")
+                af_command = self._tmplt.render(entry, "address_family", False).split('\n')
+                for cmd in af_command:
+                    self.commands.insert(begin,cmd)
+                    self.commands.append("exit")
+                    begin += 1
         for name, entry in iteritems(haf):
             # skip superfluous configs for replaced
-            if self.state == "replaced":
+            if self.state in ["replaced"]:
                 if name in waf.keys():
                     self.addcmd(entry, "address_family", True)
             else:
-                self.addcmd(entry, "address_family", True)
-            
+                af_no_command = self._tmplt.render(entry, "address_family", True).split('\n')
+                if re.search(r'\S+_\S+',name):
+                    if name not in waf.keys():
+                        af_no_command[0] = af_no_command[0][2:]
+                        af_no_command[1] = "no " + af_no_command[1]
+                        for cmd in af_no_command:
+                            self.commands.append(cmd)
+                else:               
+                    self.addcmd(entry, "address_family", True)
 
     def _compare_neighbor(self, want, have):
         parsers = [

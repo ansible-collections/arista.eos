@@ -84,7 +84,6 @@ class Bgp_afFacts(object):
             if "address-family" in bgp_line:
                 af_line = vrf_set + bgp_line
                 bgp_af_config.append(af_line)
-                vrf_set = ""
                 start = True
             if start and '!' in bgp_line:
                 start = False
