@@ -18,6 +18,7 @@ __metaclass__ = type
 import socket
 import re
 import itertools
+import q
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
@@ -256,6 +257,7 @@ class Acls(ConfigBase):
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
         """
+        q(want, have)
         commands = []
         ace_diff = {}
         h_afi_list = []
@@ -266,9 +268,11 @@ class Acls(ConfigBase):
             w_afi_list.append(w["afi"])
         for hafi in h_afi_list:
             if hafi not in w_afi_list:
+                q("Removing", hafi)
                 h = {"afi": hafi}
                 remove_cmds = del_commands(h, have)
                 commands.append(remove_cmds)
+        q("START.....................", commands)
         for w in want:
             w_names = []
             for h in have:
@@ -279,9 +283,10 @@ class Acls(ConfigBase):
                         for h_acl in h["acls"]:
                             h_names.append(h_acl["name"])
                             if h_acl["name"] == w_acl["name"]:
-                                for w_ace in w_acl["aces"]:
+                                for h_ace in h_acl["aces"]:
+                                    q("Finding diff of", h_ace, w_acl["aces"])
                                     ace_diff = get_ace_diff(
-                                        w_ace, h_acl["aces"]
+                                        h_ace, w_acl["aces"]
                                     )
                                     if ace_diff:
                                         h = {
@@ -289,30 +294,36 @@ class Acls(ConfigBase):
                                             "acls": [
                                                 {
                                                     "name": h_acl["name"],
-                                                    "aces": h_acl["aces"],
+                                                    "aces": h_ace,
                                                 }
                                             ],
                                         }
+                                        q("removing ......", h)
                                         remove_cmds = del_commands(h, have)
                                         commands.append(remove_cmds)
-                                        w_diff = [
-                                            {
-                                                "afi": h["afi"],
-                                                "acls": [
-                                                    {
-                                                        "name": h_acl["name"],
-                                                        "aces": [w_ace],
-                                                    }
-                                                ],
-                                            }
-                                        ]
-                                        config_cmds = set_commands(
-                                            w_diff, have
-                                        )
-                                        config_cmds = list(
-                                            itertools.chain(*config_cmds)
-                                        )
-                                        commands.append(config_cmds)
+                                        q(commands)
+                                        q("+++++++++++++++++++++++++++++++++++++++")
+                        for w_ace in w_acl["aces"]:
+                            w_diff = [
+                                {
+                                    "afi": w["afi"],
+                                    "acls": [
+                                        {
+                                            "name": w_acl["name"],
+                                            "aces": [w_ace],
+                                        }
+                                    ],
+                                }
+                            ]
+                            q(w_diff)
+                            config_cmds = set_commands(
+                                w_diff, have
+                            )
+                            config_cmds = list(
+                                itertools.chain(*config_cmds)
+                            )
+                            commands.append(config_cmds)
+                    q("after diff........", commands)
 
                     for hname in h_names:
                         if hname not in w_names:
@@ -320,6 +331,7 @@ class Acls(ConfigBase):
                             remove_cmds = del_commands(h, have)
                             if remove_cmds not in commands:
                                 commands.append(remove_cmds)
+                    q("after remove", commands)
 
         if commands:
             commands = list(itertools.chain(*commands))
@@ -446,6 +458,7 @@ def add_commands(want):
         if "aces" not in acl.keys():
             continue
         for ace in acl["aces"]:
+            q("addding ...........", ace)
             command = ""
             if "sequence" in ace.keys():
                 command = str(ace["sequence"])
@@ -543,6 +556,7 @@ def add_commands(want):
 
 
 def del_commands(want, have, name_only=False):
+    q("del_comm", want, have)
     commandset = []
     command = ""
     have_command = []
@@ -558,6 +572,7 @@ def del_commands(want, have, name_only=False):
                 commandset.append("no " + have_cmd)
         return commandset
 
+    q(have_command)
     for acl in want["acls"]:
         ace_present = True
         if "standard" in acl.keys() and acl["standard"]:
@@ -571,6 +586,7 @@ def del_commands(want, have, name_only=False):
         if name_only:
             msg = "Deleted operation allows deletion of access-list only and not the entries !!"
             return "Warn " + msg
+        q("in here................................")
         return_command = add_commands(want)
         for cmd in return_command:
             if "access-list" in cmd:
@@ -590,6 +606,10 @@ def get_ace_diff(want_ace, have_ace):
     # gives the diff of the aces passed.
     for h_a in have_ace:
         d = dict_diff(want_ace, h_a)
+        q("--------------------------------")
+        q(want_ace, h_a, d)
+        q("*******************************")
         if not d:
             break
+    q("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\")
     return d
