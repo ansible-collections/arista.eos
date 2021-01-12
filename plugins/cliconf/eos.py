@@ -254,7 +254,10 @@ class Cliconf(CliconfBase):
         if running and diff_match != "none" and diff_replace != "config":
             # running configuration
             running_obj = NetworkConfig(
-                indent=3, contents=running, ignore_lines=diff_ignore_lines, comment_tokens=["!"],
+                indent=3,
+                contents=running,
+                ignore_lines=diff_ignore_lines,
+                comment_tokens=["!"],
             )
             configdiffobjs = candidate_obj.difference(
                 running_obj, path=path, match=diff_match, replace=diff_replace
