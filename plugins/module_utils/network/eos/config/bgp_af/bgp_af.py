@@ -36,7 +36,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 )
 import re
 
-import q
 class Bgp_af(ResourceModule):
     """
     The eos_bgp_af config class
@@ -70,7 +69,8 @@ class Bgp_af(ResourceModule):
             "neighbor.weight",
             "neighbor.encapsulation",
             "network",
-            "redistribute"
+            "redistribute",
+            "route_target",
         ]
 
     def execute_module(self):
@@ -133,7 +133,7 @@ class Bgp_af(ResourceModule):
             if hkey in waf.keys():
                 af_no_command = self._tmplt.render(entry, "address_family", True).split('\n')
                 if re.search(r'\S+_\S+',hkey):
-                    af_no_command[0] = af_no_command[0][2:]
+                    af_no_command[0] = af_no_command[0][3:]
                     af_no_command[1] = "no " + af_no_command[1]
                     for cmd in af_no_command:
                         self.commands.append(cmd)
@@ -153,9 +153,6 @@ class Bgp_af(ResourceModule):
                     self._delete_af(want, have)
                 else:
                     self._compare_af({name: entry}, {name: have.get(name, {})})
-
-        for name, entry in iteritems(have):
-            self._compare_af(want={}, have={name: entry})
 
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
@@ -186,15 +183,26 @@ class Bgp_af(ResourceModule):
                 if name in waf.keys():
                     self.addcmd(entry, "address_family", True)
             else:
-                af_no_command = self._tmplt.render(entry, "address_family", True).split('\n')
-                if re.search(r'\S+_\S+',name):
-                    if name not in waf.keys():
-                        af_no_command[0] = af_no_command[0][2:]
-                        af_no_command[1] = "no " + af_no_command[1]
-                        for cmd in af_no_command:
-                            self.commands.append(cmd)
+                # overridden
+                # check if want has vrf or not
+                # if want doesnot have vrf, device's vrf config will not
+                # be touched.
+                vrf_present = False
+                for w_key in waf.keys():
+                    if re.search(r'\S+_\S+',w_key):
+                        vrf_present = True
+                        break
+                if vrf_present:
+                    if re.search(r'\S+_\S+',name):
+                        af_no_command = self._tmplt.render(entry, "address_family", True).split('\n')
+                        if name not in waf.keys():
+                            af_no_command[0] = af_no_command[0][3:]
+                            af_no_command[1] = "no " + af_no_command[1]
+                            for cmd in af_no_command:
+                                self.commands.append(cmd)
                 else:               
-                    self.addcmd(entry, "address_family", True)
+                    if not re.search(r'\S+_\S+',name):
+                        self.addcmd(entry, "address_family", True)
 
     def _compare_neighbor(self, want, have):
         parsers = [
@@ -224,18 +232,14 @@ class Bgp_af(ResourceModule):
         ]
 
         for attrib in ["redistribute", "network"]:
-            wdict = get_from_dict(want, attrib) or {}
-            hdict = get_from_dict(have, attrib) or {}
+            wdict = want.pop(attrib, {})
+            hdict = have.pop(attrib, {})
             for key, entry in iteritems(wdict):
-              #  if entry != hdict.pop(key, {}):
-              #      self.addcmd(entry, attrib, False)
-              # self.compare(parsers=parsers, want={ attrib: entry }, have=hdict.pop(key, {}))
               if entry != hdict.pop(key, {}):
                 self.addcmd(entry, attrib, False)
             # remove remaining items in have for replaced
             for entry in hdict.values():
                 self.addcmd(entry, attrib, True)
-                #self.compare(parsers=parsers, want={}, have=entry)
 
     def _bgp_af_list_to_dict(self, entry):
         for name, proc in iteritems(entry):
@@ -261,4 +265,3 @@ class Bgp_af(ResourceModule):
                     entry["protocol"]: entry
                     for entry in proc.get("redistribute", [])
                 }
-

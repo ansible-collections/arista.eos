@@ -101,6 +101,10 @@ def _tmplt_bgp_redistribute(config_data):
         command += " route-map {route_map}".format(**config_data)
     return command
 
+def _tmplt_bgp_route_target(config_data):
+    command = "route-target {mode} {target}".format(**config_data['route_target'])
+    return command
+
 class Bgp_afTemplate(NetworkTemplate):
     def __init__(self, lines=None):
         super(Bgp_afTemplate, self).__init__(lines=lines, tmplt=self)
@@ -591,7 +595,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": _tmplt_bgp_redistribute,
-            "compval": "address_family.redistribute",
+            "compval": "redistribute",
             "result": {
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
@@ -603,6 +607,29 @@ class Bgp_afTemplate(NetworkTemplate):
                                 "ospf_route": "{{ match.split(" ")[1] }}"
                             }
                         ]
+                    }
+                }
+            },
+        },
+        {
+            "name": "route_target",
+            "getval": re.compile(
+                r"""
+                \s*route-target
+                \s+(?P<mode>both|import|export)
+                \s+(?P<target>\S+)
+                *$""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_bgp_route_target,
+            "compval": "route_target",
+            "result": {
+                "address_family": {
+                    '{{ afi + "_" + vrf|d() }}': {
+                        "route_target": {
+                            "mode": "{{ mode }}",
+                            "target": "{{ target }}",
+                        }
                     }
                 }
             },

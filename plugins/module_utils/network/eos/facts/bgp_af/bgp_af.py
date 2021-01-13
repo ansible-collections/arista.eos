@@ -27,8 +27,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp
 )
 import re
 
-import q
-
 class Bgp_afFacts(object):
     """ The eos bgp_af facts class
     """
@@ -88,26 +86,11 @@ class Bgp_afFacts(object):
             if start and '!' in bgp_line:
                 start = False
 
-        q(bgp_af_config)
 
         # parse native config using the Bgp_af template
         bgp_af_parser = Bgp_afTemplate(lines=bgp_af_config)
         objs = bgp_af_parser.parse()
         if objs:
-            #global_vals = objs.get("vrfs", {}).pop("vrf_", {})
-            #for key, value in iteritems(global_vals):
-            #    objs[key] = value
-            #if "vrfs" in objs:
-            #    objs["vrfs"] = list(objs["vrfs"].values())
-            #    for vrf in objs["vrfs"]:
-            #        if "address_family" in vrf:
-            #            vrf["address_family"] = list(vrf["address_family"].values())
-            #            for af in vrf["address_family"]:
-            #                if "neighbor" in af:
-            #                    af["neighbor"] = list(af["neighbor"].values())
-            #                if "network" in af:
-            #                    af["network"] = list(af["network"].values())
-
             if "address_family" in objs:
                 objs["address_family"] = list(objs["address_family"].values())
                 for af in objs["address_family"]:
@@ -115,8 +98,6 @@ class Bgp_afFacts(object):
                         af["neighbor"] = list(af["neighbor"].values())
                     if "network" in af:
                         af["network"] = list(af["network"].values())
-
-
 
         ansible_facts['ansible_network_resources'].pop('bgp_af', None)
 

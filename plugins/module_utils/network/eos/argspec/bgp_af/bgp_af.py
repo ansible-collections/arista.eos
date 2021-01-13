@@ -91,6 +91,13 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                                 },
                             },
                         },
+                        "route_target": {
+                            "type": "dict",
+                            "options": {
+                                "mode": {"type": "str"},
+                                "target": {"type": "str"},
+                            },
+                        },
                         "graceful_restart": {"type": "bool"},
                         "bgp_params": {
                             "type": "dict",
