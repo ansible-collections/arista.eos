@@ -4,6 +4,7 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 """
@@ -14,76 +15,97 @@ the given network resource.
 """
 
 import re
-from ansible.module_utils.six import iteritems
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
 
+
 def _tmplt_router_bgp_cmd(config_data):
     command = "router bgp {as_number}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_address_family(config_data):
     command = ""
-    if config_data.get('vrf'):
+    if config_data.get("vrf"):
         command = "vrf {vrf}\n".format(**config_data)
     command += "address-family {afi}".format(**config_data)
     if config_data.get("safi"):
         command += " {safi}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_params(config_data):
     command = "bgp"
-    if config_data['bgp_params'].get('additional_paths'):
-        command += " additional-paths {additional_paths}".format(**config_data['bgp_params'])
-        if config_data['bgp_params']["additional_paths"] == "send":
+    if config_data["bgp_params"].get("additional_paths"):
+        command += " additional-paths {additional_paths}".format(
+            **config_data["bgp_params"]
+        )
+        if config_data["bgp_params"]["additional_paths"] == "send":
             command += " any"
-    elif config_data['bgp_params'].get('next_hop_address_family'):
+    elif config_data["bgp_params"].get("next_hop_address_family"):
         command += " next-hop address-family ipv6"
-    elif config_data['bgp_params'].get('next_hop_unchanged'):
+    elif config_data["bgp_params"].get("next_hop_unchanged"):
         command += " next-hop-unchanged"
-    elif config_data['bgp_params'].get('redistribute_internal'):
+    elif config_data["bgp_params"].get("redistribute_internal"):
         command += " redistribute-internal"
-    elif config_data['bgp_params'].get('route'):
-        command += " route install-map {route}".format(**config_data['bgp_params'])
+    elif config_data["bgp_params"].get("route"):
+        command += " route install-map {route}".format(
+            **config_data["bgp_params"]
+        )
     return command
+
 
 def _tmplt_bgp_graceful_restart(config_data):
     command = "graceful-restart"
     return command
 
+
 def _tmplt_bgp_neighbor(config_data):
-    command = "neighbor {peer}".format(**config_data['neighbor'])
-    if config_data['neighbor'].get('additional_paths'):
-        command += " additional-paths {additional_paths}".format(**config_data['neighbor'])
-        if config_data['neighbor']['additional_paths'] == "send":
+    command = "neighbor {peer}".format(**config_data["neighbor"])
+    if config_data["neighbor"].get("additional_paths"):
+        command += " additional-paths {additional_paths}".format(
+            **config_data["neighbor"]
+        )
+        if config_data["neighbor"]["additional_paths"] == "send":
             command += "any"
-    elif config_data['neighbor'].get('activate'):
+    elif config_data["neighbor"].get("activate"):
         command += " activate"
-    elif config_data['neighbor'].get('default_originate'):
+    elif config_data["neighbor"].get("default_originate"):
         command += " default-originate"
-        if config_data['neighbor']['default_originate'].get('route_map'):
-            command += " route-map {route_map}".format(**config_data['neighbor']['default_originate'])
-        if config_data['neighbor']['default_originate'].get('always'):
+        if config_data["neighbor"]["default_originate"].get("route_map"):
+            command += " route-map {route_map}".format(
+                **config_data["neighbor"]["default_originate"]
+            )
+        if config_data["neighbor"]["default_originate"].get("always"):
             command += " always"
-    elif config_data['neighbor'].get('graceful_restart'):
+    elif config_data["neighbor"].get("graceful_restart"):
         command += " graceful-restart"
-    elif config_data['neighbor'].get('next_hop_unchanged'):
+    elif config_data["neighbor"].get("next_hop_unchanged"):
         command += " next-hop-unchanged"
-    elif config_data['neighbor'].get('next_hop_address_family'):
+    elif config_data["neighbor"].get("next_hop_address_family"):
         command += " next-hop addres-family ipv6"
-    elif config_data['neighbor'].get('prefix_list'):
-        command += " prefix-list {name} {direction}".format(**config_data['neighbor']['prefix_list'])
-    elif config_data['neighbor'].get('route_map'):
-        command += " route-map {name} {direction}".format(**config_data['neighbor']['route_map'])
-    elif config_data['neighbor'].get('weight'):
-        command += " weight {weight}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('encapsulation'):
-        command += " encapsulation {transport}".format(**config_data['neighbor'])
-        if config_data['neighbor']['encapsulation'].get('source_interface'):
-            command += " next-hop-self source-interface {source_interface}".format(**config_data['neighbor'])
+    elif config_data["neighbor"].get("prefix_list"):
+        command += " prefix-list {name} {direction}".format(
+            **config_data["neighbor"]["prefix_list"]
+        )
+    elif config_data["neighbor"].get("route_map"):
+        command += " route-map {name} {direction}".format(
+            **config_data["neighbor"]["route_map"]
+        )
+    elif config_data["neighbor"].get("weight"):
+        command += " weight {weight}".format(**config_data["neighbor"])
+    elif config_data["neighbor"].get("encapsulation"):
+        command += " encapsulation {transport}".format(
+            **config_data["neighbor"]
+        )
+        if config_data["neighbor"]["encapsulation"].get("source_interface"):
+            command += " next-hop-self source-interface {source_interface}".format(
+                **config_data["neighbor"]
+            )
     return command
+
 
 def _tmplt_bgp_network(config_data):
     command = "network {address}".format(**config_data)
@@ -91,19 +113,24 @@ def _tmplt_bgp_network(config_data):
         command += " route-map {route_map}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_redistribute(config_data):
     command = "redistribute {protocol}".format(**config_data)
-    if config_data.get('isis_level'):
+    if config_data.get("isis_level"):
         command += " {isis_level}".format(**config_data)
-    if config_data.get('ospf_route'):
+    if config_data.get("ospf_route"):
         command += " match {ospf_route}".format(**config_data)
-    if config_data.get('route_map'):
+    if config_data.get("route_map"):
         command += " route-map {route_map}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_route_target(config_data):
-    command = "route-target {mode} {target}".format(**config_data['route_target'])
+    command = "route-target {mode} {target}".format(
+        **config_data["route_target"]
+    )
     return command
+
 
 class Bgp_afTemplate(NetworkTemplate):
     def __init__(self, lines=None):
@@ -269,7 +296,7 @@ class Bgp_afTemplate(NetworkTemplate):
             ),
             "setval": _tmplt_bgp_graceful_restart,
             "result": {
-                 "address_family": {
+                "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "graceful_restart": "{{ True }}"
                     }
@@ -292,7 +319,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "activate": "{{ True }}",
                             }
@@ -318,7 +345,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "additional_paths": "{{ action }}",
                             }
@@ -345,11 +372,11 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "default_originate": {
                                     "route_map": "{{ route_map.split(" ")[1] }}",
-                                    "always" : "{{ True if always is defined }}"
+                                    "always": "{{ True if always is defined }}"
                                 }
                             }
                         }
@@ -373,7 +400,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "graceful_restart": "{{ True }}",
                             }
@@ -398,7 +425,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "next_hop_unchanged": "{{ True }}",
                             }
@@ -425,7 +452,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "next_hop_address_family": "{{ 'ipv6' }}",
                             }
@@ -452,7 +479,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "prefix_list": {
                                     "name": "{{ name }}",
@@ -482,7 +509,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "route_map": {
                                     "name": "{{ name }}",
@@ -511,7 +538,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "weight": "{{ weight }}",
                             }
@@ -540,7 +567,7 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "encapsulation": {
                                     "transport": "{{ type }}",

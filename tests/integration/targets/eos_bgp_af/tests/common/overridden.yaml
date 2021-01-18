@@ -46,6 +46,4 @@
           - result.changed == false
 
   always:
-
-      - include_tasks: _remove_config.yaml
-
+    - include_tasks: _remove_config.yaml

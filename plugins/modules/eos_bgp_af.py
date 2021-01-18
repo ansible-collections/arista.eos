@@ -27,6 +27,7 @@ The module file for eos_bgp_af
 """
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -67,7 +68,7 @@ options:
                 additional_paths:
                   description: BGP additional-paths commands
                   type: str
-                  choices: ['install', 'send', 'receive'] 
+                  choices: ['install', 'send', 'receive']
                 next_hop_address_family:
                   description: Next-hop address-family configuration
                   type: str
@@ -145,7 +146,7 @@ options:
                       type: str
                 weight:
                   description: Weight to assign.
-                  type: int 
+                  type: int
                 encapsulation:
                   description: Default transport encapsulation for neighbor. Applicable for evpn address-family.
                   type: dict
@@ -172,7 +173,7 @@ options:
               description: Redistribute routes in to BGP.
               type: list
               elements: dict
-              suboptions:         
+              suboptions:
                 protocol:
                   description: Routes to be redistributed.
                   type: str
@@ -187,7 +188,7 @@ options:
                 ospf_route:
                   description: ospf route options.
                   type: str
-                  choices: ['internal', 'external', 'nssa_external_1', 'nssa_external_2']  
+                  choices: ['internal', 'external', 'nssa_external_1', 'nssa_external_2']
             route_target:
               description: Route target
               type: dict
@@ -253,11 +254,10 @@ EXAMPLES = """
             redistribute:
               - protocol: "isis"
                 isis_level: "level-2"
-            route_target: 
+            route_target:
               mode: "export"
               target: "33:11"
             vrf: "vrft"
-            
       state: merged
 
 # After state:
@@ -265,8 +265,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       neighbor 1.1.1.1 activate
@@ -357,8 +357,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       neighbor 1.1.1.1 activate
@@ -376,7 +376,7 @@ EXAMPLES = """
 #          route-target export 33:11
 #          redistribute isis level-2
 # veos(config-router-bgp)#
-# 
+#
 
   - name: Replace
     arista.eos.eos_bgp_af:
@@ -399,8 +399,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       neighbor 1.1.1.1 activate
@@ -416,10 +416,10 @@ EXAMPLES = """
 #       address-family ipv6
 #          redistribute ospf3 match external
 # veos(config-router-bgp)#
-# 
-# 
+#
+#
 # # Module Execution:
-# 
+#
 #     "after": {
 #         "address_family": [
 #             {
@@ -557,8 +557,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       neighbor 1.1.1.1 activate
@@ -593,8 +593,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       bgp additional-paths receive
@@ -604,9 +604,9 @@ EXAMPLES = """
 #       address-family ipv6
 #          redistribute ospf3 match external
 # veos(config-router-bgp)#
-# 
+#
 # Module Execution:
-# 
+#
 # "after": {
 #         "address_family": [
 #             {
@@ -713,8 +713,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       bgp additional-paths receive
@@ -756,8 +756,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       bgp additional-paths receive
@@ -774,9 +774,9 @@ EXAMPLES = """
 #       address-family ipv4
 #          bgp additional-paths receive
 # veos(config-router-bgp)#
-# 
+#
 # Module Execution:
-# 
+#
 # "after": {
 #         "address_family": [
 #             {
@@ -916,8 +916,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       bgp additional-paths receive
@@ -951,8 +951,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       bgp additional-paths receive
@@ -966,9 +966,9 @@ EXAMPLES = """
 #       address-family ipv4
 #          bgp additional-paths receive
 # veos(config-router-bgp)#
-# 
+#
 # Module Execution:
-# 
+#
 # "after": {
 #         "address_family": [
 #             {
@@ -1182,8 +1182,8 @@ EXAMPLES = """
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
 #    neighbor peer2 peer-group
-#    neighbor peer2 maximum-routes 12000 
-#    neighbor 1.1.1.1 maximum-routes 12000 
+#    neighbor peer2 maximum-routes 12000
+#    neighbor 1.1.1.1 maximum-routes 12000
 #    !
 #    address-family ipv4
 #       bgp additional-paths receive
@@ -1298,7 +1298,7 @@ EXAMPLES = """
 #         "exit",
 #         "exit"
 #     ]
-# 
+#
 
 """
 
@@ -1321,12 +1321,12 @@ def main():
         argument_spec=Bgp_afArgs.argument_spec,
         mutually_exclusive=[],
         required_if=[],
-        supports_check_mode=False
+        supports_check_mode=False,
     )
 
     result = Bgp_af(module).execute_module()
     module.exit_json(**result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -22,14 +22,14 @@
                   route_map: "MAP01"
               neighbor:
                 - peer: "1.1.1.1"
-                  activate: True
+                  activate: true
             - afi: "ipv6"
               bgp_params:
                 additional_paths: "receive"
               neighbor:
                 - peer: "peer2"
                   default_originate:
-                    always: True
+                    always: true
             - afi: "ipv6"
               redistribute:
                 - protocol: "isis"
@@ -49,7 +49,7 @@
     - become: true
       arista.eos.eos_facts:
         gather_network_resources: bgp_af
- 
+
     - name: Apply the provided configuration (config to be reverted)
       become: true
       register: result
@@ -63,7 +63,7 @@
                 - protocol: "ospf3"
                   ospf_route: "external"
             - afi: "evpn"
-              graceful_restart: True
+              graceful_restart: true
               bgp_params:
                 additional_paths: "send"
 

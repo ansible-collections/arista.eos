@@ -4,6 +4,7 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 #############################################
@@ -87,7 +88,11 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                                 },
                                 "isis_level": {
                                     "type": "str",
-                                    "choices": ["level-1", "level-2", "level-1-2"],
+                                    "choices": [
+                                        "level-1",
+                                        "level-2",
+                                        "level-1-2",
+                                    ],
                                 },
                             },
                         },
@@ -180,9 +185,7 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                             "type": "str",
                             "choices": ["ipv4", "ipv6", "evpn"],
                         },
-                        "vrf": {
-                            "type": "str"
-                        },
+                        "vrf": {"type": "str"},
                     },
                 },
             },

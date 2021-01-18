@@ -4,6 +4,7 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 """
@@ -15,7 +16,6 @@ based on the configuration.
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
@@ -27,11 +27,12 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp
 )
 import re
 
+
 class Bgp_afFacts(object):
     """ The eos bgp_af facts class
     """
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Bgp_afArgs.argument_spec
         spec = deepcopy(self.argument_spec)
@@ -72,9 +73,9 @@ class Bgp_afFacts(object):
         vrf_set = ""
         start = False
         for bgp_line in data.splitlines():
-            if 'router bgp' in bgp_line:
+            if "router bgp" in bgp_line:
                 bgp_af_config.append(bgp_line)
-            vrf_present = re.search(r'vrf\s\S+', bgp_line)
+            vrf_present = re.search(r"vrf\s\S+", bgp_line)
             if vrf_present:
                 vrf_set = vrf_present.group(0)
             if start:
@@ -83,9 +84,8 @@ class Bgp_afFacts(object):
                 af_line = vrf_set + bgp_line
                 bgp_af_config.append(af_line)
                 start = True
-            if start and '!' in bgp_line:
+            if start and "!" in bgp_line:
                 start = False
-
 
         # parse native config using the Bgp_af template
         bgp_af_parser = Bgp_afTemplate(lines=bgp_af_config)
@@ -99,13 +99,13 @@ class Bgp_afFacts(object):
                     if "network" in af:
                         af["network"] = list(af["network"].values())
 
-        ansible_facts['ansible_network_resources'].pop('bgp_af', None)
+        ansible_facts["ansible_network_resources"].pop("bgp_af", None)
 
         params = utils.remove_empties(
             utils.validate_config(self.argument_spec, {"config": objs})
         )
 
-        facts['bgp_af'] = params.get("config", [])
-        ansible_facts['ansible_network_resources'].update(facts)
+        facts["bgp_af"] = params.get("config", [])
+        ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

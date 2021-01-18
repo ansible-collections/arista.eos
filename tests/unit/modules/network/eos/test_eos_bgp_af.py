@@ -61,13 +61,15 @@ class TestEosBgpafModule(TestEosModule):
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
-                                dict(address="1.5.1.0/24", route_map="MAP01")
+                                dict(address="1.5.1.0/24", route_map="MAP01"),
                             ],
                             neighbor=[
-                                dict(peer="peer2",
-                                    default_originate=dict(always=True))
+                                dict(
+                                    peer="peer2",
+                                    default_originate=dict(always=True),
+                                )
                             ],
-                            bgp_params=dict(additional_paths="receive")
+                            bgp_params=dict(additional_paths="receive"),
                         ),
                         dict(
                             afi="ipv4",
@@ -78,10 +80,10 @@ class TestEosBgpafModule(TestEosModule):
                             afi="ipv6",
                             vrf="vrft",
                             redistribute=[
-                                dict(protocol="isis",isis_level="level-2")
-                            ]
+                                dict(protocol="isis", isis_level="level-2")
+                            ],
                         ),
-                    ]
+                    ],
                 ),
                 state="merged",
             )
@@ -100,33 +102,34 @@ class TestEosBgpafModule(TestEosModule):
                                 dict(protocol="ospf3", ospf_route="external")
                             ],
                             neighbor=[
-                                dict(peer="peer2",
-                                    default_originate=dict(always=True))
+                                dict(
+                                    peer="peer2",
+                                    default_originate=dict(always=True),
+                                )
                             ],
                         ),
-                        dict(
-                            afi="ipv6",
-                            graceful_restart=True
-                        ),
+                        dict(afi="ipv6", graceful_restart=True),
                         dict(
                             afi="ipv4",
                             vrf="vrft",
-                            route_target=dict(mode="both",target="465:11"),
+                            route_target=dict(mode="both", target="465:11"),
                         ),
-                    ]
+                    ],
                 ),
                 state="merged",
             )
         )
-        commands = ['router bgp 10',
-                    'vrf vrft',
-                    'address-family ipv4',
-                    'route-target both 465:11',
-                    'exit',
-                    'exit',
-                    'address-family ipv6',
-                    'graceful-restart',
-                    'exit']
+        commands = [
+            "router bgp 10",
+            "vrf vrft",
+            "address-family ipv4",
+            "route-target both 465:11",
+            "exit",
+            "exit",
+            "address-family ipv6",
+            "graceful-restart",
+            "exit",
+        ]
 
         self.execute_module(changed=True, commands=commands)
 
@@ -142,39 +145,40 @@ class TestEosBgpafModule(TestEosModule):
                                 dict(protocol="ospf3", ospf_route="external")
                             ],
                             neighbor=[
-                                dict(peer="peer2",
-                                    default_originate=dict(always=True))
+                                dict(
+                                    peer="peer2",
+                                    default_originate=dict(always=True),
+                                )
                             ],
                         ),
-                        dict(
-                            afi="ipv6",
-                            graceful_restart=True
-                        ),
+                        dict(afi="ipv6", graceful_restart=True),
                         dict(
                             afi="ipv4",
                             vrf="vrft",
-                            route_target=dict(mode="both",target="465:11"),
+                            route_target=dict(mode="both", target="465:11"),
                         ),
-                    ]
+                    ],
                 ),
                 state="replaced",
             )
         )
-        commands = ['router bgp 10',
-                    'address-family ipv4',
-                    'no network 1.1.1.0/24',
-                    'no network 1.5.1.0/24 route-map MAP01',
-                    'no bgp additional-paths receive',
-                    'exit',
-                    'address-family ipv6',
-                    'graceful-restart',
-                    'exit',
-                    'vrf vrft',
-                    'address-family ipv4',
-                    'no bgp additional-paths receive',
-                    'route-target both 465:11',
-                    'exit',
-                    'exit']
+        commands = [
+            "router bgp 10",
+            "address-family ipv4",
+            "no network 1.1.1.0/24",
+            "no network 1.5.1.0/24 route-map MAP01",
+            "no bgp additional-paths receive",
+            "exit",
+            "address-family ipv6",
+            "graceful-restart",
+            "exit",
+            "vrf vrft",
+            "address-family ipv4",
+            "no bgp additional-paths receive",
+            "route-target both 465:11",
+            "exit",
+            "exit",
+        ]
 
         self.execute_module(changed=True, commands=commands)
 
@@ -191,13 +195,15 @@ class TestEosBgpafModule(TestEosModule):
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
-                                dict(address="1.5.1.0/24", route_map="MAP01")
+                                dict(address="1.5.1.0/24", route_map="MAP01"),
                             ],
                             neighbor=[
-                                dict(peer="peer2",
-                                    default_originate=dict(always=True))
+                                dict(
+                                    peer="peer2",
+                                    default_originate=dict(always=True),
+                                )
                             ],
-                            bgp_params=dict(additional_paths="receive")
+                            bgp_params=dict(additional_paths="receive"),
                         ),
                         dict(
                             afi="ipv4",
@@ -208,10 +214,10 @@ class TestEosBgpafModule(TestEosModule):
                             afi="ipv6",
                             vrf="vrft",
                             redistribute=[
-                                dict(protocol="isis",isis_level="level-2")
-                            ]
+                                dict(protocol="isis", isis_level="level-2")
+                            ],
                         ),
-                    ]
+                    ],
                 ),
                 state="replaced",
             )
@@ -230,41 +236,42 @@ class TestEosBgpafModule(TestEosModule):
                                 dict(protocol="ospf3", ospf_route="external")
                             ],
                             neighbor=[
-                                dict(peer="peer2",
-                                    default_originate=dict(always=True))
+                                dict(
+                                    peer="peer2",
+                                    default_originate=dict(always=True),
+                                )
                             ],
                         ),
-                        dict(
-                            afi="ipv6",
-                            graceful_restart=True
-                        ),
+                        dict(afi="ipv6", graceful_restart=True),
                         dict(
                             afi="ipv4",
                             vrf="vrft",
-                            route_target=dict(mode="both",target="465:11"),
+                            route_target=dict(mode="both", target="465:11"),
                         ),
-                    ]
+                    ],
                 ),
                 state="overridden",
             )
         )
-        commands = ['router bgp 10',
-                    'address-family ipv4',
-                    'no network 1.1.1.0/24',
-                    'no network 1.5.1.0/24 route-map MAP01',
-                    'no bgp additional-paths receive',
-                    'exit',
-                    'address-family ipv6',
-                    'graceful-restart',
-                    'exit',
-                    'vrf vrft',
-                    'address-family ipv4',
-                    'no bgp additional-paths receive',
-                    'route-target both 465:11',
-                    'exit',
-                    'exit',
-                    'vrf vrft',
-                    'no address-family ipv6']
+        commands = [
+            "router bgp 10",
+            "address-family ipv4",
+            "no network 1.1.1.0/24",
+            "no network 1.5.1.0/24 route-map MAP01",
+            "no bgp additional-paths receive",
+            "exit",
+            "address-family ipv6",
+            "graceful-restart",
+            "exit",
+            "vrf vrft",
+            "address-family ipv4",
+            "no bgp additional-paths receive",
+            "route-target both 465:11",
+            "exit",
+            "exit",
+            "vrf vrft",
+            "no address-family ipv6",
+        ]
 
         self.execute_module(changed=True, commands=commands)
 
@@ -281,13 +288,15 @@ class TestEosBgpafModule(TestEosModule):
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
-                                dict(address="1.5.1.0/24", route_map="MAP01")
+                                dict(address="1.5.1.0/24", route_map="MAP01"),
                             ],
                             neighbor=[
-                                dict(peer="peer2",
-                                    default_originate=dict(always=True))
+                                dict(
+                                    peer="peer2",
+                                    default_originate=dict(always=True),
+                                )
                             ],
-                            bgp_params=dict(additional_paths="receive")
+                            bgp_params=dict(additional_paths="receive"),
                         ),
                         dict(
                             afi="ipv4",
@@ -298,10 +307,10 @@ class TestEosBgpafModule(TestEosModule):
                             afi="ipv6",
                             vrf="vrft",
                             redistribute=[
-                                dict(protocol="isis",isis_level="level-2")
-                            ]
+                                dict(protocol="isis", isis_level="level-2")
+                            ],
                         ),
-                    ]
+                    ],
                 ),
                 state="overridden",
             )
@@ -314,41 +323,38 @@ class TestEosBgpafModule(TestEosModule):
                 config=dict(
                     as_number=10,
                     address_family=[
-                        dict(
-                            afi="ipv4",
-                        ),
-                        dict(
-                            afi="ipv4",
-                            vrf="vrft",
-                        ),
-                    ]
+                        dict(afi="ipv4"),
+                        dict(afi="ipv4", vrf="vrft"),
+                    ],
                 ),
                 state="deleted",
             )
         )
-        commands = ['router bgp 10',
-                    'no address-family ipv4',
-                    'vrf vrft',
-                    'no address-family ipv4']
+        commands = [
+            "router bgp 10",
+            "no address-family ipv4",
+            "vrf vrft",
+            "no address-family ipv4",
+        ]
 
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_bgp_af_parsed(self):
 
-        commands = ['router bgp 10',
-                    'address-family ipv4',
-                    'network 1.5.1.0/24 route-map MAP01',
-                    '!'
-                    'address-family ipv6',
-                    'graceful-restart',
-                    'redistribute isis level-1',
-                    'bgp additional-paths receive',
-                    '!',
-                    'vrf vrft',
-                    'address-family ipv4'
-                    'redistribute ospf3 match external',
-                    'route-target both 465:11',
-                    '!']
+        commands = [
+            "router bgp 10",
+            "address-family ipv4",
+            "network 1.5.1.0/24 route-map MAP01",
+            "!" "address-family ipv6",
+            "graceful-restart",
+            "redistribute isis level-1",
+            "bgp additional-paths receive",
+            "!",
+            "vrf vrft",
+            "address-family ipv4" "redistribute ospf3 match external",
+            "route-target both 465:11",
+            "!",
+        ]
 
         parsed_str = "\n".join(commands)
         set_module_args(dict(running_config=parsed_str, state="parsed"))
@@ -359,8 +365,8 @@ class TestEosBgpafModule(TestEosModule):
                 {
                     "afi": "ipv4",
                     "network": [
-                        { "address": "1.5.1.0/24", "route_map": "MAP01" }
-                    ]
+                        {"address": "1.5.1.0/24", "route_map": "MAP01"}
+                    ],
                 },
                 {
                     "afi": "ipv6",
@@ -368,9 +374,7 @@ class TestEosBgpafModule(TestEosModule):
                         {"protocol": "isis", "isis_level": "level-1"}
                     ],
                     "graceful_restart": True,
-                    "bgp_params": {
-                        "additional_paths": "receive"
-                    }
+                    "bgp_params": {"additional_paths": "receive"},
                 },
                 {
                     "afi": "ipv4",
@@ -378,12 +382,9 @@ class TestEosBgpafModule(TestEosModule):
                     "redistribute": [
                         {"protocol": "ospf3", "ospf_route": "external`"}
                     ],
-                    "route_target": {
-                        "mode": "both",
-                        "target": "465:11"
-                    }
-                }
-            ]
+                    "route_target": {"mode": "both", "target": "465:11"},
+                },
+            ],
         }
         self.assertEqual(sorted(parsed_list), sorted(result["parsed"]))
 
@@ -393,39 +394,35 @@ class TestEosBgpafModule(TestEosModule):
             changed=False, filename="eos_bgp_af_config.cfg"
         )
         gather_list = {
-            'address_family': [
+            "address_family": [
                 {
-                    'afi': 'ipv4',
-                    'bgp_params': {'additional_paths': 'receive'},
-                    'neighbor': [
-                        {
-                            'default_originate': {...},
-                            'peer': 'peer2'
-                        }
+                    "afi": "ipv4",
+                    "bgp_params": {"additional_paths": "receive"},
+                    "neighbor": [
+                        {"default_originate": {...}, "peer": "peer2"}
                     ],
-                    'network': [
-                        {'address': '1.1.1.0/24'},
-                        {'address': '1.5.1.0/24', 'route_map': 'MAP01'}
+                    "network": [
+                        {"address": "1.1.1.0/24"},
+                        {"address": "1.5.1.0/24", "route_map": "MAP01"},
                     ],
-                    'redistribute': [{'ospf_route': 'external', 'protocol': 'ospf3'}]
+                    "redistribute": [
+                        {"ospf_route": "external", "protocol": "ospf3"}
+                    ],
                 },
                 {
-                    'afi': 'ipv4',
-                    'bgp_params': {'additional_paths': 'receive'},
-                    'vrf': 'vrft'
+                    "afi": "ipv4",
+                    "bgp_params": {"additional_paths": "receive"},
+                    "vrf": "vrft",
                 },
                 {
-                    'afi': 'ipv6',
-                    'redistribute': [
-                        {
-                            'isis_level': 'level-2',
-                            'protocol': 'isis'
-                        }
+                    "afi": "ipv6",
+                    "redistribute": [
+                        {"isis_level": "level-2", "protocol": "isis"}
                     ],
-                    'vrf': 'vrft'
-                }
+                    "vrf": "vrft",
+                },
             ],
-            'as_number': '10'
+            "as_number": "10",
         }
         self.assertEqual(sorted(gather_list), sorted(result["gathered"]))
 
@@ -442,30 +439,45 @@ class TestEosBgpafModule(TestEosModule):
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
-                                dict(address="1.5.1.0/24", route_map="MAP01")
+                                dict(address="1.5.1.0/24", route_map="MAP01"),
                             ],
                             neighbor=[
-                                dict(peer="peer2",
-                                    default_originate=dict(always=True))
+                                dict(
+                                    peer="peer2",
+                                    default_originate=dict(always=True),
+                                )
                             ],
-                            bgp_params=dict(additional_paths="receive")
+                            bgp_params=dict(additional_paths="receive"),
                         ),
                         dict(
                             afi="ipv4",
                             vrf="vrft",
                             bgp_params=dict(additional_paths="receive"),
                         ),
-                    ]
+                    ],
                 ),
                 state="rendered",
             )
         )
+        self.execute_module(changed=False)
+        rendered_cmds = [
+            "router bgp 10",
+            "address-family ipv4",
+            "redistribute ospf3 match external",
+            "network 1.1.1.0/24",
+            "network 1.5.1.0/24 route-map MAP01",
+            "neighbor peer2 default-originate always",
+            "bgp additional-paths receive",
+            "exit",
+            "vrf vrft",
+            "address-family ipv4",
+            "bgp additional-paths receive",
+            "exit",
+            "exit",
+        ]
         result = self.execute_module(changed=False)
-        rendered_cmds = ['router bgp 10', 'address-family ipv4',
-                        'redistribute ospf3 match external',
-                        'network 1.1.1.0/24',
-                        'network 1.5.1.0/24 route-map MAP01',
-                        'neighbor peer2 default-originate always',
-                        'bgp additional-paths receive', 'exit',
-                        'vrf vrft', 'address-family ipv4',
-                        'bgp additional-paths receive', 'exit', 'exit']
+        self.assertEqual(
+            sorted(result["rendered"]),
+            sorted(rendered_cmds),
+            result["rendered"],
+        )

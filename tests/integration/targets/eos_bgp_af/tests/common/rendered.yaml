@@ -23,14 +23,14 @@
                   route_map: "MAP01"
               neighbor:
                 - peer: "1.1.1.1"
-                  activate: True
+                  activate: true
             - afi: "ipv6"
               bgp_params:
                 additional_paths: "receive"
               neighbor:
                 - peer: "peer2"
                   default_originate:
-                    always: True
+                    always: true
             - afi: "ipv6"
               redistribute:
                 - protocol: "isis"

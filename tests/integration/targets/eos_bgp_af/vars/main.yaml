@@ -31,14 +31,14 @@ merged:
             route_map: "MAP01"
         neighbor:
           - peer: "1.1.1.1"
-            activate: True
+            activate: true
       - afi: "ipv6"
         bgp_params:
           additional_paths: "receive"
         neighbor:
           - peer: "peer2"
             default_originate:
-              always: True 
+              always: true
       - afi: "ipv6"
         vrf: "vrft"
         redistribute:
@@ -78,7 +78,7 @@ replaced:
     - no neighbor peer2 default-originate always
     - no neighbor 1.1.1.1 activate
     - no bgp additional-paths receive
-    - exit 
+    - exit
   before:
     address_family:
       - afi: "ipv4"
@@ -94,7 +94,7 @@ replaced:
             default_originate:
               always: true
           - peer: "1.1.1.1"
-            activate: True
+            activate: true
         bgp_params:
           additional_paths: "receive"
       - afi: "ipv6"
