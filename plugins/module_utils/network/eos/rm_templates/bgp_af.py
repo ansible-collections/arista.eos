@@ -269,13 +269,9 @@ class Bgp_afTemplate(NetworkTemplate):
             ),
             "setval": _tmplt_bgp_graceful_restart,
             "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                         "address_family": {
-                            '{{ afi + "_" + vrf|d() }}': {
-                                "graceful_restart": "{{ True }}"
-                            }
-                        }
+                 "address_family": {
+                    '{{ afi + "_" + vrf|d() }}': {
+                        "graceful_restart": "{{ True }}"
                     }
                 }
             },

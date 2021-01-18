@@ -200,6 +200,8 @@ class Bgp_af(ResourceModule):
                             af_no_command[1] = "no " + af_no_command[1]
                             for cmd in af_no_command:
                                 self.commands.append(cmd)
+                    else:
+                        self.addcmd(entry, "address_family", True)
                 else:               
                     if not re.search(r'\S+_\S+',name):
                         self.addcmd(entry, "address_family", True)

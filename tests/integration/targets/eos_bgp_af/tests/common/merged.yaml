@@ -1,0 +1,61 @@
+---
+- debug:
+    msg: Start eos_bgp_af merged integration tests ansible_connection={{
+      ansible_connection }}
+
+- block:
+
+    - name: merge given bgp_af configuration
+      become: true
+      register: result
+      arista.eos.eos_bgp_af: &merged
+        config:
+          as_number: "65535"
+          address_family:
+            - afi: "ipv4"
+              redistribute:
+                - protocol: "ospf3"
+                  ospf_route: "external"
+              network:
+                - address: "1.1.1.0/24"
+                - address: "1.5.1.0/24"
+                  route_map: "MAP01"
+              neighbor:
+                - peer: "1.1.1.1"
+                  activate: True
+            - afi: "ipv6"
+              bgp_params:
+                additional_paths: "receive"
+              neighbor:
+                - peer: "peer2"
+                  default_originate:
+                    always: True
+            - afi: "ipv6"
+              redistribute:
+                - protocol: "isis"
+                  isis_level: "level-2"
+              route_target:
+                mode: "export"
+                target: "33:11"
+              vrf: "vrft"
+
+    - assert:
+        that:
+          - result.commands|length == 17
+          - result.changed == true
+          - result.commands|symmetric_difference(merged.commands) == []
+          - result.after.address_family|symmetric_difference(merged.after.address_family) == []
+          - result.before == {}
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_bgp_af: *merged
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml
