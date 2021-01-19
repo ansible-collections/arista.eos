@@ -1,0 +1,3 @@
+---
+minor_changes:
+  - Add eos_bgp_af resource module (https://github.com/ansible-collections/arista.eos/pull/141).
