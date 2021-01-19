@@ -243,10 +243,6 @@ class Acls(ConfigBase):
                                 config_cmds = set_commands(w, have)
                                 config_cmds = list(itertools.chain(*config_cmds))
 
-            #for cmd in have:
-            #    have_configs = add_commands(cmd)
-            #    have_commands.append(have_configs)
-            #have_commands = list(itertools.chain(*have_commands))
         if remove_cmds:
             remove_cmds = list(itertools.chain(*remove_cmds))
             commands.append(remove_cmds)
