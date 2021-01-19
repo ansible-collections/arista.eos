@@ -153,3 +153,33 @@ overridden:
         redistribute:
           - protocol: "isis"
             isis_level: "level-2"
+
+gathered:
+  populate:
+    address_family:
+      - afi: "ipv4"
+        bgp_params:
+          additional_paths: "receive"
+        neighbor:
+          - default_originate:
+              always: true
+            peer: "peer2"
+          - activate: true
+            peer: "1.1.1.1"
+        network:
+          - address: "1.1.1.0/24"
+          - address: "1.5.1.0/24"
+            route_map: "MAP01"
+        redistribute:
+          - ospf_route: "external"
+            protocol: "ospf3"
+      - afi: "ipv4"
+        bgp_params:
+          additional_paths: "receive"
+        vrf: "vrft"
+      - afi: "ipv6"
+        redistribute:
+          - isis_level: "level-2"
+            protocol: "isis"
+        vrf: "vrft"
+    as_number: "65535"

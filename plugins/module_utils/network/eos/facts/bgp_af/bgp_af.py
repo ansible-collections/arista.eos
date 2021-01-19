@@ -98,6 +98,7 @@ class Bgp_afFacts(object):
                         af["neighbor"] = list(af["neighbor"].values())
                     if "network" in af:
                         af["network"] = list(af["network"].values())
+                        af["network"] = sorted(af["network"], key=lambda k: k['address'])
 
         ansible_facts["ansible_network_resources"].pop("bgp_af", None)
 

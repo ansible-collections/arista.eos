@@ -17,7 +17,7 @@
     - name: Assert
       assert:
         that:
-          - result.gathered.address_family|symmetric_difference(replaced.before.address_family) == []
+          - result.gathered == gathered.populate
           - result['changed'] == false
   always:
 
