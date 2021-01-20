@@ -211,8 +211,6 @@ class Acls(ConfigBase):
         config_cmds = []
         remove_cmds = []
         diff = {}
-        present = False
-        diff_present = False
         for w in want:
             afi = "ipv6" if w["afi"] == "ipv6" else "ipv4"
             for acl in w["acls"]:
@@ -222,12 +220,10 @@ class Acls(ConfigBase):
             if h["afi"] == afi:
                 for h_acl in h["acls"]:
                     if h_acl["name"] == name:
-                        present = True
                         h = {"afi": afi, "acls": [{"name": name}]}
                         for h_ace in h_acl["aces"]:
                             diff = get_ace_diff(h_ace, want_ace)
                             if diff:
-                                diff_present = True
                                 h = {
                                     "afi": afi,
                                     "acls": [{"name": name, "aces": [h_ace]}],
