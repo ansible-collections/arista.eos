@@ -199,7 +199,7 @@ def _tmplt_bgp_monitoring(config_data):
 
 def _tmplt_bgp_neighbor(config_data):
     import q
-    q("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", config_data['neighbor'].keys())
+    q("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", config_data)
     command = "neighbor {peer}".format(**config_data['neighbor'])
     if config_data['neighbor'].get('additional_paths'):
         command += " additional-paths {additional_paths}".format(**config_data['neighbor'])
@@ -258,6 +258,7 @@ def _tmplt_bgp_neighbor(config_data):
         if config_data['neighbor']['maximum_accepted_routes'].get('warning_limit'):
             command += " warning-limit {warning_limit}".format(**config_data['neighbor']['maximum_accepted_routes'])
     elif config_data['neighbor'].get('maximum_received_routes'):
+        q("mxxxxxxxxxxxxxxxxxxxxx")
         command += " maximum-routes {count}".format(**config_data['neighbor']['maximum_received_routes'])
         if config_data['neighbor']['maximum_received_routes'].get('warning_limit'):
             command += " warning-limit {limit_count}".format(**config_data['neighbor']['maximum_received_routes']['warning_limit'])
@@ -298,15 +299,15 @@ def _tmplt_bgp_neighbor(config_data):
     elif config_data['neighbor'].get('send_community'):
         command += " send-community"
         if config_data['neighbor']['send_community'].get('community_attribute'):
-            command += " config_data['neighbor']['send_community']['community_attribute']"
+            command += " " + config_data['neighbor']['send_community']['community_attribute']
         if config_data['neighbor']['send_community'].get('sub_attribute'):
-            command += " config_data['neighbor']['send_community']['sub_attribute']"
+            command += " " + config_data['neighbor']['send_community']['sub_attribute']
         if config_data['neighbor']['send_community'].get('link_bandwidth_attribute'):
-            command += " config_data['neighbor']['send_community']['link_bandwidth_attribute']"
+            command += " " + config_data['neighbor']['send_community']['link_bandwidth_attribute']
         if config_data['neighbor']['send_community'].get('speed'):
-            command += " config_data['neighbor']['send_community']['speed']"
+            command += " " + config_data['neighbor']['send_community']['speed']
         if config_data['neighbor']['send_community'].get('divide'):
-            command += " config_data['neighbor']['send_community']['divide']"
+            command += " " + config_data['neighbor']['send_community']['divide']
     elif config_data['neighbor'].get('shutdown'):
         command += " shutdown"
     elif config_data['neighbor'].get('soft_reconfiguration'):
