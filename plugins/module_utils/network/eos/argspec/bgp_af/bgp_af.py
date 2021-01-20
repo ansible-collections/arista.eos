@@ -101,11 +101,7 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "mode": {
                                     "type": "str",
-                                    "choices": [
-                                        "both",
-                                        "import",
-                                        "export",
-                                    ],
+                                    "choices": ["both", "import", "export"],
                                 },
                                 "target": {"type": "str"},
                             },
