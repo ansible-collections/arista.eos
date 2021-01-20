@@ -31,7 +31,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_global import (
     Bgp_globalTemplate,
 )
-
+import q
 
 class Bgp_global(ResourceModule):
     """
@@ -49,7 +49,6 @@ class Bgp_global(ResourceModule):
         self.parsers = [
             "router",
             "vrf",
-            "aggregate_address",
             "bgp_params_additional_paths",
             "bgp_params_advertise_inactive",
             "bgp_params_allowas_in",
@@ -132,7 +131,6 @@ class Bgp_global(ResourceModule):
             "neighbor.ttl",
             "neighbor.update_source",
             "neighbor.weight",
-            "network",
             "route_target",
             "router_id",
             "shutdown",
@@ -176,11 +174,7 @@ class Bgp_global(ResourceModule):
             wantd = dict_merge(haved, wantd)
 
         # if state is deleted, empty out wantd and set haved to wantd
-        if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
-            wantd = {}
+        if self.state in ["deleted", "purged"]:
 
             data = self._connection.get("show running-config | section bgp ")
             for config_line in data.splitlines():
@@ -189,29 +183,19 @@ class Bgp_global(ResourceModule):
                         configurations before deleting the instance ")
                     haved = {}
                     break
+            haved = {
+                k: v for k, v in iteritems(haved) if k in wantd or not wantd
+            }
+            wantd = {}
+
+        if self.state == "deleted":
+            self._compare(want={}, have=self.have)
+        
+        if self.state == "purged":
             for num, entry in iteritems(haved):
                 self.commands.append(
                     self._tmplt.render({"as_number": num}, "router", True)
                 )
-
-
-        # remove superfluous config for overridden
-        # if self.state in ["overridden"]:
-        #    for k, have in iteritems(haved):
-        #        if have.get('address_family'):
-        #            self._module.warn(" Please use bgp_af module to override the address family configurations")
-        #            haved = {}
-        #        elif have.get('vrfs'):
-        #            for name, vrf_entry in iteritems(have['vrfs']):
-        #                q(vrf_entry)
-        #                if vrf_entry.get('address_family'):
-        #                    self._module.warn(" Please use bgp_af module to override the address family configurations")
-        #                    haved = {}
-        #                    break
-        #        else:
-        #            if k not in wantd:
-        #                self._compare(want={}, have=have)
-
 
         for k, want in iteritems(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
@@ -223,10 +207,14 @@ class Bgp_global(ResourceModule):
            for the Bgp_global network resource.
         """
         for name, entry in iteritems(want):
-            self._compare_network(want, have)
-            self.compare(parsers=self.parsers, want={name: entry}, have={name: have.pop(name, None)})
+            if name != "as_number":
+                self._compare_neighbor({name: entry}, have)
+                self._compare_lists({name: entry}, have)
+                q(self.commands)
+                self.compare(parsers=self.parsers, want={name: entry}, have=have.pop(name, {}))
 
         for name, entry in iteritems(have):
+            q("removing have")
             self.compare(parsers=self.parsers, want={}, have={name: have.get(name)})
 
         if self.commands and "router bgp" not in self.commands[0]:
@@ -235,8 +223,6 @@ class Bgp_global(ResourceModule):
             )
 
     def _compare_network(self, want, have):
-        import q
-        q(want, have)
         wnw = want.get("network", {})
         hnw = have.get("network", {})
         for name, entry in iteritems(wnw):
@@ -246,10 +232,79 @@ class Bgp_global(ResourceModule):
         for name, entry in iteritems(hnw):
             self.addcmd(entry, "network", True)
             have.pop("network", {})
+
+    def _compare_neighbor(self, want, have):
+        parsers = [
+            "neighbor.additional_paths",
+            "neighbor.allowas_in",
+            "neighbor.auto_local_addr",
+            "neighbor.default_originate",
+            "neighbor.description",
+            "neighbor.dont_capability_negotiate",
+            "neighbor.ebgp_multihop",
+            "neighbor.enforce_first_as",
+            "neighbor.export_localpref",
+            "neighbor.fall_over",
+            "neighbor.graceful_restart",
+            "neighbor.graceful_restart_helper",
+            "neighbor.idle_restart_timer",
+            "neighbor.import_localpref",
+            "neighbor.link_bandwidth",
+            "neighbor.local_as",
+            "neighbor.local_v6_addr",
+            "neighbor.maximum_accepted_routes",
+            "neighbor.maximum_received_routes",
+            "neighbor.metric_out",
+            "neighbor.monitoring",
+            "neighbor.next_hop_self",
+            "neighbor.next_hop_unchanged",
+            "neighbor.next_hop_v6_addr",
+            "neighbor.out_delay",
+            "neighbor.remote_as",
+            "neighbor.remove_private_as",
+            "neighbor.peer_group",
+            "neighbor.prefix_list",
+            "neighbor.route_map",
+            "neighbor.route_reflector_client",
+            "neighbor.route_to_peer",
+            "neighbor.send_community_add",
+            "neighbor.send_community_link_bandwidth",
+            "neighbor.send_community_extended",
+            "neighbor.send_community_remove",
+            "neighbor.send_community_standard",
+            "neighbor.send_community",
+            "neighbor.shutdown",
+            "neighbor.soft_reconfiguration",
+            "neighbor.transport",
+            "neighbor.timers",
+            "neighbor.ttl",
+            "neighbor.update_source",
+            "neighbor.weight",
+        ]
+        q(want,have)
+        wneigh = want.get("neighbor", {})
+        hneigh = have.get("neighbor", {})
+        for name, entry in iteritems(wneigh):
+            q(name, entry)
+            self.compare(
+                parsers=parsers,
+                want={"neighbor": entry},
+                have={"neighbor": hneigh.pop(name, {})},
+            )
+        for name, entry in iteritems(hneigh):
+            self.compare(parsers=parsers, want={}, have={"neighbor": entry})
+
+    def _compare_lists(self, want, have):
+        for attrib in ["redistribute", "network", "aggregate_address"]:
+            wdict = want.pop(attrib, {})
+            hdict = have.pop(attrib, {})
+            for key, entry in iteritems(wdict):
+                if entry != hdict.pop(key, {}):
+                    self.addcmd(entry, attrib, False)
+            # remove remaining items in have for replaced
+            for entry in hdict.values():
+                self.addcmd(entry, attrib, True)
         
-
- 
-
     def _bgp_global_list_to_dict(self, entry):
         for name, proc in iteritems(entry):
             if "neighbor" in proc:
@@ -269,6 +324,11 @@ class Bgp_global(ResourceModule):
                     for entry in proc.get("aggregate_address", [])
                 }
 
+            if "redistribute" in proc:
+                proc["redistribute"] = {
+                    entry["protocol"]: entry
+                    for entry in proc.get("redistribute", [])
+                }
                         
             if "vrfs" in proc:
                 proc["vrfs"] = {
@@ -276,5 +336,3 @@ class Bgp_global(ResourceModule):
                     for entry in proc.get("vrfs", [])
                 }
                 self._bgp_global_list_to_dict(proc["vrfs"])
-
-                

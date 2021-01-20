@@ -43,6 +43,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
             "type": "str",
             "choices": [
                 "deleted",
+                "purged",
                 "merged",
                 "overridden",
                 "replaced",
@@ -251,7 +252,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     "type": "list",
                     "options": {
                         "weight": {"type": "int"},
-                        "default_orignate": {
+                        "default_originate": {
                             "type": "dict",
                             "options": {
                                 "route_map": {"type": "str"},
@@ -437,6 +438,16 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "internal": {"type": "int"},
                         "local": {"type": "int"},
                         "external": {"type": "int"},
+                    },
+                },
+                "route_target": {
+                    "type": "dict",
+                    "options": {
+                        "action": {
+                            "type": "str",
+                            "choices": ["both", "import", "export"],
+                        },
+                        "target": {"type": "str"},
                     },
                 },
                 "vrfs": {
@@ -805,7 +816,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     },
                                 },
                                 "description": {"type": "str"},
-                                "maximum_accepted_route": {
+                                "maximum_accepted_routes": {
                                     "type": "dict",
                                     "options": {
                                         "count": {"type": "int"},

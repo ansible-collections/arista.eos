@@ -132,6 +132,16 @@ def _tmplt_bgp_params(config_data):
         command += " transport listen-port {transport}".format(**config_data)
     return command
 
+def _tmplt_bgp_redistribute(config_data):
+    command = "redistribute {protocol}".format(**config_data)
+    if config_data.get("isis_level"):
+        command += " {isis_level}".format(**config_data)
+    if config_data.get("ospf_route"):
+        command += " match {ospf_route}".format(**config_data)
+    if config_data.get("route_map"):
+        command += " route-map {route_map}".format(**config_data)
+    return command
+
 def _tmplt_bgp_default_metric(config_data):
     command = "default-metric {default_metric}".format(**config_data)
     return command
@@ -187,135 +197,136 @@ def _tmplt_bgp_monitoring(config_data):
         command = cmd + " station {station}".format(**config_data)
     return command
 
-
 def _tmplt_bgp_neighbor(config_data):
-    command = "neighbor {peer}".format(**config_data)
-    if config_data.get('additional_paths'):
-        command += " additional-paths {additional_paths}".format(**config_data)
-        if config_data['additional_paths'] == "send":
+    import q
+    q("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", config_data['neighbor'].keys())
+    command = "neighbor {peer}".format(**config_data['neighbor'])
+    if config_data['neighbor'].get('additional_paths'):
+        command += " additional-paths {additional_paths}".format(**config_data['neighbor'])
+        if config_data['neighbor']['additional_paths'] == "send":
             command += "any"
-    elif config_data.get('allowas_in'):
+    elif config_data['neighbor'].get('allowas_in'):
         command += " allowas-in"
-        if config_data['allowas_in'].get('count'):
-            command += " {count}".format(**config_data['allowas_in'])
-    elif config_data.get('auto_local_addr'):
+        if config_data['neighbor']['allowas_in'].get('count'):
+            command += " {count}".format(**config_data['neighbor']['allowas_in'])
+    elif config_data['neighbor'].get('auto_local_addr'):
         command += " auto-local-addr"
-    elif config_data.get('default_originate'):
+    elif config_data['neighbor'].get('default_originate'):
         command += " default-originate"
-        if config_data['default_originate'].get('route_map'):
-            command += " route-map {route_map}".format(**config_data['default_originate'])
-        if config_data['default_originate'].get('always'):
+        if config_data['neighbor']['default_originate'].get('route_map'):
+            command += " route-map {route_map}".format(**config_data['neighbor']['default_originate'])
+        if config_data['neighbor']['default_originate'].get('always'):
             command += " always"
-    elif config_data.get('description'):
-        command += " description {description}".format(**config_data)
-    elif config_data.get('dont_capability_negotiate'):
+    elif config_data['neighbor'].get('description'):
+        command += " description {description}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('dont_capability_negotiate'):
         command += " dont-capability-negotiate"
-    elif config_data.get('ebgp_multihop'):
+    elif config_data['neighbor'].get('ebgp_multihop'):
         command += " ebgp-multiphop"
-        if config_data['ebgp_multihop'].get('ttl'):
-            command += " {ttl}".format(**config_data['ebgp_multihop'])
-    elif config_data.get('enforce_first_as'):
+        if config_data['neighbor']['ebgp_multihop'].get('ttl'):
+            command += " {ttl}".format(**config_data['neighbor']['ebgp_multihop'])
+    elif config_data['neighbor'].get('enforce_first_as'):
         command += " enforce-first-as"
-    elif config_data.get('export_localpref'):
-        command += " export-localpref {export_localpref}".format(**config_data)
-    elif config_data.get('fall_over'):
+    elif config_data['neighbor'].get('export_localpref'):
+        command += " export-localpref {export_localpref}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('fall_over'):
         command += " fall-over bfd"
-    elif config_data.get('graceful_restart'):
+    elif config_data['neighbor'].get('graceful_restart'):
         command += " graceful-restart"
-    elif  config_data.get('graceful_restart_helper'):
+    elif  config_data['neighbor'].get('graceful_restart_helper'):
         command += " graceful-restart-helper"
-    elif config_data.get('idle_restart_timer'):
-        command += " idle-restart-timer {idle_restart_timer}".format(**config_data)
-    elif config_data.get('import_localpref'):
-        command += " import-localpref {import_localpref}".format(**config_data)
-    elif config_data.get('link_bandwidth'):
+    elif config_data['neighbor'].get('idle_restart_timer'):
+        command += " idle-restart-timer {idle_restart_timer}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('import_localpref'):
+        command += " import-localpref {import_localpref}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('link_bandwidth'):
         command += " link-bandwidth"
-        if config_data['link_bandwidth'].get('auto'):
+        if config_data['neighbor']['link_bandwidth'].get('auto'):
             command += " auto"
-        if config_data['link_bandwidth'].get('default'):
-            command += " default {default}".format(**config_data['link_bandwidth'])
-        if config_data['link_bandwidth'].get('update_delay'):
-            command += " update-delay {update_delay}".format(**config_data['update_delay'])
-    elif config_date.get('local_as'):
-        command += " local-as {as_number} no-prepend replace-as".format(**config_data)
-        if config_data['local_as'].get('fallback'):
+        if config_data['neighbor']['link_bandwidth'].get('default'):
+            command += " default {default}".format(**config_data['neighbor']['link_bandwidth'])
+        if config_data['neighbor']['link_bandwidth'].get('update_delay'):
+            command += " update-delay {update_delay}".format(**config_data['neighbor']['update_delay'])
+    elif config_data['neighbor'].get('local_as'):
+        command += " local-as {as_number} no-prepend replace-as".format(**config_data['neighbor'])
+        if config_data['neighbor']['local_as'].get('fallback'):
             command += " fallback"
-    elif config_data.get('local_v6_addr'):
-        command += " local-v6-addr {local_v6_addr}".format(**config_data)
-    elif config_data.get('maximum_accepted_routes'):
-        command += " maximum-accepted-routes {count}".format(**config_data['maximum_accepted_routes'])
-        if config_data['maximum_accepted_routes'].get('warning_limit'):
-            command += " warning-limit {warning_limit}".format(**config_data['maximum_accepted_routes'])
-    elif config_data.get('maximum_received_routes'):
-        command += " maximum-routes {count}".format(**config_data['maximum_received_routes'])
-        if config_data['maximum_received_routes'].get('warning_limit'):
-            command += " warning-limit {limit_count}".format(**config_data['maximum_received_routes']['warning_limit'])
-            if config_data['maximum_received_routes']['warning_limit'].get('limit_percent'):
+    elif config_data['neighbor'].get('local_v6_addr'):
+        command += " local-v6-addr {local_v6_addr}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('maximum_accepted_routes'):
+        command += " maximum-accepted-routes {count}".format(**config_data['neighbor']['maximum_accepted_routes'])
+        if config_data['neighbor']['maximum_accepted_routes'].get('warning_limit'):
+            command += " warning-limit {warning_limit}".format(**config_data['neighbor']['maximum_accepted_routes'])
+    elif config_data['neighbor'].get('maximum_received_routes'):
+        command += " maximum-routes {count}".format(**config_data['neighbor']['maximum_received_routes'])
+        if config_data['neighbor']['maximum_received_routes'].get('warning_limit'):
+            command += " warning-limit {limit_count}".format(**config_data['neighbor']['maximum_received_routes']['warning_limit'])
+            if config_data['neighbor']['maximum_received_routes']['warning_limit'].get('limit_percent'):
                 command += " percent"
-        if config_data['maximum_received_routes'].get('warning_only'):
+        if config_data['neighbor']['maximum_received_routes'].get('warning_only'):
             command += " warning-only"
-    elif config_data.get('metric_out'):
-        command += " metric-out {metric_out}".format(**config_data)
-    elif config_data.get('monitoring'):
+    elif config_data['neighbor'].get('metric_out'):
+        command += " metric-out {metric_out}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('monitoring'):
         command += " monitoring"
-    elif config_data.get('next_hop_self'):
+    elif config_data['neighbor'].get('next_hop_self'):
         command += " next-hop-self"
-    elif config_data.get('next_hop_unchanged'):
+    elif config_data['neighbor'].get('next_hop_unchanged'):
         command += " next-hop-unchanged"
-    elif config_data.get('next_hop_v6_addr'):
-        command += " next-hop-v6-addt {next_hop_v6_addr} in".format(**config_data)
-    elif config_data.get('out_delay'):
-        command += " out-delay {out_delay}".format(**config_data)
-    elif config_data.get('remote_as'):
-        command += " remote-as {remote_as}".format(**config_data)
-    elif config_data.get('remove_private_as'):
+    elif config_data['neighbor'].get('next_hop_v6_addr'):
+        command += " next-hop-v6-addt {next_hop_v6_addr} in".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('out_delay'):
+        command += " out-delay {out_delay}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('remote_as'):
+        command += " remote-as {remote_as}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('remove_private_as'):
         command += " remove-private-as"
-        if config_data['remove_private_as'].get('all'):
+        if config_data['neighbor']['remove_private_as'].get('all'):
             command += " all"
-        if config_data['remove_private_as'].get('replace_as'):
+        if config_data['neighbor']['remove_private_as'].get('replace_as'):
             command += " replace-as"
-    elif config_data.get('peer_as'):
-        command += " peer-as {peer_as}".format(**config_data)
-    elif config_data.get('prefix_list'):
-        command += " prefix-list {name} {direction}".format(**config_data['prefix_list'])
-    elif config_data.get('route_map'):
-        command += " route-map {name} {direction}".format(**config_data['route_map'])
-    elif config_data.get('route_reflector_client'):
+    elif config_data['neighbor'].get('peer_as'):
+        command += " peer-as {peer_as}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('prefix_list'):
+        command += " prefix-list {name} {direction}".format(**config_data['neighbor']['prefix_list'])
+    elif config_data['neighbor'].get('route_map'):
+        command += " route-map {name} {direction}".format(**config_data['neighbor']['route_map'])
+    elif config_data['neighbor'].get('route_reflector_client'):
         command += " route-reflector-client"
-    elif config_data.get('route_to_peer'):
+    elif config_data['neighbor'].get('route_to_peer'):
         command += " route-to-peer"
-    elif config_data.get('send_community'):
+    elif config_data['neighbor'].get('send_community'):
         command += " send-community"
-        if config_data['send_community'].get('community_attribute'):
-            command += " config_data['send_community']['community_attribute']"
-        if config_data['send_community'].get('sub_attribute'):
-            command += " config_data['send_community']['sub_attribute']"
-        if config_data['send_community'].get('link_bandwidth_attribute'):
-            command += " config_data['send_community']['link_bandwidth_attribute']"
-        if config_data['send_community'].get('speed'):
-            command += " config_data['send_community']['speed']"
-        if config_data['send_community'].get('divide'):
-            command += " config_data['send_community']['divide']"
-    elif config_data.get('shutdown'):
+        if config_data['neighbor']['send_community'].get('community_attribute'):
+            command += " config_data['neighbor']['send_community']['community_attribute']"
+        if config_data['neighbor']['send_community'].get('sub_attribute'):
+            command += " config_data['neighbor']['send_community']['sub_attribute']"
+        if config_data['neighbor']['send_community'].get('link_bandwidth_attribute'):
+            command += " config_data['neighbor']['send_community']['link_bandwidth_attribute']"
+        if config_data['neighbor']['send_community'].get('speed'):
+            command += " config_data['neighbor']['send_community']['speed']"
+        if config_data['neighbor']['send_community'].get('divide'):
+            command += " config_data['neighbor']['send_community']['divide']"
+    elif config_data['neighbor'].get('shutdown'):
         command += " shutdown"
-    elif config_data.get('soft_reconfiguration'):
+    elif config_data['neighbor'].get('soft_reconfiguration'):
         command += " soft-reconfiguration inbound"
-        if config_data['soft_reconfiguration'] == "all":
+        if config_data['neighbor']['soft_reconfiguration'] == "all":
             command += " all"
-    elif config_data.get('transport'):
+    elif config_data['neighbor'].get('transport'):
         command += " transport"
-        if config_data['transport'].get('connection_mode'):
+        if config_data['neighbor']['transport'].get('connection_mode'):
             command += " connection-mode passive"
         else:
-            command += " remote-port {remote_port}".format(**config_data['transport'])
-    elif config_data.get('timers'):
-        command += " timers {keepalive} {holdtime}".format(**config_data['timers'])
-    elif config_data.get('ttl'):
-        command += " ttl maximum-hops {ttl}".format(**config_data)
-    elif config_data.get('update_source'):
-        command += " update-source {update_source}".format(**config_data)
-    elif config_data.get('weight'):
-        command += " weight {weight}".format(**config_data)
+            command += " remote-port {remote_port}".format(**config_data['neighbor']['transport'])
+    elif config_data['neighbor'].get('timers'):
+        command += " timers {keepalive} {holdtime}".format(**config_data['neighbor']['timers'])
+    elif config_data['neighbor'].get('ttl'):
+        command += " ttl maximum-hops {ttl}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('update_source'):
+        command += " update-source {update_source}".format(**config_data['neighbor'])
+    elif config_data['neighbor'].get('weight'):
+        command += " weight {weight}".format(**config_data['neighbor'])
     return command
 
 def _tmplt_bgp_network(config_data):
@@ -1170,6 +1181,35 @@ class Bgp_globalTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "redistribute",
+            "getval": re.compile(
+                r"""
+                \s*redistribute
+                \s+(?P<route>\S+)
+                \s*(?P<level>level-1|level-2|level-1-2)*
+                \s*(?P<match>match\s.+)*
+                \s*(?P<route_map>route-map\s\S+)*
+                $""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_bgp_redistribute,
+            "compval": "redistribute",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "redistribute": [
+                            {
+                                "protocol": "{{ route }}",
+                                "route_map": "{{ route_map.split(" ")[1] }}",
+                                "isis_level": "{{ level }}",
+                                "ospf_route": "{{ 'nssa_external_' + match.split(" ")[2] if match.split(" ")[1] == 'nssa-external' else  match.split(" ")[1]}}"
+                            }
+                        ]
+                    }
+                }
+            },
+        },
+        {
             "name": "distance",
             "getval": re.compile(
                 r"""
@@ -1811,8 +1851,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s*neighbor
                 \s+(?P<peer>\S+)
                 \s+maximum-routes
-                \s+(?P<count>\d+)
-                \s*warning-limit*
+                \s+(?P<count>\d+)*
+                \s*(warning-limit)*
                 \s*(?P<limit>\d+)*
                 \s*(?P<percent>percent)*
                 \s*(?P<warning_only>warning-only)*
@@ -1820,14 +1860,14 @@ class Bgp_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": _tmplt_bgp_neighbor,
-            "compval": "neighbor.maximum_accepted_routes",
+            "compval": "neighbor.maximum_received_routes",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}" : {
                                 "peer": "{{ peer }}",
-                                "maximum_accepted_routes": {
+                                "maximum_received_routes": {
                                     "count": "{{ count }}",
                                     "warning_limit": {
                                         "limit_count": "{{ limit if percent is undefined }}",
@@ -2059,7 +2099,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s*neighbor
                 \s+(?P<peer>\S+)
                 \s+peer-group
-                \s+(?P<name>\S+)
+                \s*(?P<name>\S+)
                 *$""",
                 re.VERBOSE,
             ),
@@ -2071,7 +2111,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "neighbor": {
                             "{{ peer }}" : {
                                 "peer": "{{ peer }}",
-                                "peer_group": "{{ name }}",
+                                "peer_group": "{{ name if name is defined else peer}}",
                             }
                         }
                     }
@@ -2819,7 +2859,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*vlan-aware-bundle
-                \s+(?P<bundle>\S+)
+                \s+(?P<bundle>.+)
                 *$""",
                 re.VERBOSE,
             ),
