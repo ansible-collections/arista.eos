@@ -285,12 +285,19 @@ class Bgp_global(ResourceModule):
         wneigh = want.get("neighbor", {})
         hneigh = have.get("neighbor", {})
         for name, entry in iteritems(wneigh):
-            q(name, entry)
-            self.compare(
-                parsers=parsers,
-                want={"neighbor": entry},
-                have={"neighbor": hneigh.pop(name, {})},
-            )
+            for k,v in entry.items():
+                if k == "peer":
+                    peer = v
+                if hneigh.get(name):
+                    h = {"peer": peer, k: hneigh[name].get(k, {})}
+                else:
+                    h = {}
+                self.compare(
+                    parsers=parsers,
+                    want={"neighbor": {"peer": peer, k: v}},
+                    have={"neighbor": h},
+                )
+            hneigh.pop(name, {})
         for name, entry in iteritems(hneigh):
             self.compare(parsers=parsers, want={}, have={"neighbor": entry})
 
