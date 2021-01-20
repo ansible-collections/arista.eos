@@ -99,7 +99,14 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                         "route_target": {
                             "type": "dict",
                             "options": {
-                                "mode": {"type": "str"},
+                                "mode": {
+                                    "type": "str",
+                                    "choices": [
+                                        "both",
+                                        "import",
+                                        "export",
+                                    ],
+                                },
                                 "target": {"type": "str"},
                             },
                         },
@@ -117,7 +124,7 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": ["install", "send", "receive"],
                                 },
-                                "next_hop_unchanged": {"type": "str"},
+                                "next_hop_unchanged": {"type": "bool"},
                             },
                         },
                         "safi": {
@@ -156,7 +163,6 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": ["send", "receive"],
                                 },
-                                "peer_group": {"type": "str"},
                                 "peer": {"type": "str"},
                                 "encapsulation": {
                                     "type": "dict",

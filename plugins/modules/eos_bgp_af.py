@@ -60,7 +60,7 @@ options:
             safi:
               description: Address family type for ipv4.
               type: str
-              choices: ['labeled_unicast', 'multicast']
+              choices: ['labeled-unicast', 'multicast']
             bgp_params:
               description: BGP parameters.
               type: dict
@@ -101,7 +101,7 @@ options:
                   description: BGP additional-paths commands.
                   type: str
                   choices: ['send', 'receive']
-                default_orignate:
+                default_originate:
                   description: Originate default route to this neighbor.
                   type: dict
                   suboptions:
@@ -109,7 +109,7 @@ options:
                       description: Route map reference.
                       type: str
                     always:
-                      descrition: Always originate default route to this neighbor.
+                      description: Always originate default route to this neighbor.
                       type: bool
                 graceful_restart:
                   description: Enable graceful restart mode.
@@ -157,7 +157,7 @@ options:
                       choices: ['mpls', 'vxlan']
                     source_interface:
                       description: Source interface to update BGP next hop address. Applicable for mpls transport.
-                      type: str.
+                      type: str
             network:
               description: configure routing for network.
               type: list
@@ -575,7 +575,7 @@ EXAMPLES = """
 #          redistribute ospf3 match external
 # veos(config-router-bgp)#
 
-- name: Overridden
+  - name: Overridden
     arista.eos.eos_bgp_af:
       config:
         as_number: "10"
@@ -736,7 +736,7 @@ EXAMPLES = """
 # veos(config-router-bgp)#
 
 
-- name: Overridden
+  - name: Overridden
     arista.eos.eos_bgp_af:
       config:
         as_number: "10"
@@ -936,7 +936,7 @@ EXAMPLES = """
 #          bgp additional-paths receive
 # veos(config-router-bgp)#
 
-- name: Delete
+  - name: Delete
     arista.eos.eos_bgp_af:
       config:
         as_number: "10"
