@@ -77,7 +77,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "isis",
                                 "ospf3",
                                 "ospf",
-                                "attached_host",
+                                "attached-host",
                                 "connected",
                                 "rip",
                                 "static",
@@ -198,7 +198,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "convergence": {
                             "type": "dict",
                             "options": {
-                                "slow_peer": {"type": "int"},
+                                "slow_peer": {"type": "bool"},
                                 "time": {"type": "int"},
                             },
                         },
@@ -234,7 +234,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "batch_size": {"type": "int"},
                     },
                 },
-                "vlan_aware_bundle": {"elements": "str", "type": "list"},
+                "vlan_aware_bundle": {"type": "str"},
                 "aggregate_address": {
                     "elements": "dict",
                     "type": "list",
@@ -372,7 +372,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": [
                                         "extended",
-                                        "link_bandwidth",
+                                        "link-bandwidth",
                                         "standard",
                                     ],
                                 },
@@ -494,7 +494,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "isis",
                                         "ospf3",
                                         "ospf",
-                                        "attached_host",
+                                        "attached-host",
                                         "connected",
                                         "rip",
                                         "static",
@@ -523,7 +523,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "convergence": {
                                     "type": "dict",
                                     "options": {
-                                        "slow_peer": {"type": "int"},
+                                        "slow_peer": {"type": "bool"},
                                         "time": {"type": "int"},
                                     },
                                 },
@@ -680,7 +680,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "type": "list",
                             "options": {
                                 "weight": {"type": "int"},
-                                "default_orignate": {
+                                "default_originate": {
                                     "type": "dict",
                                     "options": {
                                         "route_map": {"type": "str"},
@@ -800,7 +800,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                             "choices": [
                                                 "extended",
-                                                "link_bandwidth",
+                                                "link-bandwidth",
                                                 "standard",
                                             ],
                                         },

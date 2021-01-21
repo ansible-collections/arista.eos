@@ -49,36 +49,6 @@ class Bgp_global(ResourceModule):
         self.parsers = [
             "router",
             "vrf",
-            "bgp_params_additional_paths",
-            "bgp_params_advertise_inactive",
-            "bgp_params_allowas_in",
-            "bgp_params_always_compare_med",
-            "bgp_params_asn",
-            "bgp_params_auto_local_addr",
-            "bgp_params_bestpath_as_path",
-            "bgp_params_bestpath_ecmp_fast",
-            "bgp_params_bestpath_med",
-            "bgp_params_bestpath_skip",
-            "bgp_params_tie_break",
-            "bgp_params_client_to_client",
-            "bgp_params_cluster_id",
-            "bgp_params_confederation",
-            "bgp_params_control_plane_filter",
-            "bgp_params_convergence",
-            "bgp_params_default",
-            "bgp_params.enforce_first_as",
-            "bgp_params.host_routes",
-            "bgp_params.labelled_unicast",
-            "bgp_params.listen_limit",
-            "bgp_params.listen_range",
-            "bgp_params.log_neighbor_changes",
-            "bgp_params.missing_policy",
-            "bgp_params.monitoring",
-            "bgp_params.nexthop_unchanged",
-            "bgp_params.redistribute_internal",
-            "bgp_params.route",
-            "bgp_params.route_reflector",
-            "bgp_params.transport",
             "default_metric",
             "distance",
             "graceful_restart",
@@ -86,51 +56,6 @@ class Bgp_global(ResourceModule):
             "acccess_group",
             "maximum_paths",
             "monitoring",
-            "neighbor.additional_paths",
-            "neighbor.allowas_in",
-            "neighbor.auto_local_addr",
-            "neighbor.default_originate",
-            "neighbor.description",
-            "neighbor.dont_capability_negotiate",
-            "neighbor.ebgp_multihop",
-            "neighbor.enforce_first_as",
-            "neighbor.export_localpref",
-            "neighbor.fall_over",
-            "neighbor.graceful_restart",
-            "neighbor.graceful_restart_helper",
-            "neighbor.idle_restart_timer",
-            "neighbor.import_localpref",
-            "neighbor.link_bandwidth",
-            "neighbor.local_as",
-            "neighbor.local_v6_addr",
-            "neighbor.maximum_accepted_routes",
-            "neighbor.maximum_received_routes",
-            "neighbor.metric_out",
-            "neighbor.monitoring",
-            "neighbor.next_hop_self",
-            "neighbor.next_hop_unchanged",
-            "neighbor.next_hop_v6_addr",
-            "neighbor.out_delay",
-            "neighbor.remote_as",
-            "neighbor.remove_private_as",
-            "neighbor.peer_group",
-            "neighbor.prefix_list",
-            "neighbor.route_map",
-            "neighbor.route_reflector_client",
-            "neighbor.route_to_peer",
-            "neighbor.send_community_add",
-            "neighbor.send_community_link_bandwidth",
-            "neighbor.send_community_extended",
-            "neighbor.send_community_remove",
-            "neighbor.send_community_standard",
-            "neighbor.send_community",
-            "neighbor.shutdown",
-            "neighbor.soft_reconfiguration",
-            "neighbor.transport",
-            "neighbor.timers",
-            "neighbor.ttl",
-            "neighbor.update_source",
-            "neighbor.weight",
             "route_target",
             "router_id",
             "shutdown",
@@ -160,11 +85,16 @@ class Bgp_global(ResourceModule):
         """
         wantd = {}
         haved = {}
-        if self.want:
-            wantd = { self.want["as_number"]: self.want }
-        if self.have:
-            haved = { self.have["as_number"]: self.have }
-
+        if self.want.get("as_number") == self.have.get("as_number") or not self.have:
+            if self.want:
+                wantd = { self.want["as_number"]: self.want }
+            if self.have:
+                haved = { self.have["as_number"]: self.have }
+        else:
+            self._module.fail_json(
+                msg="Only one bgp instance is allowed per device"
+            )
+        
          # turn all lists of dicts into dicts prior to merge
         for entry in wantd, haved:
             self._bgp_global_list_to_dict(entry)
@@ -206,32 +136,111 @@ class Bgp_global(ResourceModule):
            the `want` and `have` data with the `parsers` defined
            for the Bgp_global network resource.
         """
+        self._compare_vrfs(want, have)
+        self._compare_neighbor(want, have)
+        self._compare_lists(want, have)
+        self._compare_bgp_params(want, have)
         for name, entry in iteritems(want):
             if name != "as_number":
-                self._compare_neighbor({name: entry}, have)
-                self._compare_lists({name: entry}, have)
-                q(self.commands)
-                self.compare(parsers=self.parsers, want={name: entry}, have=have.pop(name, {}))
-
+                self.compare(parsers=self.parsers, want={name: entry}, have={name: have.pop(name, {})})
         for name, entry in iteritems(have):
-            q("removing have")
-            self.compare(parsers=self.parsers, want={}, have={name: have.get(name)})
+            if name != "as_number":
+                self.compare(parsers=self.parsers, want={}, have={name: have.get(name)})
 
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
                 0, self._tmplt.render({"as_number": want['as_number']}, "router", False)
             )
 
-    def _compare_network(self, want, have):
-        wnw = want.get("network", {})
-        hnw = have.get("network", {})
-        for name, entry in iteritems(wnw):
-            self.compare(
-                parsers=self.parsers, want=entry, have=hnw.pop(name, {})
-            )
-        for name, entry in iteritems(hnw):
-            self.addcmd(entry, "network", True)
-            have.pop("network", {})
+    def _compare_bgp_params(self, want, have):
+        parsers = [
+            "router",
+            "vrf",
+            "bgp_params_additional_paths",
+            "bgp_params_advertise_inactive",
+            "bgp_params_allowas_in",
+            "bgp_params_always_compare_med",
+            "bgp_params_asn",
+            "bgp_params_auto_local_addr",
+            "bgp_params_bestpath_as_path",
+            "bgp_params_bestpath_ecmp_fast",
+            "bgp_params_bestpath_med",
+            "bgp_params_bestpath_skip",
+            "bgp_params_tie_break",
+            "bgp_params_client_to_client",
+            "bgp_params_cluster_id",
+            "bgp_params_confederation",
+            "bgp_params_control_plane_filter",
+            "bgp_params_convergence",
+            "bgp_params_default",
+            "bgp_params.enforce_first_as",
+            "bgp_params.host_routes",
+            "bgp_params.labelled_unicast",
+            "bgp_params.listen_limit",
+            "bgp_params.listen_range",
+            "bgp_params.log_neighbor_changes",
+            "bgp_params.missing_policy",
+            "bgp_params.monitoring",
+            "bgp_params.nexthop_unchanged",
+            "bgp_params.redistribute_internal",
+            "bgp_params.route",
+            "bgp_params.route_reflector",
+            "bgp_params.transport"]
+        wbgp = want.pop("bgp_params", {})
+        hbgp = have.pop("bgp_params", {})
+        for name, entry in iteritems(wbgp):
+            self.compare(parsers=parsers, want={"bgp_params": {name: entry}}, have={"bgp_params": {name: hbgp.pop(name, {})}})
+        for name, entry in iteritems(hbgp):
+            self.compare(parsers=parsers, want={}, have={"bgp_params": {name: entry}})
+
+    def _compare_vrfs(self, want, have):
+        wvrf = want.pop("vrfs", {})
+        hvrf = have.pop("vrfs", {})
+        begin = len(self.commands)
+        for name, entry in iteritems(wvrf):
+            self._compare_neighbor(entry, hvrf.get(name, {}))
+            self._compare_lists(entry, hvrf.get(name, {}))
+            self._compare_bgp_params(entry, hvrf.get(name, {}))
+            for k, v in entry.items():
+                if hvrf.get(name):
+                    h = {k: hvrf[name].pop(k, {})}
+                else:
+                    h = {}
+                if k != "vrf":
+                    self.compare(parsers=self.parsers, want={k: v}, have=h)
+            #hvrf.pop(name, {})
+
+            if len(self.commands) != begin:
+                self.commands.insert(
+                    begin, self._tmplt.render({"vrf": name}, "vrf", False)
+                )
+                self.commands.append("exit")
+        begin_negate = len(self.commands) 
+        for name, entry in iteritems(hvrf):
+            if name not in wvrf.keys():
+                self.commands.append(
+                    self._tmplt.render({"vrf": name}, "vrf", True)
+                )
+                continue
+            # self._compare_neighbor({}, entry)
+            # self._compare_lists({}, entry)
+            # self._compare_bgp_params({}, entry)
+            self.compare(parsers=self.parsers, want={}, have=entry)
+            after_negate = len(self.commands)
+            if after_negate != begin_negate:
+                if "vrf " + name in self.commands:
+                    index = self.commands.index("vrf " + name)
+                    i = begin_negate
+                    while i < after_negate:
+                        cmd = self.commands.pop(i)
+                        if cmd != "exit":
+                            self.commands.insert(index+1, cmd)
+                        i+=1
+                else:
+                    self.commands.insert(
+                        begin_negate, self._tmplt.render({"vrf": name}, "vrf", False)
+                    )
+                    self.commands.append("exit")
 
     def _compare_neighbor(self, want, have):
         parsers = [
@@ -267,11 +276,6 @@ class Bgp_global(ResourceModule):
             "neighbor.route_map",
             "neighbor.route_reflector_client",
             "neighbor.route_to_peer",
-            "neighbor.send_community_add",
-            "neighbor.send_community_link_bandwidth",
-            "neighbor.send_community_extended",
-            "neighbor.send_community_remove",
-            "neighbor.send_community_standard",
             "neighbor.send_community",
             "neighbor.shutdown",
             "neighbor.soft_reconfiguration",
@@ -281,15 +285,14 @@ class Bgp_global(ResourceModule):
             "neighbor.update_source",
             "neighbor.weight",
         ]
-        q(want,have)
-        wneigh = want.get("neighbor", {})
-        hneigh = have.get("neighbor", {})
+        wneigh = want.pop("neighbor", {})
+        hneigh = have.pop("neighbor", {})
         for name, entry in iteritems(wneigh):
             for k,v in entry.items():
                 if k == "peer":
                     peer = v
                 if hneigh.get(name):
-                    h = {"peer": peer, k: hneigh[name].get(k, {})}
+                    h = {"peer": peer, k: hneigh[name].pop(k, {})}
                 else:
                     h = {}
                 self.compare(
@@ -297,9 +300,15 @@ class Bgp_global(ResourceModule):
                     want={"neighbor": {"peer": peer, k: v}},
                     have={"neighbor": h},
                 )
-            hneigh.pop(name, {})
+            # hneigh.pop(name, {})
         for name, entry in iteritems(hneigh):
-            self.compare(parsers=parsers, want={}, have={"neighbor": entry})
+            if name not in wneigh.keys() and "peer_group" not in entry.keys():
+                self.commands.append("no neighbor " + name)
+                continue
+            for k,v in entry.items():
+                if k == "peer":
+                    peer = v
+                self.compare(parsers=parsers, want={}, have={"neighbor": {"peer": peer, k: v}})
 
     def _compare_lists(self, want, have):
         for attrib in ["redistribute", "network", "aggregate_address"]:

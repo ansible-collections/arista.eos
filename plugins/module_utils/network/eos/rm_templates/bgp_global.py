@@ -43,93 +43,94 @@ def _tmplt_bgp_aggregate_address(config_data):
     return command
 
 def _tmplt_bgp_params(config_data):
+    import q
     command = "bgp"
-    if config_data.get('additional_paths'):
-        command += " additional-paths {additional_paths}".format(**config_data)
-        if config_data["additiona_paths"] == "send":
+    if config_data['bgp_params'].get('additional_paths'):
+        command += " additional-paths " + config_data['bgp_params']['additional_paths']
+        if config_data['bgp_params']["additional_paths"] == "send":
             command += " any"
-    elif config_data.get('advertise_inactive'):
+    elif config_data['bgp_params'].get('advertise_inactive'):
         command += " advertise-inactive"
-    elif config_data.get('allowas_in'):
+    elif config_data['bgp_params'].get('allowas_in'):
         command += " allowas-in"
-        if config_data['allowas_in'].get('count'):
-            command += " {count}".format(**config_data['allowas_in'])
-    elif config_data.get('always_compare_med'):
+        if config_data['bgp_params']['allowas_in'].get('count'):
+            command += " {count}".format(**config_data['bgp_params']['allowas_in'])
+    elif config_data['bgp_params'].get('always_compare_med'):
         command += " always-comapre-med"
-    elif config_data.get('asn'):
-        command += " asn notaion {asn}".format(**config_data)
-    elif config_data.get('auto_local_addr'):
+    elif config_data['bgp_params'].get('asn'):
+        command += " asn notaion {asn}".format(**config_data['bgp_params'])
+    elif config_data['bgp_params'].get('auto_local_addr'):
         command += " auto-local-addr"
-    elif config_data.get('bestpath'):
+    elif config_data['bgp_params'].get('bestpath'):
         command += " bestpath"
-        if config_data['bestpath'].get('as_path'):
-            command += " as-path {as_path}".format(**config_data['as_path'])
-        elif config_data['bestpath'].get('ecmp_fast'):
+        if config_data['bgp_params']['bestpath'].get('as_path'):
+            command += " as-path {as_path}".format(**config_data['bgp_params']['as_path'])
+        elif config_data['bgp_params']['bestpath'].get('ecmp_fast'):
             command += " ecmp-fast"
-        elif config_data.get('med'):
+        elif config_data['bgp_params'].get('med'):
             command += " med"
-            if config_data['med'].get('confed'):
+            if config_data['bgp_params']['med'].get('confed'):
                 command += " confed"
             else:
                 command += " missing-as-worst"
-        elif config_data.get('skip'):
+        elif config_data['bgp_params'].get('skip'):
             command += " skip next-hop igp-cost"
-        elif config_data.get('tie_break'):
-            tie = re.sub(r'_', r'-', config_data['tie_break'])
+        elif config_data['bgp_params'].get('tie_break'):
+            tie = re.sub(r'_', r'-', config_data['bgp_params']['tie_break'])
             command += " tie-break " + tie
-    elif config_data.get('client_to_client'):
+    elif config_data['bgp_params'].get('client_to_client'):
         command += " client-to-client"
-    elif config_data.get('cluster_id'):
-        command += " cluster-id {cluster_id}".format(**config_data)
-    elif config_data.get('confederation'):
+    elif config_data['bgp_params'].get('cluster_id'):
+        command += " cluster-id {cluster_id}".format(**config_data['bgp_params'])
+    elif config_data['bgp_params'].get('confederation'):
         command += " confederation"
-        if config_data['confederation'].get('identifier'):
-            command += " identifier {identifier}".format(**config_data['confederation'])
+        if config_data['bgp_params']['confederation'].get('identifier'):
+            command += " identifier {identifier}".format(**config_data['bgp_params']['confederation'])
         else:
-            command += " peers {peers}".format(**config_data['confederation'])
-    elif config_data.get('control_plane_filter'):
+            command += " peers {peers}".format(**config_data['bgp_params']['confederation'])
+    elif config_data['bgp_params'].get('control_plane_filter'):
         command += " control-plane-filter default-allow"
-    elif config_data.get('convergence'):
+    elif config_data['bgp_params'].get('convergence'):
         command += " convergence"
-        if config_data['convergence'].get('slow_peer'):
+        if config_data['bgp_params']['convergence'].get('slow_peer'):
             command += " slow-peer"
-        command += " time {time}".format(**config_data['convergence'])
-    elif config_data.get('default'):
-        command += " default {default}".format(**config_data)
-    elif config_data.get('enforce_first-as'):
+        command += " time {time}".format(**config_data['bgp_params']['convergence'])
+    elif config_data['bgp_params'].get('default'):
+        command += " default {default}".format(**config_data['bgp_params'])
+    elif config_data['bgp_params'].get('enforce_first-as'):
         command += " enforce-first-as"
-    elif config_data.get('host_routes'):
+    elif config_data['bgp_params'].get('host_routes'):
         command += " host-routes fib direct-install"
-    elif config_data.get('labeled_unicast'):
-        command += " labeled-unicast rib {labeled_unicast}".format(**config_data)
-    elif config_data.get('listen'):
+    elif config_data['bgp_params'].get('labeled_unicast'):
+        command += " labeled-unicast rib {labeled_unicast}".format(**config_data['bgp_params'])
+    elif config_data['bgp_params'].get('listen'):
         command += " listen"
-        if config_data['listen'].get('limit'):
-            command += " limit {limit}".format(**config_data['listen'])
+        if config_data['bgp_params']['listen'].get('limit'):
+            command += " limit {limit}".format(**config_data['bgp_params']['listen'])
         else:
-            command += " range {address} peer-group".format(**config_data['listen']['range'])
-            if config_data['listen']['range']['peer_group'].get('peer_filter'):
-                command += " {name} peer-filter {peer_filter}".format(**config_data['listen']['range']['peer_group'])
+            command += " range {address} peer-group".format(**config_data['bgp_params']['listen']['range'])
+            if config_data['bgp_params']['listen']['range']['peer_group'].get('peer_filter'):
+                command += " {name} peer-filter {peer_filter}".format(**config_data['bgp_params']['listen']['range']['peer_group'])
             else:
-                command += " {name} remote-as {remote_as}".format(**config_data['listen']['range']['peer_group'])
-    elif config_data.get('log_neighbor_changes'):
+                command += " {name} remote-as {remote_as}".format(**config_data['bgp_params']['listen']['range']['peer_group'])
+    elif config_data['bgp_params'].get('log_neighbor_changes'):
         command += " log-neighbor-changes"
-    elif config_data.get('missing_policy'):
+    elif config_data['bgp_params'].get('missing_policy'):
         command += " missing-policy direction {direction} action {action}".format(**config['missing_policy'])
-    elif config_data.get('monitoring'):
+    elif config_data['bgp_params'].get('monitoring'):
         command += " monitoring"
-    elif config_data.get('next_hop_unchanged'):
+    elif config_data['bgp_params'].get('next_hop_unchanged'):
         command += " next-hop-unchanged"
-    elif config_data.get('redistribute_internal'):
+    elif config_data['bgp_params'].get('redistribute_internal'):
         command += " redistribute-internal"
-    elif config_data.get('route'):
-        command += " route install-map {route}".format(**config_data)
-    elif config_data.get('route_reflector'):
+    elif config_data['bgp_params'].get('route'):
+        command += " route install-map {route}".format(**config_data['bgp_params'])
+    elif config_data['bgp_params'].get('route_reflector'):
         command += " route-reflector preserve-attributes"
-        if config_data['reoute_reflector'].get('always'):
+        if config_data['bgp_params']['reoute_reflector'].get('always'):
             command += " always"
-    elif config_data.get('transport'):
-        command += " transport listen-port {transport}".format(**config_data)
+    elif config_data['bgp_params'].get('transport'):
+        command += " transport listen-port {transport}".format(**config_data['bgp_params'])
     return command
 
 def _tmplt_bgp_redistribute(config_data):
@@ -148,12 +149,12 @@ def _tmplt_bgp_default_metric(config_data):
 
 def _tmplt_bgp_distance(config_data):
     command = "distance bgp"
-    if config_data.get("external"):
-        command += " {external}".format(**config_data)
-    if config_data.get("internal"):
-        command += " {internal}".format(**config_data)
-    if config_data.get("local"):
-        command += " {local}".format(**config_data)
+    if config_data['distance'].get("external"):
+        command += " {external}".format(**config_data['distance'])
+    if config_data['distance'].get("internal"):
+        command += " {internal}".format(**config_data['distance'])
+    if config_data['distance'].get("local"):
+        command += " {local}".format(**config_data['distance'])
     return command
 
 def _tmplt_bgp_graceful_restart(config_data):
@@ -198,13 +199,15 @@ def _tmplt_bgp_monitoring(config_data):
     return command
 
 def _tmplt_bgp_neighbor(config_data):
-    import q
-    q("NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", config_data)
     command = "neighbor {peer}".format(**config_data['neighbor'])
     if config_data['neighbor'].get('additional_paths'):
         command += " additional-paths {additional_paths}".format(**config_data['neighbor'])
         if config_data['neighbor']['additional_paths'] == "send":
             command += "any"
+    elif config_data['neighbor'].get('peer_group'):
+        command += " peer-group"
+        if config_data['neighbor']['peer_group'] != config_data['neighbor']['peer_group']:
+            command += config_data['neighbor']['peer_group']
     elif config_data['neighbor'].get('allowas_in'):
         command += " allowas-in"
         if config_data['neighbor']['allowas_in'].get('count'):
@@ -246,7 +249,7 @@ def _tmplt_bgp_neighbor(config_data):
         if config_data['neighbor']['link_bandwidth'].get('default'):
             command += " default {default}".format(**config_data['neighbor']['link_bandwidth'])
         if config_data['neighbor']['link_bandwidth'].get('update_delay'):
-            command += " update-delay {update_delay}".format(**config_data['neighbor']['update_delay'])
+            command += " update-delay {update_delay}".format(**config_data['neighbor']['link_bandwidth'])
     elif config_data['neighbor'].get('local_as'):
         command += " local-as {as_number} no-prepend replace-as".format(**config_data['neighbor'])
         if config_data['neighbor']['local_as'].get('fallback'):
@@ -258,12 +261,12 @@ def _tmplt_bgp_neighbor(config_data):
         if config_data['neighbor']['maximum_accepted_routes'].get('warning_limit'):
             command += " warning-limit {warning_limit}".format(**config_data['neighbor']['maximum_accepted_routes'])
     elif config_data['neighbor'].get('maximum_received_routes'):
-        q("mxxxxxxxxxxxxxxxxxxxxx")
         command += " maximum-routes {count}".format(**config_data['neighbor']['maximum_received_routes'])
         if config_data['neighbor']['maximum_received_routes'].get('warning_limit'):
-            command += " warning-limit {limit_count}".format(**config_data['neighbor']['maximum_received_routes']['warning_limit'])
+            if config_data['neighbor']['maximum_received_routes']['warning_limit'].get('limit_count'):
+                command += " warning-limit {limit_count}".format(**config_data['neighbor']['maximum_received_routes']['warning_limit'])
             if config_data['neighbor']['maximum_received_routes']['warning_limit'].get('limit_percent'):
-                command += " percent"
+                command += " warning-limit " + str(config_data['neighbor']['maximum_received_routes']['warning_limit']['limit_percent']) + " percent"
         if config_data['neighbor']['maximum_received_routes'].get('warning_only'):
             command += " warning-only"
     elif config_data['neighbor'].get('metric_out'):
@@ -297,6 +300,7 @@ def _tmplt_bgp_neighbor(config_data):
     elif config_data['neighbor'].get('route_to_peer'):
         command += " route-to-peer"
     elif config_data['neighbor'].get('send_community'):
+        import q
         command += " send-community"
         if config_data['neighbor']['send_community'].get('community_attribute'):
             command += " " + config_data['neighbor']['send_community']['community_attribute']
@@ -331,15 +335,15 @@ def _tmplt_bgp_neighbor(config_data):
     return command
 
 def _tmplt_bgp_network(config_data):
-    import q
-    q(config_data)
     command = "network {address}".format(**config_data)
     if config_data.get("route_map"):
         command += " route-map {route_map}".format(**config_data)
     return command
 
 def _tmplt_bgp_route_target(config_data):
-    command = "route-target {action} {target}".format(**config_data)
+    import q
+    q("RRRRRRRRRRRRRRRRRRRr")
+    command = "route-target {action} {target}".format(**config_data['route_target'])
     return command
 
 def _tmplt_bgp_router_id(config_data):
@@ -350,28 +354,28 @@ def _tmplt_bgp_shutdown(config_data):
     return "shutdown"
 
 def _tmplt_bgp_timers(config_data):
-    command = "timers bgp {keepalive} {holdtime}".format(**config_data)
+    command = "timers bgp {keepalive} {holdtime}".format(**config_data['timers'])
     return command
 
 def _tmplt_bgp_ucmp(config_data):
     command = "ucmp"
-    if "fec" in config_data:
+    if "fec" in config_data['ucmp']:
         command += " fec threshold trigger"
-        command += " {trigger} clear {clear} warning-only".format(**config_data["fec"])
-    if "link_bandwidth" in config_data:
-        command += " link-bandwidth {mode}".format(**config_data["link_bandwidth"])
-        if config_data["link_bandwidth"].get('mode') == "update_delay":
-            command += " {update_delay}".format(**config_data["link_bandwidth"])
-    if "mode" in config_data:
+        command += " {trigger} clear {clear} warning-only".format(**config_data['ucmp']["fec"])
+    if "link_bandwidth" in config_data['ucmp']:
+        command += " link-bandwidth {mode}".format(**config_data['ucmp']["link_bandwidth"])
+        if config_data['ucmp']["link_bandwidth"].get('mode') == "update_delay":
+            command += " {update_delay}".format(**config_data['ucmp']["link_bandwidth"])
+    if "mode" in config_data['ucmp']:
         command += " mode 1"
-        if config_data["mode"].get('nexthops'):
-            command += " {nexthops}".format(**config_data["mode"])
+        if config_data["ucmp"]["mode"].get('nexthops'):
+            command += " {nexthops}".format(**config_data["ucmp"]["mode"])
     return command
 
 def _tmplt_bgp_update(config_data):
-    command = "update {wait_for}".format(**config_data)
-    if config_data.get("batch_size"):
-        command += " {batch_size}".format(**config_data)
+    command = "update {wait_for}".format(**config_data['update'])
+    if config_data['update'].get("batch_size"):
+        command += " {batch_size}".format(**config_data['update'])
     return command
 
 def _tmplt_bgp_vlan(config_data):
@@ -379,7 +383,7 @@ def _tmplt_bgp_vlan(config_data):
     return command
 
 def _tmplt_bgp_vlan_aware_bundle(config_data):
-    command = "vlan-aware-bundle {vlan_aware_bundle}".format(**config_data)
+    command = "vlan-aware-bundle " + config_data['vlan_aware_bundle']
     return command
 
 class Bgp_globalTemplate(NetworkTemplate):
@@ -412,6 +416,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": _tmplt_bgp_vrf,
+            "compval": "vrfs.vrf",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
@@ -461,6 +466,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s*bgp
                 \s+additional-paths
                 \s+(?P<action>\S+)
+                \s*(any)
                 *$""",
                 re.VERBOSE,
             ),
@@ -820,8 +826,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "bgp_params": {
                             "convergence": {
-                                "slow_peer": "{{ True }}",
-                                "time": "{{ time.split(" ")[1] if slow is undefined }}"
+                                "slow_peer": "{{ True if slow is defined else False}}",
+                                "time": "{{ time.split(" ")[1] }}"
                             }
                         }
                     }
@@ -1247,6 +1253,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": _tmplt_bgp_graceful_restart,
+            "remval": "graceful-restart",
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
@@ -1632,6 +1639,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": _tmplt_bgp_neighbor,
+            "remval": "neighbor {{ peer }} graceful-restart",
             "compval": "neighbor.graceful_restart",
             "result": {
                 "vrfs": {
@@ -2230,190 +2238,17 @@ class Bgp_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "neighbor.send_community_add",
-            "getval": re.compile(
-                r"""
-                \s*neighbor
-                \s+(?P<peer>\S+)
-                \s+send-community
-                \s+add
-                \s*(?P<attr>\S+)*
-                \s*(?P<link>aggregate|divide)*
-                \s*(?P<div>equal|ration)*
-                \s*(?P<speed>\S+)*
-                $""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_bgp_neighbor,
-            "compval": "neighbor.send_community",
-            "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "neighbor": {
-                            "{{ peer }}" : {
-                                "peer": "{{ peer }}",
-                                "send_community": {
-                                    "community_attribute": "{{ 'add' }}",
-                                    "sub_attribute": "{{ attr }}",
-                                    "link_bandwidth_attribute": "{{ link }}",
-                                    "speed": "{{ speed }}",
-                                    "divide": "{{ div }}"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-        },
-        {
-            "name": "neighbor.send_community_link_bandwidth",
-            "getval": re.compile(
-                r"""
-                \s*neighbor
-                \s+(?P<peer>\S+)
-                \s+send-community
-                \s+link-bandwidth
-                \s*(?P<link>aggregate|divide)*
-                \s*(?P<div>equal|ration)*
-                \s*(?P<speed>\S+)*
-                $""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_bgp_neighbor,
-            "compval": "neighbor.send_community",
-            "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "neighbor": {
-                            "{{ peer }}" : {
-                                "peer": "{{ peer }}",
-                                "send_community": {
-                                    "community_attribute": "{{ 'link_bandidth' }}",
-                                    "link_bandwidth_attribute": "{{ link }}",
-                                    "speed": "{{ speed }}",
-                                    "divide": "{{ div }}"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-        },
-        {
-            "name": "neighbor.send_community_extended",
-            "getval": re.compile(
-                r"""
-                \s*neighbor
-                \s+(?P<peer>\S+)
-                \s+send-community
-                \s+extended
-                \s*(?P<attr>\S+)*
-                \s*(?P<link>aggregate|divide)*
-                \s*(?P<div>equal|ration)*
-                \s*(?P<speed>\S+)*
-                $""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_bgp_neighbor,
-            "compval": "neighbor.send_community",
-            "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "neighbor": {
-                            "{{ peer }}" : {
-                                "peer": "{{ peer }}",
-                                "send_community": {
-                                    "community_attribute": "{{ 'extended' }}",
-                                    "sub_attribute": "{{ attr }}",
-                                    "link_bandwidth_attribute": "{{ link }}",
-                                    "speed": "{{ speed }}",
-                                    "divide": "{{ div }}"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-        },
-        {
-            "name": "neighbor.send_community_remove",
-            "getval": re.compile(
-                r"""
-                \s*neighbor
-                \s+(?P<peer>\S+)
-                \s+send-community
-                \s+remove
-                \s*(?P<attr>\S+)*
-                \s*(?P<link>aggregate|divide)*
-                \s*(?P<div>equal|ration)*
-                \s*(?P<speed>\S+)*
-                $""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_bgp_neighbor,
-            "compval": "neighbor.send_community",
-            "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "neighbor": {
-                            "{{ peer }}" : {
-                                "peer": "{{ peer }}",
-                                "send_community": {
-                                    "community_attribute": "{{ 'remove' }}",
-                                    "sub_attribute": "{{ attr }}",
-                                    "link_bandwidth_attribute": "{{ link }}",
-                                    "speed": "{{ speed }}",
-                                    "divide": "{{ div }}"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-        },
-        {
-            "name": "neighbor.send_community_standard",
-            "getval": re.compile(
-                r"""
-                \s*neighbor
-                \s+(?P<peer>\S+)
-                \s+send-community
-                \s+remove
-                \s*(?P<attr>\S+)*
-                \s*(?P<link>aggregate|divide)*
-                \s*(?P<div>equal|ration)*
-                \s*(?P<speed>\S+)*
-                $""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_bgp_neighbor,
-            "compval": "neighbor.send_community",
-            "result": {
-                "vrfs": {
-                    '{{ "vrf_" + vrf|d() }}': {
-                        "neighbor": {
-                            "{{ peer }}" : {
-                                "peer": "{{ peer }}",
-                                "send_community": {
-                                    "community_attribute": "{{ 'standard' }}",
-                                    "sub_attribute": "{{ attr }}",
-                                    "link_bandwidth_attribute": "{{ link }}",
-                                    "speed": "{{ speed }}",
-                                    "divide": "{{ div }}"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-        },
-        {
             "name": "neighbor.send_community",
             "getval": re.compile(
                 r"""
                 \s*neighbor
                 \s+(?P<peer>\S+)
                 \s+send-community
+                \s+(?P<comm>add|extended|link-bandwidth|remove|standard)*
+                \s*(?P<attr>extended|link-bandwidth|standard)*
+                \s*(?P<link>aggregate|divide)*
+                \s*(?P<div>equal|ratio)*
+                \s*(?P<speed>\S+)*
                 $""",
                 re.VERBOSE,
             ),
@@ -2426,7 +2261,12 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{ peer }}" : {
                                 "peer": "{{ peer }}",
                                 "send_community": {
-                                    "set": "{{ True }}"
+                                    "set": "{{ True if comm is not defined }}", 
+                                    "community_attribute": "{{ comm }}",
+                                    "sub_attribute": "{{ attr }}",
+                                    "link_bandwidth_attribute": "{{ link }}",
+                                    "speed": "{{ speed }}",
+                                    "divide": "{{ div }}"
                                 }
                             }
                         }
@@ -2434,6 +2274,175 @@ class Bgp_globalTemplate(NetworkTemplate):
                 }
             },
         },
+        # {
+        #     "name": "neighbor.send_community_link_bandwidth",
+        #     "getval": re.compile(
+        #         r"""
+        #         \s*neighbor
+        #         \s+(?P<peer>\S+)
+        #         \s+send-community
+        #         \s+link-bandwidth
+        #         \s*(?P<link>aggregate|divide)*
+        #         \s*(?P<div>equal|ratio)*
+        #         \s*(?P<speed>\S+)*
+        #         $""",
+        #         re.VERBOSE,
+        #     ),
+        #     "setval": _tmplt_bgp_neighbor,
+        #     "compval": "neighbor.send_community",
+        #     "result": {
+        #         "vrfs": {
+        #             '{{ "vrf_" + vrf|d() }}': {
+        #                 "neighbor": {
+        #                     "{{ peer }}" : {
+        #                         "peer": "{{ peer }}",
+        #                         "send_community": {
+        #                             "community_attribute": "{{ 'link_bandidth' }}",
+        #                             "link_bandwidth_attribute": "{{ link }}",
+        #                             "speed": "{{ speed }}",
+        #                             "divide": "{{ div }}"
+        #                         }
+        #                     }
+        #                 }
+        #             }
+        #         }
+        #     },
+        # },
+        # {
+        #     "name": "neighbor.send_community_extended",
+        #     "getval": re.compile(
+        #         r"""
+        #         \s*neighbor
+        #         \s+(?P<peer>\S+)
+        #         \s+send-community
+        #         \s+extended
+        #         \s*(?P<attr>\S+)*
+        #         \s*(?P<link>aggregate|divide)*
+        #         \s*(?P<div>equal|ratio)*
+        #         \s*(?P<speed>\S+)*
+        #         $""",
+        #         re.VERBOSE,
+        #     ),
+        #     "setval": _tmplt_bgp_neighbor,
+        #     "compval": "neighbor.send_community",
+        #     "result": {
+        #         "vrfs": {
+        #             '{{ "vrf_" + vrf|d() }}': {
+        #                 "neighbor": {
+        #                     "{{ peer }}" : {
+        #                         "peer": "{{ peer }}",
+        #                         "send_community": {
+        #                             "community_attribute": "{{ 'extended' }}",
+        #                             "sub_attribute": "{{ attr }}",
+        #                             "link_bandwidth_attribute": "{{ link }}",
+        #                             "speed": "{{ speed }}",
+        #                             "divide": "{{ div }}"
+        #                         }
+        #                     }
+        #                 }
+        #             }
+        #         }
+        #     },
+        # },
+        # {
+        #     "name": "neighbor.send_community_remove",
+        #     "getval": re.compile(
+        #         r"""
+        #         \s*neighbor
+        #         \s+(?P<peer>\S+)
+        #         \s+send-community
+        #         \s+remove
+        #         \s*(?P<attr>\S+)*
+        #         \s*(?P<link>aggregate|divide)*
+        #         \s*(?P<div>equal|ratio)*
+        #         \s*(?P<speed>\S+)*
+        #         $""",
+        #         re.VERBOSE,
+        #     ),
+        #     "setval": _tmplt_bgp_neighbor,
+        #     "compval": "neighbor.send_community",
+        #     "result": {
+        #         "vrfs": {
+        #             '{{ "vrf_" + vrf|d() }}': {
+        #                 "neighbor": {
+        #                     "{{ peer }}" : {
+        #                         "peer": "{{ peer }}",
+        #                         "send_community": {
+        #                             "community_attribute": "{{ 'remove' }}",
+        #                             "sub_attribute": "{{ attr }}",
+        #                             "link_bandwidth_attribute": "{{ link }}",
+        #                             "speed": "{{ speed }}",
+        #                             "divide": "{{ div }}"
+        #                         }
+        #                     }
+        #                 }
+        #             }
+        #         }
+        #     },
+        # },
+        # {
+        #     "name": "neighbor.send_community_standard",
+        #     "getval": re.compile(
+        #         r"""
+        #         \s*neighbor
+        #         \s+(?P<peer>\S+)
+        #         \s+send-community
+        #         \s+remove
+        #         \s*(?P<attr>\S+)*
+        #         \s*(?P<link>aggregate|divide)*
+        #         \s*(?P<div>equal|ratio)*
+        #         \s*(?P<speed>\S+)*
+        #         $""",
+        #         re.VERBOSE,
+        #     ),
+        #     "setval": _tmplt_bgp_neighbor,
+        #     "compval": "neighbor.send_community",
+        #     "result": {
+        #         "vrfs": {
+        #             '{{ "vrf_" + vrf|d() }}': {
+        #                 "neighbor": {
+        #                     "{{ peer }}" : {
+        #                         "peer": "{{ peer }}",
+        #                         "send_community": {
+        #                             "community_attribute": "{{ 'standard' }}",
+        #                             "sub_attribute": "{{ attr }}",
+        #                             "link_bandwidth_attribute": "{{ link }}",
+        #                             "speed": "{{ speed }}",
+        #                             "divide": "{{ div }}"
+        #                         }
+        #                     }
+        #                 }
+        #             }
+        #         }
+        #     },
+        # },
+        # {
+        #     "name": "neighbor.send_community",
+        #     "getval": re.compile(
+        #         r"""
+        #         \s*neighbor
+        #         \s+(?P<peer>\S+)
+        #         \s+send-community
+        #         $""",
+        #         re.VERBOSE,
+        #     ),
+        #     "setval": _tmplt_bgp_neighbor,
+        #     "compval": "neighbor.send_community",
+        #     "result": {
+        #         "vrfs": {
+        #             '{{ "vrf_" + vrf|d() }}': {
+        #                 "neighbor": {
+        #                     "{{ peer }}" : {
+        #                         "peer": "{{ peer }}",
+        #                         "send_community": {
+        #                             "set": "{{ True }}"
+        #                         }
+        #                     }
+        #                 }
+        #             }
+        #         }
+        #     },
+        # },
         {
             "name": "neighbor.shutdown",
             "getval": re.compile(
@@ -2781,7 +2790,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                         "ucmp": {
                             "link_bandwidth": {
                                 "mode": "{{ ucmp_mode }}",
-                                "update_delay": "{{ update_delay }}"
+                                "update_delay": "{{ update_delay.split(" ")[1] }}"
                             }
                         }
                     }
@@ -2868,7 +2877,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                        "vlan_aware_bundle": "{{ bundle.split(" ") }}",
+                        "vlan_aware_bundle": "{{ bundle }}",
                     }
                 }
             },
