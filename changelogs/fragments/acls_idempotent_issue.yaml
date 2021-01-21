@@ -1,0 +1,4 @@
+---
+bugfixes:
+  - replace list.copy() with list[:] to support python 2.7  and fix idempotent issue with
+    replaced and overridden (https://github.com/ansible-collections/arista.eos/pull/142).
