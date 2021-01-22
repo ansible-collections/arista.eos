@@ -401,7 +401,10 @@ class TestEosBgpafModule(TestEosModule):
                     "afi": "ipv4",
                     "bgp_params": {"additional_paths": "receive"},
                     "neighbor": [
-                        {"default_originate": {...}, "peer": "peer2"}
+                        {
+                            "default_originate": {"always": True},
+                            "peer": "peer2",
+                        }
                     ],
                     "network": [
                         {"address": "1.1.1.0/24"},
