@@ -62,7 +62,6 @@ options:
           standard:
             description: standard access-list or not
             type: bool
-            default: false
           name:
             description: Name of the acl-list
             type: str
