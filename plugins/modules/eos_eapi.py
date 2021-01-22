@@ -45,7 +45,6 @@ options:
       is disabled. By default, when eAPI is first configured, the HTTP protocol is
       disabled.
     type: bool
-    default: no
     aliases:
     - enable_http
   http_port:
@@ -78,7 +77,6 @@ options:
       only.  When the value is set to False, the HTTP local protocol is disabled.
     - Note is value is independent of the C(http) argument
     type: bool
-    default: no
     aliases:
     - enable_local_http
   local_http_port:
@@ -95,7 +93,6 @@ options:
       UDS will not be available to handle requests.  By default when eAPI is first
       configured, the UDS is disabled.
     type: bool
-    default: no
     aliases:
     - enable_socket
   timeout:

@@ -47,7 +47,6 @@ options:
         description:
         - Name/Identifier of the interface.
         type: str
-        required: True
       address_family:
         description:
         - OSPF settings on the interfaces in address-family context.
