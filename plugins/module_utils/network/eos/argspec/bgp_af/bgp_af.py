@@ -167,7 +167,7 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                                             "type": "str",
                                             "choices": ["mpls", "vxlan"],
                                         },
-                                        "source_interface": {"type": "str."},
+                                        "source_interface": {"type": "str"},
                                     },
                                 },
                                 "prefix_list": {
