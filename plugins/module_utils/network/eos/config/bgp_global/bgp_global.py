@@ -105,14 +105,6 @@ class Bgp_global(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state in ["deleted", "purged"]:
-
-            data = self._connection.get("show running-config | section bgp ")
-            for config_line in data.splitlines():
-                if 'address-family' in config_line:
-                    self._module.warn(" Please use bgp_af module to delete the address family\
-                        configurations before deleting the instance ")
-                    haved = {}
-                    break
             haved = {
                 k: v for k, v in iteritems(haved) if k in wantd or not wantd
             }
@@ -149,7 +141,7 @@ class Bgp_global(ResourceModule):
 
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
-                0, self._tmplt.render({"as_number": want['as_number']}, "router", False)
+                0, self._tmplt.render(want or have, "router", False)
             )
 
     def _compare_bgp_params(self, want, have):
