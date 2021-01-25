@@ -138,7 +138,13 @@ def _tmplt_bgp_redistribute(config_data):
     if config_data.get("isis_level"):
         command += " {isis_level}".format(**config_data)
     if config_data.get("ospf_route"):
-        command += " match {ospf_route}".format(**config_data)
+        if config_data['ospf_route'] == "nssa_external_2":
+            route = "nssa-external 2"
+        elif config_data['ospf_route'] == "nssa_external_1":
+            route = "nssa-external 1"
+        else:
+            route = config_data['ospf_route']
+        command += " match " + route
     if config_data.get("route_map"):
         command += " route-map {route_map}".format(**config_data)
     return command
@@ -341,8 +347,6 @@ def _tmplt_bgp_network(config_data):
     return command
 
 def _tmplt_bgp_route_target(config_data):
-    import q
-    q("RRRRRRRRRRRRRRRRRRRr")
     command = "route-target {action} {target}".format(**config_data['route_target'])
     return command
 
@@ -1246,8 +1250,8 @@ class Bgp_globalTemplate(NetworkTemplate):
             "name": "graceful_restart",
             "getval": re.compile(
                 r"""
-                \s*graceful-restart\s
-                \s*(?P<restart_time>resart-time\s\d+)*
+                \s*graceful-restart
+                \s*(?P<restart_time>restart-time\s\d+)*
                 \s*(?P<stalepath_time>stalepath-time\s\d+)*
                 $""",
                 re.VERBOSE,
@@ -2815,7 +2819,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "ucmp": {
                             "mode": {
-                                "set": "{{ True if ucmp_set == 1 }}",
+                                "set": "{{ True if ucmp_set == '1'}}",
                                 "nexthops": "{{ nexthop }}"
                             }
                         }

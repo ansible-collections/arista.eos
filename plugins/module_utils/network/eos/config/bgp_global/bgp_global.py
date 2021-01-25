@@ -31,6 +31,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_global import (
     Bgp_globalTemplate,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_global.bgp_global import (
+    Bgp_globalFacts,
+)
 import q
 
 class Bgp_global(ResourceModule):
@@ -210,13 +213,15 @@ class Bgp_global(ResourceModule):
         begin_negate = len(self.commands) 
         for name, entry in iteritems(hvrf):
             if name not in wvrf.keys():
-                self.commands.append(
-                    self._tmplt.render({"vrf": name}, "vrf", True)
-                )
+                if self._check_af(name):
+                    self._module.fail_json(
+                        msg="Use the _bgp_af module to delete the address_family under vrf, before replacing/deleting the vrf."
+                    )
+                else:
+                    self.commands.append(
+                        self._tmplt.render({"vrf": name}, "vrf", True)
+                    )
                 continue
-            # self._compare_neighbor({}, entry)
-            # self._compare_lists({}, entry)
-            # self._compare_bgp_params({}, entry)
             self.compare(parsers=self.parsers, want={}, have=entry)
             after_negate = len(self.commands)
             if after_negate != begin_negate:
@@ -233,6 +238,20 @@ class Bgp_global(ResourceModule):
                         begin_negate, self._tmplt.render({"vrf": name}, "vrf", False)
                     )
                     self.commands.append("exit")
+
+    def _check_af (self, vrf):
+        af_present = False
+        if self._connection:
+            config_lines = Bgp_globalFacts.get_config(self, self._connection).splitlines()
+            index = [i for i, el in enumerate(config_lines) if vrf in el]
+            if index:
+                for line in config_lines[index[0]+1::]:
+                    if "vrf" in line:
+                        break
+                    if "address-family" in line:
+                        af_present = True
+                        break
+        return af_present    
 
     def _compare_neighbor(self, want, have):
         parsers = [
@@ -281,8 +300,7 @@ class Bgp_global(ResourceModule):
         hneigh = have.pop("neighbor", {})
         for name, entry in iteritems(wneigh):
             for k,v in entry.items():
-                if k == "peer":
-                    peer = v
+                peer =  entry["peer"]
                 if hneigh.get(name):
                     h = {"peer": peer, k: hneigh[name].pop(k, {})}
                 else:
@@ -298,8 +316,7 @@ class Bgp_global(ResourceModule):
                 self.commands.append("no neighbor " + name)
                 continue
             for k,v in entry.items():
-                if k == "peer":
-                    peer = v
+                peer = entry["peer"]
                 self.compare(parsers=parsers, want={}, have={"neighbor": {"peer": peer, k: v}})
 
     def _compare_lists(self, want, have):
