@@ -1,0 +1,117 @@
+---
+merged:
+  commands:
+    - router bgp 65535
+    - vrf vrf01
+    - redistribute isis level-2
+    - network 6.6.6.0/24 route-map netmap1
+    - network 10.1.0.0/16
+    - default-metric 433
+    - route-target export 44:22
+    - exit
+    - neighbor peer1 maximum-routes 12000
+    - neighbor peer1 peer-group
+    - neighbor peer1 send-community link-bandwidth divide ratio
+    - neighbor peer2 maximum-routes 12000
+    - neighbor peer2 peer-group
+    - redistribute ospf match nssa-external 2
+    - redistribute static
+    - redistribute rip route-map MAP01
+    - aggregate-address 1.1.1.0/24 as-set summary-only
+    - aggregate-address 5.1.0.0/16 attribute-map attrmap
+    - timers bgp 44 100
+    - ucmp link-bandwidth recursive
+    - vlan-aware-bundle bundle1 bundle3 
+deleted:
+  after:
+    as_number: "65535"
+
+replaced:
+  commands:
+    - router bgp 65535
+    - vrf vrf02
+    - redistribute isis level-2
+    - timers bgp 44 100
+    - exit
+    - no vrf vrf01
+    - no neighbor peer1 peer-group
+    - no neighbor peer1 send-community link-bandwidth divide ratio
+    - no neighbor peer1 maximum-routes 12000
+    - no neighbor peer2 peer-group
+    - no neighbor peer2 maximum-routes 12000
+    - redistribute isis level-2
+    - no redistribute ospf match nssa-external 2
+    - no redistribute static
+    - no redistribute rip route-map MAP01
+    - network 6.6.6.0/24 route-map netmap1
+    - network 10.1.0.0/16
+    - no aggregate-address 1.1.1.0/24 as-set summary-only
+    - no aggregate-address 5.1.0.0/16 attribute-map attrmap
+    - no timers bgp 44 100
+    - no ucmp link-bandwidth recursive
+    - no vlan-aware-bundle bundle1 bundle3
+  after:
+    as_number: "65535"
+    redistribute:
+      - protocol: "isis"
+        isis_level: "level-2"
+    network:
+      - address: "6.6.6.0/24"
+        route_map: "netmap1"
+      - address: "10.1.0.0/16"
+    vrfs:
+      - vrf: "vrf02"
+        timers:
+          holdtime: 100
+          keepalive: 44
+        redistribute:
+          - protocol: "isis"
+            isis_level: "level-2"
+populate:
+  global:
+    as_number: "65535"
+    aggregate_address:
+      - address: "1.1.1.0/24"
+        as_set: true
+        summary_only: true
+      - address: "5.1.0.0/16"
+        attribute_map: "attrmap"
+    neighbor:
+      - maximum_received_routes:
+          count: 12000
+        peer: "peer1"
+        peer_group: "peer1"
+        send_community:
+          community_attribute: "link-bandwidth"
+          divide: "ratio"
+          link_bandwidth_attribute: "divide"
+      - maximum_received_routes:
+          count: 12000
+        peer: "peer2"
+        peer_group: "peer2"
+    redistribute:
+      - protocol: "ospf"
+        ospf_route: "nssa_external_2"
+      - protocol: "static"
+      - protocol: "rip"
+        route_map: "MAP01"
+    timers:
+      holdtime: 100
+      keepalive: 44
+    ucmp:
+      link_bandwidth:
+        mode: "recursive"
+    vlan_aware_bundle: "bundle1 bundle3"
+    vrfs:
+      - vrf: "vrf01"
+        default_metric: 433
+        network:
+          - address: "6.6.6.0/24"
+            route_map: "netmap1"
+          - address: "10.1.0.0/16"
+        redistribute:
+          - protocol: "isis"
+            isis_level: "level-2"
+        route_target:
+          action: "export"
+          target: "44:22"
