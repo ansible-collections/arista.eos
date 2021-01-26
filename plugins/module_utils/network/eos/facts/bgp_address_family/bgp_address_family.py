@@ -102,7 +102,9 @@ class Bgp_afFacts(object):
                             af["network"], key=lambda k: k["address"]
                         )
 
-        ansible_facts["ansible_network_resources"].pop("bgp_address_family", None)
+        ansible_facts["ansible_network_resources"].pop(
+            "bgp_address_family", None
+        )
 
         params = utils.remove_empties(
             utils.validate_config(self.argument_spec, {"config": objs})
