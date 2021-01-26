@@ -4,6 +4,7 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 """
@@ -12,7 +13,6 @@ It is in this file the configuration is collected from the device
 for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
-from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
@@ -25,11 +25,12 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp
     Bgp_globalArgs,
 )
 
+
 class Bgp_globalFacts(object):
     """ The eos bgp_global facts class
     """
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Bgp_globalArgs.argument_spec
 
@@ -65,9 +66,8 @@ class Bgp_globalFacts(object):
             if "address-family" in bgp_line:
                 start = True
                 self._af = True
-            if start and '!' in bgp_line:
+            if start and "!" in bgp_line:
                 start = False
-
 
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_globalTemplate(lines=bgp_global_config)
@@ -81,11 +81,10 @@ class Bgp_globalFacts(object):
             if "vrfs" in objs:
                 objs["vrfs"] = list(objs["vrfs"].values())
                 for vrf in objs["vrfs"]:
-                     if "neighbor" in vrf:
+                    if "neighbor" in vrf:
                         vrf["neighbor"] = list(vrf["neighbor"].values())
-                     if "network" in vrf:
-                        vrf["network"] = list(vrf["network"].values()) 
-
+                    if "network" in vrf:
+                        vrf["network"] = list(vrf["network"].values())
 
             if "neighbor" in objs:
                 objs["neighbor"] = list(objs["neighbor"].values())
@@ -93,15 +92,13 @@ class Bgp_globalFacts(object):
             if "network" in objs:
                 objs["network"] = list(objs["network"].values())
 
-                         
-
-        ansible_facts['ansible_network_resources'].pop('bgp_global', None)
+        ansible_facts["ansible_network_resources"].pop("bgp_global", None)
 
         params = utils.remove_empties(
             utils.validate_config(self.argument_spec, {"config": objs})
         )
 
-        facts['bgp_global'] = params.get("config", [])
-        ansible_facts['ansible_network_resources'].update(facts)
+        facts["bgp_global"] = params.get("config", [])
+        ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

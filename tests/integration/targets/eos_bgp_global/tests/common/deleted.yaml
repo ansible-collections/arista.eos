@@ -12,7 +12,7 @@
       register: result
       arista.eos.eos_bgp_global: &deleted
         config:
-            as_number: "65535"
+          as_number: "65535"
         state: deleted
 
     - become: true

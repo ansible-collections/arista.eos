@@ -11,53 +11,53 @@
       arista.eos.eos_bgp_global: &rendered
         state: "rendered"
         config:
-            as_number: "65535"
-            aggregate_address:
-              - address: "1.1.1.0/24"
-                as_set: true
-                summary_only: true
-              - address: "5.1.0.0/16"
-                attribute_map: "attrmap"
-            neighbor:
-              - maximum_received_routes:
-                  count: 12000
-                peer: "peer1"
-                peer_group: "peer1"
-                send_community:
-                  community_attribute: "link-bandwidth"
-                  divide: "ratio"
-                  link_bandwidth_attribute: "divide"
-              - maximum_received_routes:
-                  count: 12000
-                peer: "peer2"
-                peer_group: "peer2"
-            redistribute:
-              - protocol: "ospf"
-                ospf_route: "nssa_external_2"
-              - protocol: "static"
-              - protocol: "rip"
-                route_map: "MAP01"
-            timers:
-              holdtime: 100
-              keepalive: 44
-            ucmp:
-              link_bandwidth:
-                mode: "recursive"
-            vlan_aware_bundle: "bundle1 bundle3"
-            vrfs:
-              - vrf: "vrf01"
-                default_metric: 433
-                network:
-                  - address: "6.6.6.0/24"
-                    route_map: "netmap1"
-                  - address: "10.1.0.0/16"
-                redistribute:
-                  - protocol: "isis"
-                    isis_level: "level-2"
-                route_target:
-                  action: "export"
-                  target: "44:22"
+          as_number: "65535"
+          aggregate_address:
+            - address: "1.1.1.0/24"
+              as_set: true
+              summary_only: true
+            - address: "5.1.0.0/16"
+              attribute_map: "attrmap"
+          neighbor:
+            - maximum_received_routes:
+                count: 12000
+              peer: "peer1"
+              peer_group: "peer1"
+              send_community:
+                community_attribute: "link-bandwidth"
+                divide: "ratio"
+                link_bandwidth_attribute: "divide"
+            - maximum_received_routes:
+                count: 12000
+              peer: "peer2"
+              peer_group: "peer2"
+          redistribute:
+            - protocol: "ospf"
+              ospf_route: "nssa_external_2"
+            - protocol: "static"
+            - protocol: "rip"
+              route_map: "MAP01"
+          timers:
+            holdtime: 100
+            keepalive: 44
+          ucmp:
+            link_bandwidth:
+              mode: "recursive"
+          vlan_aware_bundle: "bundle1 bundle3"
+          vrfs:
+            - vrf: "vrf01"
+              default_metric: 433
+              network:
+                - address: "6.6.6.0/24"
+                  route_map: "netmap1"
+                - address: "10.1.0.0/16"
+              redistribute:
+                - protocol: "isis"
+                  isis_level: "level-2"
+              route_target:
+                action: "export"
+                target: "44:22"
     - assert:
         that:
-           - result.changed == false
-           - result.rendered|symmetric_difference(merged.commands) == []
+          - result.changed == false
+          - result.rendered|symmetric_difference(merged.commands) == []

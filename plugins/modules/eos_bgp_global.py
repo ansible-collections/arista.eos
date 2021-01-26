@@ -27,6 +27,7 @@ The module file for eos_bgp_global
 """
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -44,22 +45,9 @@ options:
       description: A list of configurations for BGP global.
       type: dict
       suboptions:
-        AS_number:
+        as_number:
           description: Autonomous system number.
           type: str
-        address_family:
-          description: Enable address family and enter its config mode
-          type: list
-          elements: dict
-          suboptions:
-            afi:
-              description: address family.
-              type: str
-              choices: ['ipv4', 'ipv6', 'evpn']
-            af_type:
-              description: Address family type for ipv4.
-              type: str
-              choices: ['labeled_unicast', 'multicast']
         aggregate_address:
           description: Configure aggregate address.
           type: list
@@ -81,7 +69,7 @@ options:
               type: str
             match_map:
               description: Name of the route map used to filter the contributors of the
-                  aggregate route.  
+                  aggregate route.
               type: str
             summary_only:
               description: Filters all more-specific routes from updates.
@@ -93,7 +81,7 @@ options:
             additional_paths:
               description: BGP additional-paths commands
               type: str
-              choices: ['install', 'send', 'receive'] 
+              choices: ['install', 'send', 'receive']
             advertise_inactive:
               description: Advertise BGP routes even if they are inactive in RIB.
               type: bool
@@ -158,10 +146,10 @@ options:
               suboptions:
                 identifier:
                   description: Confederation identifier.
-                  type: int
+                  type: str
                 peers:
                   description: Confederation peers.
-                  type: list  
+                  type: str
             control_plan_filter:
               description: Control plane filter for BGP.
               type: bool
@@ -171,7 +159,7 @@ options:
               suboptions:
                 slow_peer:
                   description: Maximum amount of time to wait for slow peers to estabilsh session.
-                  type: int
+                  type: bool
                 time:
                   description: time in secs
                   type: int
@@ -253,13 +241,26 @@ options:
                   type: bool
                 preserve:
                   description: preserve route attributes, overwriting route-map changes
-                  type: bool 
+                  type: bool
             transport:
               description: Configure transport port for TCP session
               type: int
         default_metric:
           description: Default metric.
           type: int
+        distance:
+          description: Define an administrative distance.
+          type: dict
+          suboptions:
+            external:
+              description: distance for external routes.
+              type: int
+            internal:
+              description: distance for internal routes.
+              type: int
+            local:
+              description: distance for local routes.
+              type: int
         graceful_restart:
           description: Enable graceful restart mode.
           type: dict
@@ -271,17 +272,17 @@ options:
               description: Set the max time needed to restart and come back up.
               type: int
             stalepath_time:
-              decription: Set the max time to hold onto restarting peer stale paths.
+              description: Set the max time to hold onto restarting peer stale paths.
               type: int
         graceful_restart_helper:
           description: Enable graceful restart helper mode.
           type: bool
         access_group:
-          desscription: ip/ipv6 access list configuration.
+          description: ip/ipv6 access list configuration.
           type: dict
           suboptions:
             afi:
-              desscription: Specify ip/ipv6.
+              description: Specify ip/ipv6.
               type: str
               choices: ['ipv4', 'ipv6']
             acl_name:
@@ -317,7 +318,7 @@ options:
             timestamp:
               description: BGP monitoring protocol Per-Peer Header timestamp behavior.
               type: str
-              choices: ['none', 'send_time'] 
+              choices: ['none', 'send_time']
         neighbor:
           description: Configure routing for a network.
           type: list
@@ -344,7 +345,7 @@ options:
               description: Automatically determine the local address to be used
                              for the non-transport AF.
               type: bool
-            default_orignate:
+            default_originate:
               description: Originate default route to this neighbor.
               type: dict
               suboptions:
@@ -352,7 +353,7 @@ options:
                   description: Route map reference.
                   type: str
                 always:
-                  descrition: Always originate default route to this neighbor.
+                  description: Always originate default route to this neighbor.
                   type: bool
             description:
               description: Text describing the neighbor.
@@ -381,7 +382,7 @@ options:
               type: int
             fall_over:
               description: Configure BFD protocol options for this peer.
-              type: bool 
+              type: bool
             graceful_restart:
               description: Enable graceful restart mode.
               type: bool
@@ -426,7 +427,7 @@ options:
             local_v6_addr:
               description: The local IPv6 address of the neighbor in A:B:C:D:E:F:G:H format.
               type: str
-            maximum_accepted_route:
+            maximum_accepted_routes:
               description: Maximum number of routes accepted from this peer.
               type: dict
               suboptions:
@@ -476,7 +477,7 @@ options:
               type: str
             out_delay:
               description: Delay outbound route updates.
-              type: int.
+              type: int
             encryption_password:
               description: Password to use in computation of MD5 hash.
               type: dict
@@ -506,8 +507,8 @@ options:
                   type: bool
             peer_group:
               description: Name of the peer-group.
-              type: str 
-        
+              type: str
+
             prefix_list:
               description: Prefix list reference.
               type: dict
@@ -546,14 +547,14 @@ options:
                 sub_attribute:
                   description: Attribute to be sent to the neighbor.
                   type: str
-                  choices: ['extended', 'link_bandwidth', 'standard']
+                  choices: ['extended', 'link-bandwidth', 'standard']
                 link_bandwidth_attribute:
                   description: cumulative/aggregate attribute to be sent.
                   type: str
                   choices: ['aggregate', 'divide']
                 speed:
                   description: Reference link speed in bits/second
-                  type: str 
+                  type: str
                 divide:
                   description: link-bandwidth divide attribute.
                   type: str
@@ -587,21 +588,22 @@ options:
                   type: int
             ttl:
               description: BGP ttl security check
-              type: int 
+              type: int
             update_source:
               description: Specify the local source interface for peer BGP
                              sessions.
               type: str
             weight:
               description: Weight to assign.
-              type: int 
+              type: int
         network:
           description: Configure routing for a network.
-          type: dict
+          type: list
+          elements: dict
           suboptions:
             address:
               description: address prefix.
-              type: int
+              type: str
             route_map:
               description: Name of route map.
               type: str
@@ -609,11 +611,11 @@ options:
           description: Redistribute routes in to BGP.
           type: list
           elements: dict
-          suboptions:         
+          suboptions:
             protocol:
               description: Routes to be redistributed.
               type: str
-              choices: ['isis', 'ospf3', 'ospf', 'attached_host', 'connected', 'rip', 'static']
+              choices: ['isis', 'ospf3', 'ospf', 'attached-host', 'connected', 'rip', 'static']
             route_map:
               description: Route map reference.
               type: str
@@ -624,10 +626,21 @@ options:
             ospf_route:
               description: ospf route options.
               type: str
-              choices: ['internal', 'external', 'nssa_external_1', 'nssa_external_2']  
+              choices: ['internal', 'external', 'nssa_external_1', 'nssa_external_2']
         router_id:
           description: Router id.
           type: str
+        route_target:
+          description: Route target.
+          type: dict
+          suboptions:
+            action:
+              description: Route action.
+              type: str
+              choices: ['both', 'import', 'export']
+            target:
+              description: Route Target.
+              type: str
         shutdown:
           description: When True, shut down BGP.
           type: bool
@@ -692,14 +705,13 @@ options:
           type: int
         vlan_aware_bundle:
           description: Configure MAC VRF BGP for multiple VLAN support.
-          type: list
-          elements: str
-        vrf:
+          type: str
+        vrfs:
           description: Configure BGP in a VRF.
           type: list
           elements: dict
           suboptions:
-            name:
+            vrf:
              description: VRF name.
              type: str
             aggregate_address:
@@ -723,7 +735,7 @@ options:
                   type: str
                 match_map:
                   description: Name of the route map used to filter the contributors of the
-                      aggregate route.  
+                      aggregate route.
                   type: str
                 summary_only:
                   description: Filters all more-specific routes from updates.
@@ -735,7 +747,7 @@ options:
                 additional_paths:
                   description: BGP additional-paths commands
                   type: str
-                  choices: ['install', 'send', 'receive'] 
+                  choices: ['install', 'send', 'receive']
                 advertise_inactive:
                   description: Advertise BGP routes even if they are inactive in RIB.
                   type: bool
@@ -800,10 +812,10 @@ options:
                   suboptions:
                     identifier:
                       description: Confederation identifier.
-                      type: int
+                      type: str
                     peers:
                       description: Confederation peers.
-                      type: list  
+                      type: str
                 control_plane_filter:
                   description: Control plane filter for BGP.
                   type: bool
@@ -813,7 +825,7 @@ options:
                   suboptions:
                     slow_peer:
                       description: Maximum amount of time to wait for slow peers to estabilsh session.
-                      type: int
+                      type: bool
                     time:
                       description: time in secs
                       type: int
@@ -895,7 +907,7 @@ options:
                       type: bool
                     preserve:
                       description: preserve route attributes, overwriting route-map changes
-                      type: bool 
+                      type: bool
                 transport:
                   description: Configure transport port for TCP session
                   type: int
@@ -907,7 +919,7 @@ options:
               type: dict
               suboptions:
                 external:
-                  descriptions: distance for external routes.
+                  description: distance for external routes.
                   type: int
                 internal:
                   description: distance for internal routes.
@@ -926,17 +938,17 @@ options:
                   description: Set the max time needed to restart and come back up.
                   type: int
                 stalepath_time:
-                  decription: Set the max time to hold onto restarting peer stale paths.
+                  description: Set the max time to hold onto restarting peer stale paths.
                   type: int
             graceful_restart_helper:
               description: Enable graceful restart helper mode.
               type: bool
             access_group:
-              desscription: ip/ipv6 access list configuration.
+              description: ip/ipv6 access list configuration.
               type: dict
               suboptions:
                 afi:
-                  desscription: Specify ip/ipv6.
+                  description: Specify ip/ipv6.
                   type: str
                   choices: ['ip', 'ipv6']
                 acl_name:
@@ -981,7 +993,7 @@ options:
                   description: Automatically determine the local address to be used
                                  for the non-transport AF.
                   type: bool
-                default_orignate:
+                default_originate:
                   description: Originate default route to this neighbor.
                   type: dict
                   suboptions:
@@ -989,7 +1001,7 @@ options:
                       description: Route map reference.
                       type: str
                     always:
-                      descrition: Always originate default route to this neighbor.
+                      description: Always originate default route to this neighbor.
                       type: bool
                 description:
                   description: Text describing the neighbor.
@@ -1018,7 +1030,7 @@ options:
                   type: int
                 fall_over:
                   description: Configure BFD protocol options for this peer.
-                  type: bool 
+                  type: bool
                 graceful_restart:
                   description: Enable graceful restart mode.
                   type: bool
@@ -1063,7 +1075,7 @@ options:
                 local_v6_addr:
                   description: The local IPv6 address of the neighbor in A:B:C:D:E:F:G:H format.
                   type: str
-                maximum_accepted_route:
+                maximum_accepted_routes:
                   description: Maximum number of routes accepted from this peer.
                   type: dict
                   suboptions:
@@ -1113,7 +1125,7 @@ options:
                   type: str
                 out_delay:
                   description: Delay outbound route updates.
-                  type: int.
+                  type: int
                 encryption_password:
                   description: Password to use in computation of MD5 hash.
                   type: dict
@@ -1143,8 +1155,8 @@ options:
                       type: bool
                 peer_group:
                   description: Name of the peer-group.
-                  type: str 
-            
+                  type: str
+
                 prefix_list:
                   description: Prefix list reference.
                   type: dict
@@ -1183,14 +1195,14 @@ options:
                     sub_attribute:
                       description: Attribute to be sent to the neighbor.
                       type: str
-                      choices: ['extended', 'link_bandwidth', 'standard']
+                      choices: ['extended', 'link-bandwidth', 'standard']
                     link_bandwidth_attribute:
                       description: cumulative/aggregate attribute to be sent.
                       type: str
                       choices: ['aggregate', 'divide']
                     speed:
                       description: Reference link speed in bits/second
-                      type: str 
+                      type: str
                     divide:
                       description: link-bandwidth divide attribute.
                       type: str
@@ -1224,21 +1236,22 @@ options:
                       type: int
                 ttl:
                   description: BGP ttl security check
-                  type: int 
+                  type: int
                 update_source:
                   description: Specify the local source interface for peer BGP
                                  sessions.
                   type: str
                 weight:
                   description: Weight to assign.
-                  type: int 
+                  type: int
             network:
               description: Configure routing for a network.
-              type: dict
+              type: list
+              elements: dict
               suboptions:
                 address:
                   description: address prefix.
-                  type: int
+                  type: str
                 route_map:
                   description: Name of route map.
                   type: str
@@ -1246,11 +1259,11 @@ options:
               description: Redistribute routes in to BGP.
               type: list
               elements: dict
-              suboptions:         
+              suboptions:
                 protocol:
                   description: Routes to be redistributed.
                   type: str
-                  choices: ['isis', 'ospf3', 'ospf', 'attached_host', 'connected', 'rip', 'static']
+                  choices: ['isis', 'ospf3', 'ospf', 'attached-host', 'connected', 'rip', 'static']
                 route_map:
                   description: Route map reference.
                   type: str
@@ -1261,7 +1274,7 @@ options:
                 ospf_route:
                   description: ospf route options.
                   type: str
-                  choices: ['internal', 'external', 'nssa_external_1', 'nssa_external_2']  
+                  choices: ['internal', 'external', 'nssa_external_1', 'nssa_external_2']
             route_target:
               description: Route target.
               type: dict
@@ -1348,15 +1361,915 @@ options:
       description:
       - The state the configuration should be left in.
       type: str
-      choices: [deleted, merged, overridden, replaced, gathered, rendered, parsed]
+      choices: [deleted, merged, purged, replaced, gathered, rendered, parsed]
       default: merged
-EXAMPLES:
-- deleted_example_01.txt
-- merged_example_01.txt
-- overridden_example_01.txt
-- replaced_example_01.txt
-- gathered_example_01.txt
-- rendered_example_01.txt
+"""
+EXAMPLES = """
+# Using merged
+# Before state
+
+# veos(config)#show running-config | section bgp
+# veos(config)#
+
+  - name: Merge provided configuration with device configuration
+    arista.eos.eos_bgp_global:
+      config:
+        as_number: "100"
+        bgp_params:
+          host_routes: True
+          convergence:
+            slow_peer: True
+            time: 6
+          additional_paths: "send"
+          log_neighbor_changes: True
+        maximum_paths:
+          max_equal_cost_paths: 55
+        aggregate_address:
+          - address: "1.2.1.0/24"
+            as_set: true
+            match_map: "match01"
+          - address: "5.2.1.0/24"
+            attribute_map: "attrmatch01"
+            advertise_only: true
+        redistribute:
+          - protocol: "static"
+            route_map: "map_static"
+          - protocol: "attached-host"
+        distance:
+          internal: 50
+        neighbor:
+          - peer: "10.1.3.2"
+            allowas_in:
+              set: true
+            default_originate:
+              always: true
+            dont_capability_negotiate: true
+            export_localpref: 4000
+            maximum_received_routes:
+              count: 500
+              warning_limit:
+                limit_percent: 5
+            next_hop_unchanged: true
+            prefix_list:
+              name: "prefix01"
+              direction: "out"
+          - peer: "peer1"
+            fall_over: true
+            link_bandwidth:
+              update_delay: 5
+            monitoring: True
+            send_community:
+              community_attribute: "extended"
+              sub_attribute: "link-bandwidth"
+              link_bandwidth_attribute: "aggregate"
+              speed: "600"
+        vlan: 5
+      state: merged
+
+# After State:
+# veos(config)#show running-config | section bgp
+# router bgp 100
+#    bgp convergence slow-peer time 6
+#    distance bgp 50 50 50
+#    maximum-paths 55
+#    bgp additional-paths send any
+#    neighbor peer1 peer-group
+#    neighbor peer1 link-bandwidth update-delay 5
+#    neighbor peer1 fall-over bfd
+#    neighbor peer1 monitoring
+#    neighbor peer1 send-community extended link-bandwidth aggregate 600
+#    neighbor peer1 maximum-routes 12000
+#    neighbor 10.1.3.2 export-localpref 4000
+#    neighbor 10.1.3.2 next-hop-unchanged
+#    neighbor 10.1.3.2 dont-capability-negotiate
+#    neighbor 10.1.3.2 allowas-in 3
+#    neighbor 10.1.3.2 default-originate always
+#    neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+#    aggregate-address 1.2.1.0/24 as-set match-map match01
+#    aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+#    redistribute static route-map map_static
+#    redistribute attached-host
+#    !
+#    vlan 5
+#    !
+#    address-family ipv4
+#       neighbor 10.1.3.2 prefix-list prefix01 out
+# veos(config)#
+#
+# Module Execution:
+#
+# "after": {
+#         "aggregate_address": [
+#             {
+#                 "address": "1.2.1.0/24",
+#                 "as_set": true,
+#                 "match_map": "match01"
+#             },
+#             {
+#                 "address": "5.2.1.0/24",
+#                 "advertise_only": true,
+#                 "attribute_map": "attrmatch01"
+#             }
+#         ],
+#         "as_number": "100",
+#         "bgp_params": {
+#             "additional_paths": "send",
+#             "convergence": {
+#                 "slow_peer": true,
+#                 "time": 6
+#             }
+#         },
+#         "distance": {
+#             "external": 50,
+#             "internal": 50,
+#             "local": 50
+#         },
+#         "maximum_paths": {
+#             "max_equal_cost_paths": 55
+#         },
+#         "neighbor": [
+#             {
+#                 "fall_over": true,
+#                 "link_bandwidth": {
+#                     "set": true,
+#                     "update_delay": 5
+#                 },
+#                 "maximum_received_routes": {
+#                     "count": 12000
+#                 },
+#                 "monitoring": true,
+#                 "peer": "peer1",
+#                 "peer_group": "peer1",
+#                 "send_community": {
+#                     "community_attribute": "extended",
+#                     "link_bandwidth_attribute": "aggregate",
+#                     "speed": "600",
+#                     "sub_attribute": "link-bandwidth"
+#                 }
+#             },
+#             {
+#                 "allowas_in": {
+#                     "count": 3
+#                 },
+#                 "default_originate": {
+#                     "always": true
+#                 },
+#                 "dont_capability_negotiate": true,
+#                 "export_localpref": 4000,
+#                 "maximum_received_routes": {
+#                     "count": 500,
+#                     "warning_limit": {
+#                         "limit_percent": 5
+#                     }
+#                 },
+#                 "next_hop_unchanged": true,
+#                 "peer": "10.1.3.2"
+#             }
+#         ],
+#         "redistribute": [
+#             {
+#                 "protocol": "static",
+#                 "route_map": "map_static"
+#             },
+#             {
+#                 "protocol": "attached-host"
+#             }
+#         ],
+#         "vlan": 5
+#     },
+#     "before": {},
+#     "changed": true,
+#     "commands": [
+#         "router bgp 100",
+#         "neighbor 10.1.3.2 allowas-in",
+#         "neighbor 10.1.3.2 default-originate always",
+#         "neighbor 10.1.3.2 dont-capability-negotiate",
+#         "neighbor 10.1.3.2 export-localpref 4000",
+#         "neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent",
+#         "neighbor 10.1.3.2 next-hop-unchanged",
+#         "neighbor 10.1.3.2 prefix-list prefix01 out",
+#         "neighbor peer1 fall-over bfd",
+#         "neighbor peer1 link-bandwidth update-delay 5",
+#         "neighbor peer1 monitoring",
+#         "neighbor peer1 send-community extended link-bandwidth aggregate 600",
+#         "redistribute static route-map map_static",
+#         "redistribute attached-host",
+#         "aggregate-address 1.2.1.0/24 as-set match-map match01",
+#         "aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only",
+#         "bgp host-routes fib direct-install",
+#         "bgp convergence slow-peer time 6",
+#         "bgp additional-paths send any",
+#         "bgp log-neighbor-changes",
+#         "maximum-paths 55",
+#         "distance bgp 50",
+#         "vlan 5"
+#     ],
+
+# Using replaced:
+
+# Before state:
+# veos(config)#show running-config | section bgp
+# router bgp 100
+#    bgp convergence slow-peer time 6
+#    distance bgp 50 50 50
+#    maximum-paths 55
+#    bgp additional-paths send any
+#    neighbor peer1 peer-group
+#    neighbor peer1 link-bandwidth update-delay 5
+#    neighbor peer1 fall-over bfd
+#    neighbor peer1 monitoring
+#    neighbor peer1 send-community extended link-bandwidth aggregate 600
+#    neighbor peer1 maximum-routes 12000
+#    neighbor 10.1.3.2 export-localpref 4000
+#    neighbor 10.1.3.2 next-hop-unchanged
+#    neighbor 10.1.3.2 dont-capability-negotiate
+#    neighbor 10.1.3.2 allowas-in 3
+#    neighbor 10.1.3.2 default-originate always
+#    neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+#    aggregate-address 1.2.1.0/24 as-set match-map match01
+#    aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+#    redistribute static route-map map_static
+#    redistribute attached-host
+#    !
+#    vlan 5
+#    !
+#    address-family ipv4
+#       neighbor 10.1.3.2 prefix-list prefix01 out
+#    !
+#    vrf vrf01
+#       route-target import 54:11
+#       neighbor 12.1.3.2 dont-capability-negotiate
+#       neighbor 12.1.3.2 allowas-in 3
+#       neighbor 12.1.3.2 default-originate always
+#       neighbor 12.1.3.2 maximum-routes 12000
+# veos(config)#
+
+  - name: replace provided configuration with device configuration
+    arista.eos.eos_bgp_global:
+      config:
+        as_number: "100"
+        bgp_params:
+          host_routes: True
+          convergence:
+            slow_peer: True
+            time: 6
+          additional_paths: "send"
+          log_neighbor_changes: True
+        vrfs:
+          - vrf: "vrf01"
+            maximum_paths:
+              max_equal_cost_paths: 55
+            aggregate_address:
+              - address: "1.2.1.0/24"
+                as_set: true
+                match_map: "match01"
+              - address: "5.2.1.0/24"
+                attribute_map: "attrmatch01"
+                advertise_only: true
+            redistribute:
+              - protocol: "static"
+                route_map: "map_static"
+              - protocol: "attached-host"
+            distance:
+              internal: 50
+            neighbor:
+              - peer: "10.1.3.2"
+                allowas_in:
+                  set: true
+                default_originate:
+                  always: true
+                dont_capability_negotiate: true
+                export_localpref: 4000
+                maximum_received_routes:
+                  count: 500
+                  warning_limit:
+                    limit_percent: 5
+                next_hop_unchanged: true
+                prefix_list:
+                  name: "prefix01"
+                  direction: "out"
+              - peer: "peer1"
+                fall_over: true
+                link_bandwidth:
+                  update_delay: 5
+                monitoring: True
+                send_community:
+                  community_attribute: "extended"
+                  sub_attribute: "link-bandwidth"
+                  link_bandwidth_attribute: "aggregate"
+                  speed: "600"
+      state: replaced
+
+# After State:
+
+# veos(config)#show running-config | section bgp
+# router bgp 100
+#    bgp convergence slow-peer time 6
+#    bgp additional-paths send any
+#    !
+#    vrf vrf01
+#       distance bgp 50 50 50
+#       maximum-paths 55
+#       neighbor 10.1.3.2 export-localpref 4000
+#       neighbor 10.1.3.2 next-hop-unchanged
+#       neighbor 10.1.3.2 dont-capability-negotiate
+#       neighbor 10.1.3.2 allowas-in 3
+#       neighbor 10.1.3.2 default-originate always
+#       neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+#       aggregate-address 1.2.1.0/24 as-set match-map match01
+#       aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+#       redistribute static route-map map_static
+#       redistribute attached-host
+#       !
+#       address-family ipv4
+#          neighbor 10.1.3.2 prefix-list prefix01 out
+# veos(config)#
+#
+#
+# Module Execution:
+#
+# "after": {
+#         "as_number": "100",
+#         "bgp_params": {
+#             "additional_paths": "send",
+#             "convergence": {
+#                 "slow_peer": true,
+#                 "time": 6
+#             }
+#         },
+#         "vrfs": [
+#             {
+#                 "aggregate_address": [
+#                     {
+#                         "address": "1.2.1.0/24",
+#                         "as_set": true,
+#                         "match_map": "match01"
+#                     },
+#                     {
+#                         "address": "5.2.1.0/24",
+#                         "advertise_only": true,
+#                         "attribute_map": "attrmatch01"
+#                     }
+#                 ],
+#                 "distance": {
+#                     "external": 50,
+#                     "internal": 50,
+#                     "local": 50
+#                 },
+#                 "maximum_paths": {
+#                     "max_equal_cost_paths": 55
+#                 },
+#                 "neighbor": [
+#                     {
+#                         "allowas_in": {
+#                             "count": 3
+#                         },
+#                         "default_originate": {
+#                             "always": true
+#                         },
+#                         "dont_capability_negotiate": true,
+#                         "export_localpref": 4000,
+#                         "maximum_received_routes": {
+#                             "count": 500,
+#                             "warning_limit": {
+#                                 "limit_percent": 5
+#                             }
+#                         },
+#                         "next_hop_unchanged": true,
+#                         "peer": "10.1.3.2"
+#                     }
+#                 ],
+#                 "redistribute": [
+#                     {
+#                         "protocol": "static",
+#                         "route_map": "map_static"
+#                     },
+#                     {
+#                         "protocol": "attached-host"
+#                     }
+#                 ],
+#                 "vrf": "vrf01"
+#             }
+#         ]
+#     },
+#     "before": {
+#         "aggregate_address": [
+#             {
+#                 "address": "1.2.1.0/24",
+#                 "as_set": true,
+#                 "match_map": "match01"
+#             },
+#             {
+#                 "address": "5.2.1.0/24",
+#                 "advertise_only": true,
+#                 "attribute_map": "attrmatch01"
+#             }
+#         ],
+#         "as_number": "100",
+#         "bgp_params": {
+#             "additional_paths": "send",
+#             "convergence": {
+#                 "slow_peer": true,
+#                 "time": 6
+#             }
+#         },
+#         "distance": {
+#             "external": 50,
+#             "internal": 50,
+#             "local": 50
+#         },
+#         "maximum_paths": {
+#             "max_equal_cost_paths": 55
+#         },
+#         "neighbor": [
+#             {
+#                 "fall_over": true,
+#                 "link_bandwidth": {
+#                     "set": true,
+#                     "update_delay": 5
+#                 },
+#                 "maximum_received_routes": {
+#                     "count": 12000
+#                 },
+#                 "monitoring": true,
+#                 "peer": "peer1",
+#                 "peer_group": "peer1",
+#                 "send_community": {
+#                     "community_attribute": "extended",
+#                     "link_bandwidth_attribute": "aggregate",
+#                     "speed": "600",
+#                     "sub_attribute": "link-bandwidth"
+#                 }
+#             },
+#             {
+#                 "allowas_in": {
+#                     "count": 3
+#                 },
+#                 "default_originate": {
+#                     "always": true
+#                 },
+#                 "dont_capability_negotiate": true,
+#                 "export_localpref": 4000,
+#                 "maximum_received_routes": {
+#                     "count": 500,
+#                     "warning_limit": {
+#                         "limit_percent": 5
+#                     }
+#                 },
+#                 "next_hop_unchanged": true,
+#                 "peer": "10.1.3.2"
+#             }
+#         ],
+#         "redistribute": [
+#             {
+#                 "protocol": "static",
+#                 "route_map": "map_static"
+#             },
+#             {
+#                 "protocol": "attached-host"
+#             }
+#         ],
+#         "vlan": 5,
+#         "vrfs": [
+#             {
+#                 "neighbor": [
+#                     {
+#                         "allowas_in": {
+#                             "count": 3
+#                         },
+#                         "default_originate": {
+#                             "always": true
+#                         },
+#                         "dont_capability_negotiate": true,
+#                         "maximum_received_routes": {
+#                             "count": 12000
+#                         },
+#                         "peer": "12.1.3.2"
+#                     }
+#                 ],
+#                 "route_target": {
+#                     "action": "import",
+#                     "target": "54:11"
+#                 },
+#                 "vrf": "vrf01"
+#             }
+#         ]
+#     },
+#     "changed": true,
+#     "commands": [
+#         "router bgp 100",
+#         "vrf vrf01",
+#         "no route-target import 54:11",
+#         "neighbor 10.1.3.2 allowas-in",
+#         "neighbor 10.1.3.2 default-originate always",
+#         "neighbor 10.1.3.2 dont-capability-negotiate",
+#         "neighbor 10.1.3.2 export-localpref 4000",
+#         "neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent",
+#         "neighbor 10.1.3.2 next-hop-unchanged",
+#         "neighbor 10.1.3.2 prefix-list prefix01 out",
+#         "neighbor peer1 fall-over bfd",
+#         "neighbor peer1 link-bandwidth update-delay 5",
+#         "neighbor peer1 monitoring",
+#         "neighbor peer1 send-community extended link-bandwidth aggregate 600",
+#         "no neighbor 12.1.3.2",
+#         "redistribute static route-map map_static",
+#         "redistribute attached-host",
+#         "aggregate-address 1.2.1.0/24 as-set match-map match01",
+#         "aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only",
+#         "maximum-paths 55",
+#         "distance bgp 50",
+#         "exit",
+#         "no neighbor peer1 peer-group",
+#         "no neighbor peer1 link-bandwidth update-delay 5",
+#         "no neighbor peer1 fall-over bfd",
+#         "no neighbor peer1 monitoring",
+#         "no neighbor peer1 send-community extended link-bandwidth aggregate 600",
+#         "no neighbor peer1 maximum-routes 12000",
+#         "no neighbor 10.1.3.2",
+#         "no redistribute static route-map map_static",
+#         "no redistribute attached-host",
+#         "no aggregate-address 1.2.1.0/24 as-set match-map match01",
+#         "no aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only",
+#         "bgp host-routes fib direct-install",
+#         "bgp log-neighbor-changes",
+#         "no distance bgp 50 50 50",
+#         "no maximum-paths 55",
+#         "no vlan 5"
+#     ],
+#
+
+# Using replaced (in presence of address_family under vrf):
+# Before State:
+
+#veos(config)#show running-config | section bgp
+# router bgp 100
+#    bgp convergence slow-peer time 6
+#    bgp additional-paths send any
+#    !
+#    vrf vrf01
+#       distance bgp 50 50 50
+#       maximum-paths 55
+#       neighbor 10.1.3.2 export-localpref 4000
+#       neighbor 10.1.3.2 next-hop-unchanged
+#       neighbor 10.1.3.2 dont-capability-negotiate
+#       neighbor 10.1.3.2 allowas-in 3
+#       neighbor 10.1.3.2 default-originate always
+#       neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+#       aggregate-address 1.2.1.0/24 as-set match-map match01
+#       aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+#       redistribute static route-map map_static
+#       redistribute attached-host
+#       !
+#       address-family ipv4
+#          neighbor 10.1.3.2 prefix-list prefix01 out
+#       !
+#       address-family ipv6
+#          redistribute dhcp
+# veos(config)#
+
+  - name:  Replace
+    arista.eos.eos_bgp_global:
+      config:
+        as_number: "100"
+        graceful_restart:
+          set: True
+        router_id: "1.1.1.1"
+        timers:
+          keepalive: 2
+          holdtime: 5
+        ucmp:
+          mode:
+            set: True
+        vlan_aware_bundle: "bundle1 bundle2 bundle3"
+      state: replaced
+
+# Module Execution:
+
+# fatal: [192.168.122.113]: FAILED! => {
+#     "changed": false,
+#     "invocation": {
+#         "module_args": {
+#             "config": {
+#                 "access_group": null,
+#                 "aggregate_address": null,
+#                 "as_number": "100",
+#                 "bgp_params": null,
+#                 "default_metric": null,
+#                 "distance": null,
+#                 "graceful_restart": {
+#                     "restart_time": null,
+#                     "set": true,
+#                     "stalepath_time": null
+#                 },
+#                 "graceful_restart_helper": null,
+#                 "maximum_paths": null,
+#                 "monitoring": null,
+#                 "neighbor": null,
+#                 "network": null,
+#                 "redistribute": null,
+#                 "route_target": null,
+#                 "router_id": "1.1.1.1",
+#                 "shutdown": null,
+#                 "timers": {
+#                     "holdtime": 5,
+#                     "keepalive": 2
+#                 },
+#                 "ucmp": {
+#                     "fec": null,
+#                     "link_bandwidth": null,
+#                     "mode": {
+#                         "nexthops": null,
+#                         "set": true
+#                     }
+#                 },
+#                 "update": null,
+#                 "vlan": null,
+#                 "vlan_aware_bundle": "bundle1 bundle2 bundle3",
+#                 "vrfs": null
+#             },
+#             "running_config": null,
+#             "state": "replaced"
+#         }
+#     },
+#     "msg": "Use the _bgp_af module to delete the address_family under vrf, before replacing/deleting the vrf."
+# }
+
+# Using deleted:
+
+# Before state:
+
+# veos(config)#show running-config | section bgp
+# router bgp 100
+#    bgp convergence slow-peer time 6
+#    bgp additional-paths send any
+#    !
+#    vrf vrf01
+#       distance bgp 50 50 50
+#       maximum-paths 55
+#       neighbor 10.1.3.2 export-localpref 4000
+#       neighbor 10.1.3.2 next-hop-unchanged
+#       neighbor 10.1.3.2 dont-capability-negotiate
+#       neighbor 10.1.3.2 allowas-in 3
+#       neighbor 10.1.3.2 default-originate always
+#       neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+#       aggregate-address 1.2.1.0/24 as-set match-map match01
+#       aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+#       redistribute static route-map map_static
+#       redistribute attached-host
+#       !
+
+  - name: Delete configuration
+    arista.eos.eos_bgp_global:
+      config:
+        as_number: "100"
+      state: deleted
+
+# After State:
+
+# veos(config)#show running-config | section bgp
+# router bgp 100
+#
+#
+# Module Execution:
+#
+# "after": {
+#         "as_number": "100"
+#     },
+#     "before": {
+#         "as_number": "100",
+#         "bgp_params": {
+#             "additional_paths": "send",
+#             "convergence": {
+#                 "slow_peer": true,
+#                 "time": 6
+#             }
+#         },
+#         "vrfs": [
+#             {
+#                 "aggregate_address": [
+#                     {
+#                         "address": "1.2.1.0/24",
+#                         "as_set": true,
+#                         "match_map": "match01"
+#                     },
+#                     {
+#                         "address": "5.2.1.0/24",
+#                         "advertise_only": true,
+#                         "attribute_map": "attrmatch01"
+#                     }
+#                 ],
+#                 "distance": {
+#                     "external": 50,
+#                     "internal": 50,
+#                     "local": 50
+#                 },
+#                 "maximum_paths": {
+#                     "max_equal_cost_paths": 55
+#                 },
+#                 "neighbor": [
+#                     {
+#                         "allowas_in": {
+#                             "count": 3
+#                         },
+#                         "default_originate": {
+#                             "always": true
+#                         },
+#                         "dont_capability_negotiate": true,
+#                         "export_localpref": 4000,
+#                         "maximum_received_routes": {
+#                             "count": 500,
+#                             "warning_limit": {
+#                                 "limit_percent": 5
+#                             }
+#                         },
+#                         "next_hop_unchanged": true,
+#                         "peer": "10.1.3.2"
+#                     }
+#                 ],
+#                 "redistribute": [
+#                     {
+#                         "protocol": "static",
+#                         "route_map": "map_static"
+#                     },
+#                     {
+#                         "protocol": "attached-host"
+#                     }
+#                 ],
+#                 "vrf": "vrf01"
+#             }
+#         ]
+#     },
+#     "changed": true,
+#     "commands": [
+#         "router bgp 100",
+#         "no vrf vrf01",
+#         "no bgp convergence slow-peer time 6",
+#         "no bgp additional-paths send any"
+#     ],
+#
+
+# Using purged:
+
+# Before state:
+
+# veos(config)#show running-config | section bgp
+# router bgp 100
+#    bgp convergence slow-peer time 6
+#    distance bgp 50 50 50
+#    maximum-paths 55
+#    bgp additional-paths send any
+#    neighbor peer1 peer-group
+#    neighbor peer1 link-bandwidth update-delay 5
+#    neighbor peer1 fall-over bfd
+#    neighbor peer1 monitoring
+#    neighbor peer1 send-community extended link-bandwidth aggregate 600
+#    neighbor peer1 maximum-routes 12000
+#    neighbor 10.1.3.2 export-localpref 4000
+#    neighbor 10.1.3.2 next-hop-unchanged
+#    neighbor 10.1.3.2 dont-capability-negotiate
+#    neighbor 10.1.3.2 allowas-in 3
+#    neighbor 10.1.3.2 default-originate always
+#    neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+#    aggregate-address 1.2.1.0/24 as-set match-map match01
+#    aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+#    redistribute static route-map map_static
+#    redistribute attached-host
+#    !
+#    vlan 5
+#    !
+#    address-family ipv4
+#       neighbor 10.1.3.2 prefix-list prefix01 out
+#    !
+#    vrf vrf01
+#       route-target import 54:11
+#       neighbor 12.1.3.2 dont-capability-negotiate
+#       neighbor 12.1.3.2 allowas-in 3
+#       neighbor 12.1.3.2 default-originate always
+#       neighbor 12.1.3.2 maximum-routes 12000
+# veos(config)#
+
+  - name: Purge configuration
+    arista.eos.eos_bgp_global:
+      config:
+        as_number: "100"
+      state: purged
+
+# After State:
+
+# veos(config)#show running-config | section bgp
+# veos(config)#
+
+# Module Execution:
+
+# "after": {},
+#     "before": {
+#         "aggregate_address": [
+#             {
+#                 "address": "1.2.1.0/24",
+#                 "as_set": true,
+#                 "match_map": "match01"
+#             },
+#             {
+#                 "address": "5.2.1.0/24",
+#                 "advertise_only": true,
+#                 "attribute_map": "attrmatch01"
+#             }
+#         ],
+#         "as_number": "100",
+#         "bgp_params": {
+#             "additional_paths": "send",
+#             "convergence": {
+#                 "slow_peer": true,
+#                 "time": 6
+#             }
+#         },
+#         "distance": {
+#             "external": 50,
+#             "internal": 50,
+#             "local": 50
+#         },
+#         "maximum_paths": {
+#             "max_equal_cost_paths": 55
+#         },
+#         "neighbor": [
+#             {
+#                 "fall_over": true,
+#                 "link_bandwidth": {
+#                     "set": true,
+#                     "update_delay": 5
+#                 },
+#                 "maximum_received_routes": {
+#                     "count": 12000
+#                 },
+#                 "monitoring": true,
+#                 "peer": "peer1",
+#                 "peer_group": "peer1",
+#                 "send_community": {
+#                     "community_attribute": "extended",
+#                     "link_bandwidth_attribute": "aggregate",
+#                     "speed": "600",
+#                     "sub_attribute": "link-bandwidth"
+#                 }
+#             },
+#             {
+#                 "allowas_in": {
+#                     "count": 3
+#                 },
+#                 "default_originate": {
+#                     "always": true
+#                 },
+#                 "dont_capability_negotiate": true,
+#                 "export_localpref": 4000,
+#                 "maximum_received_routes": {
+#                     "count": 500,
+#                     "warning_limit": {
+#                         "limit_percent": 5
+#                     }
+#                 },
+#                 "next_hop_unchanged": true,
+#                 "peer": "10.1.3.2"
+#             }
+#         ],
+#         "redistribute": [
+#             {
+#                 "protocol": "static",
+#                 "route_map": "map_static"
+#             },
+#             {
+#                 "protocol": "attached-host"
+#             }
+#         ],
+#         "vlan": 5,
+#         "vrfs": [
+#             {
+#                 "neighbor": [
+#                     {
+#                         "allowas_in": {
+#                             "count": 3
+#                         },
+#                         "default_originate": {
+#                             "always": true
+#                         },
+#                         "dont_capability_negotiate": true,
+#                         "maximum_received_routes": {
+#                             "count": 12000
+#                         },
+#                         "peer": "12.1.3.2"
+#                     }
+#                 ],
+#                 "route_target": {
+#                     "action": "import",
+#                     "target": "54:11"
+#                 },
+#                 "vrf": "vrf01"
+#             }
+#         ]
+#     },
+#     "changed": true,
+#     "commands": [
+#         "no router bgp 100"
+#     ],
+
 """
 
 from ansible.module_utils.basic import AnsibleModule
@@ -1378,12 +2291,12 @@ def main():
         argument_spec=Bgp_globalArgs.argument_spec,
         mutually_exclusive=[],
         required_if=[],
-        supports_check_mode=False
+        supports_check_mode=False,
     )
 
     result = Bgp_global(module).execute_module()
     module.exit_json(**result)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

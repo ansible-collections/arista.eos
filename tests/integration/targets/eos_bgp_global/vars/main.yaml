@@ -21,7 +21,8 @@ merged:
     - aggregate-address 5.1.0.0/16 attribute-map attrmap
     - timers bgp 44 100
     - ucmp link-bandwidth recursive
-    - vlan-aware-bundle bundle1 bundle3 
+    - vlan-aware-bundle bundle1 bundle3
+
 deleted:
   after:
     as_number: "65535"

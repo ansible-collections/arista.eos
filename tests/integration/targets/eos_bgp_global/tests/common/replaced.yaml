@@ -13,22 +13,22 @@
       arista.eos.eos_bgp_global: &replaced
         state: "replaced"
         config:
-            as_number: "65535"
-            vrfs:
-              - vrf: "vrf02"
-                redistribute:
-                  - protocol: "isis"
-                    isis_level: "level-2"
-                timers:
-                  holdtime: 100
-                  keepalive: 44
-            network:
-              - address: "6.6.6.0/24"
-                route_map: "netmap1"
-              - address: "10.1.0.0/16"
-            redistribute:
-              - protocol: "isis"
-                isis_level: "level-2"
+          as_number: "65535"
+          vrfs:
+            - vrf: "vrf02"
+              redistribute:
+                - protocol: "isis"
+                  isis_level: "level-2"
+              timers:
+                holdtime: 100
+                keepalive: 44
+          network:
+            - address: "6.6.6.0/24"
+              route_map: "netmap1"
+            - address: "10.1.0.0/16"
+          redistribute:
+            - protocol: "isis"
+              isis_level: "level-2"
 
     - assert:
         that:
@@ -51,7 +51,7 @@
     - name: Configure address_family under vrf
       become: true
       arista.eos.eos_config:
-          src: populate_af.cfg
+        src: populate_af.cfg
 
     - name: Replace in presence of address_family
       become: true

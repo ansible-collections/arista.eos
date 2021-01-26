@@ -4,6 +4,7 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 #############################################
@@ -45,7 +46,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                 "deleted",
                 "purged",
                 "merged",
-                "overridden",
                 "replaced",
                 "gathered",
                 "rendered",
@@ -120,7 +120,11 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "action": {
                                     "type": "str",
-                                    "choices": ["deny", "permit", "deny-in-out"],
+                                    "choices": [
+                                        "deny",
+                                        "permit",
+                                        "deny-in-out",
+                                    ],
                                 },
                                 "direction": {
                                     "type": "str",
@@ -203,7 +207,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "log_neighbor_changes": {"type": "bool"},
-                        "asn": {"type": "str", "choices": ["asdot", "asplain"]},
+                        "asn": {
+                            "type": "str",
+                            "choices": ["asdot", "asplain"],
+                        },
                         "default": {
                             "type": "str",
                             "choices": ["ipv4_unicast", "ipv6_unicast"],
@@ -217,8 +224,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "confederation": {
                             "type": "dict",
                             "options": {
-                                "peers": {"type": "list"},
-                                "identifier": {"type": "int"},
+                                "peers": {"type": "str"},
+                                "identifier": {"type": "str"},
                             },
                         },
                     },
@@ -229,7 +236,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     "options": {
                         "wait_for": {
                             "type": "str",
-                            "choices": ["wait_for_convergence", "wait_install"],
+                            "choices": [
+                                "wait_for_convergence",
+                                "wait_install",
+                            ],
                         },
                         "batch_size": {"type": "int"},
                     },
@@ -388,7 +398,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "description": {"type": "str"},
-                        "maximum_accepted_route": {
+                        "maximum_accepted_routes": {
                             "type": "dict",
                             "options": {
                                 "count": {"type": "int"},
@@ -454,14 +464,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     "elements": "dict",
                     "type": "list",
                     "options": {
-                        "address_family": {
-                            "type": "list",
-                            "elements": "dict",
-                            "options": {
-                                "afi": {"type": "str"},
-                                "af_type": {"type": "str"}
-                            }
-                        },
                         "router_id": {"type": "str"},
                         "vrf": {"type": "str"},
                         "route_target": {
@@ -502,11 +504,14 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "isis_level": {
                                     "type": "str",
-                                    "choices": ["level-1", "level-2", "level-1-2"],
+                                    "choices": [
+                                        "level-1",
+                                        "level-2",
+                                        "level-1-2",
+                                    ],
                                 },
                             },
                         },
-                        "name": {"type": "str"},
                         "distance": {
                             "type": "dict",
                             "options": {
@@ -575,7 +580,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                         "remote_as": {
                                                             "type": "str"
                                                         },
-                                                        "name": {"type": "str"},
+                                                        "name": {
+                                                            "type": "str"
+                                                        },
                                                     },
                                                 },
                                                 "address": {"type": "str"},
@@ -634,7 +641,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "default": {
                                     "type": "str",
-                                    "choices": ["ipv4_unicast", "ipv6_unicast"],
+                                    "choices": [
+                                        "ipv4_unicast",
+                                        "ipv6_unicast",
+                                    ],
                                 },
                                 "route": {"type": "str"},
                                 "enforce_first_as": {"type": "bool"},
@@ -644,8 +654,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "confederation": {
                                     "type": "dict",
                                     "options": {
-                                        "peers": {"type": "list"},
-                                        "identifier": {"type": "int"},
+                                        "peers": {"type": "str"},
+                                        "identifier": {"type": "str"},
                                     },
                                 },
                             },
@@ -760,7 +770,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "limit_count": {"type": "int"},
-                                                "limit_percent": {"type": "int"},
+                                                "limit_percent": {
+                                                    "type": "int"
+                                                },
                                             },
                                         },
                                         "warning_only": {"type": "bool"},
@@ -770,7 +782,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "password": {"type": "str"},
-                                        "type": {"type": "int", "choices": [0, 7]},
+                                        "type": {
+                                            "type": "int",
+                                            "choices": [0, 7],
+                                        },
                                     },
                                 },
                                 "link_bandwidth": {
@@ -865,7 +880,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "direction": {"type": "str"},
-                                "afi": {"type": "str", "choices": ["ip", "ipv6"]},
+                                "afi": {
+                                    "type": "str",
+                                    "choices": ["ip", "ipv6"],
+                                },
                                 "acl_name": {"type": "str"},
                             },
                         },
@@ -937,7 +955,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "update_delay": {"type": "int"},
                                 "mode": {
                                     "type": "str",
-                                    "choices": ["encoding_weighted", "recursive"],
+                                    "choices": [
+                                        "encoding_weighted",
+                                        "recursive",
+                                    ],
                                 },
                             },
                         },

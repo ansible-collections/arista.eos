@@ -54,53 +54,36 @@ class TestEosBgpglobalModule(TestEosModule):
                 config=dict(
                     as_number="65535",
                     timers=dict(keepalive=44, holdtime=100),
-                    ucmp=dict(
-                        link_bandwidth=dict(mode="recursive")
-                    ),
+                    ucmp=dict(link_bandwidth=dict(mode="recursive")),
                     neighbor=[
                         dict(
                             peer="peer1",
                             peer_group="peer1",
-                            maximum_received_routes=dict(
-                                count=12000,
-                            ),
+                            maximum_received_routes=dict(count=12000),
                             send_community=dict(
                                 community_attribute="link-bandwidth",
                                 link_bandwidth_attribute="divide",
-                                divide="ratio"
-                            )
+                                divide="ratio",
+                            ),
                         ),
                         dict(
                             peer="peer2",
                             peer_group="peer2",
-                            maximum_received_routes=dict(
-                                count=12000
-                            ),
+                            maximum_received_routes=dict(count=12000),
                         ),
                     ],
                     aggregate_address=[
                         dict(
                             address="1.1.1.0/24",
                             as_set=True,
-                            summary_only=True
+                            summary_only=True,
                         ),
-                        dict(
-                            address="5.1.0.0/16",
-                            attribute_map="attrmap"
-                        )
+                        dict(address="5.1.0.0/16", attribute_map="attrmap"),
                     ],
                     redistribute=[
-                        dict(
-                            protocol="ospf",
-                            ospf_route="nssa_external_2"
-                        ),
-                        dict(
-                            protocol="static",
-                        ),
-                        dict(
-                            protocol="rip",
-                            route_map="MAP01"
-                        ),
+                        dict(protocol="ospf", ospf_route="nssa_external_2"),
+                        dict(protocol="static"),
+                        dict(protocol="rip", route_map="MAP01"),
                     ],
                     vlan_aware_bundle="bundle1 bundle3",
                     vrfs=[
@@ -109,22 +92,16 @@ class TestEosBgpglobalModule(TestEosModule):
                             default_metric=433,
                             network=[
                                 dict(
-                                    address="6.6.6.0/24",
-                                    route_map="netmap1"
+                                    address="6.6.6.0/24", route_map="netmap1"
                                 ),
-                                dict(
-                                    address="10.1.0.0/16"
-                                )
+                                dict(address="10.1.0.0/16"),
                             ],
                             redistribute=[
                                 dict(protocol="isis", isis_level="level-2")
                             ],
-                            route_target=dict(
-                                action="export",
-                                target="44:22"
-                            )
+                            route_target=dict(action="export", target="44:22"),
                         )
-                    ]
+                    ],
                 ),
                 state="merged",
             )
@@ -140,70 +117,54 @@ class TestEosBgpglobalModule(TestEosModule):
                         dict(
                             vrf="vrf02",
                             timers=dict(keepalive=44, holdtime=100),
-                            ucmp=dict(
-                                link_bandwidth=dict(mode="recursive")
-                            ),
+                            ucmp=dict(link_bandwidth=dict(mode="recursive")),
                             neighbor=[
                                 dict(
                                     peer="peer1",
                                     peer_group="peer1",
-                                    maximum_received_routes=dict(
-                                        count=12000,
-                                    ),
+                                    maximum_received_routes=dict(count=12000),
                                     send_community=dict(
                                         community_attribute="link-bandwidth",
                                         link_bandwidth_attribute="divide",
-                                        divide="ratio"
-                                    )
+                                        divide="ratio",
+                                    ),
                                 ),
                                 dict(
                                     peer="peer2",
                                     peer_group="peer2",
-                                    maximum_received_routes=dict(
-                                        count=12000
-                                    ),
+                                    maximum_received_routes=dict(count=12000),
                                 ),
                             ],
-                        ),
+                        )
                     ],
                     default_metric=433,
                     network=[
-                        dict(
-                            address="6.6.6.0/24",
-                            route_map="netmap1"
-                        ),
-                        dict(
-                            address="10.1.0.0/16"
-                        )
+                        dict(address="6.6.6.0/24", route_map="netmap1"),
+                        dict(address="10.1.0.0/16"),
                     ],
-                    redistribute=[
-                        dict(protocol="isis", isis_level="level-2")
-                    ],
-                    route_target=dict(
-                        action="export",
-                        target="44:22"
-                    )
+                    redistribute=[dict(protocol="isis", isis_level="level-2")],
+                    route_target=dict(action="export", target="44:22"),
                 ),
                 state="merged",
             )
         )
-        commands=[
-                  'router bgp 65535',
-                  'vrf vrf02',
-                  'neighbor peer1 peer-group',
-                  'neighbor peer1 maximum-routes 12000',
-                  'neighbor peer1 send-community link-bandwidth divide ratio',
-                  'neighbor peer2 peer-group',
-                  'neighbor peer2 maximum-routes 12000',
-                  'timers bgp 44 100',
-                  'ucmp link-bandwidth recursive',
-                  'exit',
-                  'redistribute isis level-2',
-                  'network 6.6.6.0/24 route-map netmap1',
-                  'network 10.1.0.0/16',
-                  'default-metric 433',
-                  'route-target export 44:22'
-                ]
+        commands = [
+            "router bgp 65535",
+            "vrf vrf02",
+            "neighbor peer1 peer-group",
+            "neighbor peer1 maximum-routes 12000",
+            "neighbor peer1 send-community link-bandwidth divide ratio",
+            "neighbor peer2 peer-group",
+            "neighbor peer2 maximum-routes 12000",
+            "timers bgp 44 100",
+            "ucmp link-bandwidth recursive",
+            "exit",
+            "redistribute isis level-2",
+            "network 6.6.6.0/24 route-map netmap1",
+            "network 10.1.0.0/16",
+            "default-metric 433",
+            "route-target export 44:22",
+        ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_bgp_global_replaced_idempotent(self):
@@ -212,53 +173,36 @@ class TestEosBgpglobalModule(TestEosModule):
                 config=dict(
                     as_number="65535",
                     timers=dict(keepalive=44, holdtime=100),
-                    ucmp=dict(
-                        link_bandwidth=dict(mode="recursive")
-                    ),
+                    ucmp=dict(link_bandwidth=dict(mode="recursive")),
                     neighbor=[
                         dict(
                             peer="peer1",
                             peer_group="peer1",
-                            maximum_received_routes=dict(
-                                count=12000,
-                            ),
+                            maximum_received_routes=dict(count=12000),
                             send_community=dict(
                                 community_attribute="link-bandwidth",
                                 link_bandwidth_attribute="divide",
-                                divide="ratio"
-                            )
+                                divide="ratio",
+                            ),
                         ),
                         dict(
                             peer="peer2",
                             peer_group="peer2",
-                            maximum_received_routes=dict(
-                                count=12000
-                            ),
+                            maximum_received_routes=dict(count=12000),
                         ),
                     ],
                     aggregate_address=[
                         dict(
                             address="1.1.1.0/24",
                             as_set=True,
-                            summary_only=True
+                            summary_only=True,
                         ),
-                        dict(
-                            address="5.1.0.0/16",
-                            attribute_map="attrmap"
-                        )
+                        dict(address="5.1.0.0/16", attribute_map="attrmap"),
                     ],
                     redistribute=[
-                        dict(
-                            protocol="ospf",
-                            ospf_route="nssa_external_2"
-                        ),
-                        dict(
-                            protocol="static",
-                        ),
-                        dict(
-                            protocol="rip",
-                            route_map="MAP01"
-                        ),
+                        dict(protocol="ospf", ospf_route="nssa_external_2"),
+                        dict(protocol="static"),
+                        dict(protocol="rip", route_map="MAP01"),
                     ],
                     vlan_aware_bundle="bundle1 bundle3",
                     vrfs=[
@@ -267,22 +211,16 @@ class TestEosBgpglobalModule(TestEosModule):
                             default_metric=433,
                             network=[
                                 dict(
-                                    address="6.6.6.0/24",
-                                    route_map="netmap1"
+                                    address="6.6.6.0/24", route_map="netmap1"
                                 ),
-                                dict(
-                                    address="10.1.0.0/16"
-                                )
+                                dict(address="10.1.0.0/16"),
                             ],
                             redistribute=[
                                 dict(protocol="isis", isis_level="level-2")
                             ],
-                            route_target=dict(
-                                action="export",
-                                target="44:22"
-                            )
+                            route_target=dict(action="export", target="44:22"),
                         )
-                    ]
+                    ],
                 ),
                 state="replaced",
             )
@@ -296,47 +234,37 @@ class TestEosBgpglobalModule(TestEosModule):
                     as_number="65535",
                     default_metric=433,
                     network=[
-                        dict(
-                            address="6.6.6.0/24",
-                            route_map="netmap1"
-                        ),
-                        dict(
-                            address="10.1.0.0/16"
-                        )
+                        dict(address="6.6.6.0/24", route_map="netmap1"),
+                        dict(address="10.1.0.0/16"),
                     ],
-                    redistribute=[
-                        dict(protocol="isis", isis_level="level-2")
-                    ],
-                    route_target=dict(
-                        action="export",
-                        target="44:22"
-                    )
+                    redistribute=[dict(protocol="isis", isis_level="level-2")],
+                    route_target=dict(action="export", target="44:22"),
                 ),
                 state="replaced",
             )
         )
-        commands=[
-                  'router bgp 65535',
-                  'no vrf vrf01',
-                  'redistribute isis level-2',
-                  'network 6.6.6.0/24 route-map netmap1',
-                  'network 10.1.0.0/16',
-                  'default-metric 433',
-                  'route-target export 44:22',
-                  'no timers bgp 44 100',
-                  'no ucmp link-bandwidth recursive',
-                  'no neighbor peer1 peer-group',
-                  'no neighbor peer1 send-community link-bandwidth divide ratio',
-                  'no neighbor peer1 maximum-routes 12000',
-                  'no neighbor peer2 peer-group',
-                  'no neighbor peer2 maximum-routes 12000',
-                  'no aggregate-address 1.1.1.0/24 as-set summary-only',
-                  'no aggregate-address 5.1.0.0/16 attribute-map attrmap',
-                  'no redistribute ospf match nssa-external 2',
-                  'no redistribute static',
-                  'no vlan-aware-bundle bundle1 bundle3',
-                  'no redistribute rip route-map MAP01'
-                ]
+        commands = [
+            "router bgp 65535",
+            "no vrf vrf01",
+            "redistribute isis level-2",
+            "network 6.6.6.0/24 route-map netmap1",
+            "network 10.1.0.0/16",
+            "default-metric 433",
+            "route-target export 44:22",
+            "no timers bgp 44 100",
+            "no ucmp link-bandwidth recursive",
+            "no neighbor peer1 peer-group",
+            "no neighbor peer1 send-community link-bandwidth divide ratio",
+            "no neighbor peer1 maximum-routes 12000",
+            "no neighbor peer2 peer-group",
+            "no neighbor peer2 maximum-routes 12000",
+            "no aggregate-address 1.1.1.0/24 as-set summary-only",
+            "no aggregate-address 5.1.0.0/16 attribute-map attrmap",
+            "no redistribute ospf match nssa-external 2",
+            "no redistribute static",
+            "no vlan-aware-bundle bundle1 bundle3",
+            "no redistribute rip route-map MAP01",
+        ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_bgp_global_replaced_vrf(self):
@@ -352,92 +280,80 @@ class TestEosBgpglobalModule(TestEosModule):
                                 dict(
                                     address="1.1.1.0/24",
                                     as_set=True,
-                                    summary_only=True
+                                    summary_only=True,
                                 ),
                                 dict(
                                     address="5.1.0.0/16",
-                                    attribute_map="attrmap"
-                                )
+                                    attribute_map="attrmap",
+                                ),
                             ],
                             redistribute=[
                                 dict(
                                     protocol="ospf",
-                                    ospf_route="nssa_external_2"
+                                    ospf_route="nssa_external_2",
                                 ),
-                                dict(
-                                    protocol="static",
-                                ),
-                                dict(
-                                    protocol="rip",
-                                    route_map="MAP01"
-                                ),
+                                dict(protocol="static"),
+                                dict(protocol="rip", route_map="MAP01"),
                             ],
-                        ),
+                        )
                     ],
                 ),
                 state="replaced",
             )
         )
-        commands=['router bgp 65535',
-                  'vrf vrf01',
-                  'no route-target export 44:22',
-                  'redistribute ospf match nssa-external 2',
-                  'redistribute static',
-                  'redistribute rip route-map MAP01',
-                  'no redistribute isis level-2',
-                  'no network 6.6.6.0/24 route-map netmap1',
-                  'no network 10.1.0.0/16',
-                  'aggregate-address 1.1.1.0/24 as-set summary-only',
-                  'aggregate-address 5.1.0.0/16 attribute-map attrmap',
-                  'exit', 'no neighbor peer1 peer-group',
-                  'no neighbor peer1 send-community link-bandwidth divide ratio',
-                  'no neighbor peer1 maximum-routes 12000',
-                  'no neighbor peer2 peer-group',
-                  'no neighbor peer2 maximum-routes 12000',
-                  'no redistribute ospf match nssa-external 2',
-                  'no redistribute static',
-                  'no redistribute rip route-map MAP01',
-                  'no aggregate-address 1.1.1.0/24 as-set summary-only',
-                  'no aggregate-address 5.1.0.0/16 attribute-map attrmap',
-                  'no timers bgp 44 100',
-                  'no ucmp link-bandwidth recursive', 'no vlan-aware-bundle bundle1 bundle3']
+        commands = [
+            "router bgp 65535",
+            "vrf vrf01",
+            "no route-target export 44:22",
+            "redistribute ospf match nssa-external 2",
+            "redistribute static",
+            "redistribute rip route-map MAP01",
+            "no redistribute isis level-2",
+            "no network 6.6.6.0/24 route-map netmap1",
+            "no network 10.1.0.0/16",
+            "aggregate-address 1.1.1.0/24 as-set summary-only",
+            "aggregate-address 5.1.0.0/16 attribute-map attrmap",
+            "exit",
+            "no neighbor peer1 peer-group",
+            "no neighbor peer1 send-community link-bandwidth divide ratio",
+            "no neighbor peer1 maximum-routes 12000",
+            "no neighbor peer2 peer-group",
+            "no neighbor peer2 maximum-routes 12000",
+            "no redistribute ospf match nssa-external 2",
+            "no redistribute static",
+            "no redistribute rip route-map MAP01",
+            "no aggregate-address 1.1.1.0/24 as-set summary-only",
+            "no aggregate-address 5.1.0.0/16 attribute-map attrmap",
+            "no timers bgp 44 100",
+            "no ucmp link-bandwidth recursive",
+            "no vlan-aware-bundle bundle1 bundle3",
+        ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_bgp_global_deleted(self):
-        set_module_args(
-            dict(
-                config=dict(
-                    as_number="65535",
-                ),
-                state="deleted",
-            )
-        )
-        commands=['router bgp 65535',
-                  'no vrf vrf01',
-                  'no neighbor peer1 peer-group',
-                  'no neighbor peer1 send-community link-bandwidth divide ratio',
-                  'no neighbor peer1 maximum-routes 12000',
-                  'no neighbor peer2 peer-group',
-                  'no neighbor peer2 maximum-routes 12000',
-                  'no redistribute ospf match nssa-external 2',
-                  'no redistribute static',
-                  'no redistribute rip route-map MAP01',
-                  'no aggregate-address 1.1.1.0/24 as-set summary-only',
-                  'no aggregate-address 5.1.0.0/16 attribute-map attrmap',
-                  'no timers bgp 44 100',
-                  'no ucmp link-bandwidth recursive', 'no vlan-aware-bundle bundle1 bundle3']
+        set_module_args(dict(config=dict(as_number="65535"), state="deleted"))
+        commands = [
+            "router bgp 65535",
+            "no vrf vrf01",
+            "no neighbor peer1 peer-group",
+            "no neighbor peer1 send-community link-bandwidth divide ratio",
+            "no neighbor peer1 maximum-routes 12000",
+            "no neighbor peer2 peer-group",
+            "no neighbor peer2 maximum-routes 12000",
+            "no redistribute ospf match nssa-external 2",
+            "no redistribute static",
+            "no redistribute rip route-map MAP01",
+            "no aggregate-address 1.1.1.0/24 as-set summary-only",
+            "no aggregate-address 5.1.0.0/16 attribute-map attrmap",
+            "no timers bgp 44 100",
+            "no ucmp link-bandwidth recursive",
+            "no vlan-aware-bundle bundle1 bundle3",
+        ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_bgp_global_purged(self):
-        set_module_args(
-            dict(
-                config=dict(
-                    as_number="65535",
-                ),
-                state="purged",
-            )
-        )
-        commands=['no router bgp 65535']
+        set_module_args(dict(config=dict(as_number="65535"), state="purged"))
+        commands = ["no router bgp 65535"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_bgp_global_merged_incorrect_instance(self):
@@ -449,57 +365,40 @@ class TestEosBgpglobalModule(TestEosModule):
                         dict(
                             vrf="vrf02",
                             timers=dict(keepalive=44, holdtime=100),
-                            ucmp=dict(
-                                link_bandwidth=dict(mode="recursive")
-                            ),
+                            ucmp=dict(link_bandwidth=dict(mode="recursive")),
                             neighbor=[
                                 dict(
                                     peer="peer1",
                                     peer_group="peer1",
-                                    maximum_received_routes=dict(
-                                        count=12000,
-                                    ),
+                                    maximum_received_routes=dict(count=12000),
                                     send_community=dict(
                                         community_attribute="link-bandwidth",
                                         link_bandwidth_attribute="divide",
-                                        divide="ratio"
-                                    )
+                                        divide="ratio",
+                                    ),
                                 ),
                                 dict(
                                     peer="peer2",
                                     peer_group="peer2",
-                                    maximum_received_routes=dict(
-                                        count=12000
-                                    ),
+                                    maximum_received_routes=dict(count=12000),
                                 ),
                             ],
-                        ),
+                        )
                     ],
                     default_metric=433,
                     network=[
-                        dict(
-                            address="6.6.6.0/24",
-                            route_map="netmap1"
-                        ),
-                        dict(
-                            address="10.1.0.0/16"
-                        )
+                        dict(address="6.6.6.0/24", route_map="netmap1"),
+                        dict(address="10.1.0.0/16"),
                     ],
-                    redistribute=[
-                        dict(protocol="isis", isis_level="level-2")
-                    ],
-                    route_target=dict(
-                        action="export",
-                        target="44:22"
-                    )
+                    redistribute=[dict(protocol="isis", isis_level="level-2")],
+                    route_target=dict(action="export", target="44:22"),
                 ),
                 state="merged",
             )
         )
         result = self.execute_module(failed=True)
         self.assertIn(
-            "Only one bgp instance is allowed per device",
-            result["msg"],
+            "Only one bgp instance is allowed per device", result["msg"]
         )
 
     def test_eos_bgp_global_replaced_with_af(self):
@@ -509,41 +408,28 @@ class TestEosBgpglobalModule(TestEosModule):
                     as_number="65535",
                     default_metric=433,
                     network=[
-                        dict(
-                            address="6.6.6.0/24",
-                            route_map="netmap1"
-                        ),
-                        dict(
-                            address="10.1.0.0/16"
-                        )
+                        dict(address="6.6.6.0/24", route_map="netmap1"),
+                        dict(address="10.1.0.0/16"),
                     ],
-                    redistribute=[
-                        dict(protocol="isis", isis_level="level-2")
-                    ],
-                    route_target=dict(
-                        action="export",
-                        target="44:22"
-                    )
+                    redistribute=[dict(protocol="isis", isis_level="level-2")],
+                    route_target=dict(action="export", target="44:22"),
                 ),
                 state="replaced",
             )
         )
-        result = self.execute_module(failed=True, filename="eos_bgp_global_af_config.cfg")
+        result = self.execute_module(
+            failed=True, filename="eos_bgp_global_af_config.cfg"
+        )
         self.assertIn(
             "Use the _bgp_af module to delete the address_family under vrf, before replacing/deleting the vrf.",
             result["msg"],
         )
 
     def test_eos_bgp_global_deleted_with_af(self):
-        set_module_args(
-            dict(
-                config=dict(
-                    as_number="65535",
-                ),
-                state="deleted",
-            )
+        set_module_args(dict(config=dict(as_number="65535"), state="deleted"))
+        result = self.execute_module(
+            failed=True, filename="eos_bgp_global_af_config.cfg"
         )
-        result = self.execute_module(failed=True, filename="eos_bgp_global_af_config.cfg")
         self.assertIn(
             "Use the _bgp_af module to delete the address_family under vrf, before replacing/deleting the vrf.",
             result["msg"],
@@ -554,74 +440,56 @@ class TestEosBgpglobalModule(TestEosModule):
         result = self.execute_module(
             changed=False, filename="eos_bgp_global_config.cfg"
         )
-        import q
-        q(result)
         gather_list = {
-                'aggregate_address': [
-                    {
-                        'address': '1.1.1.0/24',
-                        'as_set': True, 
-                        'summary_only': True
-                    }, 
-                    {
-                        'address': '5.1.0.0/16',
-                        'attribute_map': 'attrmap'
-                    }
-                ],
-                'as_number': '65535',
-                'neighbor': [
-                    {
-                        'maximum_received_routes': {'count': 12000},
-                        'peer': 'peer1',
-                        'peer_group': 'peer1',
-                        'send_community':
-                            {
-                                'community_attribute': 'link-bandwidth', 
-                                'divide': 'ratio', 
-                                'link_bandwidth_attribute': 'divide'
-                            }
+            "aggregate_address": [
+                {
+                    "address": "1.1.1.0/24",
+                    "as_set": True,
+                    "summary_only": True,
+                },
+                {"address": "5.1.0.0/16", "attribute_map": "attrmap"},
+            ],
+            "as_number": "65535",
+            "neighbor": [
+                {
+                    "maximum_received_routes": {"count": 12000},
+                    "peer": "peer1",
+                    "peer_group": "peer1",
+                    "send_community": {
+                        "community_attribute": "link-bandwidth",
+                        "divide": "ratio",
+                        "link_bandwidth_attribute": "divide",
                     },
-                    {
-                        'maximum_received_routes': {'count': 12000}, 
-                        'peer': 'peer2', 
-                        'peer_group': 'peer2'
-                    }
-                ], 
-                'redistribute': [
-                    {
-                        'ospf_route': 'nssa_external_2', 'protocol': 'ospf'
-                    }, 
-                    {'protocol': 'static'}, 
-                    {'protocol': 'rip', 'route_map': 'MAP01'}
-                ], 
-                'timers': {'holdtime': 100, 'keepalive': 44}, 
-                'ucmp': {
-                    'link_bandwidth': {
-                        'mode': 'recursive'
-                    }
-                }, 
-                'vlan_aware_bundle': 'bundle1 bundle3', 
-                'vrfs': [
-                    {
-                        'default_metric': 433, 
-                        'network': [
-                            {
-                                'address': '6.6.6.0/24', 
-                                'route_map': 'netmap1'
-                            }, 
-                            {'address': '10.1.0.0/16'}
-                        ], 
-                        'redistribute': [
-                            {'isis_level': 'level-2', 'protocol': 'isis'}
-                        ], 
-                        'route_target': {
-                            'action': 'export', 
-                            'target': '44:22'
-                        }, 
-                        'vrf': 'vrf01'
-                    }
-                ]
-            }
+                },
+                {
+                    "maximum_received_routes": {"count": 12000},
+                    "peer": "peer2",
+                    "peer_group": "peer2",
+                },
+            ],
+            "redistribute": [
+                {"ospf_route": "nssa_external_2", "protocol": "ospf"},
+                {"protocol": "static"},
+                {"protocol": "rip", "route_map": "MAP01"},
+            ],
+            "timers": {"holdtime": 100, "keepalive": 44},
+            "ucmp": {"link_bandwidth": {"mode": "recursive"}},
+            "vlan_aware_bundle": "bundle1 bundle3",
+            "vrfs": [
+                {
+                    "default_metric": 433,
+                    "network": [
+                        {"address": "6.6.6.0/24", "route_map": "netmap1"},
+                        {"address": "10.1.0.0/16"},
+                    ],
+                    "redistribute": [
+                        {"isis_level": "level-2", "protocol": "isis"}
+                    ],
+                    "route_target": {"action": "export", "target": "44:22"},
+                    "vrf": "vrf01",
+                }
+            ],
+        }
         self.assertEqual(sorted(gather_list), sorted(result["gathered"]))
 
     def test_eos_bgp_global_parsed(self):
@@ -637,17 +505,16 @@ class TestEosBgpglobalModule(TestEosModule):
             "aggregate-address 1.1.1.0/24 as-set summary-only",
             "aggregate-address 5.1.0.0/16 attribute-map attrmap",
             "redistribute ospf match nssa-external 2",
-            "redistribute static"
-            "redistribute rip route-map MAP01",
+            "redistribute static", "redistribute rip route-map MAP01",
             "!",
             "vlan-aware-bundle bundle1 bundle3",
             "!",
             "vrf vrf01",
-               "route-target export 44:22",
-               "default-metric 433",
-               "network 6.6.6.0/24 route-map netmap1",
-               "network 10.1.0.0/16",
-               "redistribute isis level-2"
+            "route-target export 44:22",
+            "default-metric 433",
+            "network 6.6.6.0/24 route-map netmap1",
+            "network 10.1.0.0/16",
+            "redistribute isis level-2",
         ]
 
         parsed_str = "\n".join(commands)
@@ -656,71 +523,55 @@ class TestEosBgpglobalModule(TestEosModule):
             changed=False, filename="eos_bgp_global_config.cfg"
         )
         parsed_list = {
-                'aggregate_address': [
-                    {
-                        'address': '1.1.1.0/24',
-                        'as_set': True, 
-                        'summary_only': True
-                    }, 
-                    {
-                        'address': '5.1.0.0/16',
-                        'attribute_map': 'attrmap'
-                    }
-                ],
-                'as_number': '65535',
-                'neighbor': [
-                    {
-                        'maximum_received_routes': {'count': 12000},
-                        'peer': 'peer1',
-                        'peer_group': 'peer1',
-                        'send_community':
-                            {
-                                'community_attribute': 'link-bandwidth', 
-                                'divide': 'ratio', 
-                                'link_bandwidth_attribute': 'divide'
-                            }
+            "aggregate_address": [
+                {
+                    "address": "1.1.1.0/24",
+                    "as_set": True,
+                    "summary_only": True,
+                },
+                {"address": "5.1.0.0/16", "attribute_map": "attrmap"},
+            ],
+            "as_number": "65535",
+            "neighbor": [
+                {
+                    "maximum_received_routes": {"count": 12000},
+                    "peer": "peer1",
+                    "peer_group": "peer1",
+                    "send_community": {
+                        "community_attribute": "link-bandwidth",
+                        "divide": "ratio",
+                        "link_bandwidth_attribute": "divide",
                     },
-                    {
-                        'maximum_received_routes': {'count': 12000}, 
-                        'peer': 'peer2', 
-                        'peer_group': 'peer2'
-                    }
-                ], 
-                'redistribute': [
-                    {
-                        'ospf_route': 'nssa_external_2', 'protocol': 'ospf'
-                    }, 
-                    {'protocol': 'static'}, 
-                    {'protocol': 'rip', 'route_map': 'MAP01'}
-                ], 
-                'timers': {'holdtime': 100, 'keepalive': 44}, 
-                'ucmp': {
-                    'link_bandwidth': {
-                        'mode': 'recursive'
-                    }
-                }, 
-                'vlan_aware_bundle': 'bundle1 bundle3', 
-                'vrfs': [
-                    {
-                        'default_metric': 433, 
-                        'network': [
-                            {
-                                'address': '6.6.6.0/24', 
-                                'route_map': 'netmap1'
-                            }, 
-                            {'address': '10.1.0.0/16'}
-                        ], 
-                        'redistribute': [
-                            {'isis_level': 'level-2', 'protocol': 'isis'}
-                        ], 
-                        'route_target': {
-                            'action': 'export', 
-                            'target': '44:22'
-                        }, 
-                        'vrf': 'vrf01'
-                    }
-                ]
-            }
+                },
+                {
+                    "maximum_received_routes": {"count": 12000},
+                    "peer": "peer2",
+                    "peer_group": "peer2",
+                },
+            ],
+            "redistribute": [
+                {"ospf_route": "nssa_external_2", "protocol": "ospf"},
+                {"protocol": "static"},
+                {"protocol": "rip", "route_map": "MAP01"},
+            ],
+            "timers": {"holdtime": 100, "keepalive": 44},
+            "ucmp": {"link_bandwidth": {"mode": "recursive"}},
+            "vlan_aware_bundle": "bundle1 bundle3",
+            "vrfs": [
+                {
+                    "default_metric": 433,
+                    "network": [
+                        {"address": "6.6.6.0/24", "route_map": "netmap1"},
+                        {"address": "10.1.0.0/16"},
+                    ],
+                    "redistribute": [
+                        {"isis_level": "level-2", "protocol": "isis"}
+                    ],
+                    "route_target": {"action": "export", "target": "44:22"},
+                    "vrf": "vrf01",
+                }
+            ],
+        }
         self.assertEqual(sorted(parsed_list), sorted(result["parsed"]))
 
     def test_eos_bgp_global_rendered(self):
@@ -732,70 +583,54 @@ class TestEosBgpglobalModule(TestEosModule):
                         dict(
                             vrf="vrf02",
                             timers=dict(keepalive=44, holdtime=100),
-                            ucmp=dict(
-                                link_bandwidth=dict(mode="recursive")
-                            ),
+                            ucmp=dict(link_bandwidth=dict(mode="recursive")),
                             neighbor=[
                                 dict(
                                     peer="peer1",
                                     peer_group="peer1",
-                                    maximum_received_routes=dict(
-                                        count=12000,
-                                    ),
+                                    maximum_received_routes=dict(count=12000),
                                     send_community=dict(
                                         community_attribute="link-bandwidth",
                                         link_bandwidth_attribute="divide",
-                                        divide="ratio"
-                                    )
+                                        divide="ratio",
+                                    ),
                                 ),
                                 dict(
                                     peer="peer2",
                                     peer_group="peer2",
-                                    maximum_received_routes=dict(
-                                        count=12000
-                                    ),
+                                    maximum_received_routes=dict(count=12000),
                                 ),
                             ],
-                        ),
+                        )
                     ],
                     default_metric=433,
                     network=[
-                        dict(
-                            address="6.6.6.0/24",
-                            route_map="netmap1"
-                        ),
-                        dict(
-                            address="10.1.0.0/16"
-                        )
+                        dict(address="6.6.6.0/24", route_map="netmap1"),
+                        dict(address="10.1.0.0/16"),
                     ],
-                    redistribute=[
-                        dict(protocol="isis", isis_level="level-2")
-                    ],
-                    route_target=dict(
-                        action="export",
-                        target="44:22"
-                    )
+                    redistribute=[dict(protocol="isis", isis_level="level-2")],
+                    route_target=dict(action="export", target="44:22"),
                 ),
                 state="rendered",
             )
         )
-        rendered_cmds=[
-                  'router bgp 65535',
-                  'vrf vrf02',
-                  'neighbor peer1 peer-group',
-                  'neighbor peer1 maximum-routes 12000',
-                  'neighbor peer1 send-community link-bandwidth divide ratio',
-                  'neighbor peer2 peer-group',
-                  'neighbor peer2 maximum-routes 12000',
-                  'timers bgp 44 100',
-                  'ucmp link-bandwidth recursive',
-                  'exit',
-                  'redistribute isis level-2',
-                  'network 6.6.6.0/24 route-map netmap1',
-                  'network 10.1.0.0/16',
-                  'default-metric 433',
-                  'route-target export 44:22'
-                ]
+        rendered_cmds = [
+            "router bgp 65535",
+            "vrf vrf02",
+            "neighbor peer1 peer-group",
+            "neighbor peer1 maximum-routes 12000",
+            "neighbor peer1 send-community link-bandwidth divide ratio",
+            "neighbor peer2 peer-group",
+            "neighbor peer2 maximum-routes 12000",
+            "timers bgp 44 100",
+            "ucmp link-bandwidth recursive",
+            "exit",
+            "redistribute isis level-2",
+            "network 6.6.6.0/24 route-map netmap1",
+            "network 10.1.0.0/16",
+            "default-metric 433",
+            "route-target export 44:22",
+        ]
         result = self.execute_module(changed=False)
         self.assertEqual(
             sorted(result["rendered"]),

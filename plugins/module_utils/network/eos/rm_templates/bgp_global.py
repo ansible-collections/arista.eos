@@ -4,6 +4,7 @@
 # (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
 
 from __future__ import absolute_import, division, print_function
+
 __metaclass__ = type
 
 """
@@ -14,19 +15,21 @@ the given network resource.
 """
 
 import re
-from ansible.module_utils.six import iteritems
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
 
+
 def _tmplt_router_bgp_cmd(config_data):
     command = "router bgp {as_number}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_vrf(config_data):
     command = "vrf {vrf}".format(**config_data)
     return command
+
 
 def _tmplt_bgp_aggregate_address(config_data):
     command = "aggregate-address {address}".format(**config_data)
@@ -42,126 +45,167 @@ def _tmplt_bgp_aggregate_address(config_data):
         command += " advertise-only"
     return command
 
+
 def _tmplt_bgp_params(config_data):
-    import q
     command = "bgp"
-    if config_data['bgp_params'].get('additional_paths'):
-        command += " additional-paths " + config_data['bgp_params']['additional_paths']
-        if config_data['bgp_params']["additional_paths"] == "send":
+    if config_data["bgp_params"].get("additional_paths"):
+        command += (
+            " additional-paths "
+            + config_data["bgp_params"]["additional_paths"]
+        )
+        if config_data["bgp_params"]["additional_paths"] == "send":
             command += " any"
-    elif config_data['bgp_params'].get('advertise_inactive'):
+    elif config_data["bgp_params"].get("advertise_inactive"):
         command += " advertise-inactive"
-    elif config_data['bgp_params'].get('allowas_in'):
+    elif config_data["bgp_params"].get("allowas_in"):
         command += " allowas-in"
-        if config_data['bgp_params']['allowas_in'].get('count'):
-            command += " {count}".format(**config_data['bgp_params']['allowas_in'])
-    elif config_data['bgp_params'].get('always_compare_med'):
+        if config_data["bgp_params"]["allowas_in"].get("count"):
+            command += " {count}".format(
+                **config_data["bgp_params"]["allowas_in"]
+            )
+    elif config_data["bgp_params"].get("always_compare_med"):
         command += " always-comapre-med"
-    elif config_data['bgp_params'].get('asn'):
-        command += " asn notaion {asn}".format(**config_data['bgp_params'])
-    elif config_data['bgp_params'].get('auto_local_addr'):
+    elif config_data["bgp_params"].get("asn"):
+        command += " asn notaion {asn}".format(**config_data["bgp_params"])
+    elif config_data["bgp_params"].get("auto_local_addr"):
         command += " auto-local-addr"
-    elif config_data['bgp_params'].get('bestpath'):
+    elif config_data["bgp_params"].get("bestpath"):
         command += " bestpath"
-        if config_data['bgp_params']['bestpath'].get('as_path'):
-            command += " as-path {as_path}".format(**config_data['bgp_params']['as_path'])
-        elif config_data['bgp_params']['bestpath'].get('ecmp_fast'):
+        if config_data["bgp_params"]["bestpath"].get("as_path"):
+            command += " as-path {as_path}".format(
+                **config_data["bgp_params"]["as_path"]
+            )
+        elif config_data["bgp_params"]["bestpath"].get("ecmp_fast"):
             command += " ecmp-fast"
-        elif config_data['bgp_params'].get('med'):
+        elif config_data["bgp_params"].get("med"):
             command += " med"
-            if config_data['bgp_params']['med'].get('confed'):
+            if config_data["bgp_params"]["med"].get("confed"):
                 command += " confed"
             else:
                 command += " missing-as-worst"
-        elif config_data['bgp_params'].get('skip'):
+        elif config_data["bgp_params"].get("skip"):
             command += " skip next-hop igp-cost"
-        elif config_data['bgp_params'].get('tie_break'):
-            tie = re.sub(r'_', r'-', config_data['bgp_params']['tie_break'])
+        elif config_data["bgp_params"].get("tie_break"):
+            tie = re.sub(r"_", r"-", config_data["bgp_params"]["tie_break"])
             command += " tie-break " + tie
-    elif config_data['bgp_params'].get('client_to_client'):
+    elif config_data["bgp_params"].get("client_to_client"):
         command += " client-to-client"
-    elif config_data['bgp_params'].get('cluster_id'):
-        command += " cluster-id {cluster_id}".format(**config_data['bgp_params'])
-    elif config_data['bgp_params'].get('confederation'):
+    elif config_data["bgp_params"].get("cluster_id"):
+        command += " cluster-id {cluster_id}".format(
+            **config_data["bgp_params"]
+        )
+    elif config_data["bgp_params"].get("confederation"):
         command += " confederation"
-        if config_data['bgp_params']['confederation'].get('identifier'):
-            command += " identifier {identifier}".format(**config_data['bgp_params']['confederation'])
+        if config_data["bgp_params"]["confederation"].get("identifier"):
+            command += " identifier {identifier}".format(
+                **config_data["bgp_params"]["confederation"]
+            )
         else:
-            command += " peers {peers}".format(**config_data['bgp_params']['confederation'])
-    elif config_data['bgp_params'].get('control_plane_filter'):
+            command += " peers {peers}".format(
+                **config_data["bgp_params"]["confederation"]
+            )
+    elif config_data["bgp_params"].get("control_plane_filter"):
         command += " control-plane-filter default-allow"
-    elif config_data['bgp_params'].get('convergence'):
+    elif config_data["bgp_params"].get("convergence"):
         command += " convergence"
-        if config_data['bgp_params']['convergence'].get('slow_peer'):
+        if config_data["bgp_params"]["convergence"].get("slow_peer"):
             command += " slow-peer"
-        command += " time {time}".format(**config_data['bgp_params']['convergence'])
-    elif config_data['bgp_params'].get('default'):
-        command += " default {default}".format(**config_data['bgp_params'])
-    elif config_data['bgp_params'].get('enforce_first-as'):
+        command += " time {time}".format(
+            **config_data["bgp_params"]["convergence"]
+        )
+    elif config_data["bgp_params"].get("default"):
+        command += " default {default}".format(**config_data["bgp_params"])
+    elif config_data["bgp_params"].get("enforce_first-as"):
         command += " enforce-first-as"
-    elif config_data['bgp_params'].get('host_routes'):
+    elif config_data["bgp_params"].get("host_routes"):
         command += " host-routes fib direct-install"
-    elif config_data['bgp_params'].get('labeled_unicast'):
-        command += " labeled-unicast rib {labeled_unicast}".format(**config_data['bgp_params'])
-    elif config_data['bgp_params'].get('listen'):
+    elif config_data["bgp_params"].get("labeled_unicast"):
+        command += " labeled-unicast rib {labeled_unicast}".format(
+            **config_data["bgp_params"]
+        )
+    elif config_data["bgp_params"].get("listen"):
         command += " listen"
-        if config_data['bgp_params']['listen'].get('limit'):
-            command += " limit {limit}".format(**config_data['bgp_params']['listen'])
+        if config_data["bgp_params"]["listen"].get("limit"):
+            command += " limit {limit}".format(
+                **config_data["bgp_params"]["listen"]
+            )
         else:
-            command += " range {address} peer-group".format(**config_data['bgp_params']['listen']['range'])
-            if config_data['bgp_params']['listen']['range']['peer_group'].get('peer_filter'):
-                command += " {name} peer-filter {peer_filter}".format(**config_data['bgp_params']['listen']['range']['peer_group'])
+            command += " range {address} peer-group".format(
+                **config_data["bgp_params"]["listen"]["range"]
+            )
+            if config_data["bgp_params"]["listen"]["range"]["peer_group"].get(
+                "peer_filter"
+            ):
+                command += " {name} peer-filter {peer_filter}".format(
+                    **config_data["bgp_params"]["listen"]["range"][
+                        "peer_group"
+                    ]
+                )
             else:
-                command += " {name} remote-as {remote_as}".format(**config_data['bgp_params']['listen']['range']['peer_group'])
-    elif config_data['bgp_params'].get('log_neighbor_changes'):
+                command += " {name} remote-as {remote_as}".format(
+                    **config_data["bgp_params"]["listen"]["range"][
+                        "peer_group"
+                    ]
+                )
+    elif config_data["bgp_params"].get("log_neighbor_changes"):
         command += " log-neighbor-changes"
-    elif config_data['bgp_params'].get('missing_policy'):
-        command += " missing-policy direction {direction} action {action}".format(**config['missing_policy'])
-    elif config_data['bgp_params'].get('monitoring'):
+    elif config_data["bgp_params"].get("missing_policy"):
+        command += " missing-policy direction {direction} action {action}".format(
+            **config_data["bgp_params"]["missing_policy"]
+        )
+    elif config_data["bgp_params"].get("monitoring"):
         command += " monitoring"
-    elif config_data['bgp_params'].get('next_hop_unchanged'):
+    elif config_data["bgp_params"].get("next_hop_unchanged"):
         command += " next-hop-unchanged"
-    elif config_data['bgp_params'].get('redistribute_internal'):
+    elif config_data["bgp_params"].get("redistribute_internal"):
         command += " redistribute-internal"
-    elif config_data['bgp_params'].get('route'):
-        command += " route install-map {route}".format(**config_data['bgp_params'])
-    elif config_data['bgp_params'].get('route_reflector'):
+    elif config_data["bgp_params"].get("route"):
+        command += " route install-map {route}".format(
+            **config_data["bgp_params"]
+        )
+    elif config_data["bgp_params"].get("route_reflector"):
         command += " route-reflector preserve-attributes"
-        if config_data['bgp_params']['reoute_reflector'].get('always'):
+        if config_data["bgp_params"]["reoute_reflector"].get("always"):
             command += " always"
-    elif config_data['bgp_params'].get('transport'):
-        command += " transport listen-port {transport}".format(**config_data['bgp_params'])
+    elif config_data["bgp_params"].get("transport"):
+        command += " transport listen-port {transport}".format(
+            **config_data["bgp_params"]
+        )
     return command
+
 
 def _tmplt_bgp_redistribute(config_data):
     command = "redistribute {protocol}".format(**config_data)
     if config_data.get("isis_level"):
         command += " {isis_level}".format(**config_data)
     if config_data.get("ospf_route"):
-        if config_data['ospf_route'] == "nssa_external_2":
+        if config_data["ospf_route"] == "nssa_external_2":
             route = "nssa-external 2"
-        elif config_data['ospf_route'] == "nssa_external_1":
+        elif config_data["ospf_route"] == "nssa_external_1":
             route = "nssa-external 1"
         else:
-            route = config_data['ospf_route']
+            route = config_data["ospf_route"]
         command += " match " + route
     if config_data.get("route_map"):
         command += " route-map {route_map}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_default_metric(config_data):
     command = "default-metric {default_metric}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_distance(config_data):
     command = "distance bgp"
-    if config_data['distance'].get("external"):
-        command += " {external}".format(**config_data['distance'])
-    if config_data['distance'].get("internal"):
-        command += " {internal}".format(**config_data['distance'])
-    if config_data['distance'].get("local"):
-        command += " {local}".format(**config_data['distance'])
+    if config_data["distance"].get("external"):
+        command += " {external}".format(**config_data["distance"])
+    if config_data["distance"].get("internal"):
+        command += " {internal}".format(**config_data["distance"])
+    if config_data["distance"].get("local"):
+        command += " {local}".format(**config_data["distance"])
     return command
+
 
 def _tmplt_bgp_graceful_restart(config_data):
     command = "graceful-restart"
@@ -171,25 +215,35 @@ def _tmplt_bgp_graceful_restart(config_data):
         command += " stalepath-time {stalepath_time}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_graceful_restart_helper(config_data):
     command = "graceful-restart-helper"
     return command
 
+
 def _tmplt_bgp_access_group(config_data):
-    if config_data.get('afi') == "ipv4":
+    if config_data["accesS_group"].get("afi") == "ipv4":
         afi = "ip"
     else:
         afi = "ipv6"
-    command = afi + " access-group {acl_name}".format(**config_data)
-    if config_data.get("direction"):
-        command += " {direction}".format(**config_data)
+    command = afi + " access-group {acl_name}".format(
+        **config_data["access_group"]
+    )
+    if config_data["access_group"].get("direction"):
+        command += " {direction}".format(**config_data["access_group"])
     return command
 
+
 def _tmplt_bgp_maximum_paths(config_data):
-    command = "maximum-paths {max_equal_cost_paths}".format(**config_data['maximum_paths'])
+    command = "maximum-paths {max_equal_cost_paths}".format(
+        **config_data["maximum_paths"]
+    )
     if config_data.get("max_installed_ecmp_paths"):
-        command += " ecmp {max_installed_ecmp_paths}".format(**config_data['maximum_paths'])
+        command += " ecmp {max_installed_ecmp_paths}".format(
+            **config_data["maximum_paths"]
+        )
     return command
+
 
 def _tmplt_bgp_monitoring(config_data):
     cmd = "monitoring"
@@ -204,141 +258,228 @@ def _tmplt_bgp_monitoring(config_data):
         command = cmd + " station {station}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_neighbor(config_data):
-    command = "neighbor {peer}".format(**config_data['neighbor'])
-    if config_data['neighbor'].get('additional_paths'):
-        command += " additional-paths {additional_paths}".format(**config_data['neighbor'])
-        if config_data['neighbor']['additional_paths'] == "send":
+    command = "neighbor {peer}".format(**config_data["neighbor"])
+    if config_data["neighbor"].get("additional_paths"):
+        command += " additional-paths {additional_paths}".format(
+            **config_data["neighbor"]
+        )
+        if config_data["neighbor"]["additional_paths"] == "send":
             command += "any"
-    elif config_data['neighbor'].get('peer_group'):
+    elif config_data["neighbor"].get("peer_group"):
         command += " peer-group"
-        if config_data['neighbor']['peer_group'] != config_data['neighbor']['peer_group']:
-            command += config_data['neighbor']['peer_group']
-    elif config_data['neighbor'].get('allowas_in'):
+        if (
+            config_data["neighbor"]["peer_group"]
+            != config_data["neighbor"]["peer_group"]
+        ):
+            command += config_data["neighbor"]["peer_group"]
+    elif config_data["neighbor"].get("allowas_in"):
         command += " allowas-in"
-        if config_data['neighbor']['allowas_in'].get('count'):
-            command += " {count}".format(**config_data['neighbor']['allowas_in'])
-    elif config_data['neighbor'].get('auto_local_addr'):
+        if config_data["neighbor"]["allowas_in"].get("count"):
+            command += " {count}".format(
+                **config_data["neighbor"]["allowas_in"]
+            )
+    elif config_data["neighbor"].get("auto_local_addr"):
         command += " auto-local-addr"
-    elif config_data['neighbor'].get('default_originate'):
+    elif config_data["neighbor"].get("default_originate"):
         command += " default-originate"
-        if config_data['neighbor']['default_originate'].get('route_map'):
-            command += " route-map {route_map}".format(**config_data['neighbor']['default_originate'])
-        if config_data['neighbor']['default_originate'].get('always'):
+        if config_data["neighbor"]["default_originate"].get("route_map"):
+            command += " route-map {route_map}".format(
+                **config_data["neighbor"]["default_originate"]
+            )
+        if config_data["neighbor"]["default_originate"].get("always"):
             command += " always"
-    elif config_data['neighbor'].get('description'):
-        command += " description {description}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('dont_capability_negotiate'):
+    elif config_data["neighbor"].get("description"):
+        command += " description {description}".format(
+            **config_data["neighbor"]
+        )
+    elif config_data["neighbor"].get("dont_capability_negotiate"):
         command += " dont-capability-negotiate"
-    elif config_data['neighbor'].get('ebgp_multihop'):
+    elif config_data["neighbor"].get("ebgp_multihop"):
         command += " ebgp-multiphop"
-        if config_data['neighbor']['ebgp_multihop'].get('ttl'):
-            command += " {ttl}".format(**config_data['neighbor']['ebgp_multihop'])
-    elif config_data['neighbor'].get('enforce_first_as'):
+        if config_data["neighbor"]["ebgp_multihop"].get("ttl"):
+            command += " {ttl}".format(
+                **config_data["neighbor"]["ebgp_multihop"]
+            )
+    elif config_data["neighbor"].get("enforce_first_as"):
         command += " enforce-first-as"
-    elif config_data['neighbor'].get('export_localpref'):
-        command += " export-localpref {export_localpref}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('fall_over'):
+    elif config_data["neighbor"].get("export_localpref"):
+        command += " export-localpref {export_localpref}".format(
+            **config_data["neighbor"]
+        )
+    elif config_data["neighbor"].get("fall_over"):
         command += " fall-over bfd"
-    elif config_data['neighbor'].get('graceful_restart'):
+    elif config_data["neighbor"].get("graceful_restart"):
         command += " graceful-restart"
-    elif  config_data['neighbor'].get('graceful_restart_helper'):
+    elif config_data["neighbor"].get("graceful_restart_helper"):
         command += " graceful-restart-helper"
-    elif config_data['neighbor'].get('idle_restart_timer'):
-        command += " idle-restart-timer {idle_restart_timer}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('import_localpref'):
-        command += " import-localpref {import_localpref}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('link_bandwidth'):
+    elif config_data["neighbor"].get("idle_restart_timer"):
+        command += " idle-restart-timer {idle_restart_timer}".format(
+            **config_data["neighbor"]
+        )
+    elif config_data["neighbor"].get("import_localpref"):
+        command += " import-localpref {import_localpref}".format(
+            **config_data["neighbor"]
+        )
+    elif config_data["neighbor"].get("link_bandwidth"):
         command += " link-bandwidth"
-        if config_data['neighbor']['link_bandwidth'].get('auto'):
+        if config_data["neighbor"]["link_bandwidth"].get("auto"):
             command += " auto"
-        if config_data['neighbor']['link_bandwidth'].get('default'):
-            command += " default {default}".format(**config_data['neighbor']['link_bandwidth'])
-        if config_data['neighbor']['link_bandwidth'].get('update_delay'):
-            command += " update-delay {update_delay}".format(**config_data['neighbor']['link_bandwidth'])
-    elif config_data['neighbor'].get('local_as'):
-        command += " local-as {as_number} no-prepend replace-as".format(**config_data['neighbor'])
-        if config_data['neighbor']['local_as'].get('fallback'):
+        if config_data["neighbor"]["link_bandwidth"].get("default"):
+            command += " default {default}".format(
+                **config_data["neighbor"]["link_bandwidth"]
+            )
+        if config_data["neighbor"]["link_bandwidth"].get("update_delay"):
+            command += " update-delay {update_delay}".format(
+                **config_data["neighbor"]["link_bandwidth"]
+            )
+    elif config_data["neighbor"].get("local_as"):
+        command += " local-as {as_number} no-prepend replace-as".format(
+            **config_data["neighbor"]
+        )
+        if config_data["neighbor"]["local_as"].get("fallback"):
             command += " fallback"
-    elif config_data['neighbor'].get('local_v6_addr'):
-        command += " local-v6-addr {local_v6_addr}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('maximum_accepted_routes'):
-        command += " maximum-accepted-routes {count}".format(**config_data['neighbor']['maximum_accepted_routes'])
-        if config_data['neighbor']['maximum_accepted_routes'].get('warning_limit'):
-            command += " warning-limit {warning_limit}".format(**config_data['neighbor']['maximum_accepted_routes'])
-    elif config_data['neighbor'].get('maximum_received_routes'):
-        command += " maximum-routes {count}".format(**config_data['neighbor']['maximum_received_routes'])
-        if config_data['neighbor']['maximum_received_routes'].get('warning_limit'):
-            if config_data['neighbor']['maximum_received_routes']['warning_limit'].get('limit_count'):
-                command += " warning-limit {limit_count}".format(**config_data['neighbor']['maximum_received_routes']['warning_limit'])
-            if config_data['neighbor']['maximum_received_routes']['warning_limit'].get('limit_percent'):
-                command += " warning-limit " + str(config_data['neighbor']['maximum_received_routes']['warning_limit']['limit_percent']) + " percent"
-        if config_data['neighbor']['maximum_received_routes'].get('warning_only'):
+    elif config_data["neighbor"].get("local_v6_addr"):
+        command += " local-v6-addr {local_v6_addr}".format(
+            **config_data["neighbor"]
+        )
+    elif config_data["neighbor"].get("maximum_accepted_routes"):
+        command += " maximum-accepted-routes {count}".format(
+            **config_data["neighbor"]["maximum_accepted_routes"]
+        )
+        if config_data["neighbor"]["maximum_accepted_routes"].get(
+            "warning_limit"
+        ):
+            command += " warning-limit {warning_limit}".format(
+                **config_data["neighbor"]["maximum_accepted_routes"]
+            )
+    elif config_data["neighbor"].get("maximum_received_routes"):
+        command += " maximum-routes {count}".format(
+            **config_data["neighbor"]["maximum_received_routes"]
+        )
+        if config_data["neighbor"]["maximum_received_routes"].get(
+            "warning_limit"
+        ):
+            if config_data["neighbor"]["maximum_received_routes"][
+                "warning_limit"
+            ].get("limit_count"):
+                command += " warning-limit {limit_count}".format(
+                    **config_data["neighbor"]["maximum_received_routes"][
+                        "warning_limit"
+                    ]
+                )
+            if config_data["neighbor"]["maximum_received_routes"][
+                "warning_limit"
+            ].get("limit_percent"):
+                command += (
+                    " warning-limit "
+                    + str(
+                        config_data["neighbor"]["maximum_received_routes"][
+                            "warning_limit"
+                        ]["limit_percent"]
+                    )
+                    + " percent"
+                )
+        if config_data["neighbor"]["maximum_received_routes"].get(
+            "warning_only"
+        ):
             command += " warning-only"
-    elif config_data['neighbor'].get('metric_out'):
-        command += " metric-out {metric_out}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('monitoring'):
+    elif config_data["neighbor"].get("metric_out"):
+        command += " metric-out {metric_out}".format(**config_data["neighbor"])
+    elif config_data["neighbor"].get("monitoring"):
         command += " monitoring"
-    elif config_data['neighbor'].get('next_hop_self'):
+    elif config_data["neighbor"].get("next_hop_self"):
         command += " next-hop-self"
-    elif config_data['neighbor'].get('next_hop_unchanged'):
+    elif config_data["neighbor"].get("next_hop_unchanged"):
         command += " next-hop-unchanged"
-    elif config_data['neighbor'].get('next_hop_v6_addr'):
-        command += " next-hop-v6-addt {next_hop_v6_addr} in".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('out_delay'):
-        command += " out-delay {out_delay}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('remote_as'):
-        command += " remote-as {remote_as}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('remove_private_as'):
+    elif config_data["neighbor"].get("next_hop_v6_addr"):
+        command += " next-hop-v6-addt {next_hop_v6_addr} in".format(
+            **config_data["neighbor"]
+        )
+    elif config_data["neighbor"].get("out_delay"):
+        command += " out-delay {out_delay}".format(**config_data["neighbor"])
+    elif config_data["neighbor"].get("remote_as"):
+        command += " remote-as {remote_as}".format(**config_data["neighbor"])
+    elif config_data["neighbor"].get("remove_private_as"):
         command += " remove-private-as"
-        if config_data['neighbor']['remove_private_as'].get('all'):
+        if config_data["neighbor"]["remove_private_as"].get("all"):
             command += " all"
-        if config_data['neighbor']['remove_private_as'].get('replace_as'):
+        if config_data["neighbor"]["remove_private_as"].get("replace_as"):
             command += " replace-as"
-    elif config_data['neighbor'].get('peer_as'):
-        command += " peer-as {peer_as}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('prefix_list'):
-        command += " prefix-list {name} {direction}".format(**config_data['neighbor']['prefix_list'])
-    elif config_data['neighbor'].get('route_map'):
-        command += " route-map {name} {direction}".format(**config_data['neighbor']['route_map'])
-    elif config_data['neighbor'].get('route_reflector_client'):
+    elif config_data["neighbor"].get("peer_as"):
+        command += " peer-as {peer_as}".format(**config_data["neighbor"])
+    elif config_data["neighbor"].get("prefix_list"):
+        command += " prefix-list {name} {direction}".format(
+            **config_data["neighbor"]["prefix_list"]
+        )
+    elif config_data["neighbor"].get("route_map"):
+        command += " route-map {name} {direction}".format(
+            **config_data["neighbor"]["route_map"]
+        )
+    elif config_data["neighbor"].get("route_reflector_client"):
         command += " route-reflector-client"
-    elif config_data['neighbor'].get('route_to_peer'):
+    elif config_data["neighbor"].get("route_to_peer"):
         command += " route-to-peer"
-    elif config_data['neighbor'].get('send_community'):
-        import q
+    elif config_data["neighbor"].get("send_community"):
         command += " send-community"
-        if config_data['neighbor']['send_community'].get('community_attribute'):
-            command += " " + config_data['neighbor']['send_community']['community_attribute']
-        if config_data['neighbor']['send_community'].get('sub_attribute'):
-            command += " " + config_data['neighbor']['send_community']['sub_attribute']
-        if config_data['neighbor']['send_community'].get('link_bandwidth_attribute'):
-            command += " " + config_data['neighbor']['send_community']['link_bandwidth_attribute']
-        if config_data['neighbor']['send_community'].get('speed'):
-            command += " " + config_data['neighbor']['send_community']['speed']
-        if config_data['neighbor']['send_community'].get('divide'):
-            command += " " + config_data['neighbor']['send_community']['divide']
-    elif config_data['neighbor'].get('shutdown'):
+        if config_data["neighbor"]["send_community"].get(
+            "community_attribute"
+        ):
+            command += (
+                " "
+                + config_data["neighbor"]["send_community"][
+                    "community_attribute"
+                ]
+            )
+        if config_data["neighbor"]["send_community"].get("sub_attribute"):
+            command += (
+                " "
+                + config_data["neighbor"]["send_community"]["sub_attribute"]
+            )
+        if config_data["neighbor"]["send_community"].get(
+            "link_bandwidth_attribute"
+        ):
+            command += (
+                " "
+                + config_data["neighbor"]["send_community"][
+                    "link_bandwidth_attribute"
+                ]
+            )
+        if config_data["neighbor"]["send_community"].get("speed"):
+            command += " " + config_data["neighbor"]["send_community"]["speed"]
+        if config_data["neighbor"]["send_community"].get("divide"):
+            command += (
+                " " + config_data["neighbor"]["send_community"]["divide"]
+            )
+    elif config_data["neighbor"].get("shutdown"):
         command += " shutdown"
-    elif config_data['neighbor'].get('soft_reconfiguration'):
+    elif config_data["neighbor"].get("soft_reconfiguration"):
         command += " soft-reconfiguration inbound"
-        if config_data['neighbor']['soft_reconfiguration'] == "all":
+        if config_data["neighbor"]["soft_reconfiguration"] == "all":
             command += " all"
-    elif config_data['neighbor'].get('transport'):
+    elif config_data["neighbor"].get("transport"):
         command += " transport"
-        if config_data['neighbor']['transport'].get('connection_mode'):
+        if config_data["neighbor"]["transport"].get("connection_mode"):
             command += " connection-mode passive"
         else:
-            command += " remote-port {remote_port}".format(**config_data['neighbor']['transport'])
-    elif config_data['neighbor'].get('timers'):
-        command += " timers {keepalive} {holdtime}".format(**config_data['neighbor']['timers'])
-    elif config_data['neighbor'].get('ttl'):
-        command += " ttl maximum-hops {ttl}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('update_source'):
-        command += " update-source {update_source}".format(**config_data['neighbor'])
-    elif config_data['neighbor'].get('weight'):
-        command += " weight {weight}".format(**config_data['neighbor'])
+            command += " remote-port {remote_port}".format(
+                **config_data["neighbor"]["transport"]
+            )
+    elif config_data["neighbor"].get("timers"):
+        command += " timers {keepalive} {holdtime}".format(
+            **config_data["neighbor"]["timers"]
+        )
+    elif config_data["neighbor"].get("ttl"):
+        command += " ttl maximum-hops {ttl}".format(**config_data["neighbor"])
+    elif config_data["neighbor"].get("update_source"):
+        command += " update-source {update_source}".format(
+            **config_data["neighbor"]
+        )
+    elif config_data["neighbor"].get("weight"):
+        command += " weight {weight}".format(**config_data["neighbor"])
     return command
+
 
 def _tmplt_bgp_network(config_data):
     command = "network {address}".format(**config_data)
@@ -346,49 +487,68 @@ def _tmplt_bgp_network(config_data):
         command += " route-map {route_map}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_route_target(config_data):
-    command = "route-target {action} {target}".format(**config_data['route_target'])
+    command = "route-target {action} {target}".format(
+        **config_data["route_target"]
+    )
     return command
+
 
 def _tmplt_bgp_router_id(config_data):
     command = "router-id {router_id}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_shutdown(config_data):
     return "shutdown"
 
+
 def _tmplt_bgp_timers(config_data):
-    command = "timers bgp {keepalive} {holdtime}".format(**config_data['timers'])
+    command = "timers bgp {keepalive} {holdtime}".format(
+        **config_data["timers"]
+    )
     return command
+
 
 def _tmplt_bgp_ucmp(config_data):
     command = "ucmp"
-    if "fec" in config_data['ucmp']:
+    if "fec" in config_data["ucmp"]:
         command += " fec threshold trigger"
-        command += " {trigger} clear {clear} warning-only".format(**config_data['ucmp']["fec"])
-    if "link_bandwidth" in config_data['ucmp']:
-        command += " link-bandwidth {mode}".format(**config_data['ucmp']["link_bandwidth"])
-        if config_data['ucmp']["link_bandwidth"].get('mode') == "update_delay":
-            command += " {update_delay}".format(**config_data['ucmp']["link_bandwidth"])
-    if "mode" in config_data['ucmp']:
+        command += " {trigger} clear {clear} warning-only".format(
+            **config_data["ucmp"]["fec"]
+        )
+    if "link_bandwidth" in config_data["ucmp"]:
+        command += " link-bandwidth {mode}".format(
+            **config_data["ucmp"]["link_bandwidth"]
+        )
+        if config_data["ucmp"]["link_bandwidth"].get("mode") == "update_delay":
+            command += " {update_delay}".format(
+                **config_data["ucmp"]["link_bandwidth"]
+            )
+    if "mode" in config_data["ucmp"]:
         command += " mode 1"
-        if config_data["ucmp"]["mode"].get('nexthops'):
+        if config_data["ucmp"]["mode"].get("nexthops"):
             command += " {nexthops}".format(**config_data["ucmp"]["mode"])
     return command
 
+
 def _tmplt_bgp_update(config_data):
-    command = "update {wait_for}".format(**config_data['update'])
-    if config_data['update'].get("batch_size"):
-        command += " {batch_size}".format(**config_data['update'])
+    command = "update {wait_for}".format(**config_data["update"])
+    if config_data["update"].get("batch_size"):
+        command += " {batch_size}".format(**config_data["update"])
     return command
+
 
 def _tmplt_bgp_vlan(config_data):
     command = "vlan {vlan}".format(**config_data)
     return command
 
+
 def _tmplt_bgp_vlan_aware_bundle(config_data):
-    command = "vlan-aware-bundle " + config_data['vlan_aware_bundle']
+    command = "vlan-aware-bundle " + config_data["vlan_aware_bundle"]
     return command
+
 
 class Bgp_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None):
@@ -770,8 +930,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                 r"""
                 \s*bgp
                 \s+confederation
-                \s*(?P<identifier>identifier \S+)*
-                \s*(?P<peers>peers \S+)*
+                \s*(?P<identifier>identifier\s.+)*
+                \s*(?P<peers>peers\s.+)*
                 $""",
                 re.VERBOSE,
             ),
@@ -782,8 +942,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "bgp_params": {
                             "confederation": {
-                                "identifier": "{{ identifier }}",
-                                "peers": "{{ peers.split(" ") }}"
+                                "identifier": "{{ identifier.split(" ")[1] }}",
+                                "peers": "{{ peers.split(" ")[1] }}"
                             }
                         }
                     }
@@ -1382,7 +1542,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "additional_paths": "{{ action }}",
                             }
@@ -1408,7 +1568,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "allowas_in": {
                                     "set": "{{ True if count is undefined }}",
@@ -1436,7 +1596,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "auto_local_addr": "{{ True }}",
                             }
@@ -1463,11 +1623,11 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "default_originate": {
                                     "route_map": "{{ route_map.split(" ")[1] }}",
-                                    "always" : "{{ True if always is defined }}"
+                                    "always": "{{ True if always is defined }}"
                                 }
                             }
                         }
@@ -1492,7 +1652,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "description": "{{ desc }}",
                             }
@@ -1517,7 +1677,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "dont_capability_negotiate": "{{ True }}",
                             }
@@ -1543,7 +1703,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "ebgp_multihop": {
                                     "set": "{{ True if ttl is not set }}",
@@ -1571,7 +1731,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "enforce_first_as": "{{ True }}",
                             }
@@ -1597,7 +1757,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "export_localpref": "{{ pref }}",
                             }
@@ -1623,7 +1783,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "fall_over": "{{ True }}",
                             }
@@ -1649,7 +1809,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "graceful_restart": "{{ True }}",
                             }
@@ -1674,7 +1834,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "graceful_restart_helper": "{{ True }}",
                             }
@@ -1700,7 +1860,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "idle_restart_timer": "{{ time }}",
                             }
@@ -1726,7 +1886,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "import_localpref": "{{ pref }}",
                             }
@@ -1754,7 +1914,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "link_bandwidth": {
                                     "set": "{{ True }}",
@@ -1788,7 +1948,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "local_as": {
                                     "as_number": "{{ num }}",
@@ -1817,7 +1977,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "local_v6_addr": "{{ addr }}",
                             }
@@ -1845,7 +2005,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "maximum_accepted_routes": {
                                     "count": "{{ count }}",
@@ -1878,7 +2038,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "maximum_received_routes": {
                                     "count": "{{ count }}",
@@ -1911,7 +2071,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "metric_out": "{{ metric }}",
                             }
@@ -1936,7 +2096,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "monitoring": "{{ True }}",
                             }
@@ -1961,7 +2121,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "next_hop_self": "{{ True }}",
                             }
@@ -1986,7 +2146,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "next_hop_unchanged": "{{ True }}",
                             }
@@ -2013,7 +2173,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "next_hop_v6_addr": "{{ addr }}",
                             }
@@ -2039,7 +2199,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "out_delay": "{{ delay }}",
                             }
@@ -2065,7 +2225,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "remote_as": "{{ num }}",
                             }
@@ -2092,7 +2252,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "remove_private_as": {
                                     "set": "{{ True if all is undefined and replace is undefined }}",
@@ -2122,7 +2282,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "peer_group": "{{ name if name is defined else peer}}",
                             }
@@ -2149,7 +2309,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "prefix_list": {
                                     "name": "{{ name }}",
@@ -2179,7 +2339,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "route_map": {
                                     "name": "{{ name }}",
@@ -2207,7 +2367,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "route_reflector_client": "{{ True }}",
                             }
@@ -2232,7 +2392,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "route_to_peer": "{{ True }}",
                             }
@@ -2262,10 +2422,10 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "send_community": {
-                                    "set": "{{ True if comm is not defined }}", 
+                                    "set": "{{ True if comm is not defined }}",
                                     "community_attribute": "{{ comm }}",
                                     "sub_attribute": "{{ attr }}",
                                     "link_bandwidth_attribute": "{{ link }}",
@@ -2278,175 +2438,6 @@ class Bgp_globalTemplate(NetworkTemplate):
                 }
             },
         },
-        # {
-        #     "name": "neighbor.send_community_link_bandwidth",
-        #     "getval": re.compile(
-        #         r"""
-        #         \s*neighbor
-        #         \s+(?P<peer>\S+)
-        #         \s+send-community
-        #         \s+link-bandwidth
-        #         \s*(?P<link>aggregate|divide)*
-        #         \s*(?P<div>equal|ratio)*
-        #         \s*(?P<speed>\S+)*
-        #         $""",
-        #         re.VERBOSE,
-        #     ),
-        #     "setval": _tmplt_bgp_neighbor,
-        #     "compval": "neighbor.send_community",
-        #     "result": {
-        #         "vrfs": {
-        #             '{{ "vrf_" + vrf|d() }}': {
-        #                 "neighbor": {
-        #                     "{{ peer }}" : {
-        #                         "peer": "{{ peer }}",
-        #                         "send_community": {
-        #                             "community_attribute": "{{ 'link_bandidth' }}",
-        #                             "link_bandwidth_attribute": "{{ link }}",
-        #                             "speed": "{{ speed }}",
-        #                             "divide": "{{ div }}"
-        #                         }
-        #                     }
-        #                 }
-        #             }
-        #         }
-        #     },
-        # },
-        # {
-        #     "name": "neighbor.send_community_extended",
-        #     "getval": re.compile(
-        #         r"""
-        #         \s*neighbor
-        #         \s+(?P<peer>\S+)
-        #         \s+send-community
-        #         \s+extended
-        #         \s*(?P<attr>\S+)*
-        #         \s*(?P<link>aggregate|divide)*
-        #         \s*(?P<div>equal|ratio)*
-        #         \s*(?P<speed>\S+)*
-        #         $""",
-        #         re.VERBOSE,
-        #     ),
-        #     "setval": _tmplt_bgp_neighbor,
-        #     "compval": "neighbor.send_community",
-        #     "result": {
-        #         "vrfs": {
-        #             '{{ "vrf_" + vrf|d() }}': {
-        #                 "neighbor": {
-        #                     "{{ peer }}" : {
-        #                         "peer": "{{ peer }}",
-        #                         "send_community": {
-        #                             "community_attribute": "{{ 'extended' }}",
-        #                             "sub_attribute": "{{ attr }}",
-        #                             "link_bandwidth_attribute": "{{ link }}",
-        #                             "speed": "{{ speed }}",
-        #                             "divide": "{{ div }}"
-        #                         }
-        #                     }
-        #                 }
-        #             }
-        #         }
-        #     },
-        # },
-        # {
-        #     "name": "neighbor.send_community_remove",
-        #     "getval": re.compile(
-        #         r"""
-        #         \s*neighbor
-        #         \s+(?P<peer>\S+)
-        #         \s+send-community
-        #         \s+remove
-        #         \s*(?P<attr>\S+)*
-        #         \s*(?P<link>aggregate|divide)*
-        #         \s*(?P<div>equal|ratio)*
-        #         \s*(?P<speed>\S+)*
-        #         $""",
-        #         re.VERBOSE,
-        #     ),
-        #     "setval": _tmplt_bgp_neighbor,
-        #     "compval": "neighbor.send_community",
-        #     "result": {
-        #         "vrfs": {
-        #             '{{ "vrf_" + vrf|d() }}': {
-        #                 "neighbor": {
-        #                     "{{ peer }}" : {
-        #                         "peer": "{{ peer }}",
-        #                         "send_community": {
-        #                             "community_attribute": "{{ 'remove' }}",
-        #                             "sub_attribute": "{{ attr }}",
-        #                             "link_bandwidth_attribute": "{{ link }}",
-        #                             "speed": "{{ speed }}",
-        #                             "divide": "{{ div }}"
-        #                         }
-        #                     }
-        #                 }
-        #             }
-        #         }
-        #     },
-        # },
-        # {
-        #     "name": "neighbor.send_community_standard",
-        #     "getval": re.compile(
-        #         r"""
-        #         \s*neighbor
-        #         \s+(?P<peer>\S+)
-        #         \s+send-community
-        #         \s+remove
-        #         \s*(?P<attr>\S+)*
-        #         \s*(?P<link>aggregate|divide)*
-        #         \s*(?P<div>equal|ratio)*
-        #         \s*(?P<speed>\S+)*
-        #         $""",
-        #         re.VERBOSE,
-        #     ),
-        #     "setval": _tmplt_bgp_neighbor,
-        #     "compval": "neighbor.send_community",
-        #     "result": {
-        #         "vrfs": {
-        #             '{{ "vrf_" + vrf|d() }}': {
-        #                 "neighbor": {
-        #                     "{{ peer }}" : {
-        #                         "peer": "{{ peer }}",
-        #                         "send_community": {
-        #                             "community_attribute": "{{ 'standard' }}",
-        #                             "sub_attribute": "{{ attr }}",
-        #                             "link_bandwidth_attribute": "{{ link }}",
-        #                             "speed": "{{ speed }}",
-        #                             "divide": "{{ div }}"
-        #                         }
-        #                     }
-        #                 }
-        #             }
-        #         }
-        #     },
-        # },
-        # {
-        #     "name": "neighbor.send_community",
-        #     "getval": re.compile(
-        #         r"""
-        #         \s*neighbor
-        #         \s+(?P<peer>\S+)
-        #         \s+send-community
-        #         $""",
-        #         re.VERBOSE,
-        #     ),
-        #     "setval": _tmplt_bgp_neighbor,
-        #     "compval": "neighbor.send_community",
-        #     "result": {
-        #         "vrfs": {
-        #             '{{ "vrf_" + vrf|d() }}': {
-        #                 "neighbor": {
-        #                     "{{ peer }}" : {
-        #                         "peer": "{{ peer }}",
-        #                         "send_community": {
-        #                             "set": "{{ True }}"
-        #                         }
-        #                     }
-        #                 }
-        #             }
-        #         }
-        #     },
-        # },
         {
             "name": "neighbor.shutdown",
             "getval": re.compile(
@@ -2463,7 +2454,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "shutdown": "{{ True }}",
                             }
@@ -2490,7 +2481,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "soft_reconfiguration": "{{ 'all' if all is defined else 'None' }}",
                             }
@@ -2518,7 +2509,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "transport": {
                                     "connection_mode": "{{ mode }}",
@@ -2548,7 +2539,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "timers": {
                                     "keepalive": "{{ keepalive }}",
@@ -2578,7 +2569,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "ttl": "{{ hop }}",
                             }
@@ -2604,7 +2595,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "update_source": "{{ src }}",
                             }
@@ -2630,7 +2621,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
-                            "{{ peer }}" : {
+                            "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "weight": "{{ val }}",
                             }
