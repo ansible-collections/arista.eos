@@ -227,7 +227,7 @@ class Bgp_global(ResourceModule):
             if name not in wvrf.keys():
                 if self._check_af(name):
                     self._module.fail_json(
-                        msg="Use the _bgp_af module to delete the address_family under vrf, before replacing/deleting the vrf."
+                        msg="Use the _bgp_address_family module to delete the address_family under vrf, before replacing/deleting the vrf."
                     )
                 else:
                     self.commands.append(
