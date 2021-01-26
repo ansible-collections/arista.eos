@@ -1,17 +1,17 @@
 ---
 - debug:
-    msg: Start eos_bgp_af replaced integration tests ansible_connection={{
+    msg: Start eos_bgp_address_family overridden integration tests ansible_connection={{
       ansible_connection }}
 
 - include_tasks: _populate.yaml
 
 - block:
 
-    - name: Replace given bgp_af configuration
+    - name: override given bgp_address_family configuration
       become: true
       register: result
-      arista.eos.eos_bgp_af: &replaced
-        state: replaced
+      arista.eos.eos_bgp_address_family: &overridden
+        state: overridden
         config:
           as_number: "65535"
           address_family:
@@ -22,23 +22,23 @@
                   ospf_route: "external"
               bgp_params:
                 additional_paths: "receive"
-            - afi: "ipv4"
+            - afi: "ipv6"
               redistribute:
                 - protocol: "isis"
                   isis_level: "level-2"
 
     - assert:
         that:
-          - result.commands|length == 15
+          - result.commands|length == 12
           - result.changed == true
-          - result.commands|symmetric_difference(replaced.commands) == []
-          - result.after.address_family|symmetric_difference(replaced.after.address_family) == []
+          - result.commands|symmetric_difference(overridden.commands) == []
+          - result.after.address_family|symmetric_difference(overridden.after.address_family) == []
           - result.before.address_family|symmetric_difference(replaced.before.address_family) == []
 
     - name: Idempotency check
       become: true
       register: result
-      arista.eos.eos_bgp_af: *replaced
+      arista.eos.eos_bgp_address_family: *overridden
 
     - assert:
         that:

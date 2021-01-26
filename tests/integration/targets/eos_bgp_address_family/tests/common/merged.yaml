@@ -1,14 +1,14 @@
 ---
 - debug:
-    msg: Start eos_bgp_af merged integration tests ansible_connection={{
+    msg: Start eos_bgp_address_family merged integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
 
-    - name: merge given bgp_af configuration
+    - name: merge given bgp_address_family configuration
       become: true
       register: result
-      arista.eos.eos_bgp_af: &merged
+      arista.eos.eos_bgp_address_family: &merged
         config:
           as_number: "65535"
           address_family:
@@ -50,7 +50,7 @@
     - name: Idempotency check
       become: true
       register: result
-      arista.eos.eos_bgp_af: *merged
+      arista.eos.eos_bgp_address_family: *merged
 
     - assert:
         that:

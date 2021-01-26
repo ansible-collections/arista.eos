@@ -1,14 +1,14 @@
 ---
 - debug:
-    msg: Start eos_bgp_af rtt integration tests ansible_connection={{
+    msg: Start eos_bgp_address_family rtt integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
 
-    - name: merge given bgp_af configuration
+    - name: merge given bgp_address_family configuration
       become: true
       register: baseconfig
-      arista.eos.eos_bgp_af: &merged
+      arista.eos.eos_bgp_address_family: &merged
         config:
           as_number: "65535"
           address_family:
@@ -48,12 +48,12 @@
 
     - become: true
       arista.eos.eos_facts:
-        gather_network_resources: bgp_af
+        gather_network_resources: bgp_address_family
 
     - name: Apply the provided configuration (config to be reverted)
       become: true
       register: result
-      arista.eos.eos_bgp_af:
+      arista.eos.eos_bgp_address_family:
         config:
           as_number: "65535"
           address_family:
@@ -70,8 +70,8 @@
     - name: Revert back to base config using facts round trip
       become: true
       register: revert
-      arista.eos.eos_bgp_af:
-        config: "{{ ansible_facts['network_resources']['bgp_af'] }}"
+      arista.eos.eos_bgp_address_family:
+        config: "{{ ansible_facts['network_resources']['bgp_address_family'] }}"
         state: overridden
 
     - name: Assert that config was reverted

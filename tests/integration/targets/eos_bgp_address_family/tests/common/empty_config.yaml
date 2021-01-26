@@ -1,12 +1,12 @@
 ---
 - debug:
-    msg: START eos_bgp_af empty_config integration tests on connection={{
+    msg: START eos_bgp_address_family empty_config integration tests on connection={{
       ansible_connection }}
 
 - name: Merged with empty config should give appropriate error message
   register: result
   ignore_errors: true
-  arista.eos.eos_bgp_af:
+  arista.eos.eos_bgp_address_family:
     config:
     state: merged
   become: true
@@ -18,7 +18,7 @@
 - name: Replaced with empty config should give appropriate error message
   register: result
   ignore_errors: true
-  arista.eos.eos_bgp_af:
+  arista.eos.eos_bgp_address_family:
     config:
     state: replaced
   become: true
@@ -30,7 +30,7 @@
 - name: Overridden with empty config should give appropriate error message
   register: result
   ignore_errors: true
-  arista.eos.eos_bgp_af:
+  arista.eos.eos_bgp_address_family:
     config:
     state: overridden
   become: true
@@ -42,7 +42,7 @@
 - name: Rendered with empty config should give appropriate error message
   register: result
   ignore_errors: true
-  arista.eos.eos_bgp_af:
+  arista.eos.eos_bgp_address_family:
     config:
     state: rendered
   become: true
@@ -54,7 +54,7 @@
 - name: Parsed with empty config should give appropriate error message
   register: result
   ignore_errors: true
-  arista.eos.eos_bgp_af:
+  arista.eos.eos_bgp_address_family:
     running_config:
     state: parsed
   become: true

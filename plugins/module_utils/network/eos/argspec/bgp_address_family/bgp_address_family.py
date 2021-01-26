@@ -26,12 +26,12 @@ __metaclass__ = type
 #############################################
 
 """
-The arg spec for the eos_bgp_af module
+The arg spec for the eos_bgp_address_family module
 """
 
 
 class Bgp_afArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_bgp_af module
+    """The arg spec for the eos_bgp_address_family module
     """
 
     def __init__(self, **kwargs):

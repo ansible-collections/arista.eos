@@ -10,7 +10,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 """
-The eos_bgp_af config file.
+The eos_bgp_address_family config file.
 It is in this file where the current configuration (as dict)
 is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to its desired end-state is
@@ -27,7 +27,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_af import (
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_address_family import (
     Bgp_afTemplate,
 )
 import re
@@ -35,7 +35,7 @@ import re
 
 class Bgp_af(ResourceModule):
     """
-    The eos_bgp_af config class
+    The eos_bgp_address_family config class
     """
 
     def __init__(self, module):
@@ -43,7 +43,7 @@ class Bgp_af(ResourceModule):
             empty_fact_val={},
             facts_module=Facts(module),
             module=module,
-            resource="bgp_af",
+            resource="bgp_address_family",
             tmplt=Bgp_afTemplate(),
         )
         self.parsers = [

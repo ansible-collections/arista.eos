@@ -1,14 +1,14 @@
 ---
 - debug:
-    msg: Start eos_bgp_af rendered integration tests ansible_connection={{
+    msg: Start eos_bgp_address_family rendered integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
 
-    - name: render given bgp_af configuration as device commands
+    - name: render given bgp_address_family configuration as device commands
       become: true
       register: result
-      arista.eos.eos_bgp_af:
+      arista.eos.eos_bgp_address_family:
         state: rendered
         config:
           as_number: "65535"

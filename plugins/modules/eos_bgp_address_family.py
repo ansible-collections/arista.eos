@@ -23,7 +23,7 @@
 #############################################
 
 """
-The module file for eos_bgp_af
+The module file for eos_bgp_address_family
 """
 
 from __future__ import absolute_import, division, print_function
@@ -31,7 +31,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-module: eos_bgp_af
+module: eos_bgp_address_family
 short_description: Manages BGP address family resource module
 description: This module configures and manages the attributes of BGP AF on Arista
   EOS platforms.
@@ -231,7 +231,7 @@ EXAMPLES = """
 # veos(config)#
 
   - name: Merge provided configuration with device configuration
-    arista.eos.eos_bgp_af:
+    arista.eos.eos_bgp_address_family:
       config:
         as_number: "10"
         address_family:
@@ -379,7 +379,7 @@ EXAMPLES = """
 #
 
   - name: Replace
-    arista.eos.eos_bgp_af:
+    arista.eos.eos_bgp_address_family:
       config:
         as_number: "10"
         address_family:
@@ -576,7 +576,7 @@ EXAMPLES = """
 # veos(config-router-bgp)#
 
   - name: Overridden
-    arista.eos.eos_bgp_af:
+    arista.eos.eos_bgp_address_family:
       config:
         as_number: "10"
         address_family:
@@ -737,7 +737,7 @@ EXAMPLES = """
 
 
   - name: Overridden
-    arista.eos.eos_bgp_af:
+    arista.eos.eos_bgp_address_family:
       config:
         as_number: "10"
         address_family:
@@ -937,7 +937,7 @@ EXAMPLES = """
 # veos(config-router-bgp)#
 
   - name: Delete
-    arista.eos.eos_bgp_af:
+    arista.eos.eos_bgp_address_family:
       config:
         as_number: "10"
         address_family:
@@ -1068,7 +1068,7 @@ EXAMPLES = """
 
 # Using parsed:
 
-# parsed_bgp_af.cfg :
+# parsed_bgp_address_family.cfg :
 
 # router bgp 10
 #    neighbor n2 peer-group
@@ -1104,8 +1104,8 @@ EXAMPLES = """
 #          redistribute ospf3 match external
 
   - name: parse configs
-    arista.eos.eos_bgp_af:
-      running_config: "{{ lookup('file', './parsed_bgp_af.cfg') }}"
+    arista.eos.eos_bgp_address_family:
+      running_config: "{{ lookup('file', './parsed_bgp_address_family.cfg') }}"
       state: parsed
 
 # Module Execution:
@@ -1199,7 +1199,7 @@ EXAMPLES = """
 # veos(config-router-bgp)#
 
   - name: gather configs
-    arista.eos.eos_bgp_af:
+    arista.eos.eos_bgp_address_family:
       state: gathered
 
 # Module Execution:
@@ -1248,7 +1248,7 @@ EXAMPLES = """
 # using rendered:
 
   - name:  Render
-    arista.eos.eos_bgp_af:
+    arista.eos.eos_bgp_address_family:
       config:
         as_number: "10"
         address_family:
@@ -1303,10 +1303,10 @@ EXAMPLES = """
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp_af.bgp_af import (
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp_address_family.bgp_address_family import (
     Bgp_afArgs,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.bgp_af.bgp_af import (
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.bgp_address_family.bgp_address_family import (
     Bgp_af,
 )
 

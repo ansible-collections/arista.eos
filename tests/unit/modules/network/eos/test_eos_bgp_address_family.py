@@ -8,7 +8,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.plugins.modules import eos_bgp_af
+from ansible_collections.arista.eos.plugins.modules import eos_bgp_address_family
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
@@ -16,7 +16,7 @@ from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosBgpafModule(TestEosModule):
-    module = eos_bgp_af
+    module = eos_bgp_address_family
 
     def setUp(self):
         super(TestEosBgpafModule, self).setUp()
@@ -29,7 +29,7 @@ class TestEosBgpafModule(TestEosModule):
         )
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_af.bgp_af.Bgp_afFacts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_address_family.bgp_address_family.Bgp_afFacts.get_config"
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
