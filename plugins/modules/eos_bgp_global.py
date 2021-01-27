@@ -1360,6 +1360,16 @@ options:
     state:
       description:
       - The state the configuration should be left in.
+      - State I(purged) removes all the BGP configurations from the
+        target device. Use caution with this state.('no router bgp <x>')
+      - State I(deleted) only removes BGP attributes that this modules
+        manages and does not negate the BGP process completely. Thereby, preserving
+        address-family related configurations under BGP context.
+      - Running states I(deleted) and I(replaced) will result in an error if there
+        are address-family configuration lines present under vrf context that is
+        is to be removed. Please use the  M(arista.eos.eos_bgp_address_family)
+        module for prior cleanup.
+      - Refer to examples for more details.
       type: str
       choices: [deleted, merged, purged, replaced, gathered, rendered, parsed]
       default: merged
