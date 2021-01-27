@@ -1,12 +1,12 @@
 ---
 merged:
   commands:
-    - router bgp 65535
+    - router bgp 65536
     - address-family ipv4
     - redistribute ospf3 match external
-    - network 1.1.1.0/24
-    - network 1.5.1.0/24 route-map MAP01
-    - neighbor 1.1.1.1 activate
+    - network 192.0.2.0/24
+    - network 203.0.113.0/24 route-map MAP01
+    - neighbor 192.0.2.1 activate
     - exit
     - address-family ipv6
     - neighbor peer2 default-originate always
@@ -26,11 +26,11 @@ merged:
           - protocol: "ospf3"
             ospf_route: "external"
         network:
-          - address: "1.1.1.0/24"
-          - address: "1.5.1.0/24"
+          - address: "192.0.2.0/24"
+          - address: "203.0.113.0/24"
             route_map: "MAP01"
         neighbor:
-          - peer: "1.1.1.1"
+          - peer: "192.0.2.1"
             activate: true
       - afi: "ipv6"
         bgp_params:
@@ -57,14 +57,14 @@ deleted:
           additional_paths: "receive"
 
   commands:
-    - router bgp 65535
+    - router bgp 65536
     - no address-family ipv4
     - vrf vrft
     - no address-family ipv6
 
 replaced:
   commands:
-    - router bgp 65535
+    - router bgp 65536
     - vrf vrft
     - address-family ipv4
     - redistribute ospf3 match external
@@ -73,10 +73,10 @@ replaced:
     - address-family ipv4
     - redistribute isis level-2
     - no redistribute ospf3 match external
-    - no network 1.1.1.0/24
-    - no network 1.5.1.0/24 route-map MAP01
+    - no network 192.0.2.0/24
+    - no network 203.0.113.0/24 route-map MAP01
     - no neighbor peer2 default-originate always
-    - no neighbor 1.1.1.1 activate
+    - no neighbor 192.0.2.1 activate
     - no bgp additional-paths receive
     - exit
   before:
@@ -86,14 +86,14 @@ replaced:
           - protocol: "ospf3"
             ospf_route: "external"
         network:
-          - address: "1.1.1.0/24"
-          - address: "1.5.1.0/24"
+          - address: "192.0.2.0/24"
+          - address: "203.0.113.0/24"
             route_map: "MAP01"
         neighbor:
           - peer: "peer2"
             default_originate:
               always: true
-          - peer: "1.1.1.1"
+          - peer: "192.0.2.1"
             activate: true
         bgp_params:
           additional_paths: "receive"
@@ -127,7 +127,7 @@ replaced:
 
 overridden:
   commands:
-    - router bgp 65535
+    - router bgp 65536
     - vrf vrft
     - address-family ipv4
     - redistribute ospf3 match external
@@ -165,10 +165,10 @@ gathered:
               always: true
             peer: "peer2"
           - activate: true
-            peer: "1.1.1.1"
+            peer: "192.0.2.1"
         network:
-          - address: "1.1.1.0/24"
-          - address: "1.5.1.0/24"
+          - address: "192.0.2.0/24"
+          - address: "203.0.113.0/24"
             route_map: "MAP01"
         redistribute:
           - ospf_route: "external"
@@ -182,4 +182,4 @@ gathered:
           - isis_level: "level-2"
             protocol: "isis"
         vrf: "vrft"
-    as_number: "65535"
+    as_number: "65536"

@@ -11,18 +11,18 @@
       arista.eos.eos_bgp_address_family:
         state: rendered
         config:
-          as_number: "65535"
+          as_number: "65536"
           address_family:
             - afi: "ipv4"
               redistribute:
                 - protocol: "ospf3"
                   ospf_route: "external"
               network:
-                - address: "1.1.1.0/24"
-                - address: "1.5.1.0/24"
+                - address: "192.0.2.0/24"
+                - address: "203.0.113.0/24"
                   route_map: "MAP01"
               neighbor:
-                - peer: "1.1.1.1"
+                - peer: "192.0.2.1"
                   activate: true
             - afi: "ipv6"
               bgp_params:
