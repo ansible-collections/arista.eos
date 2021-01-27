@@ -3,4 +3,4 @@
   become: true
   arista.eos.eos_config:
     lines:
-      - "no router bgp 65535"
+      - "no router bgp 65536"

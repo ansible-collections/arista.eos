@@ -13,7 +13,7 @@
       arista.eos.eos_bgp_global: &replaced
         state: "replaced"
         config:
-          as_number: "65535"
+          as_number: "65536"
           vrfs:
             - vrf: "vrf02"
               redistribute:

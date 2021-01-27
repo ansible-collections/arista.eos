@@ -11,12 +11,12 @@
       arista.eos.eos_bgp_global: &rendered
         state: "rendered"
         config:
-          as_number: "65535"
+          as_number: "65536"
           aggregate_address:
-            - address: "1.1.1.0/24"
+            - address: "203.0.113.0/24"
               as_set: true
               summary_only: true
-            - address: "5.1.0.0/16"
+            - address: "192.0.2.0/24"
               attribute_map: "attrmap"
           neighbor:
             - maximum_received_routes:

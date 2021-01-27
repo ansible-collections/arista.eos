@@ -12,7 +12,7 @@
       register: result
       arista.eos.eos_bgp_global: &purged
         config:
-          as_number: "65535"
+          as_number: "65536"
         state: purged
 
     - become: true
@@ -23,7 +23,7 @@
         that:
           - result.commands|length == 1
           - result.changed == true
-          - "'no router bgp 65535' in result.commands"
+          - "'no router bgp 65536' in result.commands"
           - ansible_facts.network_resources.bgp_global == []
           - result.after == {}
           - result.before == populate.global
