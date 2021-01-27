@@ -33,10 +33,18 @@ class TestEosBgpglobalModule(TestEosModule):
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
+        self.mock_execute_show_command_config = patch(
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.config.bgp_global.bgp_global.Bgp_global._get_config"
+        )
+        self.execute_show_command_config = (
+            self.mock_execute_show_command_config.start()
+        )
+
     def tearDown(self):
         super(TestEosBgpglobalModule, self).tearDown()
         self.mock_get_resource_connection_config.stop()
         self.mock_execute_show_command.stop()
+        self.mock_execute_show_command_config.stop()
 
     def load_fixtures(self, commands=None, transport="cli", filename=None):
         if filename is None:
@@ -47,6 +55,7 @@ class TestEosBgpglobalModule(TestEosModule):
             return output
 
         self.execute_show_command.side_effect = load_from_file
+        self.execute_show_command_config.side_effect = load_from_file
 
     def test_eos_bgp_global_merged_idempotent(self):
         set_module_args(
@@ -115,7 +124,7 @@ class TestEosBgpglobalModule(TestEosModule):
                     as_number="65535",
                     vrfs=[
                         dict(
-                            vrf="vrf02",
+                            vrf="vrf01",
                             timers=dict(keepalive=44, holdtime=100),
                             ucmp=dict(link_bandwidth=dict(mode="recursive")),
                             neighbor=[
@@ -150,7 +159,7 @@ class TestEosBgpglobalModule(TestEosModule):
         )
         commands = [
             "router bgp 65535",
-            "vrf vrf02",
+            "vrf vrf01",
             "neighbor peer1 peer-group",
             "neighbor peer1 maximum-routes 12000",
             "neighbor peer1 send-community link-bandwidth divide ratio",
@@ -421,7 +430,7 @@ class TestEosBgpglobalModule(TestEosModule):
             failed=True, filename="eos_bgp_global_af_config.cfg"
         )
         self.assertIn(
-            "Use the _bgp_af module to delete the address_family under vrf, before replacing/deleting the vrf.",
+            "Use the _bgp_address_family module to delete the address_family under vrf, before replacing/deleting the vrf.",
             result["msg"],
         )
 
@@ -431,7 +440,7 @@ class TestEosBgpglobalModule(TestEosModule):
             failed=True, filename="eos_bgp_global_af_config.cfg"
         )
         self.assertIn(
-            "Use the _bgp_af module to delete the address_family under vrf, before replacing/deleting the vrf.",
+            "Use the _bgp_address_family module to delete the address_family under vrf, before replacing/deleting the vrf.",
             result["msg"],
         )
 

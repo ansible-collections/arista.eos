@@ -30,9 +30,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_global import (
     Bgp_globalTemplate,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_global.bgp_global import (
-    Bgp_globalFacts,
-)
 
 
 class Bgp_global(ResourceModule):
@@ -252,12 +249,13 @@ class Bgp_global(ResourceModule):
                     )
                     self.commands.append("exit")
 
+    def _get_config(self, connection):
+        return connection.get("show running-config | section bgp ")
+
     def _check_af(self, vrf):
         af_present = False
         if self._connection:
-            config_lines = Bgp_globalFacts.get_config(
-                self, self._connection
-            ).splitlines()
+            config_lines = self._get_config(self._connection).splitlines()
             index = [i + 1 for i, el in enumerate(config_lines) if vrf in el]
             if index:
                 # had to do this to escape flake8 and black errors

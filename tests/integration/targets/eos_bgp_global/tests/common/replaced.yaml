@@ -61,7 +61,7 @@
 
     - assert:
         that:
-          - result.msg == 'Use the _bgp_af module to delete the address_family under vrf, before replacing/deleting the vrf.'
+          - result.msg == 'Use the _bgp_address_family module to delete the address_family under vrf, before replacing/deleting the vrf.'
 
   always:
 
