@@ -90,9 +90,9 @@ class Bgp_globalFacts(object):
                         )
                     if "aggregate_address" in vrf:
                         vrf["aggregate_address"] = sorted(
-                            vrf["aggregate_address"], key=lambda k: k["address"]
+                            vrf["aggregate_address"],
+                            key=lambda k: k["address"],
                         )
-
 
             if "neighbor" in objs:
                 objs["neighbor"] = list(objs["neighbor"].values())
@@ -106,7 +106,6 @@ class Bgp_globalFacts(object):
                 objs["aggregate_address"] = sorted(
                     objs["aggregate_address"], key=lambda k: k["address"]
                 )
-
 
         ansible_facts["ansible_network_resources"].pop("bgp_global", None)
 
