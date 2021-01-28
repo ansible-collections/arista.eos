@@ -372,8 +372,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.c
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     network_spec = {
         "prefix": dict(required=True),
         "masklen": dict(type="int"),

@@ -25,8 +25,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.vla
 
 
 class VlansFacts(object):
-    """ The eos vlans fact class
-    """
+    """The eos vlans fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -43,7 +42,7 @@ class VlansFacts(object):
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for vlans
+        """Populate the facts for vlans
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf

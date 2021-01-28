@@ -25,8 +25,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.int
 
 
 class InterfacesFacts(object):
-    """ The eos interfaces fact class
-    """
+    """The eos interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -46,7 +45,7 @@ class InterfacesFacts(object):
         return connection.get("show running-config | section ^interface")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for interfaces
+        """Populate the facts for interfaces
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary

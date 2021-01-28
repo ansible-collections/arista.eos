@@ -25,8 +25,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lac
 
 
 class Lacp_interfacesFacts(object):
-    """ The eos lacp_interfaces fact class
-    """
+    """The eos lacp_interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -46,7 +45,7 @@ class Lacp_interfacesFacts(object):
         return connection.get("show running-config | section lacp")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for lacp_interfaces
+        """Populate the facts for lacp_interfaces
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected configuration

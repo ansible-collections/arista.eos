@@ -26,8 +26,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.sta
 
 
 class Static_routesFacts(object):
-    """ The eos static_routes fact class
-    """
+    """The eos static_routes fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -47,7 +46,7 @@ class Static_routesFacts(object):
         return connection.get("show running-config | grep route")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for static_routes
+        """Populate the facts for static_routes
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf

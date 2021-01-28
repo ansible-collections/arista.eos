@@ -31,8 +31,7 @@ The arg spec for the eos_ospf_interfaces module
 
 
 class Ospf_interfacesArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_ospf_interfaces module
-    """
+    """The arg spec for the eos_ospf_interfaces module"""
 
     def __init__(self, **kwargs):
         pass
