@@ -1,0 +1,185 @@
+---
+merged:
+  commands:
+    - router bgp 65536
+    - address-family ipv4
+    - redistribute ospf3 match external
+    - network 192.0.2.0/24
+    - network 203.0.113.0/24 route-map MAP01
+    - neighbor 192.0.2.1 activate
+    - exit
+    - address-family ipv6
+    - neighbor peer2 default-originate always
+    - bgp additional-paths receive
+    - exit
+    - vrf vrft
+    - address-family ipv6
+    - redistribute isis level-2
+    - route-target export 33:11
+    - exit
+    - exit
+
+  after:
+    address_family:
+      - afi: "ipv4"
+        redistribute:
+          - protocol: "ospf3"
+            ospf_route: "external"
+        network:
+          - address: "192.0.2.0/24"
+          - address: "203.0.113.0/24"
+            route_map: "MAP01"
+        neighbor:
+          - peer: "192.0.2.1"
+            activate: true
+      - afi: "ipv6"
+        bgp_params:
+          additional_paths: "receive"
+        neighbor:
+          - peer: "peer2"
+            default_originate:
+              always: true
+      - afi: "ipv6"
+        vrf: "vrft"
+        redistribute:
+          - protocol: "isis"
+            isis_level: "level-2"
+        route_target:
+          mode: "export"
+          target: "33:11"
+
+deleted:
+  after:
+    address_family:
+      - afi: "ipv4"
+        vrf: "vrft"
+        bgp_params:
+          additional_paths: "receive"
+
+  commands:
+    - router bgp 65536
+    - no address-family ipv4
+    - vrf vrft
+    - no address-family ipv6
+
+replaced:
+  commands:
+    - router bgp 65536
+    - vrf vrft
+    - address-family ipv4
+    - redistribute ospf3 match external
+    - exit
+    - exit
+    - address-family ipv4
+    - redistribute isis level-2
+    - no redistribute ospf3 match external
+    - no network 192.0.2.0/24
+    - no network 203.0.113.0/24 route-map MAP01
+    - no neighbor peer2 default-originate always
+    - no neighbor 192.0.2.1 activate
+    - no bgp additional-paths receive
+    - exit
+  before:
+    address_family:
+      - afi: "ipv4"
+        redistribute:
+          - protocol: "ospf3"
+            ospf_route: "external"
+        network:
+          - address: "192.0.2.0/24"
+          - address: "203.0.113.0/24"
+            route_map: "MAP01"
+        neighbor:
+          - peer: "peer2"
+            default_originate:
+              always: true
+          - peer: "192.0.2.1"
+            activate: true
+        bgp_params:
+          additional_paths: "receive"
+      - afi: "ipv6"
+        vrf: "vrft"
+        redistribute:
+          - protocol: "isis"
+            isis_level: "level-2"
+      - afi: "ipv4"
+        vrf: "vrft"
+        bgp_params:
+          additional_paths: "receive"
+  after:
+    address_family:
+      - afi: "ipv4"
+        redistribute:
+          - protocol: "isis"
+            isis_level: "level-2"
+      - afi: "ipv6"
+        vrf: "vrft"
+        redistribute:
+          - protocol: "isis"
+            isis_level: "level-2"
+      - afi: "ipv4"
+        vrf: "vrft"
+        redistribute:
+          - protocol: "ospf3"
+            ospf_route: "external"
+        bgp_params:
+          additional_paths: "receive"
+
+overridden:
+  commands:
+    - router bgp 65536
+    - vrf vrft
+    - address-family ipv4
+    - redistribute ospf3 match external
+    - exit
+    - exit
+    - address-family ipv6
+    - redistribute isis level-2
+    - exit
+    - no address-family ipv4
+    - vrf vrft
+    - no address-family ipv6
+
+  after:
+    address_family:
+      - afi: "ipv4"
+        vrf: "vrft"
+        redistribute:
+          - protocol: "ospf3"
+            ospf_route: "external"
+        bgp_params:
+          additional_paths: "receive"
+      - afi: "ipv6"
+        redistribute:
+          - protocol: "isis"
+            isis_level: "level-2"
+
+gathered:
+  populate:
+    address_family:
+      - afi: "ipv4"
+        bgp_params:
+          additional_paths: "receive"
+        neighbor:
+          - default_originate:
+              always: true
+            peer: "peer2"
+          - activate: true
+            peer: "192.0.2.1"
+        network:
+          - address: "192.0.2.0/24"
+          - address: "203.0.113.0/24"
+            route_map: "MAP01"
+        redistribute:
+          - ospf_route: "external"
+            protocol: "ospf3"
+      - afi: "ipv4"
+        bgp_params:
+          additional_paths: "receive"
+        vrf: "vrft"
+      - afi: "ipv6"
+        redistribute:
+          - isis_level: "level-2"
+            protocol: "isis"
+        vrf: "vrft"
+    as_number: "65536"
