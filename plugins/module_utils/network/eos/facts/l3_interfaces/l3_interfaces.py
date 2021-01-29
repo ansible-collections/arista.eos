@@ -102,7 +102,10 @@ class L3_interfacesFacts(object):
             config["ipv4"] = []
             for match in matches:
                 address, dummy, remainder = match.partition(" ")
-                ipv4 = {"address": address}
+                if address == "virtual":
+                    ipv4 = {"virtual": True, "address": remainder}
+                else:
+                    ipv4 = {"address": address}
                 if remainder == "secondary":
                     ipv4["secondary"] = True
                 config["ipv4"].append(ipv4)

@@ -82,6 +82,9 @@ class TestEosL3InterfacesModule(TestEosModule):
                         name="Ethernet2",
                         ipv4=[dict(address="203.0.113.27/24")],
                     ),
+                    dict(
+                        name="Vlan200",
+                        ipv4=[dict(address="198.151.10.14/24", virtual=True)],
                 ],
                 state="merged",
             )
@@ -91,6 +94,8 @@ class TestEosL3InterfacesModule(TestEosModule):
             "ip address 198.51.100.14/24",
             "interface Ethernet2",
             "ip address 203.0.113.27/24",
+            "interface Vlan200",
+            "ip address virtual 198.151.10.14/24",
         ]
         self.execute_module(changed=True, commands=commands)
 

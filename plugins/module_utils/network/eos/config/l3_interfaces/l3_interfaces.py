@@ -270,6 +270,8 @@ def set_interface(want, have):
         address_cmd = "ip address {0}".format(address["address"])
         if address.get("secondary"):
             address_cmd += " secondary"
+        if address.get("virtual"):
+            address_cmd = "ip address virtual {0}".format(address["address"])
         commands.append(address_cmd)
 
     want_ipv6 = set(
@@ -304,6 +306,9 @@ def clear_interface(want, have):
 
             if address.get("secondary"):
                 address_cmd = " {0} secondary".format(address["address"])
+            if address.get("virtual"):
+                address_cmd = " virtual {0}".format(address["address"])
+            if address_cmd:
                 commands.append(address_cmd)
 
             if "secondary" not in address:
