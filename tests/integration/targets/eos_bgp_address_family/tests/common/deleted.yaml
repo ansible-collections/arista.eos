@@ -1,0 +1,46 @@
+---
+- debug:
+    msg: Start eos_bgp_address_family deleted integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Delete given bgp_address_family configuration
+      become: true
+      register: result
+      arista.eos.eos_bgp_address_family: &deleted
+        config:
+          as_number: "65536"
+          address_family:
+            - afi: "ipv4"
+            - afi: "ipv6"
+              vrf: "vrft"
+        state: deleted
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: bgp_address_family
+
+    - assert:
+        that:
+          - result.commands|length == 4
+          - result.changed == true
+          - ansible_facts.network_resources.bgp_address_family == result.after
+          - result.after.address_family|symmetric_difference(deleted.after.address_family) == []
+          - result.before.address_family|symmetric_difference(replaced.before.address_family) == []
+          - result.commands|symmetric_difference(deleted.commands) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_bgp_address_family: *deleted
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml
