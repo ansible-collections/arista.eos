@@ -341,7 +341,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: configure the login banner
       arista.eos.eos_banner:

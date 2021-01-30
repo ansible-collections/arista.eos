@@ -308,7 +308,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Enable LLDP service
       arista.eos.eos_lldp:

@@ -319,7 +319,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Gather all legacy facts
     - arista.eos.eos_facts:

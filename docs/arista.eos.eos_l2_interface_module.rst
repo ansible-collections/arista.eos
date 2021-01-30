@@ -517,7 +517,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Ensure Ethernet1 does not have any switchport
       arista.eos.eos_l2_interface:
