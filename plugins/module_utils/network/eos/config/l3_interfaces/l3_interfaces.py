@@ -189,11 +189,13 @@ class L3_interfaces(ConfigBase):
                 desired = want[key]
             else:
                 desired = dict()
+            import q
             if desired.get("ipv4"):
                 for ipv4 in desired["ipv4"]:
-                    if ipv4["secondary"] is None:
-                        del ipv4["secondary"]
-
+                    for k in ["secondary", "virtual"]:
+                        if ipv4[k] is None:
+                            del ipv4[k]
+            q(desired)
             intf_commands = set_interface(desired, extant)
             intf_commands.extend(clear_interface(desired, extant))
 
@@ -305,11 +307,9 @@ def clear_interface(want, have):
                     continue
 
             if address.get("secondary"):
-                address_cmd = " {0} secondary".format(address["address"])
+                commands.append("ip address {0} secondary".format(address["address"]))
             if address.get("virtual"):
-                address_cmd = " virtual {0}".format(address["address"])
-            if address_cmd:
-                commands.append(address_cmd)
+                commands.append("ip address virtual {0}".format(address["address"]))
 
             if "secondary" not in address:
                 # Removing non-secondary removes all other interfaces
