@@ -1,0 +1,68 @@
+---
+- debug:
+    msg: Start eos_bgp_global replaced integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: replace given bgp_global configuration
+      become: true
+      register: result
+      arista.eos.eos_bgp_global: &replaced
+        state: "replaced"
+        config:
+          as_number: "65536"
+          vrfs:
+            - vrf: "vrf02"
+              redistribute:
+                - protocol: "isis"
+                  isis_level: "level-2"
+              timers:
+                holdtime: 100
+                keepalive: 44
+          network:
+            - address: "6.6.6.0/24"
+              route_map: "netmap1"
+            - address: "10.1.0.0/16"
+          redistribute:
+            - protocol: "isis"
+              isis_level: "level-2"
+
+    - assert:
+        that:
+          - result.commands|length == 22
+          - result.changed == true
+          - result.commands|symmetric_difference(replaced.commands) == []
+          - result.after == replaced.after
+          - result.before == populate.global
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_bgp_global: *replaced
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+
+    - name: Configure address_family under vrf
+      become: true
+      arista.eos.eos_config:
+        src: populate_af.cfg
+
+    - name: Replace in presence of address_family
+      become: true
+      ignore_errors: true
+      register: result
+      arista.eos.eos_bgp_global: *replaced
+
+    - assert:
+        that:
+          - result.msg == 'Use the _bgp_address_family module to delete the address_family under vrf, before replacing/deleting the vrf.'
+
+  always:
+
+    - include_tasks: _remove_config.yaml

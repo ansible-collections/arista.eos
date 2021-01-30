@@ -13,11 +13,15 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: eos_bgp
 author: Nilashish Chakraborty (@NilashishC)
-short_description: Configure global BGP protocol settings on Arista EOS.
+short_description: (deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.
 description:
 - This module provides configuration management of global BGP parameters on Arista
   EOS devices.
 version_added: 1.0.0
+deprecated:
+  alternative: eos_bgp_global
+  why: Updated module released with more functionality.
+  removed_at_date: '2023-01-29'
 notes:
 - Tested against Arista vEOS Version 4.15.9M.
 options:

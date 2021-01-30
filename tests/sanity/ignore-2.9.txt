@@ -10,4 +10,6 @@ plugins/modules/eos_static_route.py validate-modules:deprecation-mismatch # 2.9 
 plugins/modules/eos_static_route.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
 plugins/modules/eos_vlan.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
 plugins/modules/eos_vlan.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
+plugins/modules/eos_bgp.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
+plugins/modules/eos_bgp.py validate-modules:invalid-documentation # removed_at_date not supported in `deprecated` dict
 plugins/action/eos.py action-plugin-docs # base class for deprecated network platform modules using `connection: local`
