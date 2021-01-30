@@ -5,6 +5,33 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v1.2.1
+======
+
+Minor Changes
+-------------
+
+- Add eos_bgp_address_family resource module (https://github.com/ansible-collections/arista.eos/pull/141).
+- Add eos_bgp_global resource module (https://github.com/ansible-collections/arista.eos/pull/135).
+
+Bugfixes
+--------
+
+- Add version key to galaxy.yaml to work around ansible-galaxy bug
+- Fix yaml formatting errors in documentation.
+- Uncap required ansible version in our collection.
+- Update default values in module argspec and docs (https://github.com/ansible-collections/arista.eos/pull/154).
+- Update docs to clarify the idemptonecy releated caveat and add it in the output warnings (https://github.com/ansible-collections/ansible.netcommon/pull/189)
+- fixes eos interfaces rm where interface in description resulted in failure (https://github.com/ansible-collections/arista.eos/issues/86).
+- replace list.copy() with list[:] to support python 2.7  and fix idempotent issue with replaced and overridden (https://github.com/ansible-collections/arista.eos/pull/142).
+
+
+New Modules
+-----------
+
+- eos_bgp_global - BGP global resource module
+- eos_bgp_address_family - BGP address family resource module
+
 v1.2.0
 ======
 
@@ -24,7 +51,7 @@ Bugfixes
 New Modules
 -----------
 
-- eos_ospf_interfaces - OSPF Interfaces resource module
+- eos_ospf_interfaces - ospf_interfaces resource module
 
 v1.1.0
 ======
@@ -47,7 +74,7 @@ Bugfixes
 New Modules
 -----------
 
-- eos_ospfv3 - OSPFV3 resource module
+- eos_ospfv3 - OSPFv3 resource module
 
 v1.0.3
 ======
