@@ -1,4 +1,0 @@
----
-bugfixes:
-  - Uncap required ansible version in our collection.
-  - Fix yaml formatting errors in documentation.

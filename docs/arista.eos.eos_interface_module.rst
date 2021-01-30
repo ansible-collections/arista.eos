@@ -724,7 +724,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: configure interface
       arista.eos.eos_interface:
