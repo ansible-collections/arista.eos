@@ -1,0 +1,42 @@
+---
+- debug:
+    msg: Start eos_bgp_global deleted integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Delete given bgp_global configuration
+      become: true
+      register: result
+      arista.eos.eos_bgp_global: &deleted
+        config:
+          as_number: "65536"
+        state: deleted
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: bgp_global
+
+    - assert:
+        that:
+          - result.commands|length == 15
+          - result.changed == true
+          - "'no router bgp 65536' not in result.commands"
+          - ansible_facts.network_resources.bgp_global == result.after
+          - result.after == deleted.after
+          - result.before == populate.global
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_bgp_global: *deleted
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml
