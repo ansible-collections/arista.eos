@@ -596,7 +596,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: create a new user
       arista.eos.eos_user:
