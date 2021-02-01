@@ -5,7 +5,7 @@
 arista.eos.eos_bgp
 ******************
 
-**(deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.**
+**Configure global BGP protocol settings on Arista EOS.**
 
 
 Version added: 1.0.0
@@ -13,13 +13,6 @@ Version added: 1.0.0
 .. contents::
    :local:
    :depth: 1
-
-DEPRECATED
-----------
-:Removed in collection release after 2023-01-29
-:Why: Updated module released with more functionality.
-:Alternative: eos_bgp_global
-
 
 
 Synopsis
@@ -860,7 +853,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: configure global bgp as 64496
       arista.eos.eos_bgp:
@@ -981,10 +974,6 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
 
 Status
 ------
-
-
-- This module will be removed in version . *[deprecated]*
-- For more information see `DEPRECATED`_.
 
 
 Authors
