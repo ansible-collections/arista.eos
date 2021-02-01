@@ -535,7 +535,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create vlan
       arista.eos.eos_vlan:

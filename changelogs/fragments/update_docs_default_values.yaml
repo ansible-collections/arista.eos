@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Update default values in module argspec and docs (https://github.com/ansible-collections/arista.eos/pull/154).
