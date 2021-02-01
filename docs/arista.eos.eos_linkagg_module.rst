@@ -506,7 +506,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: create link aggregation group
       arista.eos.eos_linkagg:
