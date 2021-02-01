@@ -480,7 +480,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: configure static route
       arista.eos.eos_static_route:
