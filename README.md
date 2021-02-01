@@ -10,7 +10,7 @@ This collection has been tested against Arista EOS 4.20.10M.
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.9.10,<2.11**.
+This collection has been tested against following Ansible versions: **>=2.9.10**.
 
 Plugins and modules within a collection may be tested with only specific Ansible versions.
 A collection may contain metadata that identifies these versions.
@@ -37,17 +37,15 @@ Name | Description
 --- | ---
 [arista.eos.eos](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_httpapi.rst)|Use eAPI to run command on eos platform
 
-### Inventory plugins
-Name | Description
---- | ---
-
 ### Modules
 Name | Description
 --- | ---
 [arista.eos.eos_acl_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_acl_interfaces_module.rst)|ACL interfaces resource module
 [arista.eos.eos_acls](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_acls_module.rst)|ACLs resource module
 [arista.eos.eos_banner](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_banner_module.rst)|Manage multiline banners on Arista EOS devices
-[arista.eos.eos_bgp](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_module.rst)|Configure global BGP protocol settings on Arista EOS.
+[arista.eos.eos_bgp](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_module.rst)|(deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.
+[arista.eos.eos_bgp_address_family](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_address_family_module.rst)|Manages BGP address family resource module
+[arista.eos.eos_bgp_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_global_module.rst)|Manages BGP global resource module
 [arista.eos.eos_command](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_command_module.rst)|Run arbitrary commands on an Arista EOS device
 [arista.eos.eos_config](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_config_module.rst)|Manage Arista EOS configuration sections
 [arista.eos.eos_eapi](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_eapi_module.rst)|Manage and configure Arista EOS eAPI.
@@ -76,6 +74,10 @@ Name | Description
 [arista.eos.eos_vlan](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlan_module.rst)|(deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS network devices
 [arista.eos.eos_vlans](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlans_module.rst)|VLANs resource module
 [arista.eos.eos_vrf](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vrf_module.rst)|Manage VRFs on Arista EOS network devices
+
+### Inventory plugins
+Name | Description
+--- | ---
 
 <!--end collection content-->
 

@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Add eos_bgp_global resource module (https://github.com/ansible-collections/arista.eos/pull/135).

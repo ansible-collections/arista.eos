@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Add eos_bgp_address_family resource module (https://github.com/ansible-collections/arista.eos/pull/141).
