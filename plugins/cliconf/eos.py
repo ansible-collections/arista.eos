@@ -59,6 +59,14 @@ from ansible.plugins.cliconf import CliconfBase, enable_mode
 
 
 class Cliconf(CliconfBase):
+    __rpc__ = CliconfBase.__rpc__ + [
+        "commit",
+        "discard_changes",
+        "get_diff",
+        "run_commands",
+        "supports_sessions",
+    ]
+
     def __init__(self, *args, **kwargs):
         super(Cliconf, self).__init__(*args, **kwargs)
         self._session_support = None
@@ -337,13 +345,6 @@ class Cliconf(CliconfBase):
 
     def get_capabilities(self):
         result = super(Cliconf, self).get_capabilities()
-        result["rpc"] += [
-            "commit",
-            "discard_changes",
-            "get_diff",
-            "run_commands",
-            "supports_sessions",
-        ]
         result["device_operations"] = self.get_device_operations()
         result.update(self.get_option_values())
 
