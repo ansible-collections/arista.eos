@@ -58,6 +58,8 @@ class TerminalModule(TerminalBase):
         ),
     ]
 
+    terminal_config_prompt = re.compile(r"^.+\(config(-.*)?\)#$")
+
     def on_open_shell(self):
         try:
             for cmd in (b"terminal length 0", b"terminal width 512"):
