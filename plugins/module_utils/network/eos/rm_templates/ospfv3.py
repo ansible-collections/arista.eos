@@ -19,10 +19,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
     NetworkTemplate,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    get_capabilities,
-)
-
 
 def _tmplt_ospf_vrf_cmd(process):
     command = "router ospfv3"
@@ -269,7 +265,7 @@ def _tmplt_ospf_bfd(config_data):
     return command
 
 
-os_version = ""
+os_version = "4.23"
 
 
 class Ospfv3Template(NetworkTemplate):
@@ -278,12 +274,12 @@ class Ospfv3Template(NetworkTemplate):
         super(Ospfv3Template, self).__init__(
             lines=lines, tmplt=self, module=module
         )
-        os_version = get_capabilities(module)["device_info"][
-            "network_os_version"
-        ]
-        os_match = re.search(r"([\d\.]+).*", os_version)
-        if os_match:
-            os_version = os_match.group(1)
+        if self._connection:
+            os_version = self._get_os_version()
+
+    def _get_os_version(self):
+        os_version = self._connection.get_device_info()["network_os_version"]
+        return os_version
 
     PARSERS = [
         {

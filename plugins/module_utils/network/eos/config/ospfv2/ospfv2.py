@@ -30,10 +30,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts
     Facts,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    get_capabilities,
-)
-
 
 class Ospfv2(ConfigBase):
     """
@@ -149,6 +145,14 @@ class Ospfv2(ConfigBase):
         elif self.state == "replaced":
             commands = self._state_replaced(want, have)
         return commands
+
+    def _get_os_version(self):
+        os_version = "4.20"
+        if self._connection():
+            os_version = self._connection.get_device_info()[
+                "network_os_version"
+            ]
+        return os_version
 
     def _state_replaced(self, want, have):
         """ The command generator when state is replaced
@@ -363,9 +367,8 @@ class Ospfv2(ConfigBase):
                     "auto-cost reference-bandwidth " + ospf_params["auto_cost"]
                 )
             if ospf_params.get("bfd"):
-                os_version = get_capabilities(self._module)["device_info"][
-                    "network_os_version"
-                ]
+                if self._connection:
+                    os_version = self._get_os_version()
                 if os_version < "4.23":
                     commands.append("bfd all-interfaces")
                 else:
