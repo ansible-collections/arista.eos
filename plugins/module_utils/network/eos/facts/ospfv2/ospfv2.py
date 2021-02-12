@@ -274,7 +274,7 @@ class Ospfv2Facts(object):
             elif "timers" in dev_config:
                 timers_dict = {}
                 if config_params[1] == "lsa":
-                    if config_params[2] == "rx":
+                    if config_params[2] in ["rx", "arrival"]:
                         timers_dict.update(
                             {
                                 "lsa": {
@@ -319,6 +319,17 @@ class Ospfv2Facts(object):
                         timers_dict.update(
                             {"spf": {"seconds": config_params[-1]}}
                         )
+                elif config_params[1] == "throttle":
+                    timers_dict.update(
+                        {
+                            "throttle": {
+                                "attr": config_params[2],
+                                "initial": config_params[-3],
+                                "min": config_params[-2],
+                                "max": config_params[-1],
+                            }
+                        }
+                    )
                 timers_list.append(timers_dict)
                 ospf_params_dict.update({"timers": timers_list})
             elif config_params[0] == "area":

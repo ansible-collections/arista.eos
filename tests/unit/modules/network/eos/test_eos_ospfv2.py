@@ -211,6 +211,13 @@ class TestEosOspfv2Module(TestEosModule):
                             redistribute=[
                                 dict(routes="isis", isis_level="level-1")
                             ],
+                            timers=[
+                                dict(
+                                    throttle=dict(
+                                        attr="spf", initial=10, min=26, max=33
+                                    )
+                                )
+                            ],
                         ),
                         dict(
                             process_id=4,
@@ -229,6 +236,7 @@ class TestEosOspfv2Module(TestEosModule):
             "router ospf 1",
             "area 0.0.0.12 filter 10.2.1.0/24",
             "redistribute isis level-1",
+            "timers throttle spf 10 26 33",
             "exit",
             "router ospf 4 vrf vrftest",
             "area 0.0.0.9 default-cost 20",
@@ -261,6 +269,13 @@ class TestEosOspfv2Module(TestEosModule):
                             networks=[
                                 dict(area="0.0.0.0", prefix="10.10.3.0/24")
                             ],
+                            timers=[
+                                dict(
+                                    throttle=dict(
+                                        attr="lsa", initial=10, min=26, max=33
+                                    )
+                                )
+                            ],
                         ),
                     ]
                 ),
@@ -286,6 +301,7 @@ class TestEosOspfv2Module(TestEosModule):
             "no redistribute static",
             "area 0.0.0.9 default-cost 20",
             "network 10.10.3.0/24 area 0.0.0.0",
+            "timers throttle lsa all 10 26 33",
             "exit",
         ]
         self.execute_module(changed=True, commands=commands)
@@ -648,6 +664,7 @@ class TestEosOspfv2Module(TestEosModule):
             "exit",
             "router ospf 3 vrf vrf02",
             "redistribute static",
+            "timers lsa all 20 21 22",
             "exit",
         ]
         parsed_str = "\n".join(commands)
@@ -691,6 +708,7 @@ class TestEosOspfv2Module(TestEosModule):
                 {
                     "process_id": 3,
                     "redistribute": [{"routes": "static"}],
+                    "timers": [{"throttle": {"attr": "lsa", "initial": 20, "min": 21, "max": 22}}],
                     "vrf": "vrf02",
                 },
             ]
