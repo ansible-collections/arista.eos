@@ -85,7 +85,7 @@ class TestEosL3InterfacesModule(TestEosModule):
                     dict(
                         name="Vlan200",
                         ipv4=[dict(address="198.151.10.14/24", virtual=True)],
-                    )
+                    ),
                 ],
                 state="merged",
             )
@@ -111,7 +111,8 @@ class TestEosL3InterfacesModule(TestEosModule):
                         name="Ethernet2", ipv6=[dict(address="2001:db8::1/64")]
                     ),
                     dict(
-                        name="Vlan100", ipv4=[dict(address="192.13.45.12/24", virtual=True)]
+                        name="Vlan100",
+                        ipv4=[dict(address="192.13.45.12/24", virtual=True)],
                     ),
                 ],
                 state="merged",
@@ -147,6 +148,7 @@ class TestEosL3InterfacesModule(TestEosModule):
 
     def test_eos_l3_interfaces_overridden_idempotent(self):
         import q
+
         q("*************************")
         set_module_args(
             dict(
@@ -163,9 +165,9 @@ class TestEosL3InterfacesModule(TestEosModule):
                         ipv6=[dict(address="auto-config")],
                     ),
                     dict(
-                        name="Vlan100", ipv4=[dict(address="192.13.45.12/24", virtual=True)]
+                        name="Vlan100",
+                        ipv4=[dict(address="192.13.45.12/24", virtual=True)],
                     ),
-
                 ],
                 state="overridden",
             )
@@ -207,7 +209,8 @@ class TestEosL3InterfacesModule(TestEosModule):
                         ipv6=[dict(address="auto-config")],
                     ),
                     dict(
-                        name="Vlan100", ipv4=[dict(address="192.13.45.12/24", virtual=True)]
+                        name="Vlan100",
+                        ipv4=[dict(address="192.13.45.12/24", virtual=True)],
                     ),
                 ],
                 state="replaced",

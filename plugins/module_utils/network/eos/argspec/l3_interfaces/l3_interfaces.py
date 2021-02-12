@@ -47,7 +47,7 @@ class L3_interfacesArgs(object):
                     "options": {
                         "address": {"type": "str"},
                         "secondary": {"type": "bool"},
-                        "virtual": {"type": "bool"}
+                        "virtual": {"type": "bool"},
                     },
                     "type": "list",
                 },
