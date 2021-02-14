@@ -105,7 +105,11 @@ class TestEosL3InterfacesModule(TestEosModule):
             dict(
                 config=[
                     dict(
-                        name="Ethernet1", ipv4=[dict(address="192.0.2.12/24")]
+                        name="Ethernet1",
+                        ipv4=[
+                            dict(address="192.0.2.12/24"),
+                            dict(address="192.87.33.4/24", secondary=True),
+                        ],
                     ),
                     dict(
                         name="Ethernet2", ipv6=[dict(address="2001:db8::1/64")]
@@ -143,13 +147,12 @@ class TestEosL3InterfacesModule(TestEosModule):
             "ip address 203.0.113.27/24",
             "interface Ethernet1",
             "no ip address",
+            "interface Vlan100",
+            "no ip address",
         ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_l3_interfaces_overridden_idempotent(self):
-        import q
-
-        q("*************************")
         set_module_args(
             dict(
                 config=[
@@ -157,7 +160,11 @@ class TestEosL3InterfacesModule(TestEosModule):
                         name="Ethernet2", ipv6=[dict(address="2001:db8::1/64")]
                     ),
                     dict(
-                        name="Ethernet1", ipv4=[dict(address="192.0.2.12/24")]
+                        name="Ethernet1",
+                        ipv4=[
+                            dict(address="192.0.2.12/24"),
+                            dict(address="192.87.33.4/24", secondary=True),
+                        ],
                     ),
                     dict(
                         name="Management1",
@@ -201,7 +208,11 @@ class TestEosL3InterfacesModule(TestEosModule):
                         name="Ethernet2", ipv6=[dict(address="2001:db8::1/64")]
                     ),
                     dict(
-                        name="Ethernet1", ipv4=[dict(address="192.0.2.12/24")]
+                        name="Ethernet1",
+                        ipv4=[
+                            dict(address="192.0.2.12/24"),
+                            dict(address="192.87.33.4/24", secondary=True),
+                        ],
                     ),
                     dict(
                         name="Management1",
@@ -279,12 +290,22 @@ class TestEosL3InterfacesModule(TestEosModule):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(changed=False)
         gather_list = [
-            {"name": "Ethernet1", "ipv4": [{"address": "192.0.2.12/24"}]},
+            {
+                "name": "Ethernet1",
+                "ipv4": [
+                    {"address": "192.0.2.12/24"},
+                    {"address": "192.87.33.4/24", "secondary": True},
+                ],
+            },
             {"name": "Ethernet2", "ipv6": [{"address": "2001:db8::1/64"}]},
             {
                 "name": "Management1",
                 "ipv4": [{"address": "dhcp"}],
                 "ipv6": [{"address": "auto-config"}],
+            },
+            {
+                "ipv4": [{"address": "192.13.45.12/24", "virtual": True}],
+                "name": "Vlan100",
             },
         ]
         self.assertEqual(gather_list, result["gathered"])

@@ -172,7 +172,6 @@ class L3_interfaces(ConfigBase):
             if intf_commands:
                 commands.append("interface {0}".format(interface_name))
                 commands.extend(intf_commands)
-
         return commands
 
     @staticmethod
@@ -253,7 +252,6 @@ class L3_interfaces(ConfigBase):
 
 def set_interface(want, have):
     commands = []
-
     want_ipv4 = set(
         tuple(sorted(address.items())) for address in want.get("ipv4") or []
     )
@@ -262,10 +260,11 @@ def set_interface(want, have):
     )
     for address in want_ipv4 - have_ipv4:
         address = dict(address)
-        if "secondary" in address and not address["secondary"]:
-            del address["secondary"]
-            if tuple(address.items()) in have_ipv4:
-                continue
+        for param in ["secondary", "virtual"]:
+            if param in address and not address[param]:
+                del address[param]
+        if tuple(sorted(address.items())) in have_ipv4:
+            continue
 
         address_cmd = "ip address {0}".format(address["address"])
         if address.get("secondary"):
@@ -299,18 +298,19 @@ def clear_interface(want, have):
     else:
         for address in have_ipv4 - want_ipv4:
             address = dict(address)
-            if "secondary" not in address:
-                address["secondary"] = False
-                if tuple(address.items()) in want_ipv4:
-                    continue
+            for param in ["secondary", "virtual"]:
+                if param not in address:
+                    address[param] = None
+            if tuple(sorted(address.items())) in want_ipv4:
+                continue
 
             if address.get("secondary"):
                 commands.append(
-                    "ip address {0} secondary".format(address["address"])
+                    "no ip address {0} secondary".format(address["address"])
                 )
             if address.get("virtual"):
                 commands.append(
-                    "ip address virtual {0}".format(address["address"])
+                    "no ip address virtual {0}".format(address["address"])
                 )
 
             if "secondary" not in address:
