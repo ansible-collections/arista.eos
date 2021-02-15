@@ -9,6 +9,7 @@
 
   - name: Remove interfaces from config before actual testing
     ignore_errors: true
+    become: true
     arista.eos.eos_config: &rem
       lines:
         - no switchport mode trunk
@@ -25,6 +26,7 @@
 
   - name: Merge base interfaces configuration
     register: result
+    become: true
     arista.eos.eos_interfaces: &merged
       config:
         - name: Ethernet1
@@ -51,6 +53,7 @@
 
   - name: Merge base interfaces configuration (IDEMPOTENT)
     register: result
+    become: true
     arista.eos.eos_interfaces: *merged
 
   - assert:
@@ -59,6 +62,7 @@
 
   - name: Merge L2 interfaces configuration
     register: result
+    become: true
     arista.eos.eos_l2_interfaces: &mergedl2
       config:
         - name: Ethernet1
@@ -76,6 +80,7 @@
 
   - name: Merge L2 interfaces configuration (IDEMPOTENT)
     register: result
+    become: true
     arista.eos.eos_l2_interfaces: *mergedl2
 
   - assert:
@@ -84,6 +89,7 @@
 
   - name: Merge L3 interfaces configuration
     register: result
+    become: true
     arista.eos.eos_l3_interfaces: &mergedl3
       config:
         - name: Ethernet2
@@ -99,6 +105,7 @@
 
   - name: Merge L3 interfaces configuration (IDEMPOTENT)
     register: result
+    become: true
     arista.eos.eos_l3_interfaces: *mergedl3
 
   - assert:
@@ -107,6 +114,7 @@
 
   always:
     - name: cleanup
+      become: true
       arista.eos.eos_config: *rem
       with_items: "{{ interfaces }}"
       loop_control:
