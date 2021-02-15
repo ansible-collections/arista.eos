@@ -93,7 +93,7 @@ class Ospf_interfaces(ResourceModule):
 
         # convert list of dicts to dicts of dicts
         wantd = {}
-        haved= {}
+        haved = {}
         for entry in self.want:
             wantd.update({entry["name"]: entry})
         for entry in self.have:

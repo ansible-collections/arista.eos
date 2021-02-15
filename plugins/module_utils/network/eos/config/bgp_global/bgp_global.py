@@ -108,7 +108,7 @@ class Bgp_global(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         haved = {}
         if self.state in ["deleted", "purged"]:
-            for k,v in iteritems(haved):
+            for k, v in iteritems(haved):
                 if k in wantd or not wantd:
                     haved.update({k: v})
             wantd = {}
