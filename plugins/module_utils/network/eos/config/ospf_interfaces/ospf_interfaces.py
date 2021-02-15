@@ -92,8 +92,12 @@ class Ospf_interfaces(ResourceModule):
         """
 
         # convert list of dicts to dicts of dicts
-        wantd = {entry["name"]: entry for entry in self.want}
-        haved = {entry["name"]: entry for entry in self.have}
+        wantd = {}
+        haved= {}
+        for entry in self.want:
+            wantd.update({entry["name"]: entry})
+        for entry in self.have:
+            haved.update({entry["name"]: entry})
 
         # turn all lists of dicts into dicts prior to merge
         for entry in wantd, haved:
@@ -104,10 +108,11 @@ class Ospf_interfaces(ResourceModule):
             wantd = dict_merge(haved, wantd)
 
         # if state is deleted, empty out wantd and set haved to wantd
+        haved = {}
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            for k, v in iteritems(haved):
+                if k in wantd or not wantd:
+                    haved.update({k: v})
             for k, have in iteritems(haved):
                 self._compare(want={}, have=have)
             wantd = {}

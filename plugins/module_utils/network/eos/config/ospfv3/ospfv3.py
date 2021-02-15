@@ -97,13 +97,12 @@ class Ospfv3(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
-
-        wantd = {
-            entry["vrf"]: entry for entry in self.want.get("processes", [])
-        }
-        haved = {
-            entry["vrf"]: entry for entry in self.have.get("processes", [])
-        }
+        wantd = {}
+        haved = {}
+        for entry in self.want.get("processes", []):
+            wantd.update({entry["vrf"]: entry})
+        for entry in self.have.get("processes", []):
+            haved.update({entry["vrf"]: entry})
 
         # turn all lists of dicts into dicts prior to merge
         for entry in wantd, haved:
@@ -113,10 +112,11 @@ class Ospfv3(ResourceModule):
             wantd = dict_merge(haved, wantd)
 
         # if state is deleted, empty out wantd and set haved to wantd
+        haved = {}
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            for k, v in iteritems(haved):
+                if k in wantd or not wantd:
+                    haved.update({k: v})
             wantd = {}
 
         # remove superfluous config for overridden and deleted

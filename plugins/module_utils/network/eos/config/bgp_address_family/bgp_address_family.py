@@ -106,10 +106,11 @@ class Bgp_af(ResourceModule):
                 )
                 wantd = {}
         # if state is deleted, empty out wantd and set haved to wantd
+        haved = {}
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            for k,v in iteritems(haved):
+                if k in wantd or not wantd:
+                    haved.update({k: v})
             for wk, wv in iteritems(wantd):
                 self._compare(want=wv, have=haved.pop(wk, {}))
 
