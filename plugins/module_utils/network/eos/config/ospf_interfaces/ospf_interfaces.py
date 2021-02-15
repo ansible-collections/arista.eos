@@ -108,11 +108,12 @@ class Ospf_interfaces(ResourceModule):
             wantd = dict_merge(haved, wantd)
 
         # if state is deleted, empty out wantd and set haved to wantd
-        haved = {}
         if self.state == "deleted":
+            h_del = {}
             for k, v in iteritems(haved):
                 if k in wantd or not wantd:
-                    haved.update({k: v})
+                    h_del.update({k: v})
+            haved = h_del
             for k, have in iteritems(haved):
                 self._compare(want={}, have=have)
             wantd = {}

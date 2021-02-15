@@ -106,12 +106,13 @@ class Bgp_global(ResourceModule):
             wantd = dict_merge(haved, wantd)
 
         # if state is deleted, empty out wantd and set haved to wantd
-        haved = {}
         if self.state in ["deleted", "purged"]:
+            h_del = {}
             for k, v in iteritems(haved):
                 if k in wantd or not wantd:
-                    haved.update({k: v})
+                    h_del.update({k: v})
             wantd = {}
+            haved =  h_del
 
         if self.state == "deleted":
             self._compare(want={}, have=self.have)

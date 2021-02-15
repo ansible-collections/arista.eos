@@ -97,6 +97,7 @@ class Ospfv3(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
+        import q
         wantd = {}
         haved = {}
         for entry in self.want.get("processes", []):
@@ -112,12 +113,14 @@ class Ospfv3(ResourceModule):
             wantd = dict_merge(haved, wantd)
 
         # if state is deleted, empty out wantd and set haved to wantd
-        haved = {}
         if self.state == "deleted":
+            h_del = {}
             for k, v in iteritems(haved):
                 if k in wantd or not wantd:
-                    haved.update({k: v})
+                    h_del.update({k: v})
             wantd = {}
+            haved = h_del
+            q(haved)
 
         # remove superfluous config for overridden and deleted
         if self.state in ["overridden", "deleted"]:
