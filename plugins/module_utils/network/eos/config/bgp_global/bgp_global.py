@@ -112,7 +112,7 @@ class Bgp_global(ResourceModule):
                 if k in wantd or not wantd:
                     h_del.update({k: v})
             wantd = {}
-            haved =  h_del
+            haved = h_del
 
         if self.state == "deleted":
             self._compare(want={}, have=self.have)
