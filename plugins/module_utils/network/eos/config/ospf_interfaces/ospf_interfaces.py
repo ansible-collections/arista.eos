@@ -197,12 +197,14 @@ class Ospf_interfaces(ResourceModule):
     def _ospf_int_list_to_dict(self, entry):
         for name, family in iteritems(entry):
             if family.get("ip_params"):
-                family["ip_params"] = {
-                    entry["afi"]: entry for entry in family["ip_params"]
-                }
+                family_dict = {}
+                for entry in family["ip_params"]:
+                    family_dict.update({entry["afi"]: entry})
+                family["ip_params"] = family_dict
+
             if "address_family" in family:
-                family["address_family"] = {
-                    entry["afi"]: entry
-                    for entry in family.get("address_family", [])
-                }
+                addr_dict = {}
+                for entry in family.get("address_family", []):
+                    addr_dict.update({entry["afi"]: entry})
+                family["address_family"] = addr_dict
                 self._ospf_int_list_to_dict(family["address_family"])

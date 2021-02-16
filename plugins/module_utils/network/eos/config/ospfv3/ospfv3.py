@@ -162,7 +162,10 @@ class Ospfv3(ResourceModule):
                     )
                 else:
                     # passing dict without vrf, inorder to avoid  no router ospfv3 command
-                    h = {i: have[i] for i in have if i != "vrf"}
+                    h = {}
+                    for i in have:
+                        if i!= "vrf":
+                            h.update({i: have[i]})
                     self.compare(
                         parsers=self.parsers,
                         want={name: entry},
@@ -267,20 +270,23 @@ class Ospfv3(ResourceModule):
         for name, proc in iteritems(entry):
             for area in proc.get("areas", []):
                 if "ranges" in area:
-                    area["ranges"] = {
-                        entry["address"]: entry
-                        for entry in area.get("ranges", [])
-                    }
-            proc["areas"] = {
-                entry["area_id"]: entry for entry in proc.get("areas", [])
-            }
-            proc["redistribute"] = {
-                entry["routes"]: entry
-                for entry in proc.get("redistribute", [])
-            }
+                    range_dict = {}
+                    for entry in area.get("ranges", []):
+                        range_dict.update({entry["address"]: entry})
+                    area["ranges"] = range_dict
+            areas_dict = {}
+            for entry in proc.get("areas", []):
+                areas_dict.update({entry["area_id"]: entry})
+            proc["areas"] = areas_dict
+            
+            redis_dict = {}
+            for entry in proc.get("redistribute", []):
+                redis_dict.update({entry["routes"]: entry})
+            proc["redistribute"] = redis_dict
+
             if "address_family" in proc:
-                proc["address_family"] = {
-                    entry["afi"]: entry
-                    for entry in proc.get("address_family", [])
-                }
+                addr_dict = {}
+                for entry in proc.get("address_family", []):
+                    addr_dict.update({entry["afi"]: entry})
+                proc["address_family"] = addr_dict
                 self._ospf_list_to_dict(proc["address_family"])
