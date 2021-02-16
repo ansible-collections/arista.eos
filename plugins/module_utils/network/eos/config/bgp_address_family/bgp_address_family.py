@@ -254,7 +254,9 @@ class Bgp_af(ResourceModule):
             if "address_family" in proc:
                 addr_dict = {}
                 for entry in proc.get("address_family", []):
-                    addr_dict.update({entry["afi"] + "_" + entry.get("vrf", ""): entry}) 
+                    addr_dict.update(
+                        {entry["afi"] + "_" + entry.get("vrf", ""): entry}
+                    )
                 proc["address_family"] = addr_dict
                 self._bgp_af_list_to_dict(proc["address_family"])
 

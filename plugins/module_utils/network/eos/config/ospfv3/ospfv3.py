@@ -164,7 +164,7 @@ class Ospfv3(ResourceModule):
                     # passing dict without vrf, inorder to avoid  no router ospfv3 command
                     h = {}
                     for i in have:
-                        if i!= "vrf":
+                        if i != "vrf":
                             h.update({i: have[i]})
                     self.compare(
                         parsers=self.parsers,
@@ -278,7 +278,7 @@ class Ospfv3(ResourceModule):
             for entry in proc.get("areas", []):
                 areas_dict.update({entry["area_id"]: entry})
             proc["areas"] = areas_dict
-            
+
             redis_dict = {}
             for entry in proc.get("redistribute", []):
                 redis_dict.update({entry["routes"]: entry})
