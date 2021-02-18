@@ -97,13 +97,12 @@ class Ospfv3(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
-
-        wantd = {
-            entry["vrf"]: entry for entry in self.want.get("processes", [])
-        }
-        haved = {
-            entry["vrf"]: entry for entry in self.have.get("processes", [])
-        }
+        wantd = {}
+        haved = {}
+        for entry in self.want.get("processes", []):
+            wantd.update({entry["vrf"]: entry})
+        for entry in self.have.get("processes", []):
+            haved.update({entry["vrf"]: entry})
 
         # turn all lists of dicts into dicts prior to merge
         for entry in wantd, haved:
@@ -114,10 +113,12 @@ class Ospfv3(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            h_del = {}
+            for k, v in iteritems(haved):
+                if k in wantd or not wantd:
+                    h_del.update({k: v})
             wantd = {}
+            haved = h_del
 
         # remove superfluous config for overridden and deleted
         if self.state in ["overridden", "deleted"]:
@@ -161,7 +162,10 @@ class Ospfv3(ResourceModule):
                     )
                 else:
                     # passing dict without vrf, inorder to avoid  no router ospfv3 command
-                    h = {i: have[i] for i in have if i != "vrf"}
+                    h = {}
+                    for i in have:
+                        if i != "vrf":
+                            h.update({i: have[i]})
                     self.compare(
                         parsers=self.parsers,
                         want={name: entry},
@@ -266,20 +270,23 @@ class Ospfv3(ResourceModule):
         for name, proc in iteritems(entry):
             for area in proc.get("areas", []):
                 if "ranges" in area:
-                    area["ranges"] = {
-                        entry["address"]: entry
-                        for entry in area.get("ranges", [])
-                    }
-            proc["areas"] = {
-                entry["area_id"]: entry for entry in proc.get("areas", [])
-            }
-            proc["redistribute"] = {
-                entry["routes"]: entry
-                for entry in proc.get("redistribute", [])
-            }
+                    range_dict = {}
+                    for entry in area.get("ranges", []):
+                        range_dict.update({entry["address"]: entry})
+                    area["ranges"] = range_dict
+            areas_dict = {}
+            for entry in proc.get("areas", []):
+                areas_dict.update({entry["area_id"]: entry})
+            proc["areas"] = areas_dict
+
+            redis_dict = {}
+            for entry in proc.get("redistribute", []):
+                redis_dict.update({entry["routes"]: entry})
+            proc["redistribute"] = redis_dict
+
             if "address_family" in proc:
-                proc["address_family"] = {
-                    entry["afi"]: entry
-                    for entry in proc.get("address_family", [])
-                }
+                addr_dict = {}
+                for entry in proc.get("address_family", []):
+                    addr_dict.update({entry["afi"]: entry})
+                proc["address_family"] = addr_dict
                 self._ospf_list_to_dict(proc["address_family"])

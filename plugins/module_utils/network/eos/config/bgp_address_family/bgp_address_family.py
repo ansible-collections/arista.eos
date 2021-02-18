@@ -107,9 +107,11 @@ class Bgp_af(ResourceModule):
                 wantd = {}
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            h_del = {}
+            for k, v in iteritems(haved):
+                if k in wantd or not wantd:
+                    h_del.update({k: v})
+            haved = h_del
             for wk, wv in iteritems(wantd):
                 self._compare(want=wv, have=haved.pop(wk, {}))
 
@@ -250,23 +252,28 @@ class Bgp_af(ResourceModule):
     def _bgp_af_list_to_dict(self, entry):
         for name, proc in iteritems(entry):
             if "address_family" in proc:
-                proc["address_family"] = {
-                    entry["afi"] + "_" + entry.get("vrf", ""): entry
-                    for entry in proc.get("address_family", [])
-                }
+                addr_dict = {}
+                for entry in proc.get("address_family", []):
+                    addr_dict.update(
+                        {entry["afi"] + "_" + entry.get("vrf", ""): entry}
+                    )
+                proc["address_family"] = addr_dict
                 self._bgp_af_list_to_dict(proc["address_family"])
 
             if "neighbor" in proc:
-                proc["neighbor"] = {
-                    entry["peer"]: entry for entry in proc.get("neighbor", [])
-                }
+                neigh_dict = {}
+                for entry in proc.get("neighbor", []):
+                    neigh_dict.update({entry["peer"]: entry})
+                proc["neighbor"] = neigh_dict
+
             if "network" in proc:
-                proc["network"] = {
-                    entry["address"]: entry
-                    for entry in proc.get("network", [])
-                }
+                network_dict = {}
+                for entry in proc.get("network", []):
+                    network_dict.update({entry["address"]: entry})
+                proc["network"] = network_dict
+
             if "redistribute" in proc:
-                proc["redistribute"] = {
-                    entry["protocol"]: entry
-                    for entry in proc.get("redistribute", [])
-                }
+                redis_dict = {}
+                for entry in proc.get("redistribute", []):
+                    redis_dict.update({entry["protocol"]: entry})
+                proc["redistribute"] = redis_dict
