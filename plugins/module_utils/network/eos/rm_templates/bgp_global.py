@@ -2585,7 +2585,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s*neighbor
                 \s+(?P<peer>\S+)
                 \s+update-source
-                \s+(?P<src>.*)
+                \s+(?P<src>.+)
                 *$""",
                 re.VERBOSE,
             ),

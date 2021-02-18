@@ -107,10 +107,12 @@ class Bgp_global(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state in ["deleted", "purged"]:
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            h_del = {}
+            for k, v in iteritems(haved):
+                if k in wantd or not wantd:
+                    h_del.update({k: v})
             wantd = {}
+            haved = h_del
 
         if self.state == "deleted":
             self._compare(want={}, have=self.have)
@@ -351,29 +353,32 @@ class Bgp_global(ResourceModule):
     def _bgp_global_list_to_dict(self, entry):
         for name, proc in iteritems(entry):
             if "neighbor" in proc:
-                proc["neighbor"] = {
-                    entry["peer"]: entry for entry in proc.get("neighbor", [])
-                }
+                neigh_dict = {}
+                for entry in proc.get("neighbor", []):
+                    neigh_dict.update({entry["peer"]: entry})
+                proc["neighbor"] = neigh_dict
+
             if "network" in proc:
-                proc["network"] = {
-                    entry["address"]: entry
-                    for entry in proc.get("network", [])
-                }
+                network_dict = {}
+                for entry in proc.get("network", []):
+                    network_dict.update({entry["address"]: entry})
+                proc["network"] = network_dict
 
             if "aggregate_address" in proc:
-                proc["aggregate_address"] = {
-                    entry["address"]: entry
-                    for entry in proc.get("aggregate_address", [])
-                }
+                agg_dict = {}
+                for entry in proc.get("aggregate_address", []):
+                    agg_dict.update({entry["address"]: entry})
+                proc["aggregate_address"] = agg_dict
 
             if "redistribute" in proc:
-                proc["redistribute"] = {
-                    entry["protocol"]: entry
-                    for entry in proc.get("redistribute", [])
-                }
+                redis_dict = {}
+                for entry in proc.get("redistribute", []):
+                    redis_dict.update({entry["protocol"]: entry})
+                proc["redistribute"] = redis_dict
 
             if "vrfs" in proc:
-                proc["vrfs"] = {
-                    entry["vrf"]: entry for entry in proc.get("vrfs", [])
-                }
+                vrf_dict = {}
+                for entry in proc.get("vrfs", []):
+                    vrf_dict.update({entry["vrf"]: entry})
+                proc["vrfs"] = vrf_dict
                 self._bgp_global_list_to_dict(proc["vrfs"])
