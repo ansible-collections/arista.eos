@@ -41,15 +41,14 @@
 
   - assert:
       that:
-        commands:
-          - '"interface Ethernet1" in result.commands'
-          - '"description Configured by Ansible" in result.commands'
-          - '"no shutdown" in result.commands'
-          - '"interface Ethernet2" in result.commands'
-          - '"no switchport" in result.commands'
-          - '"description Configured by Ansible" in result.commands'
-          - '"no shutdown" in result.commands'
-          - result.commands|length == 8
+        - '"interface Ethernet1" in result.commands'
+        - '"description Configured by Ansible" in result.commands'
+        - '"no shutdown" in result.commands'
+        - '"interface Ethernet2" in result.commands'
+        - '"no switchport" in result.commands'
+        - '"description Configured by Ansible" in result.commands'
+        - '"no shutdown" in result.commands'
+        - result.commands|length == 8
 
   - name: Merge base interfaces configuration (IDEMPOTENT)
     register: result
