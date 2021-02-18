@@ -48,7 +48,7 @@
         - '"no switchport" in result.commands'
         - '"description Configured by Ansible" in result.commands'
         - '"no shutdown" in result.commands'
-        - result.commands|length == 8
+        - result.commands|length == 7
 
   - name: Merge base interfaces configuration (IDEMPOTENT)
     register: result
