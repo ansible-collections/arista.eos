@@ -39,6 +39,17 @@ options:
     - name: ANSIBLE_EOS_USE_SESSIONS
     vars:
     - name: ansible_eos_use_sessions
+  config_commands:
+    description:
+    - Specifies a list of commands that can make configuration changes
+      to the target device.
+    - When `ansible_network_single_user_mode` is enabled, if a command sent
+      to the device is present in this list, the existing cache is invalidated.
+    version_added: 2.0.0
+    type: list
+    default: []
+    vars:
+    - name: ansible_eos_config_commands
 """
 
 import json
@@ -61,6 +72,7 @@ from ansible.plugins.cliconf import CliconfBase, enable_mode
 class Cliconf(CliconfBase):
     def __init__(self, *args, **kwargs):
         super(Cliconf, self).__init__(*args, **kwargs)
+        self._device_info = {}
         self._session_support = None
 
     @enable_mode
@@ -284,33 +296,37 @@ class Cliconf(CliconfBase):
         return self._session_support
 
     def get_device_info(self):
-        device_info = {}
+        if not self._device_info:
+            device_info = {}
 
-        device_info["network_os"] = "eos"
-        reply = self.get("show version | json")
-        data = json.loads(reply)
+            device_info["network_os"] = "eos"
+            reply = self.get("show version | json")
+            data = json.loads(reply)
 
-        device_info["network_os_version"] = data["version"]
-        device_info["network_os_model"] = data["modelName"]
+            device_info["network_os_version"] = data["version"]
+            device_info["network_os_model"] = data["modelName"]
 
-        reply = self.get("show hostname | json")
-        data = json.loads(reply)
+            reply = self.get("show hostname | json")
+            data = json.loads(reply)
 
-        device_info["network_os_hostname"] = data["hostname"]
+            device_info["network_os_hostname"] = data["hostname"]
 
-        try:
-            reply = self.get("bash timeout 5 cat /mnt/flash/boot-config")
+            try:
+                reply = self.get("bash timeout 5 cat /mnt/flash/boot-config")
 
-            match = re.search(r"SWI=(.+)$", reply, re.M)
-            if match:
-                device_info["network_os_image"] = match.group(1)
-        except AnsibleConnectionFailure:
-            # This requires enable mode to run
-            self._connection.queue_message(
-                "vvv", "Unable to gather network_os_image without enable mode"
-            )
+                match = re.search(r"SWI=(.+)$", reply, re.M)
+                if match:
+                    device_info["network_os_image"] = match.group(1)
+            except AnsibleConnectionFailure:
+                # This requires enable mode to run
+                self._connection.queue_message(
+                    "vvv",
+                    "Unable to gather network_os_image without enable mode",
+                )
 
-        return device_info
+            self._device_info = device_info
+
+        return self._device_info
 
     def get_device_operations(self):
         return {
