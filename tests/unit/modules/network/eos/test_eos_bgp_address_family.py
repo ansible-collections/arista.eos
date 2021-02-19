@@ -24,7 +24,7 @@ class TestEosBgpafModule(TestEosModule):
         super(TestEosBgpafModule, self).setUp()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
