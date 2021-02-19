@@ -105,18 +105,18 @@ class Acl_interfacesFacts(object):
         acls_list = []
         group_list = []
         group_dict = {}
-        config["name"] = utils.parse_conf_arg(conf, "interface")
+        config["name"] = utils.parse_conf_arg(conf, "^interface")
         conf_lines = conf.split("\n")
         for line in conf_lines:
             if config["name"] in line:
                 continue
-            access_group = utils.parse_conf_arg(line, "ip access-group")
+            access_group = utils.parse_conf_arg(line, "^ip access-group")
             # This module was verified on an ios device since vEOS doesnot support
             # acl_interfaces cnfiguration. In ios, ipv6 acl is configured as
             # traffic-filter and in eos it is access-group
 
             # access_group_v6 = utils.parse_conf_arg(line, 'ipv6 traffic-filter')
-            access_group_v6 = utils.parse_conf_arg(line, "ipv6 access-group")
+            access_group_v6 = utils.parse_conf_arg(line, "^ipv6 access-group")
             if access_group:
                 access_group_list.append(access_group)
             if access_group_v6:
