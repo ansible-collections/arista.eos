@@ -1,0 +1,3 @@
+---
+trivial:
+  - Change import path for resource_module.py in the unit testcases.
