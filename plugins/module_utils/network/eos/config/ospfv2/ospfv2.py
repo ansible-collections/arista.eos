@@ -777,7 +777,7 @@ def _parse_timers(timers_list, os_version="4.20"):
                         t_cmd = (
                             t_cmd
                             + "lsa arrival "
-                            +  str(t_dict["lsa"]["rx"]["min_interval"])
+                            + str(t_dict["lsa"]["rx"]["min_interval"])
                         )
                     else:
                         t_cmd = (
@@ -814,10 +814,16 @@ def _parse_timers(timers_list, os_version="4.20"):
                     )
             elif t_key == "throttle":
                 if t_dict["throttle"]["attr"] == "lsa":
-                    t_cmd = (t_cmd + "throttle lsa all ")
+                    t_cmd = t_cmd + "throttle lsa all "
                 else:
-                    t_cmd = (t_cmd + "throttle spf ")
-                t_cmd = (t_cmd + str(t_dict["throttle"]["initial"]) + " "
-                            + str(t_dict["throttle"]["min"]) + " " + str(t_dict["throttle"]["max"])) 
+                    t_cmd = t_cmd + "throttle spf "
+                t_cmd = (
+                    t_cmd
+                    + str(t_dict["throttle"]["initial"])
+                    + " "
+                    + str(t_dict["throttle"]["min"])
+                    + " "
+                    + str(t_dict["throttle"]["max"])
+                )
             timers_cmd.append(t_cmd)
     return timers_cmd

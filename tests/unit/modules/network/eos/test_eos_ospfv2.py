@@ -708,7 +708,16 @@ class TestEosOspfv2Module(TestEosModule):
                 {
                     "process_id": 3,
                     "redistribute": [{"routes": "static"}],
-                    "timers": [{"throttle": {"attr": "lsa", "initial": 20, "min": 21, "max": 22}}],
+                    "timers": [
+                        {
+                            "throttle": {
+                                "attr": "lsa",
+                                "initial": 20,
+                                "min": 21,
+                                "max": 22,
+                            }
+                        }
+                    ],
                     "vrf": "vrf02",
                 },
             ]

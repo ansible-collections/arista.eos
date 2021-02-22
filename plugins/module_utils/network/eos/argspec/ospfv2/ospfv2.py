@@ -306,7 +306,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 "throttle": {
                                     "options": {
                                         "attr": {"type": "str"},
-                                        "initial": {"ytpe": "int"},
+                                        "initial": {"type": "int"},
                                         "max": {"type": "int"},
                                         "min": {"type": "int"},
                                     },
