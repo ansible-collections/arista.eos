@@ -257,9 +257,29 @@ def _tmplt_ospf_timers_throttle(config_data):
         return command
 
 
+def _tmplt_ospf_bfd(config_data):
+    if os_version < "4.23":
+        command = "bfd all-interfaces"
+    else:
+        command = "bfd default"
+    return command
+
+
+os_version = "4.23"
+
+
 class Ospfv3Template(NetworkTemplate):
-    def __init__(self, lines=None):
-        super(Ospfv3Template, self).__init__(lines=lines, tmplt=self)
+    def __init__(self, lines=None, module=None):
+        global os_version
+        super(Ospfv3Template, self).__init__(
+            lines=lines, tmplt=self, module=module
+        )
+        if self._connection:
+            os_version = self._get_os_version()
+
+    def _get_os_version(self):
+        os_version = self._connection.get_device_info()["network_os_version"]
+        return os_version
 
     PARSERS = [
         {
@@ -593,7 +613,28 @@ class Ospfv3Template(NetworkTemplate):
                     *$""",
                 re.VERBOSE,
             ),
-            "setval": "bfd all-interfaces",
+            "setval": _tmplt_ospf_bfd,
+            "result": {
+                "processes": {
+                    "address_family": {
+                        '{{ afi|default("router", true) }}': {
+                            "bfd": {
+                                "all_interfaces": "{{ True if bfd is defined }}"
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "bfd",
+            "getval": re.compile(
+                r"""\s+bfd*
+                    \s*(?P<bfd>default)
+                    *$""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_ospf_bfd,
             "result": {
                 "processes": {
                     "address_family": {

@@ -55,6 +55,20 @@ class TestEosOspfv2Module(TestEosModule):
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
+        self.mock_get_os_version = patch(
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.config.ospfv2.ospfv2.Ospfv2._get_os_version"
+        )
+        self.get_os_version = self.mock_get_os_version.start()
+
+        # self.mock_get_capabilities = patch(
+        #    "ansible_collections.arista.eos.plugins.module_utils.network.eos.config.ospfv2.ospfv2.get_capabilities"
+        # )
+        # self.get_capabilities = self.mock_get_capabilities.start()
+        # self.get_capabilities.return_value = {
+        #    "device_info": {"network_os_version": "4.20"}
+        # }
+        self.get_os_version.return_value = "4.20"
+
     def tearDown(self):
         super(TestEosOspfv2Module, self).tearDown()
         self.mock_get_resource_connection_config.stop()
@@ -63,6 +77,7 @@ class TestEosOspfv2Module(TestEosModule):
         self.mock_get_config.stop()
         self.mock_load_config.stop()
         self.mock_execute_show_command.stop()
+        self.mock_get_os_version.stop()
 
     def load_fixtures(self, commands=None, transport="cli", filename=None):
         if filename is None:
@@ -196,6 +211,13 @@ class TestEosOspfv2Module(TestEosModule):
                             redistribute=[
                                 dict(routes="isis", isis_level="level-1")
                             ],
+                            timers=[
+                                dict(
+                                    throttle=dict(
+                                        attr="spf", initial=10, min=26, max=33
+                                    )
+                                )
+                            ],
                         ),
                         dict(
                             process_id=4,
@@ -214,6 +236,7 @@ class TestEosOspfv2Module(TestEosModule):
             "router ospf 1",
             "area 0.0.0.12 filter 10.2.1.0/24",
             "redistribute isis level-1",
+            "timers throttle spf 10 26 33",
             "exit",
             "router ospf 4 vrf vrftest",
             "area 0.0.0.9 default-cost 20",
@@ -246,6 +269,13 @@ class TestEosOspfv2Module(TestEosModule):
                             networks=[
                                 dict(area="0.0.0.0", prefix="10.10.3.0/24")
                             ],
+                            timers=[
+                                dict(
+                                    throttle=dict(
+                                        attr="lsa", initial=10, min=26, max=33
+                                    )
+                                )
+                            ],
                         ),
                     ]
                 ),
@@ -271,6 +301,7 @@ class TestEosOspfv2Module(TestEosModule):
             "no redistribute static",
             "area 0.0.0.9 default-cost 20",
             "network 10.10.3.0/24 area 0.0.0.0",
+            "timers throttle lsa all 10 26 33",
             "exit",
         ]
         self.execute_module(changed=True, commands=commands)
@@ -633,6 +664,7 @@ class TestEosOspfv2Module(TestEosModule):
             "exit",
             "router ospf 3 vrf vrf02",
             "redistribute static",
+            "timers lsa all 20 21 22",
             "exit",
         ]
         parsed_str = "\n".join(commands)
@@ -676,6 +708,16 @@ class TestEosOspfv2Module(TestEosModule):
                 {
                     "process_id": 3,
                     "redistribute": [{"routes": "static"}],
+                    "timers": [
+                        {
+                            "throttle": {
+                                "attr": "lsa",
+                                "initial": 20,
+                                "min": 21,
+                                "max": 22,
+                            }
+                        }
+                    ],
                     "vrf": "vrf02",
                 },
             ]
@@ -753,4 +795,33 @@ class TestEosOspfv2Module(TestEosModule):
             "no redistribute static",
             "exit",
         ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_ospfv2_merged_bfd_4_20(self):
+        set_module_args(
+            dict(
+                config=dict(
+                    processes=[
+                        dict(process_id="1", bfd=dict(all_interfaces=True))
+                    ]
+                ),
+                state="merged",
+            )
+        )
+        commands = ["router ospf 1", "bfd all-interfaces", "exit"]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_ospfv2_merged_bfd_4_23(self):
+        self.get_os_version.return_value = "4.23"
+        set_module_args(
+            dict(
+                config=dict(
+                    processes=[
+                        dict(process_id="1", bfd=dict(all_interfaces=True))
+                    ]
+                ),
+                state="merged",
+            )
+        )
+        commands = ["router ospf 1", "bfd default", "exit"]
         self.execute_module(changed=True, commands=commands)

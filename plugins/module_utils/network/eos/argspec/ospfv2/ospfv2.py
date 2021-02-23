@@ -303,6 +303,15 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                     },
                                     "type": "dict",
                                 },
+                                "throttle": {
+                                    "options": {
+                                        "attr": {"type": "str"},
+                                        "initial": {"type": "int"},
+                                        "max": {"type": "int"},
+                                        "min": {"type": "int"},
+                                    },
+                                    "type": "dict",
+                                },
                             },
                             "type": "list",
                         },
