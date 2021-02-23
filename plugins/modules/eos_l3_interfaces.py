@@ -70,6 +70,10 @@ options:
             description:
             - Whether or not this address is a secondary address.
             type: bool
+          virtual:
+            description:
+            - Whether or not this address is a virtual address.
+            type: bool
       ipv6:
         description:
         - List of IPv6 addresses to be set for the Layer 3 interface mentioned in
