@@ -70,8 +70,6 @@
                     encryption: "null"
                     hidden_key: true
                     passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
-              bfd:
-                all_interfaces: true
               fips_restrictions: true
               log_adjacency_changes:
                 detail: true
@@ -97,7 +95,7 @@
 
     - assert:
         that:
-          - result.commands|length == 46
+          - result.commands|length == 45
           - result.changed == true
           - result.commands|symmetric_difference(merged.commands) == []
           - result.after.processes|symmetric_difference(populate.before.processes) == []

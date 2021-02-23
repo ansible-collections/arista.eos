@@ -484,6 +484,22 @@ options:
                   max:
                     description: Max wait time between two SPFs in msecs.
                     type: int
+              throttle:
+                description: Configure throttle timers(valid only for eos version < 4.23).
+                type: dict
+                suboptions:
+                  attr:
+                    description: throttle attribute.
+                    type: str
+                  initial:
+                    description: Initial  schedule delay in msecs.
+                    type: int
+                  min:
+                    description: Min Hold time
+                    type: int
+                  max:
+                    description: Max wait time
+                    type: int
           fips_restrictions:
             description: Use FIPS compliant algorithms
             type: str

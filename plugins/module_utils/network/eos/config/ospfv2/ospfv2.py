@@ -146,6 +146,14 @@ class Ospfv2(ConfigBase):
             commands = self._state_replaced(want, have)
         return commands
 
+    def _get_os_version(self):
+        os_version = "4.20"
+        if self._connection():
+            os_version = self._connection.get_device_info()[
+                "network_os_version"
+            ]
+        return os_version
+
     def _state_replaced(self, want, have):
         """ The command generator when state is replaced
 
@@ -356,10 +364,14 @@ class Ospfv2(ConfigBase):
                     commands.append(c)
             if ospf_params.get("auto_cost"):
                 commands.append(
-                    "auto-cose reference-bandwidth " + ospf_params["auto_cost"]
+                    "auto-cost reference-bandwidth " + ospf_params["auto_cost"]
                 )
             if ospf_params.get("bfd"):
-                commands.append("bfd default")
+                os_version = self._get_os_version()
+                if os_version < "4.23":
+                    commands.append("bfd all-interfaces")
+                else:
+                    commands.append("bfd default")
             if ospf_params.get("default_information"):
                 commands.append(
                     _parse_default_information(
@@ -444,7 +456,8 @@ class Ospfv2(ConfigBase):
                     _parse_summary_address(ospf_params["summary_address"])
                 )
             if ospf_params.get("timers"):
-                command_list = _parse_timers(ospf_params["timers"])
+                os_version = self._get_os_version()
+                command_list = _parse_timers(ospf_params["timers"], os_version)
                 for c in command_list:
                     commands.append(c)
             commands.append("exit")
@@ -751,7 +764,7 @@ def _parse_summary_address(addr_dict):
     return sum_cmd
 
 
-def _parse_timers(timers_list):
+def _parse_timers(timers_list, os_version="4.20"):
     timers_cmd = []
     for t_dict in timers_list:
         t_cmd = "timers "
@@ -760,11 +773,18 @@ def _parse_timers(timers_list):
                 break
             if t_key == "lsa":
                 if t_dict["lsa"].get("rx"):
-                    t_cmd = (
-                        t_cmd
-                        + "lsa rx min interval "
-                        + str(t_dict["lsa"]["rx"]["min_interval"])
-                    )
+                    if os_version < "4.23":
+                        t_cmd = (
+                            t_cmd
+                            + "lsa arrival "
+                            + str(t_dict["lsa"]["rx"]["min_interval"])
+                        )
+                    else:
+                        t_cmd = (
+                            t_cmd
+                            + "lsa rx min interval "
+                            + str(t_dict["lsa"]["rx"]["min_interval"])
+                        )
                 else:
                     t_cmd = (
                         t_cmd
@@ -785,12 +805,25 @@ def _parse_timers(timers_list):
                 else:
                     t_cmd = (
                         t_cmd
-                        + " spf delay initial "
+                        + "spf delay initial "
                         + str(t_dict["spf"]["initial"])
                         + " "
                         + str(t_dict["spf"]["max"])
                         + " "
                         + str(t_dict["spf"]["min"])
                     )
+            elif t_key == "throttle":
+                if t_dict["throttle"]["attr"] == "lsa":
+                    t_cmd = t_cmd + "throttle lsa all "
+                else:
+                    t_cmd = t_cmd + "throttle spf "
+                t_cmd = (
+                    t_cmd
+                    + str(t_dict["throttle"]["initial"])
+                    + " "
+                    + str(t_dict["throttle"]["min"])
+                    + " "
+                    + str(t_dict["throttle"]["max"])
+                )
             timers_cmd.append(t_cmd)
     return timers_cmd
