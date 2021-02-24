@@ -5,20 +5,31 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
-v1.3.0
+v2.0.0
 ======
 
-Deprecated Features
--------------------
+Major Changes
+-------------
 
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
+- Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode` and `ansible_network_import_modules` - Please refer to ansible.netcommon `changelog <https://github.com/ansible-collections/ansible.netcommon/blob/main/changelogs/CHANGELOG.rst#ansible-netcommon-collection-release-notes>`_ for more details.
 
-New Modules
------------
+Minor Changes
+-------------
 
-- eos_bgp_global - BGP global resource module
-- eos_bgp_address_family - BGP address family resource module
+- Add support for configuration caching (single_user_mode).
+- Add support for syntax changes in ospf bfd command in 4.23 (https://github.com/ansible-collections/arista.eos/pull/134/)
+- Move eos_config idempotent warning message with the task response under `warnings` key if `changed` is `True`
+- Re-use device_info dictionary in cliconf
 
+Bugfixes
+--------
+
+- Add 'virtual' key to denote the existence of virtual address on an interface.(https://github.com/ansible-collections/arista.eos/pull/170).
+- Fixed the regex to parse the running config correctly.(https://github.com/ansible-collections/arista.eos/issues/150)
+- cliconf plugin - Prevent `get_capabilities()` from getting larger every time it is called
+
+v1.3.0
+======
 
 Bugfixes
 --------
@@ -30,6 +41,12 @@ Bugfixes
 - Update docs to clarify the idemptonecy releated caveat and add it in the output warnings (https://github.com/ansible-collections/ansible.netcommon/pull/189)
 - fixes eos interfaces rm where interface in description resulted in failure (https://github.com/ansible-collections/arista.eos/issues/86).
 - replace list.copy() with list[:] to support python 2.7  and fix idempotent issue with replaced and overridden (https://github.com/ansible-collections/arista.eos/pull/142).
+
+New Modules
+-----------
+
+- eos_bgp_address_family - bgp_address_family resource module
+- eos_bgp_global - bgp_global resource module
 
 v1.2.0
 ======
@@ -85,11 +102,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======

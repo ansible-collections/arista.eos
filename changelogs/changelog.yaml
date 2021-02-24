@@ -132,9 +132,6 @@ releases:
     - fix_src_backup_with_module_alias.yaml
     release_date: '2020-07-31'
   1.0.2:
-    changes:
-      release_summary:
-      - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
@@ -217,10 +214,39 @@ releases:
     - requires-ansible.yaml
     - update_docs_default_values.yaml
     modules:
-    - description: bgp_global resource module
-      name: eos_bgp_global
-      namespace: ''
     - description: bgp_address_family resource module
       name: eos_bgp_address_family
       namespace: ''
+    - description: bgp_global resource module
+      name: eos_bgp_global
+      namespace: ''
     release_date: '2021-02-01'
+  2.0.0:
+    changes:
+      bugfixes:
+      - Add 'virtual' key to denote the existence of virtual address on an interface.(https://github.com/ansible-collections/arista.eos/pull/170).
+      - Fixed the regex to parse the running config correctly.(https://github.com/ansible-collections/arista.eos/issues/150)
+      - cliconf plugin - Prevent `get_capabilities()` from getting larger every time
+        it is called
+      major_changes:
+      - Requires ansible.netcommon v2.0.0+ to support `ansible_network_single_user_mode`
+        and `ansible_network_import_modules` - Please refer to ansible.netcommon `changelog
+        <https://github.com/ansible-collections/ansible.netcommon/blob/main/changelogs/CHANGELOG.rst#ansible-netcommon-collection-release-notes>`_
+        for more details.
+      minor_changes:
+      - Add support for configuration caching (single_user_mode).
+      - Add support for syntax changes in ospf bfd command in 4.23 (https://github.com/ansible-collections/arista.eos/pull/134/)
+      - Move eos_config idempotent warning message with the task response under `warnings`
+        key if `changed` is `True`
+      - Re-use device_info dictionary in cliconf
+    fragments:
+    - acl_interfaces_parse_issue.yaml
+    - add_ignore_txt.yaml
+    - add_virtual_interface.yaml
+    - change_import_resoure_module.yaml
+    - config_module_warning_msg.yaml
+    - major_release_2.yaml
+    - ospf_bfd_command_syntax_4_23.yaml
+    - single_user_mode.yaml
+    - unbloat-rpc.yaml
+    release_date: '2021-02-24'
