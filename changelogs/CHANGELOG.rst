@@ -108,6 +108,11 @@ Bugfixes
 v1.0.2
 ======
 
+Release Summary
+---------------
+
+- rereleasing 1.0.1 with updated changelog.
+
 v1.0.1
 ======
 
