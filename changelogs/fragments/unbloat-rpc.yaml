@@ -1,3 +1,0 @@
----
-bugfixes:
-  - cliconf plugin - Prevent `get_capabilities()` from getting larger every time it is called
