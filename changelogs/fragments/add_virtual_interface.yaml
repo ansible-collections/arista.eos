@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Add 'virtual' key to denote the existence of virtual address on an interface.(https://github.com/ansible-collections/arista.eos/pull/170).

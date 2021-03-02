@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fixed the regex to parse the running config correctly.(https://github.com/ansible-collections/arista.eos/issues/150)
