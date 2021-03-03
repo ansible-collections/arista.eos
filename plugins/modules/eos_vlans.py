@@ -125,7 +125,6 @@ EXAMPLES = """
 # !
 # vlan 20
 #    name twenty
-# testing
 
 - name: Merge given VLAN attributes with device configuration
   arista.eos.eos_vlans:
