@@ -128,7 +128,9 @@ import re
 
 from copy import deepcopy
 
+from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.validation import check_required_together
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     is_masklen,
     validate_ip_address,
@@ -204,7 +206,10 @@ def map_params_to_obj(module, required_together=None):
                 if item.get(key) is None:
                     item[key] = module.params[key]
 
-            module._check_required_together(required_together, item)
+            try:
+                check_required_together(required_together, item)
+            except TypeError as exc:
+                module.fail_json(to_text(exc))
             d = item.copy()
 
             obj.append(d)
