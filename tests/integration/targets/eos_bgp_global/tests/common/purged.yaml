@@ -3,6 +3,8 @@
     msg: Start eos_bgp_global purged integration tests ansible_connection={{
       ansible_connection }}
 
+- include_tasks: _remove_config.yaml
+
 - include_tasks: _populate.yaml
 
 - block:
