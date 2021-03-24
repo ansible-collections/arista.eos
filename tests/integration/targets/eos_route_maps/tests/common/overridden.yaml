@@ -14,7 +14,7 @@
       register: result
       arista.eos.eos_route_maps: &id001
         config:
-          - route_map_name: "mapmerge"
+          - route_map: "mapmerge"
             entries:
               - action: "permit"
                 sequence: 10

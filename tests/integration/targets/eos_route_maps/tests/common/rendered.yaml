@@ -11,7 +11,7 @@
       register: result
       arista.eos.eos_route_maps: &id001
         config:
-          - route_map_name: "mapmerge"
+          - route_map: "mapmerge"
             entries:
               - description: "merged_map"
                 action: "permit"
@@ -21,10 +21,10 @@
               - description: "newmap"
                 action: "deny"
                 sequence: 25
-                continue_map: 45
+                continue_sequence: 45
                 match:
                   interface: "Ethernet1"
-          - route_map_name: "mapmerge2"
+          - route_map: "mapmerge2"
             entries:
               - sub_route_map:
                   name: "mapmerge"

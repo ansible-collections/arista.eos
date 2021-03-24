@@ -14,7 +14,7 @@
       register: result
       arista.eos.eos_route_maps: &id001
         config:
-          - route_map_name: "mapmerge2"
+          - route_map: "mapmerge2"
         state: deleted
 
     - become: true

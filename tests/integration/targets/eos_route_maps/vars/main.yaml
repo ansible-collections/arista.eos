@@ -63,12 +63,12 @@ gathered:
             router_id: "22"
           sequence: 10
         - action: "deny"
-          continue_map: 45
+          continue_sequence: 45
           description: "newmap"
           match:
             interface: "Ethernet1"
           sequence: 25
-      route_map_name: "mapmerge"
+      route_map: "mapmerge"
     - entries:
         - action: "deny"
           match:
@@ -84,7 +84,7 @@ gathered:
               value: "25"
           sub_route_map:
             name: "mapmerge"
-      route_map_name: "mapmerge2"
+      route_map: "mapmerge2"
 
 parsed:
   config:
@@ -97,12 +97,12 @@ parsed:
           set:
             bgp: 20
         - action: "deny"
-          continue_map: 45
+          continue_sequence: 45
           description: "newmap"
           match:
             interface: "Ethernet1"
           sequence: 25
-      route_map_name: "mapmerge"
+      route_map: "mapmerge"
     - entries:
         - action: "deny"
           match:
@@ -118,4 +118,4 @@ parsed:
               value: "25"
           sub_route_map:
             name: "mapmerge"
-      route_map_name: "mapmerge2"
+      route_map: "mapmerge2"

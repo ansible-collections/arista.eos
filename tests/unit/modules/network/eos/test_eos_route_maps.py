@@ -53,7 +53,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             dict(
                 config=[
                     dict(
-                        route_map_name="mapmerge",
+                        route_map="mapmerge",
                         entries=[
                             dict(
                                 description="merged_map",
@@ -65,13 +65,13 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 description="newmap",
                                 action="deny",
                                 sequence=25,
-                                continue_map=45,
+                                continue_sequence=45,
                                 match=dict(interface="Ethernet1"),
                             ),
                         ],
                     ),
                     dict(
-                        route_map_name="mapmerge2",
+                        route_map="mapmerge2",
                         entries=[
                             dict(
                                 sub_route_map=dict(name="mapmerge"),
@@ -97,7 +97,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             dict(
                 config=[
                     dict(
-                        route_map_name="mapmerge_new",
+                        route_map="mapmerge_new",
                         entries=[
                             dict(
                                 action="permit",
@@ -106,10 +106,15 @@ class TestEosRoute_MapsModule(TestEosModule):
                                         aggregate_role=dict(route_map="map01")
                                     ),
                                     isis_level="level-1",
+                                    route_type="local",
                                 ),
                                 set=dict(
                                     nexthop=dict(max_metric=True),
                                     segment_index=25,
+                                    distance=55,
+                                    tag=3,
+                                    local_preference=51,
+                                    evpn=True,
                                 ),
                             )
                         ],
@@ -121,8 +126,13 @@ class TestEosRoute_MapsModule(TestEosModule):
             "route-map mapmerge_new permit",
             "match invert-result as-path aggregate-role contributor aggregator-attributes map01",
             "match isis level level-1",
+            "match route-type local",
             "set next-hop igp-metric max-metric",
             "set segment-index 25",
+            "set distance 55",
+            "set tag 3",
+            "set local-preference 51",
+            "set evpn next-hop unchanged",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -132,7 +142,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                 state="replaced",
                 config=[
                     dict(
-                        route_map_name="mapmerge",
+                        route_map="mapmerge",
                         entries=[
                             dict(
                                 description="merged_map",
@@ -145,13 +155,13 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 description="newmap",
                                 action="deny",
                                 sequence=25,
-                                continue_map=45,
+                                continue_sequence=45,
                                 match=dict(interface="Ethernet1"),
                             ),
                         ],
                     ),
                     dict(
-                        route_map_name="mapmerge2",
+                        route_map="mapmerge2",
                         entries=[
                             dict(
                                 sub_route_map=dict(name="mapmerge"),
@@ -178,7 +188,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                 state="replaced",
                 config=[
                     dict(
-                        route_map_name="mapmerge",
+                        route_map="mapmerge",
                         entries=[
                             dict(
                                 action="permit",
@@ -220,7 +230,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                 state="overridden",
                 config=[
                     dict(
-                        route_map_name="mapmerge",
+                        route_map="mapmerge",
                         entries=[
                             dict(
                                 description="merged_map",
@@ -233,13 +243,13 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 description="newmap",
                                 action="deny",
                                 sequence=25,
-                                continue_map=45,
+                                continue_sequence=45,
                                 match=dict(interface="Ethernet1"),
                             ),
                         ],
                     ),
                     dict(
-                        route_map_name="mapmerge2",
+                        route_map="mapmerge2",
                         entries=[
                             dict(
                                 sub_route_map=dict(name="mapmerge"),
@@ -266,7 +276,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                 state="overridden",
                 config=[
                     dict(
-                        route_map_name="mapmerge",
+                        route_map="mapmerge",
                         entries=[
                             dict(
                                 action="permit",
@@ -310,7 +320,7 @@ class TestEosRoute_MapsModule(TestEosModule):
 
     def test_eos_route_maps_delete(self):
         set_module_args(
-            dict(state="deleted", config=[dict(route_map_name="mapmerge")])
+            dict(state="deleted", config=[dict(route_map="mapmerge")])
         )
         commands = ["no route-map mapmerge"]
         self.execute_module(changed=True, commands=commands)
@@ -326,7 +336,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                 state="rendered",
                 config=[
                     dict(
-                        route_map_name="mapmerge",
+                        route_map="mapmerge",
                         entries=[
                             dict(
                                 description="merged_map",
@@ -338,16 +348,15 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 description="newmap",
                                 action="deny",
                                 sequence=25,
-                                continue_map=45,
+                                continue_sequence=45,
                                 match=dict(interface="Ethernet1"),
                             ),
                         ],
                     ),
                     dict(
-                        route_map_name="mapmerge2",
+                        route_map="mapmerge2",
                         entries=[
                             dict(
-                                sub_route_map=dict(name="mapmerge"),
                                 action="deny",
                                 match=dict(
                                     ipv6=dict(resolved_next_hop="list1")
@@ -373,7 +382,6 @@ class TestEosRoute_MapsModule(TestEosModule):
             "continue 45",
             "route-map mapmerge2 deny 45",
             "match ipv6 resolved-next-hop prefix-list list1",
-            "sub-route-map mapmerge",
             "set metric 25 +igp-metric",
             "set as-path prepend last-as 2",
         ]
@@ -399,7 +407,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                 },
                 {
                     "action": "deny",
-                    "continue_map": 45,
+                    "continue_sequence": 45,
                     "description": "newmap",
                     "match": {"interface": "Ethernet1"},
                     "sequence": 25,
@@ -419,9 +427,9 @@ class TestEosRoute_MapsModule(TestEosModule):
             ],
         }
         for entry in result["gathered"]:
-            if entry.get("route_map_name") in ["mapmerge", "mapmerge2"]:
+            if entry.get("route_map") in ["mapmerge", "mapmerge2"]:
                 self.assertEqual(
-                    gathered_list[entry["route_map_name"]], entry["entries"]
+                    gathered_list[entry["route_map"]], entry["entries"]
                 )
 
     def test_vyos_route_maps_parsed(self):
@@ -454,13 +462,13 @@ class TestEosRoute_MapsModule(TestEosModule):
                     },
                     {
                         "action": "deny",
-                        "continue_map": 45,
+                        "continue_sequence": 45,
                         "description": "newmap",
                         "match": {"interface": "Ethernet1"},
                         "sequence": 25,
                     },
                 ],
-                "route_map_name": "mapmerge",
+                "route_map": "mapmerge",
             },
             {
                 "entries": [
@@ -475,7 +483,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                         "sub_route_map": {"name": "mapmerge"},
                     }
                 ],
-                "route_map_name": "mapmerge2",
+                "route_map": "mapmerge2",
             },
         ]
         self.assertEqual(parsed_list, result["parsed"])
