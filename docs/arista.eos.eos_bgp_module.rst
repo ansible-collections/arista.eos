@@ -860,7 +860,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: configure global bgp as 64496
       arista.eos.eos_bgp:
