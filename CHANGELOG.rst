@@ -5,6 +5,15 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v2.0.1
+======
+
+Bugfixes
+--------
+
+- Add _remove_config before starting every integration test.
+- galaxy.yml - change wrong dependency ``ansible.netcommon`` from ``2.0.0`` to ``>= 2.0.0`` (https://github.com/ansible-collections/overview/issues/43).
+
 v2.0.0
 ======
 
@@ -30,11 +39,6 @@ Bugfixes
 
 v1.3.0
 ======
-
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
 
 Bugfixes
 --------
@@ -107,11 +111,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======

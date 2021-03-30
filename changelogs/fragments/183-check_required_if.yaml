@@ -1,3 +1,0 @@
----
-trivial:
-  - switch required_if handling from module._check_required_if to validation.check_required_if as the former no longer exists in devel
