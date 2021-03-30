@@ -40,6 +40,11 @@ Bugfixes
 v1.3.0
 ======
 
+Deprecated Features
+-------------------
+
+- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
+
 Bugfixes
 --------
 
@@ -111,6 +116,11 @@ Bugfixes
 
 v1.0.2
 ======
+
+Release Summary
+---------------
+
+- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======

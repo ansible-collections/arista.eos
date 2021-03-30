@@ -524,7 +524,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml+jinja
+.. code-block:: yaml
 
     - name: Create vrf
       arista.eos.eos_vrf:
