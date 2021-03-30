@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Add _remove_config before starting every integration test.
