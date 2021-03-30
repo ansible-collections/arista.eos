@@ -589,7 +589,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: configure top level settings
       arista.eos.eos_config:

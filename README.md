@@ -28,6 +28,10 @@ Name | Description
 --- | ---
 [arista.eos.eos](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_cliconf.rst)|Use eos cliconf to run command on Arista EOS platform
 
+### Filter plugins
+Name | Description
+--- | ---
+
 ### Httpapi plugins
 Name | Description
 --- | ---
@@ -70,6 +74,10 @@ Name | Description
 [arista.eos.eos_vlan](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlan_module.rst)|(deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS network devices
 [arista.eos.eos_vlans](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlans_module.rst)|VLANs resource module
 [arista.eos.eos_vrf](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vrf_module.rst)|Manage VRFs on Arista EOS network devices
+
+### Inventory plugins
+Name | Description
+--- | ---
 
 <!--end collection content-->
 

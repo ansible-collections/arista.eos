@@ -132,9 +132,6 @@ releases:
     - fix_src_backup_with_module_alias.yaml
     release_date: '2020-07-31'
   1.0.2:
-    changes:
-      release_summary:
-        - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
@@ -253,3 +250,14 @@ releases:
     - single_user_mode.yaml
     - unbloat-rpc.yaml
     release_date: '2021-02-24'
+  2.0.1:
+    changes:
+      bugfixes:
+      - Add _remove_config before starting every integration test.
+      - galaxy.yml - change wrong dependency ``ansible.netcommon`` from ``2.0.0``
+        to ``>= 2.0.0`` (https://github.com/ansible-collections/overview/issues/43).
+    fragments:
+    - 177-remove_tests_sanity_requirements.yml
+    - 183-check_required_if.yaml
+    - add_remove_config_integrationtests.yml
+    release_date: '2021-03-30'

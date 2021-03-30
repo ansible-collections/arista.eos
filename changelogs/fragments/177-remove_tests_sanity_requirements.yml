@@ -1,6 +1,0 @@
----
-trivial:
-  - sanity tests - remove unnecessary requirements.txt file (https://github.com/ansible-collections/overview/issues/43).
-
-bugfixes:
-  - galaxy.yml - change wrong dependency ``ansible.netcommon`` from ``2.0.0`` to ``>= 2.0.0`` (https://github.com/ansible-collections/overview/issues/43).

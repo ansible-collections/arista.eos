@@ -444,7 +444,7 @@ Notes
 Examples
 --------
 
-.. code-block:: yaml
+.. code-block:: yaml+jinja
 
     - name: Remove ethernet1 IPv4 and IPv6 address
       arista.eos.eos_l3_interface:
