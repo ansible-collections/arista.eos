@@ -166,7 +166,9 @@ import re
 
 
 from copy import deepcopy
+from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.validation import check_required_if
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
@@ -411,7 +413,10 @@ def map_params_to_obj(module, required_if=None):
                 if item.get(key) is None:
                     item[key] = module.params[key]
 
-            module._check_required_if(required_if, item)
+            try:
+                check_required_if(required_if, item)
+            except TypeError as exc:
+                module.fail_json(to_text(exc))
             d = item.copy()
 
             if d["dest"] != "host":

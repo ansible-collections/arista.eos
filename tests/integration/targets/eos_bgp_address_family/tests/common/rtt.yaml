@@ -3,6 +3,8 @@
     msg: Start eos_bgp_address_family rtt integration tests ansible_connection={{
       ansible_connection }}
 
+- include_tasks: _remove_config.yaml
+
 - block:
 
     - name: merge given bgp_address_family configuration
