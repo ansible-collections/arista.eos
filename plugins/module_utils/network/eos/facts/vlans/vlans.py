@@ -96,14 +96,16 @@ class VlansFacts(object):
         config = deepcopy(spec)
         vlans = []
 
-        vlan_list = vlan_to_list(utils.parse_conf_arg(conf, "vlan"))
-        for vlan in vlan_list:
-            config["vlan_id"] = vlan
-            config["name"] = utils.parse_conf_arg(conf, "name")
-            config["state"] = utils.parse_conf_arg(conf, "state")
-            if config["state"] is None:
-                config["state"] = "active"
-            vlans.append(utils.remove_empties(config))
+        parse_result = utils.parse_conf_arg(conf, "vlan")
+        if not parse_result.split(" ")[0].isalpha():
+            vlan_list = vlan_to_list(parse_result)
+            for vlan in vlan_list:
+                config["vlan_id"] = vlan
+                config["name"] = utils.parse_conf_arg(conf, "name")
+                config["state"] = utils.parse_conf_arg(conf, "state")
+                if config["state"] is None:
+                    config["state"] = "active"
+                vlans.append(utils.remove_empties(config))
 
         return vlans
 
