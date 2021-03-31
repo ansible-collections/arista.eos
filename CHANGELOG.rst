@@ -5,6 +5,15 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v2.0.1
+======
+
+Bugfixes
+--------
+
+- Add _remove_config before starting every integration test.
+- galaxy.yml - change wrong dependency ``ansible.netcommon`` from ``2.0.0`` to ``>= 2.0.0`` (https://github.com/ansible-collections/overview/issues/43).
+
 v2.0.0
 ======
 
