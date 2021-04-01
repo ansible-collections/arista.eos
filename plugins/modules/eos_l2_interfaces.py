@@ -131,6 +131,8 @@ EXAMPLES = """
 #    ipv6 address auto-config
 # !
 
+#testing
+
 - name: Merge provided configuration with device configuration.
   arista.eos.eos_l2_interfaces:
     config:
