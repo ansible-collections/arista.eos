@@ -149,6 +149,8 @@ class TestEosL3InterfacesModule(TestEosModule):
             "no ip address",
             "interface Vlan100",
             "no ip address",
+            "interface Loopback99",
+            "no ip address",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -175,6 +177,7 @@ class TestEosL3InterfacesModule(TestEosModule):
                         name="Vlan100",
                         ipv4=[dict(address="192.13.45.12/24", virtual=True)],
                     ),
+                    dict(name="Loopback99", ipv4=[dict(address="1.1.1.1/24")]),
                 ],
                 state="overridden",
             )
@@ -223,6 +226,7 @@ class TestEosL3InterfacesModule(TestEosModule):
                         name="Vlan100",
                         ipv4=[dict(address="192.13.45.12/24", virtual=True)],
                     ),
+                    dict(name="Loopback99", ipv4=[dict(address="1.1.1.1/24")]),
                 ],
                 state="replaced",
             )
@@ -235,12 +239,18 @@ class TestEosL3InterfacesModule(TestEosModule):
                 config=[
                     dict(
                         name="Ethernet2", ipv6=[dict(address="2001:db8::1/64")]
-                    )
+                    ),
+                    dict(name="lo99", ipv4=[dict(address="1.1.1.1/24")]),
                 ],
                 state="deleted",
             )
         )
-        commands = ["interface Ethernet2", "no ipv6 address 2001:db8::1/64"]
+        commands = [
+            "interface Ethernet2",
+            "no ipv6 address 2001:db8::1/64",
+            "interface Loopback99",
+            "no ip address",
+        ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_l3_interfaces_rendered(self):
@@ -307,5 +317,6 @@ class TestEosL3InterfacesModule(TestEosModule):
                 "ipv4": [{"address": "192.13.45.12/24", "virtual": True}],
                 "name": "Vlan100",
             },
+            {"ipv4": [{"address": "1.1.1.1/24"}], "name": "Loopback99"},
         ]
         self.assertEqual(gather_list, result["gathered"])
