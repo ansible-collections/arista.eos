@@ -1,0 +1,3 @@
+---
+trivial:
+  - Run reboot test over eapi as well as ssh
