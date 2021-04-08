@@ -105,8 +105,8 @@ class Ospfv3Facts(object):
             ospfv3_facts["processes"].append(objs["processes"])
 
         ansible_facts["ansible_network_resources"].pop("ospfv3", None)
-        params = utils.validate_config(
-            self.argument_spec, {"config": ospfv3_facts}
+        params = ospfv3_parser.validate_config(
+            self.argument_spec, {"config": ospfv3_facts}, redact=True
         )
         params = utils.remove_empties(params)
 

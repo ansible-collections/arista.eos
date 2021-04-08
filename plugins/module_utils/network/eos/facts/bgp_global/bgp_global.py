@@ -70,7 +70,9 @@ class Bgp_globalFacts(object):
                 start = False
 
         # parse native config using the Bgp_global template
-        bgp_global_parser = Bgp_globalTemplate(lines=bgp_global_config)
+        bgp_global_parser = Bgp_globalTemplate(
+            lines=bgp_global_config, module=self._module
+        )
         objs = bgp_global_parser.parse()
 
         if objs:
@@ -110,7 +112,9 @@ class Bgp_globalFacts(object):
         ansible_facts["ansible_network_resources"].pop("bgp_global", None)
 
         params = utils.remove_empties(
-            utils.validate_config(self.argument_spec, {"config": objs})
+            bgp_global_parser.validate_config(
+                self.argument_spec, {"config": objs}, redact=True
+            )
         )
 
         facts["bgp_global"] = params.get("config", [])

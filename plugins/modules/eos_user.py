@@ -408,7 +408,7 @@ def main():
         ),
         privilege=dict(type="int"),
         role=dict(),
-        sshkey=dict(),
+        sshkey=dict(no_log=True),
         state=dict(default="present", choices=["present", "absent"]),
     )
 

@@ -195,8 +195,10 @@ def _tmplt_ospf_int_dead_interval(config_data):
 
 
 class Ospf_interfacesTemplate(NetworkTemplate):
-    def __init__(self, lines=None):
-        super(Ospf_interfacesTemplate, self).__init__(lines=lines, tmplt=self)
+    def __init__(self, lines=None, module=None):
+        super(Ospf_interfacesTemplate, self).__init__(
+            lines=lines, tmplt=self, module=module
+        )
 
     PARSERS = [
         {
