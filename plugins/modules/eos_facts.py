@@ -176,7 +176,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.fac
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
-    FACT_RESOURCE_SUBSETS
+    FACT_RESOURCE_SUBSETS,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
