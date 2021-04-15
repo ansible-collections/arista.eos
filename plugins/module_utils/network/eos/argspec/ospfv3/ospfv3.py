@@ -164,7 +164,7 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "hidden_key": {"type": "bool"},
-                                        "key": {"type": "str"},
+                                        "key": {"type": "str", "no_log": True},
                                         "algorithm": {
                                             "type": "str",
                                             "choices": ["sha1", "md5"],
@@ -181,7 +181,10 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                             ],
                                         },
                                         "spi": {"type": "int"},
-                                        "passphrase": {"type": "str"},
+                                        "passphrase": {
+                                            "type": "str",
+                                            "no_log": True,
+                                        },
                                     },
                                 },
                                 "nssa": {
@@ -214,14 +217,17 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                     "type": "dict",
                                     "options": {
                                         "hidden_key": {"type": "bool"},
-                                        "key": {"type": "str"},
+                                        "key": {"type": "str", "no_log": True},
                                         "algorithm": {
                                             "type": "str",
                                             "choices": ["md5", "sha1"],
                                         },
                                         "encrypt_key": {"type": "bool"},
                                         "spi": {"type": "int"},
-                                        "passphrase": {"type": "str"},
+                                        "passphrase": {
+                                            "type": "str",
+                                            "no_log": True,
+                                        },
                                     },
                                 },
                             },
@@ -384,7 +390,10 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "hidden_key": {"type": "bool"},
-                                                "key": {"type": "str"},
+                                                "key": {
+                                                    "type": "str",
+                                                    "no_log": True,
+                                                },
                                                 "algorithm": {
                                                     "type": "str",
                                                     "choices": ["sha1", "md5"],
@@ -403,7 +412,10 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                     ],
                                                 },
                                                 "spi": {"type": "int"},
-                                                "passphrase": {"type": "str"},
+                                                "passphrase": {
+                                                    "type": "str",
+                                                    "no_log": True,
+                                                },
                                             },
                                         },
                                         "nssa": {
@@ -446,7 +458,10 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "hidden_key": {"type": "bool"},
-                                                "key": {"type": "str"},
+                                                "key": {
+                                                    "type": "str",
+                                                    "no_log": True,
+                                                },
                                                 "algorithm": {
                                                     "type": "str",
                                                     "choices": ["md5", "sha1"],
@@ -455,7 +470,10 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                     "type": "bool"
                                                 },
                                                 "spi": {"type": "int"},
-                                                "passphrase": {"type": "str"},
+                                                "passphrase": {
+                                                    "type": "str",
+                                                    "no_log": True,
+                                                },
                                             },
                                         },
                                     },

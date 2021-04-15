@@ -64,6 +64,7 @@ class Ospfv3Facts(object):
         """
         facts = {}
         objs = []
+        ospfv3_parser = Ospfv3Template(lines=[], module=self._module)
 
         if not data:
             data = self.get_config(connection)
