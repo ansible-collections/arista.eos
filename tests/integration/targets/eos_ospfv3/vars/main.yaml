@@ -14,7 +14,7 @@ merged:
     - fips restrictions
     - max-metric router-lsa external-lsa 25 summary-lsa
     - exit
-    - area 0.0.0.0 encryption ipsec spi 44 esp null sha1 passphrase 7 7hl8FV3lZ6H1mAKpjL47hQ==
+    - area 0.0.0.0 encryption ipsec spi 44 esp null sha1 passphrase 7 ********
     - fips restrictions
     - log-adjacency-changes detail
     - exit
@@ -28,7 +28,7 @@ merged:
     - router-id 10.1.1.1
     - exit
     - adjacency exchange-start threshold 11
-    - area 0.0.0.20 authentication ipsec spi 33 sha1 passphrase 7 4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w
+    - area 0.0.0.20 authentication ipsec spi 33 sha1 passphrase 7 ********
     - area 0.0.0.20 stub
     - area 0.0.0.40 default-cost 45
     - area 0.0.0.40 stub
@@ -112,7 +112,7 @@ deleted:
             authentication:
               algorithm: "sha1"
               hidden_key: true
-              passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+              passphrase: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
               spi: 33
             stub:
               set: true
@@ -176,7 +176,7 @@ replaced:
             authentication:
               algorithm: "sha1"
               hidden_key: true
-              passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+              passphrase: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
               spi: 33
             stub:
               set: true
@@ -218,7 +218,7 @@ replaced:
               algorithm: "sha1"
               encryption: "null"
               hidden_key: true
-              passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+              passphrase: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
         fips_restrictions: true
         log_adjacency_changes:
           detail: true
@@ -257,7 +257,7 @@ replaced:
             authentication:
               algorithm: "sha1"
               hidden_key: true
-              passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+              passphrase: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
               spi: 33
             stub:
               set: true
@@ -296,7 +296,7 @@ replaced:
               algorithm: "sha1"
               encryption: "null"
               hidden_key: true
-              passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+              passphrase: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
         log_adjacency_changes:
           detail: true
         vrf: "vrf01"
@@ -375,7 +375,7 @@ populate:
             authentication:
               algorithm: "sha1"
               hidden_key: true
-              passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+              passphrase: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
               spi: 33
             stub:
               set: true
@@ -417,7 +417,122 @@ populate:
               algorithm: "sha1"
               encryption: "null"
               hidden_key: true
-              passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+              passphrase: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+        fips_restrictions: true
+        log_adjacency_changes:
+          detail: true
+        vrf: "vrf01"
+      - address_family:
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.1"
+                stub:
+                  set: true
+            distance: 200
+            fips_restrictions: true
+            router_id: "10.17.0.3"
+            timers:
+              out_delay: 10
+              throttle:
+                initial: 56
+                max: 56
+                min: 56
+                spf: true
+        fips_restrictions: true
+        vrf: "vrf02"
+rtt:
+  commands:
+    - router ospfv3 vrf vrf01
+    - address-family ipv4
+    - redistribute connected route-map MAP01
+    - fips restrictions
+    - maximum-paths 100
+    - passive-interface default
+    - exit
+    - address-family ipv6
+    - area 0.0.0.10 nssa no-summary
+    - default-information originate route-map DefaultRouteFilter
+    - fips restrictions
+    - max-metric router-lsa external-lsa 25 summary-lsa
+    - exit
+    - fips restrictions
+    - log-adjacency-changes detail
+    - exit
+    - router ospfv3
+    - address-family ipv4
+    - redistribute connected
+    - fips restrictions
+    - exit
+    - address-family ipv6
+    - fips restrictions
+    - router-id 10.1.1.1
+    - exit
+    - adjacency exchange-start threshold 11
+    - area 0.0.0.20 stub
+    - area 0.0.0.40 default-cost 45
+    - area 0.0.0.40 stub
+    - fips restrictions
+    - timers pacing flood 7
+    - exit
+    - router ospfv3 vrf vrf02
+    - address-family ipv6
+    - area 0.0.0.1 stub
+    - distance ospf intra-area 200
+    - fips restrictions
+    - router-id 10.17.0.3
+    - timers out-delay 10
+    - timers throttle spf 56 56 56
+    - exit
+    - fips restrictions
+    - exit
+  before:
+    processes:
+      - address_family:
+          - afi: "ipv4"
+            fips_restrictions: true
+            redistribute:
+              - routes: "connected"
+          - afi: "ipv6"
+            fips_restrictions: true
+            router_id: "10.1.1.1"
+        adjacency:
+          exchange_start:
+            threshold: 11
+        areas:
+          - area_id: "0.0.0.20"
+            stub:
+              set: true
+          - area_id: "0.0.0.40"
+            default_cost: 45
+            stub:
+              set: true
+        fips_restrictions: true
+        timers:
+          pacing: 7
+        vrf: "default"
+      - address_family:
+          - afi: "ipv4"
+            fips_restrictions: true
+            maximum_paths: 100
+            passive_interface: true
+            redistribute:
+              - route_map: "MAP01"
+                routes: "connected"
+          - afi: "ipv6"
+            areas:
+              - area_id: "0.0.0.10"
+                nssa:
+                  no_summary: true
+            default_information:
+              originate: true
+              route_map: "DefaultRouteFilter"
+            fips_restrictions: true
+            max_metric:
+              router_lsa:
+                external_lsa:
+                  max_metric_value: 25
+                summary_lsa:
+                  set: true
         fips_restrictions: true
         log_adjacency_changes:
           detail: true
