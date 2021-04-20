@@ -1,2 +1,2 @@
-ansible-pylibssh >= 0.2.0
+ansible-pylibssh
 paramiko
