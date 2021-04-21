@@ -32,6 +32,8 @@
     "urls": [
         "Management1 : https://172.26.4.24:443",
         "Management1 : http://172.26.4.24:80",
+        "Ethernet1: https://172.26.4.24:443",
+        "Ethernet1: http://172.26.4.24:80",
         "Unix Socket : unix:/var/run/command-api.sock",
         "Local       : http://localhost:8080/command-api"
     ],
@@ -44,4 +46,3 @@
     "commandCount": 59298,
     "bytesIn": 3189628
 }
-
