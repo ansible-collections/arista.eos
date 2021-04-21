@@ -109,7 +109,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                                         "null",
                                     ],
                                 },
-                                "keytype": {"type": "str", "no_log": True},
+                                "keytype": {"type": "str", "no_log": False},
                                 "spi": {"type": "int"},
                                 "passphrase": {"type": "str", "no_log": True},
                             },
@@ -133,7 +133,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                             "options": {
                                 "key": {"type": "str", "no_log": True},
                                 "spi": {"type": "int"},
-                                "keytype": {"type": "str", "no_log": True},
+                                "keytype": {"type": "str", "no_log": False},
                                 "passphrase": {"type": "str", "no_log": True},
                                 "algorithm": {
                                     "type": "str",
@@ -143,7 +143,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         },
                         "retransmit_interval": {"type": "int"},
                         "message_digest_key": {
-                            "no_log": True,
+                            "no_log": False,
                             "type": "dict",
                             "options": {
                                 "key_id": {"type": "int"},
@@ -164,7 +164,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         "passive_interface": {"type": "bool"},
                         "authentication_key": {
                             "type": "dict",
-                            "no_log": True,
+                            "no_log": False,
                             "options": {
                                 "encryption": {"type": "str"},
                                 "key": {"type": "str", "no_log": True},
