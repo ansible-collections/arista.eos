@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Skip when there are alpha values present following vlan keyword.

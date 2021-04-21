@@ -67,12 +67,14 @@ class TestEosVlansModule(TestEosModule):
     def load_fixtures(self, commands=None, transport="cli"):
         file_cmd = load_fixture("eos_vlan_config.cfg").split()
         file_cmd_dict = {}
-        for i in range(0, len(file_cmd), 2):
+        for i in range(0, len(file_cmd) - 2):
+            y = ""
             if file_cmd[i] == "vlan_id":
                 y = int(file_cmd[i + 1])
-            else:
+            elif file_cmd[i] in ["name", "state"]:
                 y = file_cmd[i + 1]
-            file_cmd_dict.update({file_cmd[i]: y})
+            if y:
+                file_cmd_dict.update({file_cmd[i]: y})
         self.execute_show_command.return_value = [file_cmd_dict]
 
     def test_eos_vlan_default(self):
