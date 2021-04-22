@@ -68,7 +68,7 @@ class Ospf_interfacesFacts(object):
         ospf_interfaces_facts = []
         for resource in resources:
             ospf_interfaces_parser = Ospf_interfacesTemplate(
-                lines=resource.splitlines()
+                lines=resource.splitlines(), module=self._module
             )
             entry = ospf_interfaces_parser.parse()
             if entry:
@@ -90,8 +90,10 @@ class Ospf_interfacesFacts(object):
         ansible_facts["ansible_network_resources"].pop("ospf_interfaces", None)
         facts = {"ospf_interfaces": []}
         params = utils.remove_empties(
-            utils.validate_config(
-                self.argument_spec, {"config": ospf_interfaces_facts}
+            ospf_interfaces_parser.validate_config(
+                self.argument_spec,
+                {"config": ospf_interfaces_facts},
+                redact=True,
             )
         )
 

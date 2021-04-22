@@ -94,7 +94,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         "encryption_v3": {
                             "type": "dict",
                             "options": {
-                                "key": {"type": "str"},
+                                "key": {"type": "str", "no_log": True},
                                 "algorithm": {
                                     "type": "str",
                                     "choices": ["md5", "sha1"],
@@ -109,9 +109,9 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                                         "null",
                                     ],
                                 },
-                                "keytype": {"type": "str"},
+                                "keytype": {"type": "str", "no_log": False},
                                 "spi": {"type": "int"},
-                                "passphrase": {"type": "str"},
+                                "passphrase": {"type": "str", "no_log": True},
                             },
                         },
                         "cost": {"type": "int"},
@@ -131,10 +131,10 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         "authentication_v3": {
                             "type": "dict",
                             "options": {
-                                "key": {"type": "str"},
+                                "key": {"type": "str", "no_log": True},
                                 "spi": {"type": "int"},
-                                "keytype": {"type": "str"},
-                                "passphrase": {"type": "str"},
+                                "keytype": {"type": "str", "no_log": False},
+                                "passphrase": {"type": "str", "no_log": True},
                                 "algorithm": {
                                     "type": "str",
                                     "choices": ["md5", "sha1"],
@@ -143,10 +143,11 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         },
                         "retransmit_interval": {"type": "int"},
                         "message_digest_key": {
+                            "no_log": False,
                             "type": "dict",
                             "options": {
                                 "key_id": {"type": "int"},
-                                "key": {"type": "str"},
+                                "key": {"type": "str", "no_log": True},
                                 "encryption": {"type": "str"},
                             },
                         },
@@ -163,9 +164,10 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         "passive_interface": {"type": "bool"},
                         "authentication_key": {
                             "type": "dict",
+                            "no_log": False,
                             "options": {
                                 "encryption": {"type": "str"},
-                                "key": {"type": "str"},
+                                "key": {"type": "str", "no_log": True},
                             },
                         },
                         "hello_interval": {"type": "int"},
