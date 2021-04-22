@@ -184,8 +184,9 @@ class L3_interfaces(ConfigBase):
         """
         commands = []
         for key, extant in have.items():
-            if key in want:
-                desired = want[key]
+            interface_name = normalize_interface(key)
+            if interface_name in want:
+                desired = want[interface_name]
             else:
                 desired = dict()
             if desired.get("ipv4"):
@@ -197,7 +198,7 @@ class L3_interfaces(ConfigBase):
             intf_commands.extend(clear_interface(desired, extant))
 
             if intf_commands:
-                commands.append("interface {0}".format(key))
+                commands.append("interface {0}".format(interface_name))
                 commands.extend(intf_commands)
 
         return commands
@@ -235,16 +236,17 @@ class L3_interfaces(ConfigBase):
         """
         commands = []
         for key in want:
+            interface_name = normalize_interface(key)
             desired = dict()
-            if key in have:
-                extant = have[key]
+            if interface_name in have:
+                extant = have[interface_name]
             else:
                 continue
 
             intf_commands = clear_interface(desired, extant)
 
             if intf_commands:
-                commands.append("interface {0}".format(key))
+                commands.append("interface {0}".format(interface_name))
                 commands.extend(intf_commands)
 
         return commands
