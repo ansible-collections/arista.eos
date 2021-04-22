@@ -551,8 +551,10 @@ def _tmplt_bgp_vlan_aware_bundle(config_data):
 
 
 class Bgp_globalTemplate(NetworkTemplate):
-    def __init__(self, lines=None):
-        super(Bgp_globalTemplate, self).__init__(lines=lines, tmplt=self)
+    def __init__(self, lines=None, module=None):
+        super(Bgp_globalTemplate, self).__init__(
+            lines=lines, tmplt=self, module=module
+        )
 
     # fmt: off
     PARSERS = [
