@@ -243,7 +243,7 @@ def get_os_version(module):
         r"Software image version:\s+([\d\.]+)", response[0], re.M
     )
     if version_match:
-        os_version = version_match.group(1)
+        os_version = float(version_match.group(1))
     return os_version
 
 
