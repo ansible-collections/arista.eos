@@ -382,7 +382,7 @@ def collect_facts(module, result):
     out = run_commands(module, ["show management api http-commands | json"])
     facts = dict(eos_eapi_urls=dict())
     for each in out[0]["urls"]:
-        intf, url = each.split(" : ")
+        intf, url = each.split(":", 1)
         key = str(intf).strip()
         if key not in facts["eos_eapi_urls"]:
             facts["eos_eapi_urls"][key] = list()
