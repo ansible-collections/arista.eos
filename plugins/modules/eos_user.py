@@ -243,7 +243,8 @@ def get_os_version(module):
         r"Software image version:\s+([\d\.]+)", response[0], re.M
     )
     if version_match:
-        os_version = float(version_match.group(1))
+        v = version_match.group(1).split(".")
+        os_version = tuple(int(digit) for digit in v)
     return os_version
 
 
@@ -276,7 +277,8 @@ def map_obj_to_commands(updates, module):
 
         if needs_update("sshkey"):
             ver = get_os_version(module)
-            if ver > "4.20.10":
+            # compare against image version 4.20.10
+            if ver > (4, 20, 10):
                 add("ssh-key %s" % want["sshkey"])
             else:
                 add("sshkey %s" % want["sshkey"])
