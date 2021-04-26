@@ -1,0 +1,59 @@
+---
+- debug:
+    msg: Start eos_route_maps deleted integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: delete given route-map configuration
+      become: true
+      register: result
+      arista.eos.eos_route_maps: &id001
+        config:
+          - route_map: "mapmerge2"
+        state: deleted
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: route_maps
+
+    - assert:
+        that:
+          - result.commands|length == 1
+          - result.changed == true
+          - result.after|symmetric_difference(ansible_facts['network_resources']['route_maps']) == []
+          - "'no route-map mapmerge2' in result.commands"
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_route_maps: *id001
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+
+    - name: delete given all route-map configuration
+      become: true
+      register: result
+      arista.eos.eos_route_maps:
+        state: deleted
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: route_maps
+
+    - assert:
+        that:
+          - result.commands|length == 1
+          - result.changed == true
+          - "'no route-map mapmerge' in result.commands"
+          - result.after == {}
+  always:
+
+    - include_tasks: _remove_config.yaml

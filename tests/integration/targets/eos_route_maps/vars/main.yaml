@@ -1,0 +1,121 @@
+---
+deleted:
+  commands:
+    - interface Vlan1
+    - no ip ospf dead-interval 29
+    - no ip ospf hello-interval 66
+    - no ip ospf mtu-ignore
+    - no ospfv3 cost 106
+    - no ospfv3 hello-interval 77
+    - no ospfv3 transmit-delay 100
+    - no ospfv3 ipv4 priority 45
+    - no ospfv3 ipv4 area 0.0.0.5
+    - no ospfv3 ipv6 passive-interface
+    - no ospfv3 ipv6 dead-interval 56
+    - no ospfv3 ipv6 retransmit-interval 115
+merged:
+  commands:
+    - route-map mapmerge2 deny 45
+    - match ipv6 resolved-next-hop prefix-list list1
+    - set metric 25 +igp-metric
+    - set as-path prepend last-as 2
+    - sub-route-map mapmerge
+    - route-map mapmerge permit 10
+    - match router-id prefix-list 22
+    - description merged_map
+    - route-map mapmerge deny 25
+    - match interface Ethernet1
+    - description newmap
+    - continue 45
+
+replaced:
+  commands:
+    - route-map mapmerge permit 10
+    - match ipv6 resolved-next-hop prefix-list listr
+    - no match router-id prefix-list 22
+    - no description
+    - route-map mapmerge deny 90
+    - set extcommunity rt 22:11 delete
+    - set ip next-hop unchanged
+
+overridden:
+  commands:
+    - no route-map mapmerge deny 25
+    - no route-map mapmerge2 deny 45
+    - route-map mapmerge permit 10
+    - match ipv6 resolved-next-hop prefix-list listr
+    - no match router-id prefix-list 22
+    - no description
+    - route-map mapmerge deny 90
+    - set metric igp-nexthop-cost
+
+roundtrip:
+  commands:
+    - interface GigabitEthernet0/1
+    - ip access-group aclv401 in
+
+gathered:
+  config:
+    - entries:
+        - action: "permit"
+          description: "merged_map"
+          match:
+            router_id: "22"
+          sequence: 10
+        - action: "deny"
+          continue_sequence: 45
+          description: "newmap"
+          match:
+            interface: "Ethernet1"
+          sequence: 25
+      route_map: "mapmerge"
+    - entries:
+        - action: "deny"
+          match:
+            ipv6:
+              resolved_next_hop: "list1"
+          sequence: 45
+          set:
+            as_path:
+              prepend:
+                last_as: 2
+            metric:
+              add: "igp-metric"
+              value: "25"
+          sub_route_map:
+            name: "mapmerge"
+      route_map: "mapmerge2"
+
+parsed:
+  config:
+    - entries:
+        - action: "permit"
+          description: "merged_map"
+          match:
+            router_id: "22"
+          sequence: 10
+          set:
+            bgp: 20
+        - action: "deny"
+          continue_sequence: 45
+          description: "newmap"
+          match:
+            interface: "Ethernet1"
+          sequence: 25
+      route_map: "mapmerge"
+    - entries:
+        - action: "deny"
+          match:
+            ipv6:
+              resolved_next_hop: "list1"
+          sequence: 45
+          set:
+            as_path:
+              prepend:
+                last_as: 2
+            metric:
+              add: "igp-metric"
+              value: "25"
+          sub_route_map:
+            name: "mapmerge"
+      route_map: "mapmerge2"
