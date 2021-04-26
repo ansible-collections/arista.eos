@@ -1,3 +1,0 @@
----
-trivial:
-  - Use FQCN for ansible_connection in caching tests in eos_smoke.

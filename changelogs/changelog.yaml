@@ -264,3 +264,22 @@ releases:
     - 183-check_required_if.yaml
     - add_remove_config_integrationtests.yml
     release_date: '2021-03-30'
+  2.1.1:
+    changes:
+      bugfixes:
+      - Modify the split pattern while checking for eapi url in eos_eapi.
+      - Normalize interface name before any operaion.
+      - Skip when there are alpha values present following vlan keyword.
+      minor_changes:
+      - Add eos_route_maps resource module.
+      security_fixes:
+      - Mask values of sensitive keys in module result.
+    fragments:
+    - 196-fix-caching-test-failure.yaml
+    - 197-add_ignore_txt.yml
+    - 200-add-eos-route-maps.yaml
+    - l3_interfaces_normalize_interface_name.yml
+    - no_log_mask.yaml
+    - split_eapi_url.yml
+    - vlan_id_alpha_configs.yml
+    release_date: '2021-04-26'
