@@ -1,0 +1,48 @@
+---
+- debug:
+    msg: Start eos_route_maps rendered integration tests ansible_connection={{
+      ansible_connection }}
+
+
+- block:
+
+    - name: render native config
+      become: true
+      register: result
+      arista.eos.eos_route_maps: &id001
+        config:
+          - route_map: "mapmerge"
+            entries:
+              - description: "merged_map"
+                action: "permit"
+                sequence: 10
+                match:
+                  router_id: 22
+              - description: "newmap"
+                action: "deny"
+                sequence: 25
+                continue_sequence: 45
+                match:
+                  interface: "Ethernet1"
+          - route_map: "mapmerge2"
+            entries:
+              - sub_route_map:
+                  name: "mapmerge"
+                action: "deny"
+                sequence: 45
+                set:
+                  metric:
+                    value: 25
+                    add: "igp-metric"
+                  as_path:
+                    prepend:
+                      last_as: 2
+                match:
+                  ipv6:
+                    resolved_next_hop: "list1"
+        state: rendered
+
+    - assert:
+        that:
+          - result.changed == false
+          - result.rendered|symmetric_difference(merged.commands) == []

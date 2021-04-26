@@ -71,6 +71,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_a
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_global.bgp_global import (
     Bgp_globalFacts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.route_maps.route_maps import (
+    Route_mapsFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -94,6 +97,7 @@ FACT_RESOURCE_SUBSETS = dict(
     ospf_interfaces=Ospf_interfacesFacts,
     bgp_address_family=Bgp_afFacts,
     bgp_global=Bgp_globalFacts,
+    route_maps=Route_mapsFacts,
 )
 
 

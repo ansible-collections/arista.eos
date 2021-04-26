@@ -1,0 +1,30 @@
+---
+- debug:
+    msg: Start eos_route_maps gathered integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Gather route-map  configuration
+      become: true
+      register: result
+      arista.eos.eos_route_maps: &id001
+        state: gathered
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: route_maps
+
+    - assert:
+        that:
+          - result.changed == false
+          - result.gathered|symmetric_difference(ansible_facts['network_resources']['route_maps']) == []
+          - result.gathered|symmetric_difference(gathered.config) == []
+
+  always:
+
+    - include_tasks: _remove_config.yaml

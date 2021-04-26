@@ -1,0 +1,57 @@
+---
+- debug:
+    msg: Start eos_route_maps replaced integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: replace device configuration with given route-map configuration
+      become: true
+      register: result
+      arista.eos.eos_route_maps: &id001
+        config:
+          - route_map: "mapmerge"
+            entries:
+              - action: "permit"
+                sequence: 10
+                match:
+                  ipv6:
+                    resolved_next_hop: "listr"
+              - action: "deny"
+                sequence: 90
+                set:
+                  extcommunity:
+                    rt:
+                      vpn: "22:11"
+                      delete: true
+                  ip:
+                    unchanged: true
+        state: replaced
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: route_maps
+
+    - assert:
+        that:
+          - result.commands|length == 7
+          - result.changed == true
+          - result.commands|symmetric_difference(replaced.commands) == []
+          - result.after|symmetric_difference(ansible_facts['network_resources']['route_maps']) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_route_maps: *id001
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml

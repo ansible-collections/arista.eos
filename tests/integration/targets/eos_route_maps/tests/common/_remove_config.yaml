@@ -1,0 +1,7 @@
+---
+- name: Cleanup
+  become: true
+  arista.eos.eos_config:
+    lines:
+      - "no route-map mapmerge"
+      - "no route-map mapmerge2"
