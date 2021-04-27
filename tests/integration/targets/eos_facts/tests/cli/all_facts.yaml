@@ -20,4 +20,19 @@
       - result.ansible_facts.ansible_net_memfree_mb > 1
       - result.ansible_facts.ansible_net_memtotal_mb > 1
 
+- name: Collect list of available network resources for eos
+  register: result
+  become: true
+  arista.eos.eos_facts:
+    available_network_resources: true
+    gather_network_resources: all
+    provider: '{{ cli }}'
+
+- name: Assert that correct available_network_resources returned
+  assert:
+    that:
+      - result.changed == false
+      - "{{ result['ansible_facts']['available_network_resources'] | symmetric_difference(result['ansible_facts']['ansible_net_gather_network_resources']) |length\
+          \ == 0 }}"
+
 - debug: msg="END cli/all_facts.yaml on connection={{ ansible_connection }}"
