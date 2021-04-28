@@ -5,6 +5,26 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v2.1.1
+======
+
+Minor Changes
+-------------
+
+- Add eos_route_maps resource module.
+
+Security Fixes
+--------------
+
+- Mask values of sensitive keys in module result.
+
+Bugfixes
+--------
+
+- Modify the split pattern while checking for eapi url in eos_eapi.
+- Normalize interface name before any operaion.
+- Skip when there are alpha values present following vlan keyword.
+
 v2.0.1
 ======
 
@@ -44,6 +64,7 @@ Deprecated Features
 -------------------
 
 - Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
+
 
 Bugfixes
 --------

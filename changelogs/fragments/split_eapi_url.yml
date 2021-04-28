@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Modify the split pattern while checking for eapi url in eos_eapi.

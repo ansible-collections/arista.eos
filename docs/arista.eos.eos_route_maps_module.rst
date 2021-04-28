@@ -92,7 +92,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>continue_map</b>
+                    <b>continue_sequence</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
@@ -2813,7 +2813,7 @@ Examples
                 - description: "newmap"
                   action: "deny"
                   sequence: 25
-                  continue_map: 45
+                  continue_sequence: 45
                   match:
                     interface: "Ethernet1"
             - route_map: "mapmerge2"
@@ -2871,7 +2871,7 @@ Examples
     #                 },
     #                 {
     #                     "action": "deny",
-    #                     "continue_map": 45,
+    #                     "continue_sequence": 45,
     #                     "description": "newmap",
     #                     "match": {
     #                         "interface": "Ethernet1"
@@ -3009,7 +3009,7 @@ Examples
     #                 },
     #                 {
     #                     "action": "deny",
-    #                     "continue_map": 45,
+    #                     "continue_sequence": 45,
     #                     "description": "newmap",
     #                     "match": {
     #                         "interface": "Ethernet1"
@@ -3085,7 +3085,7 @@ Examples
     #                 },
     #                 {
     #                     "action": "deny",
-    #                     "continue_map": 45,
+    #                     "continue_sequence": 45,
     #                     "description": "newmap",
     #                     "match": {
     #                         "interface": "Ethernet1"
@@ -3228,7 +3228,7 @@ Examples
     #                 },
     #                 {
     #                     "action": "deny",
-    #                     "continue_map": 45,
+    #                     "continue_sequence": 45,
     #                     "description": "newmap",
     #                     "match": {
     #                         "interface": "Ethernet1"
@@ -3575,7 +3575,7 @@ Examples
     #                 },
     #                 {
     #                     "action": "deny",
-    #                     "continue_map": 45,
+    #                     "continue_sequence": 45,
     #                     "description": "newmap",
     #                     "match": {
     #                         "interface": "Ethernet1"
@@ -3632,7 +3632,7 @@ Examples
                 - description: "newmap"
                   action: "deny"
                   sequence: 25
-                  continue_map: 45
+                  continue_sequence: 45
                   match:
                     interface: "Ethernet1"
             - route_map: "mapmerge2"
@@ -3711,7 +3711,7 @@ Examples
     #                 },
     #                 {
     #                     "action": "deny",
-    #                     "continue_map": 45,
+    #                     "continue_sequence": 45,
     #                     "description": "newmap",
     #                     "match": {
     #                         "interface": "Ethernet1"
