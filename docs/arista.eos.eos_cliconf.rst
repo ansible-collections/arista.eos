@@ -75,6 +75,24 @@ Parameters
                         <div>Specifies if sessions should be used on remote host or not</div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>non_config_lines</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                    <td>
+                                <div>var: ansible_network_non_config_regexes</div>
+                    </td>
+                <td>
+                        <div>A list of regexes that match lines to be removed from running-config when taking backup. If this key is not set, the list of default regexes is used.</div>
+                </td>
+            </tr>
     </table>
     <br/>
 

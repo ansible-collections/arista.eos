@@ -39,6 +39,14 @@ options:
     - name: ANSIBLE_EOS_USE_SESSIONS
     vars:
     - name: ansible_eos_use_sessions
+  non_config_lines:
+    description:
+    - A list of regexes that match lines to be removed from running-config
+      when taking backup. If this key is not set, the list of default regexes
+      is used.
+    type: list
+    vars:
+    - name: ansible_network_non_config_regexes
   config_commands:
     description:
     - Specifies a list of commands that can make configuration changes
