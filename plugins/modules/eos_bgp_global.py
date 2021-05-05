@@ -559,7 +559,7 @@ options:
                   description: link-bandwidth divide attribute.
                   type: str
                   choices: ['equal', 'ratio']
-            shut_down:
+            shutdown:
               description: Administratively shut down this neighbor.
               type: bool
             soft_recognition:

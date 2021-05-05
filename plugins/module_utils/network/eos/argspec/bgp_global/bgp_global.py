@@ -220,7 +220,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "auto_local_addr": {"type": "bool"},
                         "redistribute_internal": {"type": "bool"},
                         "cluster_id": {"type": "str"},
-                        "control_plan_filter": {"type": "bool"},
+                        "control_plane_filter": {"type": "bool"},
                         "confederation": {
                             "type": "dict",
                             "options": {
@@ -297,7 +297,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "ttl": {"type": "int"},
                             },
                         },
-                        "shut_down": {"type": "bool"},
+                        "shutdown": {"type": "bool"},
                         "fall_over": {"type": "bool"},
                         "idle_restart_timer": {"type": "int"},
                         "allowas_in": {
@@ -726,7 +726,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "ttl": {"type": "int"},
                                     },
                                 },
-                                "shut_down": {"type": "bool"},
+                                "shutdown": {"type": "bool"},
                                 "fall_over": {"type": "bool"},
                                 "idle_restart_timer": {"type": "int"},
                                 "allowas_in": {
@@ -905,6 +905,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "choices": [
                                                 "encoding_weighted",
                                                 "recursive",
+                                                "update_delay",
                                             ],
                                         },
                                     },

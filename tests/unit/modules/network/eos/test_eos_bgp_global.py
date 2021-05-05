@@ -125,8 +125,25 @@ class TestEosBgpglobalModule(TestEosModule):
                     vrfs=[
                         dict(
                             vrf="vrf01",
+                            bgp_params=dict(
+                                listen=dict(limit=20),
+                                log_neighbor_changes=True,
+                                missing_policy=dict(
+                                    direction="in", action="deny"
+                                ),
+                                monitoring=True,
+                                next_hop_unchanged=True,
+                                redistribute_internal=True,
+                                route="map01",
+                                route_reflector=dict(preserve=True),
+                                transport=33,
+                            ),
                             timers=dict(keepalive=44, holdtime=100),
-                            ucmp=dict(link_bandwidth=dict(mode="recursive")),
+                            ucmp=dict(
+                                link_bandwidth=dict(
+                                    mode="update_delay", update_delay=10
+                                )
+                            ),
                             neighbor=[
                                 dict(
                                     peer="peer1",
@@ -137,11 +154,17 @@ class TestEosBgpglobalModule(TestEosModule):
                                         link_bandwidth_attribute="divide",
                                         divide="ratio",
                                     ),
+                                    transport=dict(remote_port=20),
+                                    timers=dict(keepalive=5, holdtime=10),
+                                    ttl=33,
+                                    update_source="Ethernet1",
+                                    weight=43,
                                 ),
                                 dict(
                                     peer="peer2",
                                     peer_group="peer2",
                                     maximum_received_routes=dict(count=12000),
+                                    shutdown=True,
                                 ),
                             ],
                         )
@@ -153,6 +176,10 @@ class TestEosBgpglobalModule(TestEosModule):
                     ],
                     redistribute=[dict(protocol="isis", isis_level="level-2")],
                     route_target=dict(action="export", target="44:22"),
+                    ucmp=dict(mode=dict(nexthops=55)),
+                    update=dict(
+                        wait_for="wait_for_convergence", batch_size=50
+                    ),
                 ),
                 state="merged",
             )
@@ -163,16 +190,33 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor peer1 peer-group",
             "neighbor peer1 maximum-routes 12000",
             "neighbor peer1 send-community link-bandwidth divide ratio",
+            "neighbor peer1 timers 5 10",
+            "neighbor peer1 ttl maximum-hops 33",
+            "neighbor peer1 update-source Ethernet1",
+            "neighbor peer1 weight 43",
+            "neighbor peer1 transport remote-port 20",
             "neighbor peer2 peer-group",
             "neighbor peer2 maximum-routes 12000",
+            "neighbor peer2 shutdown",
+            "bgp route-reflector preserve-attributes always",
+            "bgp listen limit 20",
+            "bgp log-neighbor-changes",
+            "bgp missing-policy direction in action deny",
+            "bgp monitoring",
+            "bgp next-hop-unchanged",
+            "bgp redistribute-internal",
+            "bgp route install-map map01",
+            "bgp transport listen-port 33",
             "timers bgp 44 100",
-            "ucmp link-bandwidth recursive",
+            "ucmp link-bandwidth update_delay 10",
             "exit",
             "redistribute isis level-2",
             "network 6.6.6.0/24 route-map netmap1",
             "network 10.1.0.0/16",
             "default-metric 433",
             "route-target export 44:22",
+            "ucmp link-bandwidth recursive mode 1 55",
+            "update wait_for_convergence 50",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -608,7 +652,37 @@ class TestEosBgpglobalModule(TestEosModule):
                                 dict(
                                     peer="peer2",
                                     peer_group="peer2",
-                                    maximum_received_routes=dict(count=12000),
+                                    ebgp_multihop=dict(ttl=10),
+                                    enforce_first_as=True,
+                                    fall_over=True,
+                                    graceful_restart_helper=True,
+                                    idle_restart_timer=5,
+                                    link_bandwidth=dict(auto=True),
+                                    local_as=dict(as_number=55, fallback=True),
+                                    maximum_accepted_routes=dict(
+                                        count=6, warning_limit=4
+                                    ),
+                                    maximum_received_routes=dict(
+                                        count=6,
+                                        warning_limit=dict(limit_percent=25),
+                                        warning_only=True,
+                                    ),
+                                    metric_out=5,
+                                    monitoring=True,
+                                    next_hop_self=True,
+                                    next_hop_unchanged=True,
+                                    next_hop_v6_address="5001::/64",
+                                    out_delay=15,
+                                    remote_as=55,
+                                    remove_private_as=dict(replace_as=True),
+                                    prefix_list=dict(
+                                        name="list01", direction="in"
+                                    ),
+                                    route_map=dict(
+                                        name="map01", direction="out"
+                                    ),
+                                    route_reflector_client=True,
+                                    route_to_peer=True,
                                 ),
                             ],
                         )
@@ -620,6 +694,27 @@ class TestEosBgpglobalModule(TestEosModule):
                     ],
                     redistribute=[dict(protocol="isis", isis_level="level-2")],
                     route_target=dict(action="export", target="44:22"),
+                    bgp_params=dict(
+                        additional_paths="send",
+                        advertise_inactive=True,
+                        allowas_in=dict(count=4),
+                        always_compare_med=True,
+                        auto_local_addr=True,
+                        bestpath=dict(
+                            as_path="ignore",
+                            ecmp_fast=True,
+                            med=dict(confed=True),
+                        ),
+                        client_to_client=True,
+                        cluster_id=2,
+                        control_plane_filter=True,
+                        convergence=dict(slow_peer=True, time=5),
+                        enforce_first_as=True,
+                        host_routes=True,
+                    ),
+                    access_group=dict(
+                        afi="ipv6", acl_name="acl01", direction="out"
+                    ),
                 ),
                 state="rendered",
             )
@@ -631,15 +726,50 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor peer1 maximum-routes 12000",
             "neighbor peer1 send-community link-bandwidth divide ratio",
             "neighbor peer2 peer-group",
-            "neighbor peer2 maximum-routes 12000",
+            "neighbor peer2 local-as 55 no-prepend replace-as fallback",
+            "neighbor peer2 next-hop-v6-addr 5001::/64 in",
+            "neighbor peer2 ebgp-multiphop 10",
+            "neighbor peer2 enforce-first-as",
+            "neighbor peer2 fall-over bfd",
+            "neighbor peer2 graceful-restart-helper",
+            "neighbor peer2 idle-restart-timer 5",
+            "neighbor peer2 link-bandwidth auto",
+            "neighbor peer2 maximum-accepted-routes 6 warning-limit 4",
+            "neighbor peer2 maximum-routes 6 warning-limit 25 percent warning-only",
+            "neighbor peer2 metric-out 5",
+            "neighbor peer2 monitoring",
+            "neighbor peer2 next-hop-self",
+            "neighbor peer2 next-hop-unchanged",
+            "neighbor peer2 out-delay 15",
+            "neighbor peer2 remote-as 55",
+            "neighbor peer2 remove-private-as replace-as",
+            "neighbor peer2 prefix-list list01 in",
+            "neighbor peer2 route-map map01 out",
+            "neighbor peer2 route-reflector-client",
+            "neighbor peer2 route-to-peer",
             "timers bgp 44 100",
             "ucmp link-bandwidth recursive",
             "exit",
+            "bgp additional-paths send any",
+            "bgp advertise-inactive",
+            "bgp allowas-in 4",
+            "bgp always-comapre-med",
+            "bgp auto-local-addr",
             "redistribute isis level-2",
             "network 6.6.6.0/24 route-map netmap1",
             "network 10.1.0.0/16",
             "default-metric 433",
             "route-target export 44:22",
+            "bgp bestpath ecmp-fast",
+            "bgp bestpath med confed",
+            "bgp client-to-client",
+            "bgp cluster-id 2",
+            "bgp control-plane-filter default-allow",
+            "bgp convergence slow-peer time 5",
+            "bgp enforce-first-as",
+            "bgp host-routes fib direct-install",
+            "bgp bestpath as-path ignore",
+            "ipv6 access-group acl01 out",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
