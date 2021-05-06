@@ -138,7 +138,7 @@ Please read and familiarize yourself with this document.
 <!--Add a link to a changelog.md file or an external docsite to cover this information. -->
 ## Release notes
 
-Release notes are available [here](https://github.com/ansible-collections/arista.eos/blob/main/changelogs/CHANGELOG.rst).
+Release notes are available [here](https://github.com/ansible-collections/arista.eos/blob/main/CHANGELOG.rst).
 
 ## Roadmap
 
