@@ -27,8 +27,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp
 
 
 class Bgp_globalFacts(object):
-    """ The eos bgp_global facts class
-    """
+    """The eos bgp_global facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -41,7 +40,7 @@ class Bgp_globalFacts(object):
         return connection.get("show running-config | section bgp ")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Bgp_global network resource
+        """Populate the facts for Bgp_global network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary

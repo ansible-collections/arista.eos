@@ -391,8 +391,7 @@ def collect_facts(module, result):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     argument_spec = dict(
         http=dict(aliases=["enable_http"], type="bool"),
         http_port=dict(type="int"),

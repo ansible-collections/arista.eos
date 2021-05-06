@@ -31,8 +31,7 @@ __metaclass__ = type
 
 
 class Static_routesArgs(object):
-    """The arg spec for the eos_static_routes module
-    """
+    """The arg spec for the eos_static_routes module"""
 
     def __init__(self, **kwargs):
         pass
