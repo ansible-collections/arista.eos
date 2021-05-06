@@ -102,8 +102,7 @@ FACT_RESOURCE_SUBSETS = dict(
 
 
 class Facts(FactsBase):
-    """ The fact class for eos
-    """
+    """The fact class for eos"""
 
     VALID_LEGACY_GATHER_SUBSETS = frozenset(FACT_LEGACY_SUBSETS.keys())
     VALID_RESOURCE_SUBSETS = frozenset(FACT_RESOURCE_SUBSETS.keys())
@@ -111,7 +110,7 @@ class Facts(FactsBase):
     def get_facts(
         self, legacy_facts_type=None, resource_facts_type=None, data=None
     ):
-        """ Collect the facts for eos
+        """Collect the facts for eos
         :param legacy_facts_type: List of legacy facts types
         :param resource_facts_type: List of resource fact types
         :param data: previously collected conf

@@ -31,8 +31,7 @@ The arg spec for the eos_bgp_global module
 
 
 class Bgp_globalArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_bgp_global module
-    """
+    """The arg spec for the eos_bgp_global module"""
 
     def __init__(self, **kwargs):
         pass

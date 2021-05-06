@@ -127,8 +127,7 @@ class Neighbors(CliProvider):
             return cmd
 
     def _render_timers(self, item, config):
-        """generate bgp timer related configuration
-        """
+        """generate bgp timer related configuration"""
         keepalive = item["timers"]["keepalive"]
         holdtime = item["timers"]["holdtime"]
         neighbor = item["neighbor"]

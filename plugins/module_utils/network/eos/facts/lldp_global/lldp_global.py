@@ -26,8 +26,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lld
 
 
 class Lldp_globalFacts(object):
-    """ The eos lldp_global fact class
-    """
+    """The eos lldp_global fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -47,7 +46,7 @@ class Lldp_globalFacts(object):
         return connection.get("show running-config | section lldp")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for lldp_global
+        """Populate the facts for lldp_global
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf

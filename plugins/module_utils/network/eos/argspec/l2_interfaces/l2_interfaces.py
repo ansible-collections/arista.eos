@@ -30,8 +30,7 @@ __metaclass__ = type
 
 
 class L2_interfacesArgs(object):
-    """The arg spec for the eos_l2_interfaces module
-    """
+    """The arg spec for the eos_l2_interfaces module"""
 
     def __init__(self, **kwargs):
         pass

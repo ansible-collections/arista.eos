@@ -366,8 +366,7 @@ def check_declarative_intent_params(want, module, result):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     element_spec = dict(
         name=dict(),
         interfaces=dict(type="list", elements="str"),

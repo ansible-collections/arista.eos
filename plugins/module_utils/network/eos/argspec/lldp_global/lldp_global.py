@@ -32,8 +32,7 @@ __metaclass__ = type
 
 
 class Lldp_globalArgs(object):
-    """The arg spec for the eos_lldp_global module
-    """
+    """The arg spec for the eos_lldp_global module"""
 
     def __init__(self, **kwargs):
         pass
