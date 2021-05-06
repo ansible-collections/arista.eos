@@ -124,8 +124,7 @@ class Cli:
         return self._connection
 
     def get_config(self, flags=None):
-        """Retrieves the current config from the device or cache
-        """
+        """Retrieves the current config from the device or cache"""
         flags = [] if flags is None else flags
 
         cmd = "show running-config "
@@ -148,8 +147,7 @@ class Cli:
             return cfg
 
     def run_commands(self, commands, check_rc=True):
-        """Run list of commands on remote device and return results
-        """
+        """Run list of commands on remote device and return results"""
         connection = self._get_connection()
         try:
             response = connection.run_commands(
@@ -162,8 +160,7 @@ class Cli:
         return response
 
     def load_config(self, commands, commit=False, replace=False):
-        """Loads the config commands onto the remote device
-        """
+        """Loads the config commands onto the remote device"""
         conn = self._get_connection()
         try:
             response = conn.edit_config(commands, commit, replace)
@@ -211,8 +208,7 @@ class Cli:
         return diff
 
     def get_capabilities(self):
-        """Returns platform info of the remove device
-        """
+        """Returns platform info of the remove device"""
         if hasattr(self._module, "_capabilities"):
             return self._module._capabilities
 
@@ -311,8 +307,7 @@ class LocalEapi:
         return response
 
     def run_commands(self, commands, check_rc=True):
-        """Runs list of commands on remote device and returns results
-        """
+        """Runs list of commands on remote device and returns results"""
         output = None
         queue = list()
         responses = list()
@@ -348,8 +343,7 @@ class LocalEapi:
         return responses
 
     def get_config(self, flags=None):
-        """Retrieves the current config from the device or cache
-        """
+        """Retrieves the current config from the device or cache"""
         flags = [] if flags is None else flags
 
         cmd = "show running-config "
@@ -365,8 +359,7 @@ class LocalEapi:
             return cfg
 
     def configure(self, commands):
-        """Sends the ordered set of commands to the device
-        """
+        """Sends the ordered set of commands to the device"""
         cmds = ["configure terminal"]
         cmds.extend(commands)
 
@@ -496,8 +489,7 @@ class HttpApi:
         return self._session_support
 
     def run_commands(self, commands, check_rc=True):
-        """Runs list of commands on remote device and returns results
-        """
+        """Runs list of commands on remote device and returns results"""
         output = None
         queue = list()
         responses = list()
@@ -543,8 +535,7 @@ class HttpApi:
         return responses
 
     def get_config(self, flags=None):
-        """Retrieves the current config from the device or cache
-        """
+        """Retrieves the current config from the device or cache"""
         flags = [] if flags is None else flags
 
         cmd = "show running-config "
@@ -664,8 +655,7 @@ class HttpApi:
         return result
 
     def get_capabilities(self):
-        """Returns platform info of the remove device
-        """
+        """Returns platform info of the remove device"""
         try:
             capabilities = self._connection.get_capabilities()
         except ConnectionError as exc:

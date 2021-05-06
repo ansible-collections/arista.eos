@@ -407,8 +407,7 @@ def map_params_to_obj(module):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     element_spec = dict(
         name=dict(type="str", aliases=["interface"]),
         mode=dict(choices=["access", "trunk"]),

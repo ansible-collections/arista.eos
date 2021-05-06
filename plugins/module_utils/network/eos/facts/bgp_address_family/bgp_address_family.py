@@ -29,8 +29,7 @@ import re
 
 
 class Bgp_afFacts(object):
-    """ The eos bgp_address_family facts class
-    """
+    """The eos bgp_address_family facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -53,7 +52,7 @@ class Bgp_afFacts(object):
         return connection.get("show running-config | section bgp ")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Bgp_af network resource
+        """Populate the facts for Bgp_af network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary

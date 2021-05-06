@@ -29,8 +29,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.osp
 
 
 class Ospfv3Facts(object):
-    """ The eos ospfv3 facts class
-    """
+    """The eos ospfv3 facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -53,7 +52,7 @@ class Ospfv3Facts(object):
         return connection.get("show running-config | section ospfv3")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Ospfv3 network resource
+        """Populate the facts for Ospfv3 network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary

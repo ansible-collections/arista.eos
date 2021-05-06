@@ -19,8 +19,7 @@ def get_interface_number(name):
 
 
 def normalize_interface(name):
-    """Return the normalized interface name
-    """
+    """Return the normalized interface name"""
     if not name:
         return None
 
@@ -75,8 +74,7 @@ def vlan_range_to_list(vlans):
 
 
 def numerical_sort(string_int_list):
-    """Sorts list of integers that are digits in numerical order.
-    """
+    """Sorts list of integers that are digits in numerical order."""
     as_int_list = []
 
     for vlan in string_int_list:
