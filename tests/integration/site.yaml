@@ -1,0 +1,46 @@
+---
+- hosts: eos
+  vars:
+    collection_path: /usr/share/ansible/collections/ansible_collections
+    collection_namespace: arista
+    collection_name: eos
+    integration_tests_path: "{{ collection_path }}/{{ collection_namespace }}/{{ collection_name }}/tests/integration/targets"
+    integration_tests_pattern: "{{ collection_name }}_banner"
+    integration_target_failures: []
+
+  tasks:
+    - name: Find integration test targets
+      find:
+        file_type: directory
+        paths: "{{ integration_tests_path }}"
+        pattern: "{{ integration_tests_pattern }}"
+        recurse: false
+      register: _targets
+      delegate_to: localhost
+      no_log: true
+
+    - name: Format integration targets
+      set_fact:
+        _integration_targets: "{{ _targets.files | map(attribute='path') | list | sort }}"
+      no_log: true
+
+    - name: Test targets found
+      debug:
+        msg: "{{ _integration_targets }}"
+
+    - name: Run integration tests
+      include_tasks:
+        file: include_role.yaml
+      with_items:
+        - "{{ _integration_targets }}"
+
+    - name: Integration tests failed
+      block:
+        - name: Show target failures
+          debug:
+            msg: "{{ integration_target_failures }}"
+
+        - name: We have a problem
+          fail:
+            msg: "One or more integration tests failed!"
+      when: integration_target_failures

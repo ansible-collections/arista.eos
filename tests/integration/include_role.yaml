@@ -1,0 +1,10 @@
+---
+- name: include roles
+  block:
+    - name: Run target role
+      include_role:
+        name: "{{ item }}"
+  rescue:
+    - name: Report target failure
+      set_fact:
+        integration_target_failures: "{{ integration_target_failures + [item.split('/')[-1]] }}"
