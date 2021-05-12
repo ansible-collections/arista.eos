@@ -219,6 +219,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
     load_config,
+    run_commands,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
@@ -231,6 +232,20 @@ def validate_privilege(value, module):
         module.fail_json(
             msg="privilege must be between 1 and 15, got %s" % value
         )
+
+
+def get_os_version(module):
+    os_version = "4.20.10"
+    response = run_commands(
+        module, 'show version | grep "Software image version"'
+    )
+    version_match = re.search(
+        r"Software image version:\s+([\d\.]+)", response[0], re.M
+    )
+    if version_match:
+        v = version_match.group(1).split(".")
+        os_version = tuple(int(digit) for digit in v)
+    return os_version
 
 
 def map_obj_to_commands(updates, module):
@@ -261,7 +276,12 @@ def map_obj_to_commands(updates, module):
             add("privilege %s" % want["privilege"])
 
         if needs_update("sshkey"):
-            add("sshkey %s" % want["sshkey"])
+            ver = get_os_version(module)
+            # compare against image version 4.20.10
+            if ver > (4, 20, 10):
+                add("ssh-key %s" % want["sshkey"])
+            else:
+                add("sshkey %s" % want["sshkey"])
 
         if needs_update("nopassword"):
             if want["nopassword"]:
@@ -279,7 +299,6 @@ def map_obj_to_commands(updates, module):
                 module.fail_json(
                     msg="configured_password, sshkey or nopassword should be provided"
                 )
-
     return commands
 
 
@@ -290,7 +309,7 @@ def parse_role(data):
 
 
 def parse_sshkey(data):
-    match = re.search(r"sshkey (.+)$", data, re.M)
+    match = re.search(r"sshkey|ssh-key (.+)$", data, re.M)
     if match:
         return match.group(1)
 

@@ -43,11 +43,18 @@ class TestEosUserModule(TestEosModule):
         )
         self.load_config = self.mock_load_config.start()
 
+        self.mock_get_os_version = patch(
+            "ansible_collections.arista.eos.plugins.modules.eos_user.get_os_version"
+        )
+        self.get_os_version = self.mock_get_os_version.start()
+        self.get_os_version.return_value = (4, 20, 10)
+
     def tearDown(self):
         super(TestEosUserModule, self).tearDown()
 
         self.mock_get_config.stop()
         self.mock_load_config.stop()
+        self.mock_get_os_version.stop()
 
     def load_fixtures(self, commands=None, transport="cli"):
         self.get_config.return_value = load_fixture("eos_user_config.cfg")
@@ -96,6 +103,12 @@ class TestEosUserModule(TestEosModule):
     def test_eos_user_sshkey(self):
         set_module_args(dict(name="ansible", sshkey="test"))
         commands = ["username ansible sshkey test"]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_user_sshkey_4_23(self):
+        self.get_os_version.return_value = (4, 23, 00)
+        set_module_args(dict(name="ansible", sshkey="test"))
+        commands = ["username ansible ssh-key test"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_user_update_password_changed(self):
