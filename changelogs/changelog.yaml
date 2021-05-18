@@ -272,9 +272,12 @@ releases:
       - Skip when there are alpha values present following vlan keyword.
       minor_changes:
       - Add eos_route_maps resource module.
+      - Add support for available_network_resources key, which allows to fetch the
+        available resources for a platform (https://github.com/ansible-collections/arista.eos/issues/184).
       security_fixes:
       - Mask values of sensitive keys in module result.
     fragments:
+    - 184_available_network_resources.yaml
     - 196-fix-caching-test-failure.yaml
     - 197-add_ignore_txt.yml
     - 200-add-eos-route-maps.yaml
@@ -290,11 +293,7 @@ releases:
         version.
       - Fix regex for password prompt.
       - argspec key 'shut_down' changed to 'shutdown'.
-      minor_changes:
-      - Add support for available_network_resources key, which allows to fetch the
-        available resources for a platform (https://github.com/ansible-collections/arista.eos/issues/184).
     fragments:
-    - 184_available_network_resources.yaml
     - black.yaml
     - changelog_doc_path_update.yaml
     - fix_password_regex.yaml
