@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - argspec key 'shut_down' changed to 'shutdown'.
