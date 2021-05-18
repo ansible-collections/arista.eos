@@ -8,11 +8,6 @@ Arista Eos Collection Release Notes
 v2.1.2
 ======
 
-Minor Changes
--------------
-
-- Add support for available_network_resources key, which allows to fetch the available resources for a platform (https://github.com/ansible-collections/arista.eos/issues/184).
-
 Bugfixes
 --------
 
@@ -27,6 +22,8 @@ Minor Changes
 -------------
 
 - Add eos_route_maps resource module.
+- Add support for available_network_resources key, which allows to fetch the available resources for a platform (https://github.com/ansible-collections/arista.eos/issues/184).
+
 
 Security Fixes
 --------------
