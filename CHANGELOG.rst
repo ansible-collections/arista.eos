@@ -5,6 +5,21 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v2.1.2
+======
+
+Minor Changes
+-------------
+
+- Add support for available_network_resources key, which allows to fetch the available resources for a platform (https://github.com/ansible-collections/arista.eos/issues/184).
+
+Bugfixes
+--------
+
+- Add support to accomodate change in username config cli in latest eos software version.
+- Fix regex for password prompt.
+- argspec key 'shut_down' changed to 'shutdown'.
+
 v2.1.1
 ======
 
