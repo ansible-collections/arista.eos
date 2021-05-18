@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Add support to accomodate change in username config cli in latest eos software version.
