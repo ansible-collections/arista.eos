@@ -283,3 +283,21 @@ releases:
     - split_eapi_url.yml
     - vlan_id_alpha_configs.yml
     release_date: '2021-04-27'
+  2.1.2:
+    changes:
+      bugfixes:
+      - Add support to accomodate change in username config cli in latest eos software
+        version.
+      - Fix regex for password prompt.
+      - argspec key 'shut_down' changed to 'shutdown'.
+      minor_changes:
+      - Add support for available_network_resources key, which allows to fetch the
+        available resources for a platform (https://github.com/ansible-collections/arista.eos/issues/184).
+    fragments:
+    - 184_available_network_resources.yaml
+    - black.yaml
+    - changelog_doc_path_update.yaml
+    - fix_password_regex.yaml
+    - fix_typo_bgp_global.yaml
+    - sshkey_cli_change.yaml
+    release_date: '2021-05-18'
