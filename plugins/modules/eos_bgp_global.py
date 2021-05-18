@@ -150,7 +150,7 @@ options:
                 peers:
                   description: Confederation peers.
                   type: str
-            control_plan_filter:
+            control_plane_filter:
               description: Control plane filter for BGP.
               type: bool
             convergence:
@@ -559,7 +559,7 @@ options:
                   description: link-bandwidth divide attribute.
                   type: str
                   choices: ['equal', 'ratio']
-            shut_down:
+            shutdown:
               description: Administratively shut down this neighbor.
               type: bool
             soft_recognition:
@@ -1207,7 +1207,7 @@ options:
                       description: link-bandwidth divide attribute.
                       type: str
                       choices: ['equal', 'ratio']
-                shut_down:
+                shutdown:
                   description: Administratively shut down this neighbor.
                   type: bool
                 soft_recognition:
@@ -1323,7 +1323,7 @@ options:
                     mode:
                       description: UCMP link bandwidth mode
                       type: str
-                      choices: ['encoding_weighted', 'recursive']
+                      choices: ['encoding_weighted', 'recursive', 'update_delay']
                     update_delay:
                       description: Link Bandwidth Advertisement delay.
                       type: int

@@ -190,6 +190,18 @@ class Bgp_global(ResourceModule):
         wbgp = want.pop("bgp_params", {})
         hbgp = have.pop("bgp_params", {})
         for name, entry in iteritems(wbgp):
+            if name == "bestpath":
+                for k, v in iteritems(entry):
+                    h = {}
+                    if hbgp.get(name):
+                        h = {name: hbgp[name].pop(v, {})}
+                    self.compare(
+                        parsers=parsers,
+                        want={"bgp_params": {name: {k: v}}},
+                        have={"bgp_params": h},
+                    )
+                hbgp.pop(name, {})
+                continue
             self.compare(
                 parsers=parsers,
                 want={"bgp_params": {name: entry}},
