@@ -48,7 +48,7 @@
 - name: Enable http server
   become: true
   arista.eos.eos_eapi:
-    enable_http: True
+    enable_http: true
     http_port: 80
 
 - name: Expect http server to be in enabled state

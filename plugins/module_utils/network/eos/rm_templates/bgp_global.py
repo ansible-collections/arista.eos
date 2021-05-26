@@ -151,10 +151,8 @@ def _tmplt_bgp_params(config_data):
     elif config_data["bgp_params"].get("log_neighbor_changes"):
         command += " log-neighbor-changes"
     elif config_data["bgp_params"].get("missing_policy"):
-        command += (
-            " missing-policy direction {direction} action {action}".format(
-                **config_data["bgp_params"]["missing_policy"]
-            )
+        command += " missing-policy direction {direction} action {action}".format(
+            **config_data["bgp_params"]["missing_policy"]
         )
     elif config_data["bgp_params"].get("monitoring"):
         command += " monitoring"
