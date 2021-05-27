@@ -51,6 +51,13 @@
     enable_http: true
     http_port: 80
 
+- register: http_config
+  arista.eos.eos_command:
+    commands:
+      - show management api http-commands | json
+    provider: '{{ cli }}'
+
+
 - name: Expect http server to be in enabled state
   assert:
     that:
