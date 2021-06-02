@@ -28,9 +28,6 @@ class Prefix_listsTemplate(NetworkTemplate):
         )
 
     def _tmplt_prefix_list_ip(config_data):
-        import q
-
-        q(config_data)
         command_set = []
         config_data = config_data["prefix_lists"].get("entries", {})
         for k, v in iteritems(config_data):
@@ -48,9 +45,6 @@ class Prefix_listsTemplate(NetworkTemplate):
         return command_set
 
     def _tmplt_prefix_list_ip_del(config_data):
-        import q
-
-        q(config_data)
         command_set = []
         config_data = config_data["prefix_lists"].get("entries", {})
         for k, v in iteritems(config_data):
