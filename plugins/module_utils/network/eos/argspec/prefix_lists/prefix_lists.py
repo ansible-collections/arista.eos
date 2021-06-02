@@ -28,8 +28,7 @@ The arg spec for the eos_prefix_lists module
 
 
 class Prefix_listsArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_prefix_lists module
-    """
+    """The arg spec for the eos_prefix_lists module"""
 
     def __init__(self, **kwargs):
         pass

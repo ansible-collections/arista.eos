@@ -15,6 +15,7 @@ the given network resource.
 """
 
 import re
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
@@ -30,7 +31,33 @@ class Prefix_listsTemplate(NetworkTemplate):
         import q
 
         q(config_data)
-        command = ""
+        command_set = []
+        config_data = config_data["prefix_lists"].get("entries", {})
+        for k, v in iteritems(config_data):
+            q(k, v)
+            command = ""
+            if k != "seq":
+                command = "seq " + str(k) + " {action} {address}".format(**v)
+            else:
+                command = "{action} {address}".format(**v)
+            if "match" in v:
+                command += " {operator} {masklen}".format(**v["match"])
+            if command:
+                command_set.append(command)
+
+        return command_set
+
+    def _tmplt_prefix_list_ip_del(config_data):
+        import q
+
+        q(config_data)
+        command_set = []
+        config_data = config_data["prefix_lists"].get("entries", {})
+        for k, v in iteritems(config_data):
+            q(k, v)
+            command_set.append("seq " + str(k))
+
+        return command_set
 
     # fmt: off
     PARSERS = [
@@ -42,7 +69,7 @@ class Prefix_listsTemplate(NetworkTemplate):
                 *$""",
                 re.VERBOSE,
             ),
-            "setval": "{{ afi }} prefix-list {{ name }}",
+            "setval": '{{ "ip" if afi == "ipv4" else afi }} prefix-list {{ prefix_lists.name }}',
             "compval": "prefix_lists",
             "result": {
                 '{{ afi  }}': {
@@ -57,7 +84,7 @@ class Prefix_listsTemplate(NetworkTemplate):
             "shared": True,
         },
         {
-            "name": "prefixlist.ip",
+            "name": "prefixlist.entry",
             "getval": re.compile(
                 r"""
                 \s*seq
@@ -70,12 +97,14 @@ class Prefix_listsTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": _tmplt_prefix_list_ip,
+            "remval": _tmplt_prefix_list_ip_del,
+            "compval": "prefix_lists",
             "result": {
                 "{{ afi }}": {
                     "prefix_lists": {
                         "{{ name }}": {
-                             "entries": {
-                                 '{{ num|d("seq") }}': {
+                            "entries": {
+                                '{{ num|d("seq") }}': {
                                     "sequence": "{{ num }}",
                                     "action": "{{ action }}",
                                     "address": "{{ ip }}",
@@ -100,14 +129,21 @@ class Prefix_listsTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": "resequnce {{ start }} {{ step }}",
+            "setval": "resequence {{ start }} {{ step }}",
+            "compval": "prefix_lists.entries.resequence",
             "result": {
-                 '{{ num|d("seq") }}': {
-                     "entries": {
-                        "resequnce": {
-                            "default": "{{ True if start_seq is undefined and step is undefined }}",
-                            "start_seq": "{{ start }}",
-                            "step": "{{ step }}"
+                "{{ afi }}": {
+                    "prefix_lists": {
+                        "{{ name }}": {
+                            "entries": {
+                                '{{ num|d("seq") }}': {
+                                    "resequnce": {
+                                        "default": "{{ True if start_seq is undefined and step is undefined }}",
+                                        "start_seq": "{{ start }}",
+                                        "step": "{{ step }}"
+                                    }
+                                }
+                            }
                         }
                     }
                 }

@@ -14,8 +14,6 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
-
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
@@ -26,12 +24,10 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_template
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.prefix_lists.prefix_lists import (
     Prefix_listsArgs,
 )
-import q
 
 
 class Prefix_listsFacts(object):
-    """ The eos prefix_lists facts class
-    """
+    """The eos prefix_lists facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -44,7 +40,7 @@ class Prefix_listsFacts(object):
         return connection.get("show running-config | section prefix-list")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Prefix_lists network resource
+        """Populate the facts for Prefix_lists network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -54,7 +50,6 @@ class Prefix_listsFacts(object):
         :returns: facts
         """
         facts = {}
-        objs = []
 
         if not data:
             data = self.get_config(connection)
@@ -79,7 +74,8 @@ class Prefix_listsFacts(object):
                                     key=lambda k, sk="sequence": k[sk],
                                 )
             objs = sorted(list(objs.values()), key=lambda k, sk="afi": k[sk])
-
+        else:
+            objs = []
         ansible_facts["ansible_network_resources"].pop("prefix_lists", None)
 
         params = utils.remove_empties(

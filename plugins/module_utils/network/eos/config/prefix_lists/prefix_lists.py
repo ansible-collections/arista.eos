@@ -17,9 +17,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-import q
-from copy import deepcopy
-
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
@@ -51,7 +48,7 @@ class Prefix_lists(ResourceModule):
         self.parsers = []
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -62,14 +59,13 @@ class Prefix_lists(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-            want, have and desired state.
+        """Generate configuration commands to send based on
+        want, have and desired state.
         """
         wantd = {entry["afi"]: entry for entry in self.want}
         haved = {entry["afi"]: entry for entry in self.have}
 
         # turn all lists of dicts into dicts prior to merge
-        q("START", wantd, haved)
         for entry in wantd, haved:
             self._prefix_lists_list_to_dict(entry)
 
@@ -89,28 +85,92 @@ class Prefix_lists(ResourceModule):
             for k, have in iteritems(haved):
                 if k not in wantd:
                     self._compare(want={}, have=have)
-        q(wantd, haved)
         for k, want in iteritems(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Prefix_lists network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Prefix_lists network resource.
         """
-        self.compare(parsers=self.parsers, want=want, have=have)
+        for k, v in iteritems(want):
+            if k == "afi":
+                afi = v
+                continue
+            for pk, pv in iteritems(v):
+                begin = len(self.commands)
+                w_parent = {"afi": afi, "prefix_lists": {"name": pk}}
+                if pv.get("entries"):
+                    self._compare_prefix_lists(afi, pk, pv, have)
+                if have.get("prefix_lists"):
+                    if have["prefix_lists"].get(pk):
+                        h_parent = {"afi": afi, "prefix_lists": {"name": pk}}
+                if begin != len(self.commands):
+                    self.commands.insert(
+                        begin,
+                        self._tmplt.render(
+                            w_parent or h_parent, "prefixlist.name", False
+                        ),
+                    )
+        for hk, hv in iteritems(have):
+            if hk == "afi":
+                h_afi = hv
+                continue
+            for hpk, hpv in iteritems(hv):
+                self.commands.append(
+                    self._tmplt.render(
+                        {"afi": h_afi, "prefix_lists": {"name": hpk}},
+                        "prefixlist.name",
+                        True,
+                    )
+                )
+
+    def _compare_prefix_lists(self, afi, pk, w_list, have):
+        parser = ["prefixlist.entry", "prefixlist.resequence"]
+        for ek, ev in iteritems(w_list):
+            if ek == "name":
+                continue
+            w_child = {"afi": afi, "prefix_lists": {"entries": ev}}
+            h_child = {}
+            h_add_child = {}
+            if have.get("prefix_lists"):
+                if have["prefix_lists"].get(pk):
+                    if have["prefix_lists"][pk].get(ek):
+                        h_ent = self._compare_seq(
+                            w_list["entries"], have["prefix_lists"][pk][ek]
+                        )
+                        h_add_child = {
+                            "afi": afi,
+                            "prefix_lists": {"entries": h_ent},
+                        }
+                    for seq, seq_val in iteritems(
+                        have["prefix_lists"][pk][ek]
+                    ):
+                        h_child = {
+                            "afi": afi,
+                            "prefix_lists": {"entries": {seq: seq_val}},
+                        }
+                        self.compare(parsers=parser, want={}, have=h_child)
+                    have["prefix_lists"].pop(pk)
+            self.compare(parsers=parser, want=w_child, have=h_add_child)
+
+    def _compare_seq(self, w, h):
+        pl = {}
+        for seq, ent in iteritems(w):
+            if h.get(seq):
+                pl.update({seq: h.pop(seq)})
+        return pl
 
     def _prefix_lists_list_to_dict(self, entry):
         for afi, plist in iteritems(entry):
-            q("enter", afi, plist)
             if "prefix_lists" in plist:
                 pl_dict = {}
                 for el in plist["prefix_lists"]:
                     if "entries" in el:
                         ent_dict = {}
                         for en in el["entries"]:
-                            if not "sequence" in en:
+                            if en not in ["sequence"]:
                                 num = "seq"
                             else:
                                 num = en["sequence"]
@@ -120,4 +180,3 @@ class Prefix_lists(ResourceModule):
                     pl_dict.update({el["name"]: el})
                 plist["prefix_lists"] = pl_dict
             # entry[afi] = plist
-        q("OUT", entry)
