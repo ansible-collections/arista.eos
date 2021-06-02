@@ -131,19 +131,14 @@ class Prefix_lists(ResourceModule):
         for ek, ev in iteritems(w_list):
             if ek == "name":
                 continue
-            w_child = {"afi": afi, "prefix_lists": {"entries": ev}}
             h_child = {}
             h_add_child = {}
             if have.get("prefix_lists"):
                 if have["prefix_lists"].get(pk):
                     if have["prefix_lists"][pk].get(ek):
-                        h_ent = self._compare_seq(
-                            w_list["entries"], have["prefix_lists"][pk][ek]
+                        self._compare_seq(
+                            afi, w_list["entries"], have["prefix_lists"][pk][ek]
                         )
-                        h_add_child = {
-                            "afi": afi,
-                            "prefix_lists": {"entries": h_ent},
-                        }
                     for seq, seq_val in iteritems(
                         have["prefix_lists"][pk][ek]
                     ):
@@ -153,14 +148,23 @@ class Prefix_lists(ResourceModule):
                         }
                         self.compare(parsers=parser, want={}, have=h_child)
                     have["prefix_lists"].pop(pk)
-            self.compare(parsers=parser, want=w_child, have=h_add_child)
+            else:
+                self._compare_seq(
+                    afi, w_list["entries"], {} 
+                )
 
-    def _compare_seq(self, w, h):
-        pl = {}
+    def _compare_seq(self, afi, w, h):
+        wl_child = {}
+        hl_child = {}
+        parser = ["prefixlist.entry", "prefixlist.resequence"]
         for seq, ent in iteritems(w):
+            wl_child = {"afi": afi, "prefix_lists": {"entries": {seq: ent}}}
             if h.get(seq):
-                pl.update({seq: h.pop(seq)})
-        return pl
+                hl_child = {
+                    "afi": afi,
+                    "prefix_lists": {"entries": {seq: h.pop(seq)}},
+                 }
+            self.compare(parsers=parser, want=wl_child, have=hl_child)
 
     def _prefix_lists_list_to_dict(self, entry):
         for afi, plist in iteritems(entry):
@@ -170,7 +174,7 @@ class Prefix_lists(ResourceModule):
                     if "entries" in el:
                         ent_dict = {}
                         for en in el["entries"]:
-                            if en not in ["sequence"]:
+                            if "sequence" not in en.keys():
                                 num = "seq"
                             else:
                                 num = en["sequence"]
@@ -179,4 +183,3 @@ class Prefix_lists(ResourceModule):
                 for el in plist["prefix_lists"]:
                     pl_dict.update({el["name"]: el})
                 plist["prefix_lists"] = pl_dict
-            # entry[afi] = plist

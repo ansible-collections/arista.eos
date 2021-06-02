@@ -31,7 +31,6 @@ class Prefix_listsTemplate(NetworkTemplate):
         command_set = []
         config_data = config_data["prefix_lists"].get("entries", {})
         for k, v in iteritems(config_data):
-            q(k, v)
             command = ""
             if k != "seq":
                 command = "seq " + str(k) + " {action} {address}".format(**v)
@@ -48,7 +47,6 @@ class Prefix_listsTemplate(NetworkTemplate):
         command_set = []
         config_data = config_data["prefix_lists"].get("entries", {})
         for k, v in iteritems(config_data):
-            q(k, v)
             command_set.append("seq " + str(k))
 
         return command_set

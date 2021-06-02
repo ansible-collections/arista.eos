@@ -1,0 +1,30 @@
+---
+- debug:
+    msg: Start eos_prefix_lists gathered integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Gather route-map  configuration
+      become: true
+      register: result
+      arista.eos.eos_prefix_lists: &id001
+        state: gathered
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: prefix_lists
+
+    - assert:
+        that:
+          - result.changed == false
+          - result.gathered|symmetric_difference(ansible_facts['network_resources']['prefix_lists']) == []
+          - result.gathered|symmetric_difference(gathered.config) == []
+
+  always:
+
+    - include_tasks: _remove_config.yaml
