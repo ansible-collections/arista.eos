@@ -77,7 +77,7 @@
 
     - name: Assert that config was reverted
       assert:
-        that: 
+        that:
           - baseconfig.after == revert.after
           - revert.commands|symmetric_difference(rtt.commands) == []
 

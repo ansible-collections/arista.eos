@@ -51,6 +51,17 @@ class Prefix_listsTemplate(NetworkTemplate):
 
         return command_set
 
+    def _tmplt_prefix_list_resequence(config_data):
+        command = "resequence"
+        config_data = config_data["prefix_lists"].get("entries", {})
+        for k, v in iteritems(config_data):
+            if v["resequence"].get("start_seq"):
+                command += " " + str(v["resequence"]["start_seq"])
+            if v["resequence"].get("step"):
+                command += " " + str(v["resequence"]["step"])
+
+        return command
+
     # fmt: off
     PARSERS = [
         {
@@ -121,15 +132,15 @@ class Prefix_listsTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": "resequence {{ start }} {{ step }}",
-            "compval": "prefix_lists.entries.resequence",
+            "setval": _tmplt_prefix_list_resequence,
+            "compval": "prefix_lists",
             "result": {
                 "{{ afi }}": {
                     "prefix_lists": {
                         "{{ name }}": {
                             "entries": {
                                 '{{ num|d("seq") }}': {
-                                    "resequnce": {
+                                    "resequence": {
                                         "default": "{{ True if start_seq is undefined and step is undefined }}",
                                         "start_seq": "{{ start }}",
                                         "step": "{{ step }}"

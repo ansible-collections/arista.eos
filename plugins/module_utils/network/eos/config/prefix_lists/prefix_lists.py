@@ -20,6 +20,7 @@ created.
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
+    dict_diff,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
@@ -132,12 +133,13 @@ class Prefix_lists(ResourceModule):
             if ek == "name":
                 continue
             h_child = {}
-            h_add_child = {}
             if have.get("prefix_lists"):
                 if have["prefix_lists"].get(pk):
                     if have["prefix_lists"][pk].get(ek):
                         self._compare_seq(
-                            afi, w_list["entries"], have["prefix_lists"][pk][ek]
+                            afi,
+                            w_list["entries"],
+                            have["prefix_lists"][pk][ek],
                         )
                     for seq, seq_val in iteritems(
                         have["prefix_lists"][pk][ek]
@@ -148,22 +150,38 @@ class Prefix_lists(ResourceModule):
                         }
                         self.compare(parsers=parser, want={}, have=h_child)
                     have["prefix_lists"].pop(pk)
+                else:
+                    self._compare_seq(afi, w_list["entries"], {})
             else:
-                self._compare_seq(
-                    afi, w_list["entries"], {} 
-                )
+                self._compare_seq(afi, w_list["entries"], {})
 
     def _compare_seq(self, afi, w, h):
         wl_child = {}
         hl_child = {}
         parser = ["prefixlist.entry", "prefixlist.resequence"]
         for seq, ent in iteritems(w):
+            seq_diff = {}
             wl_child = {"afi": afi, "prefix_lists": {"entries": {seq: ent}}}
             if h.get(seq):
                 hl_child = {
                     "afi": afi,
                     "prefix_lists": {"entries": {seq: h.pop(seq)}},
-                 }
+                }
+                seq_diff = dict_diff(
+                    hl_child["prefix_lists"]["entries"][seq],
+                    wl_child["prefix_lists"]["entries"][seq],
+                )
+            if seq_diff:
+                if self.state == "merged":
+                    self._module.fail_json(
+                        msg="Sequence number "
+                        + str(seq)
+                        + " is already present. Use replaced/overridden operation to change the configuration"
+                    )
+
+                self.compare(
+                    parsers="prefixlist.entry", want={}, have=hl_child
+                )
             self.compare(parsers=parser, want=wl_child, have=hl_child)
 
     def _prefix_lists_list_to_dict(self, entry):
