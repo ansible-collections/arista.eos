@@ -97,8 +97,8 @@ class Prefix_lists(ResourceModule):
         """
         for k, v in iteritems(want):
             if k == "afi":
-                afi = v
                 continue
+            afi = want["afi"]
             for pk, pv in iteritems(v):
                 begin = len(self.commands)
                 w_parent = {"afi": afi, "prefix_lists": {"name": pk}}
