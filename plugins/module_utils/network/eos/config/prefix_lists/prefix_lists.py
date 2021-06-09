@@ -116,8 +116,8 @@ class Prefix_lists(ResourceModule):
                     )
         for hk, hv in iteritems(have):
             if hk == "afi":
-                h_afi = hv
                 continue
+            h_afi = have["afi"]
             for hpk, hpv in iteritems(hv):
                 self.commands.append(
                     self._tmplt.render(
