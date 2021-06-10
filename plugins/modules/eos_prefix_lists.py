@@ -18,7 +18,7 @@ module: eos_prefix_lists
 short_description: Manages Prefix lists resource module
 description: This module configures and manages the attributes of Prefix lists on Arista
   EOS platforms.
-version_added: 2.1.1
+version_added: 2.2.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
 - Tested against Arista EOS 4.20.10M
