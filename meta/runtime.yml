@@ -116,7 +116,11 @@ plugin_routing:
       redirect: arista.eos.eos
     ospf_interfaces:
       redirect: arista.eos.eos
-    eos_route_maps:
+    eos_prefix_lists:
+      redirect: arista.eos.eos
+    prefix_lists:
+      redirect: arista.eos.eos
+    eos_prefix_lists:
       redirect: arista.eos.eos
     route_maps:
       redirect: arista.eos.eos
@@ -231,6 +235,8 @@ plugin_routing:
       redirect: arista.eos.eos_ospfv3
     ospf_interfaces:
       redirect: arista.eos.eos_ospf_interfaces
+    prefix_lists:
+      redirect: arista.eos.eos_prefix_lists
     route_maps:
       redirect: arista.eos.eos_route_maps
     static_route:
