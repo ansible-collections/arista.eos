@@ -120,7 +120,7 @@ plugin_routing:
       redirect: arista.eos.eos
     prefix_lists:
       redirect: arista.eos.eos
-    eos_prefix_lists:
+    eos_route_maps:
       redirect: arista.eos.eos
     route_maps:
       redirect: arista.eos.eos
