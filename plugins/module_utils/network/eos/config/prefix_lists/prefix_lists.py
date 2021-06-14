@@ -82,9 +82,11 @@ class Prefix_lists(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            h_del = {}
+            for k, v in iteritems(haved):
+                if k in wantd or not wantd:
+                    h_del.update({k: v})
+            haved = h_del
             wantd = {}
 
         # remove superfluous config for overridden and deleted
