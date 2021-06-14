@@ -63,8 +63,14 @@ class Prefix_lists(ResourceModule):
         """Generate configuration commands to send based on
         want, have and desired state.
         """
-        wantd = {entry["afi"]: entry for entry in self.want}
-        haved = {entry["afi"]: entry for entry in self.have}
+
+        wantd = {}
+        haved = {}
+
+        for entry in self.want:
+            wantd.update({entry["afi"]: entry})
+        for entry in self.have:
+            haved.update({entry["afi"]: entry})
 
         # turn all lists of dicts into dicts prior to merge
         for entry in wantd, haved:

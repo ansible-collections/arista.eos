@@ -108,14 +108,6 @@ options:
       - rendered
       - parsed
       default: merged
-EXAMPLES:
-- merged_example_01.txt
-- replaced_example_01.txt
-- overridden_example_01.txt
-- deleted_example_01.txt
-- gathered_example_01.txt
-- parsed_example_01.txt
-- rendered_example_01.txt
 """
 EXAMPLES = """
 # Using merged

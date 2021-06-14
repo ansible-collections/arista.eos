@@ -12,5 +12,3 @@ plugins/module_utils/network/eos/config/ospf_interfaces/ospf_interfaces.py impor
 plugins/module_utils/network/eos/config/ospfv3/ospfv3.py import-2.6!skip
 plugins/module_utils/network/eos/config/route_maps/route_maps.py import-2.6!skip
 plugins/module_utils/network/eos/config/prefix_lists/prefix_lists.py import-2.6!skip
-plugins/module_utils/network/eos/rm_templates/prefix_lists.py no-self-argument
-plugins/module_utils/network/eos/rm_templates/prefix_lists.py self-cls-assignment

@@ -23,6 +23,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 # diable no-self-use
 # pylint: disable=R0201
 # pylint: disable=W0642
+# pylint: disable=no-self-argument
 
 
 class Prefix_listsTemplate(NetworkTemplate):
