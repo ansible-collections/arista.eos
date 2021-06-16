@@ -1607,6 +1607,7 @@ Parameters
                 </td>
                 <td>
                         <div>Configure routing for a network.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbors</div>
                 </td>
             </tr>
                                 <tr>
@@ -3143,6 +3144,7 @@ Parameters
                 </td>
                 <td>
                         <div>Configure routing for a network.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: networks</div>
                 </td>
             </tr>
                                 <tr>
@@ -5245,6 +5247,7 @@ Parameters
                 </td>
                 <td>
                         <div>Configure routing for a network.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbors</div>
                 </td>
             </tr>
                                 <tr>
@@ -6861,6 +6864,7 @@ Parameters
                 </td>
                 <td>
                         <div>Configure routing for a network.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: networks</div>
                 </td>
             </tr>
                                 <tr>
