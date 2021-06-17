@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fix typo in eos_bgp_address_family redirection.
