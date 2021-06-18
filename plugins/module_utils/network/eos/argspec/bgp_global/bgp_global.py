@@ -259,6 +259,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                 "neighbor": {
                     "elements": "dict",
                     "type": "list",
+                    "aliases": ["neighbors"],
                     "options": {
                         "weight": {"type": "int"},
                         "default_originate": {
@@ -687,6 +688,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "neighbor": {
                             "elements": "dict",
+                            "aliases": ["neighbors"],
                             "type": "list",
                             "options": {
                                 "weight": {"type": "int"},
@@ -934,6 +936,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "network": {
                             "type": "list",
+                            "aliases": ["networks"],
                             "elements": "dict",
                             "options": {
                                 "route_map": {"type": "str"},
@@ -993,6 +996,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                 },
                 "network": {
                     "type": "list",
+                    "aliases": ["networks"],
                     "elements": "dict",
                     "options": {
                         "route_map": {"type": "str"},
