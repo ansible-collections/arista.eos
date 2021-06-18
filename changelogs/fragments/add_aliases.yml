@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Add alias to neighbor and network in bgp_global so that lists of objects are plural.

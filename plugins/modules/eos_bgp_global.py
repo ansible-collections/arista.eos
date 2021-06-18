@@ -596,6 +596,8 @@ options:
             weight:
               description: Weight to assign.
               type: int
+          aliases:
+            - neighbors
         network:
           description: Configure routing for a network.
           type: list
@@ -607,6 +609,8 @@ options:
             route_map:
               description: Name of route map.
               type: str
+          aliases:
+            - networks
         redistribute:
           description: Redistribute routes in to BGP.
           type: list
@@ -969,6 +973,8 @@ options:
                   type: int
             neighbor:
               description: Configure routing for a network.
+              aliases:
+                - neighbors
               type: list
               elements: dict
               suboptions:
@@ -1246,6 +1252,8 @@ options:
                   type: int
             network:
               description: Configure routing for a network.
+              aliases:
+                - networks
               type: list
               elements: dict
               suboptions:

@@ -144,7 +144,7 @@ class TestEosBgpglobalModule(TestEosModule):
                                     mode="update_delay", update_delay=10
                                 )
                             ),
-                            neighbor=[
+                            neighbors=[
                                 dict(
                                     peer="peer1",
                                     peer_group="peer1",
@@ -170,7 +170,7 @@ class TestEosBgpglobalModule(TestEosModule):
                         )
                     ],
                     default_metric=433,
-                    network=[
+                    networks=[
                         dict(address="6.6.6.0/24", route_map="netmap1"),
                         dict(address="10.1.0.0/16"),
                     ],
