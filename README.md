@@ -63,6 +63,7 @@ Name | Description
 [arista.eos.eos_ospf_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospf_interfaces_module.rst)|OSPF Interfaces Resource Module.
 [arista.eos.eos_ospfv2](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv2_module.rst)|OSPFv2 resource module
 [arista.eos.eos_ospfv3](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv3_module.rst)|OSPFv3 resource module
+[arista.eos.eos_prefix_lists](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_prefix_lists_module.rst)|Manages Prefix lists resource module
 [arista.eos.eos_route_maps](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_route_maps_module.rst)|Manages Route Maps resource module
 [arista.eos.eos_static_route](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_static_route_module.rst)|(deprecated, removed after 2022-06-01) Manage static IP routes on Arista EOS network devices
 [arista.eos.eos_static_routes](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_static_routes_module.rst)|Static routes resource module

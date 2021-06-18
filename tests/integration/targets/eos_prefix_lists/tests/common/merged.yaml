@@ -1,0 +1,65 @@
+---
+- debug:
+    msg: Start eos_prefix_lists merged integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _remove_config.yaml
+
+- block:
+
+    - name: merge given prefix-list configuration
+      become: true
+      register: result
+      arista.eos.eos_prefix_lists: &id001
+        config:
+          - afi: "ipv4"
+            prefix_lists:
+              - name: "v401"
+                entries:
+                  - sequence: 25
+                    action: "deny"
+                    address: "45.55.4.0/24"
+                  - sequence: 100
+                    action: "permit"
+                    address: "11.11.2.0/24"
+                    match:
+                      masklen: 32
+                      operator: "ge"
+              - name: "v402"
+                entries:
+                  - action: "deny"
+                    address: "10.1.1.0/24"
+                    sequence: 10
+          - afi: "ipv6"
+            prefix_lists:
+              - name: "v601"
+                entries:
+                  - sequence: 125
+                    action: "deny"
+                    address: "5000:1::/64"
+        state: merged
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: prefix_lists
+
+    - assert:
+        that:
+          - result.commands|length == 7
+          - result.changed == true
+          - result.commands|symmetric_difference(merged.commands) == []
+          - result.after|symmetric_difference(ansible_facts['network_resources']['prefix_lists']) == []
+          - result.after|symmetric_difference(gathered.config) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_prefix_lists: *id001
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml
