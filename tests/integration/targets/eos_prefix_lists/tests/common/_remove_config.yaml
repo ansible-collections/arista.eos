@@ -1,0 +1,8 @@
+---
+- name: Cleanup
+  become: true
+  arista.eos.eos_config:
+    lines:
+      - "no ip prefix-list v401"
+      - "no ip prefix-list v402"
+      - "no ipv6 prefix-list v601"
