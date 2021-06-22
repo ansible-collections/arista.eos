@@ -162,7 +162,7 @@ plugin_routing:
     bgp:
       redirect: arista.eos.eos_bgp
     bgp_address_family:
-      redirect: arista.eos.eos_address_family
+      redirect: arista.eos.eos_bgp_address_family
     bgp_global:
       redirect: arista.eos.eos_bgp_global
     command:
