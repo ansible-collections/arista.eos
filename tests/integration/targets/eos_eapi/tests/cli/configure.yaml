@@ -19,7 +19,7 @@
       - show management api http-commands | json
     provider: '{{ cli }}'
 
-- name: Expect endpoint other ports to be set as configured ( with http disabled, http server port is not affected ).
+- name: Expect endpoint ports to be set as configured ( with http disabled, http server port is not affected ).
   assert:
     that:
       - http_config.stdout[0].httpServer.port == 80
