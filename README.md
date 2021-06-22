@@ -1,7 +1,10 @@
 
 
 # Arista EOS Collection
-[![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/arista.eos) <!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/arista.eos)-->
+[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/ansible.utils)](https://codecov.io/gh/ansible-collections/ansible.utils)
+
+[![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/arista.eos) <!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/arista.eos)](https://codecov.io/gh/ansible-collections/arista.eos)--!>
+
 
 The Ansible Arista EOS collection includes a variety of Ansible content to help automate the management of Arista EOS network appliances.
 
@@ -11,7 +14,7 @@ This collection has been tested against Arista EOS 4.20.10M.
 ## Ansible version compatibility
 
 This collection has been tested against following Ansible versions: **>=2.9.10**.
-Test
+
 Plugins and modules within a collection may be tested with only specific Ansible versions.
 A collection may contain metadata that identifies these versions.
 PEP440 is the schema used to describe the versions of Ansible.
