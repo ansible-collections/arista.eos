@@ -300,3 +300,21 @@ releases:
     - fix_typo_bgp_global.yaml
     - sshkey_cli_change.yaml
     release_date: '2021-05-18'
+  2.2.0:
+    changes:
+      bugfixes:
+      - Add alias to neighbor and network in bgp_global so that lists of objects are
+        plural.
+      - Fix typo in eos_bgp_address_family redirection.
+      minor_changes:
+      - Add eos_prefix_lists resource module.
+    fragments:
+    - add-eos-prefix-lists.yaml
+    - add_aliases.yml
+    - fix_redirection_typo.yml
+    - update_readme.yml
+    modules:
+    - description: Manages Prefix lists resource module
+      name: eos_prefix_lists
+      namespace: ''
+    release_date: '2021-06-22'

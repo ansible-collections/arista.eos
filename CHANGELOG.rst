@@ -5,6 +5,25 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v2.2.0
+======
+
+Minor Changes
+-------------
+
+- Add eos_prefix_lists resource module.
+
+Bugfixes
+--------
+
+- Add alias to neighbor and network in bgp_global so that lists of objects are plural.
+- Fix typo in eos_bgp_address_family redirection.
+
+New Modules
+-----------
+
+- eos_prefix_lists - Manages Prefix lists resource module
+
 v2.1.2
 ======
 
@@ -23,7 +42,6 @@ Minor Changes
 
 - Add eos_route_maps resource module.
 - Add support for available_network_resources key, which allows to fetch the available resources for a platform (https://github.com/ansible-collections/arista.eos/issues/184).
-
 
 Security Fixes
 --------------
