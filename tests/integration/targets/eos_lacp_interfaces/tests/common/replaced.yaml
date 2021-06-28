@@ -38,7 +38,7 @@
         == []
 
 - set_fact:
-    expected_config: '{{ config }} + {{ other_config }}'
+    expected_config: '{{ config + other_config }}'
 
 - assert:
     that:
