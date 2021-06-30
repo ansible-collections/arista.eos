@@ -25,7 +25,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.c
 )
 
 REDISTRIBUTE_PROTOCOLS = frozenset(
-    ["ospf", "ospf3", "rip", "isis", "static", "connected"]
+    ["ospf", "ospfv3", "rip", "isis", "static", "connected"]
 )
 
 
