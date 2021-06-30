@@ -93,7 +93,7 @@ class Neighbors(CliProvider):
             return cmd
 
     def _render_peer_group(self, item, config=None):
-        cmd = "neighbor %s peer-group %s" % (
+        cmd = "neighbor %s peer group %s" % (
             item["neighbor"],
             item["peer_group"],
         )
