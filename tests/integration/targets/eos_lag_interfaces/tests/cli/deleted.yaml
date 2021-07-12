@@ -29,3 +29,5 @@
 - assert:
     that:
       - ansible_facts.network_resources.lag_interfaces == []
+
+- include_tasks: _reset_config.yaml

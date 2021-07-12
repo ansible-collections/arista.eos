@@ -74,6 +74,7 @@
   become: true
   register: result
   arista.eos.eos_vrf:
+    delay: 30
     name: test
     rd: 1:201
     state: present
