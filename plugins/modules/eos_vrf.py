@@ -169,7 +169,6 @@ commands:
 """
 import re
 import time
-import q
 
 from copy import deepcopy
 
@@ -261,7 +260,6 @@ def map_config_to_obj(module):
             continue
 
         splitted_line = re.split(r"\s{2,}", line.strip())
-        q(splitted_line)
 
         if len(splitted_line) == 1:
             index += 1
