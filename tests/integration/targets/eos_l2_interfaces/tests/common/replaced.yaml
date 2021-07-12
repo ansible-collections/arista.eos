@@ -35,12 +35,3 @@
     that:
       - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.after)
         == []
-
-- set_fact:
-    expected_config: "{{ config }} + [{'mode': 'trunk', 'name': 'Ethernet2', 'trunk':\
-      \ {'native_vlan': 20}}, {'name': 'Management1'}]"
-
-- assert:
-    that:
-      - ansible_facts.network_resources.l2_interfaces|symmetric_difference(expected_config)
-        == []

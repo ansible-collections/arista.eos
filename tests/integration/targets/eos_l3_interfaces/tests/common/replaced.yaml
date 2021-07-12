@@ -48,11 +48,3 @@
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after)
         == []
   become: true
-
-- set_fact:
-    expected_config: '{{ config + other_config }}'
-
-- assert:
-    that:
-      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(expected_config)
-        == []
