@@ -158,9 +158,9 @@ def _tmplt_route_map_match_ip_address(config_data):
     command = "match ip address "
     if config_data.get("dynamic"):
         command += "dynamic"
-    if config_data.get("access-list"):
+    if config_data.get("access_list"):
         command += "access-list " + config_data["access_list"]
-    if config_data.get("prefix-list"):
+    if config_data.get("prefix_list"):
         command += "prefix-list " + config_data["prefix_list"]
     return command
 
@@ -170,9 +170,9 @@ def _tmplt_route_map_match_ipv6_address(config_data):
     command = "match ipv6 address "
     if config_data.get("dynamic"):
         command += "dynamic"
-    if config_data.get("access-list"):
+    if config_data.get("access_list"):
         command += "access-list " + config_data["access_list"]
-    if config_data.get("prefix-list"):
+    if config_data.get("prefix_list"):
         command += "prefix-list " + config_data["prefix_list"]
     return command
 
