@@ -88,11 +88,22 @@ class Route_mapsFacts(object):
                     if k == "entries":
                         e_list = []
                         match_dict = {}
+                        match_ip = {}
+                        match_ipv6 = {}
                         set_dict = {}
                         for el in v:
                             for entry_k, entry_v in iteritems(el):
                                 if entry_k == "match":
-                                    match_dict.update(entry_v)
+                                    if "ip" in entry_v or "ipv6" in entry_v:
+                                        for ipk, ipv in iteritems(entry_v):
+                                            if "ip" in entry_v: 
+                                                match_ip.update(ipv)
+                                            if "ipv6" in entry_v: 
+                                                match_ipv6.update(ipv)
+                                        matchv = {"ip": match_ip , "ipv6": match_ipv6}
+                                    else:
+                                        matchv = entry_v
+                                    match_dict.update(matchv)
                                 elif entry_k == "set":
                                     set_dict.update(entry_v)
                                 else:

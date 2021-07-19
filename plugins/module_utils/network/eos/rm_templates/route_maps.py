@@ -154,50 +154,60 @@ def _tmplt_route_map_match_invert_aspath(config_data):
 
 
 def _tmplt_route_map_match_ip_address(config_data):
-    config_data = config_data["entries"]["match"]["ip"]["address"]
-    command = "match ip address "
-    if config_data.get("dynamic"):
-        command += "dynamic"
-    if config_data.get("access-list"):
-        command += "access-list " + config_data["access_list"]
-    if config_data.get("prefix-list"):
-        command += "prefix-list " + config_data["prefix_list"]
+    command = ""
+    config_data = config_data["entries"]["match"]["ip"]
+    if config_data.get("address"):
+        config_data = config_data["address"]
+        command = "match ip address "
+        if config_data.get("dynamic"):
+            command += "dynamic"
+        if config_data.get("access_list"):
+            command += "access-list " + config_data["access_list"]
+        if config_data.get("prefix_list"):
+            command += "prefix-list " + config_data["prefix_list"]
     return command
 
 
 def _tmplt_route_map_match_ipv6_address(config_data):
-    config_data = config_data["entries"]["match"]["ipv6"]["address"]
-    command = "match ipv6 address "
-    if config_data.get("dynamic"):
-        command += "dynamic"
-    if config_data.get("access-list"):
-        command += "access-list " + config_data["access_list"]
-    if config_data.get("prefix-list"):
-        command += "prefix-list " + config_data["prefix_list"]
+    command = ""
+    config_data = config_data["entries"]["match"]["ipv6"]
+    if config_data.get("address"):
+        config_data = config_data["address"]
+        command = "match ipv6 address "
+        if config_data.get("dynamic"):
+            command += "dynamic"
+        if config_data.get("access_list"):
+            command += "access-list " + config_data["access_list"]
+        if config_data.get("prefix_list"):
+            command += "prefix-list " + config_data["prefix_list"]
     return command
 
 
 def _tmplt_route_map_match_ip(config_data):
+    command = ""
     config_data = config_data["entries"]["match"]["ip"]
-    command = "match ip "
-    if config_data.get("next_hop"):
-        command += "next-hop prefix-list " + config_data["next_hop"]
-    elif config_data.get("resolved_next_hop"):
-        command += (
-            "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
-        )
+    if "address" not in config_data:
+        command = "match ip "
+        if config_data.get("next_hop"):
+            command += "next-hop prefix-list " + config_data["next_hop"]
+        elif config_data.get("resolved_next_hop"):
+            command += (
+                "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
+            )
     return command
 
 
 def _tmplt_route_map_match_ipv6(config_data):
+    command = ""
     config_data = config_data["entries"]["match"]["ipv6"]
-    command = "match ipv6 "
-    if config_data.get("next_hop"):
-        command += "next-hop prefix-list " + config_data["next_hop"]
-    elif config_data.get("resolved_next_hop"):
-        command += (
-            "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
-        )
+    if "address" not in config_data:
+        command = "match ipv6 "
+        if config_data.get("next_hop"):
+            command += "next-hop prefix-list " + config_data["next_hop"]
+        elif config_data.get("resolved_next_hop"):
+            command += (
+                "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
+            )
     return command
 
 
@@ -431,7 +441,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*description
-                \s+(?P<desc>\S+)
+                \s+(?P<desc>.+)
                 $""",
                 re.VERBOSE,
             ),
@@ -1366,6 +1376,35 @@ class Route_mapsTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "match.ipaddress",
+            "getval": re.compile(
+                r"""
+                \s*match\sip\saddress
+                \s*(?P<dyn>dynamic)*
+                \s+(?P<attr>\S+\s\S+)
+                *$""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_route_map_match_ip_address,
+            "compval": "entries.match.ip.address",
+            "shared": True,
+            "result": {
+                "entries": [
+                    {
+                        "match": {
+                            "ip": {
+                                "address": {
+                                    "dynamic": "{{ True if dynamic is defined }}",
+                                    "access_list": '{{ attr.split(" ")[1] if attr.split(" ")[0] == "access-list" }}',
+                                    "prefix_list": '{{ attr.split(" ")[1] if attr.split(" ")[0] == "prefix-list" }}',
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+        },
+        {
             "name": "match.ip",
             "getval": re.compile(
                 r"""
@@ -1392,22 +1431,23 @@ class Route_mapsTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "match.ipaddress",
+            "name": "match.ipv6address",
             "getval": re.compile(
                 r"""
-                \s*match\sip\saddress
+                \s*match\sipv6\saddress
                 \s*(?P<dyn>dynamic)*
                 \s+(?P<attr>\S+\s\S+)
-                $""",
+                *$""",
                 re.VERBOSE,
             ),
-            "setval": _tmplt_route_map_match_ip_address,
-            "compval": "entries.match.ip.address",
+            "setval": _tmplt_route_map_match_ipv6_address,
+            "compval": "entries.match.ipv6.address",
+            "shared": True,
             "result": {
                 "entries": [
                     {
                         "match": {
-                            "ip": {
+                            "ipv6": {
                                 "address": {
                                     "dynamic": "{{ True if dynamic is defined }}",
                                     "access_list": '{{ attr.split(" ")[1] if attr.split(" ")[0] == "access-list" }}',
@@ -1439,35 +1479,6 @@ class Route_mapsTemplate(NetworkTemplate):
                             "ipv6": {
                                 "next_hop": "{{ prefix if param == 'next-hop' }}",
                                 "resolved_next_hop": "{{ prefix if param == 'resolved-next-hop' }}"
-                            }
-                        }
-                    }
-                ]
-            },
-        },
-        {
-            "name": "match.ipv6address",
-            "getval": re.compile(
-                r"""
-                \s*match\sipv6\saddress
-                \s*(?P<dyn>dynamic)*
-                \s+(?P<attr>\S+\s\S+)
-                $""",
-                re.VERBOSE,
-            ),
-            "setval": _tmplt_route_map_match_ipv6_address,
-            "compval": "entries.match.ipv6.address",
-            "shared": True,
-            "result": {
-                "entries": [
-                    {
-                        "match": {
-                            "ipv6": {
-                                "address": {
-                                    "dynamic": "{{ True if dynamic is defined }}",
-                                    "access_list": '{{ attr.split(" ")[1] if attr.split(" ")[0] == "access-list" }}',
-                                    "prefix_list": '{{ attr.split(" ")[1] if attr.split(" ")[0] == "prefix-list" }}',
-                                }
                             }
                         }
                     }
