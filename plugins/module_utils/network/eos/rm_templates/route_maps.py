@@ -179,25 +179,31 @@ def _tmplt_route_map_match_ipv6_address(config_data):
 
 def _tmplt_route_map_match_ip(config_data):
     config_data = config_data["entries"]["match"]["ip"]
-    command = "match ip "
-    if config_data.get("next_hop"):
-        command += "next-hop prefix-list " + config_data["next_hop"]
-    elif config_data.get("resolved_next_hop"):
-        command += (
-            "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
-        )
+    if "address" not in config_data:
+        command = "match ip "
+        if config_data.get("next_hop"):
+            command += "next-hop prefix-list " + config_data["next_hop"]
+        elif config_data.get("resolved_next_hop"):
+            command += (
+                "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
+            )
+    else:
+        command = ""
     return command
 
 
 def _tmplt_route_map_match_ipv6(config_data):
     config_data = config_data["entries"]["match"]["ipv6"]
-    command = "match ipv6 "
-    if config_data.get("next_hop"):
-        command += "next-hop prefix-list " + config_data["next_hop"]
-    elif config_data.get("resolved_next_hop"):
-        command += (
-            "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
-        )
+    if "address" not in config_data:
+        command = "match ipv6 "
+        if config_data.get("next_hop"):
+            command += "next-hop prefix-list " + config_data["next_hop"]
+        elif config_data.get("resolved_next_hop"):
+            command += (
+                "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
+            )
+    else:
+        command = ""
     return command
 
 
