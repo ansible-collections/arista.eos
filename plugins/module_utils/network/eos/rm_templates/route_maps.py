@@ -1377,8 +1377,6 @@ class Route_mapsTemplate(NetworkTemplate):
                 r"""
                 \s*match\sip
                 \s+(?P<param>next-hop|resolved-next-hop)
-                \s+prefix-list
-                \s+(?P<prefix>\S+)
                 *$""",
                 re.VERBOSE,
             ),
@@ -1404,6 +1402,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*match\sip\saddress
                 \s*(?P<dyn>dynamic)*
                 \s+(?P<attr>\S+\s\S+)
+                \s+prefix-list
+                \s+(?P<prefix>\S+)
                 $""",
                 re.VERBOSE,
             ),
@@ -1431,8 +1431,6 @@ class Route_mapsTemplate(NetworkTemplate):
                 r"""
                 \s*match\sipv6
                 \s*(?P<param>next-hop|resolved-next-hop)
-                \s+prefix-list
-                \s+(?P<prefix>\S+)
                 $""",
                 re.VERBOSE,
             ),
@@ -1458,6 +1456,8 @@ class Route_mapsTemplate(NetworkTemplate):
                 \s*match\sipv6\saddress
                 \s*(?P<dyn>dynamic)*
                 \s+(?P<attr>\S+\s\S+)
+                \s+prefix-list
+                \s+(?P<prefix>\S+)
                 $""",
                 re.VERBOSE,
             ),
