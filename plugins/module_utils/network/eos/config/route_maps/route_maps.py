@@ -250,7 +250,12 @@ class Route_maps(ResourceModule):
                     else:
                         h = {}
                     self.compare(
-                        parsers=["match.ip", "match.ipaddress", "match.ipv6address", "match.ipv6"],
+                        parsers=[
+                            "match.ip",
+                            "match.ipaddress",
+                            "match.ipv6address",
+                            "match.ipv6",
+                        ],
                         want={"entries": {"match": {k: {k_ip: v_ip}}}},
                         have={"entries": {"match": {k: h}}},
                     )
@@ -265,8 +270,14 @@ class Route_maps(ResourceModule):
             if k in ["ip", "ipv6"]:
                 for hk, hv in iteritems(v):
                     self.compare(
-                        parsers=["match.ip", "match.ipaddress", "match.ipv6address", "match.ipv6"],
-                        want={}, have={"entries": {"match": {k: {hk: hv}}}}
+                        parsers=[
+                            "match.ip",
+                            "match.ipaddress",
+                            "match.ipv6address",
+                            "match.ipv6",
+                        ],
+                        want={},
+                        have={"entries": {"match": {k: {hk: hv}}}},
                     )
                 continue
             self.compare(

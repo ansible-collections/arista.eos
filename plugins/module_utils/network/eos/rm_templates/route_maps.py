@@ -192,7 +192,8 @@ def _tmplt_route_map_match_ip(config_data):
             command += "next-hop prefix-list " + config_data["next_hop"]
         elif config_data.get("resolved_next_hop"):
             command += (
-                "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
+                "resolved-next-hop prefix-list "
+                + config_data["resolved_next_hop"]
             )
     return command
 
@@ -206,7 +207,8 @@ def _tmplt_route_map_match_ipv6(config_data):
             command += "next-hop prefix-list " + config_data["next_hop"]
         elif config_data.get("resolved_next_hop"):
             command += (
-                "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
+                "resolved-next-hop prefix-list "
+                + config_data["resolved_next_hop"]
             )
     return command
 
