@@ -55,6 +55,7 @@ class Prefix_listsArgs(object):  # pylint: disable=R0903
                                 "action": {
                                     "type": "str",
                                     "choices": ["deny", "permit"],
+                                    "required": True,
                                 },
                                 "address": {"type": "str"},
                                 "match": {
