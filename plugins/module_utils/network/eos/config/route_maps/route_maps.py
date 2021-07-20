@@ -243,12 +243,43 @@ class Route_maps(ResourceModule):
         w_match = want.pop("match", {})
         h_match = have.pop("match", {})
         for k, v in iteritems(w_match):
+            if k in ["ip", "ipv6"]:
+                for k_ip, v_ip in iteritems(v):
+                    if h_match.get(k):
+                        h = {k_ip: h_match[k].pop(k_ip, {})}
+                    else:
+                        h = {}
+                    self.compare(
+                        parsers=[
+                            "match.ip",
+                            "match.ipaddress",
+                            "match.ipv6address",
+                            "match.ipv6",
+                        ],
+                        want={"entries": {"match": {k: {k_ip: v_ip}}}},
+                        have={"entries": {"match": {k: h}}},
+                    )
+                h_match.pop(k, {})
+                continue
             self.compare(
                 parsers=parsers,
                 want={"entries": {"match": {k: v}}},
                 have={"entries": {"match": {k: h_match.pop(k, {})}}},
             )
         for k, v in iteritems(h_match):
+            if k in ["ip", "ipv6"]:
+                for hk, hv in iteritems(v):
+                    self.compare(
+                        parsers=[
+                            "match.ip",
+                            "match.ipaddress",
+                            "match.ipv6address",
+                            "match.ipv6",
+                        ],
+                        want={},
+                        have={"entries": {"match": {k: {hk: hv}}}},
+                    )
+                continue
             self.compare(
                 parsers=parsers, want={}, have={"entries": {"match": {k: v}}}
             )

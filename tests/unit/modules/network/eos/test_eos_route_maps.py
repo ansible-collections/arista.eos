@@ -281,7 +281,9 @@ class TestEosRoute_MapsModule(TestEosModule):
                             dict(
                                 action="permit",
                                 match=dict(
-                                    ipv6=dict(resolved_next_hop="listr")
+                                    ipv6=dict(
+                                        address=dict(prefix_list="test_prefix")
+                                    )
                                 ),
                                 set=dict(
                                     metric=dict(igp_param="igp-nexthop-cost")
@@ -291,6 +293,11 @@ class TestEosRoute_MapsModule(TestEosModule):
                             dict(
                                 action="deny",
                                 sequence=90,
+                                match=dict(
+                                    ip=dict(
+                                        address=dict(prefix_list="test_prefix")
+                                    )
+                                ),
                                 set=dict(
                                     extcommunity=dict(
                                         rt=dict(vpn="22:11", delete=True)
@@ -307,12 +314,13 @@ class TestEosRoute_MapsModule(TestEosModule):
             "no route-map mapmerge deny 25",
             "no route-map mapmerge2 deny 45",
             "route-map mapmerge permit 10",
-            "match ipv6 resolved-next-hop prefix-list listr",
+            "match ipv6 address prefix-list test_prefix",
             "set metric igp-nexthop-cost",
             "no match router-id prefix-list 22",
             "no set bgp bestpath as-path weight 20",
             "no description",
             "route-map mapmerge deny 90",
+            "match ip address prefix-list test_prefix",
             "set extcommunity rt 22:11 delete",
             "set ip next-hop unchanged",
         ]
