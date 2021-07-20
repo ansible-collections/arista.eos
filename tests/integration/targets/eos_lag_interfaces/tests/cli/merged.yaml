@@ -72,3 +72,5 @@
       - result.failed == true
       - result.msg is defined
       - '"Cannot change mode" in result.module_stderr'
+
+- include_tasks: _reset_config.yaml

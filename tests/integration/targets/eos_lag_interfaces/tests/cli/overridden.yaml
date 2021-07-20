@@ -39,3 +39,5 @@
     that:
       - ansible_facts.network_resources.lag_interfaces|symmetric_difference(config)|length
         == 0
+
+- include_tasks: _reset_config.yaml

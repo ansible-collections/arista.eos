@@ -38,31 +38,6 @@
     config: '{{ config2 }}'
     state: merged
 
-
-- set_fact:
-    expected_config:
-
-      - name: Ethernet1
-        mode: trunk
-        access:
-          vlan: 20
-        trunk:
-          native_vlan: 10
-
-      - name: Ethernet2
-        mode: trunk
-        access:
-          vlan: 30
-        trunk:
-          native_vlan: 20
-
-      - name: Management1
-
-- assert:
-    that:
-      - result.after|symmetric_difference(expected_config)
-        == []
-
 - name: Revert back to base config using facts round trip
   become: true
   register: revert

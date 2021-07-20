@@ -1,0 +1,3 @@
+---
+trivial:
+  - Remove expected_config var from cleanup in integration tests.

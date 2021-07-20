@@ -1,5 +1,6 @@
 black ; python_version > '3.5'
 coverage==4.5.4
+cffi==1.14.5
 flake8
 mock ; python_version < '3.5'
 pexpect
