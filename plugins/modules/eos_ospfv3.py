@@ -676,6 +676,7 @@ EXAMPLES = """
 # veos#show running-config | section ospfv3
 # router ospfv3 vrf vrfmerge
 #    router-id 2.2.2.2
+# test
 #    fips restrictions
 #    timers pacing flood 55
 #    !
