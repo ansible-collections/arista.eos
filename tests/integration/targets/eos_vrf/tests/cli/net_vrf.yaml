@@ -6,6 +6,7 @@
   ansible.netcommon.net_vrf:
     name: test
     state: absent
+    provider: '{{ cli }}'
 
 - name: Create vrf using platform agnostic vrf module
   become: true
@@ -14,6 +15,7 @@
     name: test
     rd: 1:200
     state: present
+    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -27,5 +29,6 @@
   ansible.netcommon.net_vrf:
     name: test
     state: absent
+    provider: '{{ cli }}'
 
 - debug: msg="END eos cli/net_vrf.yaml on connection={{ ansible_connection }}"
