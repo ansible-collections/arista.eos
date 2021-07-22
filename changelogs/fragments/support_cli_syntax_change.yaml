@@ -1,0 +1,3 @@
+---
+breaking_changes:
+  - Add support for syntax changes in release train 4.23 and after.
