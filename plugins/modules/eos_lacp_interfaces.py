@@ -65,6 +65,8 @@ options:
         choices:
         - fast
         - normal
+        aliases:
+        - timer
   running_config:
     description:
     - This option is used only with state I(parsed).

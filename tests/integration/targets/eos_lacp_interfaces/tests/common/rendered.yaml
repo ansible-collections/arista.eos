@@ -20,9 +20,9 @@
 - set_fact:
     rendered:
       - "interface Ethernet1"
-      - "lacp rate fast"
+      - "lacp timer fast"
       - "interface Ethernet2"
-      - "lacp rate normal"
+      - "lacp timer normal"
 
 - name: Assert
   assert:
