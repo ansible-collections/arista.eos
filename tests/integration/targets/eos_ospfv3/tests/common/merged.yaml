@@ -85,11 +85,10 @@
                   router_id: "10.17.0.3"
                   timers:
                     out_delay: 10
-                    throttle:
+                    spf:
                       initial: 56
                       max: 56
                       min: 56
-                      spf: true
               fips_restrictions: true
               vrf: "vrf02"
 

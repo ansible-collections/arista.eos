@@ -238,23 +238,36 @@ def _tmplt_ospf_redistribute(config_data):
     return command
 
 
-def _tmplt_ospf_timers_throttle(config_data):
-    if "throttle" in config_data["timers"]:
-        command = "timers throttle"
-        if "lsa" in config_data["timers"]["throtle"]:
-            if config_data["timers"]["throtle"].get("lsa"):
-                command += " lsa all"
-        if "spf" in config_data["timers"]["throtle"]:
-            if config_data["timers"]["throtle"].get("spf"):
-                command += " spf"
-        if "initial" in config_data["timers"]["throttle"]:
-            command += " {initial}".format(**config_data["timers"]["throttle"])
-        if "min" in config_data["timers"]["throttle"]:
-            command += " {min}".format(**config_data["timers"]["throttle"])
-        if "max" in config_data["timers"]["throttle"]:
-            command += " {max}".format(**config_data["timers"]["max"])
+def _tmplt_ospf_timers_lsa(config_data):
+    import q
 
-        return command
+    q(config_data)
+    command = ""
+    if "lsa" in config_data["timers"]:
+        command += "timers lsa {direction}".format(
+            **config_data["timers"]["lsa"]
+        )
+        if config_data["timers"]["lsa"]["direction"] == "rx":
+            command += " min interval "
+        else:
+            command += " delay initial "
+        if config_data["timers"]["lsa"].get("initial"):
+            command += str(config_data["timers"]["lsa"]["initial"])
+        if config_data["timers"]["lsa"].get("min"):
+            command += str(config_data["timers"]["lsa"]["min"])
+        if config_data["timers"]["lsa"].get("max"):
+            command += str(config_data["timers"]["lsa"]["max"])
+    return command
+
+
+def _tmplt_ospf_timers_spf(config_data):
+    command = ""
+    if "spf" in config_data["timers"]:
+        command += "timers spf delay initial "
+        command += "{initial} {min} {max}".format(
+            **config_data["timers"]["spf"]
+        )
+    return command
 
 
 def _tmplt_ospf_bfd(config_data):
@@ -972,27 +985,6 @@ class Ospfv3Template(NetworkTemplate):
             },
         },
         {
-            "name": "timers.lsa",
-            "getval": re.compile(
-                r"""\s+timers
-                    \slsa
-                    \sarrival
-                    \s(?P<lsa>\d+)
-                    *$""",
-                re.VERBOSE,
-            ),
-            "setval": "timers lsa arrival {{ timers.lsa }}",
-            "result": {
-                "processes": {
-                    "address_family": {
-                        '{{ afi|default("router", true) }}': {
-                            "timers": {"lsa": "{{ lsa }}"}
-                        }
-                    }
-                }
-            },
-        },
-        {
             "name": "timers.out_delay",
             "getval": re.compile(
                 r"""\s+timers
@@ -1034,25 +1026,27 @@ class Ospfv3Template(NetworkTemplate):
             },
         },
         {
-            "name": "timers.throttle.lsa",
+            "name": "timers.lsa",
             "getval": re.compile(
                 r"""\s+timers
-                    \sthrottle
-                    \s*(?P<lsa>lsa all)*
+                    \s(?P<lsa>lsa)
+                    \s(?P<dir>rx|tx)
+                    \s*(min\sinterval)*
+                    \s*(delay\sinitial)*
                     \s*(?P<initial>\d+)*
                     \s*(?P<min>\d+)*
                     \s*(?P<max>\d+)
                     *$""",
                 re.VERBOSE,
             ),
-            "setval": "timers throttle lsa all {{ timers.throttle.initial }} {{ timers.throttle.min }} {{ timers.throttle.max }}",
+            "setval": _tmplt_ospf_timers_lsa,
             "result": {
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "timers": {
-                                "throttle": {
-                                    "lsa": "{{ True if lsa is defined }}",
+                                "lsa": {
+                                    "direction": "{{ dir }}",
                                     "initial": "{{ initial }}",
                                     "min": "{{ min_delay }}",
                                     "max": "{{ max_delay }}",
@@ -1064,25 +1058,24 @@ class Ospfv3Template(NetworkTemplate):
             },
         },
         {
-            "name": "timers.throttle.spf",
+            "name": "timers.spf",
             "getval": re.compile(
                 r"""\s+timers
-                    \sthrottle
-                    \s*(?P<spf>spf)
+                    \s+(?P<spf>spf)
+                    \s+(delay\sinitial)
                     \s*(?P<initial>\d+)
                     \s*(?P<min>\d+)
                     \s*(?P<max>\d+)
                     *$""",
                 re.VERBOSE,
             ),
-            "setval": "timers throttle spf {{ timers.throttle.initial }} {{ timers.throttle.min }} {{ timers.throttle.max }}",
+            "setval": _tmplt_ospf_timers_spf,
             "result": {
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "timers": {
-                                "throttle": {
-                                    "spf": "{{ True if spf is defined }}",
+                                "spf": {
                                     "initial": "{{ initial }}",
                                     "min": "{{ min }}",
                                     "max": "{{ max }}",

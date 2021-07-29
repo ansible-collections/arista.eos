@@ -42,7 +42,7 @@ merged:
     - fips restrictions
     - router-id 10.17.0.3
     - timers out-delay 10
-    - timers throttle spf 56 56 56
+    - timers spf delay initial 56 56 56
     - exit
     - fips restrictions
     - exit
@@ -135,11 +135,10 @@ deleted:
             router_id: "10.17.0.3"
             timers:
               out_delay: 10
-              throttle:
+              spf:
                 initial: 56
                 max: 56
                 min: 56
-                spf: true
         fips_restrictions: true
         vrf: "vrf02"
 replaced:
@@ -149,12 +148,12 @@ replaced:
     - no fips restrictions
     - no router-id
     - no timers out-delay 10
-    - no timers throttle spf 56 56 56
+    - no timers spf delay initial 56 56 56
     - redistribute static
     - exit
     - address-family ipv4
     - area 0.0.0.3 range 60.1.0.0/16 cost 30
-    - timers lsa arrival 10
+    - timers lsa rx min interval 10
     - exit
     - no fips restrictions
     - exit
@@ -234,11 +233,10 @@ replaced:
             router_id: "10.17.0.3"
             timers:
               out_delay: 10
-              throttle:
+              spf:
                 initial: 56
                 max: 56
                 min: 56
-                spf: true
         fips_restrictions: true
         vrf: "vrf02"
   after:
@@ -308,7 +306,9 @@ replaced:
                   - address: "60.1.0.0/16"
                     cost: 30
             timers:
-              lsa: 10
+              lsa:
+                direction: "rx"
+                initial: 10
           - afi: "ipv6"
             areas:
               - area_id: "0.0.0.1"
@@ -327,12 +327,11 @@ overridden:
     - no fips restrictions
     - no router-id
     - no timers out-delay 10
-    - no timers throttle spf 56 56 56
+    - no timers spf delay initial 56 56 56
     - redistribute static
     - exit
     - address-family ipv4
     - area 0.0.0.3 range 60.1.0.0/16 cost 30
-    - timers lsa arrival 10
     - exit
     - no fips restrictions
     - exit
@@ -345,8 +344,6 @@ overridden:
                 ranges:
                   - address: "60.1.0.0/16"
                     cost: 30
-            timers:
-              lsa: 10
           - afi: "ipv6"
             areas:
               - area_id: "0.0.0.1"
@@ -433,11 +430,10 @@ populate:
             router_id: "10.17.0.3"
             timers:
               out_delay: 10
-              throttle:
+              spf:
                 initial: 56
                 max: 56
                 min: 56
-                spf: true
         fips_restrictions: true
         vrf: "vrf02"
 rtt:
@@ -481,7 +477,7 @@ rtt:
     - fips restrictions
     - router-id 10.17.0.3
     - timers out-delay 10
-    - timers throttle spf 56 56 56
+    - timers spf delay initial 56 56 56
     - exit
     - fips restrictions
     - exit
@@ -548,10 +544,9 @@ rtt:
             router_id: "10.17.0.3"
             timers:
               out_delay: 10
-              throttle:
+              spf:
                 initial: 56
                 max: 56
                 min: 56
-                spf: true
         fips_restrictions: true
         vrf: "vrf02"

@@ -72,11 +72,10 @@
                   router_id: "10.17.0.3"
                   timers:
                     out_delay: 10
-                    throttle:
+                    spf:
                       initial: 56
                       max: 56
                       min: 56
-                      spf: true
               fips_restrictions: true
               vrf: "vrf02"
 
@@ -113,8 +112,6 @@
                       ranges:
                         - address: 60.1.0.0/16
                           cost: 30
-                  timers:
-                    lsa: 10
               vrf: "vrf02"
 
     - name: Revert back to base config using facts round trip

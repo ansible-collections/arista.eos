@@ -286,16 +286,10 @@ options:
               pacing:
                 description: Configure OSPF packet pacing.
                 type: int
-              throttle:
-                description: Configure SPF timers
+              spf:
+                description: Configure OSPFv3 spf timers.
                 type: dict
                 suboptions:
-                  lsa:
-                    description: Configure threshold for retransmission of lsa
-                    type: bool
-                  spf:
-                    description: Configure time between SPF calculations
-                    type: bool
                   initial:
                     description: Initial SPF schedule delay in msecs.
                     type: int
@@ -305,7 +299,23 @@ options:
                   max:
                     description: Max wait time between two SPFs in msecs.
                     type: int
-
+              lsa:
+                description: Configure OSPFv3 LSA timers.
+                type: dict
+                suboptions:
+                  direction:
+                    description: Configure OSPFv3 LSA receiving/transmission timers.
+                    type: str
+                    choices: ["rx", "tx"]
+                  initial:
+                    description: Initial SPF schedule delay in msecs.
+                    type: int
+                  min:
+                    description: Min Hold time between two SPFs in msecs
+                    type: int
+                  max:
+                    description: Max wait time between two SPFs in msecs.
+                    type: int
           address_family:
             description: Enable address family and enter its config mode
             type: list
@@ -609,16 +619,27 @@ options:
                   pacing:
                     description: Configure OSPF packet pacing.
                     type: int
-                  throttle:
-                    description: Configure SPF timers
+                  spf:
+                    description: Configure OSPFv3 spf timers.
                     type: dict
                     suboptions:
-                      lsa:
-                        description: Configure threshold for retransmission of lsa
-                        type: bool
-                      spf:
-                        description: Configure time between SPF calculations
-                        type: bool
+                      initial:
+                        description: Initial SPF schedule delay in msecs.
+                        type: int
+                      min:
+                        description: Min Hold time between two SPFs in msecs
+                        type: int
+                      max:
+                        description: Max wait time between two SPFs in msecs.
+                        type: int
+                  lsa:
+                    description: Configure OSPFv3 LSA timers.
+                    type: dict
+                    suboptions:
+                      direction:
+                        description: Configure OSPFv3 LSA receiving/transmission timers.
+                        type: str
+                        choices: ["rx", "tx"]
                       initial:
                         description: Initial SPF schedule delay in msecs.
                         type: int
@@ -1227,7 +1248,7 @@ EXAMPLES = """
 #       distance ospf intra-area 200
 #       fips restrictions
 #       area 0.0.0.1 stub
-#       timers throttle spf 56 56 56
+#       timers spf delay initial 56 56 56
 #       timers out-delay 10
 
 
@@ -1366,11 +1387,10 @@ EXAMPLES = """
 #                         "router_id": "10.17.0.3",
 #                         "timers": {
 #                             "out_delay": 10,
-#                             "throttle": {
+#                             "spf": {
 #                                 "initial": 56,
 #                                 "max": 56,
 #                                 "min": 56,
-#                                 "spf": true
 #                             }
 #                         }
 #                     }

@@ -127,14 +127,24 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                         "timers": {
                             "type": "dict",
                             "options": {
-                                "throttle": {
+                                "spf": {
                                     "type": "dict",
                                     "options": {
                                         "max": {"type": "int"},
                                         "initial": {"type": "int"},
                                         "min": {"type": "int"},
-                                        "spf": {"type": "bool"},
-                                        "lsa": {"type": "bool"},
+                                    },
+                                },
+                                "lsa": {
+                                    "type": "dict",
+                                    "options": {
+                                        "max": {"type": "int"},
+                                        "initial": {"type": "int"},
+                                        "min": {"type": "int"},
+                                        "direction": {
+                                            "type": "str",
+                                            "choices": ["rx", "tx"],
+                                        },
                                     },
                                 },
                                 "out_delay": {"type": "int"},
@@ -337,19 +347,28 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                 "timers": {
                                     "type": "dict",
                                     "options": {
-                                        "throttle": {
+                                        "spf": {
                                             "type": "dict",
                                             "options": {
                                                 "max": {"type": "int"},
                                                 "initial": {"type": "int"},
                                                 "min": {"type": "int"},
-                                                "spf": {"type": "bool"},
-                                                "lsa": {"type": "bool"},
+                                            },
+                                        },
+                                        "lsa": {
+                                            "type": "dict",
+                                            "options": {
+                                                "max": {"type": "int"},
+                                                "initial": {"type": "int"},
+                                                "min": {"type": "int"},
+                                                "direction": {
+                                                    "type": "str",
+                                                    "choices": ["rx", "tx"],
+                                                },
                                             },
                                         },
                                         "out_delay": {"type": "int"},
                                         "pacing": {"type": "int"},
-                                        "lsa": {"type": "int"},
                                     },
                                 },
                                 "shutdown": {"type": "bool"},

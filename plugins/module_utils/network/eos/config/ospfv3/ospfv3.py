@@ -75,11 +75,10 @@ class Ospfv3(ResourceModule):
             "redistribute",
             "router_id",
             "shutdown",
-            "timers.lsa",
             "timers.out_delay",
             "timers.pacing",
-            "timers.throttle.lsa",
-            "timers.throttle.spf",
+            "timers.lsa",
+            "timers.spf",
         ]
 
     def execute_module(self):
