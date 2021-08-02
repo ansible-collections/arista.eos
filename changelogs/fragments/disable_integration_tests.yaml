@@ -1,0 +1,3 @@
+---
+trivial:
+  - Disable integration tests until cli change fix PRs are merged for eos 4.24
