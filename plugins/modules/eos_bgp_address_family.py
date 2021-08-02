@@ -190,15 +190,22 @@ options:
                   type: str
                   choices: ['internal', 'external', 'nssa_external_1', 'nssa_external_2']
             route_target:
-              description: Route target
+              description: Route target.
               type: dict
               suboptions:
-                mode:
-                  description: route import or route export.
+                action:
+                  description: Route action.
                   type: str
                   choices: ['both', 'import', 'export']
+                type:
+                  description: Type of address fmaily
+                  type: str
+                  choices: ['evpn', 'vpn-ipv4', 'vpn-ipv6']
+                route_map:
+                  description: Name of a route map.
+                  type: str
                 target:
-                  description: route target
+                  description: Route Target.
                   type: str
             vrf:
               description: name of the VRF in which BGP will be configured.

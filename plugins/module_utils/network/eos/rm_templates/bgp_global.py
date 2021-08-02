@@ -150,10 +150,8 @@ def _tmplt_bgp_params(config_data):
     elif config_data["bgp_params"].get("log_neighbor_changes"):
         command += " log-neighbor-changes"
     elif config_data["bgp_params"].get("missing_policy"):
-        command += (
-            " missing-policy direction {direction} action {action}".format(
-                **config_data["bgp_params"]["missing_policy"]
-            )
+        command += " missing-policy direction {direction} action {action}".format(
+            **config_data["bgp_params"]["missing_policy"]
         )
     elif config_data["bgp_params"].get("monitoring"):
         command += " monitoring"
@@ -491,9 +489,14 @@ def _tmplt_bgp_network(config_data):
 
 
 def _tmplt_bgp_route_target(config_data):
-    command = "route-target {action} {target}".format(
-        **config_data["route_target"]
-    )
+    command = "route-target {action}".format(**config_data["route_target"])
+    if config_data["route_target"].get("type"):
+        command += " {type}".format(**config_data["route_target"])
+    if config_data["route_target"].get("route_map"):
+        command += " {route_map}".format(**config_data["route_target"])
+    if config_data["route_target"].get("target"):
+        command += " {target}".format(**config_data["route_target"])
+
     return command
 
 
@@ -2664,6 +2667,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                 r"""
                 \s*route-target
                 \s+(?P<action>\S+)
+                \s*(?P<type>evpn|vpn-ipv4|vpn-ipv6)*
+                \s*(?P<map>route-map\s\S+)*
                 \s+(?P<target>\S+)
                 *$""",
                 re.VERBOSE,
@@ -2675,6 +2680,8 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "route_target": {
                             "action": "{{ action }}",
+                            "type": "{{ type }}",
+                            "route_map": "{{ map.split(" ")[1] }}",
                             "target": "{{ target }}",
                         }
                     }

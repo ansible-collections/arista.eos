@@ -1291,6 +1291,13 @@ options:
                   description: Route action.
                   type: str
                   choices: ['both', 'import', 'export']
+                type:
+                  description: Type of address fmaily
+                  type: str
+                  choices: ['evpn', 'vpn-ipv4', 'vpn-ipv6']
+                route_map:
+                  description: Name of a route map.
+                  type: str
                 target:
                   description: Route Target.
                   type: str
