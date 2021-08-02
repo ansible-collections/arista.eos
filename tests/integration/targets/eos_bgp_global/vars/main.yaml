@@ -7,7 +7,7 @@ merged:
     - network 6.6.6.0/24 route-map netmap1
     - network 10.1.0.0/16
     - default-metric 433
-    - route-target export 44:22
+    - route-target export vpn-ipv4 44:22
     - exit
     - neighbor peer1 maximum-routes 12000
     - neighbor peer1 peer group
@@ -121,13 +121,13 @@ replaced:
             isis_level: "level-2"
 populate:
   global:
-    as_number: "65536"
     aggregate_address:
       - address: "192.0.2.0/24"
         attribute_map: "attrmap"
       - address: "203.0.113.0/24"
         as_set: true
         summary_only: true
+    as_number: "65536"
     neighbor:
       - maximum_received_routes:
           count: 12000
@@ -142,8 +142,8 @@ populate:
         peer: "peer2"
         peer_group: "peer2"
     redistribute:
-      - protocol: "ospf"
-        ospf_route: "nssa_external_2"
+      - ospf_route: "nssa_external_2"
+        protocol: "ospf"
       - protocol: "static"
       - protocol: "rip"
         route_map: "MAP01"
@@ -155,18 +155,19 @@ populate:
         mode: "recursive"
     vlan_aware_bundle: "bundle1 bundle3"
     vrfs:
-      - vrf: "vrf01"
-        default_metric: 433
+      - default_metric: 433
         network:
           - address: "10.1.0.0/16"
           - address: "6.6.6.0/24"
             route_map: "netmap1"
         redistribute:
-          - protocol: "isis"
-            isis_level: "level-2"
+          - isis_level: "level-2"
+            protocol: "isis"
         route_target:
           action: "export"
           target: "44:22"
+          type: "vpn-ipv4"
+        vrf: "vrf01"
 
 rendered:
   commands:
