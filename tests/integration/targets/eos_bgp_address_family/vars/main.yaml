@@ -3,7 +3,7 @@ merged:
   commands:
     - router bgp 65536
     - address-family ipv4
-    - redistribute ospf3 match external
+    - redistribute ospfv3 match external
     - network 192.0.2.0/24
     - network 203.0.113.0/24 route-map MAP01
     - neighbor 192.0.2.1 activate
@@ -23,7 +23,7 @@ merged:
     address_family:
       - afi: "ipv4"
         redistribute:
-          - protocol: "ospf3"
+          - protocol: "ospfv3"
             ospf_route: "external"
         network:
           - address: "192.0.2.0/24"
@@ -67,12 +67,12 @@ replaced:
     - router bgp 65536
     - vrf vrft
     - address-family ipv4
-    - redistribute ospf3 match external
+    - redistribute ospfv3 match external
     - exit
     - exit
     - address-family ipv4
     - redistribute isis level-2
-    - no redistribute ospf3 match external
+    - no redistribute ospfv3 match external
     - no network 192.0.2.0/24
     - no network 203.0.113.0/24 route-map MAP01
     - no neighbor peer2 default-originate always
@@ -83,7 +83,7 @@ replaced:
     address_family:
       - afi: "ipv4"
         redistribute:
-          - protocol: "ospf3"
+          - protocol: "ospfv3"
             ospf_route: "external"
         network:
           - address: "192.0.2.0/24"
@@ -120,7 +120,7 @@ replaced:
       - afi: "ipv4"
         vrf: "vrft"
         redistribute:
-          - protocol: "ospf3"
+          - protocol: "ospfv3"
             ospf_route: "external"
         bgp_params:
           additional_paths: "receive"
@@ -130,7 +130,7 @@ overridden:
     - router bgp 65536
     - vrf vrft
     - address-family ipv4
-    - redistribute ospf3 match external
+    - redistribute ospfv3 match external
     - exit
     - exit
     - address-family ipv6
@@ -145,7 +145,7 @@ overridden:
       - afi: "ipv4"
         vrf: "vrft"
         redistribute:
-          - protocol: "ospf3"
+          - protocol: "ospfv3"
             ospf_route: "external"
         bgp_params:
           additional_paths: "receive"
@@ -172,7 +172,7 @@ gathered:
             route_map: "MAP01"
         redistribute:
           - ospf_route: "external"
-            protocol: "ospf3"
+            protocol: "ospfv3"
       - afi: "ipv4"
         bgp_params:
           additional_paths: "receive"

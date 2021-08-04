@@ -177,7 +177,7 @@ options:
                 protocol:
                   description: Routes to be redistributed.
                   type: str
-                  choices: ['isis', 'ospf3', 'dhcp']
+                  choices: ['isis', 'ospfv3', 'dhcp']
                 route_map:
                   description: Route map reference.
                   type: str
@@ -237,7 +237,7 @@ EXAMPLES = """
         address_family:
           - afi: "ipv4"
             redistribute:
-              - protocol: "ospf3"
+              - protocol: "ospfv3"
                 ospf_route: "external"
             network:
               - address: "1.1.1.0/24"
@@ -272,7 +272,7 @@ EXAMPLES = """
 #       neighbor 1.1.1.1 activate
 #       network 1.1.1.0/24
 #       network 1.5.1.0/24 route-map MAP01
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    address-family ipv6
 #       bgp additional-paths receive
@@ -294,7 +294,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -334,7 +334,7 @@ EXAMPLES = """
 #     "commands": [
 #         "router bgp 10",
 #         "address-family ipv4",
-#         "redistribute ospf3 match external",
+#         "redistribute ospfv3 match external",
 #         "network 1.1.1.0/24",
 #         "network 1.5.1.0/24 route-map MAP01",
 #         "exit",
@@ -364,7 +364,7 @@ EXAMPLES = """
 #       neighbor 1.1.1.1 activate
 #       network 1.1.1.0/24
 #       network 1.5.1.0/24 route-map MAP01
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    address-family ipv6
 #       bgp additional-paths receive
@@ -386,7 +386,7 @@ EXAMPLES = """
           - afi: "ipv6"
             vrf: "vrft"
             redistribute:
-              - protocol: "ospf3"
+              - protocol: "ospfv3"
                 ospf_route: "external"
           - afi: "ipv6"
             redistribute:
@@ -406,7 +406,7 @@ EXAMPLES = """
 #       neighbor 1.1.1.1 activate
 #       network 1.1.1.0/24
 #       network 1.5.1.0/24 route-map MAP01
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    address-family ipv6
 #       neighbor peer2 default-originate always
@@ -414,7 +414,7 @@ EXAMPLES = """
 #    !
 #    vrf vrft
 #       address-family ipv6
-#          redistribute ospf3 match external
+#          redistribute ospfv3 match external
 # veos(config-router-bgp)#
 #
 #
@@ -442,7 +442,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -468,7 +468,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ],
 #                 "vrf": "vrft"
@@ -498,7 +498,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -539,7 +539,7 @@ EXAMPLES = """
 #         "router bgp 10",
 #         "vrf vrft",
 #         "address-family ipv6",
-#         "redistribute ospf3 match external",
+#         "redistribute ospfv3 match external",
 #         "no redistribute isis level-2",
 #         "no route-target export 33:11",
 #         "exit",
@@ -564,7 +564,7 @@ EXAMPLES = """
 #       neighbor 1.1.1.1 activate
 #       network 1.1.1.0/24
 #       network 1.5.1.0/24 route-map MAP01
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    address-family ipv6
 #       neighbor peer2 default-originate always
@@ -572,7 +572,7 @@ EXAMPLES = """
 #    !
 #    vrf vrft
 #       address-family ipv6
-#          redistribute ospf3 match external
+#          redistribute ospfv3 match external
 # veos(config-router-bgp)#
 
   - name: Overridden
@@ -602,7 +602,7 @@ EXAMPLES = """
 #    !
 #    vrf vrft
 #       address-family ipv6
-#          redistribute ospf3 match external
+#          redistribute ospfv3 match external
 # veos(config-router-bgp)#
 #
 # Module Execution:
@@ -628,7 +628,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ],
 #                 "vrf": "vrft"
@@ -658,7 +658,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -684,7 +684,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ],
 #                 "vrf": "vrft"
@@ -696,7 +696,7 @@ EXAMPLES = """
 #     "commands": [
 #         "router bgp 10",
 #         "address-family ipv4",
-#         "no redistribute ospf3 match external",
+#         "no redistribute ospfv3 match external",
 #         "no network 1.1.1.0/24",
 #         "no network 1.5.1.0/24 route-map MAP01",
 #         "neighbor peer2 default-originate always",
@@ -722,7 +722,7 @@ EXAMPLES = """
 #       no neighbor 1.1.1.1 activate
 #       network 1.1.1.0/24
 #       network 1.5.1.0/24 route-map MAP01
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    address-family ipv6
 #       bgp additional-paths receive
@@ -732,7 +732,7 @@ EXAMPLES = """
 #       address-family ipv6
 #          route-target export 33:11
 #          redistribute isis level-2
-#          redistribute ospf3 match external
+#          redistribute ospfv3 match external
 # veos(config-router-bgp)#
 
 
@@ -764,7 +764,7 @@ EXAMPLES = """
 #       neighbor peer2 default-originate always
 #       network 1.1.1.0/24
 #       network 1.5.1.0/24 route-map MAP01
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    address-family ipv6
 #       bgp additional-paths receive
@@ -804,7 +804,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -859,7 +859,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -886,7 +886,7 @@ EXAMPLES = """
 #                     },
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ],
 #                 "route_target": {
@@ -925,7 +925,7 @@ EXAMPLES = """
 #       no neighbor 1.1.1.1 activate
 #       network 1.1.1.0/24
 #       network 1.5.1.0/24 route-map MAP01
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    address-family ipv6
 #       bgp additional-paths receive
@@ -960,7 +960,7 @@ EXAMPLES = """
 #       no neighbor 1.1.1.1 activate
 #       network 1.1.1.0/24
 #       network 1.5.1.0/24 route-map MAP01
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    vrf vrft
 #       address-family ipv4
@@ -996,7 +996,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -1037,7 +1037,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -1082,7 +1082,7 @@ EXAMPLES = """
 #    address-family ipv4
 #       bgp additional-paths receive
 #       neighbor peer2 default-originate always
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    address-family ipv6
 #       no bgp additional-paths receive
@@ -1101,7 +1101,7 @@ EXAMPLES = """
 #          bgp additional-paths receive
 #       !
 #       address-family ipv6
-#          redistribute ospf3 match external
+#          redistribute ospfv3 match external
 
   - name: parse configs
     arista.eos.eos_bgp_address_family:
@@ -1127,7 +1127,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -1166,7 +1166,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ],
 #                 "vrf": "vrft"
@@ -1191,7 +1191,7 @@ EXAMPLES = """
 #       no neighbor 1.1.1.1 activate
 #       network 1.1.1.0/24
 #       network 1.5.1.0/24 route-map MAP01
-#       redistribute ospf3 match external
+#       redistribute ospfv3 match external
 #    !
 #    vrf vrft
 #       address-family ipv4
@@ -1230,7 +1230,7 @@ EXAMPLES = """
 #                 "redistribute": [
 #                     {
 #                         "ospf_route": "external",
-#                         "protocol": "ospf3"
+#                         "protocol": "ospfv3"
 #                     }
 #                 ]
 #             },
@@ -1254,7 +1254,7 @@ EXAMPLES = """
         address_family:
           - afi: "ipv4"
             redistribute:
-              - protocol: "ospf3"
+              - protocol: "ospfv3"
                 ospf_route: "external"
             network:
               - address: "1.1.1.0/24"
@@ -1283,7 +1283,7 @@ EXAMPLES = """
 # "rendered": [
 #         "router bgp 10",
 #         "address-family ipv4",
-#         "redistribute ospf3 match external",
+#         "redistribute ospfv3 match external",
 #         "network 1.1.1.0/24",
 #         "network 1.5.1.0/24 route-map MAP01",
 #         "exit",

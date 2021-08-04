@@ -15,7 +15,7 @@
           address_family:
             - afi: "ipv4"
               redistribute:
-                - protocol: "ospf3"
+                - protocol: "ospfv3"
                   ospf_route: "external"
               network:
                 - address: "192.0.2.0/24"

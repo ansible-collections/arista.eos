@@ -129,7 +129,7 @@ options:
             - Specifies the protocol for configuring redistribute information.
             required: true
             type: str
-            choices: [ospf, ospf3, static, connected, rip, isis]
+            choices: [ospf, ospfv3, static, connected, rip, isis]
           route_map:
             description:
             - Specifies the route map reference.
@@ -183,7 +183,7 @@ options:
                 required: true
                 type: str
                 choices:
-                - ospf3
+                - ospfv3
                 - ospf
                 - isis
                 - static
