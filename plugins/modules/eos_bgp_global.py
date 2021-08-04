@@ -185,7 +185,7 @@ options:
                   description: Set limit on the number of dynamic BGP peers allowed.
                   type: int
                 range:
-                  description: Subnet Range to be associated with the peer-group.
+                  description: Subnet Range to be associated with the peer group.
                   type: dict
                   suboptions:
                     address:
@@ -326,7 +326,7 @@ options:
           suboptions:
             peer:
               type: str
-              description: Neighbor address or peer-group.
+              description: Neighbor address or peer group.
             additional_paths:
               description: BGP additional-paths commands.
               type: str
@@ -506,7 +506,7 @@ options:
                   description: Replace private AS number with local AS number.
                   type: bool
             peer_group:
-              description: Name of the peer-group.
+              description: Name of the peer group.
               type: str
 
             prefix_list:
@@ -855,7 +855,7 @@ options:
                       description: Set limit on the number of dynamic BGP peers allowed.
                       type: int
                     range:
-                      description: Subnet Range to be associated with the peer-group.
+                      description: Subnet Range to be associated with the peer group.
                       type: dict
                       suboptions:
                         address:
@@ -1160,7 +1160,7 @@ options:
                       description: Replace private AS number with local AS number.
                       type: bool
                 peer_group:
-                  description: Name of the peer-group.
+                  description: Name of the peer group.
                   type: str
 
                 prefix_list:
@@ -1451,7 +1451,7 @@ EXAMPLES = """
 #    distance bgp 50 50 50
 #    maximum-paths 55
 #    bgp additional-paths send any
-#    neighbor peer1 peer-group
+#    neighbor peer1 peer group
 #    neighbor peer1 link-bandwidth update-delay 5
 #    neighbor peer1 fall-over bfd
 #    neighbor peer1 monitoring
@@ -1592,7 +1592,7 @@ EXAMPLES = """
 #    distance bgp 50 50 50
 #    maximum-paths 55
 #    bgp additional-paths send any
-#    neighbor peer1 peer-group
+#    neighbor peer1 peer group
 #    neighbor peer1 link-bandwidth update-delay 5
 #    neighbor peer1 fall-over bfd
 #    neighbor peer1 monitoring
@@ -1897,7 +1897,7 @@ EXAMPLES = """
 #         "maximum-paths 55",
 #         "distance bgp 50",
 #         "exit",
-#         "no neighbor peer1 peer-group",
+#         "no neighbor peer1 peer group",
 #         "no neighbor peer1 link-bandwidth update-delay 5",
 #         "no neighbor peer1 fall-over bfd",
 #         "no neighbor peer1 monitoring",
@@ -2136,7 +2136,7 @@ EXAMPLES = """
 #    distance bgp 50 50 50
 #    maximum-paths 55
 #    bgp additional-paths send any
-#    neighbor peer1 peer-group
+#    neighbor peer1 peer group
 #    neighbor peer1 link-bandwidth update-delay 5
 #    neighbor peer1 fall-over bfd
 #    neighbor peer1 monitoring
