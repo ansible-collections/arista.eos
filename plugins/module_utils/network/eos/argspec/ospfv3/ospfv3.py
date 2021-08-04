@@ -149,7 +149,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                 },
                                 "out_delay": {"type": "int"},
                                 "pacing": {"type": "int"},
-                                "lsa": {"type": "int"},
                             },
                         },
                         "vrf": {"type": "str"},
