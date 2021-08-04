@@ -239,9 +239,7 @@ def _tmplt_ospf_redistribute(config_data):
 
 
 def _tmplt_ospf_timers_lsa(config_data):
-    import q
 
-    q(config_data)
     command = ""
     if "lsa" in config_data["timers"]:
         command += "timers lsa {direction}".format(
