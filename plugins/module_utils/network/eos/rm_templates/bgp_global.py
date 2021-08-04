@@ -131,7 +131,7 @@ def _tmplt_bgp_params(config_data):
                 **config_data["bgp_params"]["listen"]
             )
         else:
-            command += " range {address} peer-group".format(
+            command += " range {address} peer group".format(
                 **config_data["bgp_params"]["listen"]["range"]
             )
             if config_data["bgp_params"]["listen"]["range"]["peer_group"].get(
@@ -271,7 +271,7 @@ def _tmplt_bgp_neighbor(config_data):
         if config_data["neighbor"]["additional_paths"] == "send":
             command += "any"
     elif config_data["neighbor"].get("peer_group"):
-        command += " peer-group"
+        command += " peer group"
         if (
             config_data["neighbor"]["peer_group"]
             != config_data["neighbor"]["peer_group"]
@@ -1125,7 +1125,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s+listen
                 \s+range
                 \s+(?P<address>\S+)
-                \s+peer-group
+                \s+peer\sgroup
                 \s+(?P<group>\S+)
                 \s*(?P<filter>peer-filter \S+)*
                 \s*(?P<remote_as>remote-as \S+)*
@@ -2276,7 +2276,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 r"""
                 \s*neighbor
                 \s+(?P<peer>\S+)
-                \s+peer-group
+                \s+peer\sgroup
                 \s*(?P<name>\S+)
                 *$""",
                 re.VERBOSE,

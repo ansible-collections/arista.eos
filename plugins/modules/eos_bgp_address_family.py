@@ -93,7 +93,7 @@ options:
               suboptions:
                 peer:
                   type: str
-                  description: Neighbor address/ peer-group name.
+                  description: Neighbor address/ peer group name.
                 activate:
                   description: Activate neighbor in the address family.
                   type: bool
@@ -264,7 +264,7 @@ EXAMPLES = """
 
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
@@ -356,7 +356,7 @@ EXAMPLES = """
 
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
@@ -398,7 +398,7 @@ EXAMPLES = """
 
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
@@ -556,7 +556,7 @@ EXAMPLES = """
 
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
@@ -592,7 +592,7 @@ EXAMPLES = """
 # After State:
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
@@ -712,7 +712,7 @@ EXAMPLES = """
 
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
@@ -755,7 +755,7 @@ EXAMPLES = """
 
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
@@ -915,7 +915,7 @@ EXAMPLES = """
 
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
@@ -950,7 +950,7 @@ EXAMPLES = """
 
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
@@ -1071,10 +1071,10 @@ EXAMPLES = """
 # parsed_bgp_address_family.cfg :
 
 # router bgp 10
-#    neighbor n2 peer-group
+#    neighbor n2 peer group
 #    neighbor n2 next-hop-unchanged
 #    neighbor n2 maximum-routes 12000
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    network 1.1.1.0/24
 #    network 1.5.1.0/24 route-map MAP01
@@ -1181,7 +1181,7 @@ EXAMPLES = """
 # Device config:
 # veos(config-router-bgp)#show running-config | section bgp
 # router bgp 10
-#    neighbor peer2 peer-group
+#    neighbor peer2 peer group
 #    neighbor peer2 maximum-routes 12000
 #    neighbor 1.1.1.1 maximum-routes 12000
 #    !
