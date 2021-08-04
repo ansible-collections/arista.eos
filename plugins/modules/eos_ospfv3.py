@@ -277,9 +277,6 @@ options:
             description: Configure OSPF timers.
             type: dict
             suboptions:
-              lsa:
-                description: Configure OSPF LSA timers.
-                type: int
               out_delay:
                 description: Configure out-delay timer.
                 type: int
@@ -610,9 +607,6 @@ options:
                 description: Configure OSPF timers.
                 type: dict
                 suboptions:
-                  lsa:
-                    description: Configure OSPF LSA timers.
-                    type: int
                   out_delay:
                     description: Configure out-delay timer.
                     type: int
