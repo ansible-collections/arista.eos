@@ -83,7 +83,7 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                                 "route_map": {"type": "str"},
                                 "protocol": {
                                     "type": "str",
-                                    "choices": ["isis", "ospf3", "dhcp"],
+                                    "choices": ["isis", "ospfv3", "dhcp"],
                                 },
                                 "isis_level": {
                                     "type": "str",

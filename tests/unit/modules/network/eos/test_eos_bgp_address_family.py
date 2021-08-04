@@ -59,7 +59,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external")
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
@@ -101,7 +101,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external")
                             ],
                             neighbor=[
                                 dict(
@@ -144,7 +144,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external")
                             ],
                             neighbor=[
                                 dict(
@@ -193,7 +193,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external")
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
@@ -235,7 +235,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external")
                             ],
                             neighbor=[
                                 dict(
@@ -286,7 +286,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external")
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
@@ -355,7 +355,7 @@ class TestEosBgpafModule(TestEosModule):
             "!",
             "vrf vrft",
             "address-family ipv4",
-            "redistribute ospf3 match external",
+            "redistribute ospfv3 match external",
             "route-target both 465:11",
             "!",
         ]
@@ -384,7 +384,7 @@ class TestEosBgpafModule(TestEosModule):
                     "afi": "ipv4",
                     "vrf": "vrft",
                     "redistribute": [
-                        {"protocol": "ospf3", "ospf_route": "external`"}
+                        {"protocol": "ospfv3", "ospf_route": "external`"}
                     ],
                     "route_target": {"mode": "both", "target": "465:11"},
                 },
@@ -413,7 +413,7 @@ class TestEosBgpafModule(TestEosModule):
                         {"address": "1.5.1.0/24", "route_map": "MAP01"},
                     ],
                     "redistribute": [
-                        {"ospf_route": "external", "protocol": "ospf3"}
+                        {"ospf_route": "external", "protocol": "ospfv3"}
                     ],
                 },
                 {
@@ -442,7 +442,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external")
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
@@ -470,7 +470,7 @@ class TestEosBgpafModule(TestEosModule):
         rendered_cmds = [
             "router bgp 10",
             "address-family ipv4",
-            "redistribute ospf3 match external",
+            "redistribute ospfv3 match external",
             "network 1.1.1.0/24",
             "network 1.5.1.0/24 route-map MAP01",
             "neighbor peer2 default-originate always",

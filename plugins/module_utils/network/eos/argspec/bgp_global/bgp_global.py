@@ -74,7 +74,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "type": "str",
                             "choices": [
                                 "isis",
-                                "ospf3",
+                                "ospfv3",
                                 "ospf",
                                 "attached-host",
                                 "connected",
@@ -495,7 +495,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": [
                                         "isis",
-                                        "ospf3",
+                                        "ospfv3",
                                         "ospf",
                                         "attached-host",
                                         "connected",

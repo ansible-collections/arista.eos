@@ -619,7 +619,7 @@ options:
             protocol:
               description: Routes to be redistributed.
               type: str
-              choices: ['isis', 'ospf3', 'ospf', 'attached-host', 'connected', 'rip', 'static']
+              choices: ['isis', 'ospfv3', 'ospf', 'attached-host', 'connected', 'rip', 'static']
             route_map:
               description: Route map reference.
               type: str
@@ -1271,7 +1271,7 @@ options:
                 protocol:
                   description: Routes to be redistributed.
                   type: str
-                  choices: ['isis', 'ospf3', 'ospf', 'attached-host', 'connected', 'rip', 'static']
+                  choices: ['isis', 'ospfv3', 'ospf', 'attached-host', 'connected', 'rip', 'static']
                 route_map:
                   description: Route map reference.
                   type: str
