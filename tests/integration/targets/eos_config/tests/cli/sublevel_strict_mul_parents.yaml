@@ -9,10 +9,10 @@
     lines:
       - class-map type qos match-any c1
       - match ip access-group 10
-      - policy-map type qos p1
+      - policy-map type quality-of-service p1
       - class c1
     before:
-      - no policy-map type qos p1
+      - no policy-map type quality-of-service p1
       - no class-map type qos match-any c1
     match: none
 
@@ -26,7 +26,7 @@
           - set cos 1
           - set dscp 62
         parents:
-          - policy-map type qos p1
+          - policy-map type quality-of-service p1
           - class c1
         match: strict
         diff_against: running
@@ -45,7 +45,7 @@
           - set dscp 62
           - set cos 1
         parents:
-          - policy-map type qos p1
+          - policy-map type quality-of-service p1
           - class c1
         match: strict
         diff_against: running
@@ -64,7 +64,7 @@
           - set cos 1
           - set dscp 62
         parents:
-          - policy-map type qos p1
+          - policy-map type quality-of-service p1
           - class c1
         match: strict
         diff_against: running
@@ -78,7 +78,7 @@
       become: true
       arista.eos.eos_config:
         lines:
-          - no policy-map type qos p1
+          - no policy-map type quality-of-service p1
           - no class-map type qos match-any c1
         match: none
 
