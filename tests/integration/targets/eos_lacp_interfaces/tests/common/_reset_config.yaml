@@ -21,7 +21,7 @@
         port_priority: 30
 
       - name: Ethernet2
-        rate: fast
+        timer: fast
 
 - assert:
     that:

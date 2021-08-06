@@ -43,10 +43,10 @@ class Lacp_interfacesArgs(object):
             "options": {
                 "name": {"type": "str"},
                 "port_priority": {"type": "int"},
-                "rate": {
+                "timer": {
                     "choices": ["fast", "normal"],
                     "type": "str",
-                    "aliases": ["timer"],
+                    "aliases": ["rate"],
                 },
             },
             "type": "list",

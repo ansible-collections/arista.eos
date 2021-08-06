@@ -31,7 +31,7 @@ description:
 - This module provides declarative management of VRFs on Arista EOS network devices.
 version_added: 1.0.0
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   name:
     description:

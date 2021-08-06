@@ -5,10 +5,10 @@
     config:
 
       - name: Ethernet1
-        rate: fast
+        timer: fast
 
       - name: Ethernet2
-        rate: normal
+        timer: normal
 
 - become: true
   arista.eos.eos_facts:
@@ -40,7 +40,7 @@
 
       - name: Ethernet1
         port_priority: 30
-        rate: fast
+        timer: fast
 
 - assert:
     that:

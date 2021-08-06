@@ -39,7 +39,7 @@ description: This module manages attributes of link aggregation groups on Arista
 version_added: 1.0.0
 author: Nathaniel Case (@Qalthos)
 notes:
-- Tested against Arista EOS 4.20.10M
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:

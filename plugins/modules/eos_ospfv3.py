@@ -38,7 +38,7 @@ description: This module configures and manages the attributes of ospfv3 on Aris
 version_added: 1.1.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
-- Tested against Arista EOS 4.23.0F
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
@@ -283,6 +283,25 @@ options:
               pacing:
                 description: Configure OSPF packet pacing.
                 type: int
+              throttle:
+                description: This command is deprecated by 'timers lsa' or 'timers spf'.
+                type: dict
+                suboptions:
+                  initial:
+                    description: Initial SPF schedule delay in msecs.
+                    type: int
+                  min:
+                    description: Min Hold time between two SPFs in msecs
+                    type: int
+                  max:
+                    description: Max wait time between two SPFs in msecs.
+                    type: int
+                  lsa:
+                    description: Configure threshold for retransmission of lsa
+                    type: bool
+                  spf:
+                    description: Configure time between SPF calculations
+                    type: bool
               spf:
                 description: Configure OSPFv3 spf timers.
                 type: dict
@@ -607,6 +626,25 @@ options:
                 description: Configure OSPF timers.
                 type: dict
                 suboptions:
+                  throttle:
+                    description: This command is deprecated by 'timers lsa' or 'timers spf'.
+                    type: dict
+                    suboptions:
+                      initial:
+                        description: Initial SPF schedule delay in msecs.
+                        type: int
+                      min:
+                        description: Min Hold time between two SPFs in msecs
+                        type: int
+                      max:
+                        description: Max wait time between two SPFs in msecs.
+                        type: int
+                      lsa:
+                        description: Configure threshold for retransmission of lsa
+                        type: bool
+                      spf:
+                        description: Configure time between SPF calculations
+                        type: bool
                   out_delay:
                     description: Configure out-delay timer.
                     type: int

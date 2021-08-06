@@ -40,7 +40,7 @@ description:
 version_added: 1.0.0
 author: Nathaniel Case (@Qalthos)
 notes:
-- Tested against Arista EOS 4.20.10M
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
@@ -56,7 +56,7 @@ options:
         description:
         - LACP port priority for the interface. Range 1-65535.
         type: int
-      rate:
+      timer:
         description:
         - Rate at which PDUs are sent by LACP. At fast rate LACP is transmitted once
           every 1 second. At normal rate LACP is transmitted every 30 seconds after
@@ -66,7 +66,7 @@ options:
         - fast
         - normal
         aliases:
-        - timer
+        - rate
   running_config:
     description:
     - This option is used only with state I(parsed).

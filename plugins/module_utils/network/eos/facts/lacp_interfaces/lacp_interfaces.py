@@ -99,7 +99,7 @@ class Lacp_interfacesFacts(object):
         config["name"] = utils.parse_conf_arg(conf, "interface")
         config["port_priority"] = utils.parse_conf_arg(conf, "port-priority")
         config["rate"] = utils.parse_conf_arg(conf, "rate")
-        if not config.get("rate"):
-            config["rate"] = utils.parse_conf_arg(conf, "timer")
+        if not config.get("timer"):
+            config["timer"] = utils.parse_conf_arg(conf, "timer")
 
         return utils.remove_empties(config)

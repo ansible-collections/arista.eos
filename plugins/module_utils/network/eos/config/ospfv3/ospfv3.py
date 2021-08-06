@@ -146,6 +146,12 @@ class Ospfv3(ResourceModule):
 
     def _global_compare(self, want, have):
         for name, entry in iteritems(want):
+            if name == "timers":
+                if entry.get("throttle"):
+                    self._module.fail_json(
+                        msg="This command is deprecated by 'timers lsa / timers spf'"
+                    )
+                    continue
             if name in ["vrf", "address_family"]:
                 continue
             if not isinstance(entry, dict) and name != "areas":
@@ -194,6 +200,12 @@ class Ospfv3(ResourceModule):
         hafs = have.get("address_family", {})
         for name, entry in iteritems(wafs):
             begin = len(self.commands)
+            if "timers" in entry:
+                if entry["timers"].get("throttle"):
+                    self._module.fail_json(
+                        msg="This command is deprecated by 'timers lsa / timers spf'"
+                    )
+                    continue
             self._compare_lists(want=entry, have=hafs.get(name, {}))
             self._areas_compare(want=entry, have=hafs.get(name, {}))
             self.compare(

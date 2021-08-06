@@ -5,12 +5,12 @@
     config:
 
       - name: Ethernet1
-        rate: fast
+        timer: fast
         port_priority: 45
     other_config:
 
       - name: Ethernet2
-        rate: fast
+        timer: fast
 
 - become: true
   arista.eos.eos_facts:

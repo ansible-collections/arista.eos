@@ -21,7 +21,7 @@ description: This module configures and manages the attributes of Prefix lists o
 version_added: 2.2.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
-- Tested against Arista EOS 4.20.10M
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,eos_platform_options).
 options:
    config:
