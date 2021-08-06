@@ -241,13 +241,12 @@ def generate_commands(interface, to_set, to_remove):
     commands = []
     for key in to_remove.keys():
         if key == "rate":
-            key = "timer"
+            continue
         commands.append("no lacp {0}".format(key.replace("_", "-")))
 
     for key, value in to_set.items():
         if key == "rate":
-            key = "timer"
-
+            continue
         if value is None:
             continue
 
