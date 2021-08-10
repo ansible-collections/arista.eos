@@ -43,7 +43,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                     "options": {
                         "severity": {"type": "int"},
                         "buffer_size": {"type": "int"},
-                        "message_type": {"type": "list", "elements": "str"},
+                        "message_type": {"type": "str"},
                     },
                 },
                 "console": {
@@ -51,7 +51,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                     "options": {
                         "severity": {"type": "int"},
                         "buffer_size": {"type": "int"},
-                        "message_type": {"type": "list", "elements": "str"},
+                        "message_type": {"type": "str"},
                     },
                 },
                 "event": {
@@ -87,8 +87,9 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                         "sequence_numbers": {"type": "bool"},
                     },
                 },
-                "host": {
-                    "type": "dict",
+                "hosts": {
+                    "type": "list",
+                    "elements": "dict",
                     "options": {
                         "name": {"type": "str"},
                         "add": {"type": "bool"},
@@ -135,12 +136,14 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                         "severity": {"type": "str"},
                     },
                 },
-                "vrf": {
-                    "type": "dict",
+                "vrfs": {
+                    "type": "list",
+                    "elements": "dict",
                     "options": {
                         "name": {"type": "str"},
-                        "host": {
-                            "type": "dict",
+                        "hosts": {
+                            "type": "list",
+                            "elements": "dict",
                             "options": {
                                 "name": {"type": "str"},
                                 "add": {"type": "bool"},

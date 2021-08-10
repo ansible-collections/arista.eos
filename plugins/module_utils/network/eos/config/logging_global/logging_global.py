@@ -33,6 +33,8 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_template
     Logging_globalTemplate,
 )
 
+import q
+
 
 class Logging_global(ResourceModule):
     """
@@ -47,7 +49,25 @@ class Logging_global(ResourceModule):
             resource="logging_global",
             tmplt=Logging_globalTemplate(),
         )
-        self.parsers = []
+        self.parsers = [
+            "buffered",
+            "console",
+            "event",
+            "facility",
+            "console",
+            "format",
+            "format.timestamp",
+            "level",
+            "monitor",
+            "on",
+            "persistent",
+            "policy",
+            "relogging_interval",
+            "repeat_messages",
+            "src_interface",
+            "synchronous",
+            "trap",
+        ]
 
     def execute_module(self):
         """ Execute the module
@@ -64,9 +84,13 @@ class Logging_global(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
-        wantd = {entry["name"]: entry for entry in self.want}
-        haved = {entry["name"]: entry for entry in self.have}
 
+        wantd = {"logging_global": self.want}
+        haved = {"logging_global": self.have}
+        # turn all lists of dicts into dicts prior to merge
+        for entry in wantd["logging_global"], haved["logging_global"]:
+            self._logging_global_list_to_dict(entry)
+        q(wantd, haved)
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
@@ -85,6 +109,7 @@ class Logging_global(ResourceModule):
                     self._compare(want={}, have=have)
 
         for k, want in iteritems(wantd):
+            q(k, want)
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -93,4 +118,86 @@ class Logging_global(ResourceModule):
            the `want` and `have` data with the `parsers` defined
            for the Logging_global network resource.
         """
+        self._hosts_compare(want=want, have=have)
+        self._vrfs_compare(want=want, have=have)
         self.compare(parsers=self.parsers, want=want, have=have)
+
+    def _hosts_compare(self, want, have):
+        host_want = want.get("hosts", {})
+        host_have = have.get("hosts", {})
+        q(host_want, host_have)
+        for name, entry in iteritems(host_want):
+
+            h = {}
+            if host_have:
+                h = {"hosts": {name: host_have.pop(name, {})}}
+            self.compare(parsers="host", want={"hosts": {name: entry}}, have=h)
+        for name, entry in iteritems(host_have):
+            self.compare(parsers="host", want={}, have=entry)
+
+    def _vrfs_hosts_compare(self, vrf, want, have):
+        host_want = want.get("hosts", {})
+        host_have = have.get("hosts", {})
+        for name, entry in iteritems(host_want):
+            h = {}
+            if host_have:
+                h = {
+                    "vrfs": {
+                        "name": vrf,
+                        "hosts": {name: host_have.pop(name, {})},
+                    }
+                }
+            w = {"vrfs": {"name": vrf, "hosts": {name: entry}}}
+            self.compare(parsers="vrf.host", want=w, have=h)
+        for name, entry in iteritems(host_have):
+            self.compare(
+                parsers="vrf.host",
+                want={},
+                have={"vrfs": {"name": vrf, "hosts": {name: entry}}},
+            )
+
+    def _vrfs_compare(self, want, have):
+        vrf_want = want.get("vrfs", {})
+        vrf_have = have.get("vrfs", {})
+        for name, entry in iteritems(vrf_want):
+            self._vrfs_hosts_compare(
+                name, want=entry, have=vrf_have.pop(name, {})
+            )
+            if entry.get("source_interface"):
+                if vrf_have.get(name):
+                    h = {
+                        "vrfs": {
+                            "name": name,
+                            "source_interface": vrf_have[name].pop(
+                                "source_interface", ""
+                            ),
+                        }
+                    }
+                w = {
+                    "vrfs": {
+                        "name": name,
+                        "source_interface": entry["source_interface"],
+                    }
+                }
+            self.compare(
+                parsers="vrf.source_interface",
+                want={"hosts": {name: entry}},
+                have=h,
+            )
+        for name, entry in iteritems(vrf_have):
+            self.compare(want={}, have=entry)
+
+    def _logging_global_list_to_dict(self, entry):
+        q(entry)
+        if "hosts" in entry:
+            hosts_dict = {}
+            for el in entry["hosts"]:
+                hosts_dict.update({el["name"]: el})
+            entry["hosts"] = hosts_dict
+
+        if "vrfs" in entry:
+            vrf_dict = {}
+            for el in entry["vrfs"]:
+                vrf_dict.update({el["name"]: el})
+            entry["vrfs"] = vrf_dict
+            self._logging_global_list_to_dict(entry["vrfs"])
