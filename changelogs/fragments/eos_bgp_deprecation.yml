@@ -1,0 +1,3 @@
+---
+trivial:
+  - Moved eos_bgp deprecation from action to modules in runtime.yml.

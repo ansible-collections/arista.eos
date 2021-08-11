@@ -1,5 +1,4 @@
 plugins/action/eos.py action-plugin-docs # base class for deprecated network platform modules using `connection: local`
-plugins/modules/eos_bgp.py validate-modules:deprecation-mismatch # 2.9 expects METADATA
 plugins/module_utils/network/eos/config/bgp_global/bgp_global.py compile-2.6!skip
 plugins/module_utils/network/eos/config/bgp_address_family/bgp_address_family.py compile-2.6!skip
 plugins/module_utils/network/eos/config/ospf_interfaces/ospf_interfaces.py compile-2.6!skip
