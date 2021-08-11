@@ -291,7 +291,6 @@ EXAMPLES = """
         - protocol: isis
           route_map: RMAP_1
     operation: merge
-
 - name: Configure BGP neighbors
   arista.eos.eos_bgp:
     config:
@@ -304,13 +303,11 @@ EXAMPLES = """
         timers:
           keepalive: 300
           holdtime: 360
-
       - neighbor: 192.0.2.15
         remote_as: 64496
         description: IBGP_NBR_2
         ebgp_multihop: 150
     operation: merge
-
 - name: Configure root-level networks for BGP
   arista.eos.eos_bgp:
     config:
@@ -319,12 +316,10 @@ EXAMPLES = """
       - prefix: 203.0.113.0
         masklen: 27
         route_map: RMAP_1
-
       - prefix: 203.0.113.32
         masklen: 27
         route_map: RMAP_2
     operation: merge
-
 - name: Configure BGP neighbors under address family mode
   arista.eos.eos_bgp:
     config:
@@ -335,12 +330,10 @@ EXAMPLES = """
         - neighbor: 203.0.113.10
           activate: yes
           default_originate: true
-
         - neighbor: 192.0.2.15
           activate: yes
           graceful_restart: true
     operation: merge
-
 - name: remove bgp as 64496 from config
   arista.eos.eos_bgp:
     config:

@@ -16,14 +16,8 @@ plugin_routing:
       redirect: arista.eos.eos
     eos_bgp:
       redirect: arista.eos.eos
-      deprecation:
-        removal_date: '2023-01-29'
-        warning_text: See the plugin documentation for more details
     bgp:
       redirect: arista.eos.eos
-      deprecation:
-        removal_date: '2023-01-29'
-        warning_text: See the plugin documentation for more details
     eos_bgp_address_family:
       redirect: arista.eos.eos
     bgp_address_family:
@@ -161,6 +155,13 @@ plugin_routing:
       redirect: arista.eos.eos_banner
     bgp:
       redirect: arista.eos.eos_bgp
+      deprecation:
+        removal_date: '2023-01-29'
+        warning_text: See the plugin documentation for more details
+    eos_bgp:
+      deprecation:
+        removal_date: '2023-01-29'
+        warning_text: See the plugin documentation for more details
     bgp_address_family:
       redirect: arista.eos.eos_bgp_address_family
     bgp_global:
