@@ -317,7 +317,7 @@ options:
                     type: int
               lsa:
                 description: Configure OSPFv3 LSA timers.
-                type: dict
+                type: raw
                 suboptions:
                   direction:
                     description: Configure OSPFv3 LSA receiving/transmission timers.
@@ -666,7 +666,7 @@ options:
                         type: int
                   lsa:
                     description: Configure OSPFv3 LSA timers.
-                    type: dict
+                    type: raw
                     suboptions:
                       direction:
                         description: Configure OSPFv3 LSA receiving/transmission timers.

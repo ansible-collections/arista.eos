@@ -146,7 +146,7 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                     },
                                 },
                                 "lsa": {
-                                    "type": "dict",
+                                    "type": "raw",
                                     "options": {
                                         "max": {"type": "int"},
                                         "initial": {"type": "int"},
@@ -375,7 +375,7 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                             },
                                         },
                                         "lsa": {
-                                            "type": "dict",
+                                            "type": "raw",
                                             "options": {
                                                 "max": {"type": "int"},
                                                 "initial": {"type": "int"},

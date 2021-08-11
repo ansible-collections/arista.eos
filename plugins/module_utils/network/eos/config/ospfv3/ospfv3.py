@@ -151,6 +151,13 @@ class Ospfv3(ResourceModule):
                     self._module.warn(
                         "'timers throttle' command is deprecated by 'timers lsa / timers spf'"
                     )
+                    entry.pop("throttle")
+                    continue
+                if entry.get("lsa") and not isinstance(entry["lsa"], dict):
+                    self._module.warn(
+                        "timers.lsa accepts only dict. Please refer the documentaion."
+                    )
+                    entry.pop("lsa")
                     continue
             if name in ["vrf", "address_family"]:
                 continue
@@ -188,7 +195,6 @@ class Ospfv3(ResourceModule):
                 )
             else:
                 # passing dict without vrf, inorder to avoid  no router ospfv3 command
-                # w = {i: want[i] for i in want if i != "vrf"}
                 self.compare(
                     parsers=self.parsers,
                     want={name: want.pop(name, {})},
@@ -205,6 +211,15 @@ class Ospfv3(ResourceModule):
                     self._module.warn(
                         "'timers throttle' command is deprecated by 'timers lsa / timers spf'"
                     )
+                    entry.pop("throttle")
+                    continue
+                if entry["timers"].get("lsa") and not isinstance(
+                    entry["timers"]["lsa"], dict
+                ):
+                    self._module.warn(
+                        "timers.lsa accepts only dict. Please refer the documentaion."
+                    )
+                    entry.pop("lsa")
                     continue
             self._compare_lists(want=entry, have=hafs.get(name, {}))
             self._areas_compare(want=entry, have=hafs.get(name, {}))
