@@ -68,7 +68,7 @@ class Logging_global(ResourceModule):
         ]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -79,8 +79,8 @@ class Logging_global(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-            want, have and desired state.
+        """Generate configuration commands to send based on
+        want, have and desired state.
         """
 
         wantd = {"logging_global": self.want}
@@ -96,16 +96,16 @@ class Logging_global(ResourceModule):
         if self.state == "deleted":
             wantd = {}
             for k, have in iteritems(haved):
-               self._compare(want={}, have=have)
+                self._compare(want={}, have=have)
 
         for k, want in iteritems(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Logging_global network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Logging_global network resource.
         """
         self._hosts_compare(want=want, have=have)
         self._vrfs_compare(want=want, have=have)
@@ -174,10 +174,10 @@ class Logging_global(ResourceModule):
                     have=h,
                 )
         for name, entry in iteritems(vrf_have):
-            self._vrfs_hosts_compare(
-                name, want={}, have=entry
+            self._vrfs_hosts_compare(name, want={}, have=entry)
+            self.compare(
+                parsers="vrf.source_interface", want={}, have={"vrfs": entry}
             )
-            self.compare(parsers="vrf.source_interface", want={}, have={"vrfs": entry})
 
     def _logging_global_list_to_dict(self, entry):
         if "hosts" in entry:

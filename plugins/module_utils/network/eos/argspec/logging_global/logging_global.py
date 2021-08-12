@@ -28,8 +28,7 @@ The arg spec for the eos_logging_global module
 
 
 class Logging_globalArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_logging_global module
-    """
+    """The arg spec for the eos_logging_global module"""
 
     def __init__(self, **kwargs):
         pass
@@ -103,7 +102,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                     "type": "dict",
                     "options": {
                         "facility": {"type": "str"},
-                        "severity": {"type": "str"}
+                        "severity": {"type": "str"},
                     },
                 },
                 "monitor": {"type": "str"},

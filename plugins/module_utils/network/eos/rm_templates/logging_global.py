@@ -23,10 +23,13 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 def _tmplt_logging_format(config_data):
     command = ""
     if "hostname" in config_data["format"]:
-        command = "logging format hostname " + config_data["format"]["hostname"]
+        command = (
+            "logging format hostname " + config_data["format"]["hostname"]
+        )
     if "sequence_numbers" in config_data["format"]:
         command = "logging format sequence-numbers"
     return command
+
 
 def _tmplt_logging_global_hosts(config_data):
     el = config_data["hosts"]
@@ -40,6 +43,7 @@ def _tmplt_logging_global_hosts(config_data):
     if el.get("protocol"):
         command += " protocol " + el["protocol"]
     return command
+
 
 def _tmplt_logging_global_vrf_hosts(config_data):
     el = config_data["vrfs"]
@@ -55,6 +59,7 @@ def _tmplt_logging_global_vrf_hosts(config_data):
     if el.get("protocol"):
         command += " protocol " + el["protocol"]
     return command
+
 
 class Logging_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):

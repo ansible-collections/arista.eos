@@ -18,10 +18,10 @@ module: eos_logging_global
 short_description: Manages logging resource module
 description: This module configures and manages the attributes of  logging on Arista
   EOS platforms.
-version_added: 2.2.0
+version_added: 3.0.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
-- Tested against Arista EOS 4.20.10M
+- Tested against Arista EOS 4.24.6M
 - This module works with connection C(network_cli). See the L(EOS Platform Options,eos_platform_options).
 options:
    config:
