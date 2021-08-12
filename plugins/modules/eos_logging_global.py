@@ -33,25 +33,24 @@ options:
           - Set buffered logging parameters.
           type: dict
           suboptions: &message_options
-            severity:
-              description: Severity level (0-7).
-              type: int
-            buffer_size:
-              description: Logging buffer size
-              type: int
-            message_type:
-              description: Type of messages to be buffered
-              type: list
-              elements: str
+          severity:
+            description: Severity level .
+            type: str
+          buffer_size:
+            description: Logging buffer size
+            type: int
         console:
           description:
           - Set console logging parameters.
           type: dict
-          suboptions: *message_options
+          suboptions:
+          severity:
+            description: Severity level .
+            type: str
         event:
           description: Global events
           type: str
-          choices: ["link_status", "port_channel", "spanning_tree"]
+          choices: ["link-status", "port-channel", "spanning-tree"]
         facility:
           description: Set logging facility.
           type: str
@@ -108,11 +107,18 @@ options:
               type: int
         level:
           description: Configure logging severity
-          type: str
+          type: dict
+          suboptions:
+            facility:
+              description: Facility level
+              type: str
+            severity:
+              description: Severity level
+              type: str
         monitor:
           description: Set terminal monitor severity
           type: str
-        on:
+        turn_on:
           description: Turn on logging.
           type: bool
         persistent:
@@ -181,6 +187,8 @@ options:
       - This option is used only with state I(parsed).
       - The value of this option should be the output received from the EOS device by
         executing the command B(show running-config | section access-list).
+      - The states I(replaced) and I(overridden) have identical
+        behaviour for this module.
       - The state I(parsed) reads the configuration from C(running_config) option and
         transforms it into Ansible structured data as per the resource module's argspec
         and the value is then returned in the I(parsed) key within the result.

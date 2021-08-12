@@ -20,6 +20,42 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 )
 
 
+def _tmplt_logging_format(config_data):
+    command = ""
+    if "hostname" in config_data["format"]:
+        command = "logging format hostname " + config_data["format"]["hostname"]
+    if "sequence_numbers" in config_data["format"]:
+        command = "logging format sequence-numbers"
+    return command
+
+def _tmplt_logging_global_hosts(config_data):
+    el = config_data["hosts"]
+    command = "logging host " + el["name"]
+    if el.get("add"):
+        command += " add"
+    if el.get("remove"):
+        command += " remove"
+    if el.get("port"):
+        command += " " + str(el["port"])
+    if el.get("protocol"):
+        command += " protocol " + el["protocol"]
+    return command
+
+def _tmplt_logging_global_vrf_hosts(config_data):
+    el = config_data["vrfs"]
+    command = "logging vrf " + el["name"] + " host "
+    el = el["hosts"]
+    command += el["name"]
+    if el.get("add"):
+        command += " add"
+    if el.get("remove"):
+        command += " remove"
+    if el.get("port"):
+        command += " " + str(el["port"])
+    if el.get("protocol"):
+        command += " protocol " + el["protocol"]
+    return command
+
 class Logging_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Logging_globalTemplate, self).__init__(
@@ -33,16 +69,15 @@ class Logging_globalTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*logging\sbuffered
-                \s*(?P<sev>[0-7])*
                 \s*(?P<size>\d{2,})*
-                \s*(?P<msg>\w+)*
+                \s*(?P<sev>[0-7]|\w+)*
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging buffered {{ buffered.severity}} {{ buffered.buffer_size }} {{ buffered.message_type}}',
+            "setval": 'logging buffered {{ buffered.buffer_size if buffered.buffer_size is defined }}'
+                        ' {{ buffered.severity if buffered.severity is defined }}',
             "result": {
                 "buffered": {
-                    "message_type": "{{ msg }}",
                     "buffer_size": "{{ size }}",
                     "severity": "{{ sev }}"
                 }
@@ -53,15 +88,13 @@ class Logging_globalTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*logging\sconsole
-                \s*(?P<sev>[0-7])*
-                \s*(?P<msg>\w+)*
+                \s*(?P<sev>[0-7]|\w+)*
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging console {{ console.severity}} {{ console.message_type}}',
+            "setval": "logging console {{ console.severity|string if console.severity is defined else ''}}",
             "result": {
                 "console": {
-                    "message_type": "{{ msg }}",
                     "severity": "{{ sev }}"
                 }
             },
@@ -71,13 +104,13 @@ class Logging_globalTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*logging\sevent
-                \s(?P<event>link-status|port-channel|spanning-tree)
-                \s*(?P<mem>member-status)*
-                \sglobal
+                \s+(?P<event>link-status|port-channel|spanning-tree)
+                \s*(member-status)*
+                \s*global
                 *$""",
                 re.VERBOSE,
             ),
-            "setval": 'logging event {{ event }} {{ mem }} global',
+            "setval": "logging event {{ event }} {{ 'member-status' if event == 'port-channel' else '' }} global",
             "result": {
                 "event": "{{ event }}"
             },
@@ -97,24 +130,6 @@ class Logging_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "console",
-            "getval": re.compile(
-                r"""
-                \s*logging\sconsole
-                \s*(?P<sev>[0-7])*
-                \s*(?P<msg>\w+)*
-                $""",
-                re.VERBOSE,
-            ),
-            "setval": 'logging console {{ console.severity}} {{ console.message_type}}',
-            "result": {
-                "console": {
-                    "message_type": "{{ msg }}",
-                    "severity": "{{ sev }}"
-                }
-            },
-        },
-        {
             "name": "format",
             "getval": re.compile(
                 r"""
@@ -123,31 +138,56 @@ class Logging_globalTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging format {{ param.split(" ")[0] }} {{ param.split(" ")[1] if "hostname" in param }}',
+            "setval": _tmplt_logging_format,
+            "shared": True,
             "result": {
                 "format": {
-                    '{{ param.split(" ")[0] }}': '{{ param.split(" ")[1] if "hostname" in param else True }}',
+                    "hostname": '{{ param.split(" ")[1] if "hostname" in param }}',
+                    "sequence_numbers": '{{ True if "sequence-numbers" in param }}',
                 }
             },
         },
         {
-            "name": "format.timestamp",
+            "name": "format.timestamp.highresolution",
             "getval": re.compile(
                 r"""
-                \s*logging\sformat\stimestamp
-                \s*(?P<highresol>high-resolution)*
+                \s*logging\sformat\stimestamp\shigh-resolution
+                *$""",
+                re.VERBOSE,
+            ),
+            "setval": 'logging format timestamp high-resolution',
+            "shared": True,
+            "compval": "format.timestamp.high_resolution",
+            "result": {
+                "format": {
+                    "timestamp": {
+                        "high_resolution": "{{ True }}"
+                    }
+                }
+            },
+        },
+        {
+            "name": "format.timestamp.traditional",
+            "getval": re.compile(
+                r"""
+                \s*logging\sformat\stimestamp\straditional
                 \s*(?P<year>year)*
                 \s*(?P<zone>timezone)*
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging format timestamp {{ year if year is defined }} {{ timezone if timezone is defined }}',
+            "setval": "logging format timestamp traditional {{ 'year' if format.timestamp.traditional.year is defined }}"
+                        "{{ 'timezone' if format.timestamp.traditional.timezone is defined }}",
+            "compval": "format.timestamp.traditional",
+            "shared": True,
             "result": {
                 "format": {
                     "timestamp": {
-                        "year": "{{ True if year is defined}}",
-                        "timezone": "{{ True if timezone is defined}}",
-                        "state": "{{ enabled if year and timezone is undefined}}",
+                        "traditional": {
+                            "year": "{{ True if year is defined}}",
+                            "timezone": "{{ True if zone is defined}}",
+                            "state": "{{ enabled if year and zone is undefined}}",
+                        }
                     }
                 }
             },
@@ -157,14 +197,16 @@ class Logging_globalTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*logging\shost
-                \s(?P<name>\S+)
+                \s*(?P<name>\S+)
                 \s*(?P<oper>add|remove)*
                 \s*(?P<port>\d+)*
-                \s*(?P<proto>protocol \S+)*
+                \s*(protocol)*
+                \s*(?P<proto>tcp|udp)*
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging host {{ hosts.name}} {{ oper }} {{ hosts.port }} {{ hosts.protocol }}',
+            "setval": _tmplt_logging_global_hosts,
+            "compval": "hosts",
             "result": {
                 "hosts": {
                     "{{ name }}": {
@@ -172,7 +214,7 @@ class Logging_globalTemplate(NetworkTemplate):
                         "add": '{{ True if oper == "add" }}',
                         "remove": '{{ True if oper == "remove" }}',
                         "port": "{{ port }}",
-                        "protocol": "{{ protocol }}"
+                        "protocol": "{{ proto }}"
                     }
                 }
             },
@@ -183,12 +225,16 @@ class Logging_globalTemplate(NetworkTemplate):
                 r"""
                 \s*logging\slevel
                 \s(?P<level>\S+)
+                \s(?P<sev>\S+)
                 *$""",
                 re.VERBOSE,
             ),
-            "setval": 'logging level {{ level }}',
+            "setval": 'logging level {{ level.facility }} {{ level.severity }}',
             "result": {
-                "level": "{{ level }}"
+                "level": {
+                    "facility": "{{ level }}",
+                    "severity": "{{ sev }}"
+                }
             },
         },
         {
@@ -202,7 +248,7 @@ class Logging_globalTemplate(NetworkTemplate):
             ),
             "setval": 'logging monitor {{ val }}',
             "result": {
-                "level": "{{ val }}"
+                "monitor": "{{ val }}"
             },
         },
         {
@@ -214,8 +260,9 @@ class Logging_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": 'logging on',
+            "compval": 'turn_on',
             "result": {
-                "on": "{{ True }}"
+                "turn_on": "{{ True }}"
             },
         },
         {
@@ -227,7 +274,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging persistent {{ persistent.size }}',
+            "setval": "logging persistent{{ ' ' + persistent.size|string if persistent.size is defined }}",
             "result": {
                 "persistent": {
                     "size": "{{ size }}",
@@ -240,14 +287,14 @@ class Logging_globalTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*logging\spolicy\smatch
-                \s*(?P<inv>invert-result)*
+                \s*(?P<inv>inverse-result)*
                 \s+match-list
                 \s+(?P<match>\S+)
                 \s+discard
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging policy match {{ inv if policy.invert_result is defined }} match {{ policy.match_list }} discard',
+            "setval": "logging policy match {{ 'invert-result' if policy.invert_result is defined }} match-list {{ policy.match_list }} discard",
             "result": {
                 "policy": {
                     "invert_result": "{{ True if inv is defined }}",
@@ -305,7 +352,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging synchronous {{ synchronous.level if level is defined }}',
+            "setval": "logging synchronous{{ ' ' + synchronous.level if level is defined }}",
             "result": {
                 "synchronous": {
                     "set": "{{ True if level is not defined }}",
@@ -322,11 +369,11 @@ class Logging_globalTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging trap {{ trap.level if level is defined }}',
+            "setval": "logging trap{{ ' ' + trap.severity if trap.severity is defined }}",
             "result": {
                 "trap": {
                     "set": "{{ True if level is not defined }}",
-                    "level": "{{ level }}"
+                    "severity": "{{ level }}"
                 }
             },
         },
@@ -340,11 +387,12 @@ class Logging_globalTemplate(NetworkTemplate):
                 \s(?P<name>\S+)
                 \s*(?P<oper>add|remove)*
                 \s*(?P<port>\d+)*
-                \s*(?P<proto>protocol \S+)*
+                \s*(protocol)*
+                \s*(?P<proto>tcp|udp)*
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'logging vrf {{ vrfs.name }} host {{ vrfs.hosts.name}} {{ oper if oper is defined }} {{ vrfs.hosts.port }} {{ vrfs.hosts.protocol }}',
+            "setval": _tmplt_logging_global_vrf_hosts,
             "compval": "vrfs.hosts",
             "shared": True,
             "result": {
@@ -357,7 +405,7 @@ class Logging_globalTemplate(NetworkTemplate):
                                 "add": '{{ True if oper == "add" }}',
                                 "remove": '{{ True if oper == "remove" }}',
                                 "port": "{{ port }}",
-                                "protocol": "{{ protocol }}"
+                                "protocol": "{{ proto }}"
                             }
                         }
                     }
@@ -375,7 +423,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 *$""",
                 re.VERBOSE,
             ),
-            "setval": 'logging vrf {{ vrfs.name }} source-interface {{ vrf.source_interface }}',
+            "setval": 'logging vrf {{ vrfs.name }} source-interface {{ vrfs.source_interface }}',
             "compval": "vrfs.source_interface",
             "shared": True,
             "result": {

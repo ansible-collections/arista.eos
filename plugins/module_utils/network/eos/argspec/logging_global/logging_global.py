@@ -41,25 +41,23 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                 "buffered": {
                     "type": "dict",
                     "options": {
-                        "severity": {"type": "int"},
+                        "severity": {"type": "str"},
                         "buffer_size": {"type": "int"},
-                        "message_type": {"type": "str"},
                     },
                 },
                 "console": {
                     "type": "dict",
                     "options": {
-                        "severity": {"type": "int"},
+                        "severity": {"type": "str"},
                         "buffer_size": {"type": "int"},
-                        "message_type": {"type": "str"},
                     },
                 },
                 "event": {
                     "type": "str",
                     "choices": [
-                        "link_status",
-                        "port_channel",
-                        "spanning_tree",
+                        "link-status",
+                        "port-channel",
+                        "spanning-tree",
                     ],
                 },
                 "facility": {"type": "str"},
@@ -96,14 +94,20 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                         "remove": {"type": "bool"},
                         "protocol": {
                             "type": "str",
-                            "choices": ["type", "udp"],
+                            "choices": ["tcp", "udp"],
                         },
                         "port": {"type": "int"},
                     },
                 },
-                "level": {"type": "str"},
+                "level": {
+                    "type": "dict",
+                    "options": {
+                        "facility": {"type": "str"},
+                        "severity": {"type": "str"}
+                    },
+                },
                 "monitor": {"type": "str"},
-                True: {"type": "bool"},
+                "turn_on": {"type": "str"},
                 "persistent": {
                     "type": "dict",
                     "options": {
@@ -150,7 +154,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                                 "remove": {"type": "bool"},
                                 "protocol": {
                                     "type": "str",
-                                    "choices": ["type", "udp"],
+                                    "choices": ["tcp", "udp"],
                                 },
                                 "port": {"type": "int"},
                             },

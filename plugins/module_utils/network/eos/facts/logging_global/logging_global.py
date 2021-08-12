@@ -26,7 +26,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_template
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.logging_global.logging_global import (
     Logging_globalArgs,
 )
-import q
 
 
 class Logging_globalFacts(object):
@@ -54,7 +53,7 @@ class Logging_globalFacts(object):
         :returns: facts
         """
         facts = {}
-        objs = []
+        objs = {}
 
         if not data:
             data = self.get_config(connection)
@@ -81,7 +80,7 @@ class Logging_globalFacts(object):
                     list(objs["vrfs"].values()), key=lambda k, sk="name": k[sk]
                 )
         else:
-            objs = []
+            objs = {}
         ansible_facts["ansible_network_resources"].pop("logging_global", None)
 
         params = utils.remove_empties(
@@ -89,7 +88,8 @@ class Logging_globalFacts(object):
                 self.argument_spec, {"config": objs}, redact=True
             )
         )
-        facts["logging_global"] = params["config"]
+
+        facts["logging_global"] = params.get("config", [])
         ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts
