@@ -239,7 +239,6 @@ def _tmplt_ospf_redistribute(config_data):
 
 
 def _tmplt_ospf_timers_lsa(config_data):
-
     command = ""
     if "lsa" in config_data["timers"]:
         command += "timers lsa {direction}".format(
@@ -1038,6 +1037,8 @@ class Ospfv3Template(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": _tmplt_ospf_timers_lsa,
+            "compval": "timers.lsa",
+            "shared": True,
             "result": {
                 "processes": {
                     "address_family": {

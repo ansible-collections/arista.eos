@@ -153,6 +153,8 @@
     - assert:
         that: "'\\'timers throttle\\' command is deprecated by \\'timers lsa / timers spf\\'' in result.warnings[0]"
 
+    - include_tasks: _remove_config.yaml
+
     - name: merge given ospfv3 configuration with timers.lsa option (expect warning).
       become: true
       register: result
@@ -168,11 +170,13 @@
                   fips_restrictions: true
                   router_id: "10.1.1.1"
               timers:
-                lsa: 7
+                lsa: 33
               vrf: "default"
 
     - assert:
-        that: "'timers.lsa accepts only dict. Please refer the documentaion.' in result.warnings[0]"
+        that:
+          - "'\\'timers lsa arrival\\' has changed to \\'timers lsa rx min interval\\'' in result.warnings[0]"
+          - '"timers lsa rx min interval 33" in result["commands"]'
 
   always:
     - include_tasks: _remove_config.yaml

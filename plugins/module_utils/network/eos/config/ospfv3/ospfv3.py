@@ -152,13 +152,20 @@ class Ospfv3(ResourceModule):
                         "'timers throttle' command is deprecated by 'timers lsa / timers spf'"
                     )
                     entry.pop("throttle")
-                    continue
                 if entry.get("lsa") and not isinstance(entry["lsa"], dict):
+                    modified = {
+                        "timers": {
+                            "lsa": {"direction": "rx", "min": entry["lsa"]}
+                        }
+                    }
                     self._module.warn(
-                        "timers.lsa accepts only dict. Please refer the documentaion."
+                        " ** 'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards. ** "
+                        " \n** Your task has been modified to use {0}. ** "
+                        " \n** timers.lsa of type int will be deprecated by '2023-08-31' ** ".format(
+                            modified
+                        )
                     )
-                    entry.pop("lsa")
-                    continue
+                    entry["lsa"] = modified["timers"]["lsa"]
             if name in ["vrf", "address_family"]:
                 continue
             if not isinstance(entry, dict) and name != "areas":
@@ -216,11 +223,23 @@ class Ospfv3(ResourceModule):
                 if entry["timers"].get("lsa") and not isinstance(
                     entry["timers"]["lsa"], dict
                 ):
+                    modified = {
+                        "timers": {
+                            "lsa": {
+                                "direction": "rx",
+                                "min": entry["timers"]["lsa"],
+                            }
+                        }
+                    }
                     self._module.warn(
-                        "timers.lsa accepts only dict. Please refer the documentaion."
+                        "'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards.\
+                         Your task has been modified to use %s.\
+                         Please modify your playbook to use timers.lsa as %s. timers.lsa of type int\
+                         will be deprecated by '2023-08-31'"
+                        % modified
+                        % modified
                     )
-                    entry.pop("lsa")
-                    continue
+                    entry["timers"]["lsa"] = modified["timers"]["lsa"]
             self._compare_lists(want=entry, have=hafs.get(name, {}))
             self._areas_compare(want=entry, have=hafs.get(name, {}))
             self.compare(
