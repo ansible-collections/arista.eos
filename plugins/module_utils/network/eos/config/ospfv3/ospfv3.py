@@ -232,12 +232,11 @@ class Ospfv3(ResourceModule):
                         }
                     }
                     self._module.warn(
-                        "'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards.\
-                         Your task has been modified to use %s.\
-                         Please modify your playbook to use timers.lsa as %s. timers.lsa of type int\
-                         will be deprecated by '2023-08-31'"
-                        % modified
-                        % modified
+                        " ** 'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards. ** "
+                        " \n** Your task has been modified to use {0}. ** "
+                        " \n** timers.lsa of type int will be deprecated by '2023-08-31' ** ".format(
+                            modified
+                        )
                     )
                     entry["timers"]["lsa"] = modified["timers"]["lsa"]
             self._compare_lists(want=entry, have=hafs.get(name, {}))
