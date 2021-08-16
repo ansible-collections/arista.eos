@@ -151,7 +151,7 @@
               vrf: "default"
 
     - assert:
-        that: "'\\'timers throttle\\' command is deprecated by \\'timers lsa / timers spf\\'' in result.warnings[0]"
+        that: "'The \\'timers\\' argument has been changed to have separate \\'lsa\\' and \\'spf\\' keys and \\'throttle\\' has been deprecated.' in result.warnings[0]"
 
     - include_tasks: _remove_config.yaml
 

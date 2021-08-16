@@ -1038,7 +1038,6 @@ class Ospfv3Template(NetworkTemplate):
             ),
             "setval": _tmplt_ospf_timers_lsa,
             "compval": "timers.lsa",
-            "shared": True,
             "result": {
                 "processes": {
                     "address_family": {

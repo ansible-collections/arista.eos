@@ -148,11 +148,36 @@ class Ospfv3(ResourceModule):
         for name, entry in iteritems(want):
             if name == "timers":
                 if entry.get("throttle"):
+                    throttle = entry.pop("throttle")
+                    modified = {}
+                    if throttle.get("lsa"):
+                        modified["lsa"] = {
+                            "max": throttle["max"],
+                            "min": throttle["min"],
+                            "initial": throttle["initial"],
+                            "direction": "tx",
+                        }
+                    if throttle.get("spf"):
+                        modified["spf"] = {
+                            "max": throttle["max"],
+                            "min": throttle["min"],
+                            "initial": throttle["initial"],
+                        }
+                    entry.update(modified)
                     self._module.warn(
-                        "'timers throttle' command is deprecated by 'timers lsa / timers spf'"
+                        " ** The 'timers' argument has been changed to have separate 'lsa' and 'spf' keys and 'throttle' has been deprecated. ** "
+                        " \n** Your task has been modified to use {0}. ** "
+                        " \n** timers.throttle will be removed after '2024-01-01' ** ".format(
+                            entry
+                        )
                     )
-                    entry.pop("throttle")
                 if entry.get("lsa") and not isinstance(entry["lsa"], dict):
+                    modified = {}
+                    if not isinstance(entry["lsa"], int):
+                        # if neither old or new format, fail !
+                        self._module.fail_json(
+                            msg="The lsa key takes a dictionary of arguments. Please consult the documentation for more details"
+                        )
                     modified = {
                         "timers": {
                             "lsa": {"direction": "rx", "min": entry["lsa"]}
@@ -161,7 +186,7 @@ class Ospfv3(ResourceModule):
                     self._module.warn(
                         " ** 'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards. ** "
                         " \n** Your task has been modified to use {0}. ** "
-                        " \n** timers.lsa of type int will be deprecated by '2023-08-31' ** ".format(
+                        " \n** timers.lsa of type int will be removed after '2024-01-01' ** ".format(
                             modified
                         )
                     )
@@ -215,14 +240,37 @@ class Ospfv3(ResourceModule):
             begin = len(self.commands)
             if "timers" in entry:
                 if entry["timers"].get("throttle"):
+                    throttle = entry["timers"].pop("throttle")
+                    modified = {}
+                    if throttle.get("lsa"):
+                        modified["lsa"] = {
+                            "max": throttle["max"],
+                            "min": throttle["min"],
+                            "initial": throttle["initial"],
+                            "direction": "tx",
+                        }
+                    if throttle.get("spf"):
+                        modified["spf"] = {
+                            "max": throttle["max"],
+                            "min": throttle["min"],
+                            "initial": throttle["initial"],
+                        }
+                    entry["timers"].update(modified)
                     self._module.warn(
-                        "'timers throttle' command is deprecated by 'timers lsa / timers spf'"
+                        " ** The 'timers' argument has been changed to have separate 'lsa' and 'spf' keys and 'throttle' has been deprecated. ** "
+                        " \n** Your task has been modified to use {0}. ** "
+                        " \n** timers.throttle will be removed after '2024-01-01' ** ".format(
+                            entry["timers"]
+                        )
                     )
-                    entry.pop("throttle")
-                    continue
                 if entry["timers"].get("lsa") and not isinstance(
                     entry["timers"]["lsa"], dict
                 ):
+                    if not isinstance(entry["timers"]["lsa"], int):
+                        # It doesn't match the new format or the old format, fail here
+                        self._module.fail_json(
+                            msg="The lsa key takes a dictionary of arguments. Please consult the documentation for more details"
+                        )
                     modified = {
                         "timers": {
                             "lsa": {
@@ -234,7 +282,7 @@ class Ospfv3(ResourceModule):
                     self._module.warn(
                         " ** 'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards. ** "
                         " \n** Your task has been modified to use {0}. ** "
-                        " \n** timers.lsa of type int will be deprecated by '2023-08-31' ** ".format(
+                        " \n** timers.lsa of type int will be removed after '2024-01-01' ** ".format(
                             modified
                         )
                     )

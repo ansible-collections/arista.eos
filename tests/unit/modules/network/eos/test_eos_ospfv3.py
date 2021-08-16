@@ -820,3 +820,41 @@ class TestEosOspfv3Module(TestEosModule):
         )
         commands = ["router ospfv3", "bfd all-interfaces", "exit"]
         self.execute_module(changed=True, commands=commands)
+
+    def test_eos_ospfv3_merged_lsa_list_error(self):
+        set_module_args(
+            dict(
+                config=dict(
+                    processes=[
+                        dict(
+                            vrf="vrf02",
+                            fips_restrictions=True,
+                            address_family=[
+                                dict(
+                                    afi="ipv6",
+                                    fips_restrictions=True,
+                                    areas=[
+                                        dict(
+                                            area_id="0.0.0.1",
+                                            stub=dict(set=True),
+                                        )
+                                    ],
+                                    distance=200,
+                                    router_id="10.17.0.3",
+                                    timers=dict(
+                                        out_delay=10,
+                                        lsa=[dict(initial=56, max=56, min=56)],
+                                    ),
+                                )
+                            ],
+                        ),
+                    ]
+                ),
+                state="merged",
+            )
+        )
+        result = self.execute_module(failed=True)
+        self.assertIn(
+            "The lsa key takes a dictionary of arguments. Please consult the documentation for more details",
+            result["msg"],
+        )
