@@ -88,7 +88,7 @@ class Logging_globalFacts(object):
             )
         )
 
-        facts["logging_global"] = params.get("config", [])
+        facts["logging_global"] = params.get("config", {})
         ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

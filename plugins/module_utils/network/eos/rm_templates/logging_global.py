@@ -30,6 +30,17 @@ def _tmplt_logging_format(config_data):
         command = "logging format sequence-numbers"
     return command
 
+def _tmplt_logging_synchronous(config_data):
+    command = "logging synchronous"
+    if "level" in config_data["synchronous"]:
+        command += " level " + config_data["synchronous"]["level"]
+    return command
+
+def _tmplt_logging_trap(config_data):
+    command = "logging trap"
+    if "severity" in config_data["trap"]:
+        command += " " + config_data["trap"]["severity"]
+    return command
 
 def _tmplt_logging_global_hosts(config_data):
     el = config_data["hosts"]
@@ -357,11 +368,11 @@ class Logging_globalTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": "logging synchronous{{ ' ' + synchronous.level if level is defined }}",
+            "setval": _tmplt_logging_synchronous,
             "result": {
                 "synchronous": {
                     "set": "{{ True if level is not defined }}",
-                    "level": "{{ level.split(" ")[1] if level is defined }}"
+                    "level": '{{ level.split(" ")[1] if level is defined }}'
                 }
             },
         },
@@ -374,7 +385,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": "logging trap{{ ' ' + trap.severity if trap.severity is defined }}",
+            "setval": _tmplt_logging_trap,
             "result": {
                 "trap": {
                     "set": "{{ True if level is not defined }}",
