@@ -30,17 +30,20 @@ def _tmplt_logging_format(config_data):
         command = "logging format sequence-numbers"
     return command
 
+
 def _tmplt_logging_synchronous(config_data):
     command = "logging synchronous"
     if "level" in config_data["synchronous"]:
         command += " level " + config_data["synchronous"]["level"]
     return command
 
+
 def _tmplt_logging_trap(config_data):
     command = "logging trap"
     if "severity" in config_data["trap"]:
         command += " " + config_data["trap"]["severity"]
     return command
+
 
 def _tmplt_logging_global_hosts(config_data):
     el = config_data["hosts"]
@@ -91,7 +94,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": 'logging buffered {{ buffered.buffer_size if buffered.buffer_size is defined }}'
-                        ' {{ buffered.severity if buffered.severity is defined }}',
+                      ' {{ buffered.severity if buffered.severity is defined }}',
             "result": {
                 "buffered": {
                     "buffer_size": "{{ size }}",
@@ -193,7 +196,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": "logging format timestamp traditional {{ 'year' if format.timestamp.traditional.year is defined }}"
-                        "{{ 'timezone' if format.timestamp.traditional.timezone is defined }}",
+                      "{{ 'timezone' if format.timestamp.traditional.timezone is defined }}",
             "compval": "format.timestamp.traditional",
             "shared": True,
             "result": {
@@ -413,7 +416,7 @@ class Logging_globalTemplate(NetworkTemplate):
             "shared": True,
             "result": {
                 "vrfs": {
-                   "{{ vrf }}": {
+                    "{{ vrf }}": {
                         "name": "{{ vrf }}",
                         "hosts": {
                             "{{ name }}": {
@@ -444,7 +447,7 @@ class Logging_globalTemplate(NetworkTemplate):
             "shared": True,
             "result": {
                 "vrfs": {
-                   "{{ vrf }}": {
+                    "{{ vrf }}": {
                         "name": "{{ vrf }}",
                         "source_interface": "{{ val }}"
                     }

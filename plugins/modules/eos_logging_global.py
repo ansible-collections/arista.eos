@@ -206,16 +206,670 @@ options:
       - rendered
       - parsed
       default: merged
-EXAMPLES:
-- merged_example_01.txt
-- replaced_example_01.txt
-- overridden_example_01.txt
-- deleted_example_01.txt
-- gathered_example_01.txt
-- parsed_example_01.txt
-- rendered_example_01.txt
 """
 EXAMPLES = """
+
+# Using merged
+
+# Before state
+
+# test(config)#show running-config | section logging
+# test(config)#
+
+  - name: Merge provided configuration with device configuration
+    arista.eos.eos_logging_global:
+      config:
+        hosts:
+          - name: "host01"
+            protocol: "tcp"
+          - name: "11.11.11.1"
+            port: 25
+        vrfs:
+          - name: "vrf01"
+            source_interface: "Ethernet1"
+          - name: "vrf02"
+            hosts:
+              - name: "hostvrf1"
+                protocol: "tcp"
+              - name: "24.1.1.1"
+                port: "33"
+
+# After State:
+
+# test(config)#show running-config | section logging
+# logging host 11.11.11.1 25
+# logging host host01 514 protocol tcp
+# logging vrf vrf02 host 24.1.1.1 33
+# logging vrf vrf02 host hostvrf1 514 protocol tcp
+# logging vrf vrf01 source-interface Ethernet1
+# test(config)#
+#
+#
+# Module Execution:
+# "after": {
+#         "hosts": [
+#             {
+#                 "name": "11.11.11.1",
+#                 "port": 25
+#             },
+#             {
+#                 "name": "host01",
+#                 "port": 514,
+#                 "protocol": "tcp"
+#             }
+#         ],
+#         "vrfs": [
+#             {
+#                 "name": "vrf01",
+#                 "source_interface": "Ethernet1"
+#             },
+#             {
+#                 "hosts": [
+#                     {
+#                         "name": "24.1.1.1",
+#                         "port": 33
+#                     },
+#                     {
+#                         "name": "hostvrf1",
+#                         "port": 514,
+#                         "protocol": "tcp"
+#                     }
+#                 ],
+#                 "name": "vrf02"
+#             }
+#         ]
+#     },
+#     "before": {},
+#     "changed": true,
+#     "commands": [
+#         "logging host host01 protocol tcp",
+#         "logging host 11.11.11.1 25",
+#         "logging vrf vrf01 source-interface Ethernet1",
+#         "logging vrf vrf02 host hostvrf1 protocol tcp",
+#         "logging vrf vrf02 host 24.1.1.1 33"
+#     ],
+#
+
+# Using replaced:
+# Before State:
+
+# test(config)#show running-config | section logging
+# logging host 11.11.11.1 25
+# logging host host01 514 protocol tcp
+# logging vrf vrf02 host 24.1.1.1 33
+# logging vrf vrf02 host hostvrf1 514 protocol tcp
+# logging format timestamp traditional timezone
+# logging vrf vrf01 source-interface Ethernet1
+# logging policy match inverse-result match-list                           list01 discard
+# logging persistent 4096
+# !
+# logging level AAA alerts
+# test(config)#
+
+  - name: Repalce
+    arista.eos.eos_logging_global:
+      config:
+        synchronous:
+          set: True
+        trap:
+          severity: "critical"
+        hosts:
+          - name: "host02"
+            protocol: "tcp"
+        vrfs:
+          - name: "vrf03"
+            source_interface: "Vlan100"
+          - name: "vrf04"
+            hosts:
+              - name: "hostvrf1"
+                protocol: "tcp"
+
+      state: replaced
+
+# After State:
+# test(config)#show running-config | section logging
+# logging synchronous
+# logging trap critical
+# logging host host02 514 protocol tcp
+# logging vrf vrf04 host hostvrf1 514 protocol tcp
+# logging vrf vrf03 source-interface Vlan100
+# test(config)#
+#
+# Module Execution:
+# "after": {
+#         "hosts": [
+#             {
+#                 "name": "host02",
+#                 "port": 514,
+#                 "protocol": "tcp"
+#             }
+#         ],
+#         "synchronous": {
+#             "set": True
+#         },
+#         "trap": {
+#            "severity": "critical"
+#         },
+#         "vrfs": [
+#             {
+#                 "name": "vrf03",
+#                 "source_interface": "Vlan100"
+#             },
+#             {
+#                 "hosts": [
+#                     {
+#                         "name": "hostvrf1",
+#                         "port": 514,
+#                         "protocol": "tcp"
+#                     }
+#                 ],
+#                 "name": "vrf04"
+#             }
+#         ]
+#     },
+#     "before": {
+#         "format": {
+#             "timestamp": {
+#                 "traditional": {
+#                     "timezone": true
+#                 }
+#             }
+#         },
+#         "hosts": [
+#             {
+#                 "name": "11.11.11.1",
+#                 "port": 25
+#             },
+#             {
+#                 "name": "host01",
+#                 "port": 514,
+#                 "protocol": "tcp"
+#             }
+#         ],
+#         "level": {
+#             "facility": "AAA",
+#             "severity": "alerts"
+#         },
+#         "persistent": {
+#             "size": 4096
+#         },
+#         "policy": {
+#             "invert_result": true,
+#             "match_list": "list01"
+#         },
+#         "vrfs": [
+#             {
+#                 "name": "vrf01",
+#                 "source_interface": "Ethernet1"
+#             },
+#             {
+#                 "hosts": [
+#                     {
+#                         "name": "24.1.1.1",
+#                         "port": 33
+#                     },
+#                     {
+#                         "name": "hostvrf1",
+#                         "port": 514,
+#                         "protocol": "tcp"
+#                     }
+#                 ],
+#                 "name": "vrf02"
+#             }
+#         ]
+#     },
+#     "changed": true,
+#     "commands": [
+#         "logging host host02 protocol tcp",
+#         "no logging host 11.11.11.1 25",
+#         "no logging host host01 514 protocol tcp",
+#         "logging vrf vrf03 source-interface Vlan100",
+#         "logging vrf vrf04 host hostvrf1 protocol tcp",
+#         "no logging vrf vrf01 source-interface Ethernet1",
+#         "no logging vrf vrf02 host 24.1.1.1 33",
+#         "no logging vrf vrf02 host hostvrf1 514 protocol tcp",
+#         "no logging format timestamp traditional timezone",
+#         "no logging level AAA alerts",
+#         "no logging persistent 4096",
+#         "no logging policy match invert-result match-list list01 discard",
+#         "logging synchronous",
+#         "logging trap critical"
+#     ],
+#
+#
+
+
+# Using overridden:
+# Before State:
+
+# test(config)#show running-config | section logging
+# logging host 11.11.11.1 25
+# logging host host01 514 protocol tcp
+# logging vrf vrf02 host 24.1.1.1 33
+# logging vrf vrf02 host hostvrf1 514 protocol tcp
+# logging format timestamp traditional timezone
+# logging vrf vrf01 source-interface Ethernet1
+# logging policy match inverse-result match-list                           list01 discard
+# logging persistent 4096
+# !
+# logging level AAA alerts
+# test(config)#
+
+  - name: Repalce
+    arista.eos.eos_logging_global:
+      config:
+        synchronous:
+          set: True
+        trap:
+          severity: "critical"
+        hosts:
+          - name: "host02"
+            protocol: "tcp"
+        vrfs:
+          - name: "vrf03"
+            source_interface: "Vlan100"
+          - name: "vrf04"
+            hosts:
+              - name: "hostvrf1"
+                protocol: "tcp"
+
+      state: overridden
+
+# After State:
+# test(config)#show running-config | section logging
+# logging synchronous
+# logging trap critical
+# logging host host02 514 protocol tcp
+# logging vrf vrf04 host hostvrf1 514 protocol tcp
+# logging vrf vrf03 source-interface Vlan100
+# test(config)#
+#
+# Module Execution:
+# "after": {
+#         "hosts": [
+#             {
+#                 "name": "host02",
+#                 "port": 514,
+#                 "protocol": "tcp"
+#             }
+#         ],
+#         "synchronous": {
+#             "set": True
+#         },
+#         "trap": {
+#            "severity": "critical"
+#         },
+#         "vrfs": [
+#             {
+#                 "name": "vrf03",
+#                 "source_interface": "Vlan100"
+#             },
+#             {
+#                 "hosts": [
+#                     {
+#                         "name": "hostvrf1",
+#                         "port": 514,
+#                         "protocol": "tcp"
+#                     }
+#                 ],
+#                 "name": "vrf04"
+#             }
+#         ]
+#     },
+#     "before": {
+#         "format": {
+#             "timestamp": {
+#                 "traditional": {
+#                     "timezone": true
+#                 }
+#             }
+#         },
+#         "hosts": [
+#             {
+#                 "name": "11.11.11.1",
+#                 "port": 25
+#             },
+#             {
+#                 "name": "host01",
+#                 "port": 514,
+#                 "protocol": "tcp"
+#             }
+#         ],
+#         "level": {
+#             "facility": "AAA",
+#             "severity": "alerts"
+#         },
+#         "persistent": {
+#             "size": 4096
+#         },
+#         "policy": {
+#             "invert_result": true,
+#             "match_list": "list01"
+#         },
+#         "vrfs": [
+#             {
+#                 "name": "vrf01",
+#                 "source_interface": "Ethernet1"
+#             },
+#             {
+#                 "hosts": [
+#                     {
+#                         "name": "24.1.1.1",
+#                         "port": 33
+#                     },
+#                     {
+#                         "name": "hostvrf1",
+#                         "port": 514,
+#                         "protocol": "tcp"
+#                     }
+#                 ],
+#                 "name": "vrf02"
+#             }
+#         ]
+#     },
+#     "changed": true,
+#     "commands": [
+#         "logging host host02 protocol tcp",
+#         "no logging host 11.11.11.1 25",
+#         "no logging host host01 514 protocol tcp",
+#         "logging vrf vrf03 source-interface Vlan100",
+#         "logging vrf vrf04 host hostvrf1 protocol tcp",
+#         "no logging vrf vrf01 source-interface Ethernet1",
+#         "no logging vrf vrf02 host 24.1.1.1 33",
+#         "no logging vrf vrf02 host hostvrf1 514 protocol tcp",
+#         "no logging format timestamp traditional timezone",
+#         "no logging level AAA alerts",
+#         "no logging persistent 4096",
+#         "no logging policy match invert-result match-list list01 discard",
+#         "logging synchronous",
+#         "logging trap critical"
+#     ],
+#
+#
+
+# Using deleted:
+
+# Before State:
+# test(config)#show running-config | section logging
+# logging synchronous level critical
+# logging host 11.11.11.1 25
+# logging host host01 514 protocol tcp
+# logging host host02 514 protocol tcp
+# logging vrf vrf02 host 24.1.1.1 33
+# logging vrf vrf02 host hostvrf1 514 protocol tcp
+# logging vrf vrf04 host hostvrf1 514 protocol tcp
+# logging vrf vrf01 source-interface Ethernet1
+# logging vrf vrf03 source-interface Vlan100
+# test(config)#
+
+  - name: Delete all logging configs
+    arista.eos.eos_logging_global:
+      state: deleted
+    become: yes
+
+# After state:
+# test(config)#show running-config | section logging
+# test(config)#
+#
+# "after": {},
+#     "before": {
+#         "hosts": [
+#             {
+#                 "name": "11.11.11.1",
+#                 "port": 25
+#             },
+#             {
+#                 "name": "host01",
+#                 "port": 514,
+#                 "protocol": "tcp"
+#             },
+#             {
+#                 "name": "host02",
+#                 "port": 514,
+#                 "protocol": "tcp"
+#             }
+#         ],
+#         "synchronous": {
+#             "level": "critical"
+#         },
+#         "vrfs": [
+#             {
+#                 "name": "vrf01",
+#                 "source_interface": "Ethernet1"
+#             },
+#             {
+#                 "hosts": [
+#                     {
+#                         "name": "24.1.1.1",
+#                         "port": 33
+#                     },
+#                     {
+#                         "name": "hostvrf1",
+#                         "port": 514,
+#                         "protocol": "tcp"
+#                     }
+#                 ],
+#                 "name": "vrf02"
+#             },
+#             {
+#                 "name": "vrf03",
+#                 "source_interface": "Vlan100"
+#             },
+#             {
+#                 "hosts": [
+#                     {
+#                         "name": "hostvrf1",
+#                         "port": 514,
+#                         "protocol": "tcp"
+#                     }
+#                 ],
+#                 "name": "vrf04"
+#             }
+#         ]
+#     },
+#     "changed": true,
+#     "commands": [
+#         "no logging host 11.11.11.1 25",
+#         "no logging host host01 514 protocol tcp",
+#         "no logging host host02 514 protocol tcp",
+#         "no logging vrf vrf01 source-interface Ethernet1",
+#         "no logging vrf vrf02 host 24.1.1.1 33",
+#         "no logging vrf vrf02 host hostvrf1 514 protocol tcp",
+#         "no logging vrf vrf03 source-interface Vlan100",
+#         "no logging vrf vrf04 host hostvrf1 514 protocol tcp",
+#         "no logging synchronous level critical"
+#     ],
+
+# Using parsed:
+# parsed.cfg
+
+# logging host 11.11.11.1 25
+# logging host host01 514 protocol tcp
+# logging vrf vrf02 host 24.1.1.1 33
+# logging vrf vrf02 host hostvrf1 514 protocol tcp
+# logging format timestamp traditional timezone
+# logging vrf vrf01 source-interface Ethernet1
+# logging policy match inverse-result match-list                           list01 discard
+# logging persistent 4096
+# !
+# logging level AAA alerts
+
+  - name: parse configs
+    arista.eos.eos_logging_global:
+      running_config: "{{ lookup('file', './parsed.cfg') }}"
+      state: parsed
+
+# Module Execution
+# "parsed": {
+#         "format": {
+#             "timestamp": {
+#                 "traditional": {
+#                     "timezone": true
+#                 }
+#             }
+#         },
+#         "hosts": [
+#             {
+#                 "name": "11.11.11.1",
+#                 "port": 25
+#             },
+#             {
+#                 "name": "host01",
+#                 "port": 514,
+#                 "protocol": "tcp"
+#             }
+#         ],
+#         "level": {
+#             "facility": "AAA",
+#             "severity": "alerts"
+#         },
+#         "persistent": {
+#             "size": 4096
+#         },
+#         "policy": {
+#             "invert_result": true,
+#             "match_list": "list01"
+#         },
+#         "vrfs": [
+#             {
+#                 "name": "vrf01",
+#                 "source_interface": "Ethernet1"
+#             },
+#             {
+#                 "hosts": [
+#                     {
+#                         "name": "24.1.1.1",
+#                         "port": 33
+#                     },
+#                     {
+#                         "name": "hostvrf1",
+#                         "port": 514,
+#                         "protocol": "tcp"
+#                     }
+#                 ],
+#                 "name": "vrf02"
+#             }
+#         ]
+#     }
+#
+
+# Using gathered:
+# Before State:
+# test(config)#show running-config | section logging
+# logging host 11.11.11.1 25
+# logging host host01 514 protocol tcp
+# logging vrf vrf02 host 24.1.1.1 33
+# logging vrf vrf02 host hostvrf1 514 protocol tcp
+# logging format timestamp traditional timezone
+# logging vrf vrf01 source-interface Ethernet1
+# logging policy match inverse-result match-list                           list01 discard
+# logging persistent 4096
+# !
+# logging level AAA alerts
+# test(config)#
+
+  - name: gather configs
+    arista.eos.eos_logging_global:
+      state: gathered
+
+# Module Execution:
+# "gathered": {
+#         "format": {
+#             "timestamp": {
+#                 "traditional": {
+#                     "timezone": true
+#                 }
+#             }
+#         },
+#         "hosts": [
+#             {
+#                 "name": "11.11.11.1",
+#                 "port": 25
+#             },
+#             {
+#                 "name": "host01",
+#                 "port": 514,
+#                 "protocol": "tcp"
+#             }
+#         ],
+#         "level": {
+#             "facility": "AAA",
+#             "severity": "alerts"
+#         },
+#         "persistent": {
+#             "size": 4096
+#         },
+#         "policy": {
+#             "invert_result": true,
+#             "match_list": "list01"
+#         },
+#         "vrfs": [
+#             {
+#                 "name": "vrf01",
+#                 "source_interface": "Ethernet1"
+#             },
+#             {
+#                 "hosts": [
+#                     {
+#                         "name": "24.1.1.1",
+#                         "port": 33
+#                     },
+#                     {
+#                         "name": "hostvrf1",
+#                         "port": 514,
+#                         "protocol": "tcp"
+#                     }
+#                 ],
+#                 "name": "vrf02"
+#             }
+#         ]
+#     },
+#
+
+# Using rendered:
+  - name: Render provided configuration
+    arista.eos.eos_logging_global:
+      config:
+        format:
+          timestamp:
+            traditional:
+              timezone: True
+        level:
+          facility: "AAA"
+          severity: "alerts"
+        persistent:
+          size: 4096
+        policy:
+          invert_result: True
+          match_list: "list01"
+        hosts:
+          - name: "host01"
+            protocol: "tcp"
+          - name: "11.11.11.1"
+            port: 25
+        vrfs:
+          - name: "vrf01"
+            source_interface: "Ethernet1"
+          - name: "vrf02"
+            hosts:
+              - name: "hostvrf1"
+                protocol: "tcp"
+              - name: "24.1.1.1"
+                port: "33"
+# Module Execution:
+
+# "rendered": [
+#         "logging host host01 protocol tcp",
+#         "logging host 11.11.11.1 25",
+#         "logging vrf vrf01 source-interface Ethernet1",
+#         "logging vrf vrf02 host hostvrf1 protocol tcp",
+#         "logging vrf vrf02 host 24.1.1.1 33",
+#         "logging format timestamp traditional timezone",
+#         "logging level AAA alerts",
+#         "logging persistent 4096",
+#         "logging policy match invert-result match-list list01 discard"
+#     ]
+#
 
 """
 
