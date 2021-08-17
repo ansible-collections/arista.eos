@@ -299,7 +299,7 @@ class AclsFacts(object):
                             name_dict.update({"aces": ace_list[:]})
                         # acls_list.append(name_dict)
                         continue
-                    if protocol == "tcp" or "6":
+                    if protocol in ["tcp", "6"]:
                         protocol = "tcp"
                         flags_dict = {}
                         if (
