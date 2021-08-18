@@ -163,8 +163,16 @@ class TestEosLogging_GlobalModule(TestEosModule):
                         dict(name="vrf03", source_interface="vlan100"),
                         dict(
                             name="vrf04",
-                            hosts=[dict(name="hostvrf1", protocol="tcp", add=True),
-                                  dict(name="hostvrf2", protocol="tcp", remove=True)],
+                            hosts=[
+                                dict(
+                                    name="hostvrf1", protocol="tcp", add=True
+                                ),
+                                dict(
+                                    name="hostvrf2",
+                                    protocol="tcp",
+                                    remove=True,
+                                ),
+                            ],
                         ),
                     ],
                 )
@@ -178,7 +186,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
             "logging synchronous",
             "logging trap critical",
         ]
-        self.execute_module(changed=True, commands=commands)
+        self.execute_module(changed=True, commands=sorted(commands))
 
     def test_eos_logging_global_replaced(self):
         set_module_args(
@@ -188,8 +196,10 @@ class TestEosLogging_GlobalModule(TestEosModule):
                     format=dict(sequence_numbers=True),
                     synchronous=dict(level="informational"),
                     trap=dict(severity="critical"),
-                    hosts=[dict(name="host02", protocol="tcp", add=True),
-                          dict(name="host03", protocol="tcp", remove=True)],
+                    hosts=[
+                        dict(name="host02", protocol="tcp", add=True),
+                        dict(name="host03", protocol="tcp", remove=True),
+                    ],
                     vrfs=[
                         dict(name="vrf03", source_interface="vlan100"),
                         dict(
@@ -221,7 +231,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
             "logging synchronous level informational",
             "logging trap critical",
         ]
-        self.execute_module(changed=True, commands=commands)
+        self.execute_module(changed=True, commands=sorted(commands))
 
     def test_eos_logging_global_overridden(self):
         set_module_args(
@@ -262,7 +272,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
             "logging synchronous",
             "logging trap critical",
         ]
-        self.execute_module(changed=True, commands=commands)
+        self.execute_module(changed=True, commands=sorted(commands))
 
     def test_eos_logging_global_deleted(self):
         set_module_args(
@@ -284,8 +294,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
             "no logging persistent 4096",
             "no logging policy match invert-result match-list list01 discard",
         ]
-        self.execute_module(changed=True, commands=commands)
-
+        self.execute_module(changed=True, commands=sorted(commands))
 
     def test_eos_logging_global_gathered(self):
         set_module_args(dict(state="gathered"))
