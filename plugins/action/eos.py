@@ -25,6 +25,7 @@ import sys
 import copy
 
 from ansible import constants as C
+from ansible.module_utils.connection import Connection
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_provider_spec,
 )
@@ -48,6 +49,9 @@ class ActionModule(ActionNetworkModule):
             True if module_name in ["eos_config", "config"] else False
         )
         persistent_connection = self._play_context.connection.split(".")[-1]
+        conn = Connection(self._connection.socket_path)
+        conn.load_platfrom_type('arista.eos.eos')
+        conn.set_options(var_options=task_vars)
         warnings = []
 
         if persistent_connection in ("network_cli", "httpapi"):
