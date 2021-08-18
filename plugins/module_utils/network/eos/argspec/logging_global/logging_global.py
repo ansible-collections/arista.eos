@@ -48,7 +48,6 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                     "type": "dict",
                     "options": {
                         "severity": {"type": "str"},
-                        "buffer_size": {"type": "int"},
                     },
                 },
                 "event": {
@@ -106,7 +105,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                     },
                 },
                 "monitor": {"type": "str"},
-                "turn_on": {"type": "str"},
+                "turn_on": {"type": "bool"},
                 "persistent": {
                     "type": "dict",
                     "options": {

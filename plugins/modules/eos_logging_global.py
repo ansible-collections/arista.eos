@@ -33,20 +33,20 @@ options:
           - Set buffered logging parameters.
           type: dict
           suboptions: &message_options
-          severity:
-            description: Severity level .
-            type: str
-          buffer_size:
-            description: Logging buffer size
-            type: int
+              severity:
+                description: Severity level .
+                type: str
+              buffer_size:
+                description: Logging buffer size
+                type: int
         console:
           description:
           - Set console logging parameters.
           type: dict
           suboptions:
-          severity:
-            description: Severity level .
-            type: str
+              severity:
+                description: Severity level .
+                type: str
         event:
           description: Global events
           type: str
@@ -85,9 +85,10 @@ options:
             sequence_numbers:
               description:  No. of log messages.
               type: bool
-        host: &host
+        hosts: &host
           description: Set syslog server IP address and parameters.
-          type: dict
+          type: list
+          elements: dict
           suboptions:
             name:
               description: Hostname or IP address of the syslog server.
@@ -101,7 +102,7 @@ options:
             protocol:
               description: Set syslog server transport protocol
               type: str
-              choices: ["type", "udp"]
+              choices: ["tcp", "udp"]
             port:
               description: Port of the syslog server.
               type: int
@@ -173,14 +174,15 @@ options:
             severity:
               description: severity level
               type: str
-        vrf:
+        vrfs:
           description: Specify vrf
-          type: dict
+          type: list
+          elements: dict
           suboptions:
             name:
               description: vrf name.
               type: str
-            host: *host
+            hosts: *host
             source_interface: *srcint
    running_config:
       description:
