@@ -84,9 +84,9 @@ class TestEosLldpGlobalModule(TestEosModule):
             )
         )
         commands = [
-            "lldp holdtime 100",
-            "lldp tlv-select system-description",
-            "no lldp tlv-select port-description",
+            "lldp hold-time 100",
+            "lldp tlv transmit system-description",
+            "no lldp tlv transmit port-description",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -121,12 +121,12 @@ class TestEosLldpGlobalModule(TestEosModule):
             )
         )
         commands = [
-            "no lldp holdtime",
-            "no lldp reinit",
+            "no lldp hold-time",
+            "no lldp timer reinitialization",
             "no lldp timer",
-            "lldp holdtime 100",
-            "lldp tlv-select system-description",
-            "no lldp tlv-select port-description",
+            "lldp hold-time 100",
+            "lldp tlv transmit system-description",
+            "no lldp tlv transmit port-description",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -149,20 +149,20 @@ class TestEosLldpGlobalModule(TestEosModule):
     def test_eos_lldp_global_deleted(self):
         set_module_args(dict(state="deleted"))
         commands = [
-            "no lldp holdtime",
-            "no lldp reinit",
+            "no lldp hold-time",
+            "no lldp timer reinitialization",
             "no lldp timer",
-            "lldp tlv-select management-address",
-            "lldp tlv-select system-description",
+            "lldp tlv transmit management-address",
+            "lldp tlv transmit system-description",
         ]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_lldp_global_parsed(self):
         commands = [
-            "lldp holdtime 100",
-            "lldp tlv-select system-description",
-            "lldp reinit 5",
-            "no lldp tlv-select port-description",
+            "lldp hold-time 100",
+            "lldp tlv transmit system-description",
+            "lldp timer reinitialization 5",
+            "no lldp tlv transmit port-description",
         ]
         parsed_str = "\n".join(commands)
         set_module_args(dict(running_config=parsed_str, state="parsed"))
@@ -191,12 +191,12 @@ class TestEosLldpGlobalModule(TestEosModule):
             )
         )
         commands = [
-            "lldp holdtime 100",
-            "lldp reinit 5",
+            "lldp hold-time 100",
+            "lldp timer reinitialization 5",
             "lldp timer 400",
-            "lldp tlv-select system-description",
-            "no lldp tlv-select port-description",
-            "no lldp tlv-select management-address",
+            "lldp tlv transmit system-description",
+            "no lldp tlv transmit port-description",
+            "no lldp tlv transmit management-address",
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(

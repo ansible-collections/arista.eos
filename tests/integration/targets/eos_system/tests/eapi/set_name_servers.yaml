@@ -6,7 +6,7 @@
   arista.eos.eos_config:
     lines:
       - no ip name-server
-      - vrf definition ansible
+      - vrf instance ansible
     match: none
 
 - name: configure name_servers
@@ -58,7 +58,7 @@
   arista.eos.eos_config:
     lines:
       - no ip domain lookup source-interface
-      - no vrf definition ansible
+      - no vrf instance ansible
     match: none
 
 - debug: msg="END eapi/set_name_servers.yaml"

@@ -32,7 +32,7 @@ version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 - Abbreviated commands are NOT idempotent, see
   L(Network FAQ,../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
 - To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they

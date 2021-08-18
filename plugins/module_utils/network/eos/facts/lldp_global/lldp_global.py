@@ -82,12 +82,14 @@ class Lldp_globalFacts(object):
         :returns: The generated config
         """
         config = deepcopy(spec)
-        config["holdtime"] = utils.parse_conf_arg(conf, "holdtime")
-        config["reinit"] = utils.parse_conf_arg(conf, "reinit")
+        config["holdtime"] = utils.parse_conf_arg(conf, "hold-time")
+        config["reinit"] = utils.parse_conf_arg(conf, "timer reinitialization")
         config["timer"] = utils.parse_conf_arg(conf, "timer")
+        if config.get("timer") and "reinitialization" in config["timer"]:
+            config["timer"] = None
 
         for match in re.findall(
-            r"^(no)? lldp tlv-select (\S+)", conf, re.MULTILINE
+            r"^(no)? lldp tlv transmit (\S+)", conf, re.MULTILINE
         ):
             tlv_option = match[1].replace("-", "_")
             config["tlv_select"][tlv_option] = bool(match[0] != "no")

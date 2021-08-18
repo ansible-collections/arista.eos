@@ -80,7 +80,7 @@ class TestEosLacpInterfacesModule(TestEosModule):
         commands = [
             "interface Ethernet1",
             "lacp port-priority 45",
-            "lacp rate normal",
+            "lacp timer normal",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -101,9 +101,9 @@ class TestEosLacpInterfacesModule(TestEosModule):
         commands = [
             "interface Ethernet1",
             "lacp port-priority 45",
-            "lacp rate normal",
+            "lacp timer normal",
             "interface Ethernet2",
-            "lacp rate normal",
+            "lacp timer normal",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -122,7 +122,7 @@ class TestEosLacpInterfacesModule(TestEosModule):
     #            rate="normal"
     #        )], state="replaced"
     #    ))
-    #    commands = ['interface Ethernet1', 'lacp port-priority 45', 'lacp rate normal']
+    #    commands = ['interface Ethernet1', 'lacp port-priority 45', 'lacp timer normal']
     #    self.execute_module(changed=True, commands=commands)
 
     def test_eos_lacp_interfaces_replaced_idempotent(self):
@@ -145,10 +145,10 @@ class TestEosLacpInterfacesModule(TestEosModule):
         commands = [
             "interface Ethernet1",
             "lacp port-priority 45",
-            "lacp rate normal",
+            "lacp timer normal",
             "interface Ethernet2",
             "no lacp port-priority",
-            "no lacp rate",
+            "no lacp timer",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -166,5 +166,5 @@ class TestEosLacpInterfacesModule(TestEosModule):
 
     def test_eos_lacp_interfaces_deleted(self):
         set_module_args(dict(config=[dict(name="Ethernet2")], state="deleted"))
-        commands = ["interface Ethernet2", "no lacp rate"]
+        commands = ["interface Ethernet2", "no lacp timer"]
         self.execute_module(changed=True, commands=commands)

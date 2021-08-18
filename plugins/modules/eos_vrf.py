@@ -31,7 +31,7 @@ description:
 - This module provides declarative management of VRFs on Arista EOS network devices.
 version_added: 1.0.0
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   name:
     description:
@@ -57,7 +57,7 @@ options:
     type: list
     elements: str
   aggregate:
-    description: List of VRFs definitions
+    description: List of VRFs instances
     type: list
     elements: dict
     suboptions:
@@ -162,10 +162,10 @@ commands:
   returned: always
   type: list
   sample:
-    - vrf definition test
+    - vrf instance test
     - rd 1:100
     - interface Ethernet1
-    - vrf forwarding test
+    - vrf test
 """
 import re
 import time
@@ -205,10 +205,10 @@ def map_obj_to_commands(updates, module):
 
         if state == "absent":
             if obj_in_have:
-                commands.append("no vrf definition %s" % name)
+                commands.append("no vrf instance %s" % name)
         elif state == "present":
             if not obj_in_have:
-                commands.append("vrf definition %s" % name)
+                commands.append("vrf instance %s" % name)
 
                 if rd is not None:
                     commands.append("rd %s" % rd)
@@ -216,17 +216,17 @@ def map_obj_to_commands(updates, module):
                 if w["interfaces"]:
                     for i in w["interfaces"]:
                         commands.append("interface %s" % i)
-                        commands.append("vrf forwarding %s" % w["name"])
+                        commands.append("vrf %s" % w["name"])
             else:
                 if w["rd"] is not None and w["rd"] != obj_in_have["rd"]:
-                    commands.append("vrf definition %s" % w["name"])
+                    commands.append("vrf instance %s" % w["name"])
                     commands.append("rd %s" % w["rd"])
 
                 if w["interfaces"]:
                     if not obj_in_have["interfaces"]:
                         for i in w["interfaces"]:
                             commands.append("interface %s" % i)
-                            commands.append("vrf forwarding %s" % w["name"])
+                            commands.append("vrf %s" % w["name"])
                     elif set(w["interfaces"]) != obj_in_have["interfaces"]:
                         missing_interfaces = list(
                             set(w["interfaces"])
@@ -235,13 +235,13 @@ def map_obj_to_commands(updates, module):
 
                         for i in missing_interfaces:
                             commands.append("interface %s" % i)
-                            commands.append("vrf forwarding %s" % w["name"])
+                            commands.append("vrf %s" % w["name"])
 
     if purge:
         for h in have:
             obj_in_want = search_obj_in_list(h["name"], want)
             if not obj_in_want:
-                commands.append("no vrf definition %s" % h["name"])
+                commands.append("no vrf instance %s" % h["name"])
 
     return commands
 

@@ -29,13 +29,11 @@
                       ranges:
                         - address: 60.1.0.0/16
                           cost: 30
-                  timers:
-                    lsa: 10
               vrf: "vrf02"
 
     - assert:
         that:
-          - result.commands|length == 16
+          - result.commands|length == 15
           - result.changed == true
           - result.commands|symmetric_difference(overridden.commands) == []
           - result.after.processes|symmetric_difference(overridden.after.processes) == []

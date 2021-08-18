@@ -4,11 +4,11 @@
   arista.eos.eos_config:
     lines:
       - "lldp timer 3000"
-      - "lldp holdtime 100"
-      - "lldp reinit 5"
-      - "no lldp tlv-select management-address"
-      - "no lldp tlv-select system-description"
-      - "lldp tlv-select port-description"
+      - "lldp hold-time 100"
+      - "lldp timer reinitialization 5"
+      - "no lldp tlv transmit management-address"
+      - "no lldp tlv transmit system-description"
+      - "lldp tlv transmit port-description"
 
 - become: true
   arista.eos.eos_facts:

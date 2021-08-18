@@ -190,7 +190,7 @@ class Static_routesFacts(object):
                     if remainder and remainder[0] == "label":
                         nexthops.update({"mpls_label": remainder.pop(1)})
                         remainder.pop(0)
-                elif re.search(r"Nexthop-Group", remainder[0]):
+                elif re.search(r"Nexthop-Group", remainder[0], re.IGNORECASE):
                     nexthops.update({"nexthop_grp": remainder.pop(1)})
                     remainder.pop(0)
                 else:

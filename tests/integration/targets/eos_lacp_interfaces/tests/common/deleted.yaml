@@ -8,7 +8,7 @@
     other_config:
 
       - name: Ethernet2
-        rate: fast
+        timer: fast
 
 - become: true
   arista.eos.eos_facts:

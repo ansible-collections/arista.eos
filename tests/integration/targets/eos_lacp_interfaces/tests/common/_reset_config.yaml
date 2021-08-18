@@ -5,10 +5,10 @@
     lines:
       - "interface Ethernet1"
       - "   lacp port-priority 30"
-      - "   lacp rate normal"
+      - "   lacp timer normal"
       - "interface Ethernet2"
       - "   no lacp port-priority"
-      - "   lacp rate fast"
+      - "   lacp timer fast"
 
 - become: true
   arista.eos.eos_facts:
@@ -21,7 +21,7 @@
         port_priority: 30
 
       - name: Ethernet2
-        rate: fast
+        timer: fast
 
 - assert:
     that:

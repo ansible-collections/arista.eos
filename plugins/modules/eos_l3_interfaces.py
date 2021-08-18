@@ -39,7 +39,7 @@ description: This module provides declarative management of Layer 3 interfaces o
 version_added: 1.0.0
 author: Nathaniel Case (@qalthos)
 notes:
-- Tested against Arista EOS 4.20.10M
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
   'eos_l2_interfaces/eos_interfaces' should be used for preparing the interfaces , before applying L3 configurations using
   this module (eos_l3_interfaces).

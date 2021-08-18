@@ -38,7 +38,7 @@ description: This module configures and manages the attributes of BGP AF on Aris
 version_added: 1.4.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
-- Tested against Arista EOS 4.23.0F
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,eos_platform_options).
 options:
     config:

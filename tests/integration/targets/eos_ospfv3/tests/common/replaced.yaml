@@ -30,7 +30,9 @@
                         - address: 60.1.0.0/16
                           cost: 30
                   timers:
-                    lsa: 10
+                    lsa:
+                      direction: "rx"
+                      initial: 10
               vrf: "vrf02"
 
     - assert:
@@ -50,6 +52,6 @@
         that:
           - result.commands|length == 0
           - result.changed == false
-  always:
 
+  always:
     - include_tasks: _remove_config.yaml

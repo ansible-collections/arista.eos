@@ -137,9 +137,28 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                         "lsa": {"type": "bool"},
                                     },
                                 },
+                                "spf": {
+                                    "type": "dict",
+                                    "options": {
+                                        "max": {"type": "int"},
+                                        "initial": {"type": "int"},
+                                        "min": {"type": "int"},
+                                    },
+                                },
+                                "lsa": {
+                                    "type": "raw",
+                                    "options": {
+                                        "max": {"type": "int"},
+                                        "initial": {"type": "int"},
+                                        "min": {"type": "int"},
+                                        "direction": {
+                                            "type": "str",
+                                            "choices": ["rx", "tx"],
+                                        },
+                                    },
+                                },
                                 "out_delay": {"type": "int"},
                                 "pacing": {"type": "int"},
-                                "lsa": {"type": "int"},
                             },
                         },
                         "vrf": {"type": "str"},
@@ -347,9 +366,28 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                                 "lsa": {"type": "bool"},
                                             },
                                         },
+                                        "spf": {
+                                            "type": "dict",
+                                            "options": {
+                                                "max": {"type": "int"},
+                                                "initial": {"type": "int"},
+                                                "min": {"type": "int"},
+                                            },
+                                        },
+                                        "lsa": {
+                                            "type": "raw",
+                                            "options": {
+                                                "max": {"type": "int"},
+                                                "initial": {"type": "int"},
+                                                "min": {"type": "int"},
+                                                "direction": {
+                                                    "type": "str",
+                                                    "choices": ["rx", "tx"],
+                                                },
+                                            },
+                                        },
                                         "out_delay": {"type": "int"},
                                         "pacing": {"type": "int"},
-                                        "lsa": {"type": "int"},
                                     },
                                 },
                                 "shutdown": {"type": "bool"},

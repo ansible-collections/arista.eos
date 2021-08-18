@@ -5,12 +5,12 @@
     config1:
 
       - name: Ethernet1
-        rate: fast
+        timer: fast
 
     config2:
       - name: Ethernet2
         port_priority: 20
-        rate: fast
+        timer: fast
 
 
 - name: Merge provided configuration with device configuration (base config)
@@ -42,11 +42,11 @@
 
       - name: Ethernet1
         port_priority: 30
-        rate: fast
+        timer: fast
 
       - name: Ethernet2
         port_priority: 20
-        rate: fast
+        timer: fast
 
 - assert:
     that:
