@@ -19,6 +19,9 @@
               summary_only: true
             - address: "192.0.2.0/24"
               attribute_map: "attrmap"
+          bgp_params:
+            listen:
+              limit: 30
           neighbor:
             - maximum_received_routes:
                 count: 12000
@@ -61,10 +64,10 @@
 
     - assert:
         that:
-          - result.commands|length == 21
+          - result.commands|length == 22
           - result.changed == true
           - result.commands|symmetric_difference(merged.commands) == []
-          - result.after == populate.global
+          - result.after == merged.after
           - result.before == {}
 
     - name: Idempotency check
