@@ -126,11 +126,9 @@ def _tmplt_bgp_params(config_data):
         )
     elif config_data["bgp_params"].get("listen"):
         # from eos 4.23 , 'bgp listen limit ' is replaced by 'dynamic peer max'.
-        command = "dynamic peer max " 
+        command = "dynamic peer max "
         if config_data["bgp_params"]["listen"].get("limit"):
-            command += "{limit}".format(
-                **config_data["bgp_params"]["listen"]
-            )
+            command += "{limit}".format(**config_data["bgp_params"]["listen"])
         else:
             command += " range {address} peer group".format(
                 **config_data["bgp_params"]["listen"]["range"]

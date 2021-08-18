@@ -167,3 +167,27 @@ populate:
         route_target:
           action: "export"
           target: "44:22"
+
+rendered:
+  commands:
+    - router bgp 65536
+    - vrf vrf01
+    - redistribute isis level-2
+    - network 6.6.6.0/24 route-map netmap1
+    - network 10.1.0.0/16
+    - default-metric 433
+    - route-target export 44:22
+    - exit
+    - neighbor peer1 maximum-routes 12000
+    - neighbor peer1 peer group
+    - neighbor peer1 send-community link-bandwidth divide ratio
+    - neighbor peer2 maximum-routes 12000
+    - neighbor peer2 peer group
+    - redistribute ospf match nssa-external 2
+    - redistribute static
+    - redistribute rip route-map MAP01
+    - aggregate-address 203.0.113.0/24 as-set summary-only
+    - aggregate-address 192.0.2.0/24 attribute-map attrmap
+    - timers bgp 44 100
+    - ucmp link-bandwidth recursive
+    - vlan-aware-bundle bundle1 bundle3
