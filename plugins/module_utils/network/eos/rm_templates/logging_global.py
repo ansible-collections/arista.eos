@@ -75,6 +75,20 @@ def _tmplt_logging_global_vrf_hosts(config_data):
     return command
 
 
+def _tmplt_logging_global_format_timestamp(config_data):
+    command = ""
+    el = config_data["format"]["timestamp"]
+    if el.get("traditional"):
+        command = "logging format timestamp traditional"
+        if el["traditional"].get("year"):
+            if el["traditional"]["year"]:
+                command += " year"
+        if el["traditional"].get("timezone"):
+            if el["traditional"]["timezone"]:
+                command += " timezone"
+    return command
+
+
 class Logging_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Logging_globalTemplate, self).__init__(
@@ -195,8 +209,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": "logging format timestamp traditional {{ 'year' if format.timestamp.traditional.year is defined }}"
-                      "{{ 'timezone' if format.timestamp.traditional.timezone is defined }}",
+            "setval": _tmplt_logging_global_format_timestamp,
             "compval": "format.timestamp.traditional",
             "shared": True,
             "result": {
