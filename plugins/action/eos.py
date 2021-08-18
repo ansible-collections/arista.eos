@@ -50,7 +50,7 @@ class ActionModule(ActionNetworkModule):
         )
         persistent_connection = self._play_context.connection.split(".")[-1]
         conn = Connection(self._connection.socket_path)
-        conn.load_platfrom_type('arista.eos.eos')
+        conn.load_platfrom_plugins('arista.eos.eos')
         conn.set_options(var_options=task_vars)
         warnings = []
 
