@@ -163,7 +163,8 @@ class TestEosLogging_GlobalModule(TestEosModule):
                         dict(name="vrf03", source_interface="vlan100"),
                         dict(
                             name="vrf04",
-                            hosts=[dict(name="hostvrf1", protocol="tcp")],
+                            hosts=[dict(name="hostvrf1", protocol="tcp", add=True),
+                                  dict(name="hostvrf2", protocol="tcp", remove=True)],
                         ),
                     ],
                 )
@@ -171,7 +172,8 @@ class TestEosLogging_GlobalModule(TestEosModule):
         )
         commands = [
             "logging host host02 protocol tcp",
-            "logging vrf vrf04 host hostvrf1 protocol tcp",
+            "logging vrf vrf04 host hostvrf1 add protocol tcp",
+            "logging vrf vrf04 host hostvrf2 remove protocol tcp",
             "logging vrf vrf03 source-interface vlan100",
             "logging synchronous",
             "logging trap critical",
@@ -183,9 +185,11 @@ class TestEosLogging_GlobalModule(TestEosModule):
             dict(
                 state="replaced",
                 config=dict(
-                    synchronous=dict(set=True),
+                    format=dict(sequence_numbers=True),
+                    synchronous=dict(level="informational"),
                     trap=dict(severity="critical"),
-                    hosts=[dict(name="host02", protocol="tcp")],
+                    hosts=[dict(name="host02", protocol="tcp", add=True),
+                          dict(name="host03", protocol="tcp", remove=True)],
                     vrfs=[
                         dict(name="vrf03", source_interface="vlan100"),
                         dict(
@@ -197,7 +201,8 @@ class TestEosLogging_GlobalModule(TestEosModule):
             )
         )
         commands = [
-            "logging host host02 protocol tcp",
+            "logging host host02 add protocol tcp",
+            "logging host host03 remove protocol tcp",
             "no logging host 11.11.11.1 25",
             "no logging host host01 514 protocol tcp",
             "logging vrf vrf03 source-interface vlan100",
@@ -212,7 +217,8 @@ class TestEosLogging_GlobalModule(TestEosModule):
             "no logging level AAA alerts",
             "no logging persistent 4096",
             "no logging policy match invert-result match-list list01 discard",
-            "logging synchronous",
+            "logging format sequence-numbers",
+            "logging synchronous level informational",
             "logging trap critical",
         ]
         self.execute_module(changed=True, commands=commands)
@@ -222,6 +228,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
             dict(
                 state="overridden",
                 config=dict(
+                    format=dict(hostname="host01"),
                     synchronous=dict(set=True),
                     trap=dict(severity="critical"),
                     hosts=[dict(name="host02", protocol="tcp")],
@@ -251,10 +258,34 @@ class TestEosLogging_GlobalModule(TestEosModule):
             "no logging level AAA alerts",
             "no logging persistent 4096",
             "no logging policy match invert-result match-list list01 discard",
+            "logging format hostname host01",
             "logging synchronous",
             "logging trap critical",
         ]
         self.execute_module(changed=True, commands=commands)
+
+    def test_eos_logging_global_deleted(self):
+        set_module_args(
+            dict(
+                state="deleted",
+            )
+        )
+        commands = [
+            "no logging host 11.11.11.1 25",
+            "no logging host host01 514 protocol tcp",
+            "no logging vrf vrf01 source-interface Ethernet1",
+            "no logging vrf vrf02 host 24.1.1.1 33",
+            "no logging vrf vrf02 host hostvrf1 514 protocol tcp",
+            "no logging buffered 50000 informational",
+            "no logging facility local7",
+            "no logging console warnings",
+            "no logging format timestamp traditional timezone",
+            "no logging level AAA alerts",
+            "no logging persistent 4096",
+            "no logging policy match invert-result match-list list01 discard",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
 
     def test_eos_logging_global_gathered(self):
         set_module_args(dict(state="gathered"))
