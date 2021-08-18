@@ -62,7 +62,7 @@ class TestEosSystemModule(TestEosModule):
 
     def test_eos_system_domain_name(self):
         set_module_args(dict(domain_name="test.com"))
-        commands = ["ip domain-name test.com"]
+        commands = ["dns domain test.com"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_system_domain_list(self):
@@ -111,7 +111,7 @@ class TestEosSystemModule(TestEosModule):
 
     def test_eos_system_state_absent(self):
         set_module_args(dict(state="absent"))
-        commands = ["no ip domain-name", "no hostname"]
+        commands = ["no dns domain", "no hostname"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_system_no_change(self):

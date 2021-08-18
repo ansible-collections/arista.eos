@@ -98,6 +98,6 @@ class Lacp_interfacesFacts(object):
         config = deepcopy(spec)
         config["name"] = utils.parse_conf_arg(conf, "interface")
         config["port_priority"] = utils.parse_conf_arg(conf, "port-priority")
-        config["rate"] = utils.parse_conf_arg(conf, "rate")
+        config["timer"] = utils.parse_conf_arg(conf, "timer")
 
         return utils.remove_empties(config)

@@ -9,9 +9,9 @@ parsed:
       system_description: false
 
 rendered:
-  - "lldp holdtime 100"
+  - "lldp hold-time 100"
   - "lldp timer None"
-  - "no lldp tlv-select port-description"
-  - "lldp tlv-select system-description"
-  - "no lldp tlv-select management-address"
-  - "lldp reinit None"
+  - "no lldp tlv transmit port-description"
+  - "lldp tlv transmit system-description"
+  - "no lldp tlv transmit management-address"
+  - "lldp timer reinitialization None"

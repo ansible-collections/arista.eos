@@ -4,7 +4,7 @@
 - name: setup
   become: true
   arista.eos.eos_config:
-    lines: no ip domain-name
+    lines: no dns domain
     match: none
 
 - name: configure domain_name
@@ -30,7 +30,7 @@
 - name: teardown
   become: true
   arista.eos.eos_config:
-    lines: no ip domain-name
+    lines: no dns domain
     match: none
 
 - debug: msg="END eapi/set_domain_name.yaml"

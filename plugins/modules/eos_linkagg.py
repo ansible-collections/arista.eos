@@ -23,7 +23,7 @@ deprecated:
   why: Updated modules released with more functionality
   removed_at_date: '2022-06-01'
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   group:
     description:

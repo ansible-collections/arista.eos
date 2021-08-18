@@ -38,7 +38,7 @@ description: This module manages the IP access-list attributes of Arista EOS int
 version_added: 1.0.0
 author: Gomathiselvi S (@GomathiselviS)
 notes:
-- Tested against Arista vEOS v4.20.10M
+- Tested against Arista EOS 4.24.6F
 options:
   config:
     description: A dictionary of IP access-list options

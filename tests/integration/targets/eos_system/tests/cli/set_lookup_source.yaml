@@ -7,7 +7,7 @@
   arista.eos.eos_config:
     lines:
       - no ip domain lookup source-interface
-      - vrf definition ansible
+      - vrf instance ansible
     match: none
 
 - name: configure lookup_source
@@ -65,7 +65,7 @@
   arista.eos.eos_config:
     lines:
       - no ip domain lookup source-interface
-      - no vrf definition ansible
+      - no vrf instance ansible
     match: none
 
 - debug: msg="END cli/set_lookup_source.yaml on connection={{ ansible_connection

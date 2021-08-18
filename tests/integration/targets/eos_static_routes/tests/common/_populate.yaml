@@ -4,8 +4,8 @@
 
   arista.eos.eos_config:
     lines:
-      - "vrf definition testvrf"
-      - "vrf definition vrftest1"
+      - "vrf instance testvrf"
+      - "vrf instance vrftest1"
       - "ip route 10.1.1.0/24 Management1"
       - "ip route 10.1.1.0/24 Ethernet1 20.1.1.3 track bfd 200"
       - "ip route 10.50.0.0/16 Management1"

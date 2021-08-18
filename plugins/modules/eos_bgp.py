@@ -23,7 +23,7 @@ deprecated:
   why: Updated module released with more functionality.
   removed_at_date: '2023-01-29'
 notes:
-- Tested against Arista vEOS Version 4.15.9M.
+- Tested against Arista EOS 4.24.6F
 options:
   config:
     description:

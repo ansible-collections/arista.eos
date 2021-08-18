@@ -170,13 +170,17 @@ def state_merged(want, have):
     to_set = dict_diff(have, want)
     tlv_options = to_set.pop("tlv_select", {})
     for key, value in to_set.items():
+        if key == "holdtime":
+            key = "hold-time"
+        if key == "reinit":
+            key = "timer reinitialization"
         commands.append("lldp {0} {1}".format(key, value))
     for key, value in tlv_options.items():
         device_option = key.replace("_", "-")
         if value is True:
-            commands.append("lldp tlv-select {0}".format(device_option))
+            commands.append("lldp tlv transmit {0}".format(device_option))
         elif value is False:
-            commands.append("no lldp tlv-select {0}".format(device_option))
+            commands.append("no lldp tlv transmit {0}".format(device_option))
 
     return commands
 
@@ -192,12 +196,16 @@ def state_deleted(want, have):
     to_remove = dict_diff(want, have)
     tlv_options = to_remove.pop("tlv_select", {})
     for key in to_remove:
+        if key == "holdtime":
+            key = "hold-time"
+        if key == "reinit":
+            key = "timer reinitialization"
         commands.append("no lldp {0}".format(key))
     for key, value in tlv_options.items():
         device_option = key.replace("_", "-")
         if value is False:
-            commands.append("lldp tlv-select {0}".format(device_option))
+            commands.append("lldp tlv transmit {0}".format(device_option))
         elif value is True:
-            commands.append("no lldp tlv-select {0}".format(device_option))
+            commands.append("no lldp tlv transmit {0}".format(device_option))
 
     return commands

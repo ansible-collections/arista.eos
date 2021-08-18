@@ -85,7 +85,6 @@ class Ospfv3Facts(object):
                 lines=resource.splitlines(), module=self._module
             )
             objs = ospfv3_parser.parse()
-
             for key, sortv in [("address_family", "afi")]:
                 if key in objs["processes"] and objs["processes"][key]:
                     objs["processes"][key] = list(

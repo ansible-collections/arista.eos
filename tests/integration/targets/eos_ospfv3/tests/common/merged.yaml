@@ -85,11 +85,10 @@
                   router_id: "10.17.0.3"
                   timers:
                     out_delay: 10
-                    throttle:
+                    spf:
                       initial: 56
                       max: 56
                       min: 56
-                      spf: true
               fips_restrictions: true
               vrf: "vrf02"
 
@@ -110,6 +109,74 @@
         that:
           - result.commands|length == 0
           - result.changed == false
-  always:
 
+    - name: merge given ospfv3 configuration with timers.throttle option (expect warning).
+      become: true
+      register: result
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - afi: "ipv4"
+                  fips_restrictions: true
+                  redistribute:
+                    - routes: "connected"
+                - afi: "ipv6"
+                  fips_restrictions: true
+                  router_id: "10.1.1.1"
+              adjacency:
+                exchange_start:
+                  threshold: 11
+              areas:
+                - area_id: "0.0.0.20"
+                  authentication:
+                    algorithm: "sha1"
+                    hidden_key: true
+                    passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+                    spi: 33
+                  stub:
+                    set: true
+                - area_id: "0.0.0.40"
+                  default_cost: 45
+                  stub:
+                    set: true
+              fips_restrictions: true
+              timers:
+                pacing: 7
+                throttle:
+                  spf: true
+                  initial: 56
+                  max: 56
+                  min: 56
+              vrf: "default"
+
+    - assert:
+        that: "'The \\'timers\\' argument has been changed to have separate \\'lsa\\' and \\'spf\\' keys and \\'throttle\\' has been deprecated.' in result.warnings[0]"
+
+    - include_tasks: _remove_config.yaml
+
+    - name: merge given ospfv3 configuration with timers.lsa option (expect warning).
+      become: true
+      register: result
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - afi: "ipv4"
+                  fips_restrictions: true
+                  redistribute:
+                    - routes: "connected"
+                - afi: "ipv6"
+                  fips_restrictions: true
+                  router_id: "10.1.1.1"
+              timers:
+                lsa: 33
+              vrf: "default"
+
+    - assert:
+        that:
+          - "'\\'timers lsa arrival\\' has changed to \\'timers lsa rx min interval\\'' in result.warnings[0]"
+          - '"timers lsa rx min interval 33" in result["commands"]'
+
+  always:
     - include_tasks: _remove_config.yaml

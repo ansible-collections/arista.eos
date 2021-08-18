@@ -33,7 +33,7 @@ version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   aggregate:
     description:

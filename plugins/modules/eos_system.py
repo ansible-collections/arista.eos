@@ -32,7 +32,7 @@ version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   hostname:
     description:
@@ -122,7 +122,7 @@ commands:
   type: list
   sample:
     - hostname eos01
-    - ip domain-name test.example.com
+    - dns domain test.example.com
 session_name:
   description: The EOS config session name used to load the configuration
   returned: changed
@@ -151,7 +151,7 @@ def has_vrf(module, vrf):
     if _CONFIGURED_VRFS is not None:
         return vrf in _CONFIGURED_VRFS
     config = get_config(module)
-    _CONFIGURED_VRFS = re.findall(r"vrf definition (\S+)", config)
+    _CONFIGURED_VRFS = re.findall(r"vrf instance (\S+)", config)
     _CONFIGURED_VRFS.append("default")
     return vrf in _CONFIGURED_VRFS
 
@@ -165,7 +165,7 @@ def map_obj_to_commands(want, have, module):
 
     if state == "absent":
         if have["domain_name"]:
-            commands.append("no ip domain-name")
+            commands.append("no dns domain")
 
         if have["hostname"] != "localhost":
             commands.append("no hostname")
@@ -175,7 +175,7 @@ def map_obj_to_commands(want, have, module):
             commands.append("hostname %s" % want["hostname"])
 
         if needs_update("domain_name"):
-            commands.append("ip domain-name %s" % want["domain_name"])
+            commands.append("dns domain %s" % want["domain_name"])
 
         if want["domain_list"]:
             # handle domain_list items to be removed
@@ -269,7 +269,7 @@ def parse_hostname(config):
 
 
 def parse_domain_name(config):
-    match = re.search(r"^ip domain-name (\S+)", config, re.M)
+    match = re.search(r"^dns domain (\S+)", config, re.M)
     if match:
         return match.group(1)
 
