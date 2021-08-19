@@ -26,7 +26,7 @@ import copy
 
 from ansible import constants as C
 from ansible.module_utils._text import to_text
-from ansible.module_utils.connection import Connection
+from ansible.module_utils.connection import Connection, ConnectionError
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_provider_spec,
 )
@@ -53,11 +53,11 @@ class ActionModule(ActionNetworkModule):
 
         conn = Connection(self._connection.socket_path)
         try:
-            conn.load_platfrom_plugins('arista.eos.eos')
+            conn.load_platform_plugins('arista.eos.eos')
             conn.set_options(var_options=task_vars)
         except ConnectionError as exc:
             if "Method not found" in to_text(exc):
-                display.vvvv('load_platfrom_plugins not defined')
+                display.vvvv('load_platform_plugins not defined')
             else:
                 raise
     
