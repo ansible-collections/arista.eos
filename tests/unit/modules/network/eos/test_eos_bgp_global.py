@@ -179,9 +179,7 @@ class TestEosBgpglobalModule(TestEosModule):
                         dict(address="10.1.0.0/16"),
                     ],
                     redistribute=[dict(protocol="isis", isis_level="level-2")],
-                    route_target=dict(
-                        action="export", type="vpn-ipv4", target="44:22"
-                    ),
+                    route_target=dict(action="export", target="44:22"),
                     ucmp=dict(mode=dict(nexthops=55)),
                     update=dict(
                         wait_for="wait_for_convergence", batch_size=50
@@ -220,7 +218,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "network 6.6.6.0/24 route-map netmap1",
             "network 10.1.0.0/16",
             "default-metric 433",
-            "route-target export vpn-ipv4 44:22",
+            "route-target export 44:22",
             "ucmp link-bandwidth recursive mode 1 55",
             "update wait_for_convergence 50",
         ]
@@ -313,7 +311,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "network 6.6.6.0/24 route-map netmap1",
             "network 10.1.0.0/16",
             "default-metric 433",
-            "route-target export vpn-ipv4 44:22",
+            "route-target export 44:22",
             "no timers bgp 44 100",
             "no ucmp link-bandwidth recursive",
             "no neighbor peer1 peer group",
@@ -550,8 +548,8 @@ class TestEosBgpglobalModule(TestEosModule):
                     ],
                     "route_target": {
                         "action": "export",
-                        "type": "vpn-ipv4",
-                        "target": "44:22",
+                        "type": "evpn",
+                        "imported_route": True,
                     },
                     "vrf": "vrf01",
                 }
@@ -578,7 +576,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "vlan-aware-bundle bundle1 bundle3",
             "!",
             "vrf vrf01",
-            "route-target export vpn-ipv4 44:22",
+            "route-target export evpn imported-route",
             "default-metric 433",
             "network 6.6.6.0/24 route-map netmap1",
             "network 10.1.0.0/16",
@@ -711,9 +709,7 @@ class TestEosBgpglobalModule(TestEosModule):
                         dict(address="10.1.0.0/16"),
                     ],
                     redistribute=[dict(protocol="isis", isis_level="level-2")],
-                    route_target=dict(
-                        action="export", type="vpn-ipv4", target="44:22"
-                    ),
+                    route_target=dict(action="export", target="44:22"),
                     bgp_params=dict(
                         additional_paths="send",
                         advertise_inactive=True,
@@ -779,7 +775,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "network 6.6.6.0/24 route-map netmap1",
             "network 10.1.0.0/16",
             "default-metric 433",
-            "route-target export vpn-ipv4 44:22",
+            "route-target export 44:22",
             "bgp bestpath ecmp-fast",
             "bgp bestpath med confed",
             "bgp client-to-client",
