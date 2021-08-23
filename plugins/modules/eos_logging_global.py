@@ -45,7 +45,6 @@ options:
                 - notifications
                 - informational
                 - debugging
-                - *range(0, 7)
               buffer_size:
                 description: Logging buffer size
                 type: int
@@ -87,7 +86,6 @@ options:
                         "syslog",
                         "user",
                         "uucp",
-                        *range(1, 23)
                     ]
         format:
           description: Set logging format parameters
