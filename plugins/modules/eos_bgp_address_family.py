@@ -201,12 +201,16 @@ options:
                   description: Type of address fmaily
                   type: str
                   choices: ['evpn', 'vpn-ipv4', 'vpn-ipv6']
+                  aliases: ['mode']
                 route_map:
                   description: Name of a route map.
                   type: str
                 target:
                   description: Route Target.
                   type: str
+                imported_route:
+                  description: Export routes imported from the same Afi/Safi
+                  type: bool
             vrf:
               description: name of the VRF in which BGP will be configured.
               type: str

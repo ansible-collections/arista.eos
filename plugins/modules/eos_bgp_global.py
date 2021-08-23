@@ -1301,6 +1301,9 @@ options:
                 target:
                   description: Route Target.
                   type: str
+                imported_route:
+                  description: Export routes imported from the same Afi/Safi.
+                  type: bool
             router_id:
               description: Router id.
               type: str
