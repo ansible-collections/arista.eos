@@ -33,9 +33,19 @@ options:
           - Set buffered logging parameters.
           type: dict
           suboptions: &message_options
-              severity:
+              severity: &sev
                 description: Severity level .
                 type: str
+                choices:
+                - emergencies
+                - alerts
+                - critical
+                - errors
+                - warnings
+                - notifications
+                - informational
+                - debugging
+                - *range(0, 7)
               buffer_size:
                 description: Logging buffer size
                 type: int
@@ -44,9 +54,7 @@ options:
           - Set console logging parameters.
           type: dict
           suboptions:
-              severity:
-                description: Severity level .
-                type: str
+              severity: *sev
         event:
           description: Global events
           type: str
@@ -54,6 +62,33 @@ options:
         facility:
           description: Set logging facility.
           type: str
+          "choices": [
+                        "auth",
+                        "cron",
+                        "daemon",
+                        "kern",
+                        "local0",
+                        "local1",
+                        "local2",
+                        "local3",
+                        "local4",
+                        "local5",
+                        "local6",
+                        "local7",
+                        "lpr",
+                        "mail",
+                        "news",
+                        "sys10",
+                        "sys11",
+                        "sys12",
+                        "sys13",
+                        "sys14",
+                        "sys9",
+                        "syslog",
+                        "user",
+                        "uucp",
+                        *range(1, 23)
+                    ]
         format:
           description: Set logging format parameters
           type: dict
@@ -113,9 +148,7 @@ options:
             facility:
               description: Facility level
               type: str
-            severity:
-              description: Severity level
-              type: str
+            severity: *sev
         monitor:
           description: Set terminal monitor severity
           type: str
@@ -171,9 +204,7 @@ options:
             set:
               description: Severity of messages sent to the syslog server.
               type: bool
-            severity:
-              description: severity level
-              type: str
+            severity: *sev
         vrfs:
           description: Specify vrf
           type: list

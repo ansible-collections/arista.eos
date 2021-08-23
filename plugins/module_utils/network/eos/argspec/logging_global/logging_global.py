@@ -40,14 +40,40 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                 "buffered": {
                     "type": "dict",
                     "options": {
-                        "severity": {"type": "str"},
+                        "severity": {
+                            "type": "str",
+                            "choices": [
+                                "alerts",
+                                "critical",
+                                "debugging",
+                                "emergencies",
+                                "errors",
+                                "informational",
+                                "notifications",
+                                "warnings",
+                                *range(0, 7),
+                            ],
+                        },
                         "buffer_size": {"type": "int"},
                     },
                 },
                 "console": {
                     "type": "dict",
                     "options": {
-                        "severity": {"type": "str"},
+                        "severity": {
+                            "type": "str",
+                            "choices": [
+                                "alerts",
+                                "critical",
+                                "debugging",
+                                "emergencies",
+                                "errors",
+                                "informational",
+                                "notifications",
+                                "warnings",
+                                *range(0, 7),
+                            ],
+                        }
                     },
                 },
                 "event": {
@@ -58,7 +84,36 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                         "spanning-tree",
                     ],
                 },
-                "facility": {"type": "str"},
+                "facility": {
+                    "type": "str",
+                    "choices": [
+                        "auth",
+                        "cron",
+                        "daemon",
+                        "kern",
+                        "local0",
+                        "local1",
+                        "local2",
+                        "local3",
+                        "local4",
+                        "local5",
+                        "local6",
+                        "local7",
+                        "lpr",
+                        "mail",
+                        "news",
+                        "sys10",
+                        "sys11",
+                        "sys12",
+                        "sys13",
+                        "sys14",
+                        "sys9",
+                        "syslog",
+                        "user",
+                        "uucp",
+                        *range(1, 23),
+                    ],
+                },
                 "format": {
                     "type": "dict",
                     "options": {
@@ -90,10 +145,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                         "name": {"type": "str"},
                         "add": {"type": "bool"},
                         "remove": {"type": "bool"},
-                        "protocol": {
-                            "type": "str",
-                            "choices": ["tcp", "udp"],
-                        },
+                        "protocol": {"type": "str", "choices": ["tcp", "udp"]},
                         "port": {"type": "int"},
                     },
                 },
@@ -101,7 +153,20 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                     "type": "dict",
                     "options": {
                         "facility": {"type": "str"},
-                        "severity": {"type": "str"},
+                        "severity": {
+                            "type": "str",
+                            "choices": [
+                                "alerts",
+                                "critical",
+                                "debugging",
+                                "emergencies",
+                                "errors",
+                                "informational",
+                                "notifications",
+                                "warnings",
+                                *range(0, 7),
+                            ],
+                        },
                     },
                 },
                 "monitor": {"type": "str"},
@@ -135,7 +200,20 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                     "type": "dict",
                     "options": {
                         "set": {"type": "bool"},
-                        "severity": {"type": "str"},
+                        "severity": {
+                            "type": "str",
+                            "choices": [
+                                "alerts",
+                                "critical",
+                                "debugging",
+                                "emergencies",
+                                "errors",
+                                "informational",
+                                "notifications",
+                                "warnings",
+                                *range(0, 7),
+                            ],
+                        },
                     },
                 },
                 "vrfs": {
