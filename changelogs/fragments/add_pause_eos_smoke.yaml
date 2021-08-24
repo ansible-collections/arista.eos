@@ -1,0 +1,3 @@
+---
+trivial:
+  - Wait 10 secs before the state of the interface is checked in eos_smoke test.
