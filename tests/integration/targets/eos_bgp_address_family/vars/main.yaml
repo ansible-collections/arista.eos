@@ -45,7 +45,7 @@ merged:
           - protocol: "isis"
             isis_level: "level-2"
         route_target:
-          mode: "export"
+          action: "export"
           type: "vpn-ipv6"
           target: "33:11"
 
