@@ -479,7 +479,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
             sorted(result["rendered"]), sorted(commands), result["rendered"]
         )
 
-    def test_vyos_prefix_lists_gathered(self):
+    def test_eos_prefix_lists_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
             changed=False, filename="eos_prefix_lists_config.cfg"
@@ -532,7 +532,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                     gathered_list[entry["afi"]], entry["prefix_lists"]
                 )
 
-    def test_vyos_route_maps_parsed(self):
+    def test_eos_route_maps_parsed(self):
         commands = [
             "ip prefix-list v401",
             "seq 25 deny 45.55.4.0/24",

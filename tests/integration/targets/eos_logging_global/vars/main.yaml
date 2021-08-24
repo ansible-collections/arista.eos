@@ -1,0 +1,87 @@
+---
+merged:
+  commands:
+    - logging host host01 protocol tcp
+    - logging host 11.11.11.1 25
+    - logging vrf vrf01 source-interface Ethernet1
+    - logging vrf vrf02 host hostvrf1 protocol tcp
+    - logging vrf vrf02 host 24.1.1.1 33
+    - logging format timestamp traditional timezone
+    - logging level AAA alerts
+    - logging persistent 4096
+    - logging policy match invert-result match-list list01 discard
+deleted:
+  commands:
+    - "no logging host 11.11.11.1 25"
+    - "no logging host host01 514 protocol tcp"
+    - "no logging vrf vrf01 source-interface Ethernet1"
+    - "no logging vrf vrf02 host 24.1.1.1 33"
+    - "no logging vrf vrf02 host hostvrf1 514 protocol tcp"
+    - "no logging format timestamp traditional timezone"
+    - "no logging level AAA alerts"
+    - "no logging persistent 4096"
+    - "no logging policy match invert-result match-list list01 discard"
+
+replaced:
+  before:
+    format:
+      timestamp:
+        traditional:
+          timezone: true
+    hosts:
+      - name: "11.11.11.1"
+        port: 25
+      - name: "host01"
+        port: 514
+        protocol: "tcp"
+    level:
+      facility: "AAA"
+      severity: "alerts"
+    persistent:
+      size: 4096
+    policy:
+      invert_result: true
+      match_list: "list01"
+    vrfs:
+      - name: "vrf01"
+        source_interface: "Ethernet1"
+      - hosts:
+          - name: "24.1.1.1"
+            port: 33
+          - name: "hostvrf1"
+            port: 514
+            protocol: "tcp"
+        name: "vrf02"
+
+  commands:
+    - logging host host02 80 protocol tcp
+    - no logging host 11.11.11.1 25
+    - no logging host host01 514 protocol tcp
+    - logging vrf vrf03 source-interface Vlan100
+    - logging vrf vrf04 host hostvrf1 23 protocol tcp
+    - no logging vrf vrf01 source-interface Ethernet1
+    - no logging vrf vrf02 host 24.1.1.1 33
+    - no logging vrf vrf02 host hostvrf1 514 protocol tcp
+    - no logging format timestamp traditional timezone
+    - no logging level AAA alerts
+    - no logging persistent 4096
+    - no logging policy match invert-result match-list list01 discard
+    - logging synchronous level critical
+    - logging trap emergencies
+  after:
+    hosts:
+      - name: "host02"
+        port: 80
+        protocol: "tcp"
+    synchronous:
+      level: "critical"
+    trap:
+      severity: "emergencies"
+    vrfs:
+      - name: "vrf03"
+        source_interface: "Vlan100"
+      - hosts:
+          - name: "hostvrf1"
+            port: 23
+            protocol: "tcp"
+        name: "vrf04"

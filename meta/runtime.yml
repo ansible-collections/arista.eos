@@ -98,6 +98,10 @@ plugin_routing:
       redirect: arista.eos.eos
     logging:
       redirect: arista.eos.eos
+    eos_logging_global:
+      redirect: arista.eos.eos
+    logging_global:
+      redirect: arista.eos.eos
     eos_ospfv2:
       redirect: arista.eos.eos
     ospfv2:
@@ -230,6 +234,15 @@ plugin_routing:
       redirect: arista.eos.eos_lldp_interfaces
     logging:
       redirect: arista.eos.eos_logging
+      deprecation:
+        removal_date: '2023-09-01'
+        warning_text: See the plugin documentation for more details
+    eos_logging:
+      deprecation:
+        removal_date: '2023-09-01'
+        warning_text: See the plugin documentation for more details
+    logging_global:
+      redirect: arista.eos.eos_logging_global
     ospfv2:
       redirect: arista.eos.eos_ospfv2
     ospfv3:
