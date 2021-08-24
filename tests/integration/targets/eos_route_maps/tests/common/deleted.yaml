@@ -53,7 +53,7 @@
           - result.commands|length == 1
           - result.changed == true
           - "'no route-map mapmerge' in result.commands"
-          - result.after == {}
+          - result.after == []
   always:
 
     - include_tasks: _remove_config.yaml

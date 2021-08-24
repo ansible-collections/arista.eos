@@ -39,7 +39,7 @@ class Route_maps(ResourceModule):
 
     def __init__(self, module):
         super(Route_maps, self).__init__(
-            empty_fact_val={},
+            empty_fact_val=[],
             facts_module=Facts(module),
             module=module,
             resource="route_maps",
