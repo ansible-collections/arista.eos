@@ -101,8 +101,10 @@ def _tmplt_bgp_neighbor(config_data):
             **config_data["neighbor"]
         )
         if config_data["neighbor"]["encapsulation"].get("source_interface"):
-            command += " next-hop-self source-interface {source_interface}".format(
-                **config_data["neighbor"]
+            command += (
+                " next-hop-self source-interface {source_interface}".format(
+                    **config_data["neighbor"]
+                )
             )
     return command
 
