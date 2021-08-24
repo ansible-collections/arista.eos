@@ -113,6 +113,7 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                                 },
                                 "route_map": {"type": "str"},
                                 "target": {"type": "str"},
+                                "imported_route": {"type": "bool"},
                             },
                         },
                         "graceful_restart": {"type": "bool"},
