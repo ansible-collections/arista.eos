@@ -54,7 +54,7 @@
           - result.changed == true
           - "'no ip prefix-list v401' in result.commands"
           - "'no ip prefix-list v402' in result.commands"
-          - result.after == {}
+          - result.after == []
   always:
 
     - include_tasks: _remove_config.yaml
