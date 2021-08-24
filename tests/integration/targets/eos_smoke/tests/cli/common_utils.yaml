@@ -58,7 +58,7 @@
 # A temp fix until we find out why the interface is not up (inconsistent failure).
 - name: Pause for 10 secs
   pause:
-      seconds: 10
+    seconds: 10
 
 - name: Check intent arguments
   eos_interface:
