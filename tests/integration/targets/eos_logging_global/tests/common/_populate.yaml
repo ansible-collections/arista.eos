@@ -1,0 +1,5 @@
+---
+- name: Setup
+  become: true
+  arista.eos.eos_config:
+    src: populate.cfg
