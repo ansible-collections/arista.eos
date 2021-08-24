@@ -63,7 +63,7 @@
         that:
           - baseconfig.commands|length == 21
           - baseconfig.changed == true
-          - baseconfig.commands|symmetric_difference(merged.commands) == []
+          - baseconfig.commands|symmetric_difference(rendered.commands) == []
           - baseconfig.after == populate.global
 
     - become: true

@@ -199,7 +199,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor peer2 maximum-routes 12000",
             "neighbor peer2 shutdown",
             "bgp route-reflector preserve-attributes always",
-            "bgp listen limit 20",
+            "dynamic peer max 20",
             "bgp log-neighbor-changes",
             "bgp missing-policy direction in action deny",
             "bgp monitoring",
