@@ -73,6 +73,7 @@ merged:
         route_target:
           action: "export"
           target: "44:22"
+          type: "vpn-ipv4"
 
 deleted:
   after:
@@ -177,7 +178,7 @@ rendered:
     - network 6.6.6.0/24 route-map netmap1
     - network 10.1.0.0/16
     - default-metric 433
-    - route-target export 44:22
+    - route-target export vpn-ipv4 44:22
     - exit
     - neighbor peer1 maximum-routes 12000
     - neighbor peer1 peer group
