@@ -442,8 +442,7 @@ def check_declarative_intent_params(module, want, result):
         ):
             continue
 
-        if result["changed"]:
-            sleep(w["delay"])
+        sleep(w["delay"])
 
         command = {
             "command": "show interfaces %s" % w["name"],
