@@ -58,6 +58,7 @@
 - name: Check intent arguments
   eos_interface:
     name: "{{ test_interface_1 }}"
+    delay: 30
     state: up
     tx_rate: ge(0)
     rx_rate: ge(0)
