@@ -51,16 +51,16 @@
 - debug: msg="END cli/common_utils.yaml on connection={{ ansible_connection }}"
 
 # hit conditional()
-- name: Set test interface
-  set_fact:
-    test_interface_1: ethernet1
+# - name: Set test interface
+#  set_fact:
+#    test_interface_1: ethernet1
 
-- name: Check intent arguments
-  eos_interface:
-    name: "{{ test_interface_1 }}"
-    state: up
-    tx_rate: ge(0)
-    rx_rate: ge(0)
-    provider: "{{ cli }}"
-  become: true
-  register: result
+# - name: Check intent arguments
+#  eos_interface:
+#    name: "{{ test_interface_1 }}"
+#    state: up
+#    tx_rate: ge(0)
+#    rx_rate: ge(0)
+#    provider: "{{ cli }}"
+#  become: true
+#  register: result
