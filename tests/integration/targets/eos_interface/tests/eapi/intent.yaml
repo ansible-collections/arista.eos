@@ -32,6 +32,7 @@
   register: result
   arista.eos.eos_interface:
     name: '{{ test_interface_1 }}'
+    delay: 30
     state: down
     tx_rate: gt(0)
     rx_rate: lt(0)
@@ -48,6 +49,7 @@
   register: result
   arista.eos.eos_interface:
     name: '{{ test_interface_1 }}'
+    delay: 30
     enabled: false
     state: down
 
@@ -61,6 +63,7 @@
   register: result
   arista.eos.eos_interface:
     name: '{{ test_interface_1 }}'
+    delay: 30
     enabled: false
     state: up
 
@@ -83,6 +86,7 @@
       register: result
       arista.eos.eos_interface:
         name: management1
+        delay: 30
         neighbors:
 
           - port: eth0
@@ -98,6 +102,7 @@
       register: result
       arista.eos.eos_interface:
         name: management1
+        delay: 30
         neighbors:
 
           - port: dummy_port
@@ -118,6 +123,7 @@
     aggregate:
 
       - name: '{{ test_interface_1 }}'
+        delay: 30
         enabled: true
         state: up
 
@@ -135,6 +141,7 @@
         aggregate:
 
           - name: management1
+            delay: 30
             neighbors:
 
               - port: eth0
@@ -152,13 +159,14 @@
         aggregate:
 
           - name: management1
-        neighbors:
+            delay: 30
+            neighbors:
 
-          - port: eth0
-            host: an-vyos-02
+              - port: eth0
+                host: an-vyos-02
 
-          - port: dummy_port
-            host: dummy_host
+              - port: dummy_port
+                host: dummy_host
 
     - assert:
         that:
