@@ -15,7 +15,7 @@ merged:
     - vrf vrft
     - address-family ipv6
     - redistribute isis level-2
-    - route-target export 33:11
+    - route-target export vpn-ipv6 33:11
     - exit
     - exit
 
@@ -45,7 +45,8 @@ merged:
           - protocol: "isis"
             isis_level: "level-2"
         route_target:
-          mode: "export"
+          action: "export"
+          type: "vpn-ipv6"
           target: "33:11"
 
 deleted:

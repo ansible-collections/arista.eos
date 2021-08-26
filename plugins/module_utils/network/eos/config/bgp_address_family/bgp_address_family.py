@@ -172,6 +172,9 @@ class Bgp_af(ResourceModule):
             begin = len(self.commands)
             self._compare_lists(entry, have=haf.get(name, {}))
             self._compare_neighbor(entry, have=haf.get(name, {}))
+            # Removing the alias key
+            if "route_target" in entry.keys():
+                entry["route_target"].pop("mode", "")
             self.compare(
                 parsers=self.parsers, want=entry, have=haf.pop(name, {})
             )

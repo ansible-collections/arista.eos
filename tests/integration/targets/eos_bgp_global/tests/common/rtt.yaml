@@ -57,6 +57,7 @@
                   isis_level: "level-2"
               route_target:
                 action: "export"
+                type: "vpn-ipv4"
                 target: "44:22"
 
     - assert:

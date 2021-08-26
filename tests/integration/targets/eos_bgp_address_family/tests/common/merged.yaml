@@ -38,6 +38,7 @@
                   isis_level: "level-2"
               route_target:
                 mode: "export"
+                type: "vpn-ipv6"
                 target: "33:11"
               vrf: "vrft"
 
