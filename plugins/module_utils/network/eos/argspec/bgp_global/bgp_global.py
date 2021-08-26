@@ -474,7 +474,17 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": ["both", "import", "export"],
                                 },
+                                "type": {
+                                    "type": "str",
+                                    "choices": [
+                                        "evpn",
+                                        "vpn-ipv4",
+                                        "vpn-ipv6",
+                                    ],
+                                },
+                                "route_map": {"type": "str"},
                                 "target": {"type": "str"},
+                                "imported_route": {"type": "bool"},
                             },
                         },
                         "redistribute": {

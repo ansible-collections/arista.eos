@@ -128,9 +128,13 @@ def _tmplt_bgp_redistribute(config_data):
 
 
 def _tmplt_bgp_route_target(config_data):
-    command = "route-target {mode} {target}".format(
-        **config_data["route_target"]
-    )
+    command = "route-target {action}".format(**config_data["route_target"])
+    if config_data["route_target"].get("type"):
+        command += " {type}".format(**config_data["route_target"])
+    if config_data["route_target"].get("route_map"):
+        command += " {route_map}".format(**config_data["route_target"])
+    if config_data["route_target"].get("target"):
+        command += " {target}".format(**config_data["route_target"])
     return command
 
 
@@ -641,7 +645,9 @@ class Bgp_afTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*route-target
-                \s+(?P<mode>both|import|export)
+                \s+(?P<action>\S+)
+                \s*(?P<type>evpn|vpn-ipv4|vpn-ipv6)*
+                \s*(?P<map>route-map\s\S+)*
                 \s+(?P<target>\S+)
                 *$""",
                 re.VERBOSE,
@@ -652,7 +658,9 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "route_target": {
-                            "mode": "{{ mode }}",
+                            "action": "{{ action }}",
+                            "type": "{{ type }}",
+                            "route_map": "{{ map.split(" ")[1] }}",
                             "target": "{{ target }}",
                         }
                     }

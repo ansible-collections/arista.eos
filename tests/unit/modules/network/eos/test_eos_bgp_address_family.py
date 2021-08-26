@@ -114,7 +114,9 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             vrf="vrft",
-                            route_target=dict(mode="both", target="465:11"),
+                            route_target=dict(
+                                action="both", type="evpn", target="465:11"
+                            ),
                         ),
                     ],
                 ),
@@ -125,7 +127,7 @@ class TestEosBgpafModule(TestEosModule):
             "router bgp 10",
             "vrf vrft",
             "address-family ipv4",
-            "route-target both 465:11",
+            "route-target both evpn 465:11",
             "exit",
             "exit",
             "address-family ipv6",
@@ -157,7 +159,9 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             vrf="vrft",
-                            route_target=dict(mode="both", target="465:11"),
+                            route_target=dict(
+                                action="both", type="vpn-ipv4", target="465:11"
+                            ),
                         ),
                     ],
                 ),
@@ -177,7 +181,7 @@ class TestEosBgpafModule(TestEosModule):
             "vrf vrft",
             "address-family ipv4",
             "no bgp additional-paths receive",
-            "route-target both 465:11",
+            "route-target both vpn-ipv4 465:11",
             "exit",
             "exit",
         ]
@@ -248,7 +252,9 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             vrf="vrft",
-                            route_target=dict(mode="both", target="465:11"),
+                            route_target=dict(
+                                action="both", type="vpn-ipv6", target="465:11"
+                            ),
                         ),
                     ],
                 ),
@@ -268,7 +274,7 @@ class TestEosBgpafModule(TestEosModule):
             "vrf vrft",
             "address-family ipv4",
             "no bgp additional-paths receive",
-            "route-target both 465:11",
+            "route-target both vpn-ipv6 465:11",
             "exit",
             "exit",
             "vrf vrft",
@@ -356,7 +362,7 @@ class TestEosBgpafModule(TestEosModule):
             "vrf vrft",
             "address-family ipv4",
             "redistribute ospfv3 match external",
-            "route-target both 465:11",
+            "route-target both vpn-ipv4 465:11",
             "!",
         ]
 
@@ -386,7 +392,11 @@ class TestEosBgpafModule(TestEosModule):
                     "redistribute": [
                         {"protocol": "ospfv3", "ospf_route": "external`"}
                     ],
-                    "route_target": {"mode": "both", "target": "465:11"},
+                    "route_target": {
+                        "action": "both",
+                        "type": "vpn-ipv4",
+                        "target": "465:11",
+                    },
                 },
             ],
         }

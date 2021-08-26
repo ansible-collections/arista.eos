@@ -108,7 +108,11 @@ class TestEosBgpglobalModule(TestEosModule):
                             redistribute=[
                                 dict(protocol="isis", isis_level="level-2")
                             ],
-                            route_target=dict(action="export", target="44:22"),
+                            route_target=dict(
+                                action="export",
+                                type="vpn-ipv4",
+                                target="44:22",
+                            ),
                         )
                     ],
                 ),
@@ -271,7 +275,11 @@ class TestEosBgpglobalModule(TestEosModule):
                             redistribute=[
                                 dict(protocol="isis", isis_level="level-2")
                             ],
-                            route_target=dict(action="export", target="44:22"),
+                            route_target=dict(
+                                action="export",
+                                type="vpn-ipv4",
+                                target="44:22",
+                            ),
                         )
                     ],
                 ),
@@ -357,7 +365,7 @@ class TestEosBgpglobalModule(TestEosModule):
         commands = [
             "router bgp 65535",
             "vrf vrf01",
-            "no route-target export 44:22",
+            "no route-target export vpn-ipv4 44:22",
             "redistribute ospf match nssa-external 2",
             "redistribute static",
             "redistribute rip route-map MAP01",
@@ -538,7 +546,11 @@ class TestEosBgpglobalModule(TestEosModule):
                     "redistribute": [
                         {"isis_level": "level-2", "protocol": "isis"}
                     ],
-                    "route_target": {"action": "export", "target": "44:22"},
+                    "route_target": {
+                        "action": "export",
+                        "type": "evpn",
+                        "imported_route": True,
+                    },
                     "vrf": "vrf01",
                 }
             ],
@@ -564,7 +576,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "vlan-aware-bundle bundle1 bundle3",
             "!",
             "vrf vrf01",
-            "route-target export 44:22",
+            "route-target export evpn imported-route",
             "default-metric 433",
             "network 6.6.6.0/24 route-map netmap1",
             "network 10.1.0.0/16",
@@ -621,7 +633,11 @@ class TestEosBgpglobalModule(TestEosModule):
                     "redistribute": [
                         {"isis_level": "level-2", "protocol": "isis"}
                     ],
-                    "route_target": {"action": "export", "target": "44:22"},
+                    "route_target": {
+                        "action": "export",
+                        "type": "vpn-ipv4",
+                        "target": "44:22",
+                    },
                     "vrf": "vrf01",
                 }
             ],

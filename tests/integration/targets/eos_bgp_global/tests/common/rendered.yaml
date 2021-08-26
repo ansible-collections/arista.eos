@@ -18,6 +18,9 @@
               summary_only: true
             - address: "192.0.2.0/24"
               attribute_map: "attrmap"
+          bgp_params:
+            listen:
+              limit: 30
           neighbor:
             - maximum_received_routes:
                 count: 12000
@@ -56,8 +59,9 @@
                   isis_level: "level-2"
               route_target:
                 action: "export"
+                type: "vpn-ipv4"
                 target: "44:22"
     - assert:
         that:
           - result.changed == false
-          - result.rendered|symmetric_difference(rendered.commands) == []
+          - result.rendered|symmetric_difference(merged.commands) == []
