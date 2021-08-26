@@ -92,7 +92,6 @@
           - result.failed == false
 
     - name: Check neighbors intent arguments (failed condition)
-      ignore_errors: true
       become: true
       register: result
       arista.eos.eos_interface:
