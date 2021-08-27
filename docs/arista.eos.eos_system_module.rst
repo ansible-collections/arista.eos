@@ -375,7 +375,7 @@ Notes
 -----
 
 .. note::
-   - Tested against EOS 4.15
+   - Tested against Arista EOS 4.24.6F
    - For information on using CLI, eAPI and privileged mode see the :ref:`EOS Platform Options guide <eos_platform_options>`
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Arista EOS devices see the `Arista integration page <https://www.ansible.com/ansible-arista-networks>`_.
@@ -448,7 +448,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                             <div>The list of configuration mode commands to send to the device</div>
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;hostname eos01&#x27;, &#x27;ip domain-name test.example.com&#x27;]</div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;hostname eos01&#x27;, &#x27;dns domain test.example.com&#x27;]</div>
                 </td>
             </tr>
             <tr>

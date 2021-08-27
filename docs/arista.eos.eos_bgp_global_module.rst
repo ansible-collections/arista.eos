@@ -924,7 +924,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Subnet Range to be associated with the peer-group.</div>
+                        <div>Subnet Range to be associated with the peer group.</div>
                 </td>
             </tr>
                                 <tr>
@@ -2527,7 +2527,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Neighbor address or peer-group.</div>
+                        <div>Neighbor address or peer group.</div>
                 </td>
             </tr>
             <tr>
@@ -2544,7 +2544,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Name of the peer-group.</div>
+                        <div>Name of the peer group.</div>
                 </td>
             </tr>
             <tr>
@@ -3258,7 +3258,7 @@ Parameters
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>isis</li>
-                                    <li>ospf3</li>
+                                    <li>ospfv3</li>
                                     <li>ospf</li>
                                     <li>attached-host</li>
                                     <li>connected</li>
@@ -4626,7 +4626,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Subnet Range to be associated with the peer-group.</div>
+                        <div>Subnet Range to be associated with the peer group.</div>
                 </td>
             </tr>
                                 <tr>
@@ -6233,7 +6233,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Name of the peer-group.</div>
+                        <div>Name of the peer group.</div>
                 </td>
             </tr>
             <tr>
@@ -6984,7 +6984,7 @@ Parameters
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>isis</li>
-                                    <li>ospf3</li>
+                                    <li>ospfv3</li>
                                     <li>ospf</li>
                                     <li>attached-host</li>
                                     <li>connected</li>
@@ -7061,6 +7061,46 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>imported_route</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Export routes imported from the same Afi/Safi.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>route_map</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of a route map.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>target</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -7071,6 +7111,29 @@ Parameters
                 </td>
                 <td>
                         <div>Route Target.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>evpn</li>
+                                    <li>vpn-ipv4</li>
+                                    <li>vpn-ipv6</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Type of address fmaily</div>
                 </td>
             </tr>
 
@@ -7494,7 +7557,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Arista EOS 4.23.0F
+   - Tested against Arista EOS 4.24.6F
    - This module works with connection ``network_cli``. See the `EOS Platform Options <eos_platform_options>`_.
 
 
@@ -7572,7 +7635,7 @@ Examples
     #    distance bgp 50 50 50
     #    maximum-paths 55
     #    bgp additional-paths send any
-    #    neighbor peer1 peer-group
+    #    neighbor peer1 peer group
     #    neighbor peer1 link-bandwidth update-delay 5
     #    neighbor peer1 fall-over bfd
     #    neighbor peer1 monitoring
@@ -7713,7 +7776,7 @@ Examples
     #    distance bgp 50 50 50
     #    maximum-paths 55
     #    bgp additional-paths send any
-    #    neighbor peer1 peer-group
+    #    neighbor peer1 peer group
     #    neighbor peer1 link-bandwidth update-delay 5
     #    neighbor peer1 fall-over bfd
     #    neighbor peer1 monitoring
@@ -8018,7 +8081,7 @@ Examples
     #         "maximum-paths 55",
     #         "distance bgp 50",
     #         "exit",
-    #         "no neighbor peer1 peer-group",
+    #         "no neighbor peer1 peer group",
     #         "no neighbor peer1 link-bandwidth update-delay 5",
     #         "no neighbor peer1 fall-over bfd",
     #         "no neighbor peer1 monitoring",
@@ -8257,7 +8320,7 @@ Examples
     #    distance bgp 50 50 50
     #    maximum-paths 55
     #    bgp additional-paths send any
-    #    neighbor peer1 peer-group
+    #    neighbor peer1 peer group
     #    neighbor peer1 link-bandwidth update-delay 5
     #    neighbor peer1 fall-over bfd
     #    neighbor peer1 monitoring

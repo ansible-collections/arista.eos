@@ -1,5 +1,0 @@
----
-
-bugfixes:
-  - fix issue in route-maps facts code when route-maps facts are empty.
-  - fix issue in prefix_lists facts code when prefix_lists facts are empty.

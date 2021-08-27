@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Change cli 'bgp listen limit' to 'dynamic peer max' ( cli changes in eos 4.23 ).

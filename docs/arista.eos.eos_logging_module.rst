@@ -14,6 +14,13 @@ Version added: 1.0.0
    :local:
    :depth: 1
 
+DEPRECATED
+----------
+:Removed in collection release after 2024-01-01
+:Why: Updated module released with more functionality.
+:Alternative: eos_logging_global
+
+
 
 Synopsis
 --------
@@ -524,7 +531,7 @@ Notes
 -----
 
 .. note::
-   - Tested against EOS 4.15
+   - Tested against Arista EOS 4.24.6F
    - For information on using CLI, eAPI and privileged mode see the :ref:`EOS Platform Options guide <eos_platform_options>`
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Arista EOS devices see the `Arista integration page <https://www.ansible.com/ansible-arista-networks>`_.
@@ -608,6 +615,10 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
 
 Status
 ------
+
+
+- This module will be removed in version . *[deprecated]*
+- For more information see `DEPRECATED`_.
 
 
 Authors

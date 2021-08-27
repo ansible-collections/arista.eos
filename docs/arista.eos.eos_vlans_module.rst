@@ -152,7 +152,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Arista EOS 4.20.10M
+   - Tested against Arista EOS 4.24.6F
    - This module works with connection ``network_cli``. See the `EOS Platform Options <../network/user_guide/platform_eos.html>`_.
 
 
