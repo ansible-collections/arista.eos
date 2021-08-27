@@ -182,9 +182,10 @@ class Cliconf(CliconfBase):
         newline=True,
         output=None,
         check_all=False,
+        version=None,
     ):
         if output:
-            command = self._get_command_with_output(command, output)
+            command = self._get_command_with_output(command, output, version)
         return self.send_command(
             command=command,
             prompt=prompt,
@@ -215,9 +216,10 @@ class Cliconf(CliconfBase):
                 cmd = {"command": cmd}
 
             output = cmd.pop("output", None)
+            version = cmd.pop("version", None)
             if output:
                 cmd["command"] = self._get_command_with_output(
-                    cmd["command"], output
+                    cmd["command"], output, version
                 )
 
             try:
@@ -376,7 +378,7 @@ class Cliconf(CliconfBase):
                 config_context="(config", exit_command="abort"
             )
 
-    def _get_command_with_output(self, command, output):
+    def _get_command_with_output(self, command, output, version):
         options_values = self.get_option_values()
         if output not in options_values["output"]:
             raise ValueError(
@@ -388,4 +390,6 @@ class Cliconf(CliconfBase):
             cmd = "%s | json" % command
         else:
             cmd = command
+        if version != "latest" and "| json" in cmd:
+            cmd = "%s version %s" % (cmd, version)
         return cmd

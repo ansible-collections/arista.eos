@@ -124,3 +124,19 @@ class TestEosCommandModule(TestEosModule):
             dict(commands=commands, wait_for=wait_for, match="all")
         )
         self.execute_module(failed=True)
+
+    def test_eos_command_check_version_support(self):
+        wait_for = ['result[0] contains "version"']
+        commands = [{"command": "show version", "version": "1"}]
+        set_module_args(
+            dict(commands=commands, wait_for=wait_for, match="all")
+        )
+        self.execute_module()
+
+    def test_eos_command_check_version_support_failure(self):
+        wait_for = ['result[0] contains "version"']
+        commands = [{"command": "show version", "version": "-1"}]
+        set_module_args(
+            dict(commands=commands, wait_for=wait_for, match="all")
+        )
+        self.execute_module(failed=True)
