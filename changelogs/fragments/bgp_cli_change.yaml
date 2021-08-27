@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Fix ospf3 to be ospfv3 in bgp config.

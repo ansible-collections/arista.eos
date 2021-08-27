@@ -1,3 +1,0 @@
----
-trivial:
-  - Fix pylint failures seen in sanity tests.

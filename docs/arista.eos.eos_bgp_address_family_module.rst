@@ -496,7 +496,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Neighbor address/ peer-group name.</div>
+                        <div>Neighbor address/ peer group name.</div>
                 </td>
             </tr>
             <tr>
@@ -775,7 +775,7 @@ Parameters
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>isis</li>
-                                    <li>ospf3</li>
+                                    <li>ospfv3</li>
                                     <li>dhcp</li>
                         </ul>
                 </td>
@@ -816,7 +816,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Route target</div>
+                        <div>Route target.</div>
                 </td>
             </tr>
                                 <tr>
@@ -825,7 +825,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>mode</b>
+                    <b>action</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -839,7 +839,47 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>route import or route export.</div>
+                        <div>Route action.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>imported_route</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Export routes imported from the same Afi/Safi</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>route_map</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of a route map.</div>
                 </td>
             </tr>
             <tr>
@@ -857,7 +897,31 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>route target</div>
+                        <div>Route Target.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>evpn</li>
+                                    <li>vpn-ipv4</li>
+                                    <li>vpn-ipv6</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Type of address fmaily</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: mode</div>
                 </td>
             </tr>
 
@@ -966,7 +1030,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Arista EOS 4.23.0F
+   - Tested against Arista EOS 4.24.6F
    - This module works with connection ``network_cli``. See the `EOS Platform Options <eos_platform_options>`_.
 
 
@@ -990,7 +1054,7 @@ Examples
             address_family:
               - afi: "ipv4"
                 redistribute:
-                  - protocol: "ospf3"
+                  - protocol: "ospfv3"
                     ospf_route: "external"
                 network:
                   - address: "1.1.1.0/24"
@@ -1017,7 +1081,7 @@ Examples
 
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1025,7 +1089,7 @@ Examples
     #       neighbor 1.1.1.1 activate
     #       network 1.1.1.0/24
     #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    address-family ipv6
     #       bgp additional-paths receive
@@ -1047,7 +1111,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -1087,7 +1151,7 @@ Examples
     #     "commands": [
     #         "router bgp 10",
     #         "address-family ipv4",
-    #         "redistribute ospf3 match external",
+    #         "redistribute ospfv3 match external",
     #         "network 1.1.1.0/24",
     #         "network 1.5.1.0/24 route-map MAP01",
     #         "exit",
@@ -1109,7 +1173,7 @@ Examples
 
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1117,7 +1181,7 @@ Examples
     #       neighbor 1.1.1.1 activate
     #       network 1.1.1.0/24
     #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    address-family ipv6
     #       bgp additional-paths receive
@@ -1139,7 +1203,7 @@ Examples
               - afi: "ipv6"
                 vrf: "vrft"
                 redistribute:
-                  - protocol: "ospf3"
+                  - protocol: "ospfv3"
                     ospf_route: "external"
               - afi: "ipv6"
                 redistribute:
@@ -1151,7 +1215,7 @@ Examples
 
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1159,7 +1223,7 @@ Examples
     #       neighbor 1.1.1.1 activate
     #       network 1.1.1.0/24
     #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    address-family ipv6
     #       neighbor peer2 default-originate always
@@ -1167,7 +1231,7 @@ Examples
     #    !
     #    vrf vrft
     #       address-family ipv6
-    #          redistribute ospf3 match external
+    #          redistribute ospfv3 match external
     # veos(config-router-bgp)#
     #
     #
@@ -1195,7 +1259,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -1221,7 +1285,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ],
     #                 "vrf": "vrft"
@@ -1251,7 +1315,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -1292,7 +1356,7 @@ Examples
     #         "router bgp 10",
     #         "vrf vrft",
     #         "address-family ipv6",
-    #         "redistribute ospf3 match external",
+    #         "redistribute ospfv3 match external",
     #         "no redistribute isis level-2",
     #         "no route-target export 33:11",
     #         "exit",
@@ -1309,7 +1373,7 @@ Examples
 
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1317,7 +1381,7 @@ Examples
     #       neighbor 1.1.1.1 activate
     #       network 1.1.1.0/24
     #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    address-family ipv6
     #       neighbor peer2 default-originate always
@@ -1325,7 +1389,7 @@ Examples
     #    !
     #    vrf vrft
     #       address-family ipv6
-    #          redistribute ospf3 match external
+    #          redistribute ospfv3 match external
     # veos(config-router-bgp)#
 
       - name: Overridden
@@ -1345,7 +1409,7 @@ Examples
     # After State:
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1355,7 +1419,7 @@ Examples
     #    !
     #    vrf vrft
     #       address-family ipv6
-    #          redistribute ospf3 match external
+    #          redistribute ospfv3 match external
     # veos(config-router-bgp)#
     #
     # Module Execution:
@@ -1381,7 +1445,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ],
     #                 "vrf": "vrft"
@@ -1411,7 +1475,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -1437,7 +1501,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ],
     #                 "vrf": "vrft"
@@ -1449,7 +1513,7 @@ Examples
     #     "commands": [
     #         "router bgp 10",
     #         "address-family ipv4",
-    #         "no redistribute ospf3 match external",
+    #         "no redistribute ospfv3 match external",
     #         "no network 1.1.1.0/24",
     #         "no network 1.5.1.0/24 route-map MAP01",
     #         "neighbor peer2 default-originate always",
@@ -1465,7 +1529,7 @@ Examples
 
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1475,7 +1539,7 @@ Examples
     #       no neighbor 1.1.1.1 activate
     #       network 1.1.1.0/24
     #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    address-family ipv6
     #       bgp additional-paths receive
@@ -1485,7 +1549,7 @@ Examples
     #       address-family ipv6
     #          route-target export 33:11
     #          redistribute isis level-2
-    #          redistribute ospf3 match external
+    #          redistribute ospfv3 match external
     # veos(config-router-bgp)#
 
 
@@ -1508,7 +1572,7 @@ Examples
 
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1517,7 +1581,7 @@ Examples
     #       neighbor peer2 default-originate always
     #       network 1.1.1.0/24
     #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    address-family ipv6
     #       bgp additional-paths receive
@@ -1557,7 +1621,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -1612,7 +1676,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -1639,7 +1703,7 @@ Examples
     #                     },
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ],
     #                 "route_target": {
@@ -1668,7 +1732,7 @@ Examples
 
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1678,7 +1742,7 @@ Examples
     #       no neighbor 1.1.1.1 activate
     #       network 1.1.1.0/24
     #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    address-family ipv6
     #       bgp additional-paths receive
@@ -1703,7 +1767,7 @@ Examples
 
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1713,7 +1777,7 @@ Examples
     #       no neighbor 1.1.1.1 activate
     #       network 1.1.1.0/24
     #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    vrf vrft
     #       address-family ipv4
@@ -1749,7 +1813,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -1790,7 +1854,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -1824,10 +1888,10 @@ Examples
     # parsed_bgp_address_family.cfg :
 
     # router bgp 10
-    #    neighbor n2 peer-group
+    #    neighbor n2 peer group
     #    neighbor n2 next-hop-unchanged
     #    neighbor n2 maximum-routes 12000
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    network 1.1.1.0/24
     #    network 1.5.1.0/24 route-map MAP01
@@ -1835,7 +1899,7 @@ Examples
     #    address-family ipv4
     #       bgp additional-paths receive
     #       neighbor peer2 default-originate always
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    address-family ipv6
     #       no bgp additional-paths receive
@@ -1854,7 +1918,7 @@ Examples
     #          bgp additional-paths receive
     #       !
     #       address-family ipv6
-    #          redistribute ospf3 match external
+    #          redistribute ospfv3 match external
 
       - name: parse configs
         arista.eos.eos_bgp_address_family:
@@ -1880,7 +1944,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -1919,7 +1983,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ],
     #                 "vrf": "vrft"
@@ -1934,7 +1998,7 @@ Examples
     # Device config:
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
-    #    neighbor peer2 peer-group
+    #    neighbor peer2 peer group
     #    neighbor peer2 maximum-routes 12000
     #    neighbor 1.1.1.1 maximum-routes 12000
     #    !
@@ -1944,7 +2008,7 @@ Examples
     #       no neighbor 1.1.1.1 activate
     #       network 1.1.1.0/24
     #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospf3 match external
+    #       redistribute ospfv3 match external
     #    !
     #    vrf vrft
     #       address-family ipv4
@@ -1983,7 +2047,7 @@ Examples
     #                 "redistribute": [
     #                     {
     #                         "ospf_route": "external",
-    #                         "protocol": "ospf3"
+    #                         "protocol": "ospfv3"
     #                     }
     #                 ]
     #             },
@@ -2007,7 +2071,7 @@ Examples
             address_family:
               - afi: "ipv4"
                 redistribute:
-                  - protocol: "ospf3"
+                  - protocol: "ospfv3"
                     ospf_route: "external"
                 network:
                   - address: "1.1.1.0/24"
@@ -2036,7 +2100,7 @@ Examples
     # "rendered": [
     #         "router bgp 10",
     #         "address-family ipv4",
-    #         "redistribute ospf3 match external",
+    #         "redistribute ospfv3 match external",
     #         "network 1.1.1.0/24",
     #         "network 1.5.1.0/24 route-map MAP01",
     #         "exit",

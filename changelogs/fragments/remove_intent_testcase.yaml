@@ -1,3 +1,0 @@
----
-trivial:
-  - Remove intent testcases from eos_interface and eos_smoke temporarily, inorder to avoid the failures caused by the flapping of Ethernet1.

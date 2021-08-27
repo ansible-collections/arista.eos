@@ -577,7 +577,7 @@ Notes
 -----
 
 .. note::
-   - Tested against EOS 4.15
+   - Tested against Arista EOS 4.24.6F
    - Abbreviated commands are NOT idempotent, see `Network FAQ <../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands>`_.
    - To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they appear if present in the running configuration on device including the indentation.
    - For information on using CLI, eAPI and privileged mode see the :ref:`EOS Platform Options guide <eos_platform_options>`

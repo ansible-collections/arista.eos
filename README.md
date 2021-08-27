@@ -5,7 +5,7 @@
 
 The Ansible Arista EOS collection includes a variety of Ansible content to help automate the management of Arista EOS network appliances.
 
-This collection has been tested against Arista EOS 4.20.10M.
+This collection has been tested against Arista EOS 4.24.6F.
 
 <!--start requires_ansible-->
 ## Ansible version compatibility
@@ -60,6 +60,7 @@ Name | Description
 [arista.eos.eos_lldp_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_global_module.rst)|LLDP resource module
 [arista.eos.eos_lldp_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_interfaces_module.rst)|LLDP interfaces resource module
 [arista.eos.eos_logging](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_logging_module.rst)|Manage logging on network devices
+[arista.eos.eos_logging_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_logging_global_module.rst)|Manages logging resource module
 [arista.eos.eos_ospf_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospf_interfaces_module.rst)|OSPF Interfaces Resource Module.
 [arista.eos.eos_ospfv2](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv2_module.rst)|OSPFv2 resource module
 [arista.eos.eos_ospfv3](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv3_module.rst)|OSPFv3 resource module

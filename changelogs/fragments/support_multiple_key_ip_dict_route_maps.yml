@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Added fix to support multiple keys under ip and ipv6 dict in parser template.

@@ -434,7 +434,7 @@ Notes
 -----
 
 .. note::
-   - Tested against EOS 4.15
+   - Tested against Arista EOS 4.24.6F
    - For information on using CLI, eAPI and privileged mode see the :ref:`EOS Platform Options guide <eos_platform_options>`
    - For more information on using Ansible to manage network devices see the :ref:`Ansible Network Guide <network_guide>`
    - For more information on using Ansible to manage Arista EOS devices see the `Arista integration page <https://www.ansible.com/ansible-arista-networks>`_.

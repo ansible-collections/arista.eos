@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Add new keys to vrf->route_target in bgp modules.
