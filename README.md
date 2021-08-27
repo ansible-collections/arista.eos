@@ -5,7 +5,7 @@
 
 The Ansible Arista EOS collection includes a variety of Ansible content to help automate the management of Arista EOS network appliances.
 
-This collection has been tested against Arista EOS 4.20.10M.
+This collection has been tested against Arista EOS 4.24.6F.
 
 <!--start requires_ansible-->
 ## Ansible version compatibility

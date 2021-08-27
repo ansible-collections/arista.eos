@@ -16,7 +16,7 @@ Version added: 1.0.0
 
 DEPRECATED
 ----------
-:Removed in collection release after 2023-09-01
+:Removed in collection release after 2024-01-01
 :Why: Updated module released with more functionality.
 :Alternative: eos_logging_global
 
