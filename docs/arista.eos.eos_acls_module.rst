@@ -2832,7 +2832,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Arista vEOS v4.20.10M
+   - Tested against Arista EOS 4.24.6F
 
 
 

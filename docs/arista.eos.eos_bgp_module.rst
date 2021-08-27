@@ -325,7 +325,7 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>ospf3</li>
+                                    <li>ospfv3</li>
                                     <li>ospf</li>
                                     <li>isis</li>
                                     <li>static</li>
@@ -774,7 +774,7 @@ Parameters
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>ospf</li>
-                                    <li>ospf3</li>
+                                    <li>ospfv3</li>
                                     <li>static</li>
                                     <li>connected</li>
                                     <li>rip</li>
@@ -853,7 +853,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Arista vEOS Version 4.15.9M.
+   - Tested against Arista EOS 4.24.6F
 
 
 
@@ -888,7 +888,6 @@ Examples
             - protocol: isis
               route_map: RMAP_1
         operation: merge
-
     - name: Configure BGP neighbors
       arista.eos.eos_bgp:
         config:
@@ -901,13 +900,11 @@ Examples
             timers:
               keepalive: 300
               holdtime: 360
-
           - neighbor: 192.0.2.15
             remote_as: 64496
             description: IBGP_NBR_2
             ebgp_multihop: 150
         operation: merge
-
     - name: Configure root-level networks for BGP
       arista.eos.eos_bgp:
         config:
@@ -916,12 +913,10 @@ Examples
           - prefix: 203.0.113.0
             masklen: 27
             route_map: RMAP_1
-
           - prefix: 203.0.113.32
             masklen: 27
             route_map: RMAP_2
         operation: merge
-
     - name: Configure BGP neighbors under address family mode
       arista.eos.eos_bgp:
         config:
@@ -932,12 +927,10 @@ Examples
             - neighbor: 203.0.113.10
               activate: yes
               default_originate: true
-
             - neighbor: 192.0.2.15
               activate: yes
               graceful_restart: true
         operation: merge
-
     - name: remove bgp as 64496 from config
       arista.eos.eos_bgp:
         config:

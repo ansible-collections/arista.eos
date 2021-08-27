@@ -132,9 +132,6 @@ releases:
     - fix_src_backup_with_module_alias.yaml
     release_date: '2020-07-31'
   1.0.2:
-    changes:
-      release_summary:
-        - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
@@ -318,3 +315,43 @@ releases:
       name: eos_prefix_lists
       namespace: ''
     release_date: '2021-06-22'
+  3.0.0:
+    changes:
+      breaking_changes:
+      - Arista released train 4.23.X and newer and along with it replaced and deprecated
+        lots of commands. This PR adds support for syntax changes in release train
+        4.23 and after. Going forward the eos modules will not support eos sw version
+        < 4.23.
+      bugfixes:
+      - Added fix to support multiple keys under ip and ipv6 dict in parser template.
+      - fix issue in prefix_lists facts code when prefix_lists facts are empty.
+      - fix issue in route-maps facts code when route-maps facts are empty.
+      minor_changes:
+      - Add eos_logging_global resource module.
+      - Add new keys to vrf->route_target in bgp modules.
+      - Change cli 'bgp listen limit' to 'dynamic peer max' ( cli changes in eos 4.23
+        ).
+      - Fix ospf3 to be ospfv3 in bgp config.
+      - Update BGP neighbor peer group syntax.
+    fragments:
+    - 225-safe-eval-no-concat.yml
+    - 230_empty_config_facts.yml
+    - add_keys_bgp_route_target.yml
+    - arguments-renamed-pylint-issue.yaml
+    - bgp_cli_change.yaml
+    - bgp_listen_limit_cli_change.yml
+    - bgp_peer_group_cli_change.yaml
+    - disable_integration_tests.yaml
+    - enable_interface_test.yaml
+    - eos_bgp_deprecation.yml
+    - eos_logging_global_module.yml
+    - pylint_upgrade_sanity_fix.yml
+    - remove_expected_config.yml
+    - remove_intent_testcase.yaml
+    - support_cli_syntax_change.yaml
+    - support_multiple_key_ip_dict_route_maps.yml
+    modules:
+    - description: Manages logging resource module
+      name: eos_logging_global
+      namespace: ''
+    release_date: '2021-08-27'

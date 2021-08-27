@@ -5,6 +5,35 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v3.0.0
+======
+
+Minor Changes
+-------------
+
+- Add eos_logging_global resource module.
+- Add new keys to vrf->route_target in bgp modules.
+- Change cli 'bgp listen limit' to 'dynamic peer max' ( cli changes in eos 4.23 ).
+- Fix ospf3 to be ospfv3 in bgp config.
+- Update BGP neighbor peer group syntax.
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- Arista released train 4.23.X and newer and along with it replaced and deprecated lots of commands. This PR adds support for syntax changes in release train 4.23 and after. Going forward the eos modules will not support eos sw version < 4.23.
+
+Bugfixes
+--------
+
+- Added fix to support multiple keys under ip and ipv6 dict in parser template.
+- fix issue in prefix_lists facts code when prefix_lists facts are empty.
+- fix issue in route-maps facts code when route-maps facts are empty.
+
+New Modules
+-----------
+
+- eos_logging_global - Manages logging resource module
+
 v2.2.0
 ======
 
@@ -90,12 +119,6 @@ Bugfixes
 v1.3.0
 ======
 
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
-
-
 Bugfixes
 --------
 
@@ -167,11 +190,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======
