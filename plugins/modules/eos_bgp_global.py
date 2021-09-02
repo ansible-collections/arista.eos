@@ -40,7 +40,7 @@ author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
 - Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,eos_platform_options).
-# testing 
+# testing
 options:
     config:
       description: A list of configurations for BGP global.
