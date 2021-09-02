@@ -6,7 +6,6 @@
   arista.eos.eos_config:
     lines:
       - no username ansibletest1
-    provider: '{{ cli }}'
 
 - name: Create user with role using platform agnostic module
   become: true
@@ -17,7 +16,6 @@
     role: network-operator
     state: present
     configured_password: test1
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -32,6 +30,5 @@
   arista.eos.eos_config:
     lines:
       - no username ansibletest1
-    provider: '{{ cli }}'
 
 - debug: msg="END eos cli/net_user.yaml on connection={{ ansible_connection }}"

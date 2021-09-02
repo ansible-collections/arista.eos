@@ -11,13 +11,11 @@
     enable_local_http: true
     enable_https: true
     local_http_port: 8181
-    provider: '{{ cli }}'
 
 - register: http_config
   arista.eos.eos_command:
     commands:
       - show management api http-commands | json
-    provider: '{{ cli }}'
 
 - name: Expect endpoint ports to be set
   assert:
@@ -34,7 +32,6 @@
     https_port: 4443
     enable_local_http: true
     local_http_port: 8181
-    provider: '{{ cli }}'
 
 - name: Expect action to be idempotent
   assert:

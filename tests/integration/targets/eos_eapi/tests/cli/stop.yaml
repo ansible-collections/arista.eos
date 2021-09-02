@@ -6,13 +6,11 @@
   register: eos_eapi_output
   arista.eos.eos_eapi:
     state: stopped
-    provider: '{{ cli }}'
 
 - register: http_config
   arista.eos.eos_command:
     commands:
       - show management api http-commands | json
-    provider: '{{ cli }}'
 
 - debug: var=http_config
   when: debug
@@ -26,7 +24,6 @@
   register: eos_eapi_output
   arista.eos.eos_eapi:
     state: stopped
-    provider: '{{ cli }}'
 
 - debug: var=eos_eapi_output
   when: debug

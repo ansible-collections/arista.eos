@@ -7,7 +7,6 @@
   arista.eos.eos_config:
     lines:
       - no ip route 192.168.3.0/24 192.168.0.1
-    provider: '{{ cli }}'
 
 - name: configure static route using platform agnostic module
   become: true
@@ -16,7 +15,6 @@
     address: 192.168.3.0/24
     next_hop: 192.168.0.1
     admin_distance: 2
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -28,7 +26,6 @@
   arista.eos.eos_config:
     lines:
       - no ip route 192.168.3.0/24 192.168.0.1
-    provider: '{{ cli }}'
 
 - debug: msg="END eos cli/net_static_route.yaml on connection={{ ansible_connection
     }}"
