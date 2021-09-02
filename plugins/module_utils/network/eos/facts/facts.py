@@ -80,6 +80,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.prefi
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.logging_global.logging_global import (
     Logging_globalFacts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ntp_global.ntp_global import (
+    Ntp_globalFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -106,6 +109,7 @@ FACT_RESOURCE_SUBSETS = dict(
     route_maps=Route_mapsFacts,
     prefix_lists=Prefix_listsFacts,
     logging_global=Logging_globalFacts,
+    ntp_global=Ntp_globalFacts,
 )
 
 
