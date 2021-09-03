@@ -9,7 +9,6 @@
       - no username ansibletest2
       - no username ansibletest3
       - no username ansibletest4
-    provider: '{{ cli }}'
 
 - name: Create user with role
   become: true
@@ -20,7 +19,6 @@
     role: network-operator
     state: present
     configured_password: test1
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -39,7 +37,6 @@
     state: present
     configured_password: test1
     update_password: on_create
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -61,7 +58,6 @@
         configured_password: test3
     state: present
     role: network-operator
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -81,7 +77,6 @@
     name: faileduser1
     privilege: 15
     state: present
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -97,4 +92,3 @@
       - no username ansibletest2
       - no username ansibletest3
       - no username ansibletest4
-    provider: '{{ cli }}'

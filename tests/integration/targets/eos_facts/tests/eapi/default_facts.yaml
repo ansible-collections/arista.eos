@@ -6,7 +6,6 @@
   become: true
   register: result
   arista.eos.eos_facts:
-    provider: '{{ eapi }}'
 
 - assert:
     that:
