@@ -7,7 +7,6 @@
   ignore_errors: true
   arista.eos.eos_eapi:
     vrf: foobar
-    provider: '{{ cli }}'
 
 - name: Ensure that setting VRF failed
   assert:
@@ -22,14 +21,12 @@
   ignore_errors: true
   arista.eos.eos_eapi:
     vrf: default
-    provider: '{{ cli }}'
 
 - name: Set VRF to default again (idempotent)
   become: true
   register: eos_eapi_output
   arista.eos.eos_eapi:
     vrf: default
-    provider: '{{ cli }}'
 
 - name: Ensure idempotent
   assert:
@@ -41,6 +38,5 @@
   when: false
   arista.eos.eos_command:
     commands: show vrf
-    provider: '{{ cli }}'
 
 - debug: msg="END cli/vrf.yaml on connection={{ ansible_connection }}"

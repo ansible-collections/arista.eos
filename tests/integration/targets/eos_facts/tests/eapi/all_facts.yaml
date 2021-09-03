@@ -7,7 +7,6 @@
   arista.eos.eos_facts:
     gather_subset:
       - all
-    provider: '{{ eapi }}'
 
 - assert:
     that:

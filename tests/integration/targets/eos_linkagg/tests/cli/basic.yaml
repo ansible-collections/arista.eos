@@ -7,7 +7,6 @@
     lines:
       - no interface port-channel 20
       - no interface port-channel 100
-    provider: '{{ cli }}'
 
 - name: setup - remove config used in test(part2)
   loop:
@@ -17,7 +16,6 @@
   arista.eos.eos_config:
     lines:
       - no channel-group 20
-    provider: '{{ cli }}'
     parents: '{{ item }}'
 
 - name: create linkagg
@@ -26,7 +24,6 @@
   arista.eos.eos_linkagg: &id001
     group: 20
     state: present
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -51,7 +48,6 @@
     members:
       - Ethernet1
       - Ethernet2
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -78,7 +74,6 @@
     mode: active
     members:
       - Ethernet2
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -101,7 +96,6 @@
   arista.eos.eos_linkagg: &id004
     group: 20
     state: absent
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -128,7 +122,6 @@
 
       - group: 100
         min_links: 4
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -158,7 +151,6 @@
 
       - group: 100
         min_links: 4
-    provider: '{{ cli }}'
     state: absent
 
 - assert:
@@ -182,7 +174,6 @@
     lines:
       - no interface port-channel 20
       - no interface port-channel 100
-    provider: '{{ cli }}'
 
 - name: teardown(part2)
   become: true
@@ -192,7 +183,6 @@
   arista.eos.eos_config:
     lines:
       - no channel-group 20
-    provider: '{{ cli }}'
     parents: '{{ item }}'
 
 - debug: msg="END cli/basic.yaml"
