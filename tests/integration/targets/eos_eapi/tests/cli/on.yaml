@@ -15,9 +15,6 @@
     commands:
       - show management api http-commands | json
 
-- debug: var=http_config
-  when: debug
-
 - name: Expect all EAPI endpoints to be in on state
   assert:
     that:

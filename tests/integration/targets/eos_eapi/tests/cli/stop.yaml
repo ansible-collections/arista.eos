@@ -12,9 +12,6 @@
     commands:
       - show management api http-commands | json
 
-- debug: var=http_config
-  when: debug
-
 - name: Expect EAPI state is off
   assert:
     that: http_config.stdout[0].enabled == false
@@ -24,9 +21,6 @@
   register: eos_eapi_output
   arista.eos.eos_eapi:
     state: stopped
-
-- debug: var=eos_eapi_output
-  when: debug
 
 - name: Expect action to be idempotent
   assert:

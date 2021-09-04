@@ -36,9 +36,6 @@
     enable_local_http: false
     enable_socket: false
 
-- debug: var=eos_eapi_output
-  when: debug
-
 - name: Expect action to be idempotent
   assert:
     that:
