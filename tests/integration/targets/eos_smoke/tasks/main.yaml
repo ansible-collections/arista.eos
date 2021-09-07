@@ -1,4 +1,7 @@
 ---
+- include_role:
+    name: prepare_eos_tests
+
 - include: cli.yaml
 
 - include: eapi.yaml

@@ -1,0 +1,3 @@
+---
+trivial:
+  - Move prepare_eos_tests role to tasks/main.yaml from meta/main.yaml.
