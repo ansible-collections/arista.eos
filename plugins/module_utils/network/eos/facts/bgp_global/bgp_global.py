@@ -51,7 +51,6 @@ class Bgp_globalFacts(object):
         """
         facts = {}
         objs = []
-
         if not data:
             data = self.get_config(connection)
 
@@ -59,8 +58,15 @@ class Bgp_globalFacts(object):
         bgp_global_config = []
         start = False
         self._af = False
+        not_bgp = False
         for bgp_line in data.splitlines():
-            if not start:
+            if "router " in bgp_line:
+                # Skip other protocol configs like router ospf etc
+                if "router bgp" not in bgp_line:
+                    not_bgp = True
+                    continue
+                not_bgp = False
+            if not start and not not_bgp:
                 bgp_global_config.append(bgp_line)
             if "address-family" in bgp_line:
                 start = True

@@ -1715,7 +1715,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "ebgp_multihop": {
-                                    "set": "{{ True if ttl is not set }}",
+                                    "set": "{{ True if ttl is not defined }}",
                                     "ttl": "{{ ttl }}"
                                 }
                             }
