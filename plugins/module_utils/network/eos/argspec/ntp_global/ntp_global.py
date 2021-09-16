@@ -28,8 +28,7 @@ The arg spec for the eos_ntp_global module
 
 
 class Ntp_globalArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_ntp_global module
-    """
+    """The arg spec for the eos_ntp_global module"""
 
     def __init__(self, **kwargs):
         pass

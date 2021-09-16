@@ -21,8 +21,8 @@
               key: "123456"
           servers:
             - server: "110.21.1.1"
-              burst: True
-              prefer: True
+              burst: true
+              prefer: true
               minpoll: 13
           serve:
             access_lists:
@@ -50,5 +50,4 @@
           - result.changed == false
   always:
 
-      - include_tasks: _remove_config.yaml
-
+    - include_tasks: _remove_config.yaml

@@ -15,19 +15,16 @@ the given network resource.
 """
 
 import re
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
 
 
 def _tmplt_ntp_global_serve(config_data):
-    import q
-    q(config_data)
+
     el = config_data["serve"]
     command = "ntp serve"
     if el.get("access_lists"):
-        q("INN", el)
         command += " {afi} access-group".format(**el["access_lists"])
         if "acls" in el["access_lists"]:
             command += " {acl_name} ".format(**el["access_lists"]["acls"])
@@ -48,7 +45,7 @@ def _tmplt_ntp_global_authentication_keys(config_data):
     if "key" in el:
         command += " " + el["key"]
     return command
-        
+
 
 def _tmplt_ntp_global_servers(config_data):
     el = config_data["servers"]
@@ -118,7 +115,7 @@ class Ntp_globalTemplate(NetworkTemplate):
             "setval": _tmplt_ntp_global_authentication_keys,
             "result": {
                 "authentication_keys": {
-                    "{{ id }}": { 
+                    "{{ id }}": {
                         "id": "{{ id }}",
                         "algorithm": "{{ algo }}",
                         "encryption": "{{ enc }}",

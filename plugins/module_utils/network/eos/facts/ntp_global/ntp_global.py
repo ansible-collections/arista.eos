@@ -14,9 +14,6 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
-
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
@@ -26,11 +23,10 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_template
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ntp_global.ntp_global import (
     Ntp_globalArgs,
 )
-import q
+
 
 class Ntp_globalFacts(object):
-    """ The eos ntp_global facts class
-    """
+    """The eos ntp_global facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -43,7 +39,7 @@ class Ntp_globalFacts(object):
         return connection.get("show running-config | section ntp")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Ntp_global network resource
+        """Populate the facts for Ntp_global network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary

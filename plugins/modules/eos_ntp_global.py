@@ -226,8 +226,8 @@ EXAMPLES = """
 # ntp serve ip access-group acl01 in
 # ntp serve ipv6 access-group acl02 in
 # localhost(config)#
-# 
-# 
+#
+#
 # Module Execution:
 # "after": {
 #         "authenticate": {
@@ -639,8 +639,8 @@ EXAMPLES = """
 # After State:
 #  localhost(config)#show running-config | section ntp
 # localhost(config)#
-# 
-# 
+#
+#
 # # Module Execution
 # "after": {},
 #     "before": {
@@ -722,7 +722,7 @@ EXAMPLES = """
 #         "no ntp qos dscp 10",
 #         "no ntp trusted-key 23"
 #     ],
-# 
+#
 
 # Using parsed:
 # parsed.cfg
@@ -956,7 +956,7 @@ EXAMPLES = """
 #         "ntp qos dscp 10",
 #         "ntp trusted-key 23"
 #     ]
-# 
+#
 
 
 
