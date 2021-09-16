@@ -26,7 +26,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_template
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ntp_global.ntp_global import (
     Ntp_globalArgs,
 )
-
+import q
 
 class Ntp_globalFacts(object):
     """ The eos ntp_global facts class
@@ -66,7 +66,8 @@ class Ntp_globalFacts(object):
         if objs:
             if "authentication_keys" in objs:
                 objs["authentication_keys"] = sorted(
-                    objs["authentication_keys"], key=lambda k, sk="id": k[sk]
+                    list(objs["authentication_keys"].values()),
+                    key=lambda k, sk="id": k[sk],
                 )
             if "serve" in objs:
                 if "access_lists" in objs["serve"]:
@@ -74,9 +75,13 @@ class Ntp_globalFacts(object):
                         list(objs["serve"]["access_lists"].values()),
                         key=lambda k, sk="afi": k[sk],
                     )
+            if "servers" in objs:
+                objs["servers"] = sorted(
+                    list(objs["servers"].values()),
+                    key=lambda k, sk="server": k[sk],
+                )
         else:
             objs = {}
-
         ansible_facts["ansible_network_resources"].pop("ntp_global", None)
 
         params = utils.remove_empties(

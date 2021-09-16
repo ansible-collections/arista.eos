@@ -17,8 +17,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from copy import deepcopy
-
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
@@ -32,7 +30,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ntp_global import (
     Ntp_globalTemplate,
 )
-
+import q
 
 class Ntp_global(ResourceModule):
     """
@@ -47,7 +45,12 @@ class Ntp_global(ResourceModule):
             resource="ntp_global",
             tmplt=Ntp_globalTemplate(),
         )
-        self.parsers = []
+        self.parsers = [
+            "authenticate",
+            "local_interface",
+            "qos_dscp",
+            "trusted_key"
+        ]
 
     def execute_module(self):
         """ Execute the module
@@ -64,8 +67,11 @@ class Ntp_global(ResourceModule):
         """ Generate configuration commands to send based on
             want, have and desired state.
         """
-        wantd = {entry["name"]: entry for entry in self.want}
-        haved = {entry["name"]: entry for entry in self.have}
+        wantd = {"ntp_global": self.want}
+        haved = {"ntp_global": self.have}
+        # turn all lists of dicts into dicts prior to merge
+        for entry in wantd["ntp_global"], haved["ntp_global"]:
+            self._ntp_global_list_to_dict(entry)
 
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
@@ -77,9 +83,6 @@ class Ntp_global(ResourceModule):
                 k: v for k, v in iteritems(haved) if k in wantd or not wantd
             }
             wantd = {}
-
-        # remove superfluous config for overridden and deleted
-        if self.state in ["overridden", "deleted"]:
             for k, have in iteritems(haved):
                 if k not in wantd:
                     self._compare(want={}, have=have)
@@ -93,4 +96,114 @@ class Ntp_global(ResourceModule):
            the `want` and `have` data with the `parsers` defined
            for the Ntp_global network resource.
         """
+        self._serve_compare(want=want, have=have)
+        self._authentication_keys_compare(want=want, have=have)
+        self._servers_compare(want=want, have=have)
         self.compare(parsers=self.parsers, want=want, have=have)
+        add_cmd = []
+        del_cmd = []
+        if self.commands:
+           for cmd in self.commands:
+                if "no ntp" in cmd:
+                    del_cmd.append(cmd)
+                else:
+                    add_cmd.append(cmd)
+           self.commands = del_cmd + add_cmd 
+
+    def _authentication_keys_compare(self, want, have):
+        w = want.pop("authentication_keys", {})
+        h = have.pop("authentication_keys", {})
+        for name, entry in iteritems(w):
+            h_key = {}
+            if h.get(name):
+                h_key = {"authentication_keys": h.pop(name)}
+            self.compare(parsers="authentication_keys", want={"authentication_keys": entry}, have=h_key)
+        for name, entry in iteritems(h):
+             self.compare(parsers="authentication_keys", want={} , have={"authentication_keys": entry})
+        
+    def _servers_compare(self, want, have):
+        w = want.pop("servers", {})
+        h = have.pop("servers", {})
+        for name, entry in iteritems(w):
+            h_key = {}
+            if h.get(name):
+                h_key = {"servers": h.pop(name)}
+            self.compare(parsers="servers", want={"servers": entry}, have=h_key)
+        for name, entry in iteritems(h):
+             self.compare(parsers="servers", want={} , have={"servers": entry})
+
+    def _serve_compare(self, want, have):
+        serve_want = want.pop("serve", {})
+        serve_have = have.pop("serve", {})
+        for name, entry in iteritems(serve_want):
+            if name == "all" and entry:
+                w = {"serve": {"all": True}}
+                self.compare(parsers="serve_all", want=w, have={"serve": {"all": serve_have.pop("all", False)}})
+            else:
+                for k_afi, v_afi in iteritems(entry):
+                    for k, v in iteritems(v_afi):
+                        afi = v_afi["afi"]
+                        if k == "afi":
+                            continue
+                        h = {}
+                        if k == "acls":
+                            for ace, ace_entry in iteritems(v):
+                                if serve_have.get("access_lists"):
+                                    for hk, hv in iteritems(serve_have["access_lists"]):
+                                        for h_k, h_v in iteritems(hv):
+                                            if h_k == "afi":
+                                                h_afi = h_v
+                                                continue
+                                            if h_afi == afi:
+                                                if ace in h_v:
+                                                    h_acc = {"afi": h_afi, "acls": h_v.pop(ace)} 
+                                                    h = {"serve": {"access_lists": h_acc}}
+                                w = {"serve": {"access_lists": {"afi": afi, "acls": ace_entry}}}
+                                self.compare(parsers="serve", want=w, have=h)
+        for k, v in iteritems(serve_have):
+            if k == "all" and v:
+                h = {"serve": {"all": True}}
+                self.compare(parsers="serve_all", want={}, have=h)
+            else:
+                for k_afi, v_afi in iteritems(v):
+                    for k, v in iteritems(v_afi):
+                        hafi = v_afi["afi"]
+                        if k == "afi":
+                            continue
+                        for k_acl, v_acl in iteritems(v):
+                            h = {"serve": {"access_lists": {"afi": hafi, "acls": v_acl}}}
+                            self.compare(
+                                parsers="serve", want={}, have=h
+                            )
+
+
+    def _ntp_global_list_to_dict(self, entry):
+        if "authentication_keys" in entry:
+            key_dict = {}
+            for el in entry["authentication_keys"]:
+                key_dict.update({el["id"]: el})
+            entry["authentication_keys"] = key_dict
+
+        if "servers" in entry:
+            server_dict = {}
+            for el in entry["servers"]:
+                server_dict.update({el["server"]: el})
+            entry["servers"] = server_dict
+
+        if "serve" in entry:
+            serve_dict = {}
+            main_dict = {}
+            if entry["serve"].get("all"):
+                main_dict.update({"all": entry["serve"]["all"]})
+            if  entry["serve"].get("access_lists"):
+                for el in entry["serve"].get("access_lists"):
+                    if "acls" in el:
+                        acl_dict = {}
+                        for acl in el["acls"]:
+                           acl_dict.update({acl["acl_name"]: acl})
+                        el["acls"] = acl_dict 
+                    serve_dict.update({el["afi"]: el})
+                if serve_dict:
+                    main_dict.update({"access_lists": serve_dict})
+            if serve_dict:
+                entry["serve"] =  main_dict

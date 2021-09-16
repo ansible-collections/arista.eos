@@ -90,11 +90,12 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                     "elements": "dict",
                     "options": {
                         "vrf": {"type": "str"},
-                        "host": {"type": "str", "required": True},
+                        "server": {"type": "str", "required": True},
                         "burst": {"type": "bool"},
                         "iburst": {"type": "bool"},
                         "key": {"type": "int"},
                         "local_interface": {"type": "str"},
+                        "source": {"type": "str"},
                         "maxpoll": {"type": "int"},
                         "minpoll": {"type": "int"},
                         "prefer": {"type": "bool"},

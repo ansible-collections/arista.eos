@@ -15,51 +15,66 @@ the given network resource.
 """
 
 import re
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
 
 
 def _tmplt_ntp_global_serve(config_data):
+    import q
+    q(config_data)
     el = config_data["serve"]
-    command = "ntp serve "
-    if el.get("all"):
-        command += "all"
+    command = "ntp serve"
     if el.get("access_lists"):
-        command += " { afi } access-group".format(**el["access_lists"])
+        q("INN", el)
+        command += " {afi} access-group".format(**el["access_lists"])
         if "acls" in el["access_lists"]:
-            command += " { acl_name } ".format(**el["access_lists"]["acls"])
+            command += " {acl_name} ".format(**el["access_lists"]["acls"])
             if el["access_lists"]["acls"].get("vrf"):
-                command += "vrf { vrf } ".format(**el["access_lists"]["acls"])
+                command += " vrf {vrf} ".format(**el["access_lists"]["acls"])
             command += el["access_lists"]["acls"]["direction"]
     return command
 
 
+def _tmplt_ntp_global_authentication_keys(config_data):
+    el = config_data["authentication_keys"]
+    command = ""
+    command = "ntp authentication-key "
+    command += str(el["id"])
+    command += " " + el["algorithm"]
+    if "encryption" in el:
+        command += " " + str(el["encryption"])
+    if "key" in el:
+        command += " " + el["key"]
+    return command
+        
+
 def _tmplt_ntp_global_servers(config_data):
     el = config_data["servers"]
-    command = "ntp server "
+    command = "ntp server"
     if el.get("vrf"):
-        command += "vrf {vrf} ".format(**el)
+        command += " vrf {vrf}".format(**el)
     if el.get("server"):
-        command += "{ server } ".format(**el)
+        command += " {server}".format(**el)
     if el.get("burst"):
-        command += "burst "
+        command += " burst"
     if el.get("iburst"):
-        command += "iburst "
+        command += " iburst"
     if el.get("key"):
-        command += "key { key } ".format(**el)
+        command += " key {key}".format(**el)
     if el.get("local_interface"):
-        command += "local_interface { local_interface } ".format(**el)
+        command += " local_interface {local_interface}".format(**el)
     if el.get("maxpoll"):
-        command += "maxpoll { maxpoll } ".format(**el)
+        command += " maxpoll {maxpoll}".format(**el)
     if el.get("minpoll"):
-        command += "minpoll { minpoll } ".format(**el)
+        command += " minpoll {minpoll}".format(**el)
     if el.get("prefer"):
-        command += "prefer "
+        command += " prefer"
     if el.get("source"):
-        command += "source { source } ".format(**el)
+        command += " source {source}".format(**el)
     if el.get("version"):
-        command += "version { version }".format(**el)
+        command += " version {version}".format(**el)
     return command
 
 
@@ -80,7 +95,7 @@ class Ntp_globalTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": 'ntp authenticate {{ "servers" if authenticate.servers is defined }}',
+            "setval": 'ntp authenticate{{ " servers" if authenticate.servers is defined }}',
             "result": {
                 "authenticate": {
                     "enable": "{{ True if servers is undefined }}",
@@ -100,18 +115,16 @@ class Ntp_globalTemplate(NetworkTemplate):
                 *$""",
                 re.VERBOSE,
             ),
-            "setval": 'ntp authentication-key {{ aunthentication_keys.id }} {{ auntentication_keys.algorithm }}'
-                      '{{ aunthentication_keys.encryption if aunthentication_keys.encryption is defined }}'
-                      '{{ aunthentication_keys.key if aunthentication_keys.key is defined }}',
+            "setval": _tmplt_ntp_global_authentication_keys,
             "result": {
-                "authentication_keys": [
-                    {
+                "authentication_keys": {
+                    "{{ id }}": { 
                         "id": "{{ id }}",
                         "algorithm": "{{ algo }}",
                         "encryption": "{{ enc }}",
                         "key": "{{ line }}"
                     }
-                ]
+                }
             },
         },
         {
@@ -143,11 +156,27 @@ class Ntp_globalTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "serve_all",
+            "getval": re.compile(
+                r"""
+                \s*ntp\sserve
+                \s+(?P<all>all)*
+                $""",
+                re.VERBOSE,
+            ),
+            "setval": "ntp serve all",
+            "compval": "serve",
+            "result": {
+                "serve": {
+                    "all": "{{ True if all is defined }}",
+                }
+            },
+        },
+        {
             "name": "serve",
             "getval": re.compile(
                 r"""
                 \s*ntp\sserve
-                \s*(?P<all>all)*
                 \s*(?P<afi>ip|ipv6)*
                 \s*(access-group)*
                 \s*(?P<name>\S+)*
@@ -160,7 +189,6 @@ class Ntp_globalTemplate(NetworkTemplate):
             "shared": True,
             "result": {
                 "serve": {
-                    "all": "{{ True if all is defined }}",
                     "access_lists": {
                         "{{ afi }}": {
                             "afi": "{{ afi }}",
@@ -180,18 +208,18 @@ class Ntp_globalTemplate(NetworkTemplate):
             "name": "servers",
             "getval": re.compile(
                 r"""
-                \s*ntp\sservers
-                \s*(?P<vrf>vrf \S+)*
+                \s*ntp\sserver
+                \s*(?P<vrf>vrf\s\S+)*
                 \s*(?P<host>\S+)*
+                \s*(?P<prefer>prefer)*
                 \s*(?P<burst>burst)*
                 \s*(?P<iburst>iburst)*
-                \s*(?P<key>key \d+)*
-                \s*(?P<local_int>local-interface .+)*
-                \s*(?P<maxpoll>maxpoll \d+)*
-                \s*(?P<minpoll>minpoll \d+)*
-                \s*(?P<prefer>prefer)*
-                \s*(?P<source>source .+)*
-                \s*(?P<version>version [1-4])*
+                \s*(?P<local_int>local-interface\s.+)*
+                \s*(?P<maxpoll>maxpoll\s\d+)*
+                \s*(?P<minpoll>minpoll\s\d+)*
+                \s*(?P<source>source\s.+)*
+                \s*(?P<version>version\s[1-4])*
+                \s*(?P<key>key\s\d+)*
                 $""",
                 re.VERBOSE,
             ),
@@ -203,7 +231,7 @@ class Ntp_globalTemplate(NetworkTemplate):
                         "server": "{{ host }}",
                         "burst": "{{ True if burst is defined }}",
                         "iburst": "{{ True if iburst is defined }}",
-                        "key": "{{ key.split(" ")[1] is defined }}",
+                        "key": "{{ key.split(" ")[1] if key is defined }}",
                         "burst": "{{ True if burst is defined }}",
                         "iburst": "{{ True if iburst is defined }}",
                         "local_interface": "{{ local_int.split(" ")[1:] if local_int is defined }}",

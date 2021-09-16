@@ -168,6 +168,800 @@ EXAMPLES:
 """
 EXAMPLES = """
 
+# Using merged
+
+# Before state
+
+# localhost(config)#show running-config | section ntp
+# localhost(config)#
+
+  - name: Merge provided configuration with device configuration
+    arista.eos.eos_ntp_global:
+      config:
+        authenticate:
+          enable: true
+        authentication_keys:
+          - id: 2
+            algorithm: "sha1"
+            encryption: 7
+            key: "123456"
+          - id: 23
+            algorithm: "md5"
+            encryption: 7
+            key: "123456"
+        local_interface: "Ethernet1"
+        qos_dscp: 10
+        trusted_key: 23
+        servers:
+          - server: "10.1.1.1"
+            vrf: "vrf01"
+            burst: True
+            prefer: True
+          - server: "25.1.1.1"
+            vrf: "vrf01"
+            maxpoll: 15
+            key: 2
+        serve:
+          access_lists:
+            - afi: "ip"
+              acls:
+                - acl_name: "acl01"
+                  direction: "in"
+            - afi: "ipv6"
+              acls:
+                 - acl_name: "acl02"
+                   direction: "in"
+
+# After State
+
+# localhost(config)#show running-config | section ntp
+# ntp authentication-key 2 sha1 7 123456
+# ntp authentication-key 23 md5 7 123456
+# ntp trusted-key 23
+# ntp authenticate
+# ntp local-interface Ethernet1
+# ntp qos dscp 10
+# ntp server vrf vrf01 10.1.1.1 prefer burst
+# ntp server vrf vrf01 25.1.1.1 maxpoll 15 key 2
+# ntp serve ip access-group acl01 in
+# ntp serve ipv6 access-group acl02 in
+# localhost(config)#
+# 
+# 
+# Module Execution:
+# "after": {
+#         "authenticate": {
+#             "enable": true
+#         },
+#         "authentication_keys": [
+#             {
+#                 "algorithm": "sha1",
+#                 "encryption": 7,
+#                 "id": 2,
+#                 "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#             },
+#             {
+#                 "algorithm": "md5",
+#                 "encryption": 7,
+#                 "id": 23,
+#                 "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#             }
+#         ],
+#         "local_interface": "Ethernet1",
+#         "qos_dscp": 10,
+#         "serve": {
+#             "access_lists": [
+#                 {
+#                     "acls": [
+#                         {
+#                             "acl_name": "acl01",
+#                             "direction": "in"
+#                         }
+#                     ],
+#                     "afi": "ip"
+#                 },
+#                 {
+#                     "acls": [
+#                         {
+#                             "acl_name": "acl02",
+#                             "direction": "in"
+#                         }
+#                     ],
+#                     "afi": "ipv6"
+#                 }
+#             ]
+#         },
+#         "servers": [
+#             {
+#                 "burst": true,
+#                 "prefer": true,
+#                 "server": "10.1.1.1",
+#                 "vrf": "vrf01"
+#             },
+#             {
+#                 "key": 2,
+#                 "maxpoll": 15,
+#                 "server": "25.1.1.1",
+#                 "vrf": "vrf01"
+#             }
+#         ],
+#         "trusted_key": "23"
+#     },
+#     "before": {},
+#     "changed": true,
+#     "commands": [
+#         "ntp serve ip access-group acl01 in",
+#         "ntp serve ipv6 access-group acl02 in",
+#         "ntp authentication-key 2 sha1 7 ********",
+#         "ntp authentication-key 23 md5 7 ********",
+#         "ntp server vrf vrf01 10.1.1.1 burst prefer",
+#         "ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15",
+#         "ntp authenticate",
+#         "ntp local-interface Ethernet1",
+#         "ntp qos dscp 10",
+#         "ntp trusted-key 23"
+#     ],
+
+# Using Replaced
+
+# Before State
+
+# localhost(config)#show running-config | section ntp
+# ntp authentication-key 2 sha1 7 123456
+# ntp authentication-key 23 md5 7 123456
+# ntp trusted-key 23
+# ntp authenticate
+# ntp local-interface Ethernet1
+# ntp qos dscp 10
+# ntp server vrf vrf01 10.1.1.1 prefer burst
+# ntp server vrf vrf01 25.1.1.1 maxpoll 15 key 2
+# ntp serve ip access-group acl01 in
+# ntp serve ipv6 access-group acl02 in
+# localhost(config)#
+
+  - name: Replace
+    arista.eos.eos_ntp_global:
+      config:
+        qos_dscp: 15
+        authentication_keys:
+          - id: 2
+            algorithm: "md5"
+            encryption: 7
+            key: "123456"
+        servers:
+          - server: "11.21.1.1"
+            vrf: "vrf01"
+            burst: True
+            prefer: True
+            minpoll: 13
+        serve:
+          access_lists:
+            - afi: "ip"
+              acls:
+                - acl_name: "acl03"
+                  direction: "in"
+      state: replaced
+# After State:
+# localhost(config)#show running-config | section ntp
+# ntp authentication-key 2 md5 7 123456
+# ntp qos dscp 15
+# ntp server vrf vrf01 11.21.1.1 prefer burst minpoll 13
+# ntp serve ip access-group acl03 in
+# localhost(config)#
+#
+#
+# Module Execution:
+# "after": {
+#        "authentication_keys": [
+#            {
+#                "algorithm": "md5",
+#                "encryption": 7,
+#                "id": 2,
+#                "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#            }
+#        ],
+#        "qos_dscp": 15,
+#        "serve": {
+#            "access_lists": [
+#                {
+#                    "acls": [
+#                        {
+#                            "acl_name": "acl03",
+#                            "direction": "in"
+#                        }
+#                    ],
+#                    "afi": "ip"
+#                }
+#            ]
+#        },
+#        "servers": [
+#            {
+#                "burst": true,
+#                "minpoll": 13,
+#                "prefer": true,
+#                "server": "11.21.1.1",
+#                "vrf": "vrf01"
+#            }
+#        ]
+#    },
+#    "before": {
+#        "authenticate": {
+#            "enable": true
+#        },
+#        "authentication_keys": [
+#            {
+#                "algorithm": "sha1",
+#                "encryption": 7,
+#                "id": 2,
+#                "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#            },
+#            {
+#                "algorithm": "md5",
+#                "encryption": 7,
+#                "id": 23,
+#                "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#            }
+#        ],
+#        "local_interface": "Ethernet1",
+#        "qos_dscp": 10,
+#        "serve": {
+#            "access_lists": [
+#                {
+#                    "acls": [
+#                        {
+#                            "acl_name": "acl01",
+#                            "direction": "in"
+#                        }
+#                    ],
+#                    "afi": "ip"
+#                },
+#                {
+#                    "acls": [
+#                        {
+#                            "acl_name": "acl02",
+#                            "direction": "in"
+#                        }
+#                    ],
+#                    "afi": "ipv6"
+#                }
+#            ]
+#        },
+#        "servers": [
+#            {
+#                "burst": true,
+#                "prefer": true,
+#                "server": "10.1.1.1",
+#                "vrf": "vrf01"
+#            },
+#            {
+#                "key": 2,
+#                "maxpoll": 15,
+#                "server": "25.1.1.1",
+#                "vrf": "vrf01"
+#            }
+#        ],
+#        "trusted_key": "23"
+#    },
+#    "changed": true,
+#    "commands": [
+#        "no ntp serve ip access-group acl01 in",
+#        "no ntp serve ipv6 access-group acl02 in",
+#        "no ntp authentication-key 23 md5 7 ********",
+#        "no ntp server vrf vrf01 10.1.1.1 burst prefer",
+#        "no ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15",
+#        "no ntp authenticate",
+#        "no ntp local-interface Ethernet1",
+#        "no ntp trusted-key 23",
+#        "ntp serve ip access-group acl03 in",
+#        "ntp authentication-key 2 md5 7 ********",
+#        "ntp server vrf vrf01 11.21.1.1 burst minpoll 13 prefer",
+#        "ntp qos dscp 15"
+#    ],
+#
+# Using Overridden
+
+# Before State
+
+# localhost(config)#show running-config | section ntp
+# ntp authentication-key 2 sha1 7 123456
+# ntp authentication-key 23 md5 7 123456
+# ntp trusted-key 23
+# ntp authenticate
+# ntp local-interface Ethernet1
+# ntp qos dscp 10
+# ntp server vrf vrf01 10.1.1.1 prefer burst
+# ntp server vrf vrf01 25.1.1.1 maxpoll 15 key 2
+# ntp serve ip access-group acl01 in
+# ntp serve ipv6 access-group acl02 in
+# localhost(config)#
+
+  - name: Replace
+    arista.eos.eos_ntp_global:
+      config:
+        qos_dscp: 15
+        authentication_keys:
+          - id: 2
+            algorithm: "md5"
+            encryption: 7
+            key: "123456"
+        servers:
+          - server: "11.21.1.1"
+            vrf: "vrf01"
+            burst: True
+            prefer: True
+            minpoll: 13
+        serve:
+          access_lists:
+            - afi: "ip"
+              acls:
+                - acl_name: "acl03"
+                  direction: "in"
+      state: overridden
+# After State:
+# localhost(config)#show running-config | section ntp
+# ntp authentication-key 2 md5 7 123456
+# ntp qos dscp 15
+# ntp server vrf vrf01 11.21.1.1 prefer burst minpoll 13
+# ntp serve ip access-group acl03 in
+# localhost(config)#
+#
+#
+# Module Execution:
+# "after": {
+#        "authentication_keys": [
+#            {
+#                "algorithm": "md5",
+#                "encryption": 7,
+#                "id": 2,
+#                "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#            }
+#        ],
+#        "qos_dscp": 15,
+#        "serve": {
+#            "access_lists": [
+#                {
+#                    "acls": [
+#                        {
+#                            "acl_name": "acl03",
+#                            "direction": "in"
+#                        }
+#                    ],
+#                    "afi": "ip"
+#                }
+#            ]
+#        },
+#        "servers": [
+#            {
+#                "burst": true,
+#                "minpoll": 13,
+#                "prefer": true,
+#                "server": "11.21.1.1",
+#                "vrf": "vrf01"
+#            }
+#        ]
+#    },
+#    "before": {
+#        "authenticate": {
+#            "enable": true
+#        },
+#        "authentication_keys": [
+#            {
+#                "algorithm": "sha1",
+#                "encryption": 7,
+#                "id": 2,
+#                "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#            },
+#            {
+#                "algorithm": "md5",
+#                "encryption": 7,
+#                "id": 23,
+#                "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#            }
+#        ],
+#        "local_interface": "Ethernet1",
+#        "qos_dscp": 10,
+#        "serve": {
+#            "access_lists": [
+#                {
+#                    "acls": [
+#                        {
+#                            "acl_name": "acl01",
+#                            "direction": "in"
+#                        }
+#                    ],
+#                    "afi": "ip"
+#                },
+#                {
+#                    "acls": [
+#                        {
+#                            "acl_name": "acl02",
+#                            "direction": "in"
+#                        }
+#                    ],
+#                    "afi": "ipv6"
+#                }
+#            ]
+#        },
+#        "servers": [
+#            {
+#                "burst": true,
+#                "prefer": true,
+#                "server": "10.1.1.1",
+#                "vrf": "vrf01"
+#            },
+#            {
+#                "key": 2,
+#                "maxpoll": 15,
+#                "server": "25.1.1.1",
+#                "vrf": "vrf01"
+#            }
+#        ],
+#        "trusted_key": "23"
+#    },
+#    "changed": true,
+#    "commands": [
+#        "no ntp serve ip access-group acl01 in",
+#        "no ntp serve ipv6 access-group acl02 in",
+#        "no ntp authentication-key 23 md5 7 ********",
+#        "no ntp server vrf vrf01 10.1.1.1 burst prefer",
+#        "no ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15",
+#        "no ntp authenticate",
+#        "no ntp local-interface Ethernet1",
+#        "no ntp trusted-key 23",
+#        "ntp serve ip access-group acl03 in",
+#        "ntp authentication-key 2 md5 7 ********",
+#        "ntp server vrf vrf01 11.21.1.1 burst minpoll 13 prefer",
+#        "ntp qos dscp 15"
+#    ],
+#
+
+# using deleted:
+# Before State
+
+# localhost(config)#show running-config | section ntp
+# ntp authentication-key 2 sha1 7 123456
+# ntp authentication-key 23 md5 7 123456
+# ntp trusted-key 23
+# ntp authenticate
+# ntp local-interface Ethernet1
+# ntp qos dscp 10
+# ntp server vrf vrf01 10.1.1.1 prefer burst
+# ntp server vrf vrf01 11.21.1.1 prefer burst minpoll 13
+# ntp server vrf vrf01 25.1.1.1 maxpoll 15 key 2
+# ntp serve ip access-group acl01 in
+# ntp serve ipv6 access-group acl02 in
+# localhost(config)#
+
+  - name: Delete  ntp-global
+    arista.eos.eos_ntp_global:
+      state: deleted
+
+# After State:
+#  localhost(config)#show running-config | section ntp
+# localhost(config)#
+# 
+# 
+# # Module Execution
+# "after": {},
+#     "before": {
+#         "authenticate": {
+#             "enable": true
+#         },
+#         "authentication_keys": [
+#             {
+#                 "algorithm": "sha1",
+#                 "encryption": 7,
+#                 "id": 2,
+#                 "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#             },
+#             {
+#                 "algorithm": "md5",
+#                 "encryption": 7,
+#                 "id": 23,
+#                 "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#             }
+#         ],
+#         "local_interface": "Ethernet1",
+#         "qos_dscp": 10,
+#         "serve": {
+#             "access_lists": [
+#                 {
+#                     "acls": [
+#                         {
+#                             "acl_name": "acl01",
+#                             "direction": "in"
+#                         }
+#                     ],
+#                     "afi": "ip"
+#                 },
+#                 {
+#                     "acls": [
+#                         {
+#                             "acl_name": "acl02",
+#                             "direction": "in"
+#                         }
+#                     ],
+#                     "afi": "ipv6"
+#                 }
+#             ]
+#         },
+#         "servers": [
+#             {
+#                 "burst": true,
+#                 "prefer": true,
+#                 "server": "10.1.1.1",
+#                 "vrf": "vrf01"
+#             },
+#             {
+#                 "burst": true,
+#                 "minpoll": 13,
+#                 "prefer": true,
+#                 "server": "11.21.1.1",
+#                 "vrf": "vrf01"
+#             },
+#             {
+#                 "key": 2,
+#                 "maxpoll": 15,
+#                 "server": "25.1.1.1",
+#                 "vrf": "vrf01"
+#             }
+#         ],
+#         "trusted_key": "23"
+#     },
+#     "changed": true,
+#     "commands": [
+#         "no ntp serve ip access-group acl01 in",
+#         "no ntp serve ipv6 access-group acl02 in",
+#         "no ntp authentication-key 2 sha1 7 ********",
+#         "no ntp authentication-key 23 md5 7 ********",
+#         "no ntp server vrf vrf01 10.1.1.1 burst prefer",
+#         "no ntp server vrf vrf01 11.21.1.1 burst minpoll 13 prefer",
+#         "no ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15",
+#         "no ntp authenticate",
+#         "no ntp local-interface Ethernet1",
+#         "no ntp qos dscp 10",
+#         "no ntp trusted-key 23"
+#     ],
+# 
+
+# Using parsed:
+# parsed.cfg
+# ntp authentication-key 2 sha1 7 123456
+# ntp authentication-key 23 md5 7 123456
+# ntp trusted-key 23
+# ntp authenticate
+# ntp local-interface Ethernet1
+# ntp qos dscp 10
+# ntp server vrf vrf01 10.1.1.1 prefer burst
+# ntp server vrf vrf01 11.21.1.1 prefer burst minpoll 13
+# ntp server vrf vrf01 25.1.1.1 maxpoll 15 key 2
+# ntp serve ip access-group acl01 in
+# ntp serve ipv6 access-group acl02 in
+
+- name: parse configs
+    arista.eos.eos_ntp_global:
+      running_config: "{{ lookup('file', './parsed_ntp_global.cfg') }}"
+      state: parsed
+    tags:
+      - parsed
+# Module Execution
+# "parsed": {
+#         "authenticate": {
+#             "enable": true
+#         },
+#         "authentication_keys": [
+#             {
+#                 "algorithm": "sha1",
+#                 "encryption": 7,
+#                 "id": 2,
+#                 "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#             },
+#             {
+#                 "algorithm": "md5",
+#                 "encryption": 7,
+#                 "id": 23,
+#                 "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#             }
+#         ],
+#         "local_interface": "Ethernet1",
+#         "qos_dscp": 10,
+#         "serve": {
+#             "access_lists": [
+#                 {
+#                     "acls": [
+#                         {
+#                             "acl_name": "acl01",
+#                             "direction": "in"
+#                         }
+#                     ],
+#                     "afi": "ip"
+#                 },
+#                 {
+#                     "acls": [
+#                         {
+#                             "acl_name": "acl02",
+#                             "direction": "in"
+#                         }
+#                     ],
+#                     "afi": "ipv6"
+#                 }
+#             ]
+#         },
+#         "servers": [
+#             {
+#                 "burst": true,
+#                 "prefer": true,
+#                 "server": "10.1.1.1",
+#                 "vrf": "vrf01"
+#             },
+#             {
+#                 "burst": true,
+#                 "minpoll": 13,
+#                 "prefer": true,
+#                 "server": "11.21.1.1",
+#                 "vrf": "vrf01"
+#             },
+#             {
+#                 "key": 2,
+#                 "maxpoll": 15,
+#                 "server": "25.1.1.1",
+#                 "vrf": "vrf01"
+#             }
+#         ],
+#         "trusted_key": "23"
+#     }
+# }
+
+# using Gathered
+# Device config:
+# localhost(config)#show running-config | section ntp
+# ntp authentication-key 2 sha1 7 123456
+# ntp authentication-key 23 md5 7 123456
+# ntp trusted-key 23
+# ntp authenticate
+# ntp local-interface Ethernet1
+# ntp qos dscp 10
+# ntp server vrf vrf01 10.1.1.1 prefer burst
+# ntp server vrf vrf01 25.1.1.1 maxpoll 15 key 2
+# ntp serve ip access-group acl01 in
+# ntp serve ipv6 access-group acl02 in
+# localhost(config)#
+
+
+  - name: gather configs
+    arista.eos.eos_ntp_global:
+      state: gathered
+    tags:
+      - gathered
+# Module Execution
+#   "gathered": {
+#         "authenticate": {
+#             "enable": true
+#         },
+#         "authentication_keys": [
+#             {
+#                 "algorithm": "sha1",
+#                 "encryption": 7,
+#                 "id": 2,
+#                 "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#             },
+#             {
+#                 "algorithm": "md5",
+#                 "encryption": 7,
+#                 "id": 23,
+#                 "key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+#             }
+#         ],
+#         "local_interface": "Ethernet1",
+#         "qos_dscp": 10,
+#         "serve": {
+#             "access_lists": [
+#                 {
+#                     "acls": [
+#                         {
+#                             "acl_name": "acl01",
+#                             "direction": "in"
+#                         }
+#                     ],
+#                     "afi": "ip"
+#                 },
+#                 {
+#                     "acls": [
+#                         {
+#                             "acl_name": "acl02",
+#                             "direction": "in"
+#                         }
+#                     ],
+#                     "afi": "ipv6"
+#                 }
+#             ]
+#         },
+#         "servers": [
+#             {
+#                 "burst": true,
+#                 "prefer": true,
+#                 "server": "10.1.1.1",
+#                 "vrf": "vrf01"
+#             },
+#             {
+#                 "key": 2,
+#                 "maxpoll": 15,
+#                 "server": "25.1.1.1",
+#                 "vrf": "vrf01"
+#             }
+#         ],
+#         "trusted_key": "23"
+#     },
+#     "invocation": {
+#         "module_args": {
+#             "config": null,
+#             "running_config": null,
+#             "state": "gathered"
+#         }
+#     }
+# }
+
+
+# using rendered:
+
+  - name: Render provided configuration
+    arista.eos.eos_ntp_global:
+      config:
+        authenticate:
+          enable: true
+        authentication_keys:
+          - id: 2
+            algorithm: "sha1"
+            encryption: 7
+            key: "123456"
+          - id: 23
+            algorithm: "md5"
+            encryption: 7
+            key: "123456"
+        local_interface: "Ethernet1"
+        qos_dscp: 10
+        trusted_key: 23
+        servers:
+          - server: "10.1.1.1"
+            vrf: "vrf01"
+            burst: True
+            prefer: True
+          - server: "25.1.1.1"
+            vrf: "vrf01"
+            maxpoll: 15
+            key: 2
+        serve:
+          access_lists:
+            - afi: "ip"
+              acls:
+                - acl_name: "acl01"
+                  direction: "in"
+            - afi: "ipv6"
+              acls:
+                 - acl_name: "acl02"
+                   direction: "in"
+      state: rendered
+    become: yes
+
+# Module Execution:
+# "rendered": [
+#         "ntp serve ip access-group acl01 in",
+#         "ntp serve ipv6 access-group acl02 in",
+#         "ntp authentication-key 2 sha1 7 ********",
+#         "ntp authentication-key 23 md5 7 ********",
+#         "ntp server vrf vrf01 10.1.1.1 burst prefer",
+#         "ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15",
+#         "ntp authenticate",
+#         "ntp local-interface Ethernet1",
+#         "ntp qos dscp 10",
+#         "ntp trusted-key 23"
+#     ]
+# 
+
+
+
+
+
 """
 
 from ansible.module_utils.basic import AnsibleModule
