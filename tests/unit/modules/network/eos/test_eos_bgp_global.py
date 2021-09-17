@@ -152,6 +152,7 @@ class TestEosBgpglobalModule(TestEosModule):
                                 dict(
                                     peer="peer1",
                                     peer_group="peer1",
+                                    ebgp_multihop=dict(set=True),
                                     maximum_received_routes=dict(count=12000),
                                     send_community=dict(
                                         community_attribute="link-bandwidth",
@@ -193,6 +194,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "vrf vrf01",
             "neighbor peer1 peer group",
             "neighbor peer1 maximum-routes 12000",
+            "neighbor peer1 ebgp-multiphop",
             "neighbor peer1 send-community link-bandwidth divide ratio",
             "neighbor peer1 timers 5 10",
             "neighbor peer1 ttl maximum-hops 33",
