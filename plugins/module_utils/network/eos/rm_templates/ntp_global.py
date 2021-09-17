@@ -229,8 +229,6 @@ class Ntp_globalTemplate(NetworkTemplate):
                         "burst": "{{ True if burst is defined }}",
                         "iburst": "{{ True if iburst is defined }}",
                         "key": "{{ key.split(" ")[1] if key is defined }}",
-                        "burst": "{{ True if burst is defined }}",
-                        "iburst": "{{ True if iburst is defined }}",
                         "local_interface": "{{ local_int.split(" ")[1:] if local_int is defined }}",
                         "maxpoll": "{{ maxpoll.split(" ")[1] if maxpoll is defined }}",
                         "minpoll": "{{ minpoll.split(" ")[1] if minpoll is defined }}",
