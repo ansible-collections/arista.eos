@@ -102,6 +102,10 @@ plugin_routing:
       redirect: arista.eos.eos
     logging_global:
       redirect: arista.eos.eos
+    eos_ntp_global:
+      redirect: arista.eos.eos
+    ntp_global:
+      redirect: arista.eos.eos
     eos_ospfv2:
       redirect: arista.eos.eos
     ospfv2:
@@ -243,6 +247,8 @@ plugin_routing:
         warning_text: See the plugin documentation for more details
     logging_global:
       redirect: arista.eos.eos_logging_global
+    ntp_global:
+      redirect: arista.eos.eos_ntp_global
     ospfv2:
       redirect: arista.eos.eos_ospfv2
     ospfv3:
