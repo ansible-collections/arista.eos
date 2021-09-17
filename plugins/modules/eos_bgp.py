@@ -21,7 +21,7 @@ version_added: 1.0.0
 deprecated:
   alternative: eos_bgp_global
   why: Updated module released with more functionality.
-  removed_at_date: '2023-01-29'
+  removed_at_date: '2023-01-01'
 notes:
 - Tested against Arista EOS 4.24.6F
 options:

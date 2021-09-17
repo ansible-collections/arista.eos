@@ -18,7 +18,7 @@ version_added: 1.0.0
 deprecated:
   alternative: eos_logging_global
   why: Updated module released with more functionality.
-  removed_at_date: '2023-09-01'
+  removed_at_date: '2024-01-01'
 notes:
 - Tested against Arista EOS 4.24.6F
 options:
