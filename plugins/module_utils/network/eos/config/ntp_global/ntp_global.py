@@ -167,8 +167,8 @@ class Ntp_global(ResourceModule):
                                         serve_have["access_lists"]
                                     ):
                                         for h_k, h_v in iteritems(hv):
+                                            h_afi = hv["afi"]
                                             if h_k == "afi":
-                                                h_afi = h_v
                                                 continue
                                             if h_afi == afi:
                                                 if ace in h_v:
