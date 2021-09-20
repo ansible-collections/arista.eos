@@ -22,7 +22,7 @@ version_added: 3.1.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
 - Tested against Arista EOS 4.24.60M
-- This module works with connection C(network_cli). See the L(EOS Platform Options,eos_platform_options).
+- This module works with connection C(network_cli). See the U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_eos.html).
 options:
     config:
       description: A dictionary of ntp options
@@ -160,14 +160,6 @@ options:
       - rendered
       - parsed
       default: merged
-EXAMPLES:
-- merged_example_01.txt
-- replaced_example_01.txt
-- overridden_example_01.txt
-- deleted_example_01.txt
-- gathered_example_01.txt
-- parsed_example_01.txt
-- rendered_example_01.txt
 """
 EXAMPLES = """
 
