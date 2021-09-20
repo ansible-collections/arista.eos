@@ -92,7 +92,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                         "server": {"type": "str", "required": True},
                         "burst": {"type": "bool"},
                         "iburst": {"type": "bool"},
-                        "key": {"type": "int"},
+                        "key_id": {"type": "int"},
                         "local_interface": {"type": "str"},
                         "source": {"type": "str"},
                         "maxpoll": {"type": "int"},

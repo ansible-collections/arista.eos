@@ -114,7 +114,7 @@ options:
             iburst:
               description: Send bursts of packets until the server is reached
               type: bool
-            key:
+            key_id:
               description: Set a key to use for authentication.
               type: int
             local_interface:
@@ -146,7 +146,10 @@ options:
       type: str
     state:
       description:
-      - The state the configuration should be left in.
+        - The state the configuration should be left in.
+        - The states I(replaced) and I(overridden) have identical
+          behaviour for this module.
+        - Please refer to examples for more details.
       type: str
       choices:
       - deleted
@@ -200,7 +203,7 @@ EXAMPLES = """
           - server: "25.1.1.1"
             vrf: "vrf01"
             maxpoll: 15
-            key: 2
+            key_id: 2
         serve:
           access_lists:
             - afi: "ip"
@@ -279,7 +282,7 @@ EXAMPLES = """
 #                 "vrf": "vrf01"
 #             },
 #             {
-#                 "key": 2,
+#                 "key_id": 2,
 #                 "maxpoll": 15,
 #                 "server": "25.1.1.1",
 #                 "vrf": "vrf01"
@@ -434,7 +437,7 @@ EXAMPLES = """
 #                "vrf": "vrf01"
 #            },
 #            {
-#                "key": 2,
+#                "key_id": 2,
 #                "maxpoll": 15,
 #                "server": "25.1.1.1",
 #                "vrf": "vrf01"
@@ -590,7 +593,7 @@ EXAMPLES = """
 #                "vrf": "vrf01"
 #            },
 #            {
-#                "key": 2,
+#                "key_id": 2,
 #                "maxpoll": 15,
 #                "server": "25.1.1.1",
 #                "vrf": "vrf01"
@@ -884,7 +887,7 @@ EXAMPLES = """
 #                 "vrf": "vrf01"
 #             },
 #             {
-#                 "key": 2,
+#                 "key_id": 2,
 #                 "maxpoll": 15,
 #                 "server": "25.1.1.1",
 #                 "vrf": "vrf01"
@@ -929,7 +932,7 @@ EXAMPLES = """
           - server: "25.1.1.1"
             vrf: "vrf01"
             maxpoll: 15
-            key: 2
+            key_id: 2
         serve:
           access_lists:
             - afi: "ip"
@@ -957,11 +960,65 @@ EXAMPLES = """
 #         "ntp trusted-key 23"
 #     ]
 #
+"""
 
+RETURN = """
+before:
+  description: The configuration prior to the module execution.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+after:
+  description: The resulting configuration after module execution.
+  returned: when changed
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: list
+  sample:
+    - ntp master stratum 2
+    - ntp peer 198.51.100.1 use-vrf test maxpoll 7
+    - ntp authentication-key 10 md5 wawyhanx2 7
+    - ntp access-group peer PeerAcl1
+    - ntp access-group peer PeerAcl2
+    - ntp access-group query-only QueryAcl1
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
 
+    - ntp authentication-key 2 sha1 7 123456
+    - ntp authentication-key 23 md5 7 123456
+    - ntp trusted-key 23
+    - ntp authenticate
+    - ntp local-interface Ethernet1
+    - ntp qos dscp 10
+    - ntp server vrf vrf01 10.1.1.1 prefer burst
+    - ntp server vrf vrf01 25.1.1.1 maxpoll 15 key 2
+    - ntp serve ip access-group acl01 in
+    - ntp serve ipv6 access-group acl02 in
 
-
-
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 from ansible.module_utils.basic import AnsibleModule

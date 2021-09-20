@@ -66,7 +66,10 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     trusted_key=23,
                     servers=[
                         dict(
-                            server="25.1.1.1", vrf="vrf01", maxpoll=15, key=2
+                            server="25.1.1.1",
+                            vrf="vrf01",
+                            maxpoll=15,
+                            key_id=2,
                         ),
                         dict(
                             server="11.21.1.1",
@@ -112,7 +115,10 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     trusted_key=23,
                     servers=[
                         dict(
-                            server="25.1.1.1", vrf="vrf01", maxpoll=15, key=2
+                            server="25.1.1.1",
+                            vrf="vrf01",
+                            maxpoll=15,
+                            key_id=2,
                         ),
                         dict(
                             server="11.21.1.1",
@@ -158,7 +164,10 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     trusted_key=23,
                     servers=[
                         dict(
-                            server="25.1.1.1", vrf="vrf01", maxpoll=15, key=2
+                            server="25.1.1.1",
+                            vrf="vrf01",
+                            maxpoll=15,
+                            key_id=2,
                         ),
                         dict(
                             server="11.21.1.1",
@@ -362,7 +371,7 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     "vrf": "vrf01",
                 },
                 {
-                    "key": 2,
+                    "key_id": 2,
                     "maxpoll": 15,
                     "server": "25.1.1.1",
                     "vrf": "vrf01",
@@ -427,7 +436,7 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     "vrf": "vrf01",
                 },
                 {
-                    "key": 2,
+                    "key_id": 2,
                     "maxpoll": 15,
                     "server": "25.1.1.1",
                     "vrf": "vrf01",
@@ -456,7 +465,10 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     trusted_key=23,
                     servers=[
                         dict(
-                            server="25.1.1.1", vrf="vrf01", maxpoll=15, key=2
+                            server="25.1.1.1",
+                            vrf="vrf01",
+                            maxpoll=15,
+                            key_id=2,
                         ),
                         dict(
                             server="11.21.1.1",

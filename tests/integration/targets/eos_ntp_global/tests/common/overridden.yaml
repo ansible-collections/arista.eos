@@ -35,9 +35,9 @@
         that:
           - result.commands|length == 14
           - result.changed == true
-          - result.commands|symmetric_difference(overridden.commands) == []
-          - result.after == overridden.after
-          - result.before == overridden.before
+          - result.commands|symmetric_difference(replaced.commands) == []
+          - result.after == replaced.after
+          - result.before == replaced.before
 
     - name: Idempotency check
       become: true

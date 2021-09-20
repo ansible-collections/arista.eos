@@ -79,9 +79,6 @@ class Ntp_global(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
             wantd = {}
             for k, have in iteritems(haved):
                 if k not in wantd:
