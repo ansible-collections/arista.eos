@@ -47,6 +47,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                 "authentication_keys": {
                     "type": "list",
                     "elements": "dict",
+                    "no_log": False,
                     "options": {
                         "id": {"type": "int"},
                         "algorithm": {
@@ -101,7 +102,7 @@ class Ntp_globalArgs(object):  # pylint: disable=R0903
                         "version": {"type": "int"},
                     },
                 },
-                "trusted_key": {"type": "str"},
+                "trusted_key": {"type": "str", "no_log": False},
             },
         },
         "running_config": {"type": "str"},

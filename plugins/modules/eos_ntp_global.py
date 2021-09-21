@@ -55,11 +55,10 @@ options:
             encryption:
               description: key type
               type: int
-              choices: [0, 1]
+              choices: [0, 7]
             key:
               description: Unobfuscated key string.
               type: str
-              no_log: True
         local_interface:
           description: Configure the interface from which the IP source address is taken.
           type: str
@@ -118,6 +117,9 @@ options:
               description: Set a key to use for authentication.
               type: int
             local_interface:
+              description: Configure the interface from which the IP source address is taken.
+              type: str
+            source:
               description: Configure the interface from which the IP source address is taken.
               type: str
             maxpoll:
@@ -733,7 +735,7 @@ EXAMPLES = """
 # ntp serve ip access-group acl01 in
 # ntp serve ipv6 access-group acl02 in
 
-- name: parse configs
+  - name: parse configs
     arista.eos.eos_ntp_global:
       running_config: "{{ lookup('file', './parsed_ntp_global.cfg') }}"
       state: parsed
