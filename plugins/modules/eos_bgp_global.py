@@ -279,7 +279,8 @@ options:
           type: bool
         access_group:
           description: ip/ipv6 access list configuration.
-          type: dict
+          type: list
+          elements: dict
           suboptions:
             afi:
               description: Specify ip/ipv6.
@@ -949,7 +950,8 @@ options:
               type: bool
             access_group:
               description: ip/ipv6 access list configuration.
-              type: dict
+              type: list
+              elemets: dict
               suboptions:
                 afi:
                   description: Specify ip/ipv6.
