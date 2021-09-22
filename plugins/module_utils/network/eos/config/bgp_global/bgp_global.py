@@ -344,11 +344,10 @@ class Bgp_global(ResourceModule):
                 self.commands.append("no neighbor " + name)
                 continue
             for k, v in entry.items():
-                peer = entry["peer"]
                 self.compare(
                     parsers=parsers,
                     want={},
-                    have={"neighbor": {"peer": peer, k: v}},
+                    have={"neighbor": {"peer": name, k: v}},
                 )
 
     def _compare_lists(self, want, have):
