@@ -951,12 +951,12 @@ options:
             access_group:
               description: ip/ipv6 access list configuration.
               type: list
-              elemets: dict
+              elements: dict
               suboptions:
                 afi:
                   description: Specify ip/ipv6.
                   type: str
-                  choices: ['ip', 'ipv6']
+                  choices: ['ipv4', 'ipv6']
                 acl_name:
                   description: access list name.
                   type: str
