@@ -33,12 +33,14 @@ def _tmplt_ntp_global_serve(config_data):
             command += el["access_lists"]["acls"]["direction"]
     return command
 
+
 def _tmplt_ntp_global_authenticate(config_data):
     el = config_data["authenticate"]
     command = "ntp authenticate"
     if el.get("servers"):
         command += " servers"
     return command
+
 
 def _tmplt_ntp_global_authentication_keys(config_data):
     el = config_data["authentication_keys"]
