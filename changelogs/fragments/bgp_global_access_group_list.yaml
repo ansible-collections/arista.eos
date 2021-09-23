@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Changed access_group parameter to type list, to enable multiple access-groups configuration.

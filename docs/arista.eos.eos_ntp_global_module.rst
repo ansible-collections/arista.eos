@@ -159,7 +159,7 @@ Parameters
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>0</li>
-                                    <li>1</li>
+                                    <li>7</li>
                         </ul>
                 </td>
                 <td>
@@ -453,7 +453,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>key</b>
+                    <b>key_id</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">integer</span>
@@ -560,6 +560,23 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>source</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Configure the interface from which the IP source address is taken.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>version</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -646,6 +663,8 @@ Parameters
                 </td>
                 <td>
                         <div>The state the configuration should be left in.</div>
+                        <div>The states <em>replaced</em> and <em>overridden</em> have identical behaviour for this module.</div>
+                        <div>Please refer to examples for more details.</div>
                 </td>
             </tr>
     </table>
@@ -657,7 +676,7 @@ Notes
 
 .. note::
    - Tested against Arista EOS 4.24.60M
-   - This module works with connection ``network_cli``. See the `EOS Platform Options <eos_platform_options>`_.
+   - This module works with connection ``network_cli``. See the https://docs.ansible.com/ansible/latest/network/user_guide/platform_eos.html.
 
 
 
@@ -698,7 +717,7 @@ Examples
               - server: "25.1.1.1"
                 vrf: "vrf01"
                 maxpoll: 15
-                key: 2
+                key_id: 2
             serve:
               access_lists:
                 - afi: "ip"
@@ -777,7 +796,7 @@ Examples
     #                 "vrf": "vrf01"
     #             },
     #             {
-    #                 "key": 2,
+    #                 "key_id": 2,
     #                 "maxpoll": 15,
     #                 "server": "25.1.1.1",
     #                 "vrf": "vrf01"
@@ -932,7 +951,7 @@ Examples
     #                "vrf": "vrf01"
     #            },
     #            {
-    #                "key": 2,
+    #                "key_id": 2,
     #                "maxpoll": 15,
     #                "server": "25.1.1.1",
     #                "vrf": "vrf01"
@@ -1088,7 +1107,7 @@ Examples
     #                "vrf": "vrf01"
     #            },
     #            {
-    #                "key": 2,
+    #                "key_id": 2,
     #                "maxpoll": 15,
     #                "server": "25.1.1.1",
     #                "vrf": "vrf01"
@@ -1236,7 +1255,7 @@ Examples
     # ntp serve ip access-group acl01 in
     # ntp serve ipv6 access-group acl02 in
 
-    - name: parse configs
+      - name: parse configs
         arista.eos.eos_ntp_global:
           running_config: "{{ lookup('file', './parsed_ntp_global.cfg') }}"
           state: parsed
@@ -1382,7 +1401,7 @@ Examples
     #                 "vrf": "vrf01"
     #             },
     #             {
-    #                 "key": 2,
+    #                 "key_id": 2,
     #                 "maxpoll": 15,
     #                 "server": "25.1.1.1",
     #                 "vrf": "vrf01"
@@ -1427,7 +1446,7 @@ Examples
               - server: "25.1.1.1"
                 vrf: "vrf01"
                 maxpoll: 15
-                key: 2
+                key_id: 2
             serve:
               access_lists:
                 - afi: "ip"
@@ -1457,6 +1476,123 @@ Examples
     #
 
 
+
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>after</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when changed</td>
+                <td>
+                            <div>The resulting configuration after module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>before</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>
+                            <div>The configuration prior to the module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>commands</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>
+                            <div>The set of commands pushed to the remote device.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ntp master stratum 2&#x27;, &#x27;ntp peer 198.51.100.1 use-vrf test maxpoll 7&#x27;, &#x27;ntp authentication-key 10 md5 wawyhanx2 7&#x27;, &#x27;ntp access-group peer PeerAcl1&#x27;, &#x27;ntp access-group peer PeerAcl2&#x27;, &#x27;ntp access-group query-only QueryAcl1&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>gathered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>gathered</code></td>
+                <td>
+                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>parsed</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>parsed</code></td>
+                <td>
+                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rendered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>rendered</code></td>
+                <td>
+                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;ntp authentication-key 2 sha1 7 123456&#x27;, &#x27;ntp authentication-key 23 md5 7 123456&#x27;, &#x27;ntp trusted-key 23&#x27;, &#x27;ntp authenticate&#x27;, &#x27;ntp local-interface Ethernet1&#x27;, &#x27;ntp qos dscp 10&#x27;, &#x27;ntp server vrf vrf01 10.1.1.1 prefer burst&#x27;, &#x27;ntp server vrf vrf01 25.1.1.1 maxpoll 15 key 2&#x27;, &#x27;ntp serve ip access-group acl01 in&#x27;, &#x27;ntp serve ipv6 access-group acl02 in&#x27;]</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
 
 
 Status

@@ -1,3 +1,0 @@
----
-bugfixes:
-  - command template fixed supporting Jinja version for centos-8 EEs.

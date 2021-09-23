@@ -5,6 +5,32 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v3.1.0
+======
+
+Minor Changes
+-------------
+
+- Add eos_ntp_global module.
+
+Deprecated Features
+-------------------
+
+- Remove testing with provider for ansible-test integration jobs. This helps prepare us to move to network-ee integration tests.
+
+Bugfixes
+--------
+
+- Changed access_group parameter to type list, to enable multiple access-groups configuration.
+- Fix logic error while executing replaced and overridden operations on bgp neighbors.
+- Fix typo and logic errors in bgp_global, to skip other routing protocol configs from running-config.
+- command template fixed supporting Jinja version for centos-8 EEs.
+
+New Modules
+-----------
+
+- eos_ntp_global - Manages ntp resource module
+
 v3.0.0
 ======
 
@@ -119,12 +145,6 @@ Bugfixes
 v1.3.0
 ======
 
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
-
-
 Bugfixes
 --------
 
@@ -196,11 +216,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======

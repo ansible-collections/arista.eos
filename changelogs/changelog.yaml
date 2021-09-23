@@ -132,9 +132,6 @@ releases:
     - fix_src_backup_with_module_alias.yaml
     release_date: '2020-07-31'
   1.0.2:
-    changes:
-      release_summary:
-        - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
@@ -358,3 +355,34 @@ releases:
       name: eos_logging_global
       namespace: ''
     release_date: '2021-08-27'
+  3.1.0:
+    changes:
+      bugfixes:
+      - Changed access_group parameter to type list, to enable multiple access-groups
+        configuration.
+      - Fix logic error while executing replaced and overridden operations on bgp
+        neighbors.
+      - Fix typo and logic errors in bgp_global, to skip other routing protocol configs
+        from running-config.
+      - command template fixed supporting Jinja version for centos-8 EEs.
+      deprecated_features:
+      - Remove testing with provider for ansible-test integration jobs. This helps
+        prepare us to move to network-ee integration tests.
+      minor_changes:
+      - Add eos_ntp_global module.
+    fragments:
+    - bgp_global_access_group_list.yaml
+    - bgp_global_neighbor_replaced.yaml
+    - bgp_global_typo_fix.yaml
+    - cleanup_tags_for_tests.yaml
+    - deprecation_biannually.yaml
+    - eos_ntp_global_module.yaml
+    - remove_debug_from_tests.yaml
+    - remove_provider_from_tests.yaml
+    - set_allow_duplicates.yaml
+    - template_to_support_jinja2.10.3.yaml
+    modules:
+    - description: Manages ntp resource module
+      name: eos_ntp_global
+      namespace: ''
+    release_date: '2021-09-24'
