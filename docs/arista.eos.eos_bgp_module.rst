@@ -16,7 +16,7 @@ Version added: 1.0.0
 
 DEPRECATED
 ----------
-:Removed in collection release after 2023-01-29
+:Removed in collection release after 2023-01-01
 :Why: Updated module released with more functionality.
 :Alternative: eos_bgp_global
 
@@ -976,7 +976,7 @@ Status
 ------
 
 
-- This module will be removed in a release after 2023-01-29. *[deprecated]*
+- This module will be removed in version . *[deprecated]*
 - For more information see `DEPRECATED`_.
 
 

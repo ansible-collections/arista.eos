@@ -52,7 +52,6 @@ class Bgp_global(ResourceModule):
             "distance",
             "graceful_restart",
             "graceful_restart_helper",
-            "acccess_group",
             "maximum_paths",
             "monitoring",
             "route_target",
@@ -352,7 +351,12 @@ class Bgp_global(ResourceModule):
                 )
 
     def _compare_lists(self, want, have):
-        for attrib in ["redistribute", "network", "aggregate_address"]:
+        for attrib in [
+            "redistribute",
+            "network",
+            "aggregate_address",
+            "access_group",
+        ]:
             wdict = want.pop(attrib, {})
             hdict = have.pop(attrib, {})
             for key, entry in iteritems(wdict):
@@ -381,6 +385,12 @@ class Bgp_global(ResourceModule):
                 for entry in proc.get("aggregate_address", []):
                     agg_dict.update({entry["address"]: entry})
                 proc["aggregate_address"] = agg_dict
+
+            if "access_group" in proc:
+                access_dict = {}
+                for entry in proc.get("access_group", []):
+                    access_dict.update({entry["afi"]: entry})
+                proc["access_group"] = access_dict
 
             if "redistribute" in proc:
                 redis_dict = {}

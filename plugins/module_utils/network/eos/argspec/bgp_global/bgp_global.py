@@ -465,6 +465,18 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     "elements": "dict",
                     "type": "list",
                     "options": {
+                        "access_group": {
+                            "elements": "dict",
+                            "type": "list",
+                            "options": {
+                                "direction": {"type": "str"},
+                                "afi": {
+                                    "type": "str",
+                                    "choices": ["ipv4", "ipv6"],
+                                },
+                                "acl_name": {"type": "str"},
+                            },
+                        },
                         "router_id": {"type": "str"},
                         "vrf": {"type": "str"},
                         "route_target": {
@@ -892,17 +904,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "shutdown": {"type": "bool"},
-                        "access_group": {
-                            "type": "dict",
-                            "options": {
-                                "direction": {"type": "str"},
-                                "afi": {
-                                    "type": "str",
-                                    "choices": ["ip", "ipv6"],
-                                },
-                                "acl_name": {"type": "str"},
-                            },
-                        },
                         "graceful_restart_helper": {"type": "bool"},
                         "ucmp": {
                             "type": "dict",
@@ -956,7 +957,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     },
                 },
                 "access_group": {
-                    "type": "dict",
+                    "elements": "dict",
+                    "type": "list",
                     "options": {
                         "direction": {"type": "str"},
                         "afi": {"type": "str", "choices": ["ipv4", "ipv6"]},

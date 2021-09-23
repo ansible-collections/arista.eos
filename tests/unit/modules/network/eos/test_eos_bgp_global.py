@@ -302,6 +302,10 @@ class TestEosBgpglobalModule(TestEosModule):
                     ],
                     redistribute=[dict(protocol="isis", isis_level="level-2")],
                     route_target=dict(action="export", target="44:22"),
+                    access_group=[
+                        dict(afi="ipv6", acl_name="acl01", direction="out"),
+                        dict(afi="ipv4", acl_name="acl02", direction="out"),
+                    ],
                 ),
                 state="replaced",
             )
@@ -314,6 +318,8 @@ class TestEosBgpglobalModule(TestEosModule):
             "network 10.1.0.0/16",
             "default-metric 433",
             "route-target export 44:22",
+            "ip access-group acl02 out",
+            "ipv6 access-group acl01 out",
             "no timers bgp 44 100",
             "no ucmp link-bandwidth recursive",
             "no neighbor peer1 peer group",
@@ -730,9 +736,9 @@ class TestEosBgpglobalModule(TestEosModule):
                         enforce_first_as=True,
                         host_routes=True,
                     ),
-                    access_group=dict(
-                        afi="ipv6", acl_name="acl01", direction="out"
-                    ),
+                    access_group=[
+                        dict(afi="ipv6", acl_name="acl01", direction="out")
+                    ],
                 ),
                 state="rendered",
             )
