@@ -55,7 +55,8 @@ Parameters
                     <b>access_group</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
@@ -3730,7 +3731,8 @@ Parameters
                     <b>access_group</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
@@ -3771,7 +3773,7 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>ip</li>
+                                    <li>ipv4</li>
                                     <li>ipv6</li>
                         </ul>
                 </td>

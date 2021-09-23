@@ -224,15 +224,13 @@ def _tmplt_bgp_graceful_restart_helper(config_data):
 
 
 def _tmplt_bgp_access_group(config_data):
-    if config_data["access_group"].get("afi") == "ipv4":
+    if config_data.get("afi") == "ipv4":
         afi = "ip"
     else:
         afi = "ipv6"
-    command = afi + " access-group {acl_name}".format(
-        **config_data["access_group"]
-    )
-    if config_data["access_group"].get("direction"):
-        command += " {direction}".format(**config_data["access_group"])
+    command = afi + " access-group {acl_name}".format(**config_data)
+    if config_data.get("direction"):
+        command += " {direction}".format(**config_data)
     return command
 
 
@@ -1459,7 +1457,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "acccess_group",
+            "name": "access_group",
             "getval": re.compile(
                 r"""
                 \s*(?P<afi>ip|ipv6)
@@ -1474,11 +1472,13 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                        "access_group": {
-                            "afi": "{{ ipv4 if afi == 'ip'  else afi }}",
-                            "acl_name": "{{ acl_name }}",
-                            "direction": "{{ direction }}",
-                        }
+                        "access_group": [
+                            {
+                                "afi": "{{ ipv4 if afi == 'ip'  else afi }}",
+                                "acl_name": "{{ acl_name }}",
+                                "direction": "{{ direction }}",
+                            }
+                        ]
                     }
                 }
             },
