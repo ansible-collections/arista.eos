@@ -296,6 +296,17 @@ class TestEosBgpglobalModule(TestEosModule):
                 config=dict(
                     as_number="65535",
                     default_metric=433,
+                    neighbor=[
+                        dict(
+                            peer="peer1",
+                            peer_group="peer1",
+                            send_community=dict(
+                                community_attribute="link-bandwidth",
+                                link_bandwidth_attribute="divide",
+                                divide="ratio",
+                            ),
+                        )
+                    ],
                     network=[
                         dict(address="6.6.6.0/24", route_map="netmap1"),
                         dict(address="10.1.0.0/16"),
@@ -322,8 +333,6 @@ class TestEosBgpglobalModule(TestEosModule):
             "ipv6 access-group acl01 out",
             "no timers bgp 44 100",
             "no ucmp link-bandwidth recursive",
-            "no neighbor peer1 peer group",
-            "no neighbor peer1 send-community link-bandwidth divide ratio",
             "no neighbor peer1 maximum-routes 12000",
             "no neighbor peer2 peer group",
             "no neighbor peer2 maximum-routes 12000",
