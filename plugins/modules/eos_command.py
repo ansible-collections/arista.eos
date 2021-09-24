@@ -41,9 +41,8 @@ options:
       resulting output from the command is returned.  If the I(wait_for) argument
       is provided, the module is not returned until the condition is satisfied or
       the number of I(retries) has been exceeded.
-    - If a command sent to the device requires answering a prompt, it is possible to pass
-      a dict containing command, answer and prompt. Common answers are 'y' or "\\r"
-      (carriage return, must be double quotes). Refer below examples.
+    - Commands may be represented either as simple strings or as dictionaries as described below.
+      Refer to the Examples setion for some common uses.
     required: true
     type: list
     elements: raw
@@ -168,26 +167,35 @@ EXAMPLES = """
     - command: show version
       output: json
 
-- name: using cli transport, check whether the switch is in maintenance mode
+- name: check whether the switch is in maintenance mode
   arista.eos.eos_command:
     commands: show maintenance
     wait_for: result[0] contains 'Under Maintenance'
 
-- name: using cli transport, check whether the switch is in maintenance mode using
-    json output
+- name: check whether the switch is in maintenance mode using json output
   arista.eos.eos_command:
-    commands: show maintenance | json
+    commands:
+    - command: show maintenance
+      output: json
     wait_for: result[0].units.System.state eq 'underMaintenance'
 
-- name: using eapi transport check whether the switch is in maintenance, with 8 retries
+- name: check whether the switch is in maintenance, with 8 retries
     and 2 second interval between retries
   arista.eos.eos_command:
     commands: show maintenance
     wait_for: result[0]['units']['System']['state'] eq 'underMaintenance'
     interval: 2
     retries: 8
-    provider:
-      transport: eapi
+
+- name: run a command that requires a confirmation. Note that prompt
+    takes regexes, and so strings containing characters like brackets
+    need to be escaped.
+  arista.eos.eos_command:
+    commands:
+    - command: reload power
+      prompt: "\[confirm\]"
+      answer: y
+      newline: false
 """
 
 RETURN = """
