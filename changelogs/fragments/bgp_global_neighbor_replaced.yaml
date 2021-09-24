@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fix logic error while executing replaced and overridden operations on bgp neighbors.

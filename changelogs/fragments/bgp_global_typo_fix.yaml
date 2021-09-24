@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fix typo and logic errors in bgp_global, to skip other routing protocol configs from running-config.
