@@ -136,7 +136,7 @@ options:
     type: int
 """
 
-EXAMPLES = """
+EXAMPLES = r"""
 - name: run show version on remote devices
   arista.eos.eos_command:
     commands: show version
@@ -193,7 +193,7 @@ EXAMPLES = """
   arista.eos.eos_command:
     commands:
     - command: reload power
-      prompt: "\[confirm\]"
+      prompt: \[confirm\]
       answer: y
       newline: false
 """

@@ -563,7 +563,7 @@ Examples
       arista.eos.eos_command:
         commands:
         - command: reload power
-          prompt: "\[confirm\]"
+          prompt: \[confirm\]
           answer: y
           newline: false
 
