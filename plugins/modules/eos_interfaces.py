@@ -115,6 +115,7 @@ options:
 EXAMPLES = """
 
 # Using merged
+# testing
 
 # Before state:
 # -------------
