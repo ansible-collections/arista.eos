@@ -27,7 +27,7 @@ short_description: Manage Arista EOS configuration sections
 description:
 - Arista EOS configurations use a simple block indent file syntax for segmenting configuration
   into sections.  This module provides an implementation for working with EOS configuration
-  sections in a deterministic way.  This module works with either CLI or eAPI transports.
+  sections in a deterministic way. This module works with either CLI or eAPI transports.
 version_added: 1.0.0
 extends_documentation_fragment:
 - arista.eos.eos
