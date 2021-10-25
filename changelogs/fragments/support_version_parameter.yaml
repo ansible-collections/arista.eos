@@ -1,0 +1,7 @@
+---
+breaking_changes:
+  - eos_command - new suboption ``version`` of parameter ``command``, which controls the JSON response version.
+    Previously the value was assumed to be "latest" for network_cli and "1" for httpapi, but the default will now be "latest" for both connections.
+    This option is also available for use in modules making their own device requests with
+    ``plugins.module_utils.network.eos.eos.run_commands()`` with the same new default behavior.
+    (https://github.com/ansible-collections/arista.eos/pull/258).

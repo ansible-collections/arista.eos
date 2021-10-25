@@ -76,7 +76,8 @@ class HttpApi(HttpApiBase):
             data.insert(0, {"cmd": "enable", "input": self._become_pass})
 
         output = message_kwargs.get("output") or "text"
-        request = request_builder(data, output)
+        version = message_kwargs.get("version") or "latest"
+        request = request_builder(data, output, version)
         headers = {"Content-Type": "application/json-rpc"}
 
         _response, response_data = self.connection.send(
@@ -200,8 +201,10 @@ def handle_response(response):
     return results
 
 
-def request_builder(commands, output, reqid=None):
-    params = dict(version=1, cmds=commands, format=output)
+def request_builder(commands, output, version, reqid=None):
+    if version != "latest":
+        version = int(version)
+    params = dict(version=version, cmds=commands, format=output)
     return json.dumps(
         dict(jsonrpc="2.0", id=reqid, method="runCmds", params=params)
     )

@@ -58,6 +58,12 @@ options:
         - How the remote device should format the command response data.
         type: str
         choices: ["text", "json"]
+      version:
+        description:
+        - Specifies the version of the JSON response returned when I(output=json).
+        type: str
+        choices: ["1", "latest"]
+        default: "latest"
       prompt:
         description:
         - A single regex pattern or a sequence of patterns to evaluate the expected prompt
@@ -223,11 +229,11 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.p
     Conditional,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    transform_commands,
     to_lines,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     run_commands,
+    transform_commands,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_argument_spec,
