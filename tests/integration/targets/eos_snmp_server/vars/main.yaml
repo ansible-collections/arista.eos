@@ -10,7 +10,7 @@ merged:
     - "snmp-server host host01 version 3 priv user01 udp-port 23"
     - "snmp-server vrf vrf01 local-interface Ethernet1"
     - "snmp-server contact admin"
-    - "snmp-server engineID remote 1.1.1.1 1234567"
+    - "snmp-server engineID remote 1.1.1.1 12345678ab"
     - "snmp-server enable traps bgp"
     - "snmp-server enable traps capacity arista-hardware-utilization-alert"
     - "snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif"
