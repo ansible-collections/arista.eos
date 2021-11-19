@@ -314,7 +314,7 @@ options:
             description: Enable vrrp traps. If set to enabled , all the traps are set.
             type: dict
             suboptions:
-              vrrp:
+              trap_new_master:
                 description: vrrp
                 type: bool
               enabled:
@@ -346,7 +346,7 @@ options:
         suboptions:
           root_oid:
             description: Extension root oid
-            type: int
+            type: str
           script_location:
             description: script location
             type: str
@@ -404,7 +404,7 @@ options:
           version:
             description: Notification message SNMP version.
             type: str
-            choices: ['1', '2c', '3']
+            choices: ['1', '2c', '3 auth', '3 noauth', '3 priv']
           vrf:
             description: Specify the VRF in which the host is configured
             type: str
@@ -478,25 +478,38 @@ options:
           auth:
             description: User authentication settings
             type: dict
-            suboptions: &auth
+            suboptions:
               algorithm:
                 description: algorithm for authentication
                 type: str
               auth_passphrase:
                 description: authentication passphrase hex string
                 type: str
-                no_log: True
               encryption:
                 description: algorithm for encryption.
                 type: str
               priv_passphrase:
                 description: privacy passphrase hexstring
                 type: str
-                no_log: True
           localized:
             description: localized auth and privacy passphrases.
             type: dict
-            suboptions: *auth
+            suboptions:
+              engineid:
+                description: Engine id
+                type: str
+              algorithm:
+                description: algorithm for authentication
+                type: str
+              auth_passphrase:
+                description: authentication passphrase hex string
+                type: str
+              encryption:
+                description: algorithm for encryption.
+                type: str
+              priv_passphrase:
+                description: privacy passphrase hexstring
+                type: str
       views:
         description: SNMPv2 MIB view configuration
         type: list
@@ -508,12 +521,10 @@ options:
           mib:
             description: SNMP MIB name
             type: str
-          excluded:
-            description: Exclude the named MIB family from the view
-            type: bool
-          included:
-            description: Include the named MIB family from the view
-            type: bool
+          action:
+            description: Action to be performed.
+            type: str
+            choices: ['excluded', 'included']
       vrfs:
         description: Specify the VRF in which the source address is used
         type: list
@@ -718,7 +729,7 @@ EXAMPLES = """
 # snmp-server enable traps capacity arista-hardware-utilization-alert
 # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif
 
-  - name: Replace given snmp_server configuration
+    - name: Replace given snmp_server configuration
       become: true
       register: result
       arista.eos.eos_snmp_server: &replaced
@@ -889,7 +900,7 @@ EXAMPLES = """
 # snmp-server enable traps capacity arista-hardware-utilization-alert
 # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif
 
-  - name: Override given snmp_server configuration
+    - name: Override given snmp_server configuration
       arista.eos.eos_snmp_server:
         state: overridden
         config:
@@ -1170,10 +1181,10 @@ EXAMPLES = """
 # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif
 # snmp-server enable traps external-alarm arista-external-alarm-deasserted-notif
 
-- name: Provide the running configuration for parsing (config to be parsed)
-  arista.eos.eos_snmp_server:
-    running_config: "{{ lookup('file', '_parsed.cfg') }}"
-    state: parsed
+    - name: Provide the running configuration for parsing (config to be parsed)
+      arista.eos.eos_snmp_server:
+        running_config: "{{ lookup('file', '_parsed.cfg') }}"
+        state: parsed
 
 # Module Execution:
 #     "parsed": {
