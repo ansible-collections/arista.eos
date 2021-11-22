@@ -474,9 +474,6 @@ class TestEosSnmp_ServerModule(TestEosModule):
         result = self.execute_module(
             changed=False, filename="eos_snmp_server_config.cfg"
         )
-        import q
-
-        q(result["gathered"])
         gathered_list = {
             "communities": [
                 {"acl_v6": "list1", "name": "comm3", "view": "view1"},
