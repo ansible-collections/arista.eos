@@ -6,3 +6,4 @@ mock ; python_version < '3.5'
 pexpect
 pytest-xdist
 yamllint
+selinux_please_lie_to_me
