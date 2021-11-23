@@ -39,7 +39,7 @@ options:
       Possible values for this argument include all and the resources like interfaces,
       vlans etc. Can specify a list of values to include a larger subset. Values can
       also be used with an initial C(!) to specify that a specific subset should
-      not be collected. Values can also be used with an initial C(M(!)) to specify
+      not be collected. Values can also be used with an initial C(!) to specify
       that a specific subset should not be collected. Valid subsets are 'all', 'interfaces',
       'l2_interfaces', 'l3_interfaces', 'lacp', 'lacp_interfaces', 'lag_interfaces',
       'lldp_global', 'lldp_interfaces', 'vlans', 'acls'.
