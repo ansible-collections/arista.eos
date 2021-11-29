@@ -132,6 +132,7 @@ class Snmp_server(ResourceModule):
         the `want` and `have` data with the `parsers` defined
         for the Snmp_server network resource.
         """
+        self._compare_hosts(want, have)
         self._compare_lists(want, have)
         for name, entry in iteritems(want):
             self.compare(
@@ -158,7 +159,6 @@ class Snmp_server(ResourceModule):
             "communities_ipv6_acl",
             "communities_ipv4_acl",
             "groups",
-            "hosts",
             "acls",
             "views",
             "users.auth",
@@ -168,7 +168,6 @@ class Snmp_server(ResourceModule):
         for attrib in [
             "communities",
             "groups",
-            "hosts",
             "acls",
             "users",
             "views",
@@ -187,11 +186,24 @@ class Snmp_server(ResourceModule):
             for entry in hdict.values():
                 self.compare(parsers=parsers, want={}, have={attrib: entry})
 
+    def _compare_hosts(self, want, have):
+        wdict = get_from_dict(want, "hosts") or {}
+        hdict = get_from_dict(have, "hosts") or {}
+        for key, entry in iteritems(wdict):
+            # self.addcmd(entry, attrib, False)
+            self.compare(
+                parsers="hosts",
+                want={"hosts": {key: entry}},
+                have={"hosts": {key: hdict.pop(key, {})}},
+            )
+        # remove remaining items in have for replaced
+        for key, entry in iteritems(hdict):
+            self.compare(parsers="hosts", want={}, have={"hosts": {key: entry}})
+
     def _snmp_server_list_to_dict(self, entry):
         param_dict = {
             "communities": "name",
             "groups": "group",
-            "hosts": "host",
             "acls": "afi",
             "users": "user",
             "views": "view",
@@ -203,3 +215,14 @@ class Snmp_server(ResourceModule):
                 for el in entry[k]:
                     a_dict.update({el[v]: el})
                 entry[k] = a_dict
+        if "hosts" in entry:
+            host_dict = {}
+            for el in entry["hosts"]:
+                tr = ""
+                inf = ""
+                if el.get("traps"):
+                    tr = "traps"
+                if el.get("informs"):
+                    inf = "informs"
+                host_dict.update({(el.get("host"), el.get("user"), el.get("version"), inf, tr, el.get("udp_port")): el})
+            entry["hosts"] = host_dict

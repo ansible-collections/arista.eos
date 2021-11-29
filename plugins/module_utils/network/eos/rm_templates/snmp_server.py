@@ -288,8 +288,8 @@ def _tmplt_snmp_server_groups(config_data):
 
 
 def _tmplt_snmp_server_hosts(config_data):
-    command = "snmp-server host " + config_data["hosts"]["host"]
-    el = config_data["hosts"]
+    el=list(config_data["hosts"].values())[0]
+    command = "snmp-server host " + el["host"]
     if el.get("vrf"):
         command += " vrf" + el["vrf"]
     if el.get("informs"):
@@ -919,27 +919,31 @@ class Snmp_serverTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*snmp-server\shost
-                \s*(?P<name>\S+)*
+                \s(?P<name>\S+)
                 \s*(?P<vrf>vrf\s\S+)*
-                \s*(?P<msg>informs|traps)*
+                \s*(?P<msg_inf1>informs)*
+                \s*(?P<msg_tr1>traps)*
                 \s*(version)*
                 \s*(?P<version>1|2c|3\sauth|3\snoauth|3\spriv)*
+                \s*(?P<msg_inf2>informs)*
+                \s*(?P<msg_tr2>traps)*
                 \s*(?P<comm>\S+)*
-                \s*(?P<udp>udp-port\s\d+)*
+                \s*(?P<udp>udp-port)*?
+                \s*(?P<port>\d+)*?
                 $""",
                 re.VERBOSE,
             ),
             "setval": _tmplt_snmp_server_hosts,
             "result": {
                 "hosts": {
-                    "{{ name }}": {
+                    '{{ name, comm|d(""), version|d("2c"), msg_inf1|d() or msg_inf2|d(), msg_tr1|d() or msg_tr2|d(), port|d() }}': {
                         "host": "{{ name }}",
                         "vrf": "{{ vrf.split(" ")[1] if vrf is defined }}",
                         "version": '{{ version }}',
+                        "udp_port": "{{ port if udp is defined and port is defined else None }}",
+                        "informs": '{{ True if msg_inf1 is defined or msg_inf2 is defined else None }}',
+                        "traps": '{{ True if msg_tr1 is defined or msg_tr2 is defined else None }}',
                         "user": "{{ comm }}",
-                        "udp_port": "{{ udp.split(" ")[1] if udp is defined }}",
-                        "informs": '{{ True if "informs" is in msg }}',
-                        "traps": '{{ True if "traps" is in msg }}',
                     }
                 }
             },
