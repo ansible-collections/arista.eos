@@ -198,7 +198,9 @@ class Snmp_server(ResourceModule):
             )
         # remove remaining items in have for replaced
         for key, entry in iteritems(hdict):
-            self.compare(parsers="hosts", want={}, have={"hosts": {key: entry}})
+            self.compare(
+                parsers="hosts", want={}, have={"hosts": {key: entry}}
+            )
 
     def _snmp_server_list_to_dict(self, entry):
         param_dict = {
@@ -224,5 +226,16 @@ class Snmp_server(ResourceModule):
                     tr = "traps"
                 if el.get("informs"):
                     inf = "informs"
-                host_dict.update({(el.get("host"), el.get("user"), el.get("version"), inf, tr, el.get("udp_port")): el})
+                host_dict.update(
+                    {
+                        (
+                            el.get("host"),
+                            el.get("user"),
+                            el.get("version"),
+                            inf,
+                            tr,
+                            el.get("udp_port"),
+                        ): el
+                    }
+                )
             entry["hosts"] = host_dict

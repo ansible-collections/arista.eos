@@ -288,7 +288,7 @@ def _tmplt_snmp_server_groups(config_data):
 
 
 def _tmplt_snmp_server_hosts(config_data):
-    el=list(config_data["hosts"].values())[0]
+    el = list(config_data["hosts"].values())[0]
     command = "snmp-server host " + el["host"]
     if el.get("vrf"):
         command += " vrf" + el["vrf"]
