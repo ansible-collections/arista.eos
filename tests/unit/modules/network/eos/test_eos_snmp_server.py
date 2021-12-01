@@ -340,7 +340,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
             "snmp-server enable traps bridge arista-mac-age arista-mac-learn arista-mac-move",
             "snmp-server enable traps entity arista-ent-sensor-alarm ent-config-change ent-state-oper ent-state-oper-disabled ent-state-oper-enabled",
             "snmp-server enable traps isis adjacency-change area-mismatch attempt-to-exceed-max-sequence authentication-type-failure database-overload own-lsp-purge rejected-adjacency sequence-number-skip",  # noqa: E501
-            "snmp-server enable traps lldp rem_tables_change",
+            "snmp-server enable traps lldp rem-tables-change",
             "snmp-server enable traps mpls-ldp mpls-ldp-session-down mpls-ldp-session-up",
             "snmp-server enable traps msdp backward-transition established",
             "snmp-server enable traps ospf if-auth-failure if-config-error if-state-change nbr-state-change",
