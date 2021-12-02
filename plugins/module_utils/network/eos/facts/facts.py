@@ -83,6 +83,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.loggi
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ntp_global.ntp_global import (
     Ntp_globalFacts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.snmp_server.snmp_server import (
+    Snmp_serverFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -110,6 +113,7 @@ FACT_RESOURCE_SUBSETS = dict(
     prefix_lists=Prefix_listsFacts,
     logging_global=Logging_globalFacts,
     ntp_global=Ntp_globalFacts,
+    snmp_server=Snmp_serverFacts,
 )
 
 

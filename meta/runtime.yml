@@ -126,6 +126,10 @@ plugin_routing:
       redirect: arista.eos.eos
     route_maps:
       redirect: arista.eos.eos
+    eos_snmp_server:
+      redirect: arista.eos.eos
+    snmp_server:
+      redirect: arista.eos.eos
     eos_static_route:
       redirect: arista.eos.eos
     static_route:
@@ -259,6 +263,8 @@ plugin_routing:
       redirect: arista.eos.eos_prefix_lists
     route_maps:
       redirect: arista.eos.eos_route_maps
+    snmp_server:
+      redirect: arista.eos.eos_snmp_server
     static_route:
       redirect: arista.eos.eos_static_route
       deprecation:
