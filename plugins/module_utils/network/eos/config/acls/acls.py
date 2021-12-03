@@ -240,15 +240,16 @@ class Acls(ConfigBase):
                                         ],
                                     }
                                 ]
-                                config_cmds = set_commands(w, have)
-                                config_cmds = list(
-                                    itertools.chain(*config_cmds)
-                                )
+                                cmds = set_commands(w, have)
+                                config_cmds.append(list(
+                                    itertools.chain(*cmds)
+                                ))
 
         if remove_cmds:
             remove_cmds = list(itertools.chain(*remove_cmds))
             commands.append(remove_cmds)
         if config_cmds:
+            config_cmds = list(itertools.chain(*config_cmds))
             commands.append(config_cmds)
         commands = list(itertools.chain(*commands))
         commandset = []
