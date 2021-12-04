@@ -132,9 +132,6 @@ releases:
     - fix_src_backup_with_module_alias.yaml
     release_date: '2020-07-31'
   1.0.2:
-    changes:
-      release_summary:
-        - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
@@ -389,3 +386,25 @@ releases:
       name: eos_ntp_global
       namespace: ''
     release_date: '2021-09-24'
+  4.0.0:
+    changes:
+      breaking_changes:
+      - eos_command - new suboption ``version`` of parameter ``command``, which controls
+        the JSON response version. Previously the value was assumed to be "latest"
+        for network_cli and "1" for httpapi, but the default will now be "latest"
+        for both connections. This option is also available for use in modules making
+        their own device requests with ``plugins.module_utils.network.eos.eos.run_commands()``
+        with the same new default behavior. (https://github.com/ansible-collections/arista.eos/pull/258).
+      minor_changes:
+      - Add eos_snmp_server resource module.
+    fragments:
+    - 0-copy_ignore_txt.yml
+    - 280-command-spec.yaml
+    - eos_snmp_server.yaml
+    - remove_2.6_ignores.yml
+    - support_version_parameter.yaml
+    modules:
+    - description: Manages snmp server resource module
+      name: eos_snmp_server
+      namespace: ''
+    release_date: '2021-12-07'

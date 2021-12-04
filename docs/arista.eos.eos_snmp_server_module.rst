@@ -432,7 +432,7 @@ Parameters
                     <b>root_oid</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">integer</span>
+                        <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
@@ -731,7 +731,9 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>1</li>
                                     <li>2c</li>
-                                    <li>3</li>
+                                    <li>3 auth</li>
+                                    <li>3 noauth</li>
+                                    <li>3 priv</li>
                         </ul>
                 </td>
                 <td>
@@ -2640,7 +2642,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>vrrp</b>
+                    <b>trap_new_master</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -2859,6 +2861,24 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>engineid</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Engine id</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>priv_passphrase</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -2968,41 +2988,20 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>excluded</b>
+                    <b>action</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
+                        <span style="color: purple">string</span>
                     </div>
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
+                                    <li>excluded</li>
+                                    <li>included</li>
                         </ul>
                 </td>
                 <td>
-                        <div>Exclude the named MIB family from the view</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>included</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Include the named MIB family from the view</div>
+                        <div>Action to be performed.</div>
                 </td>
             </tr>
             <tr>
@@ -3327,7 +3326,7 @@ Examples
     # snmp-server enable traps capacity arista-hardware-utilization-alert
     # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif
 
-      - name: Replace given snmp_server configuration
+        - name: Replace given snmp_server configuration
           become: true
           register: result
           arista.eos.eos_snmp_server: &replaced
@@ -3498,7 +3497,7 @@ Examples
     # snmp-server enable traps capacity arista-hardware-utilization-alert
     # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif
 
-      - name: Override given snmp_server configuration
+        - name: Override given snmp_server configuration
           arista.eos.eos_snmp_server:
             state: overridden
             config:
@@ -3779,10 +3778,10 @@ Examples
     # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif
     # snmp-server enable traps external-alarm arista-external-alarm-deasserted-notif
 
-    - name: Provide the running configuration for parsing (config to be parsed)
-      arista.eos.eos_snmp_server:
-        running_config: "{{ lookup('file', '_parsed.cfg') }}"
-        state: parsed
+        - name: Provide the running configuration for parsing (config to be parsed)
+          arista.eos.eos_snmp_server:
+            running_config: "{{ lookup('file', '_parsed.cfg') }}"
+            state: parsed
 
     # Module Execution:
     #     "parsed": {

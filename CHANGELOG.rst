@@ -5,6 +5,24 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v4.0.0
+======
+
+Minor Changes
+-------------
+
+- Add eos_snmp_server resource module.
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- eos_command - new suboption ``version`` of parameter ``command``, which controls the JSON response version. Previously the value was assumed to be "latest" for network_cli and "1" for httpapi, but the default will now be "latest" for both connections. This option is also available for use in modules making their own device requests with ``plugins.module_utils.network.eos.eos.run_commands()`` with the same new default behavior. (https://github.com/ansible-collections/arista.eos/pull/258).
+
+New Modules
+-----------
+
+- eos_snmp_server - Manages snmp server resource module
+
 v3.1.0
 ======
 
@@ -145,12 +163,6 @@ Bugfixes
 v1.3.0
 ======
 
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
-
-
 Bugfixes
 --------
 
@@ -222,11 +234,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======
