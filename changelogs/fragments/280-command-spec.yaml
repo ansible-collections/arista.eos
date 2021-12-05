@@ -1,3 +1,0 @@
----
-trivial:
-  - eos_command - document valid suboptions for `commands` argument.
