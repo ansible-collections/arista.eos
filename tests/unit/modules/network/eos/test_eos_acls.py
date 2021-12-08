@@ -173,6 +173,16 @@ class TestEosAclsModule(TestEosModule):
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
+                                    ),
+                                    dict(
+                                        sequence="20",
+                                        grant="permit",
+                                        protocol="ospf",
+                                        source=dict(
+                                            subnet_address="40.2.0.0/8"
+                                        ),
+                                        destination=dict(any="true"),
+                                        log="true",
                                     )
                                 ],
                             )
@@ -187,6 +197,7 @@ class TestEosAclsModule(TestEosModule):
             "no 35",
             "no 45",
             "10 permit ospf 30.2.0.0/8 any log",
+            "20 permit ospf 40.2.0.0/8 any log",
         ]
         self.execute_module(changed=True, commands=commands)
 
