@@ -183,7 +183,7 @@ class TestEosAclsModule(TestEosModule):
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
-                                    )
+                                    ),
                                 ],
                             )
                         ],
