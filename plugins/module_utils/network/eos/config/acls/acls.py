@@ -153,7 +153,7 @@ class Acls(ConfigBase):
                         if seq_num:
                             have_seq_num = re.search(r"(\d+) (.*)", h)
                             if seq_num.group(1) == have_seq_num.group(
-                                    1
+                                1
                             ) and have_seq_num.group(2) != seq_num.group(2):
                                 negate_cmd = "no " + seq_num.group(1)
                                 config.insert(config.index(w), negate_cmd)
@@ -181,8 +181,8 @@ class Acls(ConfigBase):
         """
         commands = []
         if (
-                self.state in ("merged", "replaced", "overridden", "rendered")
-                and not want
+            self.state in ("merged", "replaced", "overridden", "rendered")
+            and not want
         ):
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
@@ -241,9 +241,9 @@ class Acls(ConfigBase):
                                     }
                                 ]
                                 cmds = set_commands(w, have)
-                                config_cmds.append(list(
-                                    itertools.chain(*cmds)
-                                ))
+                                config_cmds.append(
+                                    list(itertools.chain(*cmds))
+                                )
 
         if remove_cmds:
             remove_cmds = list(itertools.chain(*remove_cmds))
@@ -397,12 +397,12 @@ def set_commands(want, have):
                             for wace in wacl["aces"]:
                                 for hace in hacl["aces"]:
                                     if (
-                                            "sequence" in wace.keys()
-                                            and "sequence" in hace.keys()
+                                        "sequence" in wace.keys()
+                                        and "sequence" in hace.keys()
                                     ):
                                         if (
-                                                wace["sequence"]
-                                                == hace["sequence"]
+                                            wace["sequence"]
+                                            == hace["sequence"]
                                         ):
                                             wace_updated = get_updated_ace(
                                                 wace, hace
@@ -483,11 +483,11 @@ def add_commands(want):
                     command = command + " host " + ace["source"]["host"]
                 elif "address" in ace["source"].keys():
                     command = (
-                            command
-                            + " "
-                            + ace["source"]["address"]
-                            + " "
-                            + ace["source"]["wildcard_bits"]
+                        command
+                        + " "
+                        + ace["source"]["address"]
+                        + " "
+                        + ace["source"]["wildcard_bits"]
                     )
                 if "port_protocol" in ace["source"].keys():
                     for op, val in ace["source"]["port_protocol"].items():
@@ -499,26 +499,26 @@ def add_commands(want):
                     command = command + " any"
                 elif "subnet_address" in ace["destination"].keys():
                     command = (
-                            command + " " + ace["destination"]["subnet_address"]
+                        command + " " + ace["destination"]["subnet_address"]
                     )
                 elif "host" in ace["destination"].keys():
                     command = command + " host " + ace["destination"]["host"]
                 elif "address" in ace["destination"].keys():
                     command = (
-                            command
-                            + " "
-                            + ace["destination"]["address"]
-                            + " "
-                            + ace["destination"]["wildcard_bits"]
+                        command
+                        + " "
+                        + ace["destination"]["address"]
+                        + " "
+                        + ace["destination"]["wildcard_bits"]
                     )
                 if "port_protocol" in ace["destination"].keys():
                     for op in ace["destination"]["port_protocol"].keys():
                         command = (
-                                command
-                                + " "
-                                + op
-                                + " "
-                                + ace["destination"]["port_protocol"][op]
+                            command
+                            + " "
+                            + op
+                            + " "
+                            + ace["destination"]["port_protocol"][op]
                         )
             if "protocol_options" in ace.keys():
                 for proto in ace["protocol_options"].keys():
@@ -527,9 +527,9 @@ def add_commands(want):
                             command = command + " " + icmp_msg
                     elif proto == "ip" or proto == "ipv6":
                         command = (
-                                command
-                                + " nexthop-group "
-                                + ace["protocol_options"][proto]["nexthop_group"]
+                            command
+                            + " nexthop-group "
+                            + ace["protocol_options"][proto]["nexthop_group"]
                         )
                     elif proto == "tcp":
                         for flag, val in ace["protocol_options"][proto][
