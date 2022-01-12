@@ -124,6 +124,7 @@ EXAMPLES = """
 #    description "Interface 1"
 # !
 # interface Ethernet2
+# test
 # !
 # interface Management1
 #    description "Management interface"
