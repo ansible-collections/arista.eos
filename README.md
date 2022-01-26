@@ -46,6 +46,7 @@ Name | Description
 [arista.eos.eos_config](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_config_module.rst)|Manage Arista EOS configuration sections
 [arista.eos.eos_eapi](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_eapi_module.rst)|Manage and configure Arista EOS eAPI.
 [arista.eos.eos_facts](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_facts_module.rst)|Collect facts from remote devices running Arista EOS
+[arista.eos.eos_hostname](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_hostname_module.rst)|Manages hostname resource module
 [arista.eos.eos_interface](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_interface_module.rst)|(deprecated, removed after 2022-06-01) Manage Interface on Arista EOS network devices
 [arista.eos.eos_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_interfaces_module.rst)|Interfaces resource module
 [arista.eos.eos_l2_interface](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_l2_interface_module.rst)|(deprecated, removed after 2022-06-01) Manage L2 interfaces on Arista EOS network devices.

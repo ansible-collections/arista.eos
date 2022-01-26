@@ -1,0 +1,38 @@
+---
+- debug:
+    msg: Start eos_hostname replaced integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Replace given hostname configuration
+      become: true
+      register: result
+      arista.eos.eos_hostname: &replaced
+        state: replaced
+        config:
+          hostname: "eos"
+
+    - assert:
+        that:
+          - result.commands|length == 1
+          - result.changed == true
+          - result.commands|symmetric_difference(replaced.commands) == []
+          - result.after == replaced.after
+          - result.before == replaced.before
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_hostname: *replaced
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+
+  always:
+
+    - include_tasks: _remove_config.yaml

@@ -1,0 +1,40 @@
+---
+- debug:
+    msg: Start eos_hostname deleted integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Delete given hostname configuration
+      become: true
+      register: result
+      arista.eos.eos_hostname: &deleted
+        state: deleted
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: hostname
+
+    - assert:
+        that:
+          - result.commands|length == 1
+          - result.changed == true
+          - ansible_facts.network_resources.hostname == result.after
+          - result.after == {}
+          - result.before == replaced.before
+          - deleted['commands'] == result['commands']
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_hostname: *deleted
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml

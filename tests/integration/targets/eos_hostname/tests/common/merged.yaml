@@ -1,0 +1,34 @@
+---
+- debug:
+    msg: Start eos_hostname merged integration tests ansible_connection={{
+      ansible_connection }}
+
+- block:
+
+    - name: merge given hostname configuration
+      become: true
+      register: result
+      arista.eos.eos_hostname: &merged
+        config:
+          hostname: "eos_test"
+
+    - assert:
+        that:
+          - result.commands|length == 1
+          - result.changed == true
+          - result.commands|symmetric_difference(merged.commands) == []
+          - result.after == replaced.before
+          - result.before == {}
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_hostname: *merged
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml
