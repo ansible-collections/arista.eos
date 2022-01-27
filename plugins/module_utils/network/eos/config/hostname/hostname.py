@@ -60,7 +60,6 @@ class Hostname(ResourceModule):
         wantd = self.want
         haved = self.have
 
-        # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             wantd = {}
 
