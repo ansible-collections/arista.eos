@@ -42,6 +42,10 @@ plugin_routing:
       redirect: arista.eos.eos
     facts:
       redirect: arista.eos.eos
+    eos_hostname:
+      redirect: arista.eos.eos
+    hostname:
+      redirect: arista.eos.eos
     eos_interface:
       redirect: arista.eos.eos
     interface:
@@ -186,6 +190,8 @@ plugin_routing:
       redirect: arista.eos.eos_eapi
     facts:
       redirect: arista.eos.eos_facts
+    hostname:
+      redirect: arista.eos.eos_hostname
     interface:
       redirect: arista.eos.eos_interface
       deprecation:
