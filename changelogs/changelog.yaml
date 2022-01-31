@@ -132,9 +132,6 @@ releases:
     - fix_src_backup_with_module_alias.yaml
     release_date: '2020-07-31'
   1.0.2:
-    changes:
-      release_summary:
-        - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
@@ -411,3 +408,19 @@ releases:
       name: eos_snmp_server
       namespace: ''
     release_date: '2021-12-07'
+  4.1.0:
+    changes:
+      bugfixes:
+      - eos_acls - fixes state replaced where new ACEs are not all added
+      minor_changes:
+      - Add eos_hostname resource module.
+      - eos_acls - Fix examples typos
+    fragments:
+    - 295-eos-acls-examples-fix.yaml
+    - 297-eos-acl-fix-replaced.yaml
+    - add_eos_hostname.yaml
+    modules:
+    - description: Manages hostname resource module
+      name: eos_hostname
+      namespace: ''
+    release_date: '2022-01-31'

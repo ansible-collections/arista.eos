@@ -5,6 +5,25 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v4.1.0
+======
+
+Minor Changes
+-------------
+
+- Add eos_hostname resource module.
+- eos_acls - Fix examples typos
+
+Bugfixes
+--------
+
+- eos_acls - fixes state replaced where new ACEs are not all added
+
+New Modules
+-----------
+
+- eos_hostname - Manages hostname resource module
+
 v4.0.0
 ======
 
@@ -163,11 +182,6 @@ Bugfixes
 v1.3.0
 ======
 
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
-
 Bugfixes
 --------
 
@@ -239,11 +253,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======
