@@ -5,6 +5,25 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v4.1.0
+======
+
+Minor Changes
+-------------
+
+- Add eos_hostname resource module.
+- eos_acls - Fix examples typos
+
+Bugfixes
+--------
+
+- eos_acls - fixes state replaced where new ACEs are not all added
+
+New Modules
+-----------
+
+- eos_hostname - Manages hostname resource module
+
 v4.0.0
 ======
 
