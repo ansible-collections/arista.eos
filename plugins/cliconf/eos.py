@@ -66,7 +66,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     NetworkConfig,
     dumps,
 )
-from ansible.plugins.cliconf import CliconfBase, enable_mode
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import (
+    CliconfBase,
+    enable_mode,
+)
 
 
 class Cliconf(CliconfBase):
