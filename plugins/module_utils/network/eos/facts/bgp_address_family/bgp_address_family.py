@@ -72,6 +72,11 @@ class Bgp_afFacts(object):
         vrf_set = ""
         start = False
         for bgp_line in data.splitlines():
+            match_bgp = re.search(
+                r"router (.*) \S+$", bgp_line, flags=re.IGNORECASE
+            )
+            if match_bgp and match_bgp.group(1) != "bgp":
+                break
             if "router bgp" in bgp_line:
                 bgp_af_config.append(bgp_line)
             vrf_present = re.search(r"vrf\s\S+", bgp_line)
