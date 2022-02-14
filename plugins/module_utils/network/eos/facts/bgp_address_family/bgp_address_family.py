@@ -49,7 +49,7 @@ class Bgp_afFacts(object):
         """Wrapper method for `connection.get()`
         This method exists solely to allow the unit test framework to mock device connection calls.
         """
-        return connection.get("show running-config | section bgp ")
+        return connection.get("show running-config | section router\sbgp ")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for Bgp_af network resource
@@ -72,11 +72,6 @@ class Bgp_afFacts(object):
         vrf_set = ""
         start = False
         for bgp_line in data.splitlines():
-            match_bgp = re.search(
-                r"router (.*) \S+$", bgp_line, flags=re.IGNORECASE
-            )
-            if match_bgp and match_bgp.group(1) != "bgp":
-                break
             if "router bgp" in bgp_line:
                 bgp_af_config.append(bgp_line)
             vrf_present = re.search(r"vrf\s\S+", bgp_line)
