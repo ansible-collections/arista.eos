@@ -49,9 +49,7 @@ class Bgp_afFacts(object):
         """Wrapper method for `connection.get()`
         This method exists solely to allow the unit test framework to mock device connection calls.
         """
-        return connection.get(
-            "show running-config | section router\sbgp "
-        )  # noqa: W605
+        return connection.get("show running-config | section router\\sbgp ")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for Bgp_af network resource
