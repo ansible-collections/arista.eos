@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Add logic to skip unwanted configs from running-config, to collect bgp af facts.
