@@ -2,10 +2,6 @@
 requires_ansible: '>=2.9.10'
 plugin_routing:
   action:
-    acl_interfaces:
-      redirect: eos_acl_interfaces
-    eos_acls:
-      redirect: arista.eos.eos
     acls:
       redirect: arista.eos.eos
     eos_banner:
