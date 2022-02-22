@@ -196,6 +196,7 @@ EXAMPLES = r"""
 - name: run a command that requires a confirmation. Note that prompt
     takes regexes, and so strings containing characters like brackets
     need to be escaped.
+
   arista.eos.eos_command:
     commands:
     - command: reload power
