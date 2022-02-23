@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - "Fixed an invalid parameter used in example for eos_l2_interfaces"
