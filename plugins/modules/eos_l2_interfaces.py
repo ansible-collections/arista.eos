@@ -185,7 +185,7 @@ EXAMPLES = """
       mode: trunk
       trunk:
         native_vlan: 20
-        trunk_vlans: 5-10, 15
+        trunk_allowed_vlans: 5-10, 15
     state: replaced
 
 # After state:
