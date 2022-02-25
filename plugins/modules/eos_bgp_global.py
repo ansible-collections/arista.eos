@@ -2319,9 +2319,14 @@ def main():
     """
     module = AnsibleModule(
         argument_spec=Bgp_globalArgs.argument_spec,
-        mutually_exclusive=[],
-        required_if=[],
-        supports_check_mode=False,
+        mutually_exclusive=[["config", "running_config"]],
+        required_if=[
+            ["state", "merged", ["config"]],
+            ["state", "replaced", ["config"]],
+            ["state", "rendered", ["config"]],
+            ["state", "parsed", ["running_config"]],
+        ],
+        supports_check_mode=True,
     )
 
     result = Bgp_global(module).execute_module()
