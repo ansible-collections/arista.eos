@@ -132,9 +132,6 @@ releases:
     - fix_src_backup_with_module_alias.yaml
     release_date: '2020-07-31'
   1.0.2:
-    changes:
-      release_summary:
-        - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
@@ -427,3 +424,15 @@ releases:
       name: eos_hostname
       namespace: ''
     release_date: '2022-01-31'
+  4.1.1:
+    changes:
+      bugfixes:
+      - Add check mode support to bgp_global and bgp_address_family
+      - Add logic to skip unwanted configs from running-config, to collect bgp af
+        facts.
+      - Fixed an invalid parameter used in example for eos_l2_interfaces
+    fragments:
+    - bgp_check_mode_support.yml
+    - fix_documentation_eos_l2_interfaces.yml
+    - skip_unwanted_configs_bgp_af.yaml
+    release_date: '2022-02-28'

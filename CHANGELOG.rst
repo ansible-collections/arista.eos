@@ -5,6 +5,16 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v4.1.1
+======
+
+Bugfixes
+--------
+
+- Add check mode support to bgp_global and bgp_address_family
+- Add logic to skip unwanted configs from running-config, to collect bgp af facts.
+- Fixed an invalid parameter used in example for eos_l2_interfaces
+
 v4.1.0
 ======
 
@@ -182,11 +192,6 @@ Bugfixes
 v1.3.0
 ======
 
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
-
 Bugfixes
 --------
 
@@ -258,11 +263,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======
