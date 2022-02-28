@@ -1,3 +1,0 @@
----
-bugfixes:
-  - "Add check mode support to bgp_global and bgp_address_family"

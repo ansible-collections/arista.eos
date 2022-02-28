@@ -5,6 +5,16 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v4.1.1
+======
+
+Bugfixes
+--------
+
+- Add check mode support to bgp_global and bgp_address_family
+- Add logic to skip unwanted configs from running-config, to collect bgp af facts.
+- Fixed an invalid parameter used in example for eos_l2_interfaces
+
 v4.1.0
 ======
 
