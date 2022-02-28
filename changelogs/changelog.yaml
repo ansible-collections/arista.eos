@@ -133,8 +133,8 @@ releases:
     release_date: '2020-07-31'
   1.0.2:
     changes:
-     release_summary:
-      - rereleasing 1.0.1 with updated changelog.
+      release_summary:
+        - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
