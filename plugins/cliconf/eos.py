@@ -22,8 +22,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-author: Ansible Networking Team
-cliconf: eos
+author: Ansible Networking Team (@ansible-network)
+name: eos
 short_description: Use eos cliconf to run command on Arista EOS platform
 description:
 - This eos plugin provides low level abstraction apis for sending and receiving CLI
