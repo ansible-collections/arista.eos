@@ -6,8 +6,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-author: Ansible Networking Team
-httpapi: eos
+author: Ansible Networking Team (@ansible-network)
+name: eos
 short_description: Use eAPI to run command on eos platform
 description:
 - This eos plugin provides low level abstraction api's for sending and receiving CLI
