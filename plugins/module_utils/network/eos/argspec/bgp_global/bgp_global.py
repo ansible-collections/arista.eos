@@ -366,7 +366,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "graceful_restart_helper": {"type": "bool"},
-                        "peer": {"type": "str", "aliases": ["neighbor_address"]},
+                        "peer": {
+                            "type": "str",
+                            "aliases": ["neighbor_address"],
+                        },
                         "next_hop_self": {"type": "bool"},
                         "route_to_peer": {"type": "bool"},
                         "soft_recognition": {
