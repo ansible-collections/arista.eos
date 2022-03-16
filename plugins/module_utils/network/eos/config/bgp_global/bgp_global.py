@@ -330,12 +330,12 @@ class Bgp_global(ResourceModule):
             for k, v in entry.items():
                 peer = entry["peer"]
                 if hneigh.get(name):
-                    h = {"peer": peer, k: hneigh[name].pop(k, {})}
+                    h = {"neighbor_address": peer, k: hneigh[name].pop(k, {})}
                 else:
                     h = {}
                 self.compare(
                     parsers=parsers,
-                    want={"neighbor": {"peer": peer, k: v}},
+                    want={"neighbor": {"neighbor_address": peer, k: v}},
                     have={"neighbor": h},
                 )
         for name, entry in iteritems(hneigh):
@@ -346,7 +346,7 @@ class Bgp_global(ResourceModule):
                 self.compare(
                     parsers=parsers,
                     want={},
-                    have={"neighbor": {"peer": name, k: v}},
+                    have={"neighbor": {"neighbor_address": name, k: v}},
                 )
 
     def _compare_lists(self, want, have):

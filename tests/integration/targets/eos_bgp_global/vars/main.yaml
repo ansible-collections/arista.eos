@@ -37,6 +37,7 @@ merged:
     neighbor:
       - maximum_received_routes:
           count: 12000
+        neighbor_address: "peer1"
         peer: "peer1"
         peer_group: "peer1"
         send_community:
@@ -45,6 +46,7 @@ merged:
           link_bandwidth_attribute: "divide"
       - maximum_received_routes:
           count: 12000
+        neighbor_address: "peer2"
         peer: "peer2"
         peer_group: "peer2"
     redistribute:
@@ -132,6 +134,7 @@ populate:
     neighbor:
       - maximum_received_routes:
           count: 12000
+        neighbor_address: "peer1"
         peer: "peer1"
         peer_group: "peer1"
         send_community:
@@ -140,6 +143,7 @@ populate:
           link_bandwidth_attribute: "divide"
       - maximum_received_routes:
           count: 12000
+        neighbor_address: "peer2"
         peer: "peer2"
         peer_group: "peer2"
     redistribute:

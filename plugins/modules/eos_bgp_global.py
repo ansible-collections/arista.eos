@@ -328,6 +328,8 @@ options:
             peer:
               type: str
               description: Neighbor address or peer group.
+              aliases:
+                - neighbor_address
             additional_paths:
               description: BGP additional-paths commands.
               type: str

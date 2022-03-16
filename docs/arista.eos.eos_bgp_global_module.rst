@@ -2529,6 +2529,7 @@ Parameters
                 </td>
                 <td>
                         <div>Neighbor address or peer group.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbor_address</div>
                 </td>
             </tr>
             <tr>
