@@ -2443,6 +2443,24 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>neighbor_address</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Neighbor address or peer group.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: peer</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="5">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>next_hop_self</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -2512,24 +2530,6 @@ Parameters
                 </td>
                 <td>
                         <div>Delay outbound route updates.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>peer</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Neighbor address or peer group.</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbor_address</div>
                 </td>
             </tr>
             <tr>
@@ -6129,6 +6129,25 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>neighbor_address</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Neighbor address or peer group.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: peer</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>next_hop_self</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -6201,24 +6220,6 @@ Parameters
                 </td>
                 <td>
                         <div>Delay outbound route updates.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>peer</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Neighbor address or peer group.</div>
                 </td>
             </tr>
             <tr>
@@ -7618,7 +7619,7 @@ Examples
                 prefix_list:
                   name: "prefix01"
                   direction: "out"
-              - peer: "peer1"
+              - neighbor_address: "peer1"
                 fall_over: true
                 link_bandwidth:
                   update_delay: 5
@@ -7838,7 +7839,7 @@ Examples
                 distance:
                   internal: 50
                 neighbor:
-                  - peer: "10.1.3.2"
+                  - neighbor_address: "10.1.3.2"
                     allowas_in:
                       set: true
                     default_originate:
@@ -7853,7 +7854,7 @@ Examples
                     prefix_list:
                       name: "prefix01"
                       direction: "out"
-                  - peer: "peer1"
+                  - neighbor_address: "peer1"
                     fall_over: true
                     link_bandwidth:
                       update_delay: 5

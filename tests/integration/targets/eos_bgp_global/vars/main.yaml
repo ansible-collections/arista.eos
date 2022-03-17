@@ -38,7 +38,6 @@ merged:
       - maximum_received_routes:
           count: 12000
         neighbor_address: "peer1"
-        peer: "peer1"
         peer_group: "peer1"
         send_community:
           community_attribute: "link-bandwidth"
@@ -47,7 +46,6 @@ merged:
       - maximum_received_routes:
           count: 12000
         neighbor_address: "peer2"
-        peer: "peer2"
         peer_group: "peer2"
     redistribute:
       - protocol: "ospf"
@@ -135,7 +133,6 @@ populate:
       - maximum_received_routes:
           count: 12000
         neighbor_address: "peer1"
-        peer: "peer1"
         peer_group: "peer1"
         send_community:
           community_attribute: "link-bandwidth"
@@ -144,7 +141,6 @@ populate:
       - maximum_received_routes:
           count: 12000
         neighbor_address: "peer2"
-        peer: "peer2"
         peer_group: "peer2"
     redistribute:
       - ospf_route: "nssa_external_2"

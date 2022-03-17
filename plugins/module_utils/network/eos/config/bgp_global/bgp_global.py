@@ -328,7 +328,10 @@ class Bgp_global(ResourceModule):
         hneigh = have.pop("neighbor", {})
         for name, entry in iteritems(wneigh):
             for k, v in entry.items():
-                peer = entry["peer"]
+                if entry.get("peer"):
+                    peer = entry["peer"]
+                else:
+                    peer = entry["neighbor_address"]
                 if hneigh.get(name):
                     h = {"neighbor_address": peer, k: hneigh[name].pop(k, {})}
                 else:
@@ -370,7 +373,11 @@ class Bgp_global(ResourceModule):
             if "neighbor" in proc:
                 neigh_dict = {}
                 for entry in proc.get("neighbor", []):
-                    neigh_dict.update({entry["peer"]: entry})
+                    if entry.get("peer"):
+                        peer = entry["peer"]
+                    else:
+                        peer = entry["neighbor_address"]
+                    neigh_dict.update({peer: entry})
                 proc["neighbor"] = neigh_dict
 
             if "network" in proc:
