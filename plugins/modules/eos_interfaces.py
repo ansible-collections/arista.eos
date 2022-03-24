@@ -129,6 +129,7 @@ EXAMPLES = """
 #    description "Management interface"
 #    ip address dhcp
 # !
+# test
 
 - name: Merge provided configuration with device configuration
   arista.eos.eos_interfaces:
