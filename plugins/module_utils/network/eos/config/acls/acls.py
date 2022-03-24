@@ -395,7 +395,7 @@ def set_commands(want, have):
                         if wacl["name"] == hacl["name"]:
                             want_aces = wacl["aces"]
                             for wace in wacl["aces"]:
-                                for hace in hacl["aces"]:
+                                for hace in hacl.get("aces", []):
                                     if (
                                         "sequence" in wace.keys()
                                         and "sequence" in hace.keys()
@@ -493,7 +493,7 @@ def add_commands(want):
                     for op, val in ace["source"]["port_protocol"].items():
                         if val.isdigit():
                             val = socket.getservbyport(int(val))
-                        command = command + " " + op + " " + val
+                        command = command + " " + op + " " + val.replace("_", "-")
             if "destination" in ace.keys():
                 if "any" in ace["destination"].keys():
                     command = command + " any"
@@ -518,13 +518,13 @@ def add_commands(want):
                             + " "
                             + op
                             + " "
-                            + ace["destination"]["port_protocol"][op]
+                            + ace["destination"]["port_protocol"][op].replace("_", "-")
                         )
             if "protocol_options" in ace.keys():
                 for proto in ace["protocol_options"].keys():
                     if proto == "icmp" or proto == "icmpv6":
                         for icmp_msg in ace["protocol_options"][proto].keys():
-                            command = command + " " + icmp_msg
+                            command = command + " " + icmp_msg.replace("_", "-")
                     elif proto == "ip" or proto == "ipv6":
                         command = (
                             command
