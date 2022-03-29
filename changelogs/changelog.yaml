@@ -439,3 +439,12 @@ releases:
     - fix_documentation_eos_l2_interfaces.yml
     - skip_unwanted_configs_bgp_af.yaml
     release_date: '2022-02-28'
+  4.1.2:
+    changes:
+      bugfixes:
+      - Add symlink of modules under plugins/action.
+      - eos_bgp_global - Add alias for peer -  neighbor_address
+    fragments:
+    - add_alias_bgp_global_peer.yaml
+    - add_symlink_redirection.yml
+    release_date: '2022-03-29'
