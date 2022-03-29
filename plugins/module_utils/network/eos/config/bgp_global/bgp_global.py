@@ -328,14 +328,17 @@ class Bgp_global(ResourceModule):
         hneigh = have.pop("neighbor", {})
         for name, entry in iteritems(wneigh):
             for k, v in entry.items():
-                peer = entry["peer"]
+                if entry.get("peer"):
+                    peer = entry["peer"]
+                else:
+                    peer = entry["neighbor_address"]
                 if hneigh.get(name):
-                    h = {"peer": peer, k: hneigh[name].pop(k, {})}
+                    h = {"neighbor_address": peer, k: hneigh[name].pop(k, {})}
                 else:
                     h = {}
                 self.compare(
                     parsers=parsers,
-                    want={"neighbor": {"peer": peer, k: v}},
+                    want={"neighbor": {"neighbor_address": peer, k: v}},
                     have={"neighbor": h},
                 )
         for name, entry in iteritems(hneigh):
@@ -346,7 +349,7 @@ class Bgp_global(ResourceModule):
                 self.compare(
                     parsers=parsers,
                     want={},
-                    have={"neighbor": {"peer": name, k: v}},
+                    have={"neighbor": {"neighbor_address": name, k: v}},
                 )
 
     def _compare_lists(self, want, have):
@@ -370,7 +373,11 @@ class Bgp_global(ResourceModule):
             if "neighbor" in proc:
                 neigh_dict = {}
                 for entry in proc.get("neighbor", []):
-                    neigh_dict.update({entry["peer"]: entry})
+                    if entry.get("peer"):
+                        peer = entry["peer"]
+                    else:
+                        peer = entry["neighbor_address"]
+                    neigh_dict.update({peer: entry})
                 proc["neighbor"] = neigh_dict
 
             if "network" in proc:
