@@ -25,7 +25,7 @@
           neighbor:
             - maximum_received_routes:
                 count: 12000
-              peer: "peer1"
+              neighbor_address: "peer1"
               peer_group: "peer1"
               send_community:
                 community_attribute: "link-bandwidth"

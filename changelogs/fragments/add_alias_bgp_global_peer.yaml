@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - "eos_bgp_global - Add alias for peer -  neighbor_address"
