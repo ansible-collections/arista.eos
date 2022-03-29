@@ -5,6 +5,15 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v4.1.2
+======
+
+Bugfixes
+--------
+
+- Add symlink of modules under plugins/action.
+- eos_bgp_global - Add alias for peer -  neighbor_address
+
 v4.1.1
 ======
 
@@ -192,11 +201,6 @@ Bugfixes
 v1.3.0
 ======
 
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
-
 Bugfixes
 --------
 
@@ -268,11 +272,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======
