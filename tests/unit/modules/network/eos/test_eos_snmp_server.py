@@ -109,7 +109,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
                             view="view3",
                             ro=True,
                         ),
-                        dict(name="comm5", acl_v4="list4", rw=True),
+                        dict(name="comm6", rw=True),
                     ],
                     engineid=dict(
                         local="123456",
@@ -151,7 +151,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
             "snmp-server host host01 informs version 3 priv user01 udp-port 23",
             "snmp-server host host02 traps version 2c user01 udp-port 23",
             "snmp-server host host01 informs version 3 priv user01",
-            "snmp-server community comm5 rw list4",
+            "snmp-server community comm6 rw",
             "snmp-server community comm01 view view3 ro ipv6 list1",
             "snmp-server ipv4 access-list acl01 vrf vrf01",
             "snmp-server engineID local 123456",
