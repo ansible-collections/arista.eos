@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fix added to change snmp communities with or without acl.
