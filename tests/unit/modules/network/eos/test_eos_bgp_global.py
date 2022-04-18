@@ -127,8 +127,7 @@ class TestEosBgpglobalModule(TestEosModule):
                 config=dict(
                     as_number="65535",
                     maximum_paths=dict(
-                        max_equal_cost_paths=32,
-                        max_installed_ecmp_paths=32
+                        max_equal_cost_paths=32, max_installed_ecmp_paths=32
                     ),
                     vrfs=[
                         dict(

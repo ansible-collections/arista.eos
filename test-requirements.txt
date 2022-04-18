@@ -6,3 +6,5 @@ mock ; python_version < '3.5'
 pexpect
 pytest-xdist
 yamllint
+rstcheck<4,>=3
+
