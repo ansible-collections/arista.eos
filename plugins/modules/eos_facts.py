@@ -32,7 +32,7 @@ options:
     required: false
     type: list
     elements: str
-    default: '!min'
+    default: 'min'
   gather_network_resources:
     description:
     - When supplied, this argument will restrict the facts collected to a given subset.
