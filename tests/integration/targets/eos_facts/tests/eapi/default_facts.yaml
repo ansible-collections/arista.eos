@@ -13,7 +13,6 @@
       - "'default' in result.ansible_facts.ansible_net_gather_subset"
       - "'config' not in result.ansible_facts.ansible_net_gather_subset"
       - result.ansible_facts.ansible_net_hostname is defined
-      - result.ansible_facts.ansible_net_image is defined
       - result.ansible_facts.ansible_net_model is defined
       - result.ansible_facts.ansible_net_python_version is defined
       - result.ansible_facts.ansible_net_serialnum is defined
