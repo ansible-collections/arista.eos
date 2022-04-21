@@ -195,11 +195,7 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True
     )
-    warnings = [
-        "default value for `gather_subset` "
-        "will be changed to `min` from `!config` v2.11 onwards"
-    ]
-
+    warnings = []
     ansible_facts = {}
     if module.params.get("available_network_resources"):
         ansible_facts["available_network_resources"] = sorted(
