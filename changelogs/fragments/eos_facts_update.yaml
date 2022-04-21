@@ -1,0 +1,3 @@
+---
+major_changes:
+  - "`eos_facts` - change default gather_subset to `min` from `!config` (https://github.com/ansible-collections/arista.eos/issues/306)."
