@@ -195,7 +195,7 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True
     )
-
+    warnings = []
     ansible_facts = {}
     if module.params.get("available_network_resources"):
         ansible_facts["available_network_resources"] = sorted(
