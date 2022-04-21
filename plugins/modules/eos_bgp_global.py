@@ -325,9 +325,11 @@ options:
           type: list
           elements: dict
           suboptions:
-            peer:
+            neighbor_address:
               type: str
               description: Neighbor address or peer group.
+              aliases:
+                - peer
             additional_paths:
               description: BGP additional-paths commands.
               type: str
@@ -980,9 +982,10 @@ options:
               type: list
               elements: dict
               suboptions:
-                peer:
+                neighbor_address:
                   type: str
                   description: Neighbor address or peer group.
+                  aliases: ["peer"]
                 additional_paths:
                   description: BGP additional-paths commands.
                   type: str
@@ -1443,7 +1446,7 @@ EXAMPLES = """
             prefix_list:
               name: "prefix01"
               direction: "out"
-          - peer: "peer1"
+          - neighbor_address: "peer1"
             fall_over: true
             link_bandwidth:
               update_delay: 5
@@ -1663,7 +1666,7 @@ EXAMPLES = """
             distance:
               internal: 50
             neighbor:
-              - peer: "10.1.3.2"
+              - neighbor_address: "10.1.3.2"
                 allowas_in:
                   set: true
                 default_originate:
@@ -1678,7 +1681,7 @@ EXAMPLES = """
                 prefix_list:
                   name: "prefix01"
                   direction: "out"
-              - peer: "peer1"
+              - neighbor_address: "peer1"
                 fall_over: true
                 link_bandwidth:
                   update_delay: 5
@@ -2319,9 +2322,14 @@ def main():
     """
     module = AnsibleModule(
         argument_spec=Bgp_globalArgs.argument_spec,
-        mutually_exclusive=[],
-        required_if=[],
-        supports_check_mode=False,
+        mutually_exclusive=[["config", "running_config"]],
+        required_if=[
+            ["state", "merged", ["config"]],
+            ["state", "replaced", ["config"]],
+            ["state", "rendered", ["config"]],
+            ["state", "parsed", ["running_config"]],
+        ],
+        supports_check_mode=True,
     )
 
     result = Bgp_global(module).execute_module()

@@ -38,7 +38,7 @@ def _tmplt_snmp_server_ipv6_comm(config_data):
 
 def _tmplt_snmp_server_ipv4_comm(config_data):
     command = ""
-    if "acl_v4" in config_data["communities"]:
+    if not config_data["communities"].get("acl_v6"):
         command = "snmp-server community "
         el = config_data["communities"]
         command += el["name"]
@@ -48,7 +48,8 @@ def _tmplt_snmp_server_ipv4_comm(config_data):
             command += " ro"
         if el.get("rw"):
             command += " rw"
-        command += " " + el["acl_v4"]
+        if el.get("acl_v4"):
+            command += " " + el["acl_v4"]
     return command
 
 
