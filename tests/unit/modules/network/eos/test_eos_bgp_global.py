@@ -152,6 +152,7 @@ class TestEosBgpglobalModule(TestEosModule):
                                 dict(
                                     peer="peer1",
                                     peer_group="peer1",
+                                    bfd="c_bit",
                                     ebgp_multihop=dict(set=True),
                                     maximum_received_routes=dict(count=12000),
                                     send_community=dict(
@@ -193,6 +194,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "router bgp 65535",
             "vrf vrf01",
             "neighbor peer1 peer group",
+            "neighbor peer1 bfd c-bit",
             "neighbor peer1 maximum-routes 12000",
             "neighbor peer1 ebgp-multiphop",
             "neighbor peer1 send-community link-bandwidth divide ratio",
@@ -583,6 +585,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor peer1 send-community link-bandwidth divide ratio",
             "neighbor peer1 maximum-routes 12000",
             "neighbor peer2 peer group",
+            "neighbor peer2 send-community",
             "neighbor peer2 maximum-routes 12000",
             "aggregate-address 1.1.1.0/24 as-set summary-only",
             "aggregate-address 5.1.0.0/16 attribute-map attrmap",
@@ -630,6 +633,7 @@ class TestEosBgpglobalModule(TestEosModule):
                     "maximum_received_routes": {"count": 12000},
                     "peer": "peer2",
                     "peer_group": "peer2",
+                    "send-community": {"set": True},
                 },
             ],
             "redistribute": [

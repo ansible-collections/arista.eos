@@ -348,6 +348,10 @@ options:
               description: Automatically determine the local address to be used
                              for the non-transport AF.
               type: bool
+            bfd:
+              description: Configure BFD fallover for this peer
+              type: str
+              choices: ['enable', 'c_bit']
             default_originate:
               description: Originate default route to this neighbor.
               type: dict
@@ -544,6 +548,9 @@ options:
               description: Send community attribute to this neighbor.
               type: dict
               suboptions:
+                set:
+                  description: Enable send-community
+                  type: bool
                 community_attribute:
                   description: Type of community attributes to send to this neighbor.
                   type: str
@@ -1004,6 +1011,10 @@ options:
                   description: Automatically determine the local address to be used
                                  for the non-transport AF.
                   type: bool
+                bfd:
+                  description: Configure BFD fallover for this peer
+                  type: str
+                  choices: ['enable', 'c_bit']
                 default_originate:
                   description: Originate default route to this neighbor.
                   type: dict

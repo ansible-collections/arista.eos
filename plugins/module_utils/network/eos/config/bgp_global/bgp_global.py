@@ -286,6 +286,7 @@ class Bgp_global(ResourceModule):
             "neighbor.additional_paths",
             "neighbor.allowas_in",
             "neighbor.auto_local_addr",
+            "neighbor.bfd",
             "neighbor.default_originate",
             "neighbor.description",
             "neighbor.dont_capability_negotiate",
