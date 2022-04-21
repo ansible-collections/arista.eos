@@ -126,6 +126,9 @@ class TestEosBgpglobalModule(TestEosModule):
             dict(
                 config=dict(
                     as_number="65535",
+                    maximum_paths=dict(
+                        max_equal_cost_paths=32, max_installed_ecmp_paths=32
+                    ),
                     vrfs=[
                         dict(
                             vrf="vrf01",
@@ -192,6 +195,7 @@ class TestEosBgpglobalModule(TestEosModule):
         )
         commands = [
             "router bgp 65535",
+            "maximum-paths 32 ecmp 32",
             "vrf vrf01",
             "neighbor peer1 peer group",
             "neighbor peer1 bfd c-bit",

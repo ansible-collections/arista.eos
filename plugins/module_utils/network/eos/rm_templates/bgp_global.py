@@ -238,7 +238,7 @@ def _tmplt_bgp_maximum_paths(config_data):
     command = "maximum-paths {max_equal_cost_paths}".format(
         **config_data["maximum_paths"]
     )
-    if config_data.get("max_installed_ecmp_paths"):
+    if config_data["maximum_paths"].get("max_installed_ecmp_paths"):
         command += " ecmp {max_installed_ecmp_paths}".format(
             **config_data["maximum_paths"]
         )
