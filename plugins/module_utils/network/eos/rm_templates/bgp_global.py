@@ -282,6 +282,10 @@ def _tmplt_bgp_neighbor(config_data):
             )
     elif config_data["neighbor"].get("auto_local_addr"):
         command += " auto-local-addr"
+    elif config_data["neighbor"].get("bfd"):
+        command += " bfd"
+        if config_data["neighbor"]["bfd"] == "c_bit":
+            command += " c-bit"
     elif config_data["neighbor"].get("default_originate"):
         command += " default-originate"
         if config_data["neighbor"]["default_originate"].get("route_map"):
@@ -1615,6 +1619,32 @@ class Bgp_globalTemplate(NetworkTemplate):
             },
         },
         {
+            "name": "neighbor.bfd",
+            "getval": re.compile(
+                r"""
+                \s*neighbor
+                \s+(?P<peer>\S+)
+                \s+bfd
+                \s*(?P<cbit>c-bit)
+                *$""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_bgp_neighbor,
+            "compval": "neighbor.bfd",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbor": {
+                            "{{ peer }}": {
+                                "neighbor_address": "{{ peer }}",
+                                "bfd": "{{ 'c_bit' if cbit is defined else 'enable' }}",
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
             "name": "neighbor.default_originate",
             "getval": re.compile(
                 r"""
@@ -2417,7 +2447,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s*neighbor
                 \s+(?P<peer>\S+)
                 \s+send-community
-                \s+(?P<comm>add|extended|link-bandwidth|remove|standard)*
+                \s*(?P<comm>add|extended|link-bandwidth|remove|standard)*
                 \s*(?P<attr>extended|link-bandwidth|standard)*
                 \s*(?P<link>aggregate|divide)*
                 \s*(?P<div>equal|ratio)*

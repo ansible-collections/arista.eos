@@ -261,6 +261,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     "type": "list",
                     "aliases": ["neighbors"],
                     "options": {
+                        "bfd": {"type": "str", "choices": ["c_bit", "enable"]},
                         "weight": {"type": "int"},
                         "default_originate": {
                             "type": "dict",
@@ -381,6 +382,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "send_community": {
                             "type": "dict",
                             "options": {
+                                "set": {"type": "bool"},
                                 "community_attribute": {"type": "str"},
                                 "sub_attribute": {
                                     "type": "str",
@@ -716,6 +718,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "aliases": ["neighbors"],
                             "type": "list",
                             "options": {
+                                "bfd": {
+                                    "type": "str",
+                                    "choices": ["c_bit", "enable"],
+                                },
                                 "weight": {"type": "int"},
                                 "default_originate": {
                                     "type": "dict",
