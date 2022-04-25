@@ -61,7 +61,8 @@ class HttpApi(HttpApiBase):
                 return self._session_support
 
             try:
-                self.send_request("show configuration sessions")
+                response = self.send_request("show configuration sessions")
+                self._session_support = "error" not in response
             except AnsibleConnectionFailure:
                 self._session_support = False
 
