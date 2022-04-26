@@ -15,8 +15,8 @@ description:
 version_added: 1.0.0
 options:
   eos_use_sessions:
-    type: int
-    default: 1
+    type: bool
+    default: yes
     description:
     - Specifies if sessions should be used on remote host or not
     env:
@@ -28,6 +28,7 @@ options:
 import json
 import time
 
+from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_text
 from ansible.module_utils.connection import ConnectionError
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
@@ -53,20 +54,17 @@ class HttpApi(HttpApiBase):
         self._session_support = None
 
     def supports_sessions(self):
-        use_session = self.get_option("eos_use_sessions")
-        try:
-            use_session = int(use_session)
-        except ValueError:
-            pass
-
-        if not bool(use_session):
+        if not self.get_option("eos_use_sessions"):
             self._session_support = False
         else:
             if self._session_support:
                 return self._session_support
 
-            response = self.send_request("show configuration sessions")
-            self._session_support = "error" not in response
+            try:
+                response = self.send_request("show configuration sessions")
+                self._session_support = "error" not in response
+            except AnsibleConnectionFailure:
+                self._session_support = False
 
         return self._session_support
 
