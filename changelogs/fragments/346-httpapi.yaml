@@ -1,5 +1,0 @@
----
-breaking_changes:
-  - httpapi - the ``eos_use_sessions`` option is now a boolean instead of an integer.
-bugfixes:
-  - httpapi - detect session support more robustly when ``eos_use_sessions`` is not specified.
