@@ -5,6 +5,31 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v5.0.0
+======
+
+Major Changes
+-------------
+
+- Minimum required ansible.netcommon version is 2.5.1.
+- Updated base plugin references to ansible.netcommon.
+- `eos_facts` - change default gather_subset to `min` from `!config` (https://github.com/ansible-collections/arista.eos/issues/306).
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- httpapi - the ``eos_use_sessions`` option is now a boolean instead of an integer.
+
+Bugfixes
+--------
+
+- Add and fix bgp_global neighbor parsers.
+- Fix added to change snmp communities with or without acl.
+- Fix parser to parse maximum-paths ecmp command correctly.
+- arista.eos.eos_acls - fixed issue that would cause a key value error on `aces` element when no ACEs exist in the access-list.
+- arista.eos.eos_acls - fixed issue where protcol_options were rendered to command line using the key _underscore_ value rather than the hyphen nominclature.
+- httpapi - detect session support more robustly when ``eos_use_sessions`` is not specified.
+
 v4.1.2
 ======
 
@@ -201,11 +226,6 @@ Bugfixes
 v1.3.0
 ======
 
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
-
 Bugfixes
 --------
 
@@ -277,11 +297,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======
