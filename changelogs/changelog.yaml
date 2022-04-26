@@ -448,3 +448,32 @@ releases:
     - add_alias_bgp_global_peer.yaml
     - add_symlink_redirection.yml
     release_date: '2022-03-29'
+  5.0.0:
+    changes:
+      breaking_changes:
+      - httpapi - the ``eos_use_sessions`` option is now a boolean instead of an integer.
+      bugfixes:
+      - Add and fix bgp_global neighbor parsers.
+      - Fix added to change snmp communities with or without acl.
+      - Fix parser to parse maximum-paths ecmp command correctly.
+      - arista.eos.eos_acls - fixed issue that would cause a key value error on `aces`
+        element when no ACEs exist in the access-list.
+      - arista.eos.eos_acls - fixed issue where protcol_options were rendered to command
+        line using the key _underscore_ value rather than the hyphen nominclature.
+      - httpapi - detect session support more robustly when ``eos_use_sessions`` is
+        not specified.
+      major_changes:
+      - Minimum required ansible.netcommon version is 2.5.1.
+      - Updated base plugin references to ansible.netcommon.
+      - '`eos_facts` - change default gather_subset to `min` from `!config` (https://github.com/ansible-collections/arista.eos/issues/306).'
+    fragments:
+    - 0-ignore.yml
+    - 346-httpapi.yaml
+    - add_bgp_global_neighor_bfd.yaml
+    - eos_facts_remove_warning.yaml
+    - eos_facts_update.yaml
+    - fix_bgp_global_ecmp_render.yaml
+    - fix_eos_acls_protocol_options.yml
+    - fix_snmp_server_communities.yaml
+    - netcommon_ref_update.yaml
+    release_date: '2022-04-26'
