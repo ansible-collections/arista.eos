@@ -1,0 +1,4 @@
+collections:
+  - name: https://github.com/ansible-collections/ansible.netcommon
+    type: git
+    version: main
