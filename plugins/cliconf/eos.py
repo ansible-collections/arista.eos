@@ -128,7 +128,7 @@ class Cliconf(CliconfBase):
         resp = {}
         session = None
         if self.supports_sessions():
-            session = "ansible_%.2f" % time.time()
+            session = "ansible_%d" % (time.time() * 100)
             resp.update({"session": session})
             self.send_command("configure session %s" % session)
             if replace:
