@@ -161,7 +161,7 @@ class HttpApi(HttpApiBase):
 
         session = None
         if self.supports_sessions():
-            session = "ansible_%d" % int(time.time())
+            session = "ansible_%.2f" % time.time()
             candidate = ["configure session %s" % session] + candidate
         else:
             candidate = ["configure"] + candidate
