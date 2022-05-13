@@ -54,12 +54,14 @@ options:
 """
 
 import json
-import time
 import re
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_text
 from ansible.module_utils.common._collections_compat import Mapping
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    session_name,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
 )
@@ -128,7 +130,7 @@ class Cliconf(CliconfBase):
         resp = {}
         session = None
         if self.supports_sessions():
-            session = "ansible_%d" % (time.time() * 100)
+            session = session_name()
             resp.update({"session": session})
             self.send_command("configure session %s" % session)
             if replace:

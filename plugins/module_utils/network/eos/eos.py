@@ -123,6 +123,11 @@ def transform_commands(module):
     return transform(module.params["commands"])
 
 
+def session_name():
+    """Generate a unique string to be used as a configuration session name."""
+    return "ansible_%d" % (time.time() * 100)
+
+
 class Cli:
     def __init__(self, module):
         self._module = module
@@ -413,7 +418,7 @@ class LocalEapi:
                 result = {"changed": True}
                 return result
 
-        session = "ansible_%s" % int(time.time())
+        session = session_name()
         result = {"session": session}
         commands = ["configure session %s" % session]
 
@@ -628,7 +633,7 @@ class HttpApi:
         fallback to using configure() to load the commands.  If that happens,
         there will be no returned diff or session values
         """
-        session = "ansible_%s" % int(time.time())
+        session = session_name()
         result = {"session": session}
         banner_cmd = None
         banner_input = []
