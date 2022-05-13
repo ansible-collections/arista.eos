@@ -26,11 +26,13 @@ options:
 """
 
 import json
-import time
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_text
 from ansible.module_utils.connection import ConnectionError
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    session_name,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
 )
@@ -161,7 +163,7 @@ class HttpApi(HttpApiBase):
 
         session = None
         if self.supports_sessions():
-            session = "ansible_%d" % int(time.time())
+            session = session_name()
             candidate = ["configure session %s" % session] + candidate
         else:
             candidate = ["configure"] + candidate
