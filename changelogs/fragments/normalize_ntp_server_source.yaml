@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Normalize ntp server source interface.

@@ -205,7 +205,7 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     ],
                     qos_dscp=15,
                     servers=[
-                        dict(server="110.21.1.1", version=3, iburst=True)
+                        dict(server="110.21.1.1", version=3, iburst=True, source="vlan500")
                     ],
                     serve=dict(
                         access_lists=[
@@ -221,7 +221,7 @@ class TestEosNtp_GlobalModule(TestEosModule):
         commands = [
             "ntp serve ip access-group acl03 in",
             "ntp authentication-key 4 sha1 0 123456",
-            "ntp server 110.21.1.1 iburst version 3",
+            "ntp server 110.21.1.1 iburst source Vlan500 version 3",
             "ntp qos dscp 15",
         ]
         self.execute_module(changed=True, commands=sorted(commands))
