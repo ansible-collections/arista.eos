@@ -205,7 +205,12 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     ],
                     qos_dscp=15,
                     servers=[
-                        dict(server="110.21.1.1", version=3, iburst=True, source="vlan500")
+                        dict(
+                            server="110.21.1.1",
+                            version=3,
+                            iburst=True,
+                            source="vlan500",
+                        )
                     ],
                     serve=dict(
                         access_lists=[

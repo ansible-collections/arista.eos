@@ -134,7 +134,7 @@ class Ntp_global(ResourceModule):
         h = have.pop("servers", {})
         for name, entry in iteritems(w):
             if entry.get("source"):
-                entry["source"] =  normalize_interface(entry["source"])
+                entry["source"] = normalize_interface(entry["source"])
             h_key = {}
             if h.get(name):
                 h_key = {"servers": h.pop(name)}
