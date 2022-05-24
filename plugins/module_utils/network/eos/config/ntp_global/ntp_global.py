@@ -30,6 +30,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ntp_global import (
     Ntp_globalTemplate,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
+    normalize_interface,
+)
 
 
 class Ntp_global(ResourceModule):
@@ -130,6 +133,8 @@ class Ntp_global(ResourceModule):
         w = want.pop("servers", {})
         h = have.pop("servers", {})
         for name, entry in iteritems(w):
+            if entry.get("source"):
+                entry["source"] = normalize_interface(entry["source"])
             h_key = {}
             if h.get(name):
                 h_key = {"servers": h.pop(name)}

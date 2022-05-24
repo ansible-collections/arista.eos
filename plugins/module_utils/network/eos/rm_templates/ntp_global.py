@@ -18,6 +18,9 @@ import re
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
+    normalize_interface,
+)
 
 
 def _tmplt_ntp_global_serve(config_data):
@@ -76,7 +79,8 @@ def _tmplt_ntp_global_servers(config_data):
     if el.get("prefer"):
         command += " prefer"
     if el.get("source"):
-        command += " source {source}".format(**el)
+        interface_name = normalize_interface(el["source"])
+        command += " source " + interface_name
     if el.get("version"):
         command += " version {version}".format(**el)
     return command
@@ -218,12 +222,12 @@ class Ntp_globalTemplate(NetworkTemplate):
                 \s*(?P<prefer>prefer)*
                 \s*(?P<burst>burst)*
                 \s*(?P<iburst>iburst)*
-                \s*(?P<local_int>local-interface\s.+)*
+                \s*(?P<local_int>local-interface\s.+?)*
                 \s*(?P<maxpoll>maxpoll\s\d+)*
                 \s*(?P<minpoll>minpoll\s\d+)*
-                \s*(?P<source>source\s.+)*
+                \s*(?P<source>source\s.+?)*
                 \s*(?P<version>version\s[1-4])*
-                \s*(?P<key>key\s\d+)*
+                \s*(?P<key>key\s.+)*
                 $""",
                 re.VERBOSE,
             ),
