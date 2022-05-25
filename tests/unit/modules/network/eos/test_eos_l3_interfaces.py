@@ -137,6 +137,10 @@ class TestEosL3InterfacesModule(TestEosModule):
                         ipv4=[dict(address="dhcp")],
                         ipv6=[dict(address="auto-config")],
                     ),
+                    dict(
+                        name="vlan200",
+                        ipv4=[dict(address="168.0.113.27/24")],
+                    ),
                 ],
                 state="overridden",
             )
@@ -151,6 +155,8 @@ class TestEosL3InterfacesModule(TestEosModule):
             "no ip address",
             "interface Loopback99",
             "no ip address",
+            "interface Vlan200",
+            "ip address 168.0.113.27/24",
         ]
         self.execute_module(changed=True, commands=commands)
 

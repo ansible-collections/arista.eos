@@ -1,0 +1,4 @@
+---
+bugfixes:
+  - Normalize interface name from want before comaparing with the interface in have.
+  - Add logic to add new interface using overridden.
