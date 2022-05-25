@@ -1,5 +1,0 @@
----
-bugfixes:
-  - Automatiaclly named sessions (ansible_XXXXXXXXX) now use two digits of sub-second
-    precision (if available). This is to work around tasks reusing a session if the previous task
-    completed very quickly.
