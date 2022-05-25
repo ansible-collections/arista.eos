@@ -5,6 +5,18 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v5.0.1
+======
+
+Bugfixes
+--------
+
+- Add logic to add new interface using overridden.
+- Automatiaclly named sessions (ansible_XXXXXXXXX) now use two digits of sub-second precision (if available). This is to work around tasks reusing a session if the previous task completed very quickly.
+- Fix the logic to add new aces using replaced and overriden state.
+- Normalize interface name from want before comaparing with the interface in have.
+- Normalize ntp server source interface.
+
 v5.0.0
 ======
 
