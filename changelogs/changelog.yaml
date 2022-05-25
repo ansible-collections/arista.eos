@@ -132,9 +132,6 @@ releases:
     - fix_src_backup_with_module_alias.yaml
     release_date: '2020-07-31'
   1.0.2:
-    changes:
-      release_summary:
-        - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
@@ -477,3 +474,21 @@ releases:
     - fix_snmp_server_communities.yaml
     - netcommon_ref_update.yaml
     release_date: '2022-04-26'
+  5.0.1:
+    changes:
+      bugfixes:
+      - Add logic to add new interface using overridden.
+      - Automatiaclly named sessions (ansible_XXXXXXXXX) now use two digits of sub-second
+        precision (if available). This is to work around tasks reusing a session if
+        the previous task completed very quickly.
+      - Fix the logic to add new aces using replaced and overriden state.
+      - Normalize interface name from want before comaparing with the interface in
+        have.
+      - Normalize ntp server source interface.
+    fragments:
+    - fast_sessions.yaml
+    - fix_acls_replaced.yaml
+    - l3_interfaces_overridden_new_int.yaml
+    - normalize_ntp_server_source.yaml
+    - pre-commit.yaml
+    release_date: '2022-05-25'
