@@ -185,10 +185,14 @@ class L3_interfaces(ConfigBase):
         commands = []
         for key, extant in have.items():
             interface_name = normalize_interface(key)
-            if interface_name in want:
-                desired = want[interface_name]
-            else:
-                desired = dict()
+            desired = dict()
+            if "Management" in interface_name:
+                continue
+            for k in want.keys():
+                k_want = normalize_interface(k)
+                if key == k_want:
+                    desired = want[k]
+                    break
             if desired.get("ipv4"):
                 for ipv4 in desired["ipv4"]:
                     for k in ["secondary", "virtual"]:
@@ -200,6 +204,18 @@ class L3_interfaces(ConfigBase):
             if intf_commands:
                 commands.append("interface {0}".format(interface_name))
                 commands.extend(intf_commands)
+
+        # new interfaces in want
+        new_intf_commands = []
+        for key, desired in want.items():
+            interface_name = normalize_interface(key)
+            if interface_name not in have:
+                extant = dict()
+                new_intf_commands = set_interface(desired, extant)
+
+            if new_intf_commands:
+                commands.append("interface {0}".format(interface_name))
+                commands.extend(new_intf_commands)
 
         return commands
 
