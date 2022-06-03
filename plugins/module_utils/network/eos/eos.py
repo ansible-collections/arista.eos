@@ -184,6 +184,29 @@ class Cli:
             )
         return response
 
+    def get_session_config(self, commands, commit=False, replace=False):
+        """Loads the config commands onto the remote device"""
+        conn = self._get_connection()
+        try:
+            response = conn.get_session_config(commands, commit, replace)
+        except ConnectionError as exc:
+            message = getattr(exc, "err", to_text(exc))
+            if (
+                "check mode is not supported without configuration session"
+                in message
+            ):
+                self._module.warn(
+                    "EOS can not check config without config session"
+                )
+                response = {"changed": True}
+            else:
+                self._module.fail_json(
+                    msg="%s" % message,
+                    data=to_text(message, errors="surrogate_then_replace"),
+                )
+
+        return response
+
     def load_config(self, commands, commit=False, replace=False):
         """Loads the config commands onto the remote device"""
         conn = self._get_connection()
@@ -394,6 +417,61 @@ class LocalEapi:
             self._module.fail_json(msg=err["message"], code=err["code"])
 
         return responses[1:]
+
+    def get_session_config(self, config, commit=False, replace=False):
+        """Loads the configuration onto the remote devices
+
+        If the device doesn't support configuration sessions, this will
+        fallback to using configure() to load the commands.  If that happens,
+        there will be no returned diff or session values
+        """
+        use_session = os.getenv("ANSIBLE_EOS_USE_SESSIONS", True)
+        try:
+            use_session = int(use_session)
+        except ValueError:
+            pass
+
+        if not all((bool(use_session), self.supports_sessions)):
+            if commit:
+                return self.configure(config)
+            else:
+                self._module.warn(
+                    "EOS can not check config without config session"
+                )
+                result = {"changed": True}
+                return result
+
+        session = session_name()
+        result = {"session": session}
+        commands = ["configure session %s" % session]
+
+        if replace:
+            commands.append("rollback clean-config")
+
+        commands.extend(config)
+
+        response = self.send_request(commands)
+        if "error" in response:
+            commands = ["configure session %s" % session, "abort"]
+            self.send_request(commands)
+            err = response["error"]
+            error_text = []
+            for data in err["data"]:
+                error_text.extend(data.get("errors", []))
+            error_text = "\n".join(error_text) or err["message"]
+            self._module.fail_json(msg=error_text, code=err["code"])
+
+        commands = [
+            "configure session %s" % session,
+            "show session-config",
+        ]
+        if commit:
+            commands.append("commit")
+        else:
+            commands.append("abort")
+
+        response = self.send_request(commands, output="text")
+        return response
 
     def load_config(self, config, commit=False, replace=False):
         """Loads the configuration onto the remote devices
@@ -683,6 +761,62 @@ class HttpApi:
 
         return result
 
+    def get_session_config(self, config, commit=False, replace=False):
+        """Loads the configuration onto the remote devices
+
+        If the device doesn't support configuration sessions, this will
+        fallback to using configure() to load the commands.  If that happens,
+        there will be no returned diff or session values
+        """
+        use_session = os.getenv("ANSIBLE_EOS_USE_SESSIONS", True)
+        try:
+            use_session = int(use_session)
+        except ValueError:
+            pass
+
+        if not all((bool(use_session), self.supports_sessions)):
+            if commit:
+                return self.configure(config)
+            else:
+                self._module.warn(
+                    "EOS can not check config without config session"
+                )
+                result = {"changed": True}
+                return result
+
+        session = session_name()
+        result = {"session": session}
+        commands = ["configure session %s" % session]
+
+        if replace:
+            commands.append("rollback clean-config")
+
+        commands.extend(config)
+
+        response = self.send_request(commands)
+        if "error" in response:
+            commands = ["configure session %s" % session, "abort"]
+            self.send_request(commands)
+            err = response["error"]
+            error_text = []
+            for data in err["data"]:
+                error_text.extend(data.get("errors", []))
+            error_text = "\n".join(error_text) or err["message"]
+            self._module.fail_json(msg=error_text, code=err["code"])
+
+        commands = [
+            "configure session %s" % session,
+            "show session-config diffs",
+        ]
+        if commit:
+            commands.append("commit")
+        else:
+            commands.append("abort")
+
+        response = self.send_request(commands, output="text")
+
+        return response
+
     def get_capabilities(self):
         """Returns platform info of the remove device"""
         try:
@@ -744,6 +878,11 @@ def run_commands(module, commands, check_rc=True):
 def load_config(module, config, commit=False, replace=False):
     conn = get_connection(module)
     return conn.load_config(config, commit, replace)
+
+
+def get_session_config(module, config, commit=False, replace=False):
+    conn = get_connection(module)
+    return conn.get_session_config(config, commit, replace)
 
 
 def get_diff(
