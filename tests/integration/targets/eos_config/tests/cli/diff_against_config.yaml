@@ -19,7 +19,7 @@
     - name: configure hostname
       become: true
       register: result
-      diff: True
+      diff: true
       arista.eos.eos_config:
         intended_config: "hostname foo"
         diff_against: validate_config
