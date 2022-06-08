@@ -583,10 +583,9 @@ def main():
                         module, None, flags=flags
                     )
                     replace = module.params["replace"] == "config"
-                    response = get_session_config(
-                        module, contents, replace=replace, commit=False
+                    after = get_session_config(
+                        module, contents.split("\n"), replace=replace, commit=False
                     )
-                    after = response["diff"]
 
                 result.update(
                     {

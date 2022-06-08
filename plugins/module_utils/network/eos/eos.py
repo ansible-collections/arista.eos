@@ -33,6 +33,7 @@ __metaclass__ = type
 import json
 import os
 import time
+import re
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import env_fallback
@@ -768,6 +769,7 @@ class HttpApi:
         fallback to using configure() to load the commands.  If that happens,
         there will be no returned diff or session values
         """
+        resp = "" 
         use_session = os.getenv("ANSIBLE_EOS_USE_SESSIONS", True)
         try:
             use_session = int(use_session)
@@ -783,7 +785,6 @@ class HttpApi:
                 )
                 result = {"changed": True}
                 return result
-
         session = session_name()
         result = {"session": session}
         commands = ["configure session %s" % session]
@@ -792,11 +793,10 @@ class HttpApi:
             commands.append("rollback clean-config")
 
         commands.extend(config)
-
-        response = self.send_request(commands)
+        response = self._connection.send_request(commands)
         if "error" in response:
             commands = ["configure session %s" % session, "abort"]
-            self.send_request(commands)
+            self._connection.send_request(commands)
             err = response["error"]
             error_text = []
             for data in err["data"]:
@@ -806,16 +806,17 @@ class HttpApi:
 
         commands = [
             "configure session %s" % session,
-            "show session-config diffs",
+            "show session-config",
         ]
         if commit:
             commands.append("commit")
         else:
             commands.append("abort")
-
-        response = self.send_request(commands, output="text")
-
-        return response
+        response = self._connection.send_request(commands, output="text")
+        for out in response:
+            if out:
+                resp += out + ""
+        return resp.rstrip()
 
     def get_capabilities(self):
         """Returns platform info of the remove device"""

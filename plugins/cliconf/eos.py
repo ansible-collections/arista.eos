@@ -177,6 +177,8 @@ class Cliconf(CliconfBase):
                 self.discard_changes(session)
         else:
             self.send_command("end")
+        if resp.get("diff"):
+            return resp["diff"]
         return resp
 
     @enable_mode
