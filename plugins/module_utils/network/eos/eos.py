@@ -33,7 +33,6 @@ __metaclass__ = type
 import json
 import os
 import time
-import re
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import env_fallback
@@ -769,7 +768,7 @@ class HttpApi:
         fallback to using configure() to load the commands.  If that happens,
         there will be no returned diff or session values
         """
-        resp = "" 
+        resp = ""
         use_session = os.getenv("ANSIBLE_EOS_USE_SESSIONS", True)
         try:
             use_session = int(use_session)

@@ -584,7 +584,10 @@ def main():
                     )
                     replace = module.params["replace"] == "config"
                     after = get_session_config(
-                        module, contents.split("\n"), replace=replace, commit=False
+                        module,
+                        contents.split("\n"),
+                        replace=replace,
+                        commit=False,
                     )
 
                 result.update(
