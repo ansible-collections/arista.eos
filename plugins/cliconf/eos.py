@@ -135,23 +135,19 @@ class Cliconf(CliconfBase):
             self.send_command("configure session %s" % session)
             if replace:
                 self.send_command("rollback clean-config")
+            copy_cmd = {"command": "copy terminal: session-config", "sendonly": True}
+            self.send_command(**copy_cmd)
         else:
             self.send_command("configure")
 
         results = []
         requests = []
-        multiline = False
+        multiline = True
         for line in to_list(candidate):
             if not isinstance(line, Mapping):
                 line = {"command": line}
 
             cmd = line["command"]
-            if cmd == "end":
-                continue
-            if cmd.startswith("banner") or multiline:
-                multiline = True
-            elif cmd == "EOF" and multiline:
-                multiline = False
 
             if multiline:
                 line["sendonly"] = True
@@ -164,6 +160,7 @@ class Cliconf(CliconfBase):
                     self.discard_changes(session)
                     raise AnsibleConnectionFailure(e.message)
 
+        self.send_command("\x04")
         resp["request"] = requests
         resp["response"] = results
         if self.supports_sessions():
