@@ -7,4 +7,5 @@ pexpect
 pytest-xdist
 yamllint
 rstcheck<4,>=3
+git+https://github.com/ansible-community/pytest-ansible-units.git
 
