@@ -556,8 +556,7 @@ class TestEosBgpglobalModule(TestEosModule):
                     "maximum_received_routes": {"count": 12000},
                     "peer": "peer2",
                     "peer_group": "peer2",
-                    # TODO: determine how to hash the password to match
-                    "password": "fixme"
+                    "encryption_password": {"type": 0, "password":"mypassword" },
                 },
             ],
             "redistribute": [
