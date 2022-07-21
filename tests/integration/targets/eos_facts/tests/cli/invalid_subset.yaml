@@ -9,7 +9,6 @@
   arista.eos.eos_facts:
     gather_subset:
       - foobar
-    provider: '{{ cli }}'
 
 - assert:
     that:

@@ -66,6 +66,17 @@ def _tmplt_route_map_extcommunity_rt(config_data):
     return command
 
 
+def _tmplt_route_maps_subroutemap(config_data):
+    command = ""
+    if config_data["entries"].get("sub_route_map"):
+        command = (
+            "sub-route-map " + config_data["entries"]["sub_route_map"]["name"]
+        )
+    if config_data["entries"]["sub_route_map"].get("invert_result"):
+        command += " invert-result"
+    return command
+
+
 def _tmplt_route_map_extcommunity_soo(config_data):
     config_data = config_data["entries"]["set"]["extcommunity"]["soo"]
     command = "set extcommunity soo " + config_data["vpn"]
@@ -468,7 +479,7 @@ class Route_mapsTemplate(NetworkTemplate):
                 $""",
                 re.VERBOSE,
             ),
-            "setval": "sub-route-map {{ entries.sub_route_map.name }}{{ (' ' + invert-result) if invert is defined }}",
+            "setval": _tmplt_route_maps_subroutemap,
             "compval": "entries.sub_route_map",
             "result": {
                 "entries": [

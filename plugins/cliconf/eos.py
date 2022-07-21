@@ -22,8 +22,8 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-author: Ansible Networking Team
-cliconf: eos
+author: Ansible Networking Team (@ansible-network)
+name: eos
 short_description: Use eos cliconf to run command on Arista EOS platform
 description:
 - This eos plugin provides low level abstraction apis for sending and receiving CLI
@@ -47,18 +47,21 @@ options:
       to the device is present in this list, the existing cache is invalidated.
     version_added: 2.0.0
     type: list
+    elements: str
     default: []
     vars:
     - name: ansible_eos_config_commands
 """
 
 import json
-import time
 import re
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_text
 from ansible.module_utils.common._collections_compat import Mapping
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    session_name,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
 )
@@ -66,7 +69,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     NetworkConfig,
     dumps,
 )
-from ansible.plugins.cliconf import CliconfBase, enable_mode
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import (
+    CliconfBase,
+    enable_mode,
+)
 
 
 class Cliconf(CliconfBase):
@@ -124,7 +130,7 @@ class Cliconf(CliconfBase):
         resp = {}
         session = None
         if self.supports_sessions():
-            session = "ansible_%s" % int(time.time())
+            session = session_name()
             resp.update({"session": session})
             self.send_command("configure session %s" % session)
             if replace:
@@ -182,9 +188,10 @@ class Cliconf(CliconfBase):
         newline=True,
         output=None,
         check_all=False,
+        version=None,
     ):
         if output:
-            command = self._get_command_with_output(command, output)
+            command = self._get_command_with_output(command, output, version)
         return self.send_command(
             command=command,
             prompt=prompt,
@@ -215,9 +222,10 @@ class Cliconf(CliconfBase):
                 cmd = {"command": cmd}
 
             output = cmd.pop("output", None)
+            version = cmd.pop("version", None)
             if output:
                 cmd["command"] = self._get_command_with_output(
-                    cmd["command"], output
+                    cmd["command"], output, version
                 )
 
             try:
@@ -376,7 +384,7 @@ class Cliconf(CliconfBase):
                 config_context="(config", exit_command="abort"
             )
 
-    def _get_command_with_output(self, command, output):
+    def _get_command_with_output(self, command, output, version):
         options_values = self.get_option_values()
         if output not in options_values["output"]:
             raise ValueError(
@@ -388,4 +396,6 @@ class Cliconf(CliconfBase):
             cmd = "%s | json" % command
         else:
             cmd = command
+        if version != "latest" and "| json" in cmd:
+            cmd = "%s version %s" % (cmd, version)
         return cmd

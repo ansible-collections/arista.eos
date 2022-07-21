@@ -1,0 +1,113 @@
+---
+merged:
+  commands:
+    - "snmp-server community comm3 view view1 ipv6 list1"
+    - "snmp-server community comm4 view view1 list3"
+    - "snmp-server community comm5 ro list4"
+    - "snmp-server group group1 v1 read view1"
+    - "snmp-server group group2 v3 priv write view2 notify view1"
+    - "snmp-server host host02 version 2c user01 udp-port 23"
+    - "snmp-server host host01 version 3 priv user01 udp-port 23"
+    - "snmp-server vrf vrf01 local-interface Ethernet1"
+    - "snmp-server contact admin"
+    - "snmp-server engineID remote 1.1.1.1 12345678ab"
+    - "snmp-server enable traps bgp"
+    - "snmp-server enable traps capacity arista-hardware-utilization-alert"
+    - "snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif"
+
+deleted:
+  commands:
+    - "no snmp-server community comm3 view view1 ro ipv6 list1"
+    - "no snmp-server community comm4 view view1 ro list3"
+    - "no snmp-server community comm5 ro list4"
+    - "no snmp-server group group1 v1 read view1"
+    - "no snmp-server group group2 v3 priv write view2 notify view1"
+    - "no snmp-server host host02 version 2c user01 udp-port 23"
+    - "no snmp-server host host01 version 3 priv user01 udp-port 23"
+    - "no snmp-server vrf vrf01 local-interface Ethernet1"
+    - "no snmp-server contact admin"
+    - "default snmp-server enable traps bgp"
+    - "default snmp-server enable traps capacity arista-hardware-utilization-alert"
+    - "default snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif"
+
+replaced:
+  before:
+    communities:
+      - acl_v6: list1
+        name: comm3
+        ro: true
+        view: view1
+      - acl_v4: list3
+        name: comm4
+        ro: true
+        view: view1
+      - acl_v4: list4
+        name: comm5
+        ro: true
+    contact: "admin"
+    groups:
+      - group: "group1"
+        read: "view1"
+        version: "v1"
+      - auth_privacy: "priv"
+        group: "group2"
+        notify: "view1"
+        version: "v3"
+        write: "view2"
+    hosts:
+      - host: "host01"
+        udp_port: 23
+        user: "user01"
+        version: "3 priv"
+      - host: "host02"
+        udp_port: 23
+        user: "user01"
+        version: "2c"
+    traps:
+      bgp:
+        enabled: true
+      capacity:
+        arista_hardware_utilization_alert: true
+      external_alarm:
+        arista_external_alarm_asserted_notif: true
+        arista_external_alarm_deasserted_notif: true
+    vrfs:
+      - local_interface: "Ethernet1"
+        vrf: "vrf01"
+
+  commands:
+    - "snmp-server community comm3 view view1 ipv6 list1"
+    - "snmp-server community replacecomm list4"
+    - "no snmp-server community comm4 view view1 ro list3"
+    - "no snmp-server community comm5 ro list4"
+    - "no snmp-server group group1 v1 read view1"
+    - "no snmp-server group group2 v3 priv write view2 notify view1"
+    - "no snmp-server host host01 version 3 priv user01 udp-port 23"
+    - "no snmp-server host host02 version 2c user01 udp-port 23"
+    - "snmp-server vrf vrf_replace local-interface Ethernet1"
+    - "no snmp-server vrf vrf01 local-interface Ethernet1"
+    - "snmp-server extension 123456 flash:"
+    - "default snmp-server enable traps capacity arista-hardware-utilization-alert"
+    - "default snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif"
+    - "snmp-server enable traps test arista-test-notification"
+    - "no snmp-server contact admin"
+  after:
+    communities:
+      - acl_v6: list1
+        name: comm3
+        ro: true
+        view: view1
+      - acl_v4: list4
+        name: replacecomm
+        ro: true
+    extension:
+      root_oid: "0.123456"
+      script_location: "flash:"
+    traps:
+      bgp:
+        enabled: true
+      test:
+        arista_test_notification: true
+    vrfs:
+      - local_interface: "Ethernet1"
+        vrf: "vrf_replace"

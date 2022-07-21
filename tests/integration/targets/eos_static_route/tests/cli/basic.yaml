@@ -8,7 +8,6 @@
       - no ip route 192.168.3.0/24 192.168.0.1
       - no ip route 192.168.4.0/24 192.168.0.1
       - no ip route 192.168.5.0/24 192.168.0.1
-    provider: '{{ cli }}'
 
 - name: configure static route
   become: true
@@ -17,7 +16,6 @@
     address: 192.168.3.0/24
     next_hop: 192.168.0.1
     admin_distance: 2
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -40,7 +38,6 @@
     address: 192.168.3.0/24
     next_hop: 192.168.0.1
     admin_distance: 2
-    provider: '{{ cli }}'
     state: absent
 
 - assert:
@@ -68,7 +65,6 @@
 
       - address: 192.168.5.0/24
         next_hop: 192.168.0.1
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -97,7 +93,6 @@
       - address: 192.168.5.0/24
         next_hop: 192.168.0.1
     state: absent
-    provider: '{{ cli }}'
 
 - assert:
     that:
@@ -121,6 +116,5 @@
       - no ip route 192.168.3.0/24 192.168.0.1
       - no ip route 192.168.4.0/24 192.168.0.1
       - no ip route 192.168.5.0/24 192.168.0.1
-    provider: '{{ cli }}'
 
 - debug: msg="END cli/basic.yaml on connection={{ ansible_connection }}"

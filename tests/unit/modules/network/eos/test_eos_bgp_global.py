@@ -127,6 +127,9 @@ class TestEosBgpglobalModule(TestEosModule):
             dict(
                 config=dict(
                     as_number="65535",
+                    maximum_paths=dict(
+                        max_equal_cost_paths=32, max_installed_ecmp_paths=32
+                    ),
                     vrfs=[
                         dict(
                             vrf="vrf01",
@@ -153,6 +156,8 @@ class TestEosBgpglobalModule(TestEosModule):
                                 dict(
                                     peer="peer1",
                                     peer_group="peer1",
+                                    bfd="c_bit",
+                                    ebgp_multihop=dict(set=True),
                                     maximum_received_routes=dict(count=12000),
                                     send_community=dict(
                                         community_attribute="link-bandwidth",
@@ -191,9 +196,12 @@ class TestEosBgpglobalModule(TestEosModule):
         )
         commands = [
             "router bgp 65535",
+            "maximum-paths 32 ecmp 32",
             "vrf vrf01",
             "neighbor peer1 peer group",
+            "neighbor peer1 bfd c-bit",
             "neighbor peer1 maximum-routes 12000",
+            "neighbor peer1 ebgp-multiphop",
             "neighbor peer1 send-community link-bandwidth divide ratio",
             "neighbor peer1 timers 5 10",
             "neighbor peer1 ttl maximum-hops 33",
@@ -296,12 +304,27 @@ class TestEosBgpglobalModule(TestEosModule):
                 config=dict(
                     as_number="65535",
                     default_metric=433,
+                    neighbor=[
+                        dict(
+                            peer="peer1",
+                            peer_group="peer1",
+                            send_community=dict(
+                                community_attribute="link-bandwidth",
+                                link_bandwidth_attribute="divide",
+                                divide="ratio",
+                            ),
+                        )
+                    ],
                     network=[
                         dict(address="6.6.6.0/24", route_map="netmap1"),
                         dict(address="10.1.0.0/16"),
                     ],
                     redistribute=[dict(protocol="isis", isis_level="level-2")],
                     route_target=dict(action="export", target="44:22"),
+                    access_group=[
+                        dict(afi="ipv6", acl_name="acl01", direction="out"),
+                        dict(afi="ipv4", acl_name="acl02", direction="out"),
+                    ],
                 ),
                 state="replaced",
             )
@@ -314,10 +337,10 @@ class TestEosBgpglobalModule(TestEosModule):
             "network 10.1.0.0/16",
             "default-metric 433",
             "route-target export 44:22",
+            "ip access-group acl02 out",
+            "ipv6 access-group acl01 out",
             "no timers bgp 44 100",
             "no ucmp link-bandwidth recursive",
-            "no neighbor peer1 peer group",
-            "no neighbor peer1 send-community link-bandwidth divide ratio",
             "no neighbor peer1 maximum-routes 12000",
             "no neighbor peer2 peer group",
             "no neighbor peer2 maximum-routes 12000",
@@ -573,6 +596,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor peer1 send-community link-bandwidth divide ratio",
             "neighbor peer1 maximum-routes 12000",
             "neighbor peer2 peer group",
+            "neighbor peer2 send-community",
             "neighbor peer2 maximum-routes 12000",
             # TODO: this might need to be hashed
             "neighbor peer2 password 0 mypassword",
@@ -622,6 +646,7 @@ class TestEosBgpglobalModule(TestEosModule):
                     "maximum_received_routes": {"count": 12000},
                     "peer": "peer2",
                     "peer_group": "peer2",
+                    "send-community": {"set": True},
                 },
             ],
             "redistribute": [
@@ -738,9 +763,9 @@ class TestEosBgpglobalModule(TestEosModule):
                         enforce_first_as=True,
                         host_routes=True,
                     ),
-                    access_group=dict(
-                        afi="ipv6", acl_name="acl01", direction="out"
-                    ),
+                    access_group=[
+                        dict(afi="ipv6", acl_name="acl01", direction="out")
+                    ],
                 ),
                 state="rendered",
             )

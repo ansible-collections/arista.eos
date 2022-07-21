@@ -5,6 +5,125 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v5.0.1
+======
+
+Bugfixes
+--------
+
+- Add logic to add new interface using overridden.
+- Automatiaclly named sessions (ansible_XXXXXXXXX) now use two digits of sub-second precision (if available). This is to work around tasks reusing a session if the previous task completed very quickly.
+- Fix the logic to add new aces using replaced and overriden state.
+- Normalize interface name from want before comaparing with the interface in have.
+- Normalize ntp server source interface.
+
+v5.0.0
+======
+
+Major Changes
+-------------
+
+- Minimum required ansible.netcommon version is 2.5.1.
+- Updated base plugin references to ansible.netcommon.
+- `eos_facts` - change default gather_subset to `min` from `!config` (https://github.com/ansible-collections/arista.eos/issues/306).
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- httpapi - the ``eos_use_sessions`` option is now a boolean instead of an integer.
+
+Bugfixes
+--------
+
+- Add and fix bgp_global neighbor parsers.
+- Fix added to change snmp communities with or without acl.
+- Fix parser to parse maximum-paths ecmp command correctly.
+- arista.eos.eos_acls - fixed issue that would cause a key value error on `aces` element when no ACEs exist in the access-list.
+- arista.eos.eos_acls - fixed issue where protcol_options were rendered to command line using the key _underscore_ value rather than the hyphen nominclature.
+- httpapi - detect session support more robustly when ``eos_use_sessions`` is not specified.
+
+v4.1.2
+======
+
+Bugfixes
+--------
+
+- Add symlink of modules under plugins/action.
+- eos_bgp_global - Add alias for peer -  neighbor_address
+
+v4.1.1
+======
+
+Bugfixes
+--------
+
+- Add check mode support to bgp_global and bgp_address_family
+- Add logic to skip unwanted configs from running-config, to collect bgp af facts.
+- Fixed an invalid parameter used in example for eos_l2_interfaces
+
+v4.1.0
+======
+
+Minor Changes
+-------------
+
+- Add eos_hostname resource module.
+- eos_acls - Fix examples typos
+
+Bugfixes
+--------
+
+- eos_acls - fixes state replaced where new ACEs are not all added
+
+New Modules
+-----------
+
+- eos_hostname - Manages hostname resource module
+
+v4.0.0
+======
+
+Minor Changes
+-------------
+
+- Add eos_snmp_server resource module.
+
+Breaking Changes / Porting Guide
+--------------------------------
+
+- eos_command - new suboption ``version`` of parameter ``command``, which controls the JSON response version. Previously the value was assumed to be "latest" for network_cli and "1" for httpapi, but the default will now be "latest" for both connections. This option is also available for use in modules making their own device requests with ``plugins.module_utils.network.eos.eos.run_commands()`` with the same new default behavior. (https://github.com/ansible-collections/arista.eos/pull/258).
+
+New Modules
+-----------
+
+- eos_snmp_server - Manages snmp server resource module
+
+v3.1.0
+======
+
+Minor Changes
+-------------
+
+- Add eos_ntp_global module.
+
+Deprecated Features
+-------------------
+
+- Remove testing with provider for ansible-test integration jobs. This helps prepare us to move to network-ee integration tests.
+
+Bugfixes
+--------
+
+- Changed access_group parameter to type list, to enable multiple access-groups configuration.
+- Fix logic error while executing replaced and overridden operations on bgp neighbors.
+- Fix typo and logic errors in bgp_global, to skip other routing protocol configs from running-config.
+- command template fixed supporting Jinja version for centos-8 EEs.
+
+New Modules
+-----------
+
+- eos_ntp_global - Manages ntp resource module
+
 v3.0.0
 ======
 
@@ -123,7 +242,6 @@ Deprecated Features
 -------------------
 
 - Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
-
 
 Bugfixes
 --------

@@ -210,45 +210,74 @@ class Acls(ConfigBase):
         commands = []
         config_cmds = []
         remove_cmds = []
+        ace_names = []
         diff = {}
+        if not have:
+            commands = set_commands(want, [])
         for w in want:
             afi = "ipv6" if w["afi"] == "ipv6" else "ipv4"
             for acl in w["acls"]:
                 name = acl["name"]
                 want_ace = acl["aces"]
-        for h in have:
-            if h["afi"] == afi:
-                for h_acl in h["acls"]:
-                    if h_acl["name"] == name:
-                        h = {"afi": afi, "acls": [{"name": name}]}
-                        for h_ace in h_acl["aces"]:
-                            diff = get_ace_diff(h_ace, want_ace)
-                            if diff:
-                                h = {
-                                    "afi": afi,
-                                    "acls": [{"name": name, "aces": [h_ace]}],
-                                }
-                                remove_cmds.append(del_commands(h, have))
-                        for w_ace in want_ace:
-                            w_diff = get_ace_diff(w_ace, h_acl["aces"])
-                            if w_diff:
-                                w = [
-                                    {
-                                        "afi": afi,
-                                        "acls": [
-                                            {"name": name, "aces": [w_ace]}
-                                        ],
-                                    }
-                                ]
-                                config_cmds = set_commands(w, have)
-                                config_cmds = list(
-                                    itertools.chain(*config_cmds)
-                                )
+                for h in have:
+                    if h["afi"] == afi:
+                        for h_acl in h["acls"]:
+                            if h_acl["name"] == name:
+                                if name not in ace_names:
+                                    ace_names.append(name)
+                                h = {"afi": afi, "acls": [{"name": name}]}
+                                for h_ace in h_acl.get("aces", []):
+                                    diff = get_ace_diff(h_ace, want_ace)
+                                    if diff:
+                                        h = {
+                                            "afi": afi,
+                                            "acls": [
+                                                {"name": name, "aces": [h_ace]}
+                                            ],
+                                        }
+                                        remove_cmds.append(
+                                            del_commands(h, have)
+                                        )
+                                for w_ace in want_ace:
+                                    w_diff = get_ace_diff(
+                                        w_ace, h_acl.get("aces", [])
+                                    )
+                                    if w_diff:
+                                        w = [
+                                            {
+                                                "afi": afi,
+                                                "acls": [
+                                                    {
+                                                        "name": name,
+                                                        "aces": [w_ace],
+                                                    }
+                                                ],
+                                            }
+                                        ]
+                                        cmds = set_commands(w, have)
+                                        config_cmds.append(
+                                            list(itertools.chain(*cmds))
+                                        )
+                            if name not in ace_names:
+                                for w_ace in want_ace:
+                                    w = [
+                                        {
+                                            "afi": afi,
+                                            "acls": [
+                                                {"name": name, "aces": [w_ace]}
+                                            ],
+                                        }
+                                    ]
+                                    cmds = set_commands(w, have)
+                                    config_cmds.append(
+                                        list(itertools.chain(*cmds))
+                                    )
 
         if remove_cmds:
             remove_cmds = list(itertools.chain(*remove_cmds))
             commands.append(remove_cmds)
         if config_cmds:
+            config_cmds = list(itertools.chain(*config_cmds))
             commands.append(config_cmds)
         commands = list(itertools.chain(*commands))
         commandset = []
@@ -270,6 +299,8 @@ class Acls(ConfigBase):
             h_afi_list.append(h["afi"])
         for w in want:
             w_afi_list.append(w["afi"])
+        if not h_afi_list:
+            commands = set_commands(want, [])
         for hafi in h_afi_list:
             if hafi not in w_afi_list:
                 h = {"afi": hafi}
@@ -281,11 +312,10 @@ class Acls(ConfigBase):
                 h_names = []
                 if w["afi"] == h["afi"]:
                     for w_acl in w["acls"]:
-                        w_names.append(w_acl["name"])
                         for h_acl in h["acls"]:
                             h_names.append(h_acl["name"])
                             if h_acl["name"] == w_acl["name"]:
-                                for h_ace in h_acl["aces"]:
+                                for h_ace in h_acl.get("aces", []):
                                     ace_diff = get_ace_diff(
                                         h_ace, w_acl["aces"]
                                     )
@@ -301,9 +331,10 @@ class Acls(ConfigBase):
                                         }
                                         remove_cmds = del_commands(h, have)
                                         commands.append(remove_cmds)
-                                for w_ace in w_acl["aces"]:
+                            for w_ace in w_acl["aces"]:
+                                if w_acl["name"] not in w_names:
                                     w_ace_diff = get_ace_diff(
-                                        w_ace, h_acl["aces"]
+                                        w_ace, h_acl.get("aces", [])
                                     )
                                     if w_ace_diff:
                                         w_diff = [
@@ -324,6 +355,7 @@ class Acls(ConfigBase):
                                             itertools.chain(*config_cmds)
                                         )
                                         commands.append(config_cmds)
+                            w_names.append(w_acl["name"])
                     for hname in h_names:
                         if hname not in w_names:
                             h = {"afi": h["afi"], "acls": [{"name": hname}]}
@@ -333,6 +365,7 @@ class Acls(ConfigBase):
 
         if commands:
             commands = list(itertools.chain(*commands))
+
         commandset = []
         for c in commands:
             access_list = re.findall(r"(ip.*) access-list (.*)", c)
@@ -394,7 +427,7 @@ def set_commands(want, have):
                         if wacl["name"] == hacl["name"]:
                             want_aces = wacl["aces"]
                             for wace in wacl["aces"]:
-                                for hace in hacl["aces"]:
+                                for hace in hacl.get("aces", []):
                                     if (
                                         "sequence" in wace.keys()
                                         and "sequence" in hace.keys()
@@ -492,7 +525,9 @@ def add_commands(want):
                     for op, val in ace["source"]["port_protocol"].items():
                         if val.isdigit():
                             val = socket.getservbyport(int(val))
-                        command = command + " " + op + " " + val
+                        command = (
+                            command + " " + op + " " + val.replace("_", "-")
+                        )
             if "destination" in ace.keys():
                 if "any" in ace["destination"].keys():
                     command = command + " any"
@@ -517,13 +552,17 @@ def add_commands(want):
                             + " "
                             + op
                             + " "
-                            + ace["destination"]["port_protocol"][op]
+                            + ace["destination"]["port_protocol"][op].replace(
+                                "_", "-"
+                            )
                         )
             if "protocol_options" in ace.keys():
                 for proto in ace["protocol_options"].keys():
                     if proto == "icmp" or proto == "icmpv6":
                         for icmp_msg in ace["protocol_options"][proto].keys():
-                            command = command + " " + icmp_msg
+                            command = (
+                                command + " " + icmp_msg.replace("_", "-")
+                            )
                     elif proto == "ip" or proto == "ipv6":
                         command = (
                             command
@@ -598,6 +637,8 @@ def del_commands(want, have, name_only=False):
 
 def get_ace_diff(want_ace, have_ace):
     # gives the diff of the aces passed.
+    if not have_ace:
+        return dict_diff({}, want_ace)
     for h_a in have_ace:
         d = dict_diff(want_ace, h_a)
         if not d:

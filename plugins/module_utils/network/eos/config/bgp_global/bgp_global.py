@@ -52,7 +52,6 @@ class Bgp_global(ResourceModule):
             "distance",
             "graceful_restart",
             "graceful_restart_helper",
-            "acccess_group",
             "maximum_paths",
             "monitoring",
             "route_target",
@@ -287,6 +286,7 @@ class Bgp_global(ResourceModule):
             "neighbor.additional_paths",
             "neighbor.allowas_in",
             "neighbor.auto_local_addr",
+            "neighbor.bfd",
             "neighbor.default_originate",
             "neighbor.description",
             "neighbor.dont_capability_negotiate",
@@ -330,14 +330,17 @@ class Bgp_global(ResourceModule):
         hneigh = have.pop("neighbor", {})
         for name, entry in iteritems(wneigh):
             for k, v in entry.items():
-                peer = entry["peer"]
+                if entry.get("peer"):
+                    peer = entry["peer"]
+                else:
+                    peer = entry["neighbor_address"]
                 if hneigh.get(name):
-                    h = {"peer": peer, k: hneigh[name].pop(k, {})}
+                    h = {"neighbor_address": peer, k: hneigh[name].pop(k, {})}
                 else:
                     h = {}
                 self.compare(
                     parsers=parsers,
-                    want={"neighbor": {"peer": peer, k: v}},
+                    want={"neighbor": {"neighbor_address": peer, k: v}},
                     have={"neighbor": h},
                 )
         for name, entry in iteritems(hneigh):
@@ -345,15 +348,19 @@ class Bgp_global(ResourceModule):
                 self.commands.append("no neighbor " + name)
                 continue
             for k, v in entry.items():
-                peer = entry["peer"]
                 self.compare(
                     parsers=parsers,
                     want={},
-                    have={"neighbor": {"peer": peer, k: v}},
+                    have={"neighbor": {"neighbor_address": name, k: v}},
                 )
 
     def _compare_lists(self, want, have):
-        for attrib in ["redistribute", "network", "aggregate_address"]:
+        for attrib in [
+            "redistribute",
+            "network",
+            "aggregate_address",
+            "access_group",
+        ]:
             wdict = want.pop(attrib, {})
             hdict = have.pop(attrib, {})
             for key, entry in iteritems(wdict):
@@ -368,7 +375,11 @@ class Bgp_global(ResourceModule):
             if "neighbor" in proc:
                 neigh_dict = {}
                 for entry in proc.get("neighbor", []):
-                    neigh_dict.update({entry["peer"]: entry})
+                    if entry.get("peer"):
+                        peer = entry["peer"]
+                    else:
+                        peer = entry["neighbor_address"]
+                    neigh_dict.update({peer: entry})
                 proc["neighbor"] = neigh_dict
 
             if "network" in proc:
@@ -382,6 +393,12 @@ class Bgp_global(ResourceModule):
                 for entry in proc.get("aggregate_address", []):
                     agg_dict.update({entry["address"]: entry})
                 proc["aggregate_address"] = agg_dict
+
+            if "access_group" in proc:
+                access_dict = {}
+                for entry in proc.get("access_group", []):
+                    access_dict.update({entry["afi"]: entry})
+                proc["access_group"] = access_dict
 
             if "redistribute" in proc:
                 redis_dict = {}

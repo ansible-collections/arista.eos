@@ -358,3 +358,140 @@ releases:
       name: eos_logging_global
       namespace: ''
     release_date: '2021-08-27'
+  3.1.0:
+    changes:
+      bugfixes:
+      - Changed access_group parameter to type list, to enable multiple access-groups
+        configuration.
+      - Fix logic error while executing replaced and overridden operations on bgp
+        neighbors.
+      - Fix typo and logic errors in bgp_global, to skip other routing protocol configs
+        from running-config.
+      - command template fixed supporting Jinja version for centos-8 EEs.
+      deprecated_features:
+      - Remove testing with provider for ansible-test integration jobs. This helps
+        prepare us to move to network-ee integration tests.
+      minor_changes:
+      - Add eos_ntp_global module.
+    fragments:
+    - bgp_global_access_group_list.yaml
+    - bgp_global_neighbor_replaced.yaml
+    - bgp_global_typo_fix.yaml
+    - cleanup_tags_for_tests.yaml
+    - deprecation_biannually.yaml
+    - eos_ntp_global_module.yaml
+    - remove_debug_from_tests.yaml
+    - remove_provider_from_tests.yaml
+    - set_allow_duplicates.yaml
+    - template_to_support_jinja2.10.3.yaml
+    modules:
+    - description: Manages ntp resource module
+      name: eos_ntp_global
+      namespace: ''
+    release_date: '2021-09-24'
+  4.0.0:
+    changes:
+      breaking_changes:
+      - eos_command - new suboption ``version`` of parameter ``command``, which controls
+        the JSON response version. Previously the value was assumed to be "latest"
+        for network_cli and "1" for httpapi, but the default will now be "latest"
+        for both connections. This option is also available for use in modules making
+        their own device requests with ``plugins.module_utils.network.eos.eos.run_commands()``
+        with the same new default behavior. (https://github.com/ansible-collections/arista.eos/pull/258).
+      minor_changes:
+      - Add eos_snmp_server resource module.
+    fragments:
+    - 0-copy_ignore_txt.yml
+    - 280-command-spec.yaml
+    - eos_snmp_server.yaml
+    - remove_2.6_ignores.yml
+    - support_version_parameter.yaml
+    modules:
+    - description: Manages snmp server resource module
+      name: eos_snmp_server
+      namespace: ''
+    release_date: '2021-12-07'
+  4.1.0:
+    changes:
+      bugfixes:
+      - eos_acls - fixes state replaced where new ACEs are not all added
+      minor_changes:
+      - Add eos_hostname resource module.
+      - eos_acls - Fix examples typos
+    fragments:
+    - 295-eos-acls-examples-fix.yaml
+    - 297-eos-acl-fix-replaced.yaml
+    - add_eos_hostname.yaml
+    modules:
+    - description: Manages hostname resource module
+      name: eos_hostname
+      namespace: ''
+    release_date: '2022-01-31'
+  4.1.1:
+    changes:
+      bugfixes:
+      - Add check mode support to bgp_global and bgp_address_family
+      - Add logic to skip unwanted configs from running-config, to collect bgp af
+        facts.
+      - Fixed an invalid parameter used in example for eos_l2_interfaces
+    fragments:
+    - bgp_check_mode_support.yml
+    - fix_documentation_eos_l2_interfaces.yml
+    - skip_unwanted_configs_bgp_af.yaml
+    release_date: '2022-02-28'
+  4.1.2:
+    changes:
+      bugfixes:
+      - Add symlink of modules under plugins/action.
+      - eos_bgp_global - Add alias for peer -  neighbor_address
+    fragments:
+    - add_alias_bgp_global_peer.yaml
+    - add_symlink_redirection.yml
+    release_date: '2022-03-29'
+  5.0.0:
+    changes:
+      breaking_changes:
+      - httpapi - the ``eos_use_sessions`` option is now a boolean instead of an integer.
+      bugfixes:
+      - Add and fix bgp_global neighbor parsers.
+      - Fix added to change snmp communities with or without acl.
+      - Fix parser to parse maximum-paths ecmp command correctly.
+      - arista.eos.eos_acls - fixed issue that would cause a key value error on `aces`
+        element when no ACEs exist in the access-list.
+      - arista.eos.eos_acls - fixed issue where protcol_options were rendered to command
+        line using the key _underscore_ value rather than the hyphen nominclature.
+      - httpapi - detect session support more robustly when ``eos_use_sessions`` is
+        not specified.
+      major_changes:
+      - Minimum required ansible.netcommon version is 2.5.1.
+      - Updated base plugin references to ansible.netcommon.
+      - '`eos_facts` - change default gather_subset to `min` from `!config` (https://github.com/ansible-collections/arista.eos/issues/306).'
+    fragments:
+    - 0-ignore.yml
+    - 346-httpapi.yaml
+    - add_bgp_global_neighor_bfd.yaml
+    - eos_facts_remove_warning.yaml
+    - eos_facts_update.yaml
+    - fix_bgp_global_ecmp_render.yaml
+    - fix_eos_acls_protocol_options.yml
+    - fix_snmp_server_communities.yaml
+    - netcommon_ref_update.yaml
+    release_date: '2022-04-26'
+  5.0.1:
+    changes:
+      bugfixes:
+      - Add logic to add new interface using overridden.
+      - Automatiaclly named sessions (ansible_XXXXXXXXX) now use two digits of sub-second
+        precision (if available). This is to work around tasks reusing a session if
+        the previous task completed very quickly.
+      - Fix the logic to add new aces using replaced and overriden state.
+      - Normalize interface name from want before comaparing with the interface in
+        have.
+      - Normalize ntp server source interface.
+    fragments:
+    - fast_sessions.yaml
+    - fix_acls_replaced.yaml
+    - l3_interfaces_overridden_new_int.yaml
+    - normalize_ntp_server_source.yaml
+    - pre-commit.yaml
+    release_date: '2022-05-25'

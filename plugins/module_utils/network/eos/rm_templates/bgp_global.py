@@ -224,15 +224,13 @@ def _tmplt_bgp_graceful_restart_helper(config_data):
 
 
 def _tmplt_bgp_access_group(config_data):
-    if config_data["access_group"].get("afi") == "ipv4":
+    if config_data.get("afi") == "ipv4":
         afi = "ip"
     else:
         afi = "ipv6"
-    command = afi + " access-group {acl_name}".format(
-        **config_data["access_group"]
-    )
-    if config_data["access_group"].get("direction"):
-        command += " {direction}".format(**config_data["access_group"])
+    command = afi + " access-group {acl_name}".format(**config_data)
+    if config_data.get("direction"):
+        command += " {direction}".format(**config_data)
     return command
 
 
@@ -240,7 +238,7 @@ def _tmplt_bgp_maximum_paths(config_data):
     command = "maximum-paths {max_equal_cost_paths}".format(
         **config_data["maximum_paths"]
     )
-    if config_data.get("max_installed_ecmp_paths"):
+    if config_data["maximum_paths"].get("max_installed_ecmp_paths"):
         command += " ecmp {max_installed_ecmp_paths}".format(
             **config_data["maximum_paths"]
         )
@@ -262,7 +260,7 @@ def _tmplt_bgp_monitoring(config_data):
 
 
 def _tmplt_bgp_neighbor(config_data):
-    command = "neighbor {peer}".format(**config_data["neighbor"])
+    command = "neighbor {neighbor_address}".format(**config_data["neighbor"])
     if config_data["neighbor"].get("additional_paths"):
         command += " additional-paths {additional_paths}".format(
             **config_data["neighbor"]
@@ -284,6 +282,10 @@ def _tmplt_bgp_neighbor(config_data):
             )
     elif config_data["neighbor"].get("auto_local_addr"):
         command += " auto-local-addr"
+    elif config_data["neighbor"].get("bfd"):
+        command += " bfd"
+        if config_data["neighbor"]["bfd"] == "c_bit":
+            command += " c-bit"
     elif config_data["neighbor"].get("default_originate"):
         command += " default-originate"
         if config_data["neighbor"]["default_originate"].get("route_map"):
@@ -1463,7 +1465,7 @@ class Bgp_globalTemplate(NetworkTemplate):
             },
         },
         {
-            "name": "acccess_group",
+            "name": "access_group",
             "getval": re.compile(
                 r"""
                 \s*(?P<afi>ip|ipv6)
@@ -1478,11 +1480,13 @@ class Bgp_globalTemplate(NetworkTemplate):
             "result": {
                 "vrfs": {
                     '{{ "vrf_" + vrf|d() }}': {
-                        "access_group": {
-                            "afi": "{{ ipv4 if afi == 'ip'  else afi }}",
-                            "acl_name": "{{ acl_name }}",
-                            "direction": "{{ direction }}",
-                        }
+                        "access_group": [
+                            {
+                                "afi": "{{ ipv4 if afi == 'ip'  else afi }}",
+                                "acl_name": "{{ acl_name }}",
+                                "direction": "{{ direction }}",
+                            }
+                        ]
                     }
                 }
             },
@@ -1556,7 +1560,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "additional_paths": "{{ action }}",
                             }
                         }
@@ -1582,7 +1586,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "allowas_in": {
                                     "set": "{{ True if count is undefined }}",
                                     "count": "{{ count }}"
@@ -1610,8 +1614,34 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "auto_local_addr": "{{ True }}",
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "neighbor.bfd",
+            "getval": re.compile(
+                r"""
+                \s*neighbor
+                \s+(?P<peer>\S+)
+                \s+bfd
+                \s*(?P<cbit>c-bit)
+                *$""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_bgp_neighbor,
+            "compval": "neighbor.bfd",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbor": {
+                            "{{ peer }}": {
+                                "neighbor_address": "{{ peer }}",
+                                "bfd": "{{ 'c_bit' if cbit is defined else 'enable' }}",
                             }
                         }
                     }
@@ -1637,7 +1667,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "default_originate": {
                                     "route_map": "{{ route_map.split(" ")[1] }}",
                                     "always": "{{ True if always is defined }}"
@@ -1666,7 +1696,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "description": "{{ desc }}",
                             }
                         }
@@ -1691,7 +1721,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "dont_capability_negotiate": "{{ True }}",
                             }
                         }
@@ -1717,9 +1747,9 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "ebgp_multihop": {
-                                    "set": "{{ True if ttl is not set }}",
+                                    "set": "{{ True if ttl is not defined }}",
                                     "ttl": "{{ ttl }}"
                                 }
                             }
@@ -1775,7 +1805,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "enforce_first_as": "{{ True }}",
                             }
                         }
@@ -1801,7 +1831,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "export_localpref": "{{ pref }}",
                             }
                         }
@@ -1827,7 +1857,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "fall_over": "{{ True }}",
                             }
                         }
@@ -1853,7 +1883,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "graceful_restart": "{{ True }}",
                             }
                         }
@@ -1878,7 +1908,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "graceful_restart_helper": "{{ True }}",
                             }
                         }
@@ -1904,7 +1934,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "idle_restart_timer": "{{ time }}",
                             }
                         }
@@ -1930,7 +1960,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "import_localpref": "{{ pref }}",
                             }
                         }
@@ -1958,7 +1988,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "link_bandwidth": {
                                     "set": "{{ True }}",
                                     "auto": "{{ True if auto is defined }}",
@@ -1992,7 +2022,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "local_as": {
                                     "as_number": "{{ num }}",
                                     "fallback": "{{ True if fallback is defined }}"
@@ -2021,7 +2051,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "local_v6_addr": "{{ addr }}",
                             }
                         }
@@ -2049,7 +2079,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "maximum_accepted_routes": {
                                     "count": "{{ count }}",
                                     "warning_limit": "{{ limit }}"
@@ -2082,7 +2112,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "maximum_received_routes": {
                                     "count": "{{ count }}",
                                     "warning_limit": {
@@ -2115,7 +2145,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "metric_out": "{{ metric }}",
                             }
                         }
@@ -2140,7 +2170,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "monitoring": "{{ True }}",
                             }
                         }
@@ -2165,7 +2195,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "next_hop_self": "{{ True }}",
                             }
                         }
@@ -2190,7 +2220,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "next_hop_unchanged": "{{ True }}",
                             }
                         }
@@ -2217,7 +2247,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "next_hop_v6_address": "{{ addr }}",
                             }
                         }
@@ -2243,7 +2273,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "out_delay": "{{ delay }}",
                             }
                         }
@@ -2269,7 +2299,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "remote_as": "{{ num }}",
                             }
                         }
@@ -2296,7 +2326,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "remove_private_as": {
                                     "set": "{{ True if all is undefined and replace is undefined }}",
                                     "all": "{{ True if all is defined }}",
@@ -2326,7 +2356,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "peer_group": "{{ name if name is defined else peer}}",
                             }
                         }
@@ -2353,7 +2383,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "prefix_list": {
                                     "name": "{{ name }}",
                                     "direction": "{{ dir }}"
@@ -2383,7 +2413,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "route_map": {
                                     "name": "{{ name }}",
                                     "direction": "{{ dir }}"
@@ -2411,7 +2441,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "route_reflector_client": "{{ True }}",
                             }
                         }
@@ -2436,7 +2466,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "route_to_peer": "{{ True }}",
                             }
                         }
@@ -2451,7 +2481,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s*neighbor
                 \s+(?P<peer>\S+)
                 \s+send-community
-                \s+(?P<comm>add|extended|link-bandwidth|remove|standard)*
+                \s*(?P<comm>add|extended|link-bandwidth|remove|standard)*
                 \s*(?P<attr>extended|link-bandwidth|standard)*
                 \s*(?P<link>aggregate|divide)*
                 \s*(?P<div>equal|ratio)*
@@ -2466,7 +2496,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "send_community": {
                                     "set": "{{ True if comm is not defined }}",
                                     "community_attribute": "{{ comm }}",
@@ -2498,7 +2528,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "shutdown": "{{ True }}",
                             }
                         }
@@ -2525,7 +2555,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "soft_reconfiguration": "{{ 'all' if all is defined else 'None' }}",
                             }
                         }
@@ -2553,7 +2583,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "transport": {
                                     "connection_mode": "{{ mode }}",
                                     "remote_port": "{{ port if port is defined }}"
@@ -2583,7 +2613,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "timers": {
                                     "keepalive": "{{ keepalive }}",
                                     "holdtime": "{{ holdtime }}"
@@ -2613,7 +2643,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "ttl": "{{ hop }}",
                             }
                         }
@@ -2639,7 +2669,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "update_source": "{{ src }}",
                             }
                         }
@@ -2665,7 +2695,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                     '{{ "vrf_" + vrf|d() }}': {
                         "neighbor": {
                             "{{ peer }}": {
-                                "peer": "{{ peer }}",
+                                "neighbor_address": "{{ peer }}",
                                 "weight": "{{ val }}",
                             }
                         }

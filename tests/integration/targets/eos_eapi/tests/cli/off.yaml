@@ -9,7 +9,6 @@
     enable_https: false
     enable_local_http: false
     enable_socket: false
-    provider: '{{ cli }}'
 
 - debug: var=eos_eapi_output
 
@@ -17,7 +16,6 @@
   arista.eos.eos_command:
     commands:
       - show management api http-commands | json
-    provider: '{{ cli }}'
 
 - debug: var=http_config
 
@@ -37,10 +35,6 @@
     enable_https: false
     enable_local_http: false
     enable_socket: false
-    provider: '{{ cli }}'
-
-- debug: var=eos_eapi_output
-  when: debug
 
 - name: Expect action to be idempotent
   assert:

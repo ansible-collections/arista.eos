@@ -48,9 +48,161 @@ Parameters
                 </td>
                 <td>
                         <div>The commands to send to the remote EOS device over the configured provider.  The resulting output from the command is returned.  If the <em>wait_for</em> argument is provided, the module is not returned until the condition is satisfied or the number of <em>retries</em> has been exceeded.</div>
-                        <div>If a command sent to the device requires answering a prompt, it is possible to pass a dict containing command, answer and prompt. Common answers are &#x27;y&#x27; or &quot;\r&quot; (carriage return, must be double quotes). Refer below examples.</div>
+                        <div>Commands may be represented either as simple strings or as dictionaries as described below. Refer to the Examples setion for some common uses.</div>
                 </td>
             </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>answer</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The answer to reply with if <em>prompt</em> is matched. The value can be a single answer or a list of answer for multiple prompts. In case the command execution results in multiple prompts the sequence of the prompt and excepted answer should be in same order.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>check_all</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>By default if any one of the prompts mentioned in <code>prompt</code> option is matched it won&#x27;t check for other prompts. This boolean flag, that when set to <em>True</em> will check for all the prompts mentioned in <code>prompt</code> option in the given order. If the option is set to <em>True</em> all the prompts should be received from remote host if not it will result in timeout.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>command</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                         / <span style="color: red">required</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>The command to send to the remote network device.  The resulting output from the command is returned, unless <em>sendonly</em> is set.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>newline</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The boolean value, that when set to false will send <em>answer</em> to the device without a trailing newline.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>output</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>text</li>
+                                    <li>json</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>How the remote device should format the command response data.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>prompt</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>A single regex pattern or a sequence of patterns to evaluate the expected prompt from <em>command</em>.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>sendonly</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>The boolean value, that when set to true will send <em>command</em> to the device but not wait for a result.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>version</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>1</li>
+                                    <li><div style="color: blue"><b>latest</b>&nbsp;&larr;</div></li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Specifies the version of the JSON response returned when <em>output=json</em>.</div>
+                </td>
+            </tr>
+
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
@@ -405,26 +557,35 @@ Examples
         - command: show version
           output: json
 
-    - name: using cli transport, check whether the switch is in maintenance mode
+    - name: check whether the switch is in maintenance mode
       arista.eos.eos_command:
         commands: show maintenance
         wait_for: result[0] contains 'Under Maintenance'
 
-    - name: using cli transport, check whether the switch is in maintenance mode using
-        json output
+    - name: check whether the switch is in maintenance mode using json output
       arista.eos.eos_command:
-        commands: show maintenance | json
+        commands:
+        - command: show maintenance
+          output: json
         wait_for: result[0].units.System.state eq 'underMaintenance'
 
-    - name: using eapi transport check whether the switch is in maintenance, with 8 retries
+    - name: check whether the switch is in maintenance, with 8 retries
         and 2 second interval between retries
       arista.eos.eos_command:
         commands: show maintenance
         wait_for: result[0]['units']['System']['state'] eq 'underMaintenance'
         interval: 2
         retries: 8
-        provider:
-          transport: eapi
+
+    - name: run a command that requires a confirmation. Note that prompt
+        takes regexes, and so strings containing characters like brackets
+        need to be escaped.
+      arista.eos.eos_command:
+        commands:
+        - command: reload power
+          prompt: \[confirm\]
+          answer: y
+          newline: false
 
 
 

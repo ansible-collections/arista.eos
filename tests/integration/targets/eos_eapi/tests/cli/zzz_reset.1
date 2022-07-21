@@ -4,14 +4,12 @@
   eos_config:
     lines: default management api http-commands
     match: none
-    provider: "{{ cli }}"
   register: eos_eapi_output
   connection: local
 
 - eos_command:
     commands:
       - show management api http-commands | json
-    provider: "{{ cli }}"
   register: http_config
   connection: local
 
@@ -26,7 +24,6 @@
   eos_config:
     lines: default management api http-commands
     match: none
-    provider: "{{ cli }}"
   register: eos_eapi_output
   connection: local
 

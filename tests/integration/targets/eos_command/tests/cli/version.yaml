@@ -1,0 +1,31 @@
+---
+- debug: msg="START cli/version.yaml on connection={{ ansible_connection }}"
+
+- name: Check support for "latest" version parameter value.
+  register: result
+  arista.eos.eos_command:
+    commands:
+      - command: "show ip route summary"
+        output: json
+        version: "latest"
+
+- assert:
+    that:
+      - result.changed == false
+      - result.stdout is defined
+      - result.stdout_lines[0].protoModelStatus is defined
+
+- name: Check support for "1" version parameter value.
+  register: result
+  arista.eos.eos_command:
+    commands:
+      - command: "show ip route summary"
+        output: json
+        version: "1"
+
+- assert:
+    that:
+      - result.changed == false
+      - result.stdout is defined
+
+- debug: msg="END cli/version.yaml"

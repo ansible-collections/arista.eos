@@ -1,0 +1,40 @@
+---
+- debug:
+    msg: Start eos_ntp_global deleted integration tests ansible_connection={{
+      ansible_connection }}
+
+- include_tasks: _populate.yaml
+
+- block:
+
+    - name: Delete given ntp_global configuration
+      become: true
+      register: result
+      arista.eos.eos_ntp_global: &deleted
+        state: deleted
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: ntp_global
+
+    - assert:
+        that:
+          - result.commands|length == 11
+          - result.changed == true
+          - ansible_facts.network_resources.ntp_global == result.after
+          - result.after == {}
+          - result.before == replaced.before
+          - result.commands|symmetric_difference(deleted.commands) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_ntp_global: *deleted
+
+    - assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+
+    - include_tasks: _remove_config.yaml

@@ -79,7 +79,7 @@ eos_argument_spec = {
         options=eos_provider_spec,
         removed_at_date="2022-06-01",
         removed_from_collection="arista.eos",
-    )
+    ),
 }
 
 
@@ -101,6 +101,31 @@ def get_connection(module):
                 conn = HttpApi(module)
         _DEVICE_CONNECTION = conn
     return _DEVICE_CONNECTION
+
+
+def transform_commands(module):
+    transform = ComplexList(
+        dict(
+            command=dict(key=True),
+            output=dict(),
+            prompt=dict(type="list"),
+            answer=dict(type="list"),
+            newline=dict(type="bool", default=True),
+            sendonly=dict(type="bool", default=False),
+            check_all=dict(type="bool", default=False),
+            version=dict(
+                type="str", default="latest", choices=["latest", "1"]
+            ),
+        ),
+        module,
+    )
+
+    return transform(module.params["commands"])
+
+
+def session_name():
+    """Generate a unique string to be used as a configuration session name."""
+    return "ansible_%d" % (time.time() * 100)
 
 
 class Cli:
@@ -393,7 +418,7 @@ class LocalEapi:
                 result = {"changed": True}
                 return result
 
-        session = "ansible_%s" % int(time.time())
+        session = session_name()
         result = {"session": session}
         commands = ["configure session %s" % session]
 
@@ -494,10 +519,12 @@ class HttpApi:
         queue = list()
         responses = list()
 
-        def run_queue(queue, output):
+        def run_queue(queue, output, version):
             try:
                 response = to_list(
-                    self._connection.send_request(queue, output=output)
+                    self._connection.send_request(
+                        queue, output=output, version=version
+                    )
                 )
             except ConnectionError as exc:
                 if check_rc:
@@ -514,6 +541,8 @@ class HttpApi:
                 command = item["command"]
                 if "output" in item:
                     cmd_output = item["output"]
+                if "version" in item:
+                    version = item["version"]
             else:
                 command = item
 
@@ -523,14 +552,14 @@ class HttpApi:
                 cmd_output = "json"
 
             if output and output != cmd_output:
-                responses.extend(run_queue(queue, output))
+                responses.extend(run_queue(queue, output, version))
                 queue = list()
 
             output = cmd_output
             queue.append(command)
 
         if queue:
-            responses.extend(run_queue(queue, output))
+            responses.extend(run_queue(queue, output, version))
 
         return responses
 
@@ -604,7 +633,7 @@ class HttpApi:
         fallback to using configure() to load the commands.  If that happens,
         there will be no returned diff or session values
         """
-        session = "ansible_%s" % int(time.time())
+        session = session_name()
         result = {"session": session}
         banner_cmd = None
         banner_input = []
@@ -692,6 +721,7 @@ def to_command(module, commands):
             newline=dict(type="bool", default=True),
             sendonly=dict(type="bool", default=False),
             check_all=dict(type="bool", default=False),
+            version=dict(type="str", default="latest"),
         ),
         module,
     )
