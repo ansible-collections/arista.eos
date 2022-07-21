@@ -556,7 +556,10 @@ class TestEosBgpglobalModule(TestEosModule):
                     "maximum_received_routes": {"count": 12000},
                     "peer": "peer2",
                     "peer_group": "peer2",
-                    "encryption_password": {"type": 0, "password": "mypassword"},
+                    "encryption_password": {
+                        "type": 0,
+                        "password": "mypassword"
+                    },
                 },
             ],
             "redistribute": [
@@ -703,7 +706,8 @@ class TestEosBgpglobalModule(TestEosModule):
                                     peer="peer2",
                                     peer_group="peer2",
                                     encryption_password=dict(
-                                        password="mypassword", type=0),
+                                        password="mypassword", type=0
+                                    ),
                                     ebgp_multihop=dict(ttl=10),
                                     enforce_first_as=True,
                                     fall_over=True,
