@@ -79,8 +79,9 @@ class TestEosBgpglobalModule(TestEosModule):
                             peer="peer2",
                             peer_group="peer2",
                             maximum_received_routes=dict(count=12000),
-                            encryption_password=dict(password="mypassword",
-                                                     type=0),
+                            encryption_password=dict(
+                                password="mypassword", type=0
+                            ),
                         ),
                     ],
                     aggregate_address=[
@@ -256,8 +257,9 @@ class TestEosBgpglobalModule(TestEosModule):
                             peer="peer2",
                             peer_group="peer2",
                             maximum_received_routes=dict(count=12000),
-                            encryption_password=dict(password="mypassword",
-                                                     type=0),
+                            encryption_password=dict(
+                                password="mypassword", type=0
+                            ),
                         ),
                     ],
                     aggregate_address=[
@@ -558,7 +560,7 @@ class TestEosBgpglobalModule(TestEosModule):
                     "peer_group": "peer2",
                     "encryption_password": {
                         "type": 0,
-                        "password": "mypassword"
+                        "password": "mypassword",
                     },
                 },
             ],
