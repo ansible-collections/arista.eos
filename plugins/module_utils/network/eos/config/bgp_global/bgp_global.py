@@ -291,6 +291,7 @@ class Bgp_global(ResourceModule):
             "neighbor.description",
             "neighbor.dont_capability_negotiate",
             "neighbor.ebgp_multihop",
+            "neighbor.encryption_password",
             "neighbor.enforce_first_as",
             "neighbor.export_localpref",
             "neighbor.fall_over",
