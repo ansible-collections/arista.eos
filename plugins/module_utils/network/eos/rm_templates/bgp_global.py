@@ -306,6 +306,10 @@ def _tmplt_bgp_neighbor(config_data):
             command += " {ttl}".format(
                 **config_data["neighbor"]["ebgp_multihop"]
             )
+    elif config_data["neighbor"].get("encryption_password"):
+        command += " password {type} {password}".format(
+            **config_data["neighbor"]["encryption_password"]
+        )
     elif config_data["neighbor"].get("enforce_first_as"):
         command += " enforce-first-as"
     elif config_data["neighbor"].get("export_localpref"):
@@ -1747,6 +1751,36 @@ class Bgp_globalTemplate(NetworkTemplate):
                                 "ebgp_multihop": {
                                     "set": "{{ True if ttl is not defined }}",
                                     "ttl": "{{ ttl }}"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+        },
+        {
+            "name": "neighbor.encryption_password",
+            "getval": re.compile(
+                r"""
+                \s*neighbor
+                \s+(?P<peer>\S+)
+                \s+password
+                \s*(?P<type>\d+)
+                \s*(?P<password>\S+)
+                """,
+                re.VERBOSE
+            ),
+            "setval": _tmplt_bgp_neighbor,
+            "compval": "neighbor.encryption_password",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbor": {
+                            "{{ peer }}": {
+                                "peer": "{{ peer }}",
+                                "encryption_password": {
+                                    "type": "{{ type }}",
+                                    "password": "{{ password }}"
                                 }
                             }
                         }

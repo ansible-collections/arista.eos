@@ -79,6 +79,9 @@ class TestEosBgpglobalModule(TestEosModule):
                             peer="peer2",
                             peer_group="peer2",
                             maximum_received_routes=dict(count=12000),
+                            encryption_password=dict(
+                                password="mypassword", type=0
+                            ),
                         ),
                     ],
                     aggregate_address=[
@@ -254,6 +257,9 @@ class TestEosBgpglobalModule(TestEosModule):
                             peer="peer2",
                             peer_group="peer2",
                             maximum_received_routes=dict(count=12000),
+                            encryption_password=dict(
+                                password="mypassword", type=0
+                            ),
                         ),
                     ],
                     aggregate_address=[
@@ -342,6 +348,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "no neighbor peer1 maximum-routes 12000",
             "no neighbor peer2 peer group",
             "no neighbor peer2 maximum-routes 12000",
+            "no neighbor peer2 password 0 mypassword",
             "no aggregate-address 1.1.1.0/24 as-set summary-only",
             "no aggregate-address 5.1.0.0/16 attribute-map attrmap",
             "no redistribute ospf match nssa-external 2",
@@ -403,6 +410,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "no neighbor peer1 maximum-routes 12000",
             "no neighbor peer2 peer group",
             "no neighbor peer2 maximum-routes 12000",
+            "no neighbor peer2 password 0 mypassword",
             "no redistribute ospf match nssa-external 2",
             "no redistribute static",
             "no redistribute rip route-map MAP01",
@@ -424,6 +432,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "no neighbor peer1 maximum-routes 12000",
             "no neighbor peer2 peer group",
             "no neighbor peer2 maximum-routes 12000",
+            "no neighbor peer2 password 0 mypassword",
             "no redistribute ospf match nssa-external 2",
             "no redistribute static",
             "no redistribute rip route-map MAP01",
@@ -549,6 +558,10 @@ class TestEosBgpglobalModule(TestEosModule):
                     "maximum_received_routes": {"count": 12000},
                     "peer": "peer2",
                     "peer_group": "peer2",
+                    "encryption_password": {
+                        "type": 0,
+                        "password": "mypassword",
+                    },
                 },
             ],
             "redistribute": [
@@ -591,6 +604,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor peer2 peer group",
             "neighbor peer2 send-community",
             "neighbor peer2 maximum-routes 12000",
+            "neighbor peer2 password 0 mypassword",
             "aggregate-address 1.1.1.0/24 as-set summary-only",
             "aggregate-address 5.1.0.0/16 attribute-map attrmap",
             "redistribute ospf match nssa-external 2",
@@ -693,6 +707,9 @@ class TestEosBgpglobalModule(TestEosModule):
                                 dict(
                                     peer="peer2",
                                     peer_group="peer2",
+                                    encryption_password=dict(
+                                        password="mypassword", type=0
+                                    ),
                                     ebgp_multihop=dict(ttl=10),
                                     enforce_first_as=True,
                                     fall_over=True,
@@ -782,6 +799,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor peer2 next-hop-self",
             "neighbor peer2 next-hop-unchanged",
             "neighbor peer2 out-delay 15",
+            "neighbor peer2 password 0 mypassword",
             "neighbor peer2 remote-as 55",
             "neighbor peer2 remove-private-as replace-as",
             "neighbor peer2 prefix-list list01 in",
