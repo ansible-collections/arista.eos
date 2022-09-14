@@ -164,6 +164,11 @@ class Cliconf(CliconfBase):
                     self.discard_changes(session)
                     raise AnsibleConnectionFailure(e.message)
 
+            # commit timer commands put the CLI out of config mode,
+            # so put it back into configure mode for subsequent commands
+            if cmd.startswith("commit timer"):
+                self.send_command("configure")
+
         resp["request"] = requests
         resp["response"] = results
         if self.supports_sessions():
