@@ -23,6 +23,14 @@ options:
     - name: ANSIBLE_EOS_USE_SESSIONS
     vars:
     - name: ansible_eos_use_sessions
+  eos_session_name:
+    type: string
+    description:
+    - Specifies if a custom session name should be used.
+    env:
+    - name: ANSIBLE_EOS_SESSION_NAME
+    vars:
+    - name: ansible_eos_session_name
 """
 
 import json
@@ -163,7 +171,11 @@ class HttpApi(HttpApiBase):
 
         session = None
         if self.supports_sessions():
-            session = session_name()
+            custom_session_name = self.get_option('ansible_eos_session_name')
+            if custom_session_name:
+                session = custom_session_name
+            else:
+                session = session_name()
             candidate = ["configure session %s" % session] + candidate
         else:
             candidate = ["configure"] + candidate
