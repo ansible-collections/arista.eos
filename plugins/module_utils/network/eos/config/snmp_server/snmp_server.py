@@ -85,7 +85,6 @@ class Snmp_server(ResourceModule):
 
     def execute_module(self):
         """Execute the module
-
         :rtype: A dictionary
         :returns: The result from module execution
         """
