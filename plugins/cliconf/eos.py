@@ -113,6 +113,75 @@ class Cliconf(CliconfBase):
         return self.send_command(cmd)
 
     @enable_mode
+    def get_session_config(
+        self, candidate=None, commit=True, replace=None, comment=None
+    ):
+
+        operations = self.get_device_operations()
+        self.check_edit_config_capability(
+            operations, candidate, commit, replace, comment
+        )
+
+        if (commit is False) and (not self.supports_sessions()):
+            raise ValueError(
+                "check mode is not supported without configuration session"
+            )
+
+        resp = {}
+        session = None
+        if self.supports_sessions():
+            session = session_name()
+            resp.update({"session": session})
+            self.send_command("configure session %s" % session)
+            if replace:
+                self.send_command("rollback clean-config")
+        else:
+            self.send_command("configure")
+
+        results = []
+        requests = []
+        multiline = False
+        for line in to_list(candidate):
+            if not isinstance(line, Mapping):
+                line = {"command": line}
+
+            cmd = line["command"]
+            if cmd == "end":
+                continue
+            if cmd.startswith("banner") or multiline:
+                multiline = True
+            elif cmd == "EOF" and multiline:
+                multiline = False
+
+            if multiline:
+                line["sendonly"] = True
+
+            if cmd != "end" and not cmd.startswith("!"):
+                try:
+                    results.append(self.send_command(**line))
+                    requests.append(cmd)
+                except AnsibleConnectionFailure as e:
+                    self.discard_changes(session)
+                    raise AnsibleConnectionFailure(e.message)
+
+        resp["request"] = requests
+        resp["response"] = results
+        if self.supports_sessions():
+            out = self.send_command("show session-config")
+            if out:
+                resp["diff"] = out.strip()
+
+            if commit:
+                self.commit()
+            else:
+                self.discard_changes(session)
+        else:
+            self.send_command("end")
+        if resp.get("diff"):
+            return resp["diff"]
+        return resp
+
+    @enable_mode
     def edit_config(
         self, candidate=None, commit=True, replace=None, comment=None
     ):

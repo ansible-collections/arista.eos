@@ -174,6 +174,9 @@ options:
       device configuration.
     - When this option is configured as C(session), the diff returned will be based
       on the configuration session.
+    - When this option is configured as C(validate_config), the module will return before
+      with the running-config before applying the intended config and after with the session
+      config after applying the intended config to the session.
     default: session
     type: str
     choices:
@@ -181,6 +184,7 @@ options:
     - running
     - intended
     - session
+    - validate_config
   diff_ignore_lines:
     description:
     - Use this argument to specify one or more lines that should be ignored during
@@ -319,6 +323,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
+    get_session_config,
     load_config,
     get_connection,
 )
@@ -388,7 +393,13 @@ def main():
             choices=["always", "never", "modified", "changed"], default="never"
         ),
         diff_against=dict(
-            choices=["startup", "session", "intended", "running"],
+            choices=[
+                "startup",
+                "session",
+                "intended",
+                "running",
+                "validate_config",
+            ],
             default="session",
         ),
         diff_ignore_lines=dict(type="list", elements="str"),
@@ -406,6 +417,7 @@ def main():
         ("replace", "block", ["lines"]),
         ("replace", "config", ["src"]),
         ("diff_against", "intended", ["intended_config"]),
+        ("diff_against", "validate_config", ["intended_config"]),
     ]
 
     module = AnsibleModule(
@@ -426,10 +438,9 @@ def main():
     contents = None
     flags = ["all"] if module.params["defaults"] else []
     connection = get_connection(module)
-
     # Refuse to diff_against: session if sessions are disabled
     if (
-        module.params["diff_against"] == "session"
+        module.params["diff_against"] in ["session", "validate_config"]
         and not connection.supports_sessions
     ):
         module.fail_json(
@@ -496,7 +507,6 @@ def main():
 
     running_config = module.params["running_config"]
     startup_config = None
-
     if module.params["save_when"] == "always":
         save_config(module, result)
     elif module.params["save_when"] == "modified":
@@ -520,7 +530,6 @@ def main():
 
     elif module.params["save_when"] == "changed" and result["changed"]:
         save_config(module, result)
-
     if module._diff:
         if not running_config:
             output = run_commands(
@@ -554,7 +563,7 @@ def main():
             else:
                 contents = startup_config.config_text
 
-        elif module.params["diff_against"] == "intended":
+        elif module.params["diff_against"] in ["intended", "validate_config"]:
             contents = module.params["intended_config"]
 
         if contents is not None:
@@ -569,10 +578,21 @@ def main():
                 elif module.params["diff_against"] in ("startup", "running"):
                     before = base_config
                     after = running_config
+                elif module.params["diff_against"] == "validate_config":
+                    before = running = get_running_config(
+                        module, None, flags=flags
+                    )
+                    replace = module.params["replace"] == "config"
+                    after = get_session_config(
+                        module,
+                        contents.split("\n"),
+                        replace=replace,
+                        commit=False,
+                    )
 
                 result.update(
                     {
-                        "changed": True,
+                        "changed": False,
                         "diff": {"before": str(before), "after": str(after)},
                     }
                 )
