@@ -5,6 +5,15 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v5.1.0
+======
+
+Minor Changes
+-------------
+
+- Add support for setting encryption_password for BGP neighbors in bgp_global module
+- Add validate_config option to diff_against in eos_config
+
 v5.0.1
 ======
 
@@ -96,7 +105,7 @@ Breaking Changes / Porting Guide
 New Modules
 -----------
 
-- eos_snmp_server - Manages snmp server resource module
+- eos_snmp_server - Manages snmp_server resource module
 
 v3.1.0
 ======
@@ -228,6 +237,11 @@ Minor Changes
 - Move eos_config idempotent warning message with the task response under `warnings` key if `changed` is `True`
 - Re-use device_info dictionary in cliconf
 
+Deprecated Features
+-------------------
+
+- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
+
 Bugfixes
 --------
 
@@ -237,11 +251,6 @@ Bugfixes
 
 v1.3.0
 ======
-
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
 
 Bugfixes
 --------
@@ -315,11 +324,6 @@ Bugfixes
 v1.0.2
 ======
 
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
-
 v1.0.1
 ======
 
@@ -360,7 +364,7 @@ New Modules
 - eos_acl_interfaces - ACL interfaces resource module
 - eos_acls - ACLs resource module
 - eos_banner - Manage multiline banners on Arista EOS devices
-- eos_bgp - Configure global BGP protocol settings on Arista EOS.
+- eos_bgp - (deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.
 - eos_command - Run arbitrary commands on an Arista EOS device
 - eos_config - Manage Arista EOS configuration sections
 - eos_eapi - Manage and configure Arista EOS eAPI.

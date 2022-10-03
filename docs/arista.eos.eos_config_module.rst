@@ -166,6 +166,7 @@ Parameters
                                     <li>running</li>
                                     <li>intended</li>
                                     <li><div style="color: blue"><b>session</b>&nbsp;&larr;</div></li>
+                                    <li>validate_config</li>
                         </ul>
                 </td>
                 <td>
@@ -174,6 +175,7 @@ Parameters
                         <div>When this option is configured as <em>intended</em>, the module will return the diff of the running-config against the configuration provided in the <code>intended_config</code> argument.</div>
                         <div>When this option is configured as <em>running</em>, the module will return the before and after diff of the running-config with respect to any changes made to the device configuration.</div>
                         <div>When this option is configured as <code>session</code>, the diff returned will be based on the configuration session.</div>
+                        <div>When this option is configured as <code>validate_config</code>, the module will return before with the running-config before applying the intended config and after with the session config after applying the intended config to the session.</div>
                 </td>
             </tr>
             <tr>

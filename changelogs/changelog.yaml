@@ -11,7 +11,8 @@ releases:
     - description: Manage multiline banners on Arista EOS devices
       name: eos_banner
       namespace: ''
-    - description: Configure global BGP protocol settings on Arista EOS.
+    - description: (deprecated, removed after 2023-01-29) Configure global BGP protocol
+        settings on Arista EOS.
       name: eos_bgp
       namespace: ''
     - description: Run arbitrary commands on an Arista EOS device
@@ -190,7 +191,7 @@ releases:
     - 125-ospf_interfaces_resource_module.yaml
     - 127-drop-local-connection-testing.yaml
     modules:
-    - description: ospf_interfaces resource module
+    - description: OSPF Interfaces Resource Module.
       name: eos_ospf_interfaces
       namespace: ''
     release_date: '2020-10-30'
@@ -217,10 +218,10 @@ releases:
     - requires-ansible.yaml
     - update_docs_default_values.yaml
     modules:
-    - description: bgp_address_family resource module
+    - description: Manages BGP address family resource module
       name: eos_bgp_address_family
       namespace: ''
-    - description: bgp_global resource module
+    - description: Manages BGP global resource module
       name: eos_bgp_global
       namespace: ''
     release_date: '2021-02-01'
@@ -407,7 +408,7 @@ releases:
     - remove_2.6_ignores.yml
     - support_version_parameter.yaml
     modules:
-    - description: Manages snmp server resource module
+    - description: Manages snmp_server resource module
       name: eos_snmp_server
       namespace: ''
     release_date: '2021-12-07'
@@ -495,3 +496,14 @@ releases:
     - normalize_ntp_server_source.yaml
     - pre-commit.yaml
     release_date: '2022-05-25'
+  5.1.0:
+    changes:
+      minor_changes:
+      - Add support for setting encryption_password for BGP neighbors in bgp_global
+        module
+      - Add validate_config option to diff_against in eos_config
+    fragments:
+    - bgp_global_neighbor_password.yml
+    - diff_against_validate_config.yaml
+    - github_actions.yaml
+    release_date: '2022-10-03'
