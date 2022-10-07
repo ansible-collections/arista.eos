@@ -5,6 +5,7 @@ flake8
 mock ; python_version < '3.5'
 pexpect
 pytest-xdist
+pylint==2.15.0
 yamllint
 rstcheck<4,>=3
 git+https://github.com/ansible-community/pytest-ansible-units.git
