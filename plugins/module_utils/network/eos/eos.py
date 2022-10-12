@@ -35,7 +35,6 @@ import os
 import time
 
 from ansible.module_utils._text import to_text
-from ansible.module_utils.basic import env_fallback
 from ansible.module_utils.connection import Connection, ConnectionError
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.config import (
     NetworkConfig,
@@ -45,7 +44,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
     ComplexList,
 )
-from ansible.module_utils.urls import fetch_url
 
 _DEVICE_CONNECTION = None
 
@@ -53,15 +51,12 @@ _DEVICE_CONNECTION = None
 def get_connection(module):
     global _DEVICE_CONNECTION
     if not _DEVICE_CONNECTION:
-        if is_local_eapi(module):
-            conn = LocalEapi(module)
-        else:
-            connection_proxy = Connection(module._socket_path)
-            cap = json.loads(connection_proxy.get_capabilities())
-            if cap["network_api"] == "cliconf":
-                conn = Cli(module)
-            elif cap["network_api"] == "eapi":
-                conn = HttpApi(module)
+        connection_proxy = Connection(module._socket_path)
+        cap = json.loads(connection_proxy.get_capabilities())
+        if cap["network_api"] == "cliconf":
+            conn = Cli(module)
+        elif cap["network_api"] == "eapi":
+            conn = HttpApi(module)
         _DEVICE_CONNECTION = conn
     return _DEVICE_CONNECTION
 
@@ -497,15 +492,10 @@ def is_json(cmd):
 
 
 def to_command(module, commands):
-    if is_local_eapi(module):
-        default_output = "json"
-    else:
-        default_output = "text"
-
     transform = ComplexList(
         dict(
             command=dict(key=True),
-            output=dict(default=default_output),
+            output=dict(type="str", default="text"),
             prompt=dict(type="list"),
             answer=dict(type="list"),
             newline=dict(type="bool", default=True),
