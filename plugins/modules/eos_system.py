@@ -137,9 +137,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
     get_config,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 
 _CONFIGURED_VRFS = None
 
@@ -343,8 +340,6 @@ def main():
         name_servers=dict(type="list", elements="str"),
         state=dict(default="present", choices=["present", "absent"]),
     )
-
-    argument_spec.update(eos_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True

@@ -176,9 +176,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
 )
 from ansible.module_utils.six import iteritems
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 
 
 def validate_http_port(value, module):
@@ -394,8 +391,6 @@ def main():
         config=dict(),
         state=dict(default="started", choices=["stopped", "started"]),
     )
-
-    argument_spec.update(eos_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True

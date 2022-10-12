@@ -233,9 +233,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     run_commands,
     transform_commands,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 
 
 def parse_commands(module, warnings):
@@ -269,8 +266,6 @@ def main():
         retries=dict(default=10, type="int"),
         interval=dict(default=1, type="int"),
     )
-
-    argument_spec.update(eos_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True

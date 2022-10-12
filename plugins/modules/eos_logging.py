@@ -178,9 +178,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     get_config,
     load_config,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 
 
 DEST_GROUP = ["on", "host", "console", "monitor", "buffered"]
@@ -474,7 +471,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(eos_argument_spec)
 
     required_if = [("dest", "host", ["name"])]
 

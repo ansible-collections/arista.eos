@@ -93,10 +93,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
     run_commands,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-    is_local_eapi,
-)
 from ansible.module_utils.six import string_types
 from ansible.module_utils._text import to_text
 
@@ -142,20 +138,7 @@ def map_config_to_obj(module):
     output = run_commands(module, ["show banner %s" % module.params["banner"]])
     obj = {"banner": module.params["banner"], "state": "absent"}
     if output:
-        if is_local_eapi(module):
-            # On EAPI we need to extract the banner text from dict key
-            # 'loginBanner'
-            if module.params["banner"] == "login":
-                banner_response_key = "loginBanner"
-            else:
-                banner_response_key = "motd"
-            if (
-                isinstance(output[0], dict)
-                and banner_response_key in output[0].keys()
-            ):
-                obj["text"] = output[0]
-        else:
-            obj["text"] = output[0]
+        obj["text"] = output[0]
         obj["state"] = "present"
     return obj
 
@@ -179,8 +162,6 @@ def main():
         text=dict(),
         state=dict(default="present", choices=["present", "absent"]),
     )
-
-    argument_spec.update(eos_argument_spec)
 
     required_if = [("state", "present", ("text",))]
 

@@ -178,9 +178,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
     run_commands,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 
 
 def search_obj_in_list(name, lst):
@@ -388,7 +385,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(eos_argument_spec)
 
     required_one_of = [["name", "aggregate"]]
     mutually_exclusive = [["name", "aggregate"]]

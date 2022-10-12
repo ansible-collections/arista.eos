@@ -215,9 +215,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
     run_commands,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 from ansible.module_utils.six import iteritems
 
 
@@ -440,7 +437,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(eos_argument_spec)
     mutually_exclusive = [("name", "aggregate")]
 
     module = AnsibleModule(
