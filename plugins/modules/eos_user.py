@@ -48,13 +48,11 @@ options:
         description:
         - The username to be configured on the remote Arista EOS device.  This argument
           accepts a stringv value and is mutually exclusive with the C(aggregate) argument.
-          Please note that this option is not same as C(provider username).
         type: str
       configured_password:
         description:
         - The password to be configured on the remote Arista EOS device. The password
-          needs to be provided in clear and it will be encrypted on the device. Please
-          note that this option is not same as C(provider password).
+          needs to be provided in clear and it will be encrypted on the device.
         type: str
       update_password:
         description:
@@ -102,13 +100,11 @@ options:
     description:
     - The username to be configured on the remote Arista EOS device.  This argument
       accepts a stringv value and is mutually exclusive with the C(aggregate) argument.
-      Please note that this option is not same as C(provider username).
     type: str
   configured_password:
     description:
     - The password to be configured on the remote Arista EOS device. The password
-      needs to be provided in clear and it will be encrypted on the device. Please
-      note that this option is not same as C(provider password).
+      needs to be provided in clear and it will be encrypted on the device.
     type: str
   update_password:
     description:

@@ -63,7 +63,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The password to be configured on the remote Arista EOS device. The password needs to be provided in clear and it will be encrypted on the device. Please note that this option is not same as <code>provider password</code>.</div>
+                        <div>The password to be configured on the remote Arista EOS device. The password needs to be provided in clear and it will be encrypted on the device.</div>
                 </td>
             </tr>
             <tr>
@@ -79,7 +79,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The username to be configured on the remote Arista EOS device.  This argument accepts a stringv value and is mutually exclusive with the <code>aggregate</code> argument. Please note that this option is not same as <code>provider username</code>.</div>
+                        <div>The username to be configured on the remote Arista EOS device.  This argument accepts a stringv value and is mutually exclusive with the <code>aggregate</code> argument.</div>
                 </td>
             </tr>
             <tr>
@@ -203,7 +203,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The password to be configured on the remote Arista EOS device. The password needs to be provided in clear and it will be encrypted on the device. Please note that this option is not same as <code>provider password</code>.</div>
+                        <div>The password to be configured on the remote Arista EOS device. The password needs to be provided in clear and it will be encrypted on the device.</div>
                 </td>
             </tr>
             <tr>
@@ -218,7 +218,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The username to be configured on the remote Arista EOS device.  This argument accepts a stringv value and is mutually exclusive with the <code>aggregate</code> argument. Please note that this option is not same as <code>provider username</code>.</div>
+                        <div>The username to be configured on the remote Arista EOS device.  This argument accepts a stringv value and is mutually exclusive with the <code>aggregate</code> argument.</div>
                 </td>
             </tr>
             <tr>
