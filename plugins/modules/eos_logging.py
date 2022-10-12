@@ -115,8 +115,6 @@ options:
     choices:
     - present
     - absent
-extends_documentation_fragment:
-- arista.eos.eos
 """
 
 EXAMPLES = """

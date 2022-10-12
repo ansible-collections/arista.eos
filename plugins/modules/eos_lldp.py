@@ -31,8 +31,6 @@ options:
     - absent
     - enabled
     - disabled
-extends_documentation_fragment:
-- arista.eos.eos
 """
 
 EXAMPLES = """

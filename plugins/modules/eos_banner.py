@@ -28,8 +28,6 @@ description:
 - This will configure both login and motd banners on remote devices running Arista
   EOS.  It allows playbooks to add or remote banner text from the active running configuration.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
 - Tested against Arista EOS 4.24.6F
 options:

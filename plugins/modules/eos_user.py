@@ -30,8 +30,6 @@ description:
   the collection of usernames in the current running config.  It also supports purging
   usernames from the configuration that are not explicitly defined.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
 - Tested against Arista EOS 4.24.6F
 options:

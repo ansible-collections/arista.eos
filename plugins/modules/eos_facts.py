@@ -20,8 +20,6 @@ description:
   facts module will always collect a base set of facts from the device and can enable
   or disable collection of additional facts.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 options:
   gather_subset:
     description:

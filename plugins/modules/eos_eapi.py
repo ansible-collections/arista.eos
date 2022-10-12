@@ -34,8 +34,6 @@ description:
   listed below to override the default configuration.
 - Requires EOS v4.12 or greater.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 options:
   http:
     description:

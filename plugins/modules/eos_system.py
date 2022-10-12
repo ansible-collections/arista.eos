@@ -29,8 +29,6 @@ description:
   EOS devices.  It provides an option to configure host system parameters or remove
   those parameters from the device active configuration.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
 - Tested against Arista EOS 4.24.6F
 options:

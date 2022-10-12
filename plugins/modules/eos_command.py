@@ -30,8 +30,6 @@ description:
   for a specific condition before returning or timing out if the condition is not
   met.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
 - Tested against Arista EOS 4.24.6F
 options:

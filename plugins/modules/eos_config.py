@@ -29,8 +29,6 @@ description:
   into sections.  This module provides an implementation for working with EOS configuration
   sections in a deterministic way.  This module works with either CLI or eAPI transports.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
 - Tested against Arista EOS 4.24.6F
 - Abbreviated commands are NOT idempotent, see
