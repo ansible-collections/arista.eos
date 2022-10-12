@@ -47,7 +47,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The commands to send to the remote EOS device over the configured provider.  The resulting output from the command is returned.  If the <em>wait_for</em> argument is provided, the module is not returned until the condition is satisfied or the number of <em>retries</em> has been exceeded.</div>
+                        <div>The commands to send to the remote EOS device. The resulting output from the command is returned.  If the <em>wait_for</em> argument is provided, the module is not returned until the condition is satisfied or the number of <em>retries</em> has been exceeded.</div>
                         <div>Commands may be represented either as simple strings or as dictionaries as described below. Refer to the Examples setion for some common uses.</div>
                 </td>
             </tr>

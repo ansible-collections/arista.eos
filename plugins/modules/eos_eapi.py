@@ -181,15 +181,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
 )
 
 
-def check_transport(module):
-    transport = (module.params["provider"] or {}).get("transport")
-
-    if transport == "eapi":
-        module.fail_json(
-            msg="eos_eapi module is only supported over cli transport"
-        )
-
-
 def validate_http_port(value, module):
     if not 1 <= value <= 65535:
         module.fail_json(msg="http_port must be between 1 and 65535")
@@ -409,8 +400,6 @@ def main():
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True
     )
-
-    check_transport(module)
 
     result = {"changed": False}
 

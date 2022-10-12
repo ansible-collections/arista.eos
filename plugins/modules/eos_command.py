@@ -35,7 +35,7 @@ notes:
 options:
   commands:
     description:
-    - The commands to send to the remote EOS device over the configured provider.  The
+    - The commands to send to the remote EOS device. The
       resulting output from the command is returned.  If the I(wait_for) argument
       is provided, the module is not returned until the condition is satisfied or
       the number of I(retries) has been exceeded.
