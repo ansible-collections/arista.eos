@@ -5,6 +5,27 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v6.0.0
+======
+
+Major Changes
+-------------
+
+- Remove following EOS dprecated modules
+- Use of connection: local and the provider option are no longer valid on any modules in this collection.
+- eos_interface
+- eos_l2_interface
+- eos_l3_interface
+- eos_linkagg
+- eos_static_route
+- eos_vlan
+
+Minor Changes
+-------------
+
+- Add support for setting encryption_password for BGP neighbors in bgp_global module
+- Add validate_config option to diff_against in eos_config
+
 v5.0.1
 ======
 
@@ -96,7 +117,7 @@ Breaking Changes / Porting Guide
 New Modules
 -----------
 
-- eos_snmp_server - Manages snmp server resource module
+- eos_snmp_server - Manages snmp_server resource module
 
 v3.1.0
 ======
@@ -238,11 +259,6 @@ Bugfixes
 v1.3.0
 ======
 
-Deprecated Features
--------------------
-
-- Deprecated `eos_bgp` modules in favor of `eos_bgp_global` and `eos_bgp_address_family` resource module.
-
 Bugfixes
 --------
 
@@ -257,8 +273,8 @@ Bugfixes
 New Modules
 -----------
 
-- eos_bgp_address_family - bgp_address_family resource module
-- eos_bgp_global - bgp_global resource module
+- eos_bgp_address_family - Manages BGP address family resource module
+- eos_bgp_global - Manages BGP global resource module
 
 v1.2.0
 ======
@@ -279,7 +295,7 @@ Bugfixes
 New Modules
 -----------
 
-- eos_ospf_interfaces - ospf_interfaces resource module
+- eos_ospf_interfaces - OSPF Interfaces Resource Module.
 
 v1.1.0
 ======
@@ -314,11 +330,6 @@ Bugfixes
 
 v1.0.2
 ======
-
-Release Summary
----------------
-
-- rereleasing 1.0.1 with updated changelog.
 
 v1.0.1
 ======
@@ -360,30 +371,24 @@ New Modules
 - eos_acl_interfaces - ACL interfaces resource module
 - eos_acls - ACLs resource module
 - eos_banner - Manage multiline banners on Arista EOS devices
-- eos_bgp - Configure global BGP protocol settings on Arista EOS.
+- eos_bgp - (deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.
 - eos_command - Run arbitrary commands on an Arista EOS device
 - eos_config - Manage Arista EOS configuration sections
 - eos_eapi - Manage and configure Arista EOS eAPI.
 - eos_facts - Collect facts from remote devices running Arista EOS
-- eos_interface - (deprecated, removed after 2022-06-01) Manage Interface on Arista EOS network devices
 - eos_interfaces - Interfaces resource module
-- eos_l2_interface - (deprecated, removed after 2022-06-01) Manage L2 interfaces on Arista EOS network devices.
 - eos_l2_interfaces - L2 interfaces resource module
-- eos_l3_interface - (deprecated, removed after 2022-06-01) Manage L3 interfaces on Arista EOS network devices.
 - eos_l3_interfaces - L3 interfaces resource module
 - eos_lacp - LACP resource module
 - eos_lacp_interfaces - LACP interfaces resource module
 - eos_lag_interfaces - LAG interfaces resource module
-- eos_linkagg - (deprecated, removed after 2022-06-01) Manage link aggregation groups on Arista EOS network devices
 - eos_lldp - Manage LLDP configuration on Arista EOS network devices
 - eos_lldp_global - LLDP resource module
 - eos_lldp_interfaces - LLDP interfaces resource module
 - eos_logging - Manage logging on network devices
 - eos_ospfv2 - OSPFv2 resource module
-- eos_static_route - (deprecated, removed after 2022-06-01) Manage static IP routes on Arista EOS network devices
 - eos_static_routes - Static routes resource module
 - eos_system - Manage the system attributes on Arista EOS devices
 - eos_user - Manage the collection of local users on EOS devices
-- eos_vlan - (deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS network devices
 - eos_vlans - VLANs resource module
 - eos_vrf - Manage VRFs on Arista EOS network devices
