@@ -1,9 +1,0 @@
----
-major_changes:
-  - Remove following EOS dprecated modules
-  - eos_interface
-  - eos_l2_interface
-  - eos_l3_interface
-  - eos_linkagg
-  - eos_static_route
-  - eos_vlan

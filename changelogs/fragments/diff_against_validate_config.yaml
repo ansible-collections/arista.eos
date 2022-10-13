@@ -1,3 +1,0 @@
----
-minor_changes:
-  - Add validate_config option to diff_against in eos_config

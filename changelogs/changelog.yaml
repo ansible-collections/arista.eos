@@ -11,7 +11,8 @@ releases:
     - description: Manage multiline banners on Arista EOS devices
       name: eos_banner
       namespace: ''
-    - description: Configure global BGP protocol settings on Arista EOS.
+    - description: (deprecated, removed after 2023-01-29) Configure global BGP protocol
+        settings on Arista EOS.
       name: eos_bgp
       namespace: ''
     - description: Run arbitrary commands on an Arista EOS device
@@ -26,23 +27,11 @@ releases:
     - description: Collect facts from remote devices running Arista EOS
       name: eos_facts
       namespace: ''
-    - description: (deprecated, removed after 2022-06-01) Manage Interface on Arista
-        EOS network devices
-      name: eos_interface
-      namespace: ''
     - description: Interfaces resource module
       name: eos_interfaces
       namespace: ''
-    - description: (deprecated, removed after 2022-06-01) Manage L2 interfaces on
-        Arista EOS network devices.
-      name: eos_l2_interface
-      namespace: ''
     - description: L2 interfaces resource module
       name: eos_l2_interfaces
-      namespace: ''
-    - description: (deprecated, removed after 2022-06-01) Manage L3 interfaces on
-        Arista EOS network devices.
-      name: eos_l3_interface
       namespace: ''
     - description: L3 interfaces resource module
       name: eos_l3_interfaces
@@ -55,10 +44,6 @@ releases:
       namespace: ''
     - description: LAG interfaces resource module
       name: eos_lag_interfaces
-      namespace: ''
-    - description: (deprecated, removed after 2022-06-01) Manage link aggregation
-        groups on Arista EOS network devices
-      name: eos_linkagg
       namespace: ''
     - description: Manage LLDP configuration on Arista EOS network devices
       name: eos_lldp
@@ -75,10 +60,6 @@ releases:
     - description: OSPFv2 resource module
       name: eos_ospfv2
       namespace: ''
-    - description: (deprecated, removed after 2022-06-01) Manage static IP routes
-        on Arista EOS network devices
-      name: eos_static_route
-      namespace: ''
     - description: Static routes resource module
       name: eos_static_routes
       namespace: ''
@@ -87,10 +68,6 @@ releases:
       namespace: ''
     - description: Manage the collection of local users on EOS devices
       name: eos_user
-      namespace: ''
-    - description: (deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS
-        network devices
-      name: eos_vlan
       namespace: ''
     - description: VLANs resource module
       name: eos_vlans
@@ -132,9 +109,6 @@ releases:
     - fix_src_backup_with_module_alias.yaml
     release_date: '2020-07-31'
   1.0.2:
-    changes:
-      release_summary:
-        - rereleasing 1.0.1 with updated changelog.
     fragments:
     - 1.0.2.yaml
     release_date: '2020-08-06'
@@ -190,7 +164,7 @@ releases:
     - 125-ospf_interfaces_resource_module.yaml
     - 127-drop-local-connection-testing.yaml
     modules:
-    - description: ospf_interfaces resource module
+    - description: OSPF Interfaces Resource Module.
       name: eos_ospf_interfaces
       namespace: ''
     release_date: '2020-10-30'
@@ -217,10 +191,10 @@ releases:
     - requires-ansible.yaml
     - update_docs_default_values.yaml
     modules:
-    - description: bgp_address_family resource module
+    - description: Manages BGP address family resource module
       name: eos_bgp_address_family
       namespace: ''
-    - description: bgp_global resource module
+    - description: Manages BGP global resource module
       name: eos_bgp_global
       namespace: ''
     release_date: '2021-02-01'
@@ -407,7 +381,7 @@ releases:
     - remove_2.6_ignores.yml
     - support_version_parameter.yaml
     modules:
-    - description: Manages snmp server resource module
+    - description: Manages snmp_server resource module
       name: eos_snmp_server
       namespace: ''
     release_date: '2021-12-07'
@@ -495,3 +469,28 @@ releases:
     - normalize_ntp_server_source.yaml
     - pre-commit.yaml
     release_date: '2022-05-25'
+  6.0.0:
+    changes:
+      major_changes:
+      - Remove following EOS dprecated modules
+      - 'Use of connection: local and the provider option are no longer valid on any
+        modules in this collection.'
+      - eos_interface
+      - eos_l2_interface
+      - eos_l3_interface
+      - eos_linkagg
+      - eos_static_route
+      - eos_vlan
+      minor_changes:
+      - Add support for setting encryption_password for BGP neighbors in bgp_global
+        module
+      - Add validate_config option to diff_against in eos_config
+    fragments:
+    - bgp_global_neighbor_password.yml
+    - diff_against_validate_config.yaml
+    - github_actions.yaml
+    - net_remove.yaml
+    - remove_deprecated_modules.yaml
+    - remove_provider.yaml
+    - sanity.yaml
+    release_date: '2022-10-13'
