@@ -25,6 +25,8 @@ import sys
 import copy
 
 from ansible import constants as C
+from ansible.module_utils._text import to_text
+from ansible.module_utils.connection import Connection, ConnectionError
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     eos_provider_spec,
 )
@@ -48,6 +50,17 @@ class ActionModule(ActionNetworkModule):
             True if module_name in ["eos_config", "config"] else False
         )
         persistent_connection = self._play_context.connection.split(".")[-1]
+
+        conn = Connection(self._connection.socket_path)
+        try:
+            conn.load_platform_plugins('arista.eos.eos')
+            conn.set_options(var_options=task_vars)
+        except ConnectionError as exc:
+            if "Method not found" in to_text(exc):
+                display.vvvv('load_platform_plugins not defined')
+            else:
+                raise
+    
         warnings = []
 
         if persistent_connection in ("network_cli", "httpapi"):
