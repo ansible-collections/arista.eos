@@ -30,8 +30,6 @@ description:
   the collection of usernames in the current running config.  It also supports purging
   usernames from the configuration that are not explicitly defined.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
 - Tested against Arista EOS 4.24.6F
 options:
@@ -50,13 +48,11 @@ options:
         description:
         - The username to be configured on the remote Arista EOS device.  This argument
           accepts a stringv value and is mutually exclusive with the C(aggregate) argument.
-          Please note that this option is not same as C(provider username).
         type: str
       configured_password:
         description:
         - The password to be configured on the remote Arista EOS device. The password
-          needs to be provided in clear and it will be encrypted on the device. Please
-          note that this option is not same as C(provider password).
+          needs to be provided in clear and it will be encrypted on the device.
         type: str
       update_password:
         description:
@@ -104,13 +100,11 @@ options:
     description:
     - The username to be configured on the remote Arista EOS device.  This argument
       accepts a stringv value and is mutually exclusive with the C(aggregate) argument.
-      Please note that this option is not same as C(provider username).
     type: str
   configured_password:
     description:
     - The password to be configured on the remote Arista EOS device. The password
-      needs to be provided in clear and it will be encrypted on the device. Please
-      note that this option is not same as C(provider password).
+      needs to be provided in clear and it will be encrypted on the device.
     type: str
   update_password:
     description:
@@ -220,9 +214,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     get_config,
     load_config,
     run_commands,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
 )
 from ansible.module_utils.six import iteritems
 
@@ -446,7 +437,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(eos_argument_spec)
     mutually_exclusive = [("name", "aggregate")]
 
     module = AnsibleModule(

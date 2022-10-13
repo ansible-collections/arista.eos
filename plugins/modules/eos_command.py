@@ -30,14 +30,12 @@ description:
   for a specific condition before returning or timing out if the condition is not
   met.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
 - Tested against Arista EOS 4.24.6F
 options:
   commands:
     description:
-    - The commands to send to the remote EOS device over the configured provider.  The
+    - The commands to send to the remote EOS device. The
       resulting output from the command is returned.  If the I(wait_for) argument
       is provided, the module is not returned until the condition is satisfied or
       the number of I(retries) has been exceeded.
@@ -235,9 +233,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     run_commands,
     transform_commands,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 
 
 def parse_commands(module, warnings):
@@ -271,8 +266,6 @@ def main():
         retries=dict(default=10, type="int"),
         interval=dict(default=1, type="int"),
     )
-
-    argument_spec.update(eos_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True

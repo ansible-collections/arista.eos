@@ -25,9 +25,6 @@ from ansible_collections.arista.eos.tests.unit.modules.utils import (
 )
 from .eos_module import TestEosModule, load_fixture
 
-CLI = dict(transport="cli")
-EAPI = dict(transport="eapi")
-
 
 class TestEosBannerModule(TestEosModule):
 
@@ -69,21 +66,17 @@ class TestEosBannerModule(TestEosModule):
         self.load_config.return_value = dict(diff=None, session="session")
 
     def test_eos_banner_create_with_cli_transport(self):
-        set_module_args(
-            dict(banner="login", text="test\nbanner\nstring", provider=CLI)
-        )
+        set_module_args(dict(banner="login", text="test\nbanner\nstring"))
         commands = ["banner login", "test", "banner", "string", "EOF"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_banner_remove_with_cli_transport(self):
-        set_module_args(dict(banner="login", state="absent", provider=CLI))
+        set_module_args(dict(banner="login", state="absent"))
         commands = ["no banner login"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_banner_create_with_eapi_transport(self):
-        set_module_args(
-            dict(banner="login", text="test\nbanner\nstring", provider=EAPI)
-        )
+        set_module_args(dict(banner="login", text="test\nbanner\nstring"))
         commands = ["banner login"]
         inputs = ["test\nbanner\nstring"]
         self.execute_module(
@@ -91,16 +84,16 @@ class TestEosBannerModule(TestEosModule):
         )
 
     def test_eos_banner_remove_with_eapi_transport(self):
-        set_module_args(dict(banner="login", state="absent", provider=EAPI))
+        set_module_args(dict(banner="login", state="absent"))
         commands = ["no banner login"]
         self.execute_module(changed=True, commands=commands, transport="eapi")
 
     def test_eos_banner_nochange_with_cli_transport(self):
         banner_text = load_fixture("eos_banner_show_banner.txt").strip()
-        set_module_args(dict(banner="login", text=banner_text, provider=CLI))
+        set_module_args(dict(banner="login", text=banner_text))
         self.execute_module()
 
     def test_eos_banner_nochange_with_eapi_transport(self):
         banner_text = load_fixture("eos_banner_show_banner.txt").strip()
-        set_module_args(dict(banner="login", text=banner_text, provider=EAPI))
+        set_module_args(dict(banner="login", text=banner_text))
         self.execute_module(transport="eapi")

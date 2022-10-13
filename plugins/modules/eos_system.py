@@ -29,8 +29,6 @@ description:
   EOS devices.  It provides an option to configure host system parameters or remove
   those parameters from the device active configuration.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
 - Tested against Arista EOS 4.24.6F
 options:
@@ -138,9 +136,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     load_config,
     get_config,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
 )
 
 _CONFIGURED_VRFS = None
@@ -345,8 +340,6 @@ def main():
         name_servers=dict(type="list", elements="str"),
         state=dict(default="present", choices=["present", "absent"]),
     )
-
-    argument_spec.update(eos_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True

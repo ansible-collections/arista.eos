@@ -1,6 +1,6 @@
 ---
-- debug: msg="START cli/misc_tests.yaml on connection={{ ansible_connection }}"
-
+- debug:
+    msg: "START cli/misc_tests.yaml on connection={{ ansible_connection }}"
 
 # test become and unbecome
 - block:
@@ -20,9 +20,3 @@
       arista.eos.eos_command:
         commands: show uptime
       become: false
-
-    - name: wrong transport specified in provider
-      arista.eos.eos_command:
-        commands: show version
-
-  when: "ansible_connection != 'local'"
