@@ -118,8 +118,6 @@ options:
     choices:
     - present
     - absent
-extends_documentation_fragment:
-- arista.eos.eos
 """
 
 EXAMPLES = """
@@ -179,9 +177,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     load_config,
     run_commands,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
 )
 
 
@@ -390,7 +385,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(eos_argument_spec)
 
     required_one_of = [["name", "aggregate"]]
     mutually_exclusive = [["name", "aggregate"]]

@@ -29,8 +29,6 @@ description:
   into sections.  This module provides an implementation for working with EOS configuration
   sections in a deterministic way.  This module works with either CLI or eAPI transports.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
 - Tested against Arista EOS 4.24.6F
 - Abbreviated commands are NOT idempotent, see
@@ -330,9 +328,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     run_commands,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 
 
 def get_candidate(module):
@@ -406,8 +401,6 @@ def main():
         running_config=dict(aliases=["config"]),
         intended_config=dict(),
     )
-
-    argument_spec.update(eos_argument_spec)
 
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 

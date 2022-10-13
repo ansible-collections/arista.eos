@@ -31,8 +31,6 @@ options:
     - absent
     - enabled
     - disabled
-extends_documentation_fragment:
-- arista.eos.eos
 """
 
 EXAMPLES = """
@@ -58,9 +56,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     get_config,
     load_config,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 
 
 def has_lldp(module):
@@ -81,8 +76,6 @@ def main():
             choices=["present", "absent", "enabled", "disabled"],
         )
     )
-
-    argument_spec.update(eos_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True

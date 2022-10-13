@@ -34,8 +34,6 @@ description:
   listed below to override the default configuration.
 - Requires EOS v4.12 or greater.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 options:
   http:
     description:
@@ -178,18 +176,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
 )
 from ansible.module_utils.six import iteritems
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
-
-
-def check_transport(module):
-    transport = (module.params["provider"] or {}).get("transport")
-
-    if transport == "eapi":
-        module.fail_json(
-            msg="eos_eapi module is only supported over cli transport"
-        )
 
 
 def validate_http_port(value, module):
@@ -406,13 +392,9 @@ def main():
         state=dict(default="started", choices=["stopped", "started"]),
     )
 
-    argument_spec.update(eos_argument_spec)
-
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True
     )
-
-    check_transport(module)
 
     result = {"changed": False}
 

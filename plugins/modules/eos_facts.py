@@ -20,8 +20,6 @@ description:
   facts module will always collect a base set of facts from the device and can enable
   or disable collection of additional facts.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 options:
   gather_subset:
     description:
@@ -178,9 +176,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts
     Facts,
     FACT_RESOURCE_SUBSETS,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
 
 
 def main():
@@ -190,7 +185,6 @@ def main():
     :returns: ansible_facts
     """
     argument_spec = FactsArgs.argument_spec
-    argument_spec.update(eos_argument_spec)
 
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True
