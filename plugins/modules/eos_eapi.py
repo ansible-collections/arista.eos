@@ -238,7 +238,7 @@ def validate_vrfs(value, module):
     lines = out[0].strip().splitlines()[3:]
     for line in lines:
         if not line:
-            continuess
+            continues
         splitted_line = re.split(r"\s{2,}", line.strip())
         if len(splitted_line) > 2:
             configured_vrfs.append(splitted_line[0])
