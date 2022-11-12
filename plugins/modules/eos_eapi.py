@@ -34,6 +34,8 @@ description:
   listed below to override the default configuration.
 - Requires EOS v4.12 or greater.
 version_added: 1.0.0
+extends_documentation_fragment:
+- arista.eos.eos
 options:
   http:
     description:
@@ -99,14 +101,16 @@ options:
       the running-config.
     type: int
     default: 30
-  vrf:
+  vrfs:
     description:
-    - The C(vrf) argument will configure eAPI to listen for connections in the specified
-      VRF.  By default, eAPI transports will listen for connections in the global
-      table.  This value requires the VRF to already be created otherwise the task
-      will fail.
-    default: default
-    type: str
+    - The C(vrfs) arguement will configure eAPI to listen for connections in the specified
+      VRFs.  By default, eAPI transports will listen for connections in the global(default)
+      table.  If no other VRFs are desired, this option can be left unused. If providing
+      a VRF other than 'default' and it is desired that the API be available in the defined
+      VRF as well as the 'default' VRF, 'default' must also be defined.  This value requires
+      the VRF to already be created otherwise the task will fail.
+    default: []
+    type: list 
   config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -133,7 +137,7 @@ EXAMPLES = """
     state: started
 
 - name: Enable eAPI with no HTTP, HTTPS at port 9443, local HTTP at port 80, and socket
-    enabled
+    enabled in only the global ('default') VRF
   arista.eos.eos_eapi:
     state: started
     http: false
@@ -145,6 +149,29 @@ EXAMPLES = """
 - name: Shutdown eAPI access
   arista.eos.eos_eapi:
     state: stopped
+
+- name: Enable eAPI with HTTP, HTTPS at port 443 in only the PROD VRF
+  arista.eos.eos_eapi:
+    state: started
+    http: true
+    local_http: no
+    https: yes
+    https_port: 443
+    socket: no
+    vrfs:
+      - PROD
+
+- name: Enable eAPI with HTTP, HTTPS at port 443 in the global ('default') and PROD VRF
+  arista.eos.eos_eapi:
+    state: started
+    http: true
+    local_http: no
+    https: yes
+    https_port: 443
+    socket: no
+    vrfs:
+      - default
+      - PROD
 """
 
 RETURN = """
@@ -176,6 +203,18 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
 )
 from ansible.module_utils.six import iteritems
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    eos_argument_spec,
+)
+
+
+def check_transport(module):
+    transport = (module.params["provider"] or {}).get("transport")
+
+    if transport == "eapi":
+        module.fail_json(
+            msg="eos_eapi module is only supported over cli transport"
+        )
 
 
 def validate_http_port(value, module):
@@ -193,23 +232,24 @@ def validate_local_http_port(value, module):
         module.fail_json(msg="http_port must be between 1 and 65535")
 
 
-def validate_vrf(value, module):
+def validate_vrfs(value, module):
     out = run_commands(module, ["show vrf"])
     configured_vrfs = []
     lines = out[0].strip().splitlines()[3:]
     for line in lines:
         if not line:
-            continue
+            continuess
         splitted_line = re.split(r"\s{2,}", line.strip())
         if len(splitted_line) > 2:
             configured_vrfs.append(splitted_line[0])
-
-    configured_vrfs.append("default")
-    if value not in configured_vrfs:
-        module.fail_json(
-            msg="vrf `%s` is not configured on the system" % value
-        )
-
+    
+    if "default" not in configured_vrfs:
+        configured_vrfs.append("default")
+    for vrf in value:
+        if vrf not in configured_vrfs:
+            module.fail_json(
+                msg="vrf `%s` is not configured on the system" % vrf
+            )
 
 def map_obj_to_commands(updates, module, warnings):
     commands = list()
@@ -272,15 +312,15 @@ def map_obj_to_commands(updates, module, warnings):
             add("shutdown")
         elif want["state"] == "started":
             add("no shutdown")
-
-    if needs_update("vrf"):
-        add("vrf %s" % want["vrf"])
-        # switching operational vrfs here
-        # need to add the desired state as well
-        if want["state"] == "stopped":
-            add("shutdown")
-        elif want["state"] == "started":
+    if needs_update("vrfs"):
+        # Assumes that if the VRF is listed it should be enabled.
+        # if it is not listed, it should not be in the configuration
+        # and thus disabled by default.
+        for vrf in want["vrfs"]:
+            add("vrf %s" % vrf)
             add("no shutdown")
+        for vrf in (set(have["vrfs"]) - set(want["vrfs"])):
+            add("no vrf %s" % vrf)
 
     return commands
 
@@ -293,7 +333,16 @@ def parse_state(data):
 
 
 def map_config_to_obj(module):
-    out = run_commands(module, ["show management api http-commands | json"])
+    out = run_commands(module, ["show management api http-commands | json", "show running-config | json"])
+    # Its possible that manually configured VRFs exist in the API configuration section
+    # which are not defined as a system VRF.  In this case they will now appear in the 
+    # show command.  We must examine the configuration to find such VRFs
+    if "management api http-commands" in out[1]["cmds"]:
+        management_api_config = out[1]["cmds"]["management api http-commands"]["cmds"]
+        management_api_vrfs_config = [k.lstrip("vrf ") for k,v in management_api_config.items() if "vrf" in k]
+    else:
+        # If the API is configured there will not be any configuration to return.
+        management_api_vrfs_config = []
     return {
         "http": out[0]["httpServer"]["configured"],
         "http_port": out[0]["httpServer"]["port"],
@@ -302,7 +351,7 @@ def map_config_to_obj(module):
         "local_http": out[0]["localHttpServer"]["configured"],
         "local_http_port": out[0]["localHttpServer"]["port"],
         "socket": out[0]["unixSocketServer"]["configured"],
-        "vrf": out[0]["vrf"] or "default",
+        "vrfs": sorted(list(set(out[0]["vrfs"]) | set(management_api_vrfs_config))) or list(["default"]),
         "state": parse_state(out),
     }
 
@@ -316,7 +365,7 @@ def map_params_to_obj(module):
         "local_http": module.params["local_http"],
         "local_http_port": module.params["local_http_port"],
         "socket": module.params["socket"],
-        "vrf": module.params["vrf"],
+        "vrfs": sorted(module.params["vrfs"]),
         "state": module.params["state"],
     }
 
@@ -387,14 +436,19 @@ def main():
         local_http_port=dict(type="int"),
         socket=dict(aliases=["enable_socket"], type="bool"),
         timeout=dict(type="int", default=30),
+        vrfs=dict(type='list', default=["default"]),
         vrf=dict(default="default"),
         config=dict(),
         state=dict(default="started", choices=["stopped", "started"]),
     )
 
+    argument_spec.update(eos_argument_spec)
+    
     module = AnsibleModule(
         argument_spec=argument_spec, supports_check_mode=True
     )
+
+    check_transport(module)
 
     result = {"changed": False}
 
@@ -403,7 +457,9 @@ def main():
         warnings.append(
             "config parameter is no longer necessary and will be ignored"
         )
-
+    if module.params["vrf"]:
+        warnings.append(
+            "vrf parameter is no longer supported and will be ignore.  Use the vrfs parameter instead.")
     want = map_params_to_obj(module)
     have = map_config_to_obj(module)
 
