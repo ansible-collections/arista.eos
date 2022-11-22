@@ -157,7 +157,7 @@ class TestEosEapiModule(TestEosModule):
         self.start_configured(changed=True, commands=commands)
 
     def test_eos_eapi_vrf(self):
-        set_module_args(dict(vrf="test"))
+        set_module_args(dict(vrfs=["test"]))
         commands = [
             "management api http-commands",
             "no shutdown",
@@ -167,7 +167,7 @@ class TestEosEapiModule(TestEosModule):
         self.start_unconfigured(changed=True, commands=commands)
 
     def test_eos_eapi_change_from_default_vrf(self):
-        set_module_args(dict(vrf="test"))
+        set_module_args(dict(vrfs=["test"]))
         commands = ["management api http-commands", "vrf test", "no shutdown"]
         self.start_configured(changed=True, commands=commands)
 
@@ -176,7 +176,7 @@ class TestEosEapiModule(TestEosModule):
         self.start_configured(changed=False, commands=[])
 
     def test_eos_eapi_vrf_missing(self):
-        set_module_args(dict(vrf="missing"))
+        set_module_args(dict(vrfs=["missing"]))
         self.start_unconfigured(failed=True)
 
     def test_eos_eapi_state_absent(self):
