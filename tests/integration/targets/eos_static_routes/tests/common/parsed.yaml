@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos_static_routes parsed integration tests on connection={{ ansible_connection
       }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - name: Gather static_routes facts
   become: true
@@ -21,7 +21,7 @@
     running_config: "{{ lookup('file', '_parsed.cfg') }}"
     state: parsed
 
-- assert:
+- ansible.builtin.assert:
     that:
       - "{{ ansible_facts['network_resources']['static_routes'] | symmetric_difference(result['parsed'])\
         \ |length == 0 }}"
@@ -31,8 +31,8 @@
   register: result
   arista.eos.eos_static_routes: *id001
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result['changed'] == false
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml

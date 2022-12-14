@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/output.yaml"
+- ansible.builtin.debug: msg="START eapi/output.yaml"
 
 - name: get output for single command
   register: result
@@ -7,7 +7,7 @@
     commands:
       - show version
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
@@ -19,9 +19,9 @@
       - show version
       - show interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
 
-- debug: msg="END eapi/output.yaml"
+- ansible.builtin.debug: msg="END eapi/output.yaml"

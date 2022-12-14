@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/defaults.yaml"
+- ansible.builtin.debug: msg="START eapi/defaults.yaml"
 
 - name: setup
   become: true
@@ -18,9 +18,9 @@
     src: defaults/config.j2
     defaults: true
 
-- debug: var=result
+- ansible.builtin.debug: var=result
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - result.updates is defined
@@ -32,11 +32,11 @@
     src: defaults/config.j2
     defaults: true
 
-- debug: var=result
+- ansible.builtin.debug: var=result
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.updates is not defined
 
-- debug: msg="END eapi/defaults.yaml"
+- ansible.builtin.debug: msg="END eapi/defaults.yaml"

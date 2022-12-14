@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_acl_interfaces deleted integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
 
@@ -18,7 +18,7 @@
               - afi: ipv6
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 2
           - result.changed == true
@@ -39,7 +39,7 @@
                     direction: in
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 2
           - result.changed == true
@@ -53,11 +53,11 @@
           - name: "{{ Interfaces['int1'] }}"
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 2
           - result.changed == true
           - "'no ip access-group aclv402 out' in result.commands"
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

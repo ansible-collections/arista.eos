@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/basic-motd.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START eapi/basic-motd.yaml on connection={{ ansible_connection }}"
 
 - name: Remove previous motd banner
   become: true
@@ -14,7 +14,7 @@
     text: "this is my motd banner\nthat has a multiline\nstring\n"
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'this is my motd banner' in result.commands"
@@ -29,7 +29,7 @@
     text: "this is my motd banner\nthat has a multiline\nstring\n"
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0
@@ -43,7 +43,7 @@
     text: "this is my motd banner\nthat has a multiline\nstring\n"
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'no banner motd' in result.commands"
@@ -57,7 +57,7 @@
     text: "this is my motd banner\nthat has a multiline\nstring\n"
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0

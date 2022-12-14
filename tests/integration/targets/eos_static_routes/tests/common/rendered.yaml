@@ -1,11 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos_static_routes rendered integration tests on connection={{ ansible_connection
       }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
 
@@ -44,7 +44,7 @@
         lines:
           - ipv6 route vrf testvrf 1120:10::/64 Ethernet1 55
           - ip route 155.55.1.0/24 Nexthop-Group testgrp tag 100
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ lines | symmetric_difference(result['rendered']) |length == 0 }}"
 
@@ -53,9 +53,9 @@
       arista.eos.eos_static_routes: *id001
 
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

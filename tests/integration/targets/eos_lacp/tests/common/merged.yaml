@@ -1,7 +1,7 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       system:
         priority: 20
@@ -17,7 +17,7 @@
     config: '{{ config }}'
     state: merged
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lacp == result.before
 
@@ -25,10 +25,10 @@
   arista.eos.eos_facts:
     gather_network_resources: lacp
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lacp == result.after
 
-- assert:
+- ansible.builtin.assert:
     that:
       - config == ansible_facts.network_resources.lacp

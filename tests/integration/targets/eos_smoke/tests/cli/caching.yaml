@@ -1,8 +1,8 @@
 ---
 - block:
-  - debug: msg="START connection={{ ansible_connection }} cli/caching.yaml"
+  - ansible.builtin.debug: msg="START connection={{ ansible_connection }} cli/caching.yaml"
 
-  - set_fact:
+  - ansible.builtin.set_fact:
       interfaces:
         - interface Ethernet1
         - interface Ethernet2
@@ -39,7 +39,7 @@
           enabled: true
       state: merged
 
-  - assert:
+  - ansible.builtin.assert:
       that:
         - '"interface Ethernet1" in result.commands'
         - '"description Configured by Ansible" in result.commands'
@@ -55,7 +55,7 @@
     become: true
     arista.eos.eos_interfaces: *merged
 
-  - assert:
+  - ansible.builtin.assert:
       that:
         - result.changed == False
 
@@ -70,7 +70,7 @@
             native_vlan: 10
       state: merged
 
-  - assert:
+  - ansible.builtin.assert:
       that:
         - '"interface Ethernet1" in result.commands'
         - '"switchport mode trunk" in result.commands'
@@ -82,7 +82,7 @@
     become: true
     arista.eos.eos_l2_interfaces: *mergedl2
 
-  - assert:
+  - ansible.builtin.assert:
       that:
         - result.changed == False
 
@@ -96,7 +96,7 @@
             - address: 203.0.113.227/31
       state: merged
 
-  - assert:
+  - ansible.builtin.assert:
       that:
         - '"interface Ethernet2" in result.commands'
         - '"ip address 203.0.113.227/31" in result.commands'
@@ -107,7 +107,7 @@
     become: true
     arista.eos.eos_l3_interfaces: *mergedl3
 
-  - assert:
+  - ansible.builtin.assert:
       that:
         - result.changed == False
 

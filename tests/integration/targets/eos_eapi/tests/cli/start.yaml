@@ -1,5 +1,5 @@
 ---
-- debug: msg="START CLI/START.YAML"
+- ansible.builtin.debug: msg="START CLI/START.YAML"
 
 - name: Set state to started
   become: true
@@ -13,7 +13,7 @@
       - show management api http-commands | json
 
 - name: Expect EAPI state is on
-  assert:
+  ansible.builtin.assert:
     that: http_config.stdout[0].enabled == true
 
 - name: Set state to running again
@@ -23,8 +23,8 @@
     state: started
 
 - name: Expect action to be idempotent
-  assert:
+  ansible.builtin.assert:
     that:
       - eos_eapi_output.changed == false
 
-- debug: msg="STOP CLI/START.YAML"
+- ansible.builtin.debug: msg="STOP CLI/START.YAML"

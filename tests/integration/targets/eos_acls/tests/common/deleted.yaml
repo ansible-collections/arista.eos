@@ -1,11 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_acls deleted integration tests ansible_connection={{ ansible_connection
       }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config1:
 
       - afi: ipv4
@@ -55,7 +55,7 @@
                 source:
                   any: true
 
-- set_fact:
+- ansible.builtin.set_fact:
     config2:
 
       - afi: ipv4
@@ -93,7 +93,7 @@
                 ttl:
                   eq: '55'
 
-- set_fact:
+- ansible.builtin.set_fact:
     config3:
 
       - afi: ipv4
@@ -129,7 +129,7 @@
       arista.eos.eos_facts:
         gather_network_resources: acls
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 1
           - result.changed == true
@@ -153,7 +153,7 @@
       arista.eos.eos_facts:
         gather_network_resources: acls
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 1
           - result.changed == true
@@ -162,4 +162,4 @@
       become: true
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

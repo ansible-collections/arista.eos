@@ -1,11 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_static_routes merged integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - address_families:
@@ -99,7 +99,7 @@
   arista.eos.eos_facts:
     gather_network_resources: static_routes
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.static_routes|symmetric_difference(config)
         == []
@@ -111,9 +111,9 @@
   register: result
   arista.eos.eos_static_routes: *id001
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands|length == 0
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml

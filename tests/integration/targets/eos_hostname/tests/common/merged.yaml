@@ -1,5 +1,5 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_hostname merged integration tests ansible_connection={{
       ansible_connection }}
 
@@ -12,7 +12,7 @@
         config:
           hostname: "eos_test"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 1
           - result.changed == true
@@ -25,10 +25,10 @@
       register: result
       arista.eos.eos_hostname: *merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

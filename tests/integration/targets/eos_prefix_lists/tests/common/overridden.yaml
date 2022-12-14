@@ -1,11 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_prefix_lists overridden integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
 
@@ -33,7 +33,7 @@
       arista.eos.eos_facts:
         gather_network_resources: prefix_lists
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 5
           - result.changed == true
@@ -46,10 +46,10 @@
       register: result
       arista.eos.eos_prefix_lists: *id001
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

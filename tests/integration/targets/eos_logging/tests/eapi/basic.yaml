@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/basic.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START eapi/basic.yaml on connection={{ ansible_connection }}"
 
 - name: Set up host logging
   become: true
@@ -9,7 +9,7 @@
     name: 172.16.0.1
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"logging host 172.16.0.1" in result.commands'
@@ -22,7 +22,7 @@
     name: 172.16.0.1
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -34,7 +34,7 @@
     name: 172.16.0.1
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"no logging host 172.16.0.1" in result.commands'
@@ -47,7 +47,7 @@
     name: 172.16.0.1
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -59,7 +59,7 @@
     level: warnings
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"logging console warnings" in result.commands'
@@ -71,7 +71,7 @@
     dest: buffered
     size: 480000
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"logging buffered 480000" in result.commands'
@@ -90,7 +90,7 @@
         size: 480000
         state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"no logging console" in result.commands'

@@ -1,5 +1,5 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ospfv3 rtt integration tests ansible_connection={{
       ansible_connection }}
 
@@ -79,7 +79,7 @@
               fips_restrictions: true
               vrf: "vrf02"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - baseconfig.commands|length == 43
           - baseconfig.changed == true
@@ -122,9 +122,9 @@
         state: overridden
 
     - name: Assert that config was reverted
-      assert:
+      ansible.builtin.assert:
         that: baseconfig.after == revert.after
 
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

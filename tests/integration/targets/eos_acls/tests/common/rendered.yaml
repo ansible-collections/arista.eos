@@ -1,5 +1,5 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos_acls rendered integration tests on connection={{ ansible_connection
       }}
 
@@ -75,7 +75,7 @@
           - permit tcp any eq smtp any eq www ttl eq 55
           - ipv6 access-list standard test2
           - permit any log
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ lines | symmetric_difference(result['rendered']) |length == 0 }}"
 
@@ -84,6 +84,6 @@
       arista.eos.eos_acls: *id001
 
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false

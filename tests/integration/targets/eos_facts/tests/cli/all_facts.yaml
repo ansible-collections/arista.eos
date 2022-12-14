@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/all_facts.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/all_facts.yaml on connection={{ ansible_connection }}"
 
 - name: test getting all facts
   become: true
@@ -8,7 +8,7 @@
     gather_subset:
       - all
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - "'config' in result.ansible_facts.ansible_net_gather_subset"
@@ -27,10 +27,10 @@
     gather_network_resources: all
 
 - name: Assert that correct available_network_resources returned
-  assert:
+  ansible.builtin.assert:
     that:
       - result.changed == false
       - "{{ result['ansible_facts']['available_network_resources'] | symmetric_difference(result['ansible_facts']['ansible_net_gather_network_resources']) |length\
           \ == 0 }}"
 
-- debug: msg="END cli/all_facts.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/all_facts.yaml on connection={{ ansible_connection }}"

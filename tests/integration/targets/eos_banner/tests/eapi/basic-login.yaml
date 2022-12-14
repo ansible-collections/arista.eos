@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/basic-login.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START eapi/basic-login.yaml on connection={{ ansible_connection }}"
 
 - name: Remove previous login banner
   become: true
@@ -14,7 +14,7 @@
     text: "this is my login banner\nthat has a multiline\nstring\n"
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'banner login' in result.commands[0]"
@@ -25,7 +25,7 @@
   register: result
   arista.eos.eos_banner: *id001
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0
@@ -39,7 +39,7 @@
     text: "this is my login banner\nthat has a multiline\nstring\n"
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'no banner login' in result.commands"
@@ -50,7 +50,7 @@
   register: result
   arista.eos.eos_banner: *id002
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0

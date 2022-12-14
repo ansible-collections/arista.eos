@@ -1,5 +1,5 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_logging_global merged integration tests ansible_connection={{
       ansible_connection }}
 
@@ -37,7 +37,7 @@
                 - name: "24.1.1.1"
                   port: "33"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 9
           - result.changed == true
@@ -50,10 +50,10 @@
       register: result
       arista.eos.eos_logging_global: *merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

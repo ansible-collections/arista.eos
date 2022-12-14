@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos_lacp parsed integration tests on connection={{ ansible_connection
       }}
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       system:
         priority: 20
@@ -15,7 +15,7 @@
     running_config: "{{ lookup('file', '_parsed.cfg') }}"
     state: parsed
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - config == result['parsed']

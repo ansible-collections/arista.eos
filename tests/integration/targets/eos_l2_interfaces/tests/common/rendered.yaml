@@ -1,7 +1,7 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - name: Ethernet1
@@ -25,7 +25,7 @@
     state: rendered
 
 - name: Assert
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered|symmetric_difference(result.rendered) == []
       - result['changed'] == false

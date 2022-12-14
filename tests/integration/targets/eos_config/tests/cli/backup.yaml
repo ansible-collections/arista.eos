@@ -1,8 +1,8 @@
 ---
-- debug: msg="START cli/backup.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/backup.yaml on connection={{ ansible_connection }}"
 
 - name: collect any backup files
-  find:
+  ansible.builtin.find:
     paths: '{{ role_path }}/backup'
     pattern: '{{ inventory_hostname_short }}_config*'
   register: backup_files
@@ -19,7 +19,7 @@
     match: none
 
 - name: collect any backup files
-  find:
+  ansible.builtin.find:
     paths: '{{ role_path }}/backup'
     pattern: '{{ inventory_hostname_short }}_config*'
   register: backup_files
@@ -38,19 +38,19 @@
     src: basic/config.j2
     backup: true
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - result.updates is defined
 
 - name: collect any backup files
-  find:
+  ansible.builtin.find:
     paths: '{{ role_path }}/backup'
     pattern: '{{ inventory_hostname_short }}_config*'
   register: backup_files
   connection: local
 
-- assert:
+- ansible.builtin.assert:
     that:
       - backup_files.files is defined
 
@@ -71,17 +71,17 @@
       filename: backup.cfg
       dir_path: '{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
 - name: check if the backup file-1 exist
-  find:
+  ansible.builtin.find:
     paths: '{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}/backup.cfg'
   register: backup_file
   connection: local
 
-- assert:
+- ansible.builtin.assert:
     that:
       - backup_file.files is defined
 
@@ -93,17 +93,17 @@
     backup_options:
       filename: backup.cfg
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
 - name: check if the backup file-2 exist
-  find:
+  ansible.builtin.find:
     paths: '{{ role_path }}/backup/backup.cfg'
   register: backup_file
   connection: local
 
-- assert:
+- ansible.builtin.assert:
     that:
       - backup_file.files is defined
 
@@ -115,19 +115,19 @@
     backup_options:
       dir_path: '{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
 - name: check if the backup file-3 exist
-  find:
+  ansible.builtin.find:
     paths: '{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}'
     pattern: '{{ inventory_hostname_short }}_config*'
   register: backup_file
   connection: local
 
-- assert:
+- ansible.builtin.assert:
     that:
       - backup_file.files is defined
 
-- debug: msg="END cli/backup.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/backup.yaml on connection={{ ansible_connection }}"

@@ -14,7 +14,7 @@
   arista.eos.eos_facts:
     gather_network_resources: lldp_interfaces
 
-- set_fact:
+- ansible.builtin.set_fact:
     expected_config:
 
       - name: Ethernet1
@@ -23,7 +23,7 @@
       - name: Ethernet2
         transmit: false
 
-- assert:
+- ansible.builtin.assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.lldp_interfaces)
         == []

@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_snmp_server overridden integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
 
@@ -31,7 +31,7 @@
             - vrf: "vrf_replace"
               local_interface: "Ethernet1"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 15
           - result.changed == true
@@ -45,11 +45,11 @@
       register: result
       arista.eos.eos_snmp_server: *replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 3
           - result.changed == true
 
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

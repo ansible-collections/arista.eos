@@ -1,11 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_acls merged integration tests ansible_connection={{ ansible_connection
       }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - afi: ipv4
@@ -51,7 +51,7 @@
       arista.eos.eos_facts:
         gather_network_resources: acls
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 7
           - result.changed == true
@@ -70,7 +70,7 @@
       arista.eos.eos_facts:
         gather_network_resources: acls
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
           - result.commands|length == 0
@@ -78,4 +78,4 @@
             == []
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

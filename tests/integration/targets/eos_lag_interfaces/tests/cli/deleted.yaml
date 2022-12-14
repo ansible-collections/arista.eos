@@ -1,7 +1,7 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - name: Port-Channel5
@@ -17,7 +17,7 @@
     config: '{{ config }}'
     state: deleted
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length
         == 0
@@ -26,8 +26,8 @@
   arista.eos.eos_facts:
     gather_network_resources: lag_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lag_interfaces == []
 
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml

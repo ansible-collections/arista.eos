@@ -1,5 +1,5 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
 - become: true
   arista.eos.eos_facts:
@@ -16,7 +16,7 @@
   arista.eos.eos_facts:
     gather_network_resources: vlans
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == False
       - result.commands == []

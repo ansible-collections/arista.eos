@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_route_maps rtt integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
 
@@ -46,7 +46,7 @@
       arista.eos.eos_facts:
         gather_network_resources: route_maps
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - baseconfig.commands|length == 12
           - baseconfig.changed == true
@@ -83,9 +83,9 @@
         state: overridden
 
     - name: Assert that config was reverted
-      assert:
+      ansible.builtin.assert:
         that: baseconfig.after == revert.after
 
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

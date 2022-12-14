@@ -1,11 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_static_routes merged integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - address_families:
@@ -199,7 +199,7 @@
       arista.eos.eos_facts:
         gather_network_resources: static_routes
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - ansible_facts.network_resources.static_routes|symmetric_difference(config)
             == []
@@ -222,7 +222,7 @@
                         admin_distance: 21
         state: merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.after|symmetric_difference(revert_config) == []
 
@@ -234,10 +234,10 @@
         state: overridden
 
     - name: Assert that config was reverted
-      assert:
+      ansible.builtin.assert:
         that:
           - ansible_facts.network_resources.static_routes | symmetric_difference(revert.after)
             == []
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

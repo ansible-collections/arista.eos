@@ -1,7 +1,7 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - name: Ethernet1
@@ -25,7 +25,7 @@
     config: '{{ config }}'
     state: merged
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
         == []
@@ -34,7 +34,7 @@
   arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after)
         == []

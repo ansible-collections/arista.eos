@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/set_domain_list.yaml on connection={{ ansible_connection
+- ansible.builtin.debug: msg="START cli/set_domain_list.yaml on connection={{ ansible_connection
     }}"
 
 - name: setup
@@ -18,7 +18,7 @@
       - ansible.com
       - redhat.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ip domain-list ansible.com' in result.commands"
@@ -32,7 +32,7 @@
       - ansible.com
       - redhat.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -43,7 +43,7 @@
     domain_list:
       - ansible.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'no ip domain-list redhat.com' in result.commands"
@@ -55,7 +55,7 @@
     domain_list:
       - ansible.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -67,7 +67,7 @@
       - ansible.com
       - redhat.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ip domain-list redhat.com' in result.commands"
@@ -80,7 +80,7 @@
       - ansible.com
       - redhat.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -92,7 +92,7 @@
       - ansible.com
       - eng.ansible.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'no ip domain-list redhat.com' in result.commands"
@@ -107,7 +107,7 @@
       - ansible.com
       - eng.ansible.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -120,4 +120,4 @@
       - no ip domain-list eng.ansible.com
     match: none
 
-- debug: msg="END cli/set_domain_list.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/set_domain_list.yaml on connection={{ ansible_connection }}"

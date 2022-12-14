@@ -1,5 +1,5 @@
 ---
-- debug: msg="START CLI/BADTRANSPORT.YAML"
+- ansible.builtin.debug: msg="START CLI/BADTRANSPORT.YAML"
 
 - block:
 
@@ -8,8 +8,8 @@
       ignore_errors: true
       arista.eos.eos_eapi:
 
-    - assert:
+    - ansible.builtin.assert:
         that: eos_eapi_output.failed == true
   when: ansible_connection == 'local'
 
-- debug: msg="START CLI/BADTRANSPORT.YAML"
+- ansible.builtin.debug: msg="START CLI/BADTRANSPORT.YAML"

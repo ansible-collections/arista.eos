@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/contains.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/contains.yaml on connection={{ ansible_connection }}"
 
 - name: test contains operator
   register: result
@@ -11,9 +11,9 @@
       - result[0] contains EOS
       - result[1].interfaces.Management1.name contains Manage
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
 
-- debug: msg="END cli/contains.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/contains.yaml on connection={{ ansible_connection }}"

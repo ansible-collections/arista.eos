@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_logging_global replaced integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
 
@@ -30,7 +30,7 @@
                   protocol: "tcp"
                   port: "23"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 14
           - result.changed == true
@@ -43,11 +43,11 @@
       register: result
       arista.eos.eos_logging_global: *replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
 
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

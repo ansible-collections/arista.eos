@@ -1,5 +1,5 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_snmp_server rendered integration tests ansible_connection={{
       ansible_connection }}
 
@@ -56,10 +56,10 @@
             - vrf: "vrf01"
               local_interface: "Ethernet1"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
           - result.rendered|symmetric_difference(merged.commands) == []
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

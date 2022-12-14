@@ -27,7 +27,7 @@
       register: results
 
     - name: check that attempt failed
-      assert:
+      ansible.builtin.assert:
         that:
           - results.failed
   always:

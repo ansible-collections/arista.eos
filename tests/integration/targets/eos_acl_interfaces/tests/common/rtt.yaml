@@ -1,5 +1,5 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_acl_interfaces merged round trip tests ansible_connection={{
       ansible_connection }}
 
@@ -39,7 +39,7 @@
                     direction: in
         state: merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 6
           - result.changed == true
@@ -61,7 +61,7 @@
                     direction: in
 
     - name: Assert that changes were applied
-      assert:
+      ansible.builtin.assert:
         that:
           - "{{ round_trip['commands'] | symmetric_difference(result['commands']) == [] }}"
 
@@ -73,10 +73,10 @@
         state: overridden
 
     - name: Assert that config was reverted
-      assert:
+      ansible.builtin.assert:
         that: "{{ base_config['after'] | symmetric_difference(revert['after']) == [] }}"
 
 
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

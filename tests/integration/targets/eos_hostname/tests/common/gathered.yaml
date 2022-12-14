@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos_hostname gathered integration tests on connection={{ ansible_connection
       }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
 
@@ -15,10 +15,10 @@
         state: gathered
 
     - name: Assert
-      assert:
+      ansible.builtin.assert:
         that:
           - replaced.before == result.gathered
           - result['changed'] == false
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -1,5 +1,5 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START cli/sublevel_strict_mul_parents.yaml on connection={{ ansible_connection
       }}
 
@@ -31,7 +31,7 @@
         match: strict
         diff_against: running
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - "'set cos 1' in result.updates"
@@ -50,7 +50,7 @@
         match: strict
         diff_against: running
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - "'set cos 1' in result.updates"
@@ -69,7 +69,7 @@
         match: strict
         diff_against: running
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
   always:
@@ -82,5 +82,5 @@
           - no class-map type qos match-any c1
         match: none
 
-- debug: msg="END cli/sublevel_strict_mul_parents.yaml on connection={{ ansible_connection
+- ansible.builtin.debug: msg="END cli/sublevel_strict_mul_parents.yaml on connection={{ ansible_connection
     }}"

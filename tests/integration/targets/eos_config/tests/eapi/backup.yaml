@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/backup.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START eapi/backup.yaml on connection={{ ansible_connection }}"
 
 - name: setup
   become: true
@@ -12,7 +12,7 @@
     match: none
 
 - name: collect any backup files
-  find:
+  ansible.builtin.find:
     paths: '{{ role_path }}/backup'
     pattern: '{{ inventory_hostname_short }}_config*'
   register: backup_files
@@ -31,20 +31,20 @@
     src: basic/config.j2
     backup: true
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - result.updates is defined
 
 - name: collect any backup files
-  find:
+  ansible.builtin.find:
     paths: '{{ role_path }}/backup'
     pattern: '{{ inventory_hostname_short }}_config*'
   register: backup_files
   connection: local
 
-- assert:
+- ansible.builtin.assert:
     that:
       - backup_files.files is defined
 
-- debug: msg="END eapi/backup.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END eapi/backup.yaml on connection={{ ansible_connection }}"

@@ -1,11 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_static_routes deleted integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - address_families:
@@ -45,7 +45,7 @@
                   - interface: 33.1.1.1
         vrf: vrftest1
 
-- set_fact:
+- ansible.builtin.set_fact:
     config1:
 
       - address_families:
@@ -97,7 +97,7 @@
                     admin_distance: 23
         vrf: testvrf
 
-- set_fact:
+- ansible.builtin.set_fact:
     config2:
 
       - address_families:
@@ -138,7 +138,7 @@
                     interface: Ethernet1
         vrf: testvrf
 
-- set_fact:
+- ansible.builtin.set_fact:
     config3:
 
       - address_families:
@@ -177,7 +177,7 @@
                     admin_distance: 23
         vrf: testvrf
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - name: Delete attributes of given static routes - afi specific.
   become: true
@@ -194,11 +194,11 @@
   arista.eos.eos_facts:
     gather_network_resources: static_routes
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.static_routes|symmetric_difference(config1)
         == []
       - '"no ipv6 route 1000:10::/64 Ethernet1 67 tag 98" in result.commands'
   become: true
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml

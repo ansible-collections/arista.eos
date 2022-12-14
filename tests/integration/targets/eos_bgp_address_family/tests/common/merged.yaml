@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_bgp_address_family merged integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
 
@@ -42,7 +42,7 @@
                 target: "33:11"
               vrf: "vrft"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 17
           - result.changed == true
@@ -55,10 +55,10 @@
       register: result
       arista.eos.eos_bgp_address_family: *merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

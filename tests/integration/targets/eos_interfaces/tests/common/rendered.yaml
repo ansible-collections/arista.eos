@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos_interfaces rendered integration tests on connection={{ ansible_connection
       }}
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       - name: Ethernet1
         enabled: true
@@ -21,7 +21,7 @@
     state: rendered
 
 - name: Assert
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered|symmetric_difference(result.rendered) == []
       - result['changed'] == false

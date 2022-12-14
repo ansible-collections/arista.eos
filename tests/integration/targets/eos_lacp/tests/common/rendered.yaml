@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos_lacp rendered integration tests on connection={{ ansible_connection
       }}
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       system:
         priority: 20
@@ -15,12 +15,12 @@
     config: '{{ config }}'
     state: rendered
 
-- set_fact:
+- ansible.builtin.set_fact:
     rendered:
       - "lacp system-priority 20"
 
 - name: Assert
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered|symmetric_difference(result.rendered) == []
       - result['changed'] == false

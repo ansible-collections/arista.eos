@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/lessthanorequal.yaml on connection={{ ansible_connection
+- ansible.builtin.debug: msg="START eapi/lessthanorequal.yaml on connection={{ ansible_connection
     }}"
 
 - name: test le operator
@@ -11,7 +11,7 @@
     wait_for:
       - result[1].interfaces.Management1.mtu le 1600
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
@@ -25,10 +25,10 @@
     wait_for:
       - result[1].interfaces.Management1.mtu <= 1600
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
 
-- debug: msg="END eapi/lessthanorequal.yaml on connection={{ ansible_connection
+- ansible.builtin.debug: msg="END eapi/lessthanorequal.yaml on connection={{ ansible_connection
     }}"

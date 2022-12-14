@@ -1,5 +1,5 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       holdtime: 100
       tlv_select:
@@ -15,7 +15,7 @@
     state: rendered
 
 - name: Assert
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered.sort() == result.rendered.sort()
       - result['changed'] == false

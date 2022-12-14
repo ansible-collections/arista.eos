@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos_acls parsed integration tests on connection={{ ansible_connection
       }}
 
-- include_tasks: _parsed_cfg.yaml
+- ansible.builtin.include_tasks: _parsed_cfg.yaml
 
 - name: Gather acls facts
   become: true
@@ -21,10 +21,10 @@
     running_config: "{{ lookup('file', '_parsed.cfg') }}"
     state: parsed
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - ansible_facts.network_resources.acls|symmetric_difference(result.parsed)
         == []
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml

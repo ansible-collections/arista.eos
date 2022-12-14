@@ -1,11 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos_static_routes gathered integration tests on connection={{ ansible_connection
       }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
 
@@ -16,7 +16,7 @@
         config:
         state: gathered
 
-    - set_fact:
+    - ansible.builtin.set_fact:
         config:
 
           - address_families:
@@ -79,7 +79,7 @@
             vrf: testvrf
 
     - name: Assert that gathered dicts was correctly generated
-      assert:
+      ansible.builtin.assert:
         that:
           - " config | symmetric_difference(result['gathered']) == []"
 
@@ -89,9 +89,9 @@
       arista.eos.eos_static_routes: *id001
 
     - name: Assert that the previous task was idempotent
-      assert:
+      ansible.builtin.assert:
         that:
           - result['changed'] == false
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

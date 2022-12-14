@@ -1,7 +1,7 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - vlan_id: 20
@@ -18,7 +18,7 @@
     config: '{{ config }}'
     state: merged
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.vlans|symmetric_difference(result.before)
         == []
@@ -27,12 +27,12 @@
   arista.eos.eos_facts:
     gather_network_resources: vlans
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.vlans|symmetric_difference(result.after)
         == []
 
-- set_fact:
+- ansible.builtin.set_fact:
     expected_config:
 
       - vlan_id: 10
@@ -43,7 +43,7 @@
         name: twenty
         state: suspend
 
-- assert:
+- ansible.builtin.assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.vlans)
         == []

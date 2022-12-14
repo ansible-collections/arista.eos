@@ -1,7 +1,7 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - name: Port-Channel10
@@ -28,7 +28,7 @@
     config: '{{ config }}'
     state: replaced
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length
         == 0
@@ -37,17 +37,17 @@
   arista.eos.eos_facts:
     gather_network_resources: lag_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.after)|length
         == 0
 
-- set_fact:
+- ansible.builtin.set_fact:
     expected_config: '{{ config + other_config }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lag_interfaces|symmetric_difference(expected_config)|length
         == 0
 
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml

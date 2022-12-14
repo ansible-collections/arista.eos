@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ospfv3 deleted integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
 
@@ -20,7 +20,7 @@
       arista.eos.eos_facts:
         gather_network_resources: ospfv3
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 1
           - result.changed == true
@@ -34,10 +34,10 @@
       register: result
       arista.eos.eos_ospfv3: *deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

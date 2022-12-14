@@ -20,7 +20,7 @@
     rd: 1:200
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'vrf instance test' in result.commands"
@@ -35,7 +35,7 @@
     rd: 1:200
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0
@@ -49,7 +49,7 @@
     rd: 1:201
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'vrf instance test' in result.commands"
@@ -64,7 +64,7 @@
     rd: 1:201
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0
@@ -82,7 +82,7 @@
     associated_interfaces:
       - Ethernet2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'interface ethernet2' in result.commands"
@@ -99,7 +99,7 @@
     interfaces:
       - ethernet 2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0
@@ -115,7 +115,7 @@
     associated_interfaces:
       - test
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.failed == True
 
@@ -135,7 +135,7 @@
       - loopback15
       - loopback1000
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'interface loopback10' in result.commands"
@@ -170,7 +170,7 @@
       - loopback15
       - loopback1000
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0
@@ -198,7 +198,7 @@
         rd: 1:203
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'vrf instance test2' in result.commands"
@@ -220,7 +220,7 @@
         rd: 1:203
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands | length == 0
@@ -240,7 +240,7 @@
     state: present
     purge: true
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'vrf instance test4' in result.commands"

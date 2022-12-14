@@ -1,7 +1,7 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - name: Ethernet1
@@ -18,7 +18,7 @@
     config: '{{ config }}'
     state: overridden
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.before)
         == []
@@ -27,12 +27,12 @@
   arista.eos.eos_facts:
     gather_network_resources: lldp_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.after)
         == []
 
-- assert:
+- ansible.builtin.assert:
     that:
       - config|symmetric_difference(ansible_facts.network_resources.lldp_interfaces)
         == []

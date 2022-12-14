@@ -1,9 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_acls merged integration tests ansible_connection={{ ansible_connection
       }}
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
 
       - afi: ipv4
@@ -127,7 +127,7 @@
       arista.eos.eos_facts:
         gather_network_resources: acls
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 8
           - result.changed == true
@@ -138,7 +138,7 @@
       register: result
       arista.eos.eos_acls: *id001
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
           - result.commands|length == 0
@@ -165,7 +165,7 @@
                       any: true
         state: merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == true
           - result.commands|length == 3
@@ -173,4 +173,4 @@
           - "'35 deny tcp any any ttl eq 33 log'  in result.commands"
   always:
 
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

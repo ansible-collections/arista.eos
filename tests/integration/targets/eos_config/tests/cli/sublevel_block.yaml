@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/sublevel_block.yaml on connection={{ ansible_connection
+- ansible.builtin.debug: msg="START cli/sublevel_block.yaml on connection={{ ansible_connection
     }}"
 
 - name: setup
@@ -27,7 +27,7 @@
     replace: block
     after: exit
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ip access-list test' in result.updates"
@@ -49,7 +49,7 @@
     replace: block
     after: exit
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -59,4 +59,4 @@
     lines: no ip access-list test
     match: none
 
-- debug: msg="END cli/sublevel_block.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/sublevel_block.yaml on connection={{ ansible_connection }}"

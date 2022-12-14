@@ -1,5 +1,5 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       - name: 5
         members:
@@ -16,7 +16,7 @@
     state: rendered
 
 - name: Assert
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered.sort() == result.rendered.sort()
       - result['changed'] == false

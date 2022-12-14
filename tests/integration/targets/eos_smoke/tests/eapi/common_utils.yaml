@@ -3,7 +3,7 @@
 # arista.eos.eos_interface -> conditional
 # arista.eos.eos_command -> ComplexList
 
-- debug: msg="START cli/common_utils.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/common_utils.yaml on connection={{ ansible_connection }}"
 
 # hit remove_default_spec() validate_ip_address() validate_prefix() ComplexList
 - name: setup - remove config used in test
@@ -20,7 +20,7 @@
 #  become: true
 #  register: result
 #
-# - assert:
+# - ansible.builtin.assert:
 #    that:
 #      - "result.changed == true"
 #      - "'ip route 192.168.3.0/24 192.168.0.1 2' in result.commands"
@@ -34,7 +34,7 @@
 #  register: result
 #  ignore_errors: true
 #
-# - assert:
+# - ansible.builtin.assert:
 #    that:
 #      - "result.failed == true"
 #
@@ -44,11 +44,11 @@
 #      - no ip route 192.168.3.0/24 192.168.0.1
 #  become: true
 
-- debug: msg="END cli/common_utils.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/common_utils.yaml on connection={{ ansible_connection }}"
 
 # hit conditional()
 # - name: Set test interface
-#  set_fact:
+#  ansible.builtin.set_fact:
 #    test_interface_1: ethernet1
 
 # - name: Check intent arguments

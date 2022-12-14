@@ -1,7 +1,7 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config1:
       - name: Ethernet2
         description: Configured by Ansible
@@ -25,7 +25,7 @@
   arista.eos.eos_facts:
     gather_network_resources: interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(baseconfig.after) == []
 
@@ -44,5 +44,5 @@
     state: overridden
 
 - name: Assert that config was reverted
-  assert:
+  ansible.builtin.assert:
     that: "{{ baseconfig['after'] | symmetric_difference(revert['after']) == [] }}"

@@ -1,8 +1,10 @@
 ---
-- include: cli.yaml
+- name: Include cli tasks
+  ansible.builtin.include: cli.yaml
   tags:
     - network_cli
 
-- include: eapi.yaml
+- name: Include eapi tasks
+  ansible.builtin.include: eapi.yaml
   tags:
     - httpapi
