@@ -32,4 +32,6 @@
   vars:
     ansible_connection: ansible.netcommon.httpapi
 - name: Clean up test state
-  ansible.builtin.include_tasks: '{{ role_path }}/tests/common/_cleanup.yml ansible_connection=ansible.netcommon.network_cli'
+  ansible.builtin.include_tasks: '{{ role_path }}/tests/common/_cleanup.yml'
+  vars:
+    ansible_connection: ansible.netcommon.network_cli

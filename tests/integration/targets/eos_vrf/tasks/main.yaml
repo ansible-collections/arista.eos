@@ -1,4 +1,4 @@
 ---
-- ansible.builtin.include: cli.yaml
+- ansible.builtin.include_tasks: cli.yaml
   tags:
     - network_cli
