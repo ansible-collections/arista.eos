@@ -9,7 +9,8 @@
   tags:
     - httpapi
 
-- ansible.builtin.include_tasks: redirection.yaml
+- name: Invoke redirectional tasks
+  ansible.builtin.include_tasks: redirection.yaml
   when: ansible_version.full is version('2.10.0', '>=')
   tags:
     - network_cli

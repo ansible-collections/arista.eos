@@ -9,7 +9,7 @@
   tags:
     - network_cli
 
-- name: invoke eapi tasks
+- name: Invoke eapi tasks
   ansible.builtin.include_tasks: eapi.yaml
   tags:
     - httpapi

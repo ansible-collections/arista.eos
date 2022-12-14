@@ -21,7 +21,7 @@
       files: '{{ test_cases.files + eapi_cases.files }}'
 
 - name: Set test_items
-  ansible.builtin.set_fact: 
+  ansible.builtin.set_fact:
     test_items: "{{ test_cases.files | map(attribute='path') | list }}"
 
 - name: Run test cases (connection=ansible.netcommon.httpapi)

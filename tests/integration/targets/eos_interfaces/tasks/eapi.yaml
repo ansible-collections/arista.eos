@@ -15,7 +15,8 @@
   register: eapi_cases
   delegate_to: localhost
 
-- ansible.builtin.set_fact:
+- name: Set files
+  ansible.builtin.set_fact:
     test_cases:
       files: '{{ test_cases.files + eapi_cases.files }}'
 

@@ -1,5 +1,5 @@
 ---
-- name: collect all common test cases
+- name: Collect all common test cases
   ansible.builtin.find:
     paths: '{{ role_path }}/tests/common'
     patterns: '{{ testcase }}.yaml'

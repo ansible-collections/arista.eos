@@ -1,4 +1,5 @@
 ---
-- ansible.builtin.include_tasks: cli.yaml
+- name: Invoke cli
+  ansible.builtin.include_tasks: cli.yaml
   tags:
     - network_cli
