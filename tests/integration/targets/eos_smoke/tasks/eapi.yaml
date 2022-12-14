@@ -1,15 +1,15 @@
 ---
-- name: collect all eapi test cases
+- name: Collect all eapi test cases
   ansible.builtin.find:
     paths: "{{ role_path }}/tests/eapi"
     patterns: "{{ testcase }}.yaml"
   delegate_to: localhost
   register: test_cases
 
-- name: set test_items
+- name: Set test_items
   ansible.builtin.set_fact: test_items="{{ test_cases.files | map(attribute='path') | list }}"
 
-- name: run test cases (connection=ansible.netcommon.httpapi)
+- name: Run test cases (connection=ansible.netcommon.httpapi)
   ansible.builtin.include: '{{ test_case_to_run }} ansible_connection=ansible.netcommon.httpapi'
   with_items: '{{ test_items }}'
   loop_control:

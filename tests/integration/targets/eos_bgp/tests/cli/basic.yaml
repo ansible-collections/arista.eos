@@ -1,5 +1,6 @@
 ---
-- ansible.builtin.debug: msg="START eos cli/eos_bgp.yaml on connection={{ ansible_connection }}"
+- name: Basic Tests
+  ansible.builtin.debug: msg="START eos cli/eos_bgp.yaml on connection={{ ansible_connection }}"
 
 - name: Clear existing BGP config
   become: true
@@ -16,7 +17,8 @@
       bgp_as: 64496
       router_id: 192.0.2.2
 
-- ansible.builtin.assert:
+- name: Assertion
+  ansible.builtin.assert:
     that:
       - result.changed == true
       - "'router bgp 64496' in result.commands"
@@ -27,7 +29,8 @@
   register: result
   arista.eos.eos_bgp: *id001
 
-- ansible.builtin.assert:
+- name: Assertion
+  ansible.builtin.assert:
     that:
       - result.changed == false
 

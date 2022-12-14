@@ -6,7 +6,7 @@
   register: shortname_test_cases
   delegate_to: localhost
 
-- name: set test_items for redirection
+- name: Set test_items for redirection
   ansible.builtin.set_fact: test_items="{{ shortname_test_cases.files | map(attribute='path') | list }}"
 
 - name: run test case (connection=ansible.netcommon.network_cli)
