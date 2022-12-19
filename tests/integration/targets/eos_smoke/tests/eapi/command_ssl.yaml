@@ -1,0 +1,25 @@
+---
+- name: Test 'show version' via eAPI SSL (should fail with Py3.10 because of default ciphers)
+  ignore_errors: true
+  register: result
+  vars:
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+  arista.eos.eos_command:
+    commands:
+      - show version
+
+- assert:
+    that:
+      - '"[SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure" in result.module_stderr'
+  when: result.failed
+
+- name: Test 'show version' via eAPI SSL when ansible-core >= 2.14 (ansible_httpapi_ciphers=['AES256-SHA'])
+  vars:
+    ansible_httpapi_use_ssl: true
+    ansible_httpapi_validate_certs: false
+    ansible_httpapi_ciphers: ['AES256-SHA']
+  arista.eos.eos_command:
+    commands:
+      - show version
+  when: ansible_version.full is version('2.14.0', '>=')
