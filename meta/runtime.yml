@@ -1,5 +1,5 @@
 ---
-requires_ansible: '>=2.9.10'
+requires_ansible: ">=2.9.10"
 plugin_routing:
   modules:
     acl_interfaces:
@@ -11,11 +11,11 @@ plugin_routing:
     bgp:
       redirect: arista.eos.eos_bgp
       deprecation:
-        removal_date: '2023-01-01'
+        removal_date: "2023-01-01"
         warning_text: See the plugin documentation for more details
     eos_bgp:
       deprecation:
-        removal_date: '2023-01-01'
+        removal_date: "2023-01-01"
         warning_text: See the plugin documentation for more details
     bgp_address_family:
       redirect: arista.eos.eos_bgp_address_family
@@ -52,11 +52,11 @@ plugin_routing:
     logging:
       redirect: arista.eos.eos_logging
       deprecation:
-        removal_date: '2024-01-01'
+        removal_date: "2024-01-01"
         warning_text: See the plugin documentation for more details
     eos_logging:
       deprecation:
-        removal_date: '2024-01-01'
+        removal_date: "2024-01-01"
         warning_text: See the plugin documentation for more details
     logging_global:
       redirect: arista.eos.eos_logging_global

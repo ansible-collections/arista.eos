@@ -4,6 +4,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import re
 
@@ -11,11 +12,12 @@ from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
-    CliProvider,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.neighbors import (
     AFNeighbors,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
+    CliProvider,
 )
 
 
@@ -34,7 +36,9 @@ class AddressFamily(CliProvider):
             if config:
                 context_path = [router_context, context]
                 context_config = self.get_config_context(
-                    config, context_path, indent=2
+                    config,
+                    context_path,
+                    indent=2,
                 )
 
             for key, value in iteritems(item):
@@ -126,7 +130,9 @@ class AddressFamily(CliProvider):
         if self.params["operation"] == "replace":
             if config:
                 matches = re.findall(
-                    r"redistribute (\S+)(?:\s*)(\d*)", config, re.M
+                    r"redistribute (\S+)(?:\s*)(\d*)",
+                    config,
+                    re.M,
                 )
                 for i in range(0, len(matches)):
                     matches[i] = " ".join(matches[i]).strip()
@@ -138,5 +144,6 @@ class AddressFamily(CliProvider):
     def _render_neighbors(self, item, config):
         """generate bgp neighbor configuration"""
         return AFNeighbors(self.params).render(
-            config, nbr_list=item["neighbors"]
+            config,
+            nbr_list=item["neighbors"],
         )

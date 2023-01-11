@@ -18,6 +18,7 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import json
@@ -68,7 +69,9 @@ class TestEosModule(ModuleTestCase):
             self.load_fixtures(commands, transport=transport)
         else:
             self.load_fixtures(
-                commands, transport=transport, filename=filename
+                commands,
+                transport=transport,
+                filename=filename,
             )
 
         if failed:
@@ -100,7 +103,9 @@ class TestEosModule(ModuleTestCase):
                     )
                 else:
                     self.assertEqual(
-                        commands, result["commands"], result["commands"]
+                        commands,
+                        result["commands"],
+                        result["commands"],
                     )
 
         return result

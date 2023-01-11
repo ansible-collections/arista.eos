@@ -1,5 +1,6 @@
 ---
-- debug: msg="START eos cli/eos_bgp.yaml on connection={{ ansible_connection }}"
+- name: Basic Tests
+  ansible.builtin.debug: msg="START eos cli/eos_bgp.yaml on connection={{ ansible_connection }}"
 
 - name: Clear existing BGP config
   become: true
@@ -16,7 +17,8 @@
       bgp_as: 64496
       router_id: 192.0.2.2
 
-- assert:
+- name: Assertion
+  ansible.builtin.assert:
     that:
       - result.changed == true
       - "'router bgp 64496' in result.commands"
@@ -27,7 +29,8 @@
   register: result
   arista.eos.eos_bgp: *id001
 
-- assert:
+- name: Assertion
+  ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -39,7 +42,6 @@
     config:
       bgp_as: 64496
       neighbors:
-
         - neighbor: 192.0.2.10
           remote_as: 64496
           description: IBGP_NBR_1
@@ -53,7 +55,7 @@
           description: IBGP_NBR_2
           ebgp_multihop: 150
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'router bgp 64496' in result.commands"
@@ -70,7 +72,7 @@
   register: result
   arista.eos.eos_bgp: *id002
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -82,7 +84,6 @@
     config:
       bgp_as: 64496
       neighbors:
-
         - neighbor: 192.0.2.15
           remote_as: 64496
           description: IBGP_NBR_2
@@ -92,7 +93,7 @@
           remote_as: 64511
           description: EBGP_NBR_1
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'neighbor 203.0.113.10 remote-as 64511' in result.commands"
@@ -104,7 +105,7 @@
   register: result
   arista.eos.eos_bgp: *id003
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -116,7 +117,6 @@
     config:
       bgp_as: 64496
       networks:
-
         - prefix: 203.0.113.0
           masklen: 27
           route_map: RMAP_1
@@ -125,7 +125,7 @@
           masklen: 27
           route_map: RMAP_2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == True
       - "'router bgp 64496' in result.commands"
@@ -137,7 +137,7 @@
   register: result
   arista.eos.eos_bgp: *id004
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -149,7 +149,6 @@
     config:
       bgp_as: 64496
       networks:
-
         - prefix: 203.0.113.0
           masklen: 27
           route_map: RMAP_1
@@ -157,7 +156,7 @@
         - prefix: 198.51.100.16
           masklen: 28
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == True
       - "'router bgp 64496' in result.commands"
@@ -169,7 +168,7 @@
   register: result
   arista.eos.eos_bgp: *id005
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -181,13 +180,12 @@
     config:
       bgp_as: 64496
       redistribute:
-
         - protocol: ospf
           route_map: RMAP_1
 
         - protocol: rip
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'router bgp 64496' in result.commands"
@@ -199,7 +197,7 @@
   register: result
   arista.eos.eos_bgp: *id006
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -211,14 +209,13 @@
     config:
       bgp_as: 64496
       redistribute:
-
         - protocol: ospf
           route_map: RMAP_1
 
         - protocol: static
           route_map: RMAP_2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'redistribute static route-map RMAP_2' in result.commands"
@@ -229,7 +226,7 @@
   register: result
   arista.eos.eos_bgp: *id007
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -241,10 +238,8 @@
     config:
       bgp_as: 64496
       address_family:
-
         - afi: ipv4
           neighbors:
-
             - neighbor: 203.0.113.10
               activate: true
               default_originate: true
@@ -253,7 +248,7 @@
               activate: true
               graceful_restart: false
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'router bgp 64496' in result.commands"
@@ -268,7 +263,7 @@
   register: result
   arista.eos.eos_bgp: *id008
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -280,10 +275,8 @@
     config:
       bgp_as: 64496
       address_family:
-
         - afi: ipv4
           networks:
-
             - prefix: 198.51.100.48
               masklen: 28
               route_map: RMAP_1
@@ -297,11 +290,10 @@
 
         - afi: ipv6
           networks:
-
-            - prefix: '2001:db8::'
+            - prefix: "2001:db8::"
               masklen: 33
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'router bgp 64496' in result.commands"
@@ -317,7 +309,7 @@
   register: result
   arista.eos.eos_bgp: *id009
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -329,10 +321,8 @@
     config:
       bgp_as: 64496
       address_family:
-
         - afi: ipv4
           networks:
-
             - prefix: 198.51.100.80
               masklen: 28
 
@@ -344,11 +334,10 @@
 
         - afi: ipv6
           networks:
-
-            - prefix: '2001:db8:1000::'
+            - prefix: "2001:db8:1000::"
               masklen: 37
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"router bgp 64496" in result.commands'
@@ -366,7 +355,7 @@
   register: result
   arista.eos.eos_bgp: *id010
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -380,7 +369,7 @@
       router_id: 192.0.2.10
       log_neighbor_changes: true
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'no router bgp 64496' in result.commands"
@@ -393,7 +382,7 @@
   register: result
   arista.eos.eos_bgp: *id011
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'no router bgp 64497' in result.commands"
@@ -403,8 +392,8 @@
   register: result
   arista.eos.eos_bgp: *id011
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- debug: msg="END eos cli/eos_bgp.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END eos cli/eos_bgp.yaml on connection={{ ansible_connection }}"

@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/toplevel_after.yaml"
+- ansible.builtin.debug: msg="START eapi/toplevel_after.yaml"
 
 - name: setup
   become: true
@@ -16,7 +16,7 @@
     lines: hostname foo
     after: snmp-server contact bar
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'hostname foo' in result.updates"
@@ -29,7 +29,7 @@
     lines: hostname foo
     after: snmp-server contact foo
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -41,4 +41,4 @@
       - hostname {{ inventory_hostname_short }}
     match: none
 
-- debug: msg="END eapi/toplevel_after.yaml"
+- ansible.builtin.debug: msg="END eapi/toplevel_after.yaml"

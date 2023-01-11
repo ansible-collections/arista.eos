@@ -12,14 +12,17 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
+
 from copy import deepcopy
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.static_routes.static_routes import (
     Static_routesArgs,
 )
@@ -89,7 +92,8 @@ class Static_routesFacts(object):
         for resource in resource_vrf.keys():
             if resource:
                 obj = self.render_config(
-                    self.generated_spec, resource_vrf[resource][0]
+                    self.generated_spec,
+                    resource_vrf[resource][0],
                 )
                 if obj:
                     objs.append(obj)
@@ -98,7 +102,8 @@ class Static_routesFacts(object):
         if objs:
             facts["static_routes"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["static_routes"].append(utils.remove_empties(cfg))
@@ -137,7 +142,8 @@ class Static_routesFacts(object):
         conf_list = conf.split("\n")
         for conf_elem in conf_list:
             matches = re.findall(
-                r"(ip|ipv6) route ([\d\.\/:]+|vrf) (.+)$", conf_elem
+                r"(ip|ipv6) route ([\d\.\/:]+|vrf) (.+)$",
+                conf_elem,
             )
             if matches:
                 remainder = matches[0][2].split()
@@ -200,15 +206,16 @@ class Static_routesFacts(object):
                     nexthops.update({"interface": interface})
                 for attribute in remainder:
                     forward_addr = re.search(
-                        r"([\dA-Fa-f]+[:\.]+)+[\dA-Fa-f]+", attribute
+                        r"([\dA-Fa-f]+[:\.]+)+[\dA-Fa-f]+",
+                        attribute,
                     )
                     if forward_addr:
                         nexthops.update(
                             {
                                 "forward_router_address": remainder.pop(
-                                    remainder.index(attribute)
-                                )
-                            }
+                                    remainder.index(attribute),
+                                ),
+                            },
                         )
                 for attribute in remainder:
                     for params in ["tag", "name", "track"]:
@@ -219,9 +226,9 @@ class Static_routesFacts(object):
                             nexthops.update(
                                 {
                                     keyname: remainder.pop(
-                                        remainder.index(attribute) + 1
-                                    )
-                                }
+                                        remainder.index(attribute) + 1,
+                                    ),
+                                },
                             )
                             remainder.pop(remainder.index(attribute))
                 if remainder:

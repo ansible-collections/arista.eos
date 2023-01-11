@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -319,13 +320,12 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     NetworkConfig,
     dumps,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
+    get_connection,
     get_session_config,
     load_config,
-    get_connection,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     run_commands,
 )
 
@@ -364,7 +364,7 @@ def save_config(module, result):
         module.warn(
             "Skipping command `copy running-config startup-config` "
             "due to check_mode.  Configuration not copied to "
-            "non-volatile storage"
+            "non-volatile storage",
         )
 
 
@@ -378,14 +378,16 @@ def main():
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
         match=dict(
-            default="line", choices=["line", "strict", "exact", "none"]
+            default="line",
+            choices=["line", "strict", "exact", "none"],
         ),
         replace=dict(default="line", choices=["line", "block", "config"]),
         defaults=dict(type="bool", default=False),
         backup=dict(type="bool", default=False),
         backup_options=dict(type="dict", options=backup_spec),
         save_when=dict(
-            choices=["always", "never", "modified", "changed"], default="never"
+            choices=["always", "never", "modified", "changed"],
+            default="never",
         ),
         diff_against=dict(
             choices=[
@@ -437,7 +439,7 @@ def main():
         and not connection.supports_sessions
     ):
         module.fail_json(
-            msg="Cannot diff against sessions when sessions are disabled. Please change diff_against to another value"
+            msg="Cannot diff against sessions when sessions are disabled. Please change diff_against to another value",
         )
 
     if module.params["backup"] or (
@@ -484,7 +486,10 @@ def main():
             commit = not module.check_mode
 
             response = load_config(
-                module, commands, replace=replace, commit=commit
+                module,
+                commands,
+                replace=replace,
+                commit=commit,
             )
 
             result["changed"] = True
@@ -512,10 +517,14 @@ def main():
         )
 
         running_config = NetworkConfig(
-            indent=3, contents=output[0], ignore_lines=diff_ignore_lines
+            indent=3,
+            contents=output[0],
+            ignore_lines=diff_ignore_lines,
         )
         startup_config = NetworkConfig(
-            indent=3, contents=output[1], ignore_lines=diff_ignore_lines
+            indent=3,
+            contents=output[1],
+            ignore_lines=diff_ignore_lines,
         )
 
         if running_config.sha1 != startup_config.sha1:
@@ -526,7 +535,8 @@ def main():
     if module._diff:
         if not running_config:
             output = run_commands(
-                module, {"command": "show running-config", "output": "text"}
+                module,
+                {"command": "show running-config", "output": "text"},
             )
             contents = output[0]
         else:
@@ -534,13 +544,15 @@ def main():
 
         # recreate the object in order to process diff_ignore_lines
         running_config = NetworkConfig(
-            indent=3, contents=contents, ignore_lines=diff_ignore_lines
+            indent=3,
+            contents=contents,
+            ignore_lines=diff_ignore_lines,
         )
 
         if module.params["diff_against"] == "running":
             if module.check_mode:
                 module.warn(
-                    "unable to perform diff against running-config due to check mode"
+                    "unable to perform diff against running-config due to check mode",
                 )
                 contents = None
             else:
@@ -561,7 +573,9 @@ def main():
 
         if contents is not None:
             base_config = NetworkConfig(
-                indent=3, contents=contents, ignore_lines=diff_ignore_lines
+                indent=3,
+                contents=contents,
+                ignore_lines=diff_ignore_lines,
             )
 
             if running_config.sha1 != base_config.sha1:
@@ -573,7 +587,9 @@ def main():
                     after = running_config
                 elif module.params["diff_against"] == "validate_config":
                     before = running = get_running_config(
-                        module, None, flags=flags
+                        module,
+                        None,
+                        flags=flags,
                     )
                     replace = module.params["replace"] == "config"
                     after = get_session_config(
@@ -587,11 +603,11 @@ def main():
                     {
                         "changed": False,
                         "diff": {"before": str(before), "after": str(after)},
-                    }
+                    },
                 )
 
     if result.get("changed") and any(
-        (module.params["src"], module.params["lines"])
+        (module.params["src"], module.params["lines"]),
     ):
         msg = (
             "To ensure idempotency and correct diff the input configuration lines should be"

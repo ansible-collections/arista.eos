@@ -1,12 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ntp_global replaced integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: replace given ntp_global configuration
       become: true
       register: result
@@ -31,7 +30,7 @@
                   - acl_name: "acl03"
                     direction: "in"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 14
           - result.changed == true
@@ -44,10 +43,9 @@
       register: result
       arista.eos.eos_ntp_global: *replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

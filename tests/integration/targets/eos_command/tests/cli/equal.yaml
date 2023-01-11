@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/equal.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/equal.yaml on connection={{ ansible_connection }}"
 
 - name: test eq operator
   register: result
@@ -10,7 +10,7 @@
     wait_for:
       - result[1].interfaces.Management1.name eq Management1
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
@@ -24,9 +24,9 @@
     wait_for:
       - result[1].interfaces.Management1.name == Management1
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
 
-- debug: msg="END cli/equal.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/equal.yaml on connection={{ ansible_connection }}"

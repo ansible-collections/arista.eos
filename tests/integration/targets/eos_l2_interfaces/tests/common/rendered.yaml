@@ -1,9 +1,8 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         mode: trunk
         trunk:
@@ -21,11 +20,11 @@
   register: result
   become: true
   arista.eos.eos_l2_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: rendered
 
 - name: Assert
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered|symmetric_difference(result.rendered) == []
       - result['changed'] == false

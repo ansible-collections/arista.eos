@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/sublevel_strict.yaml"
+- ansible.builtin.debug: msg="START eapi/sublevel_strict.yaml"
 
 - name: setup
   become: true
@@ -29,7 +29,7 @@
     match: strict
     replace: block
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ip access-list test' in result.updates"
@@ -51,7 +51,7 @@
     parents: ip access-list test
     match: strict
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -61,4 +61,4 @@
     lines: no ip access-list test
     match: none
 
-- debug: msg="END eapi/sublevel_strict.yaml"
+- ansible.builtin.debug: msg="END eapi/sublevel_strict.yaml"

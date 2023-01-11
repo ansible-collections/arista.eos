@@ -4,13 +4,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_lag_interfaces
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -21,36 +23,36 @@ class TestEosLagInterfacesModule(TestEosModule):
         super(TestEosLagInterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
         self.get_resource_connection_facts = (
             self.mock_get_resource_connection_facts.start()
         )
 
         self.mock_edit_config = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
         )
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.lag_interfaces.lag_interfaces.Lag_interfacesFacts.get_device_data"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.lag_interfaces.lag_interfaces.Lag_interfacesFacts.get_device_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -79,10 +81,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                             dict(member="Ethernet1", mode="on"),
                             dict(member="Ethernet2", mode="on"),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "interface Ethernet1",
@@ -102,10 +104,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                             dict(member="Ethernet1", mode="on"),
                             dict(member="Ethernet2", mode="on"),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "interface Ethernet1",
@@ -122,10 +124,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                     dict(
                         name="Port-Channel5",
                         members=[dict(member="Ethernet3", mode="passive")],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False)
 
@@ -136,10 +138,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                     dict(
                         name="Port-Channel1",
                         members=[dict(member="Ethernet3", mode="on")],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = ["interface Ethernet3", "channel-group 1 mode on"]
 
@@ -152,10 +154,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                     dict(
                         name="Port-Channel5",
                         members=[dict(member="Ethernet3", mode="passive")],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False)
 
@@ -166,10 +168,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                     dict(
                         name="Port-Channel1",
                         members=[dict(member="Ethernet2", mode="on")],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface Ethernet2",
@@ -186,10 +188,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                     dict(
                         name="Port-Channel5",
                         members=[dict(member="Ethernet2", mode="on")],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface Ethernet2",
@@ -207,10 +209,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                     dict(
                         name="Port-Channel5",
                         members=[dict(member="Ethernet3", mode="passive")],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False)
 
@@ -221,10 +223,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                     dict(
                         name="Port-Channel5",
                         members=[dict(member="Ethernet3", mode="passive")],
-                    )
+                    ),
                 ],
                 state="deleted",
-            )
+            ),
         )
         commands = ["no interface Port-Channel5"]
 
@@ -240,10 +242,10 @@ class TestEosLagInterfacesModule(TestEosModule):
                             dict(member="Ethernet1", mode="on"),
                             dict(member="Ethernet2", mode="on"),
                         ],
-                    )
+                    ),
                 ],
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "interface Ethernet1",
@@ -253,7 +255,9 @@ class TestEosLagInterfacesModule(TestEosModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_eos_lag_interfaces_parsed(self):
@@ -273,7 +277,7 @@ class TestEosLagInterfacesModule(TestEosModule):
                     {"member": "Ethernet1", "mode": "on"},
                     {"member": "Ethernet2", "mode": "on"},
                 ],
-            }
+            },
         ]
         self.assertEqual(parsed_list, result["parsed"])
 
@@ -284,6 +288,6 @@ class TestEosLagInterfacesModule(TestEosModule):
             {
                 "name": "Port-Channel5",
                 "members": [{"member": "Ethernet3", "mode": "passive"}],
-            }
+            },
         ]
         self.assertEqual(gather_list, result["gathered"])

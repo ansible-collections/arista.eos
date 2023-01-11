@@ -13,6 +13,7 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import itertools
@@ -21,9 +22,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     search_obj_in_list,
+    to_list,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -48,10 +50,12 @@ class Acl_interfaces(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         acl_interfaces_facts = facts["ansible_network_resources"].get(
-            "acl_interfaces"
+            "acl_interfaces",
         )
         if not acl_interfaces_facts:
             return []
@@ -89,10 +93,10 @@ class Acl_interfaces(ConfigBase):
         elif self.state == "parsed":
             if not self._module.params["running_config"]:
                 self._module.fail_json(
-                    msg="Value of running_config parameter must not be empty for state parsed"
+                    msg="Value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_acl_interfaces_facts(
-                data=self._module.params["running_config"]
+                data=self._module.params["running_config"],
             )
         else:
             changed_acl_interfaces_facts = []
@@ -132,8 +136,8 @@ class Acl_interfaces(ConfigBase):
         if self.state in ("merged", "replaced", "overridden") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
         state = self._module.params["state"]
         if state == "overridden":
@@ -167,26 +171,26 @@ class Acl_interfaces(ConfigBase):
                     obj = self.get_acl_diff(obj_in_have, w)
                     if obj[0]:
                         to_delete = {
-                            "access_groups": [{"acls": obj[0], "afi": "ipv4"}]
+                            "access_groups": [{"acls": obj[0], "afi": "ipv4"}],
                         }
                         commands.append(remove_commands(to_delete, w["name"]))
                     if obj[1]:
                         to_delete = {
-                            "access_groups": [{"acls": obj[1], "afi": "ipv6"}]
+                            "access_groups": [{"acls": obj[1], "afi": "ipv6"}],
                         }
                         commands.append(remove_commands(to_delete, w["name"]))
                     diff = self.get_acl_diff(w, obj_in_have)
                     if diff[0]:
                         diff_access_group.append(
-                            {"afi": "ipv4", "acls": diff[0]}
+                            {"afi": "ipv4", "acls": diff[0]},
                         )
                     if diff[1]:
                         diff_access_group.append(
-                            {"afi": "ipv6", "acls": diff[1]}
+                            {"afi": "ipv6", "acls": diff[1]},
                         )
                     if diff_access_group:
                         commands.append(
-                            add_commands(diff_access_group, w["name"])
+                            add_commands(diff_access_group, w["name"]),
                         )
             if commands:
                 intf_command = ["interface " + w["name"]]
@@ -219,26 +223,26 @@ class Acl_interfaces(ConfigBase):
                     obj = self.get_acl_diff(obj_in_have, w)
                     if obj[0]:
                         to_delete = {
-                            "access_groups": [{"acls": obj[0], "afi": "ipv4"}]
+                            "access_groups": [{"acls": obj[0], "afi": "ipv4"}],
                         }
                         commands.append(remove_commands(to_delete, w["name"]))
                     if obj[1]:
                         to_delete = {
-                            "access_groups": [{"acls": obj[1], "afi": "ipv6"}]
+                            "access_groups": [{"acls": obj[1], "afi": "ipv6"}],
                         }
                         commands.append(remove_commands(to_delete, w["name"]))
                     diff = self.get_acl_diff(w, obj_in_have)
                     if diff[0]:
                         diff_access_group.append(
-                            {"afi": "ipv4", "acls": diff[0]}
+                            {"afi": "ipv4", "acls": diff[0]},
                         )
                     if diff[1]:
                         diff_access_group.append(
-                            {"afi": "ipv6", "acls": diff[1]}
+                            {"afi": "ipv6", "acls": diff[1]},
                         )
                     if diff_access_group:
                         commands.append(
-                            add_commands(diff_access_group, w["name"])
+                            add_commands(diff_access_group, w["name"]),
                         )
             if commands:
                 intf_command = ["interface " + w["name"]]
@@ -282,11 +286,11 @@ class Acl_interfaces(ConfigBase):
                     diff = self.get_acl_diff(w, obj_in_have)
                     if diff[0]:
                         diff_access_group.append(
-                            {"afi": "ipv4", "acls": diff[0]}
+                            {"afi": "ipv4", "acls": diff[0]},
                         )
                     if diff[1]:
                         diff_access_group.append(
-                            {"afi": "ipv6", "acls": diff[1]}
+                            {"afi": "ipv6", "acls": diff[1]},
                         )
                     if diff_access_group:
                         commands = add_commands(diff_access_group, w["name"])
@@ -318,12 +322,14 @@ class Acl_interfaces(ConfigBase):
                 for w_grp in w["access_groups"]:
                     if "acls" not in w_grp.keys() or not w_grp["acls"]:
                         obj = self.get_acls_from_afi(
-                            w["name"], w_grp["afi"], have
+                            w["name"],
+                            w_grp["afi"],
+                            have,
                         )
                         to_delete = {
                             "access_groups": [
-                                {"acls": obj, "afi": w_grp["afi"]}
-                            ]
+                                {"acls": obj, "afi": w_grp["afi"]},
+                            ],
                         }
                         commands = remove_commands(to_delete, w["name"])
                     else:
@@ -337,20 +343,20 @@ class Acl_interfaces(ConfigBase):
                         if obj[0]:
                             to_delete = {
                                 "access_groups": [
-                                    {"acls": obj[0], "afi": "ipv4"}
-                                ]
+                                    {"acls": obj[0], "afi": "ipv4"},
+                                ],
                             }
                             commands.append(
-                                remove_commands(to_delete, w["name"])
+                                remove_commands(to_delete, w["name"]),
                             )
                         if obj[1]:
                             to_delete = {
                                 "access_groups": [
-                                    {"acls": obj[1], "afi": "ipv6"}
-                                ]
+                                    {"acls": obj[1], "afi": "ipv6"},
+                                ],
                             }
                             commands.append(
-                                remove_commands(to_delete, w["name"])
+                                remove_commands(to_delete, w["name"]),
                             )
                         if commands:
                             commands = list(itertools.chain(*commands))
@@ -381,7 +387,7 @@ class Acl_interfaces(ConfigBase):
                 h_acls_v6 = h_group["acls"]
         for item in w_acls_v4:
             match = list(
-                filter(lambda x: x["name"] == item["name"], h_acls_v4)
+                filter(lambda x: x["name"] == item["name"], h_acls_v4),
             )
             if match:
                 if item["direction"] == match[0]["direction"]:
@@ -395,7 +401,7 @@ class Acl_interfaces(ConfigBase):
                     diff_v4.append(item)
         for item in w_acls_v6:
             match = list(
-                filter(lambda x: x["name"] == item["name"], h_acls_v6)
+                filter(lambda x: x["name"] == item["name"], h_acls_v6),
             )
             if match:
                 if item["direction"] == match[0]["direction"]:
@@ -442,7 +448,7 @@ def add_commands(want, interface):
                     + " "
                     + acl["name"]
                     + " "
-                    + acl["direction"]
+                    + acl["direction"],
                 )
     return commands
 
@@ -470,6 +476,6 @@ def remove_commands(want, interface):
                     + " "
                     + acl["name"]
                     + " "
-                    + acl["direction"]
+                    + acl["direction"],
                 )
     return commands

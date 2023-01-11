@@ -19,6 +19,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -59,19 +60,20 @@ import re
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_text
 from ansible.module_utils.common._collections_compat import Mapping
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    session_name,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.config import (
     NetworkConfig,
     dumps,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    to_list,
+)
 from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import (
     CliconfBase,
     enable_mode,
+)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    session_name,
 )
 
 
@@ -95,13 +97,13 @@ class Cliconf(CliconfBase):
         if format not in options_values["format"]:
             raise ValueError(
                 "'format' value %s is invalid. Valid values are %s"
-                % (format, ",".join(options_values["format"]))
+                % (format, ",".join(options_values["format"])),
             )
 
         lookup = {"running": "running-config", "startup": "startup-config"}
         if source not in lookup:
             raise ValueError(
-                "fetching configuration from %s is not supported" % source
+                "fetching configuration from %s is not supported" % source,
             )
 
         cmd = "show %s " % lookup[source]
@@ -114,17 +116,25 @@ class Cliconf(CliconfBase):
 
     @enable_mode
     def get_session_config(
-        self, candidate=None, commit=True, replace=None, comment=None
+        self,
+        candidate=None,
+        commit=True,
+        replace=None,
+        comment=None,
     ):
 
         operations = self.get_device_operations()
         self.check_edit_config_capability(
-            operations, candidate, commit, replace, comment
+            operations,
+            candidate,
+            commit,
+            replace,
+            comment,
         )
 
         if (commit is False) and (not self.supports_sessions()):
             raise ValueError(
-                "check mode is not supported without configuration session"
+                "check mode is not supported without configuration session",
             )
 
         resp = {}
@@ -183,17 +193,25 @@ class Cliconf(CliconfBase):
 
     @enable_mode
     def edit_config(
-        self, candidate=None, commit=True, replace=None, comment=None
+        self,
+        candidate=None,
+        commit=True,
+        replace=None,
+        comment=None,
     ):
 
         operations = self.get_device_operations()
         self.check_edit_config_capability(
-            operations, candidate, commit, replace, comment
+            operations,
+            candidate,
+            commit,
+            replace,
+            comment,
         )
 
         if (commit is False) and (not self.supports_sessions()):
             raise ValueError(
-                "check mode is not supported without configuration session"
+                "check mode is not supported without configuration session",
             )
 
         resp = {}
@@ -294,7 +312,9 @@ class Cliconf(CliconfBase):
             version = cmd.pop("version", None)
             if output:
                 cmd["command"] = self._get_command_with_output(
-                    cmd["command"], output, version
+                    cmd["command"],
+                    output,
+                    version,
                 )
 
             try:
@@ -329,19 +349,19 @@ class Cliconf(CliconfBase):
 
         if candidate is None and device_operations["supports_generate_diff"]:
             raise ValueError(
-                "candidate configuration is required to generate diff"
+                "candidate configuration is required to generate diff",
             )
 
         if diff_match not in option_values["diff_match"]:
             raise ValueError(
                 "'match' value %s in invalid, valid values are %s"
-                % (diff_match, ", ".join(option_values["diff_match"]))
+                % (diff_match, ", ".join(option_values["diff_match"])),
             )
 
         if diff_replace not in option_values["diff_replace"]:
             raise ValueError(
                 "'replace' value %s in invalid, valid values are %s"
-                % (diff_replace, ", ".join(option_values["diff_replace"]))
+                % (diff_replace, ", ".join(option_values["diff_replace"])),
             )
 
         # prepare candidate configuration
@@ -351,10 +371,15 @@ class Cliconf(CliconfBase):
         if running and diff_match != "none" and diff_replace != "config":
             # running configuration
             running_obj = NetworkConfig(
-                indent=3, contents=running, ignore_lines=diff_ignore_lines
+                indent=3,
+                contents=running,
+                ignore_lines=diff_ignore_lines,
             )
             configdiffobjs = candidate_obj.difference(
-                running_obj, path=path, match=diff_match, replace=diff_replace
+                running_obj,
+                path=path,
+                match=diff_match,
+                replace=diff_replace,
             )
 
         else:
@@ -450,7 +475,8 @@ class Cliconf(CliconfBase):
         """
         if self._connection.connected:
             self._update_cli_prompt_context(
-                config_context="(config", exit_command="abort"
+                config_context="(config",
+                exit_command="abort",
             )
 
     def _get_command_with_output(self, command, output, version):
@@ -458,7 +484,7 @@ class Cliconf(CliconfBase):
         if output not in options_values["output"]:
             raise ValueError(
                 "'output' value %s is invalid. Valid values are %s"
-                % (output, ",".join(options_values["output"]))
+                % (output, ",".join(options_values["output"])),
             )
 
         if output == "json" and not command.endswith("| json"):

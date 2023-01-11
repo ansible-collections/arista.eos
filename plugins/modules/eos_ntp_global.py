@@ -10,6 +10,7 @@ The module file for eos_ntp_global
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -1016,6 +1017,7 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ntp_global.ntp_global import (
     Ntp_globalArgs,
 )

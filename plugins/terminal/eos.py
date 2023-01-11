@@ -19,10 +19,11 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-import re
 import json
+import re
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_bytes, to_text
@@ -56,7 +57,7 @@ class TerminalModule(TerminalBase):
         re.compile(rb"% Prefix length must be less than"),
         # returned in response to 'channel-group <name> mode <mode>'
         re.compile(
-            rb"% Cannot change mode; remove all members and try again."
+            rb"% Cannot change mode; remove all members and try again.",
         ),
     ]
 
@@ -76,26 +77,27 @@ class TerminalModule(TerminalBase):
         cmd = {"command": "enable"}
         if passwd:
             cmd["prompt"] = to_text(
-                r"[\r\n]?[Pp]assword: $", errors="surrogate_or_strict"
+                r"[\r\n]?[Pp]assword: $",
+                errors="surrogate_or_strict",
             )
             cmd["answer"] = passwd
             cmd["prompt_retry_check"] = True
 
         try:
             self._exec_cli_command(
-                to_bytes(json.dumps(cmd), errors="surrogate_or_strict")
+                to_bytes(json.dumps(cmd), errors="surrogate_or_strict"),
             )
             prompt = self._get_prompt()
             if prompt is None or not prompt.endswith(b"#"):
                 raise AnsibleConnectionFailure(
                     "failed to elevate privilege to enable mode still at prompt [%s]"
-                    % prompt
+                    % prompt,
                 )
         except AnsibleConnectionFailure as e:
             prompt = self._get_prompt()
             raise AnsibleConnectionFailure(
                 "unable to elevate privilege to enable mode, at prompt [%s] with error: %s"
-                % (prompt, e.message)
+                % (prompt, e.message),
             )
 
     def on_unbecome(self):

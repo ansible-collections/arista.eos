@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/sublevel.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/sublevel.yaml on connection={{ ansible_connection }}"
 
 - name: setup
   become: true
@@ -14,7 +14,7 @@
     lines: name test
     parents: vlan 10
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'vlan 10' in result.updates"
@@ -27,7 +27,7 @@
     lines: name test
     parents: vlan 10
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -37,4 +37,4 @@
     lines: no vlan 10
     match: none
 
-- debug: msg="END cli/sublevel.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/sublevel.yaml on connection={{ ansible_connection }}"

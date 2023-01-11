@@ -4,6 +4,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import re
 
@@ -11,21 +12,21 @@ from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
-    register_provider,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
-    CliProvider,
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.address_family import (
+    AddressFamily,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.neighbors import (
     Neighbors,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.address_family import (
-    AddressFamily,
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
+    CliProvider,
+    register_provider,
 )
 
+
 REDISTRIBUTE_PROTOCOLS = frozenset(
-    ["ospf", "ospfv3", "rip", "isis", "static", "connected"]
+    ["ospf", "ospfv3", "rip", "isis", "static", "connected"],
 )
 
 
@@ -56,7 +57,7 @@ class Provider(CliProvider):
             self._validate_input(config)
             if operation == "replace":
                 if existing_as and int(existing_as) != self.get_value(
-                    "config.bgp_as"
+                    "config.bgp_as",
                 ):
                     commands.append("no router bgp %s" % existing_as)
                     config = None
@@ -143,7 +144,9 @@ class Provider(CliProvider):
         if self.params["operation"] == "replace":
             if config:
                 matches = re.findall(
-                    r"redistribute (\S+)(?:\s*)(\d*)", config, re.M
+                    r"redistribute (\S+)(?:\s*)(\d*)",
+                    config,
+                    re.M,
                 )
                 for i in range(0, len(matches)):
                     matches[i] = " ".join(matches[i]).strip()
@@ -174,10 +177,10 @@ class Provider(CliProvider):
                     if item["networks"]:
                         raise ValueError(
                             "operation is replace but provided both root level networks and networks under %s address family"
-                            % item["afi"]
+                            % item["afi"],
                         )
 
             if config and device_has_AF(config):
                 raise ValueError(
-                    "operation is replace and device has one or more address family activated but root level network(s) provided"
+                    "operation is replace and device has one or more address family activated but root level network(s) provided",
                 )

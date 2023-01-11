@@ -1,13 +1,11 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         transmit: false
     other_config:
-
       - name: Ethernet2
         transmit: false
 
@@ -15,15 +13,16 @@
   arista.eos.eos_facts:
     gather_network_resources: lldp_interfaces
 
-- name: Replace existing LLDP configuration of specified interfaces with provided
+- name:
+    Replace existing LLDP configuration of specified interfaces with provided
     configuration
   register: result
   become: true
   arista.eos.eos_lldp_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: replaced
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.before)
         == []
@@ -32,15 +31,15 @@
   arista.eos.eos_facts:
     gather_network_resources: lldp_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.after)
         == []
 
-- set_fact:
-    expected_config: '{{ config + other_config }}'
+- ansible.builtin.set_fact:
+    expected_config: "{{ config + other_config }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.lldp_interfaces)
         == []

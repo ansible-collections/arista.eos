@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/sublevel.yaml"
+- ansible.builtin.debug: msg="START eapi/sublevel.yaml"
 
 - name: setup
   become: true
@@ -15,7 +15,7 @@
     parents: ip access-list test
     after: exit
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ip access-list test' in result.updates"
@@ -28,7 +28,7 @@
     lines: 10 permit ip any any log
     parents: ip access-list test
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -38,4 +38,4 @@
     lines: no ip access-list test
     match: none
 
-- debug: msg="END eapi/sublevel.yaml"
+- ansible.builtin.debug: msg="END eapi/sublevel.yaml"

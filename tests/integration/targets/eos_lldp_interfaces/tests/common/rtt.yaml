@@ -1,14 +1,12 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config1:
-
       - name: Ethernet1
         transmit: false
 
     config2:
-
       - name: Ethernet2
         receive: false
 
@@ -16,14 +14,14 @@
   register: baseconfig
   become: true
   arista.eos.eos_lldp_interfaces:
-    config: '{{ config1 }}'
+    config: "{{ config1 }}"
     state: merged
 
 - become: true
   arista.eos.eos_facts:
     gather_network_resources: lldp_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(baseconfig.after)
         == []
@@ -32,13 +30,11 @@
   register: result
   become: true
   arista.eos.eos_lldp_interfaces:
-    config: '{{ config2 }}'
+    config: "{{ config2 }}"
     state: merged
 
-
-- set_fact:
+- ansible.builtin.set_fact:
     expected_config:
-
       - name: Ethernet1
         transmit: false
         receive: false
@@ -47,7 +43,7 @@
         transmit: false
         receive: false
 
-- assert:
+- ansible.builtin.assert:
     that:
       - expected_config|symmetric_difference(result.after) == []
 
@@ -59,5 +55,5 @@
     state: overridden
 
 - name: Assert that config was reverted
-  assert:
+  ansible.builtin.assert:
     that: baseconfig.after == revert.after

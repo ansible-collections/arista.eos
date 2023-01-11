@@ -1,5 +1,5 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       - vlan_id: 10
         name: ten
@@ -10,11 +10,11 @@
   register: result
   become: true
   arista.eos.eos_vlans:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: rendered
 
 - name: Assert
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered.sort() == result.rendered.sort()
       - result['changed'] == false

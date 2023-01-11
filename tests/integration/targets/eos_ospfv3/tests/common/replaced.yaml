@@ -1,12 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ospfv3 replaced integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: replace given ospfv3 configuration
       become: true
       register: result
@@ -35,7 +34,7 @@
                       initial: 10
               vrf: "vrf02"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 14
           - result.changed == true
@@ -48,10 +47,10 @@
       register: result
       arista.eos.eos_ospfv3: *replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
 
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

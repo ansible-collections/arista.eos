@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -52,6 +53,7 @@ commands:
     - lldp run
 """
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
     load_config,
@@ -74,11 +76,12 @@ def main():
         state=dict(
             default="present",
             choices=["present", "absent", "enabled", "disabled"],
-        )
+        ),
     )
 
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
 
     warnings = list()

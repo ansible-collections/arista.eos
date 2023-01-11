@@ -1,6 +1,7 @@
 ---
-- debug:
-    msg: START eos_bgp_address_family_interfaces parsed integration tests on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg:
+      START eos_bgp_address_family_interfaces parsed integration tests on connection={{ ansible_connection
       }}
 
 - name: Provide the running configuration for parsing (config to be parsed)
@@ -10,7 +11,7 @@
     running_config: "{{ lookup('file', '_parsed.cfg') }}"
     state: parsed
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.parsed.address_family|symmetric_difference(replaced.before.address_family) == []

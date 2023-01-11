@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -14,18 +15,20 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
 import re
+
+from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.route_maps import (
-    Route_mapsTemplate,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.route_maps.route_maps import (
     Route_mapsArgs,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.route_maps import (
+    Route_mapsTemplate,
 )
 
 
@@ -112,7 +115,7 @@ class Route_mapsFacts(object):
                                 else:
                                     dict_update.update(el)
                         dict_update.update(
-                            {"match": match_dict, "set": set_dict}
+                            {"match": match_dict, "set": set_dict},
                         )
                         e_list.append(dict_update)
                         objs.update({"entries": e_list})
@@ -130,7 +133,7 @@ class Route_mapsFacts(object):
         ansible_facts["ansible_network_resources"].pop("route_maps", None)
         facts = {"route_maps": []}
         params = utils.remove_empties(
-            utils.validate_config(self.argument_spec, {"config": r_facts})
+            utils.validate_config(self.argument_spec, {"config": r_facts}),
         )
         if params.get("config"):
             for cfg in params["config"]:

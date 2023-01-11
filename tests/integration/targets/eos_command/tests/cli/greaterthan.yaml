@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/greaterthan.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/greaterthan.yaml on connection={{ ansible_connection }}"
 
 - name: test gt operator
   register: result
@@ -10,7 +10,7 @@
     wait_for:
       - result[1].interfaces.Management1.mtu gt 0
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
@@ -24,9 +24,9 @@
     wait_for:
       - result[1].interfaces.Management1.mtu > 0
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
 
-- debug: msg="END cli/greaterthan.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/greaterthan.yaml on connection={{ ansible_connection }}"

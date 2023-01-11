@@ -14,7 +14,7 @@
   arista.eos.eos_facts:
     gather_network_resources: lldp_global
 
-- set_fact:
+- ansible.builtin.set_fact:
     expected_config:
       timer: 3000
       holdtime: 100
@@ -23,6 +23,6 @@
         management_address: false
         system_description: false
 
-- assert:
+- ansible.builtin.assert:
     that:
       - expected_config == ansible_facts.network_resources.lldp_global

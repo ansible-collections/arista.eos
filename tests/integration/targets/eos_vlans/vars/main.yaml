@@ -8,7 +8,6 @@ parsed:
       state: suspend
       name: twenty
 
-
 rendered:
   - "vlan 10"
   - "name ten"

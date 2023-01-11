@@ -28,6 +28,7 @@ The module file for eos_bgp_global
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -2317,6 +2318,7 @@ EXAMPLES = """
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp_global.bgp_global import (
     Bgp_globalArgs,
 )
