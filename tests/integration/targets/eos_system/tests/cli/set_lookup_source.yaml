@@ -1,5 +1,6 @@
 ---
-- ansible.builtin.debug: msg="START cli/set_lookup_source.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START cli/set_lookup_source.yaml on connection={{ ansible_connection
     }}"
 
 - name: setup
@@ -36,7 +37,6 @@
   register: result
   arista.eos.eos_system:
     lookup_source:
-
       - interface: Management1
         vrf: ansible
 
@@ -52,7 +52,6 @@
   register: result
   arista.eos.eos_system:
     lookup_source:
-
       - interface: Management1
         vrf: ansible
 
@@ -68,5 +67,6 @@
       - no vrf instance ansible
     match: none
 
-- ansible.builtin.debug: msg="END cli/set_lookup_source.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="END cli/set_lookup_source.yaml on connection={{ ansible_connection
     }}"

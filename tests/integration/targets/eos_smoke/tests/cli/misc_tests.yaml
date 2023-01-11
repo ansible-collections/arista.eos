@@ -13,7 +13,7 @@
 
     - ansible.builtin.assert:
         that:
-          - 'result.failed == true'
+          - "result.failed == true"
           - '"privileged mode required" in result.msg'
 
     - name: command that doesn't require become

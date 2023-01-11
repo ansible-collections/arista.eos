@@ -50,7 +50,6 @@
     that:
       - result.msg == 'value of config parameter must not be empty for state rendered'
 
-
 - name: Parsed with empty config should give appropriate error message
   register: result
   become: true

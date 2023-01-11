@@ -42,7 +42,6 @@
     config:
       bgp_as: 64496
       neighbors:
-
         - neighbor: 192.0.2.10
           remote_as: 64496
           description: IBGP_NBR_1
@@ -85,7 +84,6 @@
     config:
       bgp_as: 64496
       neighbors:
-
         - neighbor: 192.0.2.15
           remote_as: 64496
           description: IBGP_NBR_2
@@ -119,7 +117,6 @@
     config:
       bgp_as: 64496
       networks:
-
         - prefix: 203.0.113.0
           masklen: 27
           route_map: RMAP_1
@@ -152,7 +149,6 @@
     config:
       bgp_as: 64496
       networks:
-
         - prefix: 203.0.113.0
           masklen: 27
           route_map: RMAP_1
@@ -184,7 +180,6 @@
     config:
       bgp_as: 64496
       redistribute:
-
         - protocol: ospf
           route_map: RMAP_1
 
@@ -214,7 +209,6 @@
     config:
       bgp_as: 64496
       redistribute:
-
         - protocol: ospf
           route_map: RMAP_1
 
@@ -244,10 +238,8 @@
     config:
       bgp_as: 64496
       address_family:
-
         - afi: ipv4
           neighbors:
-
             - neighbor: 203.0.113.10
               activate: true
               default_originate: true
@@ -283,10 +275,8 @@
     config:
       bgp_as: 64496
       address_family:
-
         - afi: ipv4
           networks:
-
             - prefix: 198.51.100.48
               masklen: 28
               route_map: RMAP_1
@@ -300,8 +290,7 @@
 
         - afi: ipv6
           networks:
-
-            - prefix: '2001:db8::'
+            - prefix: "2001:db8::"
               masklen: 33
 
 - ansible.builtin.assert:
@@ -332,10 +321,8 @@
     config:
       bgp_as: 64496
       address_family:
-
         - afi: ipv4
           networks:
-
             - prefix: 198.51.100.80
               masklen: 28
 
@@ -347,8 +334,7 @@
 
         - afi: ipv6
           networks:
-
-            - prefix: '2001:db8:1000::'
+            - prefix: "2001:db8:1000::"
               masklen: 37
 
 - ansible.builtin.assert:

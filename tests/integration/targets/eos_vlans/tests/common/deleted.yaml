@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - vlan_id: 20
 
 - become: true
@@ -14,7 +13,7 @@
   register: result
   become: true
   arista.eos.eos_vlans:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: deleted
 
 - ansible.builtin.assert:
@@ -33,7 +32,6 @@
 
 - ansible.builtin.set_fact:
     expected_config:
-
       - vlan_id: 10
         name: ten
         state: active

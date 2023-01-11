@@ -3,12 +3,10 @@
 
 - ansible.builtin.set_fact:
     config1:
-
       - name: Ethernet1
         transmit: false
 
     config2:
-
       - name: Ethernet2
         receive: false
 
@@ -16,7 +14,7 @@
   register: baseconfig
   become: true
   arista.eos.eos_lldp_interfaces:
-    config: '{{ config1 }}'
+    config: "{{ config1 }}"
     state: merged
 
 - become: true
@@ -32,13 +30,11 @@
   register: result
   become: true
   arista.eos.eos_lldp_interfaces:
-    config: '{{ config2 }}'
+    config: "{{ config2 }}"
     state: merged
-
 
 - ansible.builtin.set_fact:
     expected_config:
-
       - name: Ethernet1
         transmit: false
         receive: false

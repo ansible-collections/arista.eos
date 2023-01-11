@@ -3,12 +3,10 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - vlan_id: 20
         state: suspend
         name: twentyreplaced
     other_config:
-
       - vlan_id: 10
         name: ten
         state: active
@@ -21,7 +19,7 @@
   register: result
   become: true
   arista.eos.eos_vlans:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: replaced
 
 - ansible.builtin.assert:
@@ -39,7 +37,7 @@
         == []
 
 - ansible.builtin.set_fact:
-    expected_config: '{{ config + other_config }}'
+    expected_config: "{{ config + other_config }}"
 
 - ansible.builtin.assert:
     that:

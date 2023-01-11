@@ -1,10 +1,10 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_ospfv2 round trip integration tests ansible_connection={{ ansible_connection
+    msg:
+      Start eos_ospfv2 round trip integration tests ansible_connection={{ ansible_connection
       }}
 
 - block:
-
     - name: merge attributes of given ospfv2(apply base config).
       become: true
       register: base_config
@@ -96,5 +96,4 @@
       ansible.builtin.assert:
         that: base_config.after == revert.after
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

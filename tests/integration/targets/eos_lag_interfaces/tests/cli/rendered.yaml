@@ -12,7 +12,7 @@
   register: result
   become: true
   arista.eos.eos_lag_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: rendered
 
 - name: Assert

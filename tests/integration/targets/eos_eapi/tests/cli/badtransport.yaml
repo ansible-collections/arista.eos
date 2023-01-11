@@ -2,7 +2,6 @@
 - ansible.builtin.debug: msg="START CLI/BADTRANSPORT.YAML"
 
 - block:
-
     - name: Expect transport other than cli to fail
       register: eos_eapi_output
       ignore_errors: true

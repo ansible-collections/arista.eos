@@ -8,7 +8,6 @@
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: Gather route-map  configuration
       become: true
       register: result
@@ -26,5 +25,4 @@
           - result.gathered|symmetric_difference(gathered.config) == []
 
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

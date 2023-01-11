@@ -8,7 +8,6 @@
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: replace given bgp_global configuration
       become: true
       register: result
@@ -66,5 +65,4 @@
           - result.msg == 'Use the _bgp_address_family module to delete the address_family under vrf, before replacing/deleting the vrf.'
 
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

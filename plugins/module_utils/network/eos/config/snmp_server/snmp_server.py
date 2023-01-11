@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -20,20 +21,19 @@ created.
 import re
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_merge,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_merge,
+    get_from_dict,
+)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.snmp_server import (
     Snmp_serverTemplate,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    get_from_dict,
 )
 
 
@@ -199,7 +199,9 @@ class Snmp_server(ResourceModule):
         # remove remaining items in have for replaced
         for key, entry in iteritems(hdict):
             self.compare(
-                parsers="hosts", want={}, have={"hosts": {key: entry}}
+                parsers="hosts",
+                want={},
+                have={"hosts": {key: entry}},
             )
 
     def _snmp_server_list_to_dict(self, entry):
@@ -235,7 +237,7 @@ class Snmp_server(ResourceModule):
                             inf,
                             tr,
                             el.get("udp_port"),
-                        ): el
-                    }
+                        ): el,
+                    },
                 )
             entry["hosts"] = host_dict

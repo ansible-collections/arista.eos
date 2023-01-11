@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,12 +19,13 @@ created.
 """
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_merge,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_merge,
+)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -93,7 +95,7 @@ class Bgp_global(ResourceModule):
                 haved = {self.have["as_number"]: self.have}
         else:
             self._module.fail_json(
-                msg="Only one bgp instance is allowed per device"
+                msg="Only one bgp instance is allowed per device",
             )
 
         # turn all lists of dicts into dicts prior to merge
@@ -119,7 +121,7 @@ class Bgp_global(ResourceModule):
         if self.state == "purged":
             for num, entry in iteritems(haved):
                 self.commands.append(
-                    self._tmplt.render({"as_number": num}, "router", True)
+                    self._tmplt.render({"as_number": num}, "router", True),
                 )
 
         for k, want in iteritems(wantd):
@@ -145,12 +147,15 @@ class Bgp_global(ResourceModule):
         for name, entry in iteritems(have):
             if name != "as_number":
                 self.compare(
-                    parsers=self.parsers, want={}, have={name: have.get(name)}
+                    parsers=self.parsers,
+                    want={},
+                    have={name: have.get(name)},
                 )
 
         if self.commands and "router bgp" not in self.commands[0]:
             self.commands.insert(
-                0, self._tmplt.render(want or have, "router", False)
+                0,
+                self._tmplt.render(want or have, "router", False),
             )
 
     def _compare_bgp_params(self, want, have):
@@ -208,7 +213,9 @@ class Bgp_global(ResourceModule):
             )
         for name, entry in iteritems(hbgp):
             self.compare(
-                parsers=parsers, want={}, have={"bgp_params": {name: entry}}
+                parsers=parsers,
+                want={},
+                have={"bgp_params": {name: entry}},
             )
 
     def _compare_vrfs(self, want, have):
@@ -229,7 +236,8 @@ class Bgp_global(ResourceModule):
 
             if len(self.commands) != begin:
                 self.commands.insert(
-                    begin, self._tmplt.render({"vrf": name}, "vrf", False)
+                    begin,
+                    self._tmplt.render({"vrf": name}, "vrf", False),
                 )
                 self.commands.append("exit")
         begin_negate = len(self.commands)
@@ -237,11 +245,11 @@ class Bgp_global(ResourceModule):
             if name not in wvrf.keys():
                 if self._check_af(name):
                     self._module.fail_json(
-                        msg="Use the _bgp_address_family module to delete the address_family under vrf, before replacing/deleting the vrf."
+                        msg="Use the _bgp_address_family module to delete the address_family under vrf, before replacing/deleting the vrf.",
                     )
                 else:
                     self.commands.append(
-                        self._tmplt.render({"vrf": name}, "vrf", True)
+                        self._tmplt.render({"vrf": name}, "vrf", True),
                     )
                 continue
             self.compare(parsers=self.parsers, want={}, have=entry)

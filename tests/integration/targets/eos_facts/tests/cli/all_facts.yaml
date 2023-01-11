@@ -31,6 +31,6 @@
     that:
       - result.changed == false
       - "{{ result['ansible_facts']['available_network_resources'] | symmetric_difference(result['ansible_facts']['ansible_net_gather_network_resources']) |length\
-          \ == 0 }}"
+        \ == 0 }}"
 
 - ansible.builtin.debug: msg="END cli/all_facts.yaml on connection={{ ansible_connection }}"

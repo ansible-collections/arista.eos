@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
 
       - name: Ethernet2
@@ -16,7 +15,7 @@
   register: result
   become: true
   arista.eos.eos_l2_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: deleted
 
 - ansible.builtin.assert:

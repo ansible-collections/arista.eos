@@ -9,7 +9,7 @@
     - test4
     - test5
   arista.eos.eos_vrf:
-    name: '{{ item }}'
+    name: "{{ item }}"
     state: absent
 
 - name: Create vrf
@@ -182,7 +182,7 @@
     - test2
     - test3
   arista.eos.eos_vrf:
-    name: '{{ item }}'
+    name: "{{ item }}"
     state: absent
 
 - name: Create aggregate of VRFs
@@ -190,7 +190,6 @@
   register: result
   arista.eos.eos_vrf:
     aggregate:
-
       - name: test2
         rd: 1:202
 
@@ -212,7 +211,6 @@
   register: result
   arista.eos.eos_vrf:
     aggregate:
-
       - name: test2
         rd: 1:202
 
@@ -231,7 +229,6 @@
   register: result
   arista.eos.eos_vrf:
     aggregate:
-
       - name: test4
         rd: 1:204
 
@@ -268,7 +265,6 @@
   become: true
   arista.eos.eos_vrf:
     aggregate:
-
       - name: test1
 
       - name: test2
@@ -284,7 +280,6 @@
   become: true
   arista.eos.eos_vrf:
     aggregate:
-
       - name: test1
 
       - name: test2

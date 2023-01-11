@@ -9,7 +9,6 @@
     match: none
 
 - block:
-
     - name: get current running-config
       become: true
       register: config_before
@@ -40,7 +39,6 @@
         that:
           - config_before == config_after
   always:
-
     - name: teardown
       become: true
       arista.eos.eos_config:

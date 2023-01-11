@@ -6,7 +6,7 @@
   register: result
   arista.eos.eos_facts:
     gather_subset:
-      - '!hardware'
+      - "!hardware"
 
 - ansible.builtin.assert:
     that:

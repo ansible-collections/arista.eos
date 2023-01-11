@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config1:
-
       - vlan_id: 20
         state: suspend
 
@@ -15,7 +14,7 @@
   register: baseconfig
   become: true
   arista.eos.eos_vlans:
-    config: '{{ config1 }}'
+    config: "{{ config1 }}"
     state: merged
 
 - become: true
@@ -31,13 +30,11 @@
   register: result
   become: true
   arista.eos.eos_vlans:
-    config: '{{ config2 }}'
+    config: "{{ config2 }}"
     state: merged
-
 
 - ansible.builtin.set_fact:
     expected_config:
-
       - vlan_id: 10
         name: ten
         state: active

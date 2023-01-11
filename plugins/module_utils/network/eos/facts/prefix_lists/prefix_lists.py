@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,11 +19,12 @@ from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.prefix_lists import (
-    Prefix_listsTemplate,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.prefix_lists.prefix_lists import (
     Prefix_listsArgs,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.prefix_lists import (
+    Prefix_listsTemplate,
 )
 
 
@@ -56,7 +58,8 @@ class Prefix_listsFacts(object):
 
         # parse native config using the Prefix_lists template
         prefix_lists_parser = Prefix_listsTemplate(
-            lines=data.splitlines(), module=self._module
+            lines=data.splitlines(),
+            module=self._module,
         )
         objs = prefix_lists_parser.parse()
         if objs:
@@ -80,8 +83,10 @@ class Prefix_listsFacts(object):
 
         params = utils.remove_empties(
             prefix_lists_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
-            )
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["prefix_lists"] = params.get("config", [])

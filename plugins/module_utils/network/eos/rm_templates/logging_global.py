@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,6 +16,7 @@ the given network resource.
 """
 
 import re
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
     NetworkTemplate,
 )
@@ -92,7 +94,9 @@ def _tmplt_logging_global_format_timestamp(config_data):
 class Logging_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Logging_globalTemplate, self).__init__(
-            lines=lines, tmplt=self, module=module
+            lines=lines,
+            tmplt=self,
+            module=module,
         )
 
     # fmt: off
@@ -112,8 +116,8 @@ class Logging_globalTemplate(NetworkTemplate):
             "result": {
                 "buffered": {
                     "buffer_size": "{{ size }}",
-                    "severity": "{{ sev }}"
-                }
+                    "severity": "{{ sev }}",
+                },
             },
         },
         {
@@ -128,8 +132,8 @@ class Logging_globalTemplate(NetworkTemplate):
             "setval": "logging console {{ console.severity|string if console.severity is defined else ''}}",
             "result": {
                 "console": {
-                    "severity": "{{ sev }}"
-                }
+                    "severity": "{{ sev }}",
+                },
             },
         },
         {
@@ -145,7 +149,7 @@ class Logging_globalTemplate(NetworkTemplate):
             ),
             "setval": "logging event {{ event }} {{ 'member-status' if event == 'port-channel' else '' }} global",
             "result": {
-                "event": "{{ event }}"
+                "event": "{{ event }}",
             },
         },
         {
@@ -159,7 +163,7 @@ class Logging_globalTemplate(NetworkTemplate):
             ),
             "setval": 'logging facility {{ facility }}',
             "result": {
-                "facility": "{{ facility }}"
+                "facility": "{{ facility }}",
             },
         },
         {
@@ -177,7 +181,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 "format": {
                     "hostname": '{{ param.split(" ")[1] if "hostname" in param }}',
                     "sequence_numbers": '{{ True if "sequence-numbers" in param }}',
-                }
+                },
             },
         },
         {
@@ -194,9 +198,9 @@ class Logging_globalTemplate(NetworkTemplate):
             "result": {
                 "format": {
                     "timestamp": {
-                        "high_resolution": "{{ True }}"
-                    }
-                }
+                        "high_resolution": "{{ True }}",
+                    },
+                },
             },
         },
         {
@@ -219,9 +223,9 @@ class Logging_globalTemplate(NetworkTemplate):
                             "year": "{{ True if year is defined}}",
                             "timezone": "{{ True if zone is defined}}",
                             "state": "{{ enabled if year and zone is undefined}}",
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             },
         },
         {
@@ -246,9 +250,9 @@ class Logging_globalTemplate(NetworkTemplate):
                         "add": '{{ True if oper == "add" }}',
                         "remove": '{{ True if oper == "remove" }}',
                         "port": "{{ port }}",
-                        "protocol": "{{ proto }}"
-                    }
-                }
+                        "protocol": "{{ proto }}",
+                    },
+                },
             },
         },
         {
@@ -265,8 +269,8 @@ class Logging_globalTemplate(NetworkTemplate):
             "result": {
                 "level": {
                     "facility": "{{ level }}",
-                    "severity": "{{ sev }}"
-                }
+                    "severity": "{{ sev }}",
+                },
             },
         },
         {
@@ -280,7 +284,7 @@ class Logging_globalTemplate(NetworkTemplate):
             ),
             "setval": 'logging monitor {{ val }}',
             "result": {
-                "monitor": "{{ val }}"
+                "monitor": "{{ val }}",
             },
         },
         {
@@ -294,7 +298,7 @@ class Logging_globalTemplate(NetworkTemplate):
             "setval": 'logging on',
             "compval": 'turn_on',
             "result": {
-                "turn_on": "{{ True }}"
+                "turn_on": "{{ True }}",
             },
         },
         {
@@ -311,7 +315,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 "persistent": {
                     "size": "{{ size }}",
                     "set": '{{ True if size is not defined }}',
-                }
+                },
             },
         },
         {
@@ -331,7 +335,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 "policy": {
                     "invert_result": "{{ True if inv is defined }}",
                     "match_list": '{{ match }}',
-                }
+                },
             },
         },
         {
@@ -345,7 +349,7 @@ class Logging_globalTemplate(NetworkTemplate):
             ),
             "setval": 'logging relogging-interval {{ relogging_interval }}',
             "result": {
-                "relogging_interval": "{{ val }}"
+                "relogging_interval": "{{ val }}",
             },
         },
         {
@@ -358,7 +362,7 @@ class Logging_globalTemplate(NetworkTemplate):
             ),
             "setval": 'logging repeat-messages',
             "result": {
-                "repeat_messages": "{{ True }}"
+                "repeat_messages": "{{ True }}",
             },
         },
         {
@@ -372,7 +376,7 @@ class Logging_globalTemplate(NetworkTemplate):
             ),
             "setval": 'logging source-interface {{ source_interface }}',
             "result": {
-                "source_interface": "{{ val }}"
+                "source_interface": "{{ val }}",
             },
         },
         {
@@ -388,8 +392,8 @@ class Logging_globalTemplate(NetworkTemplate):
             "result": {
                 "synchronous": {
                     "set": "{{ True if level is not defined }}",
-                    "level": '{{ level.split(" ")[1] if level is defined }}'
-                }
+                    "level": '{{ level.split(" ")[1] if level is defined }}',
+                },
             },
         },
         {
@@ -405,8 +409,8 @@ class Logging_globalTemplate(NetworkTemplate):
             "result": {
                 "trap": {
                     "set": "{{ True if level is not defined }}",
-                    "severity": "{{ level }}"
-                }
+                    "severity": "{{ level }}",
+                },
             },
         },
         {
@@ -437,11 +441,11 @@ class Logging_globalTemplate(NetworkTemplate):
                                 "add": '{{ True if oper == "add" }}',
                                 "remove": '{{ True if oper == "remove" }}',
                                 "port": "{{ port }}",
-                                "protocol": "{{ proto }}"
-                            }
-                        }
-                    }
-                }
+                                "protocol": "{{ proto }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -462,9 +466,9 @@ class Logging_globalTemplate(NetworkTemplate):
                 "vrfs": {
                     "{{ vrf }}": {
                         "name": "{{ vrf }}",
-                        "source_interface": "{{ val }}"
-                    }
-                }
+                        "source_interface": "{{ val }}",
+                    },
+                },
             },
         },
     ]

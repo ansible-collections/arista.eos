@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config1:
-
       - name: Ethernet1
         timer: fast
 
@@ -12,12 +11,11 @@
         port_priority: 20
         timer: fast
 
-
 - name: Merge provided configuration with device configuration (base config)
   register: baseconfig
   become: true
   arista.eos.eos_lacp_interfaces:
-    config: '{{ config1 }}'
+    config: "{{ config1 }}"
     state: merged
 
 - become: true
@@ -33,13 +31,11 @@
   register: result
   become: true
   arista.eos.eos_lacp_interfaces:
-    config: '{{ config2 }}'
+    config: "{{ config2 }}"
     state: merged
-
 
 - ansible.builtin.set_fact:
     expected_config:
-
       - name: Ethernet1
         port_priority: 30
         timer: fast

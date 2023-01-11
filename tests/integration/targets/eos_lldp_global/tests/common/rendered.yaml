@@ -11,7 +11,7 @@
   register: result
   become: true
   arista.eos.eos_lldp_global:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: rendered
 
 - name: Assert

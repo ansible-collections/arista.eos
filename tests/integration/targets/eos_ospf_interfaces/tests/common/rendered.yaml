@@ -1,11 +1,10 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_ospf_interfaces rendered integration tests ansible_connection={{
+    msg:
+      Start eos_ospf_interfaces rendered integration tests ansible_connection={{
       ansible_connection }}
 
-
 - block:
-
     - name: render native config
       become: true
       register: result

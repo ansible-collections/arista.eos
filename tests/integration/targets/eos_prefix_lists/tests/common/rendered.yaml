@@ -6,7 +6,6 @@
 - ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given prefix-list configuration
       become: true
       register: result

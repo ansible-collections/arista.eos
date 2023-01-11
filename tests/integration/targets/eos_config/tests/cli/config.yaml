@@ -18,7 +18,7 @@
   register: result
   arista.eos.eos_config:
     lines: hostname foo
-    config: '{{ config.stdout[0] }}'
+    config: "{{ config.stdout[0] }}"
 
 - ansible.builtin.assert:
     that:
@@ -36,7 +36,7 @@
   register: result
   arista.eos.eos_config:
     lines: hostname foo
-    config: '{{ config.stdout[0] }}'
+    config: "{{ config.stdout[0] }}"
 
 - ansible.builtin.assert:
     that:

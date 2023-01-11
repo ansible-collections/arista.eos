@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet2
         access:
           vlan: 30
@@ -12,12 +11,13 @@
   arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
 
-- name: Override device configuration of all L2 interfaces on device with provided
+- name:
+    Override device configuration of all L2 interfaces on device with provided
     configuration.
   register: result
   become: true
   arista.eos.eos_l2_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: overridden
 
 - ansible.builtin.assert:

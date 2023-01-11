@@ -1,6 +1,7 @@
 ---
 - ansible.builtin.debug:
-    msg: START eos_route_maps parsed integration tests on connection={{ ansible_connection
+    msg:
+      START eos_route_maps parsed integration tests on connection={{ ansible_connection
       }}
 
 - name: Provide the running configuration for parsing (config to be parsed)

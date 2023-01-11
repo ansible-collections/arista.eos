@@ -1,6 +1,7 @@
 ---
 - ansible.builtin.debug:
-    msg: START eos_lacp rendered integration tests on connection={{ ansible_connection
+    msg:
+      START eos_lacp rendered integration tests on connection={{ ansible_connection
       }}
 
 - ansible.builtin.set_fact:
@@ -12,7 +13,7 @@
   register: result
   become: true
   arista.eos.eos_lacp:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: rendered
 
 - ansible.builtin.set_fact:

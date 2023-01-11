@@ -9,7 +9,7 @@
   register: result
   become: true
   arista.eos.eos_vlans:
-    config: '{{ ansible_facts.network_resources.vlans }}'
+    config: "{{ ansible_facts.network_resources.vlans }}"
     state: replaced
 
 - become: true

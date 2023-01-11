@@ -3,13 +3,12 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         trunk:
           native_vlan: 20
           trunk_allowed_vlans:
             - 5-10
-            - '15'
+            - "15"
 
 - become: true
   arista.eos.eos_facts:
@@ -19,7 +18,7 @@
   register: result
   become: true
   arista.eos.eos_l2_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: replaced
 
 - ansible.builtin.assert:

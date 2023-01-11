@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         mode: trunk
         trunk:
@@ -21,7 +20,7 @@
   register: result
   become: true
   arista.eos.eos_l2_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: merged
 
 - ansible.builtin.assert:

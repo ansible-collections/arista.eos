@@ -1,6 +1,7 @@
 ---
 - ansible.builtin.debug:
-    msg: START eos_static_routes parsed integration tests on connection={{ ansible_connection
+    msg:
+      START eos_static_routes parsed integration tests on connection={{ ansible_connection
       }}
 
 - ansible.builtin.include_tasks: _populate.yaml

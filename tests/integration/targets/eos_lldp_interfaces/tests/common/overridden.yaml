@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         transmit: false
 
@@ -15,7 +14,7 @@
   register: result
   become: true
   arista.eos.eos_lldp_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: overridden
 
 - ansible.builtin.assert:

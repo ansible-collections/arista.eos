@@ -16,7 +16,6 @@
 
 - ansible.builtin.set_fact:
     expected_config:
-
       - name: Ethernet1
         receive: false
 

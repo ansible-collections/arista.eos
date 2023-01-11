@@ -4,19 +4,15 @@
       ansible_connection }}
 
 - block:
-
     - name: merge given acl interfaces configuration(apply base config)
       become: true
       register: base_config
       arista.eos.eos_acl_interfaces:
         config:
-
           - name: "{{ Interfaces['int1'] }}"
             access_groups:
-
               - afi: ipv4
                 acls:
-
                   - name: aclv401
                     direction: in
 
@@ -25,16 +21,13 @@
 
               - afi: ipv6
                 acls:
-
                   - name: aclv601
                     direction: out
 
           - name: "{{ Interfaces['int2'] }}"
             access_groups:
-
               - afi: ipv6
                 acls:
-
                   - name: aclv601
                     direction: in
         state: merged
@@ -50,13 +43,10 @@
       register: result
       arista.eos.eos_acl_interfaces:
         config:
-
           - name: "{{ Interfaces['int2'] }}"
             access_groups:
-
               - afi: ipv4
                 acls:
-
                   - name: aclv401
                     direction: in
 
@@ -76,7 +66,5 @@
       ansible.builtin.assert:
         that: "{{ base_config['after'] | symmetric_difference(revert['after']) == [] }}"
 
-
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

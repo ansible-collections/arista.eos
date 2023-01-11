@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,6 +16,7 @@ the given network resource.
 """
 
 import re
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
@@ -367,7 +369,9 @@ def _tmplt_snmp_server_users_localized(config_data):
 class Snmp_serverTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Snmp_serverTemplate, self).__init__(
-            lines=lines, tmplt=self, module=module
+            lines=lines,
+            tmplt=self,
+            module=module,
         )
 
     # fmt: off
@@ -383,7 +387,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             ),
             "setval": 'snmp-server chassis-id {{ chassis_id }}',
             "result": {
-                "chassis_id": "{{ id }}"
+                "chassis_id": "{{ id }}",
             },
         },
         {
@@ -407,9 +411,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "acl_v6": "{{ acl.split(" ")[1] }}",
                         "view": "{{ view.split(" ")[1] if view is defined }}",
                         "ro": '{{ True if access == "ro" }}',
-                        "rw": '{{ True if access == "rw" }}'
-                    }
-                }
+                        "rw": '{{ True if access == "rw" }}',
+                    },
+                },
             },
         },
         {
@@ -433,9 +437,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "acl_v4": '{{ acl if acl != "ipv6" }}',
                         "view": "{{ view.split(" ")[1] if view is defined }}",
                         "ro": '{{ True if access == "ro" }}',
-                        "rw": '{{ True if access == "rw" }}'
-                    }
-                }
+                        "rw": '{{ True if access == "rw" }}',
+                    },
+                },
             },
         },
         {
@@ -473,9 +477,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "arista_established": "{{ True if trap2 is defined }}",
                         "backward_transition": "{{ True if trap3 is defined }}",
                         "established": "{{ True if trap4 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined and trap2 is undefined and trap3 is undefined and trap4 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined and trap2 is undefined and trap3 is undefined and trap4 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -497,8 +501,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "arista_mac_age": "{{ True if trap1 is defined }}",
                         "arista_mac_learn": "{{ True if trap2 is defined }}",
                         "arista_mac_move": "{{ True if trap3 is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
 
@@ -516,9 +520,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                 "traps": {
                     "capacity": {
                         "arista_hardware_utilization_alert": "{{ True if trap1 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -544,9 +548,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "ent_state_oper_disabled": "{{ True if trap4 is defined }}",
                         "ent_state_oper_enabled": "{{ True if trap4 is defined }}",
                         "enabled": "{{ True if trap1 is undefined and trap2 is undefined and trap3 is undefined\
-                             and trap4 is undefined and trap5 is undefined }}"
-                    }
-                }
+                             and trap4 is undefined and trap5 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -565,9 +569,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                     "external_alarm": {
                         "arista_external_alarm_asserted_notif": "{{ True if trap1 is defined }}",
                         "arista_external_alarm_deasserted_notif": "{{ True if trap2 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined and trap2 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined and trap2 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -599,10 +603,10 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "rejected_adjacency": "{{ True if trap4 is defined }}",
                         "sequence_number_skip": "{{ True if trap4 is defined }}",
                         "enabled": "{{ True if trap1 is undefined and trap2 is undefined and trap3 is undefined and trap4 is undefined\
-                                    and trap5 is undefined and trap6 is undefined and trap7 is undefined and trap8 is undefined }}"
+                                    and trap5 is undefined and trap6 is undefined and trap7 is undefined and trap8 is undefined }}",
 
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -620,8 +624,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                     "lldp": {
                         "rem_tables_change": "{{ True if trap1 is defined }}",
                         "enabled": "{{ True if trap1 is undefined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -641,8 +645,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "mpls_ldp_session_down": "{{ True if trap1 is defined }}",
                         "mpls_ldp_session_up": "{{ True if trap2 is defined }}",
                         "enabled": "{{ True if trap1 is undefined and trap2 is undefined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -662,8 +666,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "backward_transition": "{{ True if trap1 is defined }}",
                         "established": "{{ True if trap2 is defined }}",
                         "enabled": "{{ True if trap1 is undefined and trap2 is undefined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -686,9 +690,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "if_auth_failure": "{{ True if trap1 is defined }}",
                         "if_state_change": "{{ True if trap3 is defined }}",
                         "nbr_state_change": "{{ True if trap4 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined and trap2 is undefined and trap3 is undefined and trap4 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined and trap2 is undefined and trap3 is undefined and trap4 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -718,9 +722,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "nssa_translator_status_change": "{{ True if trap6 is defined }}",
                         "restart_status_change": "{{ True if trap7 is defined }}",
                         "enabled": "{{ True if trap1 is undefined and trap2 is undefined and trap3 is undefined and trap4 is undefined\
-                         and trap5 is undefined and trap6 is undefined and trap7 is undefined }}"
-                    }
-                }
+                         and trap5 is undefined and trap6 is undefined and trap7 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -737,9 +741,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                 "traps": {
                     "pim": {
                         "neighbor_loss": "{{ True if trap1 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -760,9 +764,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "authentication": "{{ True if trap1 is defined }}",
                         "link_down": "{{ True if trap2 is defined }}",
                         "link_up": "{{ True if trap3 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined and trap2 is undefined and trap3 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined and trap2 is undefined and trap3 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -779,9 +783,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                 "traps": {
                     "snmpConfigManEvent": {
                         "arista_config_man_event": "{{ True if trap1 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -798,9 +802,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                 "traps": {
                     "switchover": {
                         "arista_redundancy_switch_over_notif": "{{ True if trap1 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -817,9 +821,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                 "traps": {
                     "test": {
                         "arista_test_notification": "{{ True if trap1 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -836,9 +840,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                 "traps": {
                     "vrrp": {
                         "trap_new_master": "{{ True if trap1 is defined }}",
-                        "enabled": "{{ True if trap1 is undefined }}"
-                    }
-                }
+                        "enabled": "{{ True if trap1 is undefined }}",
+                    },
+                },
             },
         },
         {
@@ -861,8 +865,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "host": "{{ remote.split(" ")[1] if remote is defined }}",
                         "id": "{{ id }}",
                         "udp_port": "{{ udp.split(" ")[1] if udp is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -882,8 +886,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                 "extension": {
                     "root_oid": "{{ oid }}",
                     "script_location": "{{ script }}",
-                    "oneshot": "{{ True if oneshot is defined }}"
-                }
+                    "oneshot": "{{ True if oneshot is defined }}",
+                },
             },
         },
         {
@@ -911,8 +915,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "notify": "{{ notify.split(" ")[1] if notify is defined }}",
                         "read": "{{ read.split(" ")[1] if read is defined }}",
                         "write": "{{ write.split(" ")[1] if write is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -945,8 +949,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "informs": '{{ True if msg_inf1 is defined or msg_inf2 is defined else None }}',
                         "traps": '{{ True if msg_tr1 is defined or msg_tr2 is defined else None }}',
                         "user": "{{ comm }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -968,8 +972,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                         "afi": "{{ afi }}",
                         "acl": "{{ acl }}",
                         "vrf": "{{ vrf.split(" ")[1] if vrf is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -983,7 +987,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             ),
             "setval": "snmp-server local-interface {{ local_interface }}",
             "result": {
-                "local_interface": "{{ int }}"
+                "local_interface": "{{ int }}",
             },
         },
         {
@@ -997,7 +1001,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             ),
             "setval": "snmp-server location {{ location }}",
             "result": {
-                "location": "{{ loc }}"
+                "location": "{{ loc }}",
             },
         },
         {
@@ -1011,7 +1015,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             ),
             "setval": "snmp-server notification log entry limit {{ notification }}",
             "result": {
-                "notification": "{{ num }}"
+                "notification": "{{ num }}",
             },
         },
         {
@@ -1028,8 +1032,8 @@ class Snmp_serverTemplate(NetworkTemplate):
             "compval": "objects",
             "result": {
                 "objects": {
-                    "mac_address_tables": "{{ True }}"
-                }
+                    "mac_address_tables": "{{ True }}",
+                },
             },
         },
         {
@@ -1046,8 +1050,8 @@ class Snmp_serverTemplate(NetworkTemplate):
             "compval": "objects",
             "result": {
                 "objects": {
-                    "route_address_tables": "{{ True }}"
-                }
+                    "route_address_tables": "{{ True }}",
+                },
             },
         },
         {
@@ -1061,7 +1065,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             ),
             "setval": "snmp-server qos dscp {{ qos }}",
             "result": {
-                "qos": "{{ num }}"
+                "qos": "{{ num }}",
             },
         },
         {
@@ -1075,7 +1079,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             ),
             "setval": "snmp-server qosmib counter-interval {{ qosmib }}",
             "result": {
-                "qosmib": "{{ num }}"
+                "qosmib": "{{ num }}",
             },
         },
         {
@@ -1089,7 +1093,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             ),
             "setval": "snmp-server transmit max-size {{ transmit }}",
             "result": {
-                "transmit": "{{ num }}"
+                "transmit": "{{ num }}",
             },
         },
         {
@@ -1102,7 +1106,7 @@ class Snmp_serverTemplate(NetworkTemplate):
             ),
             "setval": "snmp-server transport tcp",
             "result": {
-                "transport": '{{ "tcp" }}'
+                "transport": '{{ "tcp" }}',
             },
         },
         {
@@ -1122,9 +1126,9 @@ class Snmp_serverTemplate(NetworkTemplate):
                     "{{ name }}": {
                         "view": "{{ name }}",
                         "mib": "{{ mib }}",
-                        "action": "{{ actions }}"
-                    }
-                }
+                        "action": "{{ actions }}",
+                    },
+                },
             },
         },
         {
@@ -1143,8 +1147,8 @@ class Snmp_serverTemplate(NetworkTemplate):
                     "{{ name }}": {
                         "vrf": "{{ name }}",
                         "local_interface": "{{ int.split(" ")[1] }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1178,11 +1182,11 @@ class Snmp_serverTemplate(NetworkTemplate):
                             "algorithm": "{{ algo }}",
                             "auth_passphrase": "{{ pass }}",
                             "encryption": "{{ enc }}",
-                            "priv_passphrase": "{{ privpass }}"
+                            "priv_passphrase": "{{ privpass }}",
                         },
                         "udp_port": "{{ udp.split(" ")[1] if udp is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1217,11 +1221,11 @@ class Snmp_serverTemplate(NetworkTemplate):
                             "algorithm": "{{ algo }}",
                             "auth_passphrase": "{{ pass }}",
                             "encryption": "{{ enc }}",
-                            "priv_passphrase": "{{ privpass }}"
+                            "priv_passphrase": "{{ privpass }}",
                         },
                         "udp_port": "{{ udp.split(" ")[1] if udp is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
     ]

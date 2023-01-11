@@ -28,6 +28,7 @@ The module file for eos_l3_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -372,6 +373,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.l3_interfaces.l3_interfaces import (
     L3_interfacesArgs,
 )

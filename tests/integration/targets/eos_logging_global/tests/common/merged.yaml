@@ -4,7 +4,6 @@
       ansible_connection }}
 
 - block:
-
     - name: merge given logging_global configuration
       become: true
       register: result
@@ -55,5 +54,4 @@
           - result.commands|length == 0
           - result.changed == false
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

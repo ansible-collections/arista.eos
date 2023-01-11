@@ -3,7 +3,6 @@
     msg: START cli/cli_command.yaml on connection={{ ansible_connection }}
 
 - block:
-
     - name: get output for single command
       register: result
       ansible.netcommon.cli_command:
@@ -50,7 +49,6 @@
   when: ansible_connection == 'ansible.netcommon.network_cli'
 
 - block:
-
     - name: test failure for local connection
       register: result
       ansible.netcommon.cli_command:

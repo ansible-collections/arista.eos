@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         duplex: auto
         enabled: true
@@ -25,7 +24,7 @@
   register: result
   become: true
   arista.eos.eos_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: overridden
 
 - ansible.builtin.assert:

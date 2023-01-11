@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -17,11 +18,12 @@ based on the configuration.
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ntp_global import (
-    Ntp_globalTemplate,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ntp_global.ntp_global import (
     Ntp_globalArgs,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ntp_global import (
+    Ntp_globalTemplate,
 )
 
 
@@ -56,7 +58,8 @@ class Ntp_globalFacts(object):
 
         # parse native config using the Ntp_global template
         ntp_global_parser = Ntp_globalTemplate(
-            lines=data.splitlines(), module=self._module
+            lines=data.splitlines(),
+            module=self._module,
         )
         objs = ntp_global_parser.parse()
         if objs:
@@ -82,8 +85,10 @@ class Ntp_globalFacts(object):
 
         params = utils.remove_empties(
             ntp_global_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
-            )
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["ntp_global"] = params.get("config", {})

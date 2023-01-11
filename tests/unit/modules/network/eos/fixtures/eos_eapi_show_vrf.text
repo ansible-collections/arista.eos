@@ -6,6 +6,3 @@ Maximum number of vrfs allowed: 14
 
   test       1:100       ipv4,ipv6       v4:routing,       Ethernet5, Ethernet6
                                          v6:no routing
-
-
-

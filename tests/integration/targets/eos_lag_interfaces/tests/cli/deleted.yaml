@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Port-Channel5
 
 - become: true
@@ -14,7 +13,7 @@
   become: true
   register: result
   arista.eos.eos_lag_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: deleted
 
 - ansible.builtin.assert:

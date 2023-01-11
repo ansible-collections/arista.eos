@@ -50,7 +50,6 @@
   register: result
   arista.eos.eos_user:
     aggregate:
-
       - name: ansibletest2
         configured_password: test2
 

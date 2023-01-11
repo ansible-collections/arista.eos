@@ -5,13 +5,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_snmp_server
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,14 +24,14 @@ class TestEosSnmp_ServerModule(TestEosModule):
         super(TestEosSnmp_ServerModule, self).setUp()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.snmp_server.snmp_server.Snmp_serverFacts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.snmp_server.snmp_server.Snmp_serverFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -55,7 +57,10 @@ class TestEosSnmp_ServerModule(TestEosModule):
                     communities=[
                         dict(name="comm3", acl_v6="list1", view="view1"),
                         dict(
-                            name="comm4", acl_v4="list3", view="view1", ro=True
+                            name="comm4",
+                            acl_v4="list3",
+                            view="view1",
+                            ro=True,
                         ),
                         dict(name="comm5", acl_v4="list4"),
                     ],
@@ -94,7 +99,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
                         ),
                     ),
                 ),
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -144,7 +149,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
                     ],
                     acls=[dict(afi="ipv4", acl="acl01", vrf="vrf01")],
                 ),
-            )
+            ),
         )
 
         commands = [
@@ -167,7 +172,10 @@ class TestEosSnmp_ServerModule(TestEosModule):
                     communities=[
                         dict(name="comm3", acl_v6="list1", view="view1"),
                         dict(
-                            name="comm4", acl_v4="list3", view="view1", ro=True
+                            name="comm4",
+                            acl_v4="list3",
+                            view="view1",
+                            ro=True,
                         ),
                         dict(name="comm5", acl_v4="list4"),
                     ],
@@ -207,7 +215,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
                     ),
                 ),
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -218,7 +226,10 @@ class TestEosSnmp_ServerModule(TestEosModule):
                     communities=[
                         dict(name="comm3", acl_v6="list1", view="view1"),
                         dict(
-                            name="comm4", acl_v4="list3", view="view1", ro=True
+                            name="comm4",
+                            acl_v4="list3",
+                            view="view1",
+                            ro=True,
                         ),
                         dict(name="comm5", acl_v4="list4"),
                     ],
@@ -258,7 +269,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
                     ),
                 ),
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -276,11 +287,13 @@ class TestEosSnmp_ServerModule(TestEosModule):
                         vrrp=dict(trap_new_master=True),
                         test=dict(arista_test_notification=True),
                         switchover=dict(
-                            arista_redundancy_switch_over_notif=True
+                            arista_redundancy_switch_over_notif=True,
                         ),
                         snmpConfigManEvent=dict(arista_config_man_event=True),
                         snmp=dict(
-                            authentication=True, link_down=True, link_up=True
+                            authentication=True,
+                            link_down=True,
+                            link_up=True,
                         ),
                         pim=dict(neighbor_loss=True),
                         ospfv3=dict(
@@ -331,9 +344,9 @@ class TestEosSnmp_ServerModule(TestEosModule):
                             arista_mac_learn=True,
                             arista_mac_move=True,
                         ),
-                    )
+                    ),
                 ),
-            )
+            ),
         )
         commands = [
             "snmp-server enable traps bgp arista-backward-transition arista-established backward-transition established",
@@ -376,11 +389,11 @@ class TestEosSnmp_ServerModule(TestEosModule):
                                 priv_passphrase="abcdef",
                             ),
                             udp_port=100,
-                        )
+                        ),
                     ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "snmp-server community replacecomm rw ipv6 list4",
@@ -421,7 +434,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
                                 priv_passphrase="abcdef",
                             ),
                             udp_port=100,
-                        )
+                        ),
                     ],
                     views=[dict(view="view1", mib="mib1", action="excluded")],
                     transport="tcp",
@@ -431,7 +444,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
                     objects=dict(route_tables=True),
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "no snmp-server community comm3 view view1 ipv6 list1",
@@ -480,7 +493,8 @@ class TestEosSnmp_ServerModule(TestEosModule):
     def test_eos_snmp_server_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_snmp_server_config.cfg"
+            changed=False,
+            filename="eos_snmp_server_config.cfg",
         )
         gathered_list = {
             "communities": [
@@ -605,7 +619,10 @@ class TestEosSnmp_ServerModule(TestEosModule):
                     communities=[
                         dict(name="comm3", acl_v6="list1", view="view1"),
                         dict(
-                            name="comm4", acl_v4="list3", view="view1", ro=True
+                            name="comm4",
+                            acl_v4="list3",
+                            view="view1",
+                            ro=True,
                         ),
                         dict(name="comm5", acl_v4="list4"),
                     ],
@@ -644,7 +661,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
                         ),
                     ),
                 ),
-            )
+            ),
         )
         commands = [
             "snmp-server contact admin",
@@ -662,5 +679,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )

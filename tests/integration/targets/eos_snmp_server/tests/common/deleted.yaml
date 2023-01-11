@@ -6,7 +6,6 @@
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: Delete given snmp_server configuration
       become: true
       register: result
@@ -36,5 +35,4 @@
           - result.commands|length == 0
           - result.changed == false
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

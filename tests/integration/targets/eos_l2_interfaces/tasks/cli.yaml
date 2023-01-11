@@ -1,16 +1,16 @@
 ---
 - name: Collect all common test cases
   ansible.builtin.find:
-    paths: '{{ role_path }}/tests/common'
-    patterns: '{{ testcase }}.yaml'
+    paths: "{{ role_path }}/tests/common"
+    patterns: "{{ testcase }}.yaml"
     use_regex: true
   register: test_cases
   delegate_to: localhost
 
 - name: Collect all cli test cases
   ansible.builtin.find:
-    paths: '{{ role_path }}/tests/cli'
-    patterns: '{{ testcase }}.yaml'
+    paths: "{{ role_path }}/tests/cli"
+    patterns: "{{ testcase }}.yaml"
     use_regex: true
   register: cli_cases
   delegate_to: localhost
@@ -18,21 +18,21 @@
 - name: Set files
   ansible.builtin.set_fact:
     test_cases:
-      files: '{{ test_cases.files + cli_cases.files }}'
+      files: "{{ test_cases.files + cli_cases.files }}"
 
 - name: Set test_items
   ansible.builtin.set_fact:
     test_items: "{{ test_cases.files | map(attribute='path') | list }}"
 
 - name: Run test cases (connection=ansible.netcommon.network_cli)
-  ansible.builtin.include_tasks: '{{ test_case_to_run }}'
-  with_items: '{{ test_items }}'
+  ansible.builtin.include_tasks: "{{ test_case_to_run }}"
+  with_items: "{{ test_items }}"
   loop_control:
     loop_var: test_case_to_run
   vars:
     ansible_connection: ansible.netcommon.network_cli
 
 - name: Clean up test state
-  ansible.builtin.include_tasks: '{{ role_path }}/tests/common/_cleanup.yml'
+  ansible.builtin.include_tasks: "{{ role_path }}/tests/common/_cleanup.yml"
   vars:
     ansible_connection: ansible.netcommon.network_cli

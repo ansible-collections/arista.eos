@@ -1,7 +1,6 @@
 ---
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         ipv4:
           - address: 198.51.100.14/24
@@ -14,7 +13,7 @@
   register: result
   become: true
   arista.eos.eos_l3_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: rendered
 
 - name: Assert

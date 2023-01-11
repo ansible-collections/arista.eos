@@ -13,15 +13,18 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_empties,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -46,10 +49,12 @@ class Static_routes(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         static_routes_facts = facts["ansible_network_resources"].get(
-            "static_routes"
+            "static_routes",
         )
         if not static_routes_facts:
             return []
@@ -85,10 +90,10 @@ class Static_routes(ConfigBase):
         elif self.state == "parsed":
             if not self._module.params["running_config"]:
                 self._module.fail_json(
-                    msg="Value of running_config parameter must not be empty for state parsed"
+                    msg="Value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_static_routes_facts(
-                data=self._module.params["running_config"]
+                data=self._module.params["running_config"],
             )
         else:
             changed_static_routes_facts = []
@@ -142,8 +147,8 @@ class Static_routes(ConfigBase):
         if self.state in ("merged", "replaced", "overridden") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
         state = self._module.params["state"]
         if state == "overridden":
@@ -278,7 +283,7 @@ def add_commands(want):
                     mask = route["dest"].split()[1]
                     cidr = get_net_size(mask)
                     commands.append(
-                        " " + route["dest"].split()[0] + "/" + cidr
+                        " " + route["dest"].split()[0] + "/" + cidr,
                     )
                 else:
                     commands.append(" " + route["dest"])
@@ -286,7 +291,7 @@ def add_commands(want):
                     commands.append(" " + next_hop["interface"])
                 if "nexthop_grp" in next_hop.keys():
                     commands.append(
-                        " Nexthop-Group" + " " + next_hop["nexthop_grp"]
+                        " Nexthop-Group" + " " + next_hop["nexthop_grp"],
                     )
                 if "forward_router_address" in next_hop.keys():
                     commands.append(" " + next_hop["forward_router_address"])

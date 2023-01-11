@@ -3,12 +3,10 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Port-Channel10
         members:
-
           - member: Ethernet2
-            mode: 'on'
+            mode: "on"
 
 - become: true
   arista.eos.eos_facts:
@@ -18,7 +16,7 @@
   become: true
   register: result
   arista.eos.eos_lag_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: overridden
 
 - ansible.builtin.assert:

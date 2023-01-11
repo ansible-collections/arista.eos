@@ -1,19 +1,17 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_acls merged integration tests ansible_connection={{ ansible_connection
+    msg:
+      Start eos_acls merged integration tests ansible_connection={{ ansible_connection
       }}
 
 - ansible.builtin.include_tasks: _populate.yaml
 
 - ansible.builtin.set_fact:
     config:
-
       - afi: ipv4
         acls:
-
           - name: test1
             aces:
-
               - sequence: 10
                 grant: permit
                 protocol: ospf
@@ -24,19 +22,15 @@
                 log: true
 
 - block:
-
     - name: overriden attributes with given acls.
       become: true
       register: result
       arista.eos.eos_acls: &id001
         config:
-
           - afi: ipv4
             acls:
-
               - name: test1
                 aces:
-
                   - grant: permit
                     sequence: 10
                     protocol: ospf
@@ -77,5 +71,4 @@
           - ansible_facts.network_resources.acls|symmetric_difference(result.before)
             == []
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

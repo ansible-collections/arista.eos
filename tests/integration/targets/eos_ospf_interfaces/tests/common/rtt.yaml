@@ -6,7 +6,6 @@
 - ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given ospf interfaces configuration
       become: true
       register: baseconfig
@@ -76,5 +75,4 @@
         that: baseconfig.after == revert.after
 
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

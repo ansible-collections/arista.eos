@@ -1,6 +1,7 @@
 ---
 - ansible.builtin.debug:
-    msg: START eos_bgp_address_family gathered integration tests on connection={{ ansible_connection
+    msg:
+      START eos_bgp_address_family gathered integration tests on connection={{ ansible_connection
       }}
 
 - ansible.builtin.include_tasks: _remove_config.yaml
@@ -8,7 +9,6 @@
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: Gathered the provided configuration with the exisiting running configuration
       become: true
       register: result
@@ -22,5 +22,4 @@
           - result.gathered == gathered.populate
           - result['changed'] == false
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

@@ -1,12 +1,12 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_snmp_server overridden integration tests ansible_connection={{
+    msg:
+      Start eos_snmp_server overridden integration tests ansible_connection={{
       ansible_connection }}
 
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: override given snmp_server configuration
       become: true
       register: result
@@ -51,5 +51,4 @@
           - result.changed == true
 
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

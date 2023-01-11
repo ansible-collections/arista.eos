@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 # (c) 2017, Ansible by Red Hat, inc
@@ -174,6 +175,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     load_config,
     run_commands,
@@ -225,7 +227,7 @@ def map_obj_to_commands(updates, module):
                     elif set(w["interfaces"]) != obj_in_have["interfaces"]:
                         missing_interfaces = list(
                             set(w["interfaces"])
-                            - set(obj_in_have["interfaces"])
+                            - set(obj_in_have["interfaces"]),
                         )
 
                         for i in missing_interfaces:
@@ -327,7 +329,7 @@ def map_params_to_obj(module):
                 ]
                 if module.params["associated_interfaces"]
                 else [],
-            }
+            },
         )
 
     return obj
@@ -356,7 +358,7 @@ def check_declarative_intent_params(want, module, result):
                 if interfaces is not None and i not in interfaces:
                     module.fail_json(
                         msg="Interface %s not configured on vrf %s"
-                        % (i, w["name"])
+                        % (i, w["name"]),
                     )
 
 

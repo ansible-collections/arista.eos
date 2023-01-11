@@ -14,7 +14,7 @@
   register: result
   become: true
   arista.eos.eos_lacp:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: merged
 
 - ansible.builtin.assert:

@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,16 +16,18 @@ based on the configuration.
 """
 
 import re
+
 from copy import deepcopy
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospfv3 import (
-    Ospfv3Template,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ospfv3.ospfv3 import (
     Ospfv3Args,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospfv3 import (
+    Ospfv3Template,
 )
 
 
@@ -82,13 +85,14 @@ class Ospfv3Facts(object):
         ospfv3_facts = {"processes": []}
         for resource in resources:
             ospfv3_parser = Ospfv3Template(
-                lines=resource.splitlines(), module=self._module
+                lines=resource.splitlines(),
+                module=self._module,
             )
             objs = ospfv3_parser.parse()
             for key, sortv in [("address_family", "afi")]:
                 if key in objs["processes"] and objs["processes"][key]:
                     objs["processes"][key] = list(
-                        objs["processes"][key].values()
+                        objs["processes"][key].values(),
                     )
 
             for addr_family in objs["processes"]["address_family"]:
@@ -105,7 +109,9 @@ class Ospfv3Facts(object):
 
         ansible_facts["ansible_network_resources"].pop("ospfv3", None)
         params = ospfv3_parser.validate_config(
-            self.argument_spec, {"config": ospfv3_facts}, redact=True
+            self.argument_spec,
+            {"config": ospfv3_facts},
+            redact=True,
         )
         params = utils.remove_empties(params)
 

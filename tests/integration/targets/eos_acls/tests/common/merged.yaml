@@ -1,17 +1,15 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_acls merged integration tests ansible_connection={{ ansible_connection
+    msg:
+      Start eos_acls merged integration tests ansible_connection={{ ansible_connection
       }}
 
 - ansible.builtin.set_fact:
     config:
-
       - afi: ipv4
         acls:
-
           - name: test1
             aces:
-
               - sequence: 35
                 grant: deny
                 protocol: tcp
@@ -34,7 +32,6 @@
 
           - name: test4
             aces:
-
               - grant: permit
                 sequence: 10
                 source:
@@ -47,35 +44,29 @@
                     eq: www
                 protocol: tcp
                 ttl:
-                  eq: '55'
+                  eq: "55"
 
       - afi: ipv6
         acls:
-
           - name: test2
             standard: true
             aces:
-
               - grant: permit
                 sequence: 10
-                log: 'true'
+                log: "true"
                 source:
                   any: true
 
 - block:
-
     - name: merge attributes of given acls.
       become: true
       register: result
       arista.eos.eos_acls: &id001
         config:
-
           - afi: ipv4
             acls:
-
               - name: test1
                 aces:
-
                   - sequence: 35
                     grant: deny
                     protocol: tcp
@@ -88,7 +79,7 @@
                   - remark: Run by ansible
 
                   - grant: permit
-                    protocol: '6'
+                    protocol: "6"
                     source:
                       any: true
                     destination:
@@ -96,29 +87,26 @@
 
               - name: test4
                 aces:
-
                   - grant: permit
                     source:
                       any: true
                       port_protocol:
-                        eq: '25'
+                        eq: "25"
                     destination:
                       any: true
                       port_protocol:
                         eq: www
                     protocol: tcp
                     ttl:
-                      eq: '55'
+                      eq: "55"
 
           - afi: ipv6
             acls:
-
               - name: test2
                 standard: true
                 aces:
-
                   - grant: permit
-                    log: 'true'
+                    log: "true"
                     source:
                       any: true
         state: merged
@@ -150,13 +138,10 @@
       register: result
       arista.eos.eos_acls:
         config:
-
           - afi: ipv4
             acls:
-
               - name: test1
                 aces:
-
                   - sequence: 35
                     log: true
                     ttl:
@@ -172,5 +157,4 @@
           - "'no 35' in result.commands"
           - "'35 deny tcp any any ttl eq 33 log'  in result.commands"
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

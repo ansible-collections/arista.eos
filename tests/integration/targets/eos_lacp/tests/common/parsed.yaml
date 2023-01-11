@@ -1,6 +1,7 @@
 ---
 - ansible.builtin.debug:
-    msg: START eos_lacp parsed integration tests on connection={{ ansible_connection
+    msg:
+      START eos_lacp parsed integration tests on connection={{ ansible_connection
       }}
 
 - ansible.builtin.set_fact:

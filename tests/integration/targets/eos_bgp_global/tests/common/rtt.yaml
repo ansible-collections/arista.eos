@@ -6,7 +6,6 @@
 - ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given bgp_global configuration
       become: true
       register: baseconfig
@@ -103,5 +102,4 @@
         that:
           - baseconfig.after == revert.after
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -133,10 +134,12 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     ComplexList,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    load_config,
     get_config,
+    load_config,
 )
+
 
 _CONFIGURED_VRFS = None
 
@@ -175,13 +178,13 @@ def map_obj_to_commands(want, have, module):
         if want["domain_list"]:
             # handle domain_list items to be removed
             for item in set(have["domain_list"]).difference(
-                want["domain_list"]
+                want["domain_list"],
             ):
                 commands.append("no ip domain-list %s" % item)
 
             # handle domain_list items to be added
             for item in set(want["domain_list"]).difference(
-                have["domain_list"]
+                have["domain_list"],
             ):
                 commands.append("ip domain-list %s" % item)
 
@@ -192,17 +195,17 @@ def map_obj_to_commands(want, have, module):
                     if item["vrf"]:
                         if not has_vrf(module, item["vrf"]):
                             module.fail_json(
-                                msg="vrf %s is not configured" % item["vrf"]
+                                msg="vrf %s is not configured" % item["vrf"],
                             )
                         values = (item["vrf"], item["interface"])
                         commands.append(
                             "no ip domain lookup vrf %s source-interface %s"
-                            % values
+                            % values,
                         )
                     else:
                         commands.append(
                             "no ip domain lookup source-interface %s"
-                            % item["interface"]
+                            % item["interface"],
                         )
 
             # handle lookup_source items to be added
@@ -211,17 +214,17 @@ def map_obj_to_commands(want, have, module):
                     if item["vrf"]:
                         if not has_vrf(module, item["vrf"]):
                             module.fail_json(
-                                msg="vrf %s is not configured" % item["vrf"]
+                                msg="vrf %s is not configured" % item["vrf"],
                             )
                         values = (item["vrf"], item["interface"])
                         commands.append(
                             "ip domain lookup vrf %s source-interface %s"
-                            % values
+                            % values,
                         )
                     else:
                         commands.append(
                             "ip domain lookup source-interface %s"
-                            % item["interface"]
+                            % item["interface"],
                         )
 
         if want["name_servers"]:
@@ -231,14 +234,14 @@ def map_obj_to_commands(want, have, module):
                 if item not in want["name_servers"]:
                     if not has_vrf(module, item["vrf"]):
                         module.fail_json(
-                            msg="vrf %s is not configured" % item["vrf"]
+                            msg="vrf %s is not configured" % item["vrf"],
                         )
                     if item["vrf"] not in ("default", None):
                         values = (item["vrf"], item["server"])
                         commands.append("no ip name-server vrf %s %s" % values)
                     else:
                         commands.append(
-                            "no ip name-server %s" % item["server"]
+                            "no ip name-server %s" % item["server"],
                         )
 
             # handle name_servers items to be added
@@ -246,7 +249,7 @@ def map_obj_to_commands(want, have, module):
                 if item not in have["name_servers"]:
                     if not has_vrf(module, item["vrf"]):
                         module.fail_json(
-                            msg="vrf %s is not configured" % item["vrf"]
+                            msg="vrf %s is not configured" % item["vrf"],
                         )
                     if item["vrf"] not in ("default", None):
                         values = (item["vrf"], item["server"])
@@ -282,7 +285,9 @@ def parse_lookup_source(config):
 def parse_name_servers(config):
     objects = list()
     for vrf, addr in re.findall(
-        r"ip name-server vrf (\S+) (\S+)", config, re.M
+        r"ip name-server vrf (\S+) (\S+)",
+        config,
+        re.M,
     ):
         objects.append({"server": addr, "vrf": vrf})
     return objects
@@ -307,11 +312,13 @@ def map_params_to_obj(module):
     }
 
     lookup_source = ComplexList(
-        dict(interface=dict(key=True), vrf=dict()), module
+        dict(interface=dict(key=True), vrf=dict()),
+        module,
     )
 
     name_servers = ComplexList(
-        dict(server=dict(key=True), vrf=dict(default="default")), module
+        dict(server=dict(key=True), vrf=dict(default="default")),
+        module,
     )
 
     for arg, cast in [
@@ -332,7 +339,9 @@ def main():
         hostname=dict(),
         domain_name=dict(),
         domain_list=dict(
-            type="list", aliases=["domain_search"], elements="str"
+            type="list",
+            aliases=["domain_search"],
+            elements="str",
         ),
         # { interface: <str>, vrf: <str> }
         lookup_source=dict(type="list", elements="raw"),
@@ -342,7 +351,8 @@ def main():
     )
 
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
 
     result = {"changed": False}

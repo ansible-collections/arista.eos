@@ -13,6 +13,7 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
@@ -21,9 +22,9 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     dict_diff,
     remove_empties,
+    to_list,
 )
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
@@ -50,7 +51,9 @@ class Ospfv2(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
 
         ospfv2_facts = facts["ansible_network_resources"].get("ospfv2")
@@ -87,10 +90,10 @@ class Ospfv2(ConfigBase):
         elif self.state == "parsed":
             if not self._module.params["running_config"]:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_ospfv2_facts(
-                data=self._module.params["running_config"]
+                data=self._module.params["running_config"],
             )
         else:
             changed_ospfv2_facts = self.get_ospfv2_facts()
@@ -133,8 +136,8 @@ class Ospfv2(ConfigBase):
         ):
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
         if self.state == "overridden":
             commands = self._state_overridden(want, have)
@@ -171,7 +174,7 @@ class Ospfv2(ConfigBase):
                 if w.get("vrf"):
                     if w["vrf"] != h["vrf"]:
                         self._module.fail_json(
-                            msg="Value of vrf and process_id does not match the config present in the device"
+                            msg="Value of vrf and process_id does not match the config present in the device",
                         )
                         break
                 del_instance_list = self.compare_dicts(h, w)
@@ -265,7 +268,7 @@ class Ospfv2(ConfigBase):
                         if w.get("vrf"):
                             if w["vrf"] != h["vrf"]:
                                 self._module.fail_json(
-                                    msg="Value of vrf and process_id does not match the config present in the device"
+                                    msg="Value of vrf and process_id does not match the config present in the device",
                                 )
                                 continue
                         present = True
@@ -276,7 +279,7 @@ class Ospfv2(ConfigBase):
             if not present:
                 if w["vrf"] in _get_vrf_list(have):
                     self._module.fail_json(
-                        msg="Value of vrf and process_id does not match the config present in the device"
+                        msg="Value of vrf and process_id does not match the config present in the device",
                     )
                 instance_list.append(w)
         instance_dict = {"processes": instance_list}
@@ -307,7 +310,9 @@ class Ospfv2(ConfigBase):
             elif isinstance(want_dict[w_key], list):
                 if have.get(w_key):
                     compare_list = self.compare_ospf_list(
-                        want_dict[w_key], have.get(w_key), w_key
+                        want_dict[w_key],
+                        have.get(w_key),
+                        w_key,
                     )
                     if compare_list:
                         return_ospf_dict.update({w_key: compare_list})
@@ -321,11 +326,11 @@ class Ospfv2(ConfigBase):
                     {
                         "process_id": want_dict["process_id"],
                         "vrf": want_dict["vrf"],
-                    }
+                    },
                 )
             else:
                 return_ospf_dict.update(
-                    {"process_id": want_dict["process_id"]}
+                    {"process_id": want_dict["process_id"]},
                 )
             ospf_list.append(return_ospf_dict)
         return ospf_list
@@ -356,7 +361,7 @@ class Ospfv2(ConfigBase):
                     "threshold"
                 ]
                 commands.append(
-                    "adjacency exchange-start threshold " + str(threshold)
+                    "adjacency exchange-start threshold " + str(threshold),
                 )
             if ospf_params.get("areas"):
                 command_list = _parse_areas(ospf_params["areas"])
@@ -364,7 +369,8 @@ class Ospfv2(ConfigBase):
                     commands.append(c)
             if ospf_params.get("auto_cost"):
                 commands.append(
-                    "auto-cost reference-bandwidth " + ospf_params["auto_cost"]
+                    "auto-cost reference-bandwidth "
+                    + ospf_params["auto_cost"],
                 )
             if ospf_params.get("bfd"):
                 os_version = self._get_os_version()
@@ -375,12 +381,14 @@ class Ospfv2(ConfigBase):
             if ospf_params.get("default_information"):
                 commands.append(
                     _parse_default_information(
-                        ospf_params["default_information"]
-                    )
+                        ospf_params["default_information"],
+                    ),
                 )
             if ospf_params.get("default_metric"):
                 commands.append(
-                    "default-metric" + " " + str(ospf_params["default_metric"])
+                    "default-metric"
+                    + " "
+                    + str(ospf_params["default_metric"]),
                 )
             if ospf_params.get("distance"):
                 for k, v in ospf_params["distance"].items():
@@ -393,7 +401,7 @@ class Ospfv2(ConfigBase):
                     + ospf_params["distribute_list"].keys()[0]
                     + " "
                     + ospf_params["distribute_list"].values()[0]
-                    + " in"
+                    + " in",
                 )
             if ospf_params.get("dn_bit_ignore"):
                 commands.append("dn-bit-ignore")
@@ -404,8 +412,10 @@ class Ospfv2(ConfigBase):
                     commands.append(
                         "graceful-restart grace-period "
                         + str(
-                            ospf_params["graceful_restart"].get("grace_period")
-                        )
+                            ospf_params["graceful_restart"].get(
+                                "grace_period"
+                            ),
+                        ),
                     )
             if ospf_params.get("graceful_restart_helper"):
                 commands.append("graceful-restart-helper")
@@ -420,7 +430,7 @@ class Ospfv2(ConfigBase):
                 commands.append(_parse_max_metric(ospf_params["max_metric"]))
             if ospf_params.get("maximum_paths"):
                 commands.append(
-                    "maximum-paths " + str(ospf_params["maximum_paths"])
+                    "maximum-paths " + str(ospf_params["maximum_paths"]),
                 )
             if ospf_params.get("mpls_ldp"):
                 commands.append("mpls ldp sync default")
@@ -432,7 +442,7 @@ class Ospfv2(ConfigBase):
                 if "interface_list" in ospf_params["passive_interface"].keys():
                     commands.append(
                         "passive-interface "
-                        + ospf_params["passive_interface"]["interface_list"]
+                        + ospf_params["passive_interface"]["interface_list"],
                     )
                 else:
                     commands.append("passive-interface default")
@@ -445,7 +455,7 @@ class Ospfv2(ConfigBase):
             if ospf_params.get("retransmission_threshold"):
                 commands.append(
                     "retransmission-threshold lsa "
-                    + str(ospf_params["retransmission_threshold"])
+                    + str(ospf_params["retransmission_threshold"]),
                 )
             if ospf_params.get("rfc1583compatibility"):
                 commands.append("compatible rfc1583")
@@ -453,7 +463,7 @@ class Ospfv2(ConfigBase):
                 commands.append("router-id " + ospf_params.get("router_id"))
             if ospf_params.get("summary_address"):
                 commands.append(
-                    _parse_summary_address(ospf_params["summary_address"])
+                    _parse_summary_address(ospf_params["summary_address"]),
                 )
             if ospf_params.get("timers"):
                 os_version = self._get_os_version()
@@ -479,7 +489,7 @@ class Ospfv2(ConfigBase):
                     for h_inst in have["processes"]:
                         if h_inst["process_id"] == w_inst["process_id"]:
                             if w_inst.get("vrf") and w_inst.get(
-                                "vrf"
+                                "vrf",
                             ) == h_inst.get("vrf"):
                                 if list(w_inst.keys()) == [
                                     "process_id",
@@ -489,20 +499,21 @@ class Ospfv2(ConfigBase):
                                         "no router ospf "
                                         + str(w_inst["process_id"])
                                         + " vrf "
-                                        + w_inst["vrf"]
+                                        + w_inst["vrf"],
                                     )
                                     router_context = 1
                             if len(w_inst.keys()) == 1 and list(
-                                w_inst.keys()
+                                w_inst.keys(),
                             ) == ["process_id"]:
                                 commands.append(
                                     "no router ospf "
-                                    + str(w_inst["process_id"])
+                                    + str(w_inst["process_id"]),
                                 )
                                 router_context = 1
                             if not router_context:
                                 instance_list = self.compare_dicts(
-                                    w_inst, h_inst
+                                    w_inst,
+                                    h_inst,
                                 )
                                 if not instance_list:
                                     del_want = {"processes": [w_inst]}
@@ -557,21 +568,21 @@ def _parse_areas(areas):
         area_cmd = "area " + area["area_id"]
         if area.get("default_cost"):
             command.append(
-                area_cmd + " default-cost " + str(area.get("default_cost"))
+                area_cmd + " default-cost " + str(area.get("default_cost")),
             )
         elif area.get("filter"):
             command.append(
-                area_cmd + " " + _parse_areas_filter(area["filter"])
+                area_cmd + " " + _parse_areas_filter(area["filter"]),
             )
         elif area.get("not_so_stubby"):
             command.append(
                 area_cmd
                 + " "
-                + _parse_areas_filter_notsostubby(area["not_so_stubby"])
+                + _parse_areas_filter_notsostubby(area["not_so_stubby"]),
             )
         elif area.get("nssa"):
             command.append(
-                area_cmd + " " + _parse_areas_filter_nssa(area["nssa"])
+                area_cmd + " " + _parse_areas_filter_nssa(area["nssa"]),
             )
         elif area.get("range"):
             command.append(area_cmd + " " + _parse_areas_range(area["range"]))

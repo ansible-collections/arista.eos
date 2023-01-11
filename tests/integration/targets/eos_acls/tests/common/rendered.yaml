@@ -1,22 +1,19 @@
 ---
 - ansible.builtin.debug:
-    msg: START eos_acls rendered integration tests on connection={{ ansible_connection
+    msg:
+      START eos_acls rendered integration tests on connection={{ ansible_connection
       }}
 
 - block:
-
     - name: Structure provided configuration into device specific commands
       become: true
       register: result
       arista.eos.eos_acls: &id001
         config:
-
           - afi: ipv4
             acls:
-
               - name: test1
                 aces:
-
                   - sequence: 35
                     grant: deny
                     protocol: tcp
@@ -29,7 +26,7 @@
                   - remark: Run by ansible
 
                   - grant: permit
-                    protocol: '6'
+                    protocol: "6"
                     source:
                       any: true
                     destination:
@@ -37,29 +34,26 @@
 
               - name: test4
                 aces:
-
                   - grant: permit
                     source:
                       any: true
                       port_protocol:
-                        eq: '25'
+                        eq: "25"
                     destination:
                       any: true
                       port_protocol:
                         eq: www
                     protocol: tcp
                     ttl:
-                      eq: '55'
+                      eq: "55"
 
           - afi: ipv6
             acls:
-
               - name: test2
                 standard: true
                 aces:
-
                   - grant: permit
-                    log: 'true'
+                    log: "true"
                     source:
                       any: true
         state: rendered

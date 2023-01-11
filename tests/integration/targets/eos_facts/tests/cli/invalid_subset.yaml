@@ -1,5 +1,6 @@
 ---
-- ansible.builtin.debug: msg="START cli/invalid_subset.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START cli/invalid_subset.yaml on connection={{ ansible_connection
     }}"
 
 - name: test invalid subset (foobar)

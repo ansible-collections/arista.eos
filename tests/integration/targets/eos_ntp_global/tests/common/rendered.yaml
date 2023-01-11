@@ -4,7 +4,6 @@
       ansible_connection }}
 
 - block:
-
     - name: merge given ntp_global configuration
       become: true
       register: result
@@ -55,5 +54,4 @@
           - result.changed == false
           - result.rendered|symmetric_difference(merged.commands) == []
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

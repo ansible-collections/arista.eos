@@ -1,13 +1,12 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_ospf_interfaces gathered integration tests ansible_connection={{
+    msg:
+      Start eos_ospf_interfaces gathered integration tests ansible_connection={{
       ansible_connection }}
 
 - ansible.builtin.include_tasks: _remove_config.yaml
 
-
 - block:
-
     - name: Gather ospf interfaces configuration
       become: true
       register: result
@@ -25,5 +24,4 @@
           - result.gathered == []
 
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

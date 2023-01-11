@@ -1,19 +1,17 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_acls deleted integration tests ansible_connection={{ ansible_connection
+    msg:
+      Start eos_acls deleted integration tests ansible_connection={{ ansible_connection
       }}
 
 - ansible.builtin.include_tasks: _populate.yaml
 
 - ansible.builtin.set_fact:
     config1:
-
       - afi: ipv4
         acls:
-
           - name: test1
             aces:
-
               - sequence: 55
                 grant: permit
                 protocol: tcp
@@ -27,7 +25,6 @@
 
           - name: test4
             aces:
-
               - grant: permit
                 sequence: 10
                 source:
@@ -40,30 +37,25 @@
                     eq: www
                 protocol: tcp
                 ttl:
-                  eq: '55'
+                  eq: "55"
 
       - afi: ipv6
         acls:
-
           - name: test2
             standard: true
             aces:
-
               - grant: permit
                 sequence: 10
-                log: 'true'
+                log: "true"
                 source:
                   any: true
 
 - ansible.builtin.set_fact:
     config2:
-
       - afi: ipv4
         acls:
-
           - name: test1
             aces:
-
               - sequence: 35
                 grant: deny
                 protocol: tcp
@@ -78,7 +70,6 @@
 
           - name: test4
             aces:
-
               - grant: permit
                 sequence: 10
                 source:
@@ -91,17 +82,14 @@
                     eq: www
                 protocol: tcp
                 ttl:
-                  eq: '55'
+                  eq: "55"
 
 - ansible.builtin.set_fact:
     config3:
-
       - afi: ipv4
         acls:
-
           - name: test1
             aces:
-
               - sequence: 35
                 grant: deny
                 protocol: tcp
@@ -115,13 +103,11 @@
                 sequence: 45
 
 - block:
-
     - name: Delete afi of given acls.
       become: true
       register: result
       arista.eos.eos_acls:
         config:
-
           - afi: ipv6
         state: deleted
 
@@ -133,8 +119,8 @@
         that:
           - result.commands|length == 1
           - result.changed == true
-          - 'ansible_facts.network_resources.acls|symmetric_difference(result.after)
-            == [] '
+          - "ansible_facts.network_resources.acls|symmetric_difference(result.after)
+            == [] "
       become: true
 
     - name: Delete attributes of given named acl.
@@ -142,10 +128,8 @@
       register: result
       arista.eos.eos_acls:
         config:
-
           - afi: ipv4
             acls:
-
               - name: test4
         state: deleted
 
@@ -157,9 +141,8 @@
         that:
           - result.commands|length == 1
           - result.changed == true
-          - 'ansible_facts.network_resources.acls|symmetric_difference(result.after)
-            == [] '
+          - "ansible_facts.network_resources.acls|symmetric_difference(result.after)
+            == [] "
       become: true
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

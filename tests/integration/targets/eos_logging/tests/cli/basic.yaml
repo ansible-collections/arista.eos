@@ -134,7 +134,6 @@
   register: result
   arista.eos.eos_logging:
     aggregate:
-
       - dest: console
         level: warnings
         state: absent

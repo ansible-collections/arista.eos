@@ -16,7 +16,6 @@
 
 - ansible.builtin.set_fact:
     expected_config:
-
       - vlan_id: 10
         name: ten
         state: active

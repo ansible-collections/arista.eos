@@ -17,7 +17,7 @@
   become: true
   register: config
   arista.eos.eos_eapi:
-    config: '{{ config.stdout[0] }}'
+    config: "{{ config.stdout[0] }}"
 
 - name: Ensure that this triggered a change
   ansible.builtin.assert:
@@ -34,7 +34,7 @@
   become: true
   register: config
   arista.eos.eos_eapi:
-    config: '{{ config.stdout[0] }}'
+    config: "{{ config.stdout[0] }}"
 
 - name: Idempotency check
   ansible.builtin.assert:

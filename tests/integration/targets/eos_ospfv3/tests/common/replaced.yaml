@@ -6,7 +6,6 @@
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: replace given ospfv3 configuration
       become: true
       register: result

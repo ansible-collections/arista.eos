@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -17,11 +18,12 @@ based on the configuration.
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.snmp_server import (
-    Snmp_serverTemplate,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.snmp_server.snmp_server import (
     Snmp_serverArgs,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.snmp_server import (
+    Snmp_serverTemplate,
 )
 
 
@@ -56,7 +58,8 @@ class Snmp_serverFacts(object):
 
         # parse native config using the Snmp_server template
         snmp_server_parser = Snmp_serverTemplate(
-            lines=data.splitlines(), module=self._module
+            lines=data.splitlines(),
+            module=self._module,
         )
         objs = snmp_server_parser.parse()
         if objs:
@@ -102,8 +105,10 @@ class Snmp_serverFacts(object):
 
         params = utils.remove_empties(
             snmp_server_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
-            )
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["snmp_server"] = params.get("config", {})

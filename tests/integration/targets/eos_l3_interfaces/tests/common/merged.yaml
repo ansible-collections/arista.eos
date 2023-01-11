@@ -3,15 +3,12 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         ipv4:
-
           - address: 198.51.100.14/24
 
       - name: Ethernet2
         ipv4:
-
           - address: 203.0.113.227/31
 
 - become: true
@@ -22,7 +19,7 @@
   register: result
   become: true
   arista.eos.eos_l3_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: merged
 
 - ansible.builtin.assert:

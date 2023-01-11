@@ -6,7 +6,6 @@
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: override given hostname configuration
       become: true
       register: result
@@ -35,5 +34,4 @@
           - result.changed == false
 
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

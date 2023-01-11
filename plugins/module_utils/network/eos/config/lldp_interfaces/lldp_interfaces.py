@@ -12,16 +12,18 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     dict_diff,
     param_list_to_dict,
+    to_list,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -46,10 +48,12 @@ class Lldp_interfaces(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         lldp_interfaces_facts = facts["ansible_network_resources"].get(
-            "lldp_interfaces"
+            "lldp_interfaces",
         )
         if not lldp_interfaces_facts:
             return []
@@ -88,10 +92,10 @@ class Lldp_interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_lldp_interfaces_facts(
-                data=running_config
+                data=running_config,
             )
 
         if self.state in self.ACTION_STATES:
@@ -134,8 +138,8 @@ class Lldp_interfaces(ConfigBase):
         ):
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
         want = param_list_to_dict(want, remove_key=False)
         have = param_list_to_dict(have, remove_key=False)
@@ -169,7 +173,7 @@ class Lldp_interfaces(ConfigBase):
             del_config = dict_diff(desired, extant)
 
             commands.extend(
-                generate_commands(interface_name, add_config, del_config)
+                generate_commands(interface_name, add_config, del_config),
             )
 
         return commands

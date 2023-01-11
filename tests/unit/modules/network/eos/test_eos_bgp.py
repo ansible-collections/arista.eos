@@ -5,12 +5,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.process import (
     Provider,
 )
 from ansible_collections.arista.eos.plugins.modules import eos_bgp
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -31,11 +33,12 @@ class TestFrrBgpModule(TestEosModule):
                     address_family=None,
                 ),
                 operation="merge",
-            )
+            ),
         )
         commands = obj.render(self._bgp_config)
         self.assertEqual(
-            commands, ["router bgp 64496", "router-id 192.0.2.2", "exit"]
+            commands,
+            ["router bgp 64496", "router-id 192.0.2.2", "exit"],
         )
 
     def test_eos_bgp_idempotent(self):
@@ -48,7 +51,7 @@ class TestFrrBgpModule(TestEosModule):
                     address_family=None,
                 ),
                 operation="merge",
-            )
+            ),
         )
         commands = obj.render(self._bgp_config)
         self.assertEqual(commands, [])
@@ -58,7 +61,7 @@ class TestFrrBgpModule(TestEosModule):
             params=dict(
                 config=dict(bgp_as=64496, networks=None, address_family=None),
                 operation="delete",
-            )
+            ),
         )
         commands = obj.render(self._bgp_config)
         self.assertEqual(commands, ["no router bgp 64496"])
@@ -69,13 +72,13 @@ class TestFrrBgpModule(TestEosModule):
                 config=dict(
                     bgp_as=64496,
                     neighbors=[
-                        dict(neighbor="198.51.100.12", remote_as=64498)
+                        dict(neighbor="198.51.100.12", remote_as=64498),
                     ],
                     networks=None,
                     address_family=None,
                 ),
                 operation="merge",
-            )
+            ),
         )
         commands = obj.render(self._bgp_config)
         self.assertEqual(
@@ -105,7 +108,7 @@ class TestFrrBgpModule(TestEosModule):
                     address_family=None,
                 ),
                 operation="merge",
-            )
+            ),
         )
         commands = obj.render(self._bgp_config)
         self.assertEqual(commands, [])
@@ -120,12 +123,12 @@ class TestFrrBgpModule(TestEosModule):
                             prefix="203.0.113.0",
                             masklen=24,
                             route_map="RMAP_1",
-                        )
+                        ),
                     ],
                     address_family=None,
                 ),
                 operation="merge",
-            )
+            ),
         )
         commands = obj.render(self._bgp_config)
         self.assertEqual(
@@ -135,7 +138,7 @@ class TestFrrBgpModule(TestEosModule):
                     "router bgp 64496",
                     "network 203.0.113.0/24 route-map RMAP_1",
                     "exit",
-                ]
+                ],
             ),
         )
 
@@ -146,7 +149,9 @@ class TestFrrBgpModule(TestEosModule):
                     bgp_as=64496,
                     networks=[
                         dict(
-                            prefix="192.0.2.0", masklen=27, route_map="RMAP_1"
+                            prefix="192.0.2.0",
+                            masklen=27,
+                            route_map="RMAP_1",
                         ),
                         dict(
                             prefix="198.51.100.0",
@@ -157,7 +162,7 @@ class TestFrrBgpModule(TestEosModule):
                     address_family=None,
                 ),
                 operation="merge",
-            )
+            ),
         )
         commands = obj.render(self._bgp_config)
         self.assertEqual(commands, [])
@@ -194,7 +199,9 @@ class TestFrrBgpModule(TestEosModule):
 
     def test_eos_bgp_address_family_neighbors(self):
         af_nbr_1 = dict(
-            neighbor="198.51.100.104", default_originate=True, activate=True
+            neighbor="198.51.100.104",
+            default_originate=True,
+            activate=True,
         )
         af_nbr_2 = dict(
             neighbor="198.51.100.105",
@@ -234,7 +241,9 @@ class TestFrrBgpModule(TestEosModule):
             weight=25,
         )
         af_nbr_2 = dict(
-            neighbor="192.0.2.111", activate=True, default_originate=True
+            neighbor="192.0.2.111",
+            activate=True,
+            default_originate=True,
         )
         config = dict(
             bgp_as=64496,
@@ -300,7 +309,9 @@ class TestFrrBgpModule(TestEosModule):
         )
         af_nbr_1 = dict(neighbor="203.0.113.111", activate=True)
         af_nbr_2 = dict(
-            neighbor="203.0.113.120", activate=True, default_originate=True
+            neighbor="203.0.113.120",
+            activate=True,
+            default_originate=True,
         )
 
         af_1 = dict(afi="ipv4", neighbors=[af_nbr_1, af_nbr_2])
@@ -370,7 +381,10 @@ class TestFrrBgpModule(TestEosModule):
         )
 
         config = dict(
-            bgp_as=64497, neighbors=[nbr], networks=None, address_family=None
+            bgp_as=64497,
+            neighbors=[nbr],
+            networks=None,
+            address_family=None,
         )
         obj = Provider(params=dict(config=config, operation="replace"))
         commands = obj.render(self._bgp_config)

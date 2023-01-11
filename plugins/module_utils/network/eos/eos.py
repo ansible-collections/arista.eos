@@ -29,6 +29,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import json
 import os
@@ -41,9 +42,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     dumps,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     ComplexList,
+    to_list,
 )
+
 
 _DEVICE_CONNECTION = None
 
@@ -72,7 +74,9 @@ def transform_commands(module):
             sendonly=dict(type="bool", default=False),
             check_all=dict(type="bool", default=False),
             version=dict(
-                type="str", default="latest", choices=["latest", "1"]
+                type="str",
+                default="latest",
+                choices=["latest", "1"],
             ),
         ),
         module,
@@ -122,7 +126,7 @@ class Cli:
                 out = conn.get_config(flags=flags)
             except ConnectionError as exc:
                 self._module.fail_json(
-                    msg=to_text(exc, errors="surrogate_then_replace")
+                    msg=to_text(exc, errors="surrogate_then_replace"),
                 )
 
             cfg = to_text(out, errors="surrogate_then_replace").strip()
@@ -134,11 +138,12 @@ class Cli:
         connection = self._get_connection()
         try:
             response = connection.run_commands(
-                commands=commands, check_rc=check_rc
+                commands=commands,
+                check_rc=check_rc,
             )
         except ConnectionError as exc:
             self._module.fail_json(
-                msg=to_text(exc, errors="surrogate_then_replace")
+                msg=to_text(exc, errors="surrogate_then_replace"),
             )
         return response
 
@@ -154,7 +159,7 @@ class Cli:
                 in message
             ):
                 self._module.warn(
-                    "EOS can not check config without config session"
+                    "EOS can not check config without config session",
                 )
                 response = {"changed": True}
             else:
@@ -177,7 +182,7 @@ class Cli:
                 in message
             ):
                 self._module.warn(
-                    "EOS can not check config without config session"
+                    "EOS can not check config without config session",
                 )
                 response = {"changed": True}
             else:
@@ -209,7 +214,7 @@ class Cli:
             )
         except ConnectionError as exc:
             self._module.fail_json(
-                msg=to_text(exc, errors="surrogate_then_replace")
+                msg=to_text(exc, errors="surrogate_then_replace"),
             )
         return diff
 
@@ -223,7 +228,7 @@ class Cli:
             capabilities = connection.get_capabilities()
         except ConnectionError as exc:
             self._module.fail_json(
-                msg=to_text(exc, errors="surrogate_then_replace")
+                msg=to_text(exc, errors="surrogate_then_replace"),
             )
         self._module._capabilities = json.loads(capabilities)
         return self._module._capabilities
@@ -259,8 +264,10 @@ class HttpApi:
             try:
                 response = to_list(
                     self._connection.send_request(
-                        queue, output=output, version=version
-                    )
+                        queue,
+                        output=output,
+                        version=version,
+                    ),
                 )
             except ConnectionError as exc:
                 if check_rc:
@@ -314,7 +321,7 @@ class HttpApi:
                 out = self._connection.send_request(cmd)
             except ConnectionError as exc:
                 self._module.fail_json(
-                    msg=to_text(exc, errors="surrogate_then_replace")
+                    msg=to_text(exc, errors="surrogate_then_replace"),
                 )
 
             cfg = to_text(out).strip()
@@ -339,10 +346,15 @@ class HttpApi:
         if running and diff_match != "none" and diff_replace != "config":
             # running configuration
             running_obj = NetworkConfig(
-                indent=3, contents=running, ignore_lines=diff_ignore_lines
+                indent=3,
+                contents=running,
+                ignore_lines=diff_ignore_lines,
             )
             configdiffobjs = candidate_obj.difference(
-                running_obj, path=path, match=diff_match, replace=diff_replace
+                running_obj,
+                path=path,
+                match=diff_match,
+                replace=diff_replace,
             )
 
         else:
@@ -438,7 +450,7 @@ class HttpApi:
                 return self.configure(config)
             else:
                 self._module.warn(
-                    "EOS can not check config without config session"
+                    "EOS can not check config without config session",
                 )
                 result = {"changed": True}
                 return result
@@ -481,7 +493,7 @@ class HttpApi:
             capabilities = self._connection.get_capabilities()
         except ConnectionError as exc:
             self._module.fail_json(
-                msg=to_text(exc, errors="surrogate_then_replace")
+                msg=to_text(exc, errors="surrogate_then_replace"),
             )
 
         return json.loads(capabilities)

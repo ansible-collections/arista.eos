@@ -1,6 +1,7 @@
 ---
 - ansible.builtin.debug:
-    msg: START eos_static_routes rendered integration tests on connection={{ ansible_connection
+    msg:
+      START eos_static_routes rendered integration tests on connection={{ ansible_connection
       }}
 
 - ansible.builtin.include_tasks: _remove_config.yaml
@@ -8,33 +9,25 @@
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: Structure provided configuration into device specific commands
       become: true
       register: result
       arista.eos.eos_static_routes: &id001
         config:
-
           - vrf: testvrf
             address_families:
-
               - afi: ipv6
                 routes:
-
                   - dest: 1120:10::/64
                     next_hops:
-
                       - interface: Ethernet1
                         admin_distance: 55
 
           - address_families:
-
               - afi: ipv4
                 routes:
-
                   - dest: 155.55.1.0/24
                     next_hops:
-
                       - nexthop_grp: testgrp
                         tag: 100
         state: rendered
@@ -57,5 +50,4 @@
         that:
           - result['changed'] == false
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

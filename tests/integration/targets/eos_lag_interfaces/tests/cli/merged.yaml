@@ -3,19 +3,16 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Port-Channel5
         members:
-
           - member: Ethernet2
-            mode: 'on'
+            mode: "on"
 
     change_config:
       - name: Port-Channel5
         members:
-
           - member: Ethernet2
-            mode: 'passive'
+            mode: "passive"
 
 - become: true
   arista.eos.eos_facts:
@@ -25,7 +22,7 @@
   become: true
   register: result
   arista.eos.eos_lag_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: merged
 
 - ansible.builtin.assert:
@@ -44,15 +41,13 @@
 
 - ansible.builtin.set_fact:
     expected_config:
-
       - name: Port-Channel5
         members:
-
           - member: Ethernet1
-            mode: 'on'
+            mode: "on"
 
           - member: Ethernet2
-            mode: 'on'
+            mode: "on"
 
 - ansible.builtin.assert:
     that:
@@ -64,7 +59,7 @@
   ignore_errors: true
   register: result
   arista.eos.eos_lag_interfaces:
-    config: '{{ change_config }}'
+    config: "{{ change_config }}"
     state: merged
 
 - ansible.builtin.assert:

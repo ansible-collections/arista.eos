@@ -3,10 +3,8 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
     other_config:
-
       - name: Ethernet2
         timer: fast
 
@@ -18,7 +16,7 @@
   register: result
   become: true
   arista.eos.eos_lacp_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: deleted
 
 - ansible.builtin.assert:
@@ -36,7 +34,7 @@
         == []
 
 - ansible.builtin.set_fact:
-    expected_config: '{{ other_config }}'
+    expected_config: "{{ other_config }}"
 
 - ansible.builtin.assert:
     that:

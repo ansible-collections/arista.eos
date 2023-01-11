@@ -6,7 +6,6 @@
 - ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given  prefix-list confguration
       become: true
       register: baseconfig
@@ -82,5 +81,4 @@
           - revert.commands|symmetric_difference(rtt.commands) == []
 
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

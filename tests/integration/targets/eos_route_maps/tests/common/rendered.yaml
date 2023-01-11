@@ -3,9 +3,7 @@
     msg: Start eos_route_maps rendered integration tests ansible_connection={{
       ansible_connection }}
 
-
 - block:
-
     - name: render native config
       become: true
       register: result

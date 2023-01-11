@@ -1,24 +1,21 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_acl_interfaces overridden integration tests ansible_connection={{
+    msg:
+      Start eos_acl_interfaces overridden integration tests ansible_connection={{
       ansible_connection }}
 
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: override given acl interfaces configuration
       become: true
       register: result
       arista.eos.eos_acl_interfaces: &id001
         config:
-
           - name: "{{ Interfaces['int2'] }}"
             access_groups:
-
               - afi: ipv4
                 acls:
-
                   - name: aclv401
                     direction: in
         state: overridden
@@ -39,5 +36,4 @@
           - result.commands|length == 0
           - result.changed == false
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

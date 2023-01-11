@@ -5,13 +5,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_ospfv2
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,41 +24,41 @@ class TestEosOspfv2Module(TestEosModule):
         super(TestEosOspfv2Module, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
         self.get_resource_connection_facts = (
             self.mock_get_resource_connection_facts.start()
         )
 
         self.mock_edit_config = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
         )
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospfv2.ospfv2.Ospfv2Facts.get_device_data"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospfv2.ospfv2.Ospfv2Facts.get_device_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
         self.mock_get_os_version = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.config.ospfv2.ospfv2.Ospfv2._get_os_version"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.config.ospfv2.ospfv2.Ospfv2._get_os_version",
         )
         self.get_os_version = self.mock_get_os_version.start()
 
@@ -97,7 +99,7 @@ class TestEosOspfv2Module(TestEosModule):
                         dict(
                             process_id="1",
                             adjacency=dict(
-                                exchange_start=dict(threshold=20045623)
+                                exchange_start=dict(threshold=20045623),
                             ),
                             areas=[
                                 dict(
@@ -107,12 +109,15 @@ class TestEosOspfv2Module(TestEosModule):
                                 dict(
                                     area_id="0.0.0.50",
                                     range=dict(
-                                        address="172.20.0.0/16", cost=34
+                                        address="172.20.0.0/16",
+                                        cost=34,
                                     ),
                                 ),
                             ],
                             default_information=dict(
-                                metric=100, metric_type=1, originate=True
+                                metric=100,
+                                metric_type=1,
+                                originate=True,
                             ),
                             distance=dict(intra_area=85),
                             max_lsa=dict(
@@ -146,10 +151,10 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf02",
                             redistribute=[dict(routes="static")],
                         ),
-                    ]
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -161,13 +166,13 @@ class TestEosOspfv2Module(TestEosModule):
                         dict(
                             process_id="1",
                             adjacency=dict(
-                                exchange_start=dict(threshold=20045623)
+                                exchange_start=dict(threshold=20045623),
                             ),
                             areas=[
                                 dict(
                                     filter=dict(address="10.1.1.0/24"),
                                     area_id="0.0.0.2",
-                                )
+                                ),
                             ],
                             distance=dict(intra_area=85),
                             max_lsa=dict(
@@ -178,7 +183,7 @@ class TestEosOspfv2Module(TestEosModule):
                                 reset_time=20,
                             ),
                             networks=[
-                                dict(area="0.0.0.0", prefix="10.10.3.0/24")
+                                dict(area="0.0.0.0", prefix="10.10.3.0/24"),
                             ],
                             redistribute=[dict(routes="static")],
                             router_id="170.21.0.4",
@@ -188,10 +193,10 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf01",
                             areas=[dict(default_cost=20, area_id="0.0.0.9")],
                         ),
-                    ]
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -206,17 +211,20 @@ class TestEosOspfv2Module(TestEosModule):
                                 dict(
                                     filter=dict(address="10.2.1.0/24"),
                                     area_id="0.0.0.12",
-                                )
+                                ),
                             ],
                             redistribute=[
-                                dict(routes="isis", isis_level="level-1")
+                                dict(routes="isis", isis_level="level-1"),
                             ],
                             timers=[
                                 dict(
                                     throttle=dict(
-                                        attr="spf", initial=10, min=26, max=33
-                                    )
-                                )
+                                        attr="spf",
+                                        initial=10,
+                                        min=26,
+                                        max=33,
+                                    ),
+                                ),
                             ],
                         ),
                         dict(
@@ -224,13 +232,13 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrftest",
                             areas=[dict(default_cost=20, area_id="0.0.0.9")],
                             networks=[
-                                dict(area="0.0.0.0", prefix="10.10.3.0/24")
+                                dict(area="0.0.0.0", prefix="10.10.3.0/24"),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "router ospf 1",
@@ -256,10 +264,10 @@ class TestEosOspfv2Module(TestEosModule):
                                 dict(
                                     filter=dict(address="10.2.1.0/24"),
                                     area_id="0.0.0.12",
-                                )
+                                ),
                             ],
                             redistribute=[
-                                dict(routes="isis", isis_level="level-1")
+                                dict(routes="isis", isis_level="level-1"),
                             ],
                         ),
                         dict(
@@ -267,20 +275,23 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf02",
                             areas=[dict(default_cost=20, area_id="0.0.0.9")],
                             networks=[
-                                dict(area="0.0.0.0", prefix="10.10.3.0/24")
+                                dict(area="0.0.0.0", prefix="10.10.3.0/24"),
                             ],
                             timers=[
                                 dict(
                                     throttle=dict(
-                                        attr="lsa", initial=10, min=26, max=33
-                                    )
-                                )
+                                        attr="lsa",
+                                        initial=10,
+                                        min=26,
+                                        max=33,
+                                    ),
+                                ),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "router ospf 1",
@@ -314,7 +325,7 @@ class TestEosOspfv2Module(TestEosModule):
                         dict(
                             process_id="1",
                             adjacency=dict(
-                                exchange_start=dict(threshold=20045623)
+                                exchange_start=dict(threshold=20045623),
                             ),
                             areas=[
                                 dict(
@@ -324,12 +335,15 @@ class TestEosOspfv2Module(TestEosModule):
                                 dict(
                                     area_id="0.0.0.50",
                                     range=dict(
-                                        address="172.20.0.0/16", cost=34
+                                        address="172.20.0.0/16",
+                                        cost=34,
                                     ),
                                 ),
                             ],
                             default_information=dict(
-                                metric=100, metric_type=1, originate=True
+                                metric=100,
+                                metric_type=1,
+                                originate=True,
                             ),
                             distance=dict(intra_area=85),
                             max_lsa=dict(
@@ -363,10 +377,10 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf02",
                             redistribute=[dict(routes="static")],
                         ),
-                    ]
+                    ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -381,10 +395,10 @@ class TestEosOspfv2Module(TestEosModule):
                                 dict(
                                     filter=dict(address="10.2.1.0/24"),
                                     area_id="0.0.0.12",
-                                )
+                                ),
                             ],
                             redistribute=[
-                                dict(routes="isis", isis_level="level-1")
+                                dict(routes="isis", isis_level="level-1"),
                             ],
                         ),
                         dict(
@@ -392,13 +406,13 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf02",
                             areas=[dict(default_cost=20, area_id="0.0.0.9")],
                             networks=[
-                                dict(area="0.0.0.0", prefix="10.10.3.0/24")
+                                dict(area="0.0.0.0", prefix="10.10.3.0/24"),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "router ospf 1",
@@ -433,7 +447,7 @@ class TestEosOspfv2Module(TestEosModule):
                         dict(
                             process_id="1",
                             adjacency=dict(
-                                exchange_start=dict(threshold=20045623)
+                                exchange_start=dict(threshold=20045623),
                             ),
                             areas=[
                                 dict(
@@ -443,12 +457,15 @@ class TestEosOspfv2Module(TestEosModule):
                                 dict(
                                     area_id="0.0.0.50",
                                     range=dict(
-                                        address="172.20.0.0/16", cost=34
+                                        address="172.20.0.0/16",
+                                        cost=34,
                                     ),
                                 ),
                             ],
                             default_information=dict(
-                                metric=100, metric_type=1, originate=True
+                                metric=100,
+                                metric_type=1,
+                                originate=True,
                             ),
                             distance=dict(intra_area=85),
                             max_lsa=dict(
@@ -482,10 +499,10 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf02",
                             redistribute=[dict(routes="static")],
                         ),
-                    ]
+                    ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -500,10 +517,10 @@ class TestEosOspfv2Module(TestEosModule):
                                 dict(
                                     filter=dict(address="10.2.1.0/24"),
                                     area_id="0.0.0.12",
-                                )
+                                ),
                             ],
                             redistribute=[
-                                dict(routes="isis", isis_level="level-1")
+                                dict(routes="isis", isis_level="level-1"),
                             ],
                         ),
                         dict(
@@ -511,12 +528,12 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf02",
                             areas=[dict(default_cost=20, area_id="0.0.0.9")],
                             networks=[
-                                dict(area="0.0.0.0", prefix="10.10.3.0/24")
+                                dict(area="0.0.0.0", prefix="10.10.3.0/24"),
                             ],
                         ),
-                    ]
-                )
-            )
+                    ],
+                ),
+            ),
         )
         result = self.execute_module(failed=True)
         self.assertIn(
@@ -535,10 +552,10 @@ class TestEosOspfv2Module(TestEosModule):
                                 dict(
                                     filter=dict(address="10.2.1.0/24"),
                                     area_id="0.0.0.12",
-                                )
+                                ),
                             ],
                             redistribute=[
-                                dict(routes="isis", isis_level="level-1")
+                                dict(routes="isis", isis_level="level-1"),
                             ],
                         ),
                         dict(
@@ -546,13 +563,13 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf02",
                             areas=[dict(default_cost=20, area_id="0.0.0.9")],
                             networks=[
-                                dict(area="0.0.0.0", prefix="10.10.3.0/24")
+                                dict(area="0.0.0.0", prefix="10.10.3.0/24"),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         result = self.execute_module(failed=True)
         self.assertIn(
@@ -568,7 +585,7 @@ class TestEosOspfv2Module(TestEosModule):
                         dict(
                             process_id="1",
                             adjacency=dict(
-                                exchange_start=dict(threshold=20045623)
+                                exchange_start=dict(threshold=20045623),
                             ),
                             areas=[
                                 dict(
@@ -578,12 +595,15 @@ class TestEosOspfv2Module(TestEosModule):
                                 dict(
                                     area_id="0.0.0.50",
                                     range=dict(
-                                        address="172.20.0.0/16", cost=34
+                                        address="172.20.0.0/16",
+                                        cost=34,
                                     ),
                                 ),
                             ],
                             default_information=dict(
-                                metric=100, metric_type=1, originate=True
+                                metric=100,
+                                metric_type=1,
+                                originate=True,
                             ),
                             distance=dict(intra_area=85),
                             max_lsa=dict(
@@ -617,10 +637,10 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf02",
                             redistribute=[dict(routes="static")],
                         ),
-                    ]
+                    ],
                 ),
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "router ospf 1",
@@ -645,7 +665,9 @@ class TestEosOspfv2Module(TestEosModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_eos_ospfv2_parsed(self):
@@ -715,19 +737,20 @@ class TestEosOspfv2Module(TestEosModule):
                                 "initial": 20,
                                 "min": 21,
                                 "max": 22,
-                            }
-                        }
+                            },
+                        },
                     ],
                     "vrf": "vrf02",
                 },
-            ]
+            ],
         }
         self.assertEqual(sorted(parsed_list), sorted(result["parsed"]))
 
     def test_eos_ospfv2_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_ospfv2_config_gather.cfg"
+            changed=False,
+            filename="eos_ospfv2_config_gather.cfg",
         )
         gather_list = {
             "processes": [
@@ -769,7 +792,7 @@ class TestEosOspfv2Module(TestEosModule):
                     "redistribute": [{"routes": "static"}],
                     "vrf": "vrf02",
                 },
-            ]
+            ],
         }
         self.assertEqual(sorted(gather_list), sorted(result["gathered"]))
 
@@ -784,10 +807,10 @@ class TestEosOspfv2Module(TestEosModule):
                             vrf="vrf02",
                             redistribute=[dict(routes="static")],
                         ),
-                    ]
+                    ],
                 ),
                 state="deleted",
-            )
+            ),
         )
         commands = [
             "no router ospf 1",
@@ -802,11 +825,11 @@ class TestEosOspfv2Module(TestEosModule):
             dict(
                 config=dict(
                     processes=[
-                        dict(process_id="1", bfd=dict(all_interfaces=True))
-                    ]
+                        dict(process_id="1", bfd=dict(all_interfaces=True)),
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = ["router ospf 1", "bfd all-interfaces", "exit"]
         self.execute_module(changed=True, commands=commands)
@@ -817,11 +840,11 @@ class TestEosOspfv2Module(TestEosModule):
             dict(
                 config=dict(
                     processes=[
-                        dict(process_id="1", bfd=dict(all_interfaces=True))
-                    ]
+                        dict(process_id="1", bfd=dict(all_interfaces=True)),
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = ["router ospf 1", "bfd default", "exit"]
         self.execute_module(changed=True, commands=commands)

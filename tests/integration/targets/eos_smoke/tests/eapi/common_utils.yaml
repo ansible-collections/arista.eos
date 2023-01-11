@@ -45,7 +45,6 @@
 #  become: true
 
 - ansible.builtin.debug: msg="END cli/common_utils.yaml on connection={{ ansible_connection }}"
-
 # hit conditional()
 # - name: Set test interface
 #  ansible.builtin.set_fact:

@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -17,12 +18,13 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_merge,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_merge,
+)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -140,7 +142,8 @@ class Ospf_interfaces(ResourceModule):
             tmp = want or have
             tmp.pop("address_family", {})
             self.commands.insert(
-                begin, self._tmplt.render(tmp, "interfaces", False)
+                begin,
+                self._tmplt.render(tmp, "interfaces", False),
             )
 
     def _compare_addr_family(self, want, have):

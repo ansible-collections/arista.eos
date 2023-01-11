@@ -1,6 +1,7 @@
 ---
 - ansible.builtin.debug:
-    msg: START eos_static_routes gathered integration tests on connection={{ ansible_connection
+    msg:
+      START eos_static_routes gathered integration tests on connection={{ ansible_connection
       }}
 
 - ansible.builtin.include_tasks: _remove_config.yaml
@@ -8,7 +9,6 @@
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: Gathered the provided configuration with the exisiting running configuration
       become: true
       register: result
@@ -18,15 +18,11 @@
 
     - ansible.builtin.set_fact:
         config:
-
           - address_families:
-
               - afi: ipv4
                 routes:
-
                   - dest: 10.1.1.0/24
                     next_hops:
-
                       - interface: Management1
 
                       - admin_distance: 200
@@ -36,44 +32,34 @@
 
                   - dest: 10.50.0.0/16
                     next_hops:
-
                       - interface: Management1
 
                   - dest: 23.1.0.0/16
                     next_hops:
-
                       - nexthop_grp: testgrp
                         tag: 42
 
               - afi: ipv6
                 routes:
-
                   - dest: 1000:10::/64
                     next_hops:
-
                       - admin_distance: 67
                         interface: Ethernet1
                         tag: 98
 
           - address_families:
-
               - afi: ipv4
                 routes:
-
                   - dest: 77.77.1.0/24
                     next_hops:
-
                       - interface: 33.1.1.1
             vrf: vrftest1
 
           - address_families:
-
               - afi: ipv4
                 routes:
-
                   - dest: 120.1.1.0/24
                     next_hops:
-
                       - admin_distance: 23
                         interface: Ethernet1
             vrf: testvrf
@@ -93,5 +79,4 @@
         that:
           - result['changed'] == false
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

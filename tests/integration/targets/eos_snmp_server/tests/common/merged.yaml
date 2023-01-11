@@ -4,7 +4,6 @@
       ansible_connection }}
 
 - block:
-
     - name: merge given snmp_server configuration
       become: true
       register: result
@@ -74,5 +73,4 @@
           - result.commands|length == 1
           - result.changed == true
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

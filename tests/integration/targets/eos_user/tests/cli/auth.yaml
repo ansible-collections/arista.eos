@@ -1,6 +1,5 @@
 ---
 - block:
-
     - name: Create user with password
       become: true
       arista.eos.eos_user:
@@ -12,14 +11,16 @@
 
     - name: test login
       expect:
-        command: ssh auth_user@{{ ansible_ssh_host }} -o UserKnownHostsFile=/dev/null
+        command:
+          ssh auth_user@{{ ansible_ssh_host }} -o UserKnownHostsFile=/dev/null
           -o StrictHostKeyChecking=no show version
         responses:
           (?i)password: pass123
 
     - name: test login with invalid password (should fail)
       expect:
-        command: ssh auth_user@{{ ansible_ssh_host }} -o UserKnownHostsFile=/dev/null
+        command:
+          ssh auth_user@{{ ansible_ssh_host }} -o UserKnownHostsFile=/dev/null
           -o StrictHostKeyChecking=no show version
         responses:
           (?i)password: badpass
@@ -31,7 +32,6 @@
         that:
           - results.failed
   always:
-
     - name: delete user
       become: true
       register: result

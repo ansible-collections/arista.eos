@@ -7,15 +7,11 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - address_families:
-
           - afi: ipv6
             routes:
-
               - dest: 1120:10::/64
                 next_hops:
-
                   - admin_distance: 55
                     interface: Ethernet1
         vrf: testvrf
@@ -25,16 +21,12 @@
   register: result
   arista.eos.eos_static_routes: &id001
     config:
-
       - vrf: testvrf
         address_families:
-
           - afi: ipv6
             routes:
-
               - dest: 1120:10::/64
                 next_hops:
-
                   - interface: Ethernet1
                     admin_distance: 55
     state: overridden

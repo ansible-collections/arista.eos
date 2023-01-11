@@ -1,5 +1,6 @@
 ---
-- ansible.builtin.debug: msg="START eapi/greaterthanorequal.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START eapi/greaterthanorequal.yaml on connection={{ ansible_connection
     }}"
 
 - name: test ge operator
@@ -30,5 +31,6 @@
       - result.changed == false
       - result.stdout is defined
 
-- ansible.builtin.debug: msg="END eapi/greaterthanorequal.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="END eapi/greaterthanorequal.yaml on connection={{ ansible_connection
     }}"

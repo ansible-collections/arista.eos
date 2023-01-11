@@ -13,22 +13,22 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-import socket
-import re
 import itertools
+import re
+import socket
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_diff,
+    remove_empties,
     to_list,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    remove_empties,
-    dict_diff,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -53,7 +53,9 @@ class Acls(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         acls_facts = facts["ansible_network_resources"].get("acls")
         if not acls_facts:
@@ -93,10 +95,10 @@ class Acls(ConfigBase):
         elif self.state == "parsed":
             if not self._module.params["running_config"]:
                 self._module.fail_json(
-                    msg="Value of running_config parameter must not be empty for state parsed"
+                    msg="Value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_acls_facts(
-                data=self._module.params["running_config"]
+                data=self._module.params["running_config"],
             )
         else:
             changed_acls_facts = []
@@ -153,7 +155,7 @@ class Acls(ConfigBase):
                         if seq_num:
                             have_seq_num = re.search(r"(\d+) (.*)", h)
                             if seq_num.group(1) == have_seq_num.group(
-                                1
+                                1,
                             ) and have_seq_num.group(2) != seq_num.group(2):
                                 negate_cmd = "no " + seq_num.group(1)
                                 config.insert(config.index(w), negate_cmd)
@@ -186,8 +188,8 @@ class Acls(ConfigBase):
         ):
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
         state = self._module.params["state"]
         if state == "overridden":
@@ -232,15 +234,19 @@ class Acls(ConfigBase):
                                         h = {
                                             "afi": afi,
                                             "acls": [
-                                                {"name": name, "aces": [h_ace]}
+                                                {
+                                                    "name": name,
+                                                    "aces": [h_ace],
+                                                },
                                             ],
                                         }
                                         remove_cmds.append(
-                                            del_commands(h, have)
+                                            del_commands(h, have),
                                         )
                                 for w_ace in want_ace:
                                     w_diff = get_ace_diff(
-                                        w_ace, h_acl.get("aces", [])
+                                        w_ace,
+                                        h_acl.get("aces", []),
                                     )
                                     if w_diff:
                                         w = [
@@ -250,13 +256,13 @@ class Acls(ConfigBase):
                                                     {
                                                         "name": name,
                                                         "aces": [w_ace],
-                                                    }
+                                                    },
                                                 ],
-                                            }
+                                            },
                                         ]
                                         cmds = set_commands(w, have)
                                         config_cmds.append(
-                                            list(itertools.chain(*cmds))
+                                            list(itertools.chain(*cmds)),
                                         )
                             if name not in ace_names:
                                 for w_ace in want_ace:
@@ -264,13 +270,16 @@ class Acls(ConfigBase):
                                         {
                                             "afi": afi,
                                             "acls": [
-                                                {"name": name, "aces": [w_ace]}
+                                                {
+                                                    "name": name,
+                                                    "aces": [w_ace],
+                                                },
                                             ],
-                                        }
+                                        },
                                     ]
                                     cmds = set_commands(w, have)
                                     config_cmds.append(
-                                        list(itertools.chain(*cmds))
+                                        list(itertools.chain(*cmds)),
                                     )
 
         if remove_cmds:
@@ -317,7 +326,8 @@ class Acls(ConfigBase):
                             if h_acl["name"] == w_acl["name"]:
                                 for h_ace in h_acl.get("aces", []):
                                     ace_diff = get_ace_diff(
-                                        h_ace, w_acl["aces"]
+                                        h_ace,
+                                        w_acl["aces"],
                                     )
                                     if ace_diff:
                                         h = {
@@ -326,7 +336,7 @@ class Acls(ConfigBase):
                                                 {
                                                     "name": h_acl["name"],
                                                     "aces": [h_ace],
-                                                }
+                                                },
                                             ],
                                         }
                                         remove_cmds = del_commands(h, have)
@@ -334,7 +344,8 @@ class Acls(ConfigBase):
                             for w_ace in w_acl["aces"]:
                                 if w_acl["name"] not in w_names:
                                     w_ace_diff = get_ace_diff(
-                                        w_ace, h_acl.get("aces", [])
+                                        w_ace,
+                                        h_acl.get("aces", []),
                                     )
                                     if w_ace_diff:
                                         w_diff = [
@@ -344,15 +355,16 @@ class Acls(ConfigBase):
                                                     {
                                                         "name": w_acl["name"],
                                                         "aces": [w_ace],
-                                                    }
+                                                    },
                                                 ],
-                                            }
+                                            },
                                         ]
                                         config_cmds = set_commands(
-                                            w_diff, have
+                                            w_diff,
+                                            have,
                                         )
                                         config_cmds = list(
-                                            itertools.chain(*config_cmds)
+                                            itertools.chain(*config_cmds),
                                         )
                                         commands.append(config_cmds)
                             w_names.append(w_acl["name"])
@@ -437,11 +449,12 @@ def set_commands(want, have):
                                             == hace["sequence"]
                                         ):
                                             wace_updated = get_updated_ace(
-                                                wace, hace
+                                                wace,
+                                                hace,
                                             )
                                             if wace_updated:
                                                 want_aces.pop(
-                                                    want_aces.index(wace)
+                                                    want_aces.index(wace),
                                                 )
                                                 want_aces.append(wace_updated)
         return_command = add_commands(w)
@@ -553,7 +566,8 @@ def add_commands(want):
                             + op
                             + " "
                             + ace["destination"]["port_protocol"][op].replace(
-                                "_", "-"
+                                "_",
+                                "-",
                             )
                         )
             if "protocol_options" in ace.keys():
@@ -626,7 +640,8 @@ def del_commands(want, have, name_only=False):
                 commandset.append(cmd)
                 continue
             seq = re.search(
-                r"(\d+) (permit|deny|fragment-rules|remark) .*", cmd
+                r"(\d+) (permit|deny|fragment-rules|remark) .*",
+                cmd,
             )
             if seq:
                 commandset.append("no " + seq.group(1))

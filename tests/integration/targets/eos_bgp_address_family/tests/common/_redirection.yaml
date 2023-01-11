@@ -1,12 +1,12 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_bgp_address_family redirection integration tests ansible_connection={{
+    msg:
+      Start eos_bgp_address_family redirection integration tests ansible_connection={{
       ansible_connection }}
 
 - ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given bgp_address_family configuration
       become: true
       register: result
@@ -60,5 +60,4 @@
           - result.commands|length == 0
           - result.changed == false
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml

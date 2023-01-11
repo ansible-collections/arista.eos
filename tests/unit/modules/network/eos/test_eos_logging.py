@@ -18,13 +18,15 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_logging
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -37,12 +39,12 @@ class TestEosLoggingModule(TestEosModule):
         self._log_config = load_fixture("eos_logging_config.cfg")
 
         self.mock_get_config = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_logging.get_config"
+            "ansible_collections.arista.eos.plugins.modules.eos_logging.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_logging.load_config"
+            "ansible_collections.arista.eos.plugins.modules.eos_logging.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
@@ -69,7 +71,8 @@ class TestEosLoggingModule(TestEosModule):
         set_module_args(dict(dest="buffered", size=5))
         result = self.execute_module(failed=True)
         self.assertEqual(
-            result["msg"], "size must be between 10 and 2147483647"
+            result["msg"],
+            "size must be between 10 and 2147483647",
         )
 
     def test_eos_buffer_size_datatype(self):
@@ -84,7 +87,7 @@ class TestEosLoggingModule(TestEosModule):
 
     def test_eos_buffer_size_idempotent(self):
         set_module_args(
-            dict(dest="buffered", size=50000, level="informational")
+            dict(dest="buffered", size=50000, level="informational"),
         )
         self.execute_module(changed=False, commands=[])
 

@@ -3,7 +3,6 @@
 
 - ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         mode: layer3
         description: this is interface for testing
@@ -11,7 +10,7 @@
 
       - name: Ethernet2
         description: Configured by Ansible
-        speed: '10'
+        speed: "10"
         duplex: full
         enabled: false
 
@@ -23,7 +22,7 @@
   register: result
   become: true
   arista.eos.eos_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: merged
 
 - ansible.builtin.assert:

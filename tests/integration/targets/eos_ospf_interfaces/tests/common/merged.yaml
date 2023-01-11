@@ -1,12 +1,12 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_ospf_interfaces merged integration tests ansible_connection={{
+    msg:
+      Start eos_ospf_interfaces merged integration tests ansible_connection={{
       ansible_connection }}
 
 - ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given ospf interfaces configuration
       become: true
       register: result
@@ -63,5 +63,4 @@
           - result.commands|length == 0
           - result.changed == false
   always:
-
     - ansible.builtin.include_tasks: _remove_config.yaml
