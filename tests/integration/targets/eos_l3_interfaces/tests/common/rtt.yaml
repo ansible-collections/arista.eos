@@ -1,33 +1,29 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config1:
-
       - name: Ethernet1
         ipv4:
-
           - address: 198.51.100.14/24
 
     config2:
-
       - name: Ethernet2
         ipv4:
-
           - address: 203.0.113.227/31
 
 - name: Merge provided configuration with device configuration (base config).
   register: baseconfig
   become: true
   arista.eos.eos_l3_interfaces:
-    config: '{{ config1 }}'
+    config: "{{ config1 }}"
     state: merged
 
 - become: true
   arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(baseconfig.after)
         == []
@@ -37,7 +33,7 @@
   register: result
   become: true
   arista.eos.eos_l3_interfaces:
-    config: '{{ config2 }}'
+    config: "{{ config2 }}"
     state: merged
 
 - name: Revert back to base config using facts round trip
@@ -48,5 +44,5 @@
     state: overridden
 
 - name: Assert that config was reverted
-  assert:
+  ansible.builtin.assert:
     that: "{{ baseconfig['after'] | symmetric_difference(revert['after']) == [] }}"

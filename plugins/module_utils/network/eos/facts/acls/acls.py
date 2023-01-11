@@ -12,14 +12,17 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
+
 from copy import deepcopy
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.acls.acls import (
     AclsArgs,
 )
@@ -88,7 +91,8 @@ class AclsFacts(object):
         if objs:
             facts["acls"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["acls"].append(utils.remove_empties(cfg))
@@ -149,7 +153,7 @@ class AclsFacts(object):
                 if "remark" in dev_config:
                     ace_dict.update({"sequence": dev_config_remainder.pop(0)})
                     ace_dict.update(
-                        {"remark": " ".join(dev_config_remainder[1:])}
+                        {"remark": " ".join(dev_config_remainder[1:])},
                     )
                 seq = re.search(r"\d+ (permit|deny) .*", dev_config)
                 if seq:
@@ -175,18 +179,19 @@ class AclsFacts(object):
                     if not standard:
                         protocol = dev_config_remainder[0]
                         ace_dict.update(
-                            {"protocol": dev_config_remainder.pop(0)}
+                            {"protocol": dev_config_remainder.pop(0)},
                         )
                     src_prefix = re.search(r"/", dev_config_remainder[0])
                     src_address = re.search(
-                        r"[a-z\d:\.]+", dev_config_remainder[0]
+                        r"[a-z\d:\.]+",
+                        dev_config_remainder[0],
                     )
                     if (
                         dev_config_remainder
                         and dev_config_remainder[0] == "host"
                     ):
                         source_dict.update(
-                            {"host": dev_config_remainder.pop(1)}
+                            {"host": dev_config_remainder.pop(1)},
                         )
                         dev_config_remainder.pop(0)
                     elif (
@@ -197,14 +202,14 @@ class AclsFacts(object):
                         dev_config_remainder.pop(0)
                     elif src_prefix:
                         source_dict.update(
-                            {"subnet_address": dev_config_remainder.pop(0)}
+                            {"subnet_address": dev_config_remainder.pop(0)},
                         )
                     elif src_address:
                         source_dict.update(
-                            {"address": dev_config_remainder.pop(0)}
+                            {"address": dev_config_remainder.pop(0)},
                         )
                         source_dict.update(
-                            {"wildcard_bits": dev_config_remainder.pop(0)}
+                            {"wildcard_bits": dev_config_remainder.pop(0)},
                         )
                     if dev_config_remainder:
                         if (
@@ -244,7 +249,8 @@ class AclsFacts(object):
                         continue
                     dest_prefix = re.search(r"/", dev_config_remainder[0])
                     dest_address = re.search(
-                        r"[a-z\d:\.]+", dev_config_remainder[0]
+                        r"[a-z\d:\.]+",
+                        dev_config_remainder[0],
                     )
                     if (
                         dev_config_remainder
@@ -260,14 +266,14 @@ class AclsFacts(object):
                         dev_config_remainder.pop(0)
                     elif dest_prefix:
                         dest_dict.update(
-                            {"subnet_address": dev_config_remainder.pop(0)}
+                            {"subnet_address": dev_config_remainder.pop(0)},
                         )
                     elif dest_address:
                         dest_dict.update(
-                            {"address": dev_config_remainder.pop(0)}
+                            {"address": dev_config_remainder.pop(0)},
                         )
                         dest_dict.update(
-                            {"wildcard_bits": dev_config_remainder.pop(0)}
+                            {"wildcard_bits": dev_config_remainder.pop(0)},
                         )
                     if dev_config_remainder:
                         if dev_config_remainder[0] in operator:
@@ -341,13 +347,13 @@ class AclsFacts(object):
                         ):
                             dev_config_remainder.pop(0)
                             ip_dict.update(
-                                {"nexthop_group": dev_config_remainder.pop(0)}
+                                {"nexthop_group": dev_config_remainder.pop(0)},
                             )
                     if bool(ip_dict):
                         protocol_option_dict.update({protocol: ip_dict})
                     if bool(protocol_option_dict):
                         ace_dict.update(
-                            {"protocol_options": protocol_option_dict}
+                            {"protocol_options": protocol_option_dict},
                         )
                     if (
                         dev_config_remainder
@@ -361,12 +367,12 @@ class AclsFacts(object):
                         if config_remainder in others:
                             if config_remainder == "hop_limit":
                                 hop_index = dev_config_remainder.index(
-                                    config_remainder
+                                    config_remainder,
                                 )
                                 hoplimit_dict = {
                                     dev_config_remainder[
                                         hop_index + 1
-                                    ]: dev_config_remainder[hop_index + 2]
+                                    ]: dev_config_remainder[hop_index + 2],
                                 }
                                 ace_dict.update({"hop_limit": hoplimit_dict})
                                 dev_config_remainder.pop(0)

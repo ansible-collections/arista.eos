@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli/invalid_subset.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START cli/invalid_subset.yaml on connection={{ ansible_connection
     }}"
 
 - name: test invalid subset (foobar)
@@ -10,10 +11,10 @@
     gather_subset:
       - foobar
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.failed == true
       - "'Subset must be one of' in result.msg"
 
-- debug: msg="END cli/invalid_subset.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/invalid_subset.yaml on connection={{ ansible_connection }}"

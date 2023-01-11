@@ -1,5 +1,5 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: "START cli/misc_tests.yaml on connection={{ ansible_connection }}"
 
 # test become and unbecome
@@ -11,9 +11,9 @@
       ignore_errors: true
       register: result
 
-    - assert:
+    - ansible.builtin.assert:
         that:
-          - 'result.failed == true'
+          - "result.failed == true"
           - '"privileged mode required" in result.msg'
 
     - name: command that doesn't require become

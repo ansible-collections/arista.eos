@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,13 +19,14 @@ created.
 """
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_merge,
-    dict_diff,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
     ResourceModule,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_diff,
+    dict_merge,
+)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -119,7 +121,9 @@ class Prefix_lists(ResourceModule):
                     self.commands.insert(
                         begin,
                         self._tmplt.render(
-                            w_parent or h_parent, "prefixlist.name", False
+                            w_parent or h_parent,
+                            "prefixlist.name",
+                            False,
                         ),
                     )
         for hk, hv in iteritems(have):
@@ -132,7 +136,7 @@ class Prefix_lists(ResourceModule):
                         {"afi": h_afi, "prefix_lists": {"name": hpk}},
                         "prefixlist.name",
                         True,
-                    )
+                    ),
                 )
 
     def _compare_prefix_lists(self, afi, pk, w_list, have):
@@ -150,7 +154,7 @@ class Prefix_lists(ResourceModule):
                             have["prefix_lists"][pk][ek],
                         )
                     for seq, seq_val in iteritems(
-                        have["prefix_lists"][pk][ek]
+                        have["prefix_lists"][pk][ek],
                     ):
                         h_child = {
                             "afi": afi,
@@ -184,11 +188,13 @@ class Prefix_lists(ResourceModule):
                     self._module.fail_json(
                         msg="Sequence number "
                         + str(seq)
-                        + " is already present. Use replaced/overridden operation to change the configuration"
+                        + " is already present. Use replaced/overridden operation to change the configuration",
                     )
 
                 self.compare(
-                    parsers="prefixlist.entry", want={}, have=hl_child
+                    parsers="prefixlist.entry",
+                    want={},
+                    have=hl_child,
                 )
             self.compare(parsers=parser, want=wl_child, have=hl_child)
 

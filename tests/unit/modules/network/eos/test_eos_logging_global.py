@@ -5,13 +5,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_logging_global
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,14 +24,14 @@ class TestEosLogging_GlobalModule(TestEosModule):
         super(TestEosLogging_GlobalModule, self).setUp()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.logging_global.logging_global.Logging_globalFacts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.logging_global.logging_global.Logging_globalFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -56,7 +58,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                     console=dict(severity="warnings"),
                     facility="local7",
                     format=dict(
-                        timestamp=dict(traditional=dict(timezone=True))
+                        timestamp=dict(traditional=dict(timezone=True)),
                     ),
                     hosts=[
                         dict(name="11.11.11.1", port=25),
@@ -72,13 +74,15 @@ class TestEosLogging_GlobalModule(TestEosModule):
                             hosts=[
                                 dict(name="24.1.1.1", port=33),
                                 dict(
-                                    name="hostvrf1", port=514, protocol="tcp"
+                                    name="hostvrf1",
+                                    port=514,
+                                    protocol="tcp",
                                 ),
                             ],
                         ),
                     ],
-                )
-            )
+                ),
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -91,7 +95,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                     console=dict(severity="warnings"),
                     facility="local7",
                     format=dict(
-                        timestamp=dict(traditional=dict(timezone=True))
+                        timestamp=dict(traditional=dict(timezone=True)),
                     ),
                     hosts=[
                         dict(name="11.11.11.1", port=25),
@@ -107,13 +111,15 @@ class TestEosLogging_GlobalModule(TestEosModule):
                             hosts=[
                                 dict(name="24.1.1.1", port=33),
                                 dict(
-                                    name="hostvrf1", port=514, protocol="tcp"
+                                    name="hostvrf1",
+                                    port=514,
+                                    protocol="tcp",
                                 ),
                             ],
                         ),
                     ],
                 ),
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -126,7 +132,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                     console=dict(severity="warnings"),
                     facility="local7",
                     format=dict(
-                        timestamp=dict(traditional=dict(timezone=True))
+                        timestamp=dict(traditional=dict(timezone=True)),
                     ),
                     hosts=[
                         dict(name="11.11.11.1", port=25),
@@ -142,13 +148,15 @@ class TestEosLogging_GlobalModule(TestEosModule):
                             hosts=[
                                 dict(name="24.1.1.1", port=33),
                                 dict(
-                                    name="hostvrf1", port=514, protocol="tcp"
+                                    name="hostvrf1",
+                                    port=514,
+                                    protocol="tcp",
                                 ),
                             ],
                         ),
                     ],
                 ),
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -165,7 +173,9 @@ class TestEosLogging_GlobalModule(TestEosModule):
                             name="vrf04",
                             hosts=[
                                 dict(
-                                    name="hostvrf1", protocol="tcp", add=True
+                                    name="hostvrf1",
+                                    protocol="tcp",
+                                    add=True,
                                 ),
                                 dict(
                                     name="hostvrf2",
@@ -175,8 +185,8 @@ class TestEosLogging_GlobalModule(TestEosModule):
                             ],
                         ),
                     ],
-                )
-            )
+                ),
+            ),
         )
         commands = [
             "logging host host02 protocol tcp",
@@ -208,7 +218,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                         ),
                     ],
                 ),
-            )
+            ),
         )
         commands = [
             "logging host host02 add protocol tcp",
@@ -250,7 +260,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                         ),
                     ],
                 ),
-            )
+            ),
         )
         commands = [
             "logging host host02 protocol tcp",
@@ -278,7 +288,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
         set_module_args(
             dict(
                 state="deleted",
-            )
+            ),
         )
         commands = [
             "no logging host 11.11.11.1 25",
@@ -299,7 +309,8 @@ class TestEosLogging_GlobalModule(TestEosModule):
     def test_eos_logging_global_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_logging_global_config.cfg"
+            changed=False,
+            filename="eos_logging_global_config.cfg",
         )
         gathered_list = {
             "buffered": {"buffer_size": "50000", "severity": "informational"},
@@ -378,7 +389,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                     console=dict(severity="warnings"),
                     facility="local7",
                     format=dict(
-                        timestamp=dict(traditional=dict(timezone=True))
+                        timestamp=dict(traditional=dict(timezone=True)),
                     ),
                     hosts=[
                         dict(name="11.11.11.1", port=25),
@@ -394,13 +405,15 @@ class TestEosLogging_GlobalModule(TestEosModule):
                             hosts=[
                                 dict(name="24.1.1.1", port=33),
                                 dict(
-                                    name="hostvrf1", port=514, protocol="tcp"
+                                    name="hostvrf1",
+                                    port=514,
+                                    protocol="tcp",
                                 ),
                             ],
                         ),
                     ],
                 ),
-            )
+            ),
         )
         commands = [
             "logging console warnings",
@@ -418,5 +431,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )

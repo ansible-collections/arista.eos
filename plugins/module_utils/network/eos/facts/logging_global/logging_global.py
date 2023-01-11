@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,11 +19,12 @@ from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.logging_global import (
-    Logging_globalTemplate,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.logging_global.logging_global import (
     Logging_globalArgs,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.logging_global import (
+    Logging_globalTemplate,
 )
 
 
@@ -57,7 +59,8 @@ class Logging_globalFacts(object):
 
         # parse native config using the Prefix_lists template
         logging_parser = Logging_globalTemplate(
-            lines=data.splitlines(), module=self._module
+            lines=data.splitlines(),
+            module=self._module,
         )
         objs = logging_parser.parse()
         if objs:
@@ -74,7 +77,8 @@ class Logging_globalFacts(object):
                             key=lambda k, sk="name": k[sk],
                         )
                 objs["vrfs"] = sorted(
-                    list(objs["vrfs"].values()), key=lambda k, sk="name": k[sk]
+                    list(objs["vrfs"].values()),
+                    key=lambda k, sk="name": k[sk],
                 )
         else:
             objs = {}
@@ -82,8 +86,10 @@ class Logging_globalFacts(object):
 
         params = utils.remove_empties(
             logging_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
-            )
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["logging_global"] = params.get("config", {})

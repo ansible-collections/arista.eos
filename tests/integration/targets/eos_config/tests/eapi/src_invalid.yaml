@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/src_invalid.yaml"
+- ansible.builtin.debug: msg="START eapi/src_invalid.yaml"
 
 - name: configure with invalid src
   register: result
@@ -7,10 +7,10 @@
   arista.eos.eos_config:
     src: basic/foobar.j2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.failed == true
       - result.msg == 'path specified in src not found'
 
-- debug: msg="END eapi/src_invalid.yaml"
+- ansible.builtin.debug: msg="END eapi/src_invalid.yaml"

@@ -12,14 +12,17 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
+
 from copy import deepcopy
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lldp_global.lldp_global import (
     Lldp_globalArgs,
 )
@@ -89,7 +92,9 @@ class Lldp_globalFacts(object):
             config["timer"] = None
 
         for match in re.findall(
-            r"^(no)? lldp tlv transmit (\S+)", conf, re.MULTILINE
+            r"^(no)? lldp tlv transmit (\S+)",
+            conf,
+            re.MULTILINE,
         ):
             tlv_option = match[1].replace("-", "_")
             config["tlv_select"][tlv_option] = bool(match[0] != "no")

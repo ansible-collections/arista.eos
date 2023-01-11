@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -207,31 +208,35 @@ from copy import deepcopy
 from functools import partial
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
     load_config,
     run_commands,
 )
-from ansible.module_utils.six import iteritems
 
 
 def validate_privilege(value, module):
     if not 1 <= value <= 15:
         module.fail_json(
-            msg="privilege must be between 1 and 15, got %s" % value
+            msg="privilege must be between 1 and 15, got %s" % value,
         )
 
 
 def get_os_version(module):
     os_version = "4.20.10"
     response = run_commands(
-        module, 'show version | grep "Software image version"'
+        module,
+        'show version | grep "Software image version"',
     )
     version_match = re.search(
-        r"Software image version:\s+([\d\.]+)", response[0], re.M
+        r"Software image version:\s+([\d\.]+)",
+        response[0],
+        re.M,
     )
     if version_match:
         v = version_match.group(1).split(".")
@@ -288,7 +293,7 @@ def map_obj_to_commands(updates, module):
             ]
             if all(v is None for v in value) is True:
                 module.fail_json(
-                    msg="configured_password, sshkey or nopassword should be provided"
+                    msg="configured_password, sshkey or nopassword should be provided",
                 )
     return commands
 
@@ -413,7 +418,8 @@ def main():
         configured_password=dict(no_log=True),
         nopassword=dict(type="bool"),
         update_password=dict(
-            default="always", choices=["on_create", "always"]
+            default="always",
+            choices=["on_create", "always"],
         ),
         privilege=dict(type="int"),
         role=dict(),

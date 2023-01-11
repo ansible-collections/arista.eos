@@ -1,10 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ntp_global merged integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
-
     - name: merge given ntp_global configuration
       become: true
       register: result
@@ -49,7 +48,7 @@
               vrf: "vrf01"
           trusted_key: "23"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 11
           - result.changed == true
@@ -62,10 +61,9 @@
       register: result
       arista.eos.eos_ntp_global: *merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

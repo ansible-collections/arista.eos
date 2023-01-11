@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -19,11 +20,12 @@ import re
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospf_interfaces import (
-    Ospf_interfacesTemplate,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ospf_interfaces.ospf_interfaces import (
     Ospf_interfacesArgs,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospf_interfaces import (
+    Ospf_interfacesTemplate,
 )
 
 
@@ -67,7 +69,8 @@ class Ospf_interfacesFacts(object):
         ospf_interfaces_facts = []
         for resource in resources:
             ospf_interfaces_parser = Ospf_interfacesTemplate(
-                lines=resource.splitlines(), module=self._module
+                lines=resource.splitlines(),
+                module=self._module,
             )
             entry = ospf_interfaces_parser.parse()
             if entry:
@@ -93,7 +96,7 @@ class Ospf_interfacesFacts(object):
                 self.argument_spec,
                 {"config": ospf_interfaces_facts},
                 redact=True,
-            )
+            ),
         )
 
         if params.get("config"):

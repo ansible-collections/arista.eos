@@ -5,13 +5,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_ospfv3
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -21,19 +23,19 @@ class TestEosOspfv3Module(TestEosModule):
     def setUp(self):
         super(TestEosOspfv3Module, self).setUp()
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospfv3.ospfv3.Ospfv3Facts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospfv3.ospfv3.Ospfv3Facts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
         self.mock_get_os_version = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospfv3.Ospfv3Template._get_os_version"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospfv3.Ospfv3Template._get_os_version",
         )
         self.get_os_version = self.mock_get_os_version.start()
 
@@ -100,7 +102,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         encryption="null",
                                         spi=44,
                                     ),
-                                )
+                                ),
                             ],
                             fips_restrictions=True,
                             address_family=[
@@ -111,7 +113,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         dict(
                                             routes="connected",
                                             route_map="MAP01",
-                                        )
+                                        ),
                                     ],
                                     passive_interface=True,
                                     maximum_paths=100,
@@ -123,7 +125,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         dict(
                                             area_id="0.0.0.10",
                                             nssa=dict(no_summary=True),
-                                        )
+                                        ),
                                     ],
                                     default_information=dict(
                                         originate=True,
@@ -132,10 +134,10 @@ class TestEosOspfv3Module(TestEosModule):
                                     max_metric=dict(
                                         router_lsa=dict(
                                             external_lsa=dict(
-                                                max_metric_value=25
+                                                max_metric_value=25,
                                             ),
                                             summary_lsa=dict(set=True),
-                                        )
+                                        ),
                                     ),
                                 ),
                             ],
@@ -151,7 +153,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         dict(
                                             area_id="0.0.0.1",
                                             stub=dict(set=True),
-                                        )
+                                        ),
                                     ],
                                     distance=200,
                                     router_id="10.17.0.3",
@@ -159,13 +161,13 @@ class TestEosOspfv3Module(TestEosModule):
                                         out_delay=10,
                                         spf=dict(initial=56, max=56, min=56),
                                     ),
-                                )
+                                ),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -185,7 +187,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         hidden_key=True,
                                         passphrase="4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w",
                                     ),
-                                )
+                                ),
                             ],
                             timers=dict(pacing=7),
                         ),
@@ -204,22 +206,22 @@ class TestEosOspfv3Module(TestEosModule):
                                                 dict(
                                                     address="20.1.1.0/24",
                                                     advertise=False,
-                                                )
+                                                ),
                                             ],
-                                        )
+                                        ),
                                     ],
                                     default_information=dict(
                                         originate=True,
                                         route_map="DefaultRouteFilter",
                                     ),
                                     graceful_restart=dict(set=True),
-                                )
+                                ),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "router ospfv3",
@@ -254,7 +256,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         hidden_key=True,
                                         passphrase="4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w",
                                     ),
-                                )
+                                ),
                             ],
                             log_adjacency_changes=dict(detail=True),
                             fips_restrictions=True,
@@ -269,22 +271,22 @@ class TestEosOspfv3Module(TestEosModule):
                                                 dict(
                                                     address="20.1.1.0/24",
                                                     advertise=False,
-                                                )
+                                                ),
                                             ],
-                                        )
+                                        ),
                                     ],
                                     default_information=dict(
                                         originate=True,
                                         route_map="DefaultRouteFilter",
                                     ),
                                     graceful_restart=dict(set=True),
-                                )
+                                ),
                             ],
-                        )
-                    ]
+                        ),
+                    ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "router ospfv3 vrf vrf02",
@@ -325,7 +327,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         encryption="null",
                                         spi=44,
                                     ),
-                                )
+                                ),
                             ],
                             fips_restrictions=True,
                             address_family=[
@@ -336,7 +338,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         dict(
                                             routes="connected",
                                             route_map="MAP01",
-                                        )
+                                        ),
                                     ],
                                     passive_interface=True,
                                     maximum_paths=100,
@@ -348,7 +350,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         dict(
                                             area_id="0.0.0.10",
                                             nssa=dict(no_summary=True),
-                                        )
+                                        ),
                                     ],
                                     default_information=dict(
                                         originate=True,
@@ -357,18 +359,18 @@ class TestEosOspfv3Module(TestEosModule):
                                     max_metric=dict(
                                         router_lsa=dict(
                                             external_lsa=dict(
-                                                max_metric_value=25
+                                                max_metric_value=25,
                                             ),
                                             summary_lsa=dict(set=True),
-                                        )
+                                        ),
                                     ),
                                 ),
                             ],
-                        )
-                    ]
+                        ),
+                    ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -417,7 +419,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         encryption="null",
                                         spi=44,
                                     ),
-                                )
+                                ),
                             ],
                             fips_restrictions=True,
                             address_family=[
@@ -428,7 +430,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         dict(
                                             routes="connected",
                                             route_map="MAP01",
-                                        )
+                                        ),
                                     ],
                                     passive_interface=True,
                                     maximum_paths=100,
@@ -440,7 +442,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         dict(
                                             area_id="0.0.0.10",
                                             nssa=dict(no_summary=True),
-                                        )
+                                        ),
                                     ],
                                     default_information=dict(
                                         originate=True,
@@ -449,10 +451,10 @@ class TestEosOspfv3Module(TestEosModule):
                                     max_metric=dict(
                                         router_lsa=dict(
                                             external_lsa=dict(
-                                                max_metric_value=25
+                                                max_metric_value=25,
                                             ),
                                             summary_lsa=dict(set=True),
-                                        )
+                                        ),
                                     ),
                                 ),
                             ],
@@ -468,7 +470,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         dict(
                                             area_id="0.0.0.1",
                                             stub=dict(set=True),
-                                        )
+                                        ),
                                     ],
                                     distance=200,
                                     router_id="10.17.0.3",
@@ -476,13 +478,13 @@ class TestEosOspfv3Module(TestEosModule):
                                         out_delay=10,
                                         spf=dict(initial=56, max=56, min=56),
                                     ),
-                                )
+                                ),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -528,7 +530,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         hidden_key=True,
                                         passphrase="4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w",
                                     ),
-                                )
+                                ),
                             ],
                             log_adjacency_changes=dict(detail=True),
                             fips_restrictions=True,
@@ -543,22 +545,22 @@ class TestEosOspfv3Module(TestEosModule):
                                                 dict(
                                                     address="20.1.1.0/24",
                                                     advertise=False,
-                                                )
+                                                ),
                                             ],
-                                        )
+                                        ),
                                     ],
                                     default_information=dict(
                                         originate=True,
                                         route_map="DefaultRouteFilter",
                                     ),
                                     graceful_restart=dict(set=True),
-                                )
+                                ),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "router ospfv3 vrf vrf02",
@@ -586,10 +588,10 @@ class TestEosOspfv3Module(TestEosModule):
         set_module_args(
             dict(
                 config=dict(
-                    processes=[dict(vrf="default"), dict(vrf="vrf02")]
+                    processes=[dict(vrf="default"), dict(vrf="vrf02")],
                 ),
                 state="deleted",
-            )
+            ),
         )
         commands = ["no router ospfv3 vrf vrf02", "no router ospfv3"]
 
@@ -611,7 +613,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         hidden_key=True,
                                         passphrase="4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w",
                                     ),
-                                )
+                                ),
                             ],
                             timers=dict(pacing=7),
                         ),
@@ -630,22 +632,22 @@ class TestEosOspfv3Module(TestEosModule):
                                                 dict(
                                                     address="20.1.1.0/24",
                                                     advertise=False,
-                                                )
+                                                ),
                                             ],
-                                        )
+                                        ),
                                     ],
                                     default_information=dict(
                                         originate=True,
                                         route_map="DefaultRouteFilter",
                                     ),
                                     graceful_restart=dict(set=True),
-                                )
+                                ),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "router ospfv3",
@@ -665,7 +667,9 @@ class TestEosOspfv3Module(TestEosModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_eos_ospfv3_parsed(self):
@@ -702,7 +706,7 @@ class TestEosOspfv3Module(TestEosModule):
                                 "hidden_key": True,
                                 "passphrase": "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w",
                             },
-                        }
+                        },
                     ],
                     "timers": {"pacing": 7},
                 },
@@ -721,26 +725,27 @@ class TestEosOspfv3Module(TestEosModule):
                                         {
                                             "address": "20.1.1.0/24",
                                             "advertise": False,
-                                        }
+                                        },
                                     ],
-                                }
+                                },
                             ],
                             "default_information": {
                                 "originate": True,
                                 "route_map": "DefaultRouteFilter",
                             },
                             "graceful_restart": {"set": True},
-                        }
+                        },
                     ],
                 },
-            ]
+            ],
         }
         self.assertEqual(sorted(parsed_list), sorted(result["parsed"]))
 
     def test_eos_ospfv3_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_ospfv3_config_gather.cfg"
+            changed=False,
+            filename="eos_ospfv3_config_gather.cfg",
         )
         gather_list = {
             "processes": [
@@ -755,7 +760,7 @@ class TestEosOspfv3Module(TestEosModule):
                                 "hidden_key": True,
                                 "passphrase": "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w",
                             },
-                        }
+                        },
                     ],
                     "timers": {"pacing": 7},
                 },
@@ -774,19 +779,19 @@ class TestEosOspfv3Module(TestEosModule):
                                         {
                                             "address": "20.1.1.0/24",
                                             "advertise": False,
-                                        }
+                                        },
                                     ],
-                                }
+                                },
                             ],
                             "default_information": {
                                 "originate": True,
                                 "route_map": "DefaultRouteFilter",
                             },
                             "graceful_restart": {"set": True},
-                        }
+                        },
                     ],
                 },
-            ]
+            ],
         }
         self.assertEqual(sorted(gather_list), sorted(result["gathered"]))
 
@@ -797,11 +802,11 @@ class TestEosOspfv3Module(TestEosModule):
             dict(
                 config=dict(
                     processes=[
-                        dict(vrf="default", bfd=dict(all_interfaces=True))
-                    ]
+                        dict(vrf="default", bfd=dict(all_interfaces=True)),
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = ["router ospfv3", "bfd default", "exit"]
         self.execute_module(changed=True, commands=commands)
@@ -812,11 +817,11 @@ class TestEosOspfv3Module(TestEosModule):
             dict(
                 config=dict(
                     processes=[
-                        dict(vrf="default", bfd=dict(all_interfaces=True))
-                    ]
+                        dict(vrf="default", bfd=dict(all_interfaces=True)),
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = ["router ospfv3", "bfd all-interfaces", "exit"]
         self.execute_module(changed=True, commands=commands)
@@ -837,7 +842,7 @@ class TestEosOspfv3Module(TestEosModule):
                                         dict(
                                             area_id="0.0.0.1",
                                             stub=dict(set=True),
-                                        )
+                                        ),
                                     ],
                                     distance=200,
                                     router_id="10.17.0.3",
@@ -845,13 +850,13 @@ class TestEosOspfv3Module(TestEosModule):
                                         out_delay=10,
                                         lsa=[dict(initial=56, max=56, min=56)],
                                     ),
-                                )
+                                ),
                             ],
                         ),
-                    ]
+                    ],
                 ),
                 state="merged",
-            )
+            ),
         )
         result = self.execute_module(failed=True)
         self.assertIn(

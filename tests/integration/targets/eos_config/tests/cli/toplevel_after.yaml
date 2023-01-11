@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli/toplevel_after.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START cli/toplevel_after.yaml on connection={{ ansible_connection
     }}"
 
 - name: setup
@@ -17,7 +18,7 @@
     lines: hostname foo
     after: snmp-server contact bar
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'hostname foo' in result.updates"
@@ -30,7 +31,7 @@
     lines: hostname foo
     after: snmp-server contact foo
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -42,4 +43,4 @@
       - hostname {{ inventory_hostname_short }}
     match: none
 
-- debug: msg="END cli/toplevel_after.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/toplevel_after.yaml on connection={{ ansible_connection }}"

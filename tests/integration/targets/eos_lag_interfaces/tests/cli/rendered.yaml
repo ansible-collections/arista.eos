@@ -1,5 +1,5 @@
 ---
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       - name: 5
         members:
@@ -12,11 +12,11 @@
   register: result
   become: true
   arista.eos.eos_lag_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: rendered
 
 - name: Assert
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered.sort() == result.rendered.sort()
       - result['changed'] == false

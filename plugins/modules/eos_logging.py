@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 # Copyright: (c) 2017, Ansible by Red Hat, inc
@@ -166,14 +167,15 @@ commands:
 
 import re
 
-
 from copy import deepcopy
+
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.common.validation import check_required_if
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
     load_config,
@@ -224,7 +226,7 @@ def map_obj_to_commands(updates, module):
 
                 else:
                     module.fail_json(
-                        msg="dest must be among console, monitor, buffered, host, on"
+                        msg="dest must be among console, monitor, buffered, host, on",
                     )
 
             if facility:
@@ -271,7 +273,7 @@ def map_obj_to_commands(updates, module):
                 if not present:
                     if size and level:
                         commands.append(
-                            "logging buffered {0} {1}".format(size, level)
+                            "logging buffered {0} {1}".format(size, level),
                         )
                     else:
                         commands.append("logging buffered {0}".format(size))
@@ -369,7 +371,7 @@ def map_config_to_obj(module):
                     "size": parse_size(line, dest),
                     "facility": parse_facility(line),
                     "level": parse_level(line, dest),
-                }
+                },
             )
 
     return obj
@@ -385,7 +387,7 @@ def parse_obj(obj, module):
                 "facility": module.params["facility"],
                 "level": module.params["level"],
                 "state": module.params["state"],
-            }
+            },
         )
 
     else:
@@ -397,7 +399,7 @@ def parse_obj(obj, module):
                 "facility": module.params["facility"],
                 "level": module.params["level"],
                 "state": module.params["state"],
-            }
+            },
         )
 
     return obj
@@ -467,7 +469,7 @@ def main():
 
     aggregate_spec["state"].update(default="present")
     argument_spec = dict(
-        aggregate=dict(type="list", elements="dict", options=aggregate_spec)
+        aggregate=dict(type="list", elements="dict", options=aggregate_spec),
     )
 
     argument_spec.update(element_spec)

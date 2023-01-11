@@ -1,10 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ntp_global rendered integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
-
     - name: merge given ntp_global configuration
       become: true
       register: result
@@ -50,10 +49,9 @@
               vrf: "vrf01"
           trusted_key: "23"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
           - result.rendered|symmetric_difference(merged.commands) == []
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

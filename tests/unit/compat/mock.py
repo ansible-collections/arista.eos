@@ -18,13 +18,16 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
 Compat module for Python3.x's unittest.mock module
 """
 import sys
+
 import _io
+
 
 # Python 2.7
 
@@ -103,7 +106,7 @@ if sys.version_info >= (3,) and sys.version_info < (3, 4, 4):
         if file_spec is None:
 
             file_spec = list(
-                set(dir(_io.TextIOWrapper)).union(set(dir(_io.BytesIO)))
+                set(dir(_io.TextIOWrapper)).union(set(dir(_io.BytesIO))),
             )
 
         if mock is None:

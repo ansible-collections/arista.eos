@@ -1,15 +1,16 @@
 ---
-- debug:
-    msg: START eos_interfaces rendered integration tests on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg:
+      START eos_interfaces rendered integration tests on connection={{ ansible_connection
       }}
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       - name: Ethernet1
         enabled: true
       - name: Ethernet2
         description: Configured by Ansible
-        speed: '10'
+        speed: "10"
         duplex: full
         enabled: false
 
@@ -17,11 +18,11 @@
   register: result
   become: true
   arista.eos.eos_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: rendered
 
 - name: Assert
-  assert:
+  ansible.builtin.assert:
     that:
       - rendered|symmetric_difference(result.rendered) == []
       - result['changed'] == false

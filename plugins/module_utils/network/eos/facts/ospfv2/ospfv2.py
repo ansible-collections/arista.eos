@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,11 +16,13 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 import re
+
 from copy import deepcopy
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ospfv2.ospfv2 import (
     Ospfv2Args,
 )
@@ -80,7 +83,8 @@ class Ospfv2Facts(object):
         if objs:
             facts["ospfv2"] = {}
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             facts["ospfv2"].update(utils.remove_empties(params["config"]))
 
@@ -134,7 +138,7 @@ class Ospfv2Facts(object):
             elif "auto_cost" in dev_config:
                 bw = config_params[-1]
                 ospf_params_dict.update(
-                    {"auto_cost": {"reference_bandwidth": bw}}
+                    {"auto_cost": {"reference_bandwidth": bw}},
                 )
             elif "bfd" in dev_config:
                 ospf_params_dict.update({"bfd": {"all_interfaces": True}})
@@ -153,7 +157,7 @@ class Ospfv2Facts(object):
                 ospf_params_dict.update({"distance": distance_dict})
             elif "distribute_list" in dev_config:
                 ospf_params_dict.update(
-                    {"distribute_list": {config_params[1]: config_params[2]}}
+                    {"distribute_list": {config_params[1]: config_params[2]}},
                 )
             elif "dn_bit_ignore" in dev_config:
                 ospf_params_dict.update({"dn_bit_ignore": True})
@@ -164,20 +168,20 @@ class Ospfv2Facts(object):
                     ospf_params_dict.update(
                         {
                             "graceful_restart": {
-                                "grace_period": config_params[-1]
-                            }
-                        }
+                                "grace_period": config_params[-1],
+                            },
+                        },
                     )
                 else:
                     ospf_params_dict.update(
-                        {"graceful_restart": {"set": True}}
+                        {"graceful_restart": {"set": True}},
                     )
             elif "graceful_restart_helper" in dev_config:
                 ospf_params_dict.update({"graceful_restart_helper": True})
             elif "log_adjacency_changes" in dev_config:
                 detail = True if "detail" in dev_config else False
                 ospf_params_dict.update(
-                    {"log_adjacency_changes": {"detail": detail}}
+                    {"log_adjacency_changes": {"detail": detail}},
                 )
             elif "max_lsa" in dev_config:
                 max_lsa_dict = {}
@@ -186,7 +190,7 @@ class Ospfv2Facts(object):
                 if config_params:
                     if config_params[0].isdigit():
                         max_lsa_dict.update(
-                            {"threshold": config_params.pop(0)}
+                            {"threshold": config_params.pop(0)},
                         )
                     for i, el in enumerate(config_params):
                         if el == "warning_only":
@@ -205,7 +209,7 @@ class Ospfv2Facts(object):
                     network_dict.update({"prefix": config_params.pop(0)})
                 else:
                     network_dict.update(
-                        {"network_address": config_params.pop(0)}
+                        {"network_address": config_params.pop(0)},
                     )
                     network_dict.update({"mask": config_params.pop(0)})
                 network_dict.update({"area": config_params[-1]})
@@ -214,15 +218,15 @@ class Ospfv2Facts(object):
             elif "passive_interface" in dev_config:
                 if config_params[1] == "default":
                     ospf_params_dict.update(
-                        {"passive_interface": {"default": True}}
+                        {"passive_interface": {"default": True}},
                     )
                 else:
                     ospf_params_dict.update(
                         {
                             "passive_interface": {
-                                "interface_list": config_params[1]
-                            }
-                        }
+                                "interface_list": config_params[1],
+                            },
+                        },
                     )
             elif "point_to_point" in dev_config:
                 ospf_params_dict.update({"point_to_point": True})
@@ -240,7 +244,7 @@ class Ospfv2Facts(object):
                 ospf_params_dict.update({"router_id": config_params[-1]})
             elif "retransmission_threshold" in dev_config:
                 ospf_params_dict.update(
-                    {"retransmission_threshold": config_params[-1]}
+                    {"retransmission_threshold": config_params[-1]},
                 )
             elif config_params[0] == "compatible":
                 ospf_params_dict.update({"rfc1583compatibility": True})
@@ -252,11 +256,11 @@ class Ospfv2Facts(object):
                 prefix = re.search(r"\/", config_params[0])
                 if prefix:
                     summary_address_dict.update(
-                        {"prefix": config_params.pop(0)}
+                        {"prefix": config_params.pop(0)},
                     )
                 else:
                     summary_address_dict.update(
-                        {"address": config_params.pop(0)}
+                        {"address": config_params.pop(0)},
                     )
                     summary_address_dict.update({"mask": config_params.pop(0)})
                 if "not_advertise" in dev_config:
@@ -265,10 +269,10 @@ class Ospfv2Facts(object):
                 else:
                     if config_params:
                         summary_address_dict.update(
-                            {config_params[0]: config_params[1]}
+                            {config_params[0]: config_params[1]},
                         )
                 ospf_params_dict.update(
-                    {"summary_address": summary_address_dict}
+                    {"summary_address": summary_address_dict},
                 )
             elif "timers" in dev_config:
                 timers_dict = {}
@@ -277,9 +281,9 @@ class Ospfv2Facts(object):
                         timers_dict.update(
                             {
                                 "lsa": {
-                                    "rx": {"min_interval": config_params[-1]}
-                                }
-                            }
+                                    "rx": {"min_interval": config_params[-1]},
+                                },
+                            },
                         )
                     else:
                         timers_dict.update(
@@ -290,10 +294,10 @@ class Ospfv2Facts(object):
                                             "initial": config_params[-3],
                                             "min": config_params[-2],
                                             "max": config_params[-1],
-                                        }
-                                    }
-                                }
-                            }
+                                        },
+                                    },
+                                },
+                            },
                         )
                 elif config_params[1] == "out_delay":
                     timers_dict.update({"out_delay": config_params[-1]})
@@ -309,14 +313,14 @@ class Ospfv2Facts(object):
                                             "initial": config_params[-3],
                                             "min": config_params[-2],
                                             "max": config_params[-1],
-                                        }
-                                    }
-                                }
-                            }
+                                        },
+                                    },
+                                },
+                            },
                         )
                     else:
                         timers_dict.update(
-                            {"spf": {"seconds": config_params[-1]}}
+                            {"spf": {"seconds": config_params[-1]}},
                         )
                 elif config_params[1] == "throttle":
                     timers_dict.update(
@@ -326,8 +330,8 @@ class Ospfv2Facts(object):
                                 "initial": config_params[-3],
                                 "min": config_params[-2],
                                 "max": config_params[-1],
-                            }
-                        }
+                            },
+                        },
                     )
                 timers_list.append(timers_dict)
                 ospf_params_dict.update({"timers": timers_list})
@@ -340,18 +344,18 @@ class Ospfv2Facts(object):
                     prefix = re.search(r"\/", config_params[3])
                     if prefix:
                         areas_dict.update(
-                            {"filter": {"address": config_params[3]}}
+                            {"filter": {"address": config_params[3]}},
                         )
                     elif config_params[3] == "prefix_list":
                         areas_dict.update(
-                            {"filter": {"prefix_list": config_params[-1]}}
+                            {"filter": {"prefix_list": config_params[-1]}},
                         )
                     else:
                         areas_dict.update(
-                            {"filter": {"subnet_address": config_params[3]}}
+                            {"filter": {"subnet_address": config_params[3]}},
                         )
                         areas_dict.update(
-                            {"filter": {"subnet_mask": config_params[4]}}
+                            {"filter": {"subnet_mask": config_params[4]}},
                         )
                 elif config_params[2] == "not_so_stubby":
                     if len(config_params) == 3:
@@ -366,26 +370,26 @@ class Ospfv2Facts(object):
                                 default_dict.update({"nssa_only": True})
                             if val == "metric_type":
                                 default_dict.update(
-                                    {"metric_type": config_params[i + 1]}
+                                    {"metric_type": config_params[i + 1]},
                                 )
                             if val == "metric":
                                 default_dict.update(
-                                    {"metric": config_params[i + 1]}
+                                    {"metric": config_params[i + 1]},
                                 )
                         areas_dict.update(
                             {
                                 "not_so_stubby": {
-                                    "default_information_originate": default_dict
-                                }
-                            }
+                                    "default_information_originate": default_dict,
+                                },
+                            },
                         )
                     elif config_params[3] == "no_summary":
                         areas_dict.update(
-                            {"not_so_stubby": {"no_summary": True}}
+                            {"not_so_stubby": {"no_summary": True}},
                         )
                     elif config_params[3] == "nssa_only":
                         areas_dict.update(
-                            {"not_so_stubby": {"nssa_only": True}}
+                            {"not_so_stubby": {"nssa_only": True}},
                         )
                 elif config_params[2] == "nssa":
                     if len(config_params) == 3:
@@ -398,18 +402,18 @@ class Ospfv2Facts(object):
                                 default_dict.update({"nssa_only": True})
                             if val == "metric_type":
                                 default_dict.update(
-                                    {"metric_type": config_params[i + 1]}
+                                    {"metric_type": config_params[i + 1]},
                                 )
                             if val == "metric":
                                 default_dict.update(
-                                    {"metric": config_params[i + 1]}
+                                    {"metric": config_params[i + 1]},
                                 )
                         areas_dict.update(
                             {
                                 "nssa": {
-                                    "default_information_originate": default_dict
-                                }
-                            }
+                                    "default_information_originate": default_dict,
+                                },
+                            },
                         )
                     elif config_params[3] == "no_summary":
                         areas_dict.update({"nssa": {"no_summary": True}})
@@ -443,7 +447,7 @@ class Ospfv2Facts(object):
                 config_params.pop(0)
                 if not config_params:
                     ospf_params_dict.update(
-                        {"max_metric": {"router_lsa": {"set": True}}}
+                        {"max_metric": {"router_lsa": {"set": True}}},
                     )
                 else:
                     for i, val in enumerate(config_params):
@@ -452,15 +456,15 @@ class Ospfv2Facts(object):
                         elif val == "on_startup":
                             if config_params[i + 1] == "wait_for_bgp":
                                 router_lsa_dict.update(
-                                    {"on_startup": {"wait_for_bgp": True}}
+                                    {"on_startup": {"wait_for_bgp": True}},
                                 )
                             else:
                                 router_lsa_dict.update(
                                     {
                                         "on_startup": {
-                                            "time": config_params[i + 1]
-                                        }
-                                    }
+                                            "time": config_params[i + 1],
+                                        },
+                                    },
                                 )
                         elif val == "external_lsa":
                             if (
@@ -472,13 +476,13 @@ class Ospfv2Facts(object):
                                         "external_lsa": {
                                             "max_metric_value": config_params[
                                                 i + 1
-                                            ]
-                                        }
-                                    }
+                                            ],
+                                        },
+                                    },
                                 )
                             else:
                                 router_lsa_dict.update(
-                                    {"external_lsa": {"set": True}}
+                                    {"external_lsa": {"set": True}},
                                 )
                         elif val == "summary_lsa":
                             if (
@@ -490,16 +494,16 @@ class Ospfv2Facts(object):
                                         "summary_lsa": {
                                             "max_metric_value": config_params[
                                                 i + 1
-                                            ]
-                                        }
-                                    }
+                                            ],
+                                        },
+                                    },
                                 )
                             else:
                                 router_lsa_dict.update(
-                                    {"summary_lsa": {"set": True}}
+                                    {"summary_lsa": {"set": True}},
                                 )
                     ospf_params_dict.update(
-                        {"max_metric": {"router_lsa": router_lsa_dict}}
+                        {"max_metric": {"router_lsa": router_lsa_dict}},
                     )
         # instance_list.append(ospf_params_dict)
         # config.update({"ospf_version": "v2", "ospf_processes": instance_list})

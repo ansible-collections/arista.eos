@@ -1,5 +1,5 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: START eos.eos_l2_interfaces empty_config integration tests on connection={{ ansible_connection }}
 
 - name: Merged with empty config should give appropriate error message
@@ -10,7 +10,7 @@
     config:
     state: merged
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.msg == 'value of config parameter must not be empty for state merged'
 
@@ -22,7 +22,7 @@
     config:
     state: replaced
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.msg == 'value of config parameter must not be empty for state replaced'
 
@@ -34,7 +34,7 @@
     config:
     state: overridden
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.msg == 'value of config parameter must not be empty for state overridden'
 
@@ -46,10 +46,9 @@
     config:
     state: rendered
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.msg == 'value of config parameter must not be empty for state rendered'
-
 
 - name: Parsed with empty config should give appropriate error message
   register: result
@@ -59,9 +58,9 @@
     running_config:
     state: parsed
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.msg == 'value of running_config parameter must not be empty for state parsed'
 
-- debug:
+- ansible.builtin.debug:
     msg: END eos.eos_l2_interfaces empty_config integration tests on connection={{ ansible_connection }}

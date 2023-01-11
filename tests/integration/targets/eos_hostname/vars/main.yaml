@@ -5,14 +5,14 @@ merged:
 
 replaced:
   before:
-    hostname: 'eos_test'
+    hostname: "eos_test"
   after:
-    hostname: 'eos'
+    hostname: "eos"
   commands:
     - hostname eos
 
 deleted:
   before:
-    hostname: 'eos_test'
+    hostname: "eos_test"
   commands:
     - no hostname eos_test

@@ -5,18 +5,21 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.plugins.modules import eos_acls
+import itertools
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.acls.acls import (
     add_commands,
 )
+from ansible_collections.arista.eos.plugins.modules import eos_acls
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
-import itertools
 
 
 class TestEosAclsModule(TestEosModule):
@@ -26,36 +29,36 @@ class TestEosAclsModule(TestEosModule):
         super(TestEosAclsModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
         self.get_resource_connection_facts = (
             self.mock_get_resource_connection_facts.start()
         )
 
         self.mock_edit_config = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
         )
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.acls.acls.AclsFacts.get_device_data"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.acls.acls.AclsFacts.get_device_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -95,22 +98,22 @@ class TestEosAclsModule(TestEosModule):
                                         protocol="tcp",
                                         protocol_options=dict(
                                             tcp=dict(
-                                                flags=dict(established="yes")
-                                            )
+                                                flags=dict(established="yes"),
+                                            ),
                                         ),
                                         source=dict(
-                                            subnet_address="30.2.0.0/8"
+                                            subnet_address="30.2.0.0/8",
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "ipv6 access-list standard test2",
@@ -133,7 +136,7 @@ class TestEosAclsModule(TestEosModule):
                                         grant="deny",
                                         protocol="tcp",
                                         source=dict(
-                                            subnet_address="20.0.0.0/8"
+                                            subnet_address="20.0.0.0/8",
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
@@ -145,12 +148,12 @@ class TestEosAclsModule(TestEosModule):
                                         protocol=6,
                                     ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -169,7 +172,7 @@ class TestEosAclsModule(TestEosModule):
                                         grant="permit",
                                         protocol="ospf",
                                         source=dict(
-                                            subnet_address="30.2.0.0/8"
+                                            subnet_address="30.2.0.0/8",
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
@@ -179,7 +182,7 @@ class TestEosAclsModule(TestEosModule):
                                         grant="permit",
                                         protocol="ospf",
                                         source=dict(
-                                            subnet_address="40.2.0.0/8"
+                                            subnet_address="40.2.0.0/8",
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
@@ -194,7 +197,7 @@ class TestEosAclsModule(TestEosModule):
                                         grant="permit",
                                         protocol="ospf",
                                         source=dict(
-                                            subnet_address="70.2.0.0/8"
+                                            subnet_address="70.2.0.0/8",
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
@@ -202,10 +205,10 @@ class TestEosAclsModule(TestEosModule):
                                 ],
                             ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "ip access-list test1",
@@ -233,7 +236,7 @@ class TestEosAclsModule(TestEosModule):
                                         grant="deny",
                                         protocol="tcp",
                                         source=dict(
-                                            subnet_address="20.0.0.0/8"
+                                            subnet_address="20.0.0.0/8",
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
@@ -246,12 +249,12 @@ class TestEosAclsModule(TestEosModule):
                                         protocol="tcp",
                                     ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -270,11 +273,11 @@ class TestEosAclsModule(TestEosModule):
                                         grant="permit",
                                         protocol="ospf",
                                         source=dict(
-                                            subnet_address="30.2.0.0/8"
+                                            subnet_address="30.2.0.0/8",
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
-                                    )
+                                    ),
                                 ],
                             ),
                             dict(
@@ -285,7 +288,7 @@ class TestEosAclsModule(TestEosModule):
                                         grant="permit",
                                         protocol="ospf",
                                         source=dict(
-                                            subnet_address="70.2.0.0/8"
+                                            subnet_address="70.2.0.0/8",
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
@@ -293,10 +296,10 @@ class TestEosAclsModule(TestEosModule):
                                 ],
                             ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "ip access-list test1",
@@ -323,7 +326,7 @@ class TestEosAclsModule(TestEosModule):
                                         grant="deny",
                                         protocol="tcp",
                                         source=dict(
-                                            subnet_address="20.0.0.0/8"
+                                            subnet_address="20.0.0.0/8",
                                         ),
                                         destination=dict(any="true"),
                                         log="true",
@@ -336,12 +339,12 @@ class TestEosAclsModule(TestEosModule):
                                         protocol="tcp",
                                     ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -350,7 +353,7 @@ class TestEosAclsModule(TestEosModule):
             dict(
                 config=[dict(afi="ipv4", acls=[dict(name="test1")])],
                 state="deleted",
-            )
+            ),
         )
         commands = ["no ip access-list test1"]
         self.execute_module(changed=True, commands=commands)
@@ -363,7 +366,8 @@ class TestEosAclsModule(TestEosModule):
     def test_eos_acls_gathered(self):
         set_module_args(dict(config=[], state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_acls_config.cfg"
+            changed=False,
+            filename="eos_acls_config.cfg",
         )
         commands = []
         for gathered_cmds in result["gathered"]:
@@ -376,7 +380,9 @@ class TestEosAclsModule(TestEosModule):
             "45 permit tcp any any",
         ]
         self.assertEqual(
-            sorted(config_commands), sorted(commands), result["gathered"]
+            sorted(config_commands),
+            sorted(commands),
+            result["gathered"],
         )
 
     def test_eos_acls_rendered(self):
@@ -395,19 +401,21 @@ class TestEosAclsModule(TestEosModule):
                                         source=dict(any="true"),
                                         destination=dict(any="true"),
                                         protocol=6,
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="rendered",
-            )
+            ),
         )
         commands = ["ip access-list test1", "45 permit tcp any any"]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_eos_acls_parsed(self):
@@ -415,7 +423,7 @@ class TestEosAclsModule(TestEosModule):
             dict(
                 running_config="ipv6 access-list test2\n 10 permit icmpv6 host 10.2.33.1 any ttl eq 25",
                 state="parsed",
-            )
+            ),
         )
         commands = [
             "ipv6 access-list test2",
@@ -428,5 +436,7 @@ class TestEosAclsModule(TestEosModule):
             parsed_commands.append(cfg)
         parsed_commands = list(itertools.chain(*parsed_commands))
         self.assertEqual(
-            sorted(parsed_commands), sorted(commands), result["parsed"]
+            sorted(parsed_commands),
+            sorted(commands),
+            result["parsed"],
         )

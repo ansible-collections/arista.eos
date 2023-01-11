@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -14,18 +15,20 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
+import re
+
 from copy import deepcopy
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_address_family import (
-    Bgp_afTemplate,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp_address_family.bgp_address_family import (
     Bgp_afArgs,
 )
-import re
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_address_family import (
+    Bgp_afTemplate,
+)
 
 
 class Bgp_afFacts(object):
@@ -98,15 +101,17 @@ class Bgp_afFacts(object):
                     if "network" in af:
                         af["network"] = list(af["network"].values())
                         af["network"] = sorted(
-                            af["network"], key=lambda k: k["address"]
+                            af["network"],
+                            key=lambda k: k["address"],
                         )
 
         ansible_facts["ansible_network_resources"].pop(
-            "bgp_address_family", None
+            "bgp_address_family",
+            None,
         )
 
         params = utils.remove_empties(
-            utils.validate_config(self.argument_spec, {"config": objs})
+            utils.validate_config(self.argument_spec, {"config": objs}),
         )
 
         facts["bgp_address_family"] = params.get("config", [])

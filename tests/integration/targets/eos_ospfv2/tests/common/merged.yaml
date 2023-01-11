@@ -1,10 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ospfv2 merged integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
-
     - name: merge given ospfv2 configuration
       become: true
       register: result
@@ -53,7 +52,7 @@
               redistribute:
                 - routes: "connected"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 18
           - result.changed == true
@@ -66,10 +65,9 @@
       register: result
       arista.eos.eos_ospfv2: *merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/set_hostname.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/set_hostname.yaml on connection={{ ansible_connection }}"
 
 - name: setup
   become: true
@@ -13,7 +13,7 @@
   arista.eos.eos_system:
     hostname: foo
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
@@ -23,7 +23,7 @@
   arista.eos.eos_system:
     hostname: foo
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -33,4 +33,4 @@
     lines: hostname {{ inventory_hostname }}
     match: none
 
-- debug: msg="END cli/set_hostname.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/set_hostname.yaml on connection={{ ansible_connection }}"

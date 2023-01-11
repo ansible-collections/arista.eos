@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -74,7 +75,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "arista_hardware_utilization_alert": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "enabled": {"type": "bool"},
                             },
@@ -94,10 +95,10 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "arista_external_alarm_asserted_notif": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "arista_external_alarm_deasserted_notif": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "enabled": {"type": "bool"},
                             },
@@ -108,10 +109,10 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                                 "adjacency_change": {"type": "bool"},
                                 "area_mismatch": {"type": "bool"},
                                 "attempt_to_exceed_max_sequence": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "authentication_type_failure": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "database_overload": {"type": "bool"},
                                 "own_lsp_purge": {"type": "bool"},
@@ -161,10 +162,10 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                                 "if_state_change": {"type": "bool"},
                                 "nbr_state_change": {"type": "bool"},
                                 "nbr_restart_helper_status_change": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "nssa_translator_status_change": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "restart_status_change": {"type": "bool"},
                                 "enabled": {"type": "bool"},
@@ -197,7 +198,7 @@ class Snmp_serverArgs(object):  # pylint: disable=R0903
                             "type": "dict",
                             "options": {
                                 "arista_redundancy_switch_over_notif": {
-                                    "type": "bool"
+                                    "type": "bool",
                                 },
                                 "enabled": {"type": "bool"},
                             },

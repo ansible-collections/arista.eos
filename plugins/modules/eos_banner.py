@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -88,13 +89,14 @@ session_name:
   type: str
   sample: ansible_1479315771
 """
+from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.six import string_types
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     load_config,
     run_commands,
 )
-from ansible.module_utils.six import string_types
-from ansible.module_utils._text import to_text
 
 
 def map_obj_to_commands(updates, module):
@@ -116,7 +118,7 @@ def map_obj_to_commands(updates, module):
                 commands.append("EOF")
         else:
             have_text = have["text"].get("loginBanner") or have["text"].get(
-                "motd"
+                "motd",
             )
             if have_text:
                 have_text = have_text.strip()
@@ -128,7 +130,7 @@ def map_obj_to_commands(updates, module):
                     {
                         "cmd": "banner %s" % module.params["banner"],
                         "input": want["text"].strip("\n"),
-                    }
+                    },
                 )
 
     return commands

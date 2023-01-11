@@ -10,6 +10,7 @@ The module file for eos_snmp_server
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -1485,6 +1486,7 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.snmp_server.snmp_server import (
     Snmp_serverArgs,
 )

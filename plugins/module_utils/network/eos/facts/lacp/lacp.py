@@ -11,14 +11,17 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
+
 from copy import deepcopy
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lacp.lacp import (
     LacpArgs,
 )
@@ -76,7 +79,8 @@ class LacpFacts(object):
         facts = {"lacp": {}}
         if objs:
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             facts["lacp"] = utils.remove_empties(params["config"])
 
@@ -95,7 +99,8 @@ class LacpFacts(object):
         """
         config = deepcopy(spec)
         config["system"]["priority"] = utils.parse_conf_arg(
-            conf, "system-priority"
+            conf,
+            "system-priority",
         )
 
         return utils.remove_empties(config)

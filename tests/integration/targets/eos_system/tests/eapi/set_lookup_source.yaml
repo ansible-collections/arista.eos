@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/set_lookup_source.yaml"
+- ansible.builtin.debug: msg="START eapi/set_lookup_source.yaml"
 
 - name: setup
   become: true
@@ -15,7 +15,7 @@
   arista.eos.eos_system:
     lookup_source: Management1
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ip domain lookup source-interface Management1' in result.commands"
@@ -26,7 +26,7 @@
   arista.eos.eos_system:
     lookup_source: Management1
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -35,11 +35,10 @@
   register: result
   arista.eos.eos_system:
     lookup_source:
-
       - interface: Management1
         vrf: ansible
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'no ip domain lookup source-interface Management1' in result.commands"
@@ -51,11 +50,10 @@
   register: result
   arista.eos.eos_system:
     lookup_source:
-
       - interface: Management1
         vrf: ansible
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -67,4 +65,4 @@
       - no vrf instance ansible
     match: none
 
-- debug: msg="END eapi/set_lookup_source.yaml"
+- ansible.builtin.debug: msg="END eapi/set_lookup_source.yaml"

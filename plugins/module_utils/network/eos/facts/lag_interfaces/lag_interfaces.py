@@ -11,14 +11,17 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
 import re
+
+from copy import deepcopy
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lag_interfaces.lag_interfaces import (
     Lag_interfacesArgs,
 )
@@ -82,7 +85,8 @@ class Lag_interfacesFacts(object):
         facts = {"lag_interfaces": []}
         if objs:
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             facts["lag_interfaces"] = [
                 utils.remove_empties(cfg) for cfg in params["config"]
@@ -108,7 +112,9 @@ class Lag_interfacesFacts(object):
 
         interface = {"member": interface_name}
         match = re.match(
-            r".*channel-group (\d+) mode (\S+)", conf, re.MULTILINE | re.DOTALL
+            r".*channel-group (\d+) mode (\S+)",
+            conf,
+            re.MULTILINE | re.DOTALL,
         )
         if match:
             config["name"], interface["mode"] = match.groups()

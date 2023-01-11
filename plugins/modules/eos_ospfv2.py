@@ -28,6 +28,7 @@ The module file for eos_ospfv2
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -1522,6 +1523,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ospfv2.ospfv2 import (
     Ospfv2Args,
 )

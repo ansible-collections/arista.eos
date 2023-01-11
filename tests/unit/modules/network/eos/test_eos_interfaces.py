@@ -5,13 +5,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_interfaces
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,36 +24,36 @@ class TestEosInterfacesModule(TestEosModule):
         super(TestEosInterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
         self.get_resource_connection_facts = (
             self.mock_get_resource_connection_facts.start()
         )
 
         self.mock_edit_config = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
         )
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.interfaces.interfaces.InterfacesFacts.get_device_data"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.interfaces.interfaces.InterfacesFacts.get_device_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -78,10 +80,10 @@ class TestEosInterfacesModule(TestEosModule):
                         name="Ethernet3",
                         description="Ethernet_3",
                         mode="layer2",
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "interface Ethernet3",
@@ -96,7 +98,7 @@ class TestEosInterfacesModule(TestEosModule):
             dict(
                 config=[dict(name="Ethernet1", description="Interface 1")],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -104,10 +106,10 @@ class TestEosInterfacesModule(TestEosModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="Ethernet4", speed="forced 10", duplex="full")
+                    dict(name="Ethernet4", speed="forced 10", duplex="full"),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -115,10 +117,10 @@ class TestEosInterfacesModule(TestEosModule):
         set_module_args(
             dict(
                 config=[
-                    dict(name="Ethernet2", description="Ethernet_2", mtu=1000)
+                    dict(name="Ethernet2", description="Ethernet_2", mtu=1000),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface Ethernet2",
@@ -148,10 +150,10 @@ class TestEosInterfacesModule(TestEosModule):
                         speed="forced 40g",
                         mode="layer3",
                         duplex="full",
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface Ethernet1",
@@ -170,10 +172,10 @@ class TestEosInterfacesModule(TestEosModule):
                         description="Interface_1",
                         speed="1000g",
                         duplex="full",
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface Ethernet1",
@@ -191,10 +193,10 @@ class TestEosInterfacesModule(TestEosModule):
                         description="Interface_1",
                         speed="auto",
                         duplex="full",
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface Ethernet1",
@@ -212,10 +214,10 @@ class TestEosInterfacesModule(TestEosModule):
                         description="Interface_1",
                         speed="1000g",
                         duplex="half",
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface Ethernet1",
@@ -232,7 +234,7 @@ class TestEosInterfacesModule(TestEosModule):
                     dict(name="Ethernet1", description="Ethernet 1"),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface Ethernet2",

@@ -5,13 +5,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_ntp_global
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,14 +24,14 @@ class TestEosNtp_GlobalModule(TestEosModule):
         super(TestEosNtp_GlobalModule, self).setUp()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ntp_global.ntp_global.Ntp_globalFacts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ntp_global.ntp_global.Ntp_globalFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -55,10 +57,16 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     authenticate=dict(enable=True),
                     authentication_keys=[
                         dict(
-                            id=2, algorithm="sha1", encryption=7, key="123456"
+                            id=2,
+                            algorithm="sha1",
+                            encryption=7,
+                            key="123456",
                         ),
                         dict(
-                            id=23, algorithm="md5", encryption=7, key="123456"
+                            id=23,
+                            algorithm="md5",
+                            encryption=7,
+                            key="123456",
                         ),
                     ],
                     local_interface="Ethernet1",
@@ -89,10 +97,10 @@ class TestEosNtp_GlobalModule(TestEosModule):
                                 afi="ipv6",
                                 acls=[dict(acl_name="acl02", direction="in")],
                             ),
-                        ]
+                        ],
                     ),
-                )
-            )
+                ),
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -104,10 +112,16 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     authenticate=dict(enable=True),
                     authentication_keys=[
                         dict(
-                            id=2, algorithm="sha1", encryption=7, key="123456"
+                            id=2,
+                            algorithm="sha1",
+                            encryption=7,
+                            key="123456",
                         ),
                         dict(
-                            id=23, algorithm="md5", encryption=7, key="123456"
+                            id=23,
+                            algorithm="md5",
+                            encryption=7,
+                            key="123456",
                         ),
                     ],
                     local_interface="Ethernet1",
@@ -138,10 +152,10 @@ class TestEosNtp_GlobalModule(TestEosModule):
                                 afi="ipv6",
                                 acls=[dict(acl_name="acl02", direction="in")],
                             ),
-                        ]
+                        ],
                     ),
                 ),
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -153,10 +167,16 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     authenticate=dict(enable=True),
                     authentication_keys=[
                         dict(
-                            id=2, algorithm="sha1", encryption=7, key="123456"
+                            id=2,
+                            algorithm="sha1",
+                            encryption=7,
+                            key="123456",
                         ),
                         dict(
-                            id=23, algorithm="md5", encryption=7, key="123456"
+                            id=23,
+                            algorithm="md5",
+                            encryption=7,
+                            key="123456",
                         ),
                     ],
                     local_interface="Ethernet1",
@@ -187,10 +207,10 @@ class TestEosNtp_GlobalModule(TestEosModule):
                                 afi="ipv6",
                                 acls=[dict(acl_name="acl02", direction="in")],
                             ),
-                        ]
+                        ],
                     ),
                 ),
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -200,8 +220,11 @@ class TestEosNtp_GlobalModule(TestEosModule):
                 config=dict(
                     authentication_keys=[
                         dict(
-                            id=4, algorithm="sha1", encryption=0, key="123456"
-                        )
+                            id=4,
+                            algorithm="sha1",
+                            encryption=0,
+                            key="123456",
+                        ),
                     ],
                     qos_dscp=15,
                     servers=[
@@ -210,18 +233,18 @@ class TestEosNtp_GlobalModule(TestEosModule):
                             version=3,
                             iburst=True,
                             source="vlan500",
-                        )
+                        ),
                     ],
                     serve=dict(
                         access_lists=[
                             dict(
                                 afi="ip",
                                 acls=[dict(acl_name="acl03", direction="in")],
-                            )
-                        ]
+                            ),
+                        ],
                     ),
-                )
-            )
+                ),
+            ),
         )
         commands = [
             "ntp serve ip access-group acl03 in",
@@ -238,23 +261,26 @@ class TestEosNtp_GlobalModule(TestEosModule):
                 config=dict(
                     authentication_keys=[
                         dict(
-                            id=4, algorithm="sha1", encryption=0, key="123456"
-                        )
+                            id=4,
+                            algorithm="sha1",
+                            encryption=0,
+                            key="123456",
+                        ),
                     ],
                     qos_dscp=15,
                     servers=[
-                        dict(server="110.21.1.1", version=3, iburst=True)
+                        dict(server="110.21.1.1", version=3, iburst=True),
                     ],
                     serve=dict(
                         access_lists=[
                             dict(
                                 afi="ip",
                                 acls=[dict(acl_name="acl03", direction="in")],
-                            )
-                        ]
+                            ),
+                        ],
                     ),
                 ),
-            )
+            ),
         )
         commands = [
             "no ntp serve ip access-group acl01 in",
@@ -280,24 +306,27 @@ class TestEosNtp_GlobalModule(TestEosModule):
                 config=dict(
                     authentication_keys=[
                         dict(
-                            id=4, algorithm="sha1", encryption=0, key="123456"
-                        )
+                            id=4,
+                            algorithm="sha1",
+                            encryption=0,
+                            key="123456",
+                        ),
                     ],
                     qos_dscp=15,
                     local_interface="Vlan100",
                     servers=[
-                        dict(server="110.21.1.1", version=3, iburst=True)
+                        dict(server="110.21.1.1", version=3, iburst=True),
                     ],
                     serve=dict(
                         access_lists=[
                             dict(
                                 afi="ip",
                                 acls=[dict(acl_name="acl03", direction="in")],
-                            )
-                        ]
+                            ),
+                        ],
                     ),
                 ),
-            )
+            ),
         )
         commands = [
             "no ntp serve ip access-group acl01 in",
@@ -335,7 +364,8 @@ class TestEosNtp_GlobalModule(TestEosModule):
     def test_eos_ntp_global_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_ntp_global_config.cfg"
+            changed=False,
+            filename="eos_ntp_global_config.cfg",
         )
         gathered_list = {
             "authenticate": {"enable": True},
@@ -365,7 +395,7 @@ class TestEosNtp_GlobalModule(TestEosModule):
                         "acls": [{"acl_name": "acl02", "direction": "in"}],
                         "afi": "ipv6",
                     },
-                ]
+                ],
             },
             "servers": [
                 {
@@ -430,7 +460,7 @@ class TestEosNtp_GlobalModule(TestEosModule):
                         "acls": [{"acl_name": "acl02", "direction": "in"}],
                         "afi": "ipv6",
                     },
-                ]
+                ],
             },
             "servers": [
                 {
@@ -459,10 +489,16 @@ class TestEosNtp_GlobalModule(TestEosModule):
                     authenticate=dict(enable=True),
                     authentication_keys=[
                         dict(
-                            id=2, algorithm="sha1", encryption=7, key="123456"
+                            id=2,
+                            algorithm="sha1",
+                            encryption=7,
+                            key="123456",
                         ),
                         dict(
-                            id=23, algorithm="md5", encryption=7, key="123456"
+                            id=23,
+                            algorithm="md5",
+                            encryption=7,
+                            key="123456",
                         ),
                     ],
                     local_interface="Ethernet1",
@@ -493,10 +529,10 @@ class TestEosNtp_GlobalModule(TestEosModule):
                                 afi="ipv6",
                                 acls=[dict(acl_name="acl02", direction="in")],
                             ),
-                        ]
+                        ],
                     ),
                 ),
-            )
+            ),
         )
         commands = [
             "ntp authentication-key 2 sha1 7 123456",
@@ -512,5 +548,7 @@ class TestEosNtp_GlobalModule(TestEosModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )

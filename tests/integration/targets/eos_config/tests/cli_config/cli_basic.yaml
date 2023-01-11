@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli_config/cli_basic.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START cli_config/cli_basic.yaml on connection={{ ansible_connection
     }}"
 
 - name: setup
@@ -13,7 +14,7 @@
   ansible.netcommon.cli_config: &id001
     config: "{{ lookup('template', 'basic/config.j2') }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
@@ -22,7 +23,7 @@
   become: true
   ansible.netcommon.cli_config: *id001
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -30,5 +31,6 @@
   become: true
   ansible.netcommon.cli_config: *id002
 
-- debug: msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection
     }}"

@@ -3,6 +3,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -30,14 +31,15 @@ import json
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_text
 from ansible.module_utils.connection import ConnectionError
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    session_name,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     to_list,
 )
 from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base import (
     HttpApiBase,
+)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    session_name,
 )
 
 
@@ -83,7 +85,10 @@ class HttpApi(HttpApiBase):
         headers = {"Content-Type": "application/json-rpc"}
 
         _response, response_data = self.connection.send(
-            "/command-api", request, headers=headers, method="POST"
+            "/command-api",
+            request,
+            headers=headers,
+            method="POST",
         )
 
         try:
@@ -91,8 +96,8 @@ class HttpApi(HttpApiBase):
         except ValueError:
             raise ConnectionError(
                 "Response was not valid JSON, got {0}".format(
-                    to_text(response_data.getvalue())
-                )
+                    to_text(response_data.getvalue()),
+                ),
             )
 
         results = handle_response(response_data)
@@ -208,5 +213,5 @@ def request_builder(commands, output, version, reqid=None):
         version = int(version)
     params = dict(version=version, cmds=commands, format=output)
     return json.dumps(
-        dict(jsonrpc="2.0", id=reqid, method="runCmds", params=params)
+        dict(jsonrpc="2.0", id=reqid, method="runCmds", params=params),
     )

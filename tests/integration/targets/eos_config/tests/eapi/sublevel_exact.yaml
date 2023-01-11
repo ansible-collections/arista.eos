@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/sublevel_exact.yaml"
+- ansible.builtin.debug: msg="START eapi/sublevel_exact.yaml"
 
 - name: setup
   become: true
@@ -29,7 +29,7 @@
     after: exit
     match: exact
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ip access-list test' in result.updates"
@@ -52,7 +52,7 @@
     parents: ip access-list test
     match: exact
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -62,4 +62,4 @@
     lines: no ip access-list test
     match: none
 
-- debug: msg="END eapi/sublevel_exact.yaml"
+- ansible.builtin.debug: msg="END eapi/sublevel_exact.yaml"

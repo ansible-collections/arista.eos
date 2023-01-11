@@ -1,7 +1,7 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       holdtime: 100
       tlv_select:
@@ -17,10 +17,10 @@
   register: result
   become: true
   arista.eos.eos_lldp_global:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: replaced
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_global == result.before
 
@@ -28,17 +28,17 @@
   arista.eos.eos_facts:
     gather_network_resources: lldp_global
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_global == result.after
 
-- set_fact:
+- ansible.builtin.set_fact:
     expected_config:
       holdtime: 100
       tlv_select:
         management_address: false
         port_description: false
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_global == expected_config
