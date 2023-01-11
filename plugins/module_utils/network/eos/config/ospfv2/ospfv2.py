@@ -413,7 +413,7 @@ class Ospfv2(ConfigBase):
                         "graceful-restart grace-period "
                         + str(
                             ospf_params["graceful_restart"].get(
-                                "grace_period"
+                                "grace_period",
                             ),
                         ),
                     )
