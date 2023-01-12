@@ -17,7 +17,7 @@ Version added: 1.0.0
 
 Synopsis
 --------
-- This module manages the interface attributes of Arista EOS interfaces.
+- This module manages the interface attributes DNM of Arista EOS interfaces.
 
 
 
