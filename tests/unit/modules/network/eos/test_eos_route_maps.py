@@ -285,7 +285,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 match=dict(
                                     ipv6=dict(
                                         address=dict(
-                                            prefix_list="test_prefix"
+                                            prefix_list="test_prefix",
                                         ),
                                     ),
                                 ),
@@ -300,7 +300,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 match=dict(
                                     ip=dict(
                                         address=dict(
-                                            prefix_list="test_prefix"
+                                            prefix_list="test_prefix",
                                         ),
                                     ),
                                 ),
