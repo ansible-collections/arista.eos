@@ -271,7 +271,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "rx": {
                                             "options": {
                                                 "min_interval": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                             "type": "dict",
