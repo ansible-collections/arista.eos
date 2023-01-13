@@ -36,7 +36,7 @@ DOCUMENTATION = """
 module: eos_interfaces
 short_description: Interfaces resource module
 description:
-- This module manages the interface attributes of Arista EOS interfaces.
+- This module manages the interface attributes of Arista DNM EOS interfaces.
 version_added: 1.0.0
 author:
 - Nathaniel Case (@qalthos)
