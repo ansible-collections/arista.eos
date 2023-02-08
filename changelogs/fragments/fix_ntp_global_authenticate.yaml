@@ -1,0 +1,4 @@
+---
+bugfixes:
+  - fix ntp_global authenticate config.
+  - https://github.com/ansible-collections/arista.eos/issues/399.
