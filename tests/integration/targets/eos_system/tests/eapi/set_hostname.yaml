@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/set_hostname.yaml"
+- ansible.builtin.debug: msg="START eapi/set_hostname.yaml"
 
 - name: setup
   become: true
@@ -13,7 +13,7 @@
   arista.eos.eos_system:
     hostname: foo
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
@@ -23,7 +23,7 @@
   arista.eos.eos_system:
     hostname: foo
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -33,4 +33,4 @@
     lines: hostname {{ inventory_hostname }}
     match: none
 
-- debug: msg="END eapi/set_hostname.yaml"
+- ansible.builtin.debug: msg="END eapi/set_hostname.yaml"

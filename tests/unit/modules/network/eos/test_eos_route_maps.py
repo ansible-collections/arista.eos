@@ -5,13 +5,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_route_maps
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,14 +24,14 @@ class TestEosRoute_MapsModule(TestEosModule):
         super(TestEosRoute_MapsModule, self).setUp()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.route_maps.route_maps.Route_mapsFacts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.route_maps.route_maps.Route_mapsFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -77,18 +79,18 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 sub_route_map=dict(name="mapmerge"),
                                 action="deny",
                                 match=dict(
-                                    ipv6=dict(resolved_next_hop="list1")
+                                    ipv6=dict(resolved_next_hop="list1"),
                                 ),
                                 sequence=45,
                                 set=dict(
                                     metric=dict(value=25, add="igp-metric"),
                                     as_path=dict(prepend=dict(last_as=2)),
                                 ),
-                            )
+                            ),
                         ],
                     ),
-                ]
-            )
+                ],
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -103,7 +105,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 action="permit",
                                 match=dict(
                                     invert_result=dict(
-                                        aggregate_role=dict(route_map="map01")
+                                        aggregate_role=dict(route_map="map01"),
                                     ),
                                     isis_level="level-1",
                                     route_type="local",
@@ -116,11 +118,11 @@ class TestEosRoute_MapsModule(TestEosModule):
                                     local_preference=51,
                                     evpn=True,
                                 ),
-                            )
+                            ),
                         ],
-                    )
-                ]
-            )
+                    ),
+                ],
+            ),
         )
         commands = [
             "route-map mapmerge_new permit",
@@ -167,18 +169,18 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 sub_route_map=dict(name="mapmerge"),
                                 action="deny",
                                 match=dict(
-                                    ipv6=dict(resolved_next_hop="list1")
+                                    ipv6=dict(resolved_next_hop="list1"),
                                 ),
                                 sequence=45,
                                 set=dict(
                                     metric=dict(value=25, add="igp-metric"),
                                     as_path=dict(prepend=dict(last_as=2)),
                                 ),
-                            )
+                            ),
                         ],
                     ),
                 ],
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -193,7 +195,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                             dict(
                                 action="permit",
                                 match=dict(
-                                    ipv6=dict(resolved_next_hop="listr")
+                                    ipv6=dict(resolved_next_hop="listr"),
                                 ),
                                 sequence=10,
                             ),
@@ -202,15 +204,15 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 sequence=90,
                                 set=dict(
                                     extcommunity=dict(
-                                        rt=dict(vpn="22:11", delete=True)
+                                        rt=dict(vpn="22:11", delete=True),
                                     ),
                                     ip=dict(unchanged=True),
                                 ),
                             ),
                         ],
-                    )
+                    ),
                 ],
-            )
+            ),
         )
         commands = [
             "route-map mapmerge permit 10",
@@ -255,18 +257,18 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 sub_route_map=dict(name="mapmerge"),
                                 action="deny",
                                 match=dict(
-                                    ipv6=dict(resolved_next_hop="list1")
+                                    ipv6=dict(resolved_next_hop="list1"),
                                 ),
                                 sequence=45,
                                 set=dict(
                                     metric=dict(value=25, add="igp-metric"),
                                     as_path=dict(prepend=dict(last_as=2)),
                                 ),
-                            )
+                            ),
                         ],
                     ),
                 ],
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -282,11 +284,13 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 action="permit",
                                 match=dict(
                                     ipv6=dict(
-                                        address=dict(prefix_list="test_prefix")
-                                    )
+                                        address=dict(
+                                            prefix_list="test_prefix",
+                                        ),
+                                    ),
                                 ),
                                 set=dict(
-                                    metric=dict(igp_param="igp-nexthop-cost")
+                                    metric=dict(igp_param="igp-nexthop-cost"),
                                 ),
                                 sequence=10,
                             ),
@@ -295,20 +299,22 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 sequence=90,
                                 match=dict(
                                     ip=dict(
-                                        address=dict(prefix_list="test_prefix")
-                                    )
+                                        address=dict(
+                                            prefix_list="test_prefix",
+                                        ),
+                                    ),
                                 ),
                                 set=dict(
                                     extcommunity=dict(
-                                        rt=dict(vpn="22:11", delete=True)
+                                        rt=dict(vpn="22:11", delete=True),
                                     ),
                                     ip=dict(unchanged=True),
                                 ),
                             ),
                         ],
-                    )
+                    ),
                 ],
-            )
+            ),
         )
         commands = [
             "no route-map mapmerge deny 25",
@@ -328,7 +334,7 @@ class TestEosRoute_MapsModule(TestEosModule):
 
     def test_eos_route_maps_delete(self):
         set_module_args(
-            dict(state="deleted", config=[dict(route_map="mapmerge")])
+            dict(state="deleted", config=[dict(route_map="mapmerge")]),
         )
         commands = ["no route-map mapmerge"]
         self.execute_module(changed=True, commands=commands)
@@ -367,18 +373,18 @@ class TestEosRoute_MapsModule(TestEosModule):
                             dict(
                                 action="deny",
                                 match=dict(
-                                    ipv6=dict(resolved_next_hop="list1")
+                                    ipv6=dict(resolved_next_hop="list1"),
                                 ),
                                 sequence=45,
                                 set=dict(
                                     metric=dict(value=25, add="igp-metric"),
                                     as_path=dict(prepend=dict(last_as=2)),
                                 ),
-                            )
+                            ),
                         ],
                     ),
                 ],
-            )
+            ),
         )
         commands = [
             "route-map mapmerge permit 10",
@@ -396,13 +402,16 @@ class TestEosRoute_MapsModule(TestEosModule):
 
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_vyos_route_maps_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_route_maps_config.cfg"
+            changed=False,
+            filename="eos_route_maps_config.cfg",
         )
         gathered_list = {
             "mapmerge": [
@@ -431,13 +440,14 @@ class TestEosRoute_MapsModule(TestEosModule):
                         "metric": {"value": "25", "add": "igp-metric"},
                     },
                     "sub_route_map": {"name": "mapmerge"},
-                }
+                },
             ],
         }
         for entry in result["gathered"]:
             if entry.get("route_map") in ["mapmerge", "mapmerge2"]:
                 self.assertEqual(
-                    gathered_list[entry["route_map"]], entry["entries"]
+                    gathered_list[entry["route_map"]],
+                    entry["entries"],
                 )
 
     def test_vyos_route_maps_parsed(self):
@@ -489,7 +499,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                             "metric": {"value": "25", "add": "igp-metric"},
                         },
                         "sub_route_map": {"name": "mapmerge"},
-                    }
+                    },
                 ],
                 "route_map": "mapmerge2",
             },

@@ -1,12 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_bgp_global merged integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given bgp_global configuration
       become: true
       register: result
@@ -63,7 +62,7 @@
                 type: "vpn-ipv4"
                 target: "44:22"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 22
           - result.changed == true
@@ -76,10 +75,9 @@
       register: result
       arista.eos.eos_bgp_global: *merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,12 +19,13 @@ created.
 """
 
 from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+    ResourceModule,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
-    ResourceModule,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -139,7 +141,9 @@ class Ntp_global(ResourceModule):
             if h.get(name):
                 h_key = {"servers": h.pop(name)}
             self.compare(
-                parsers="servers", want={"servers": entry}, have=h_key
+                parsers="servers",
+                want={"servers": entry},
+                have=h_key,
             )
         for name, entry in iteritems(h):
             self.compare(parsers="servers", want={}, have={"servers": entry})
@@ -166,7 +170,7 @@ class Ntp_global(ResourceModule):
                             for ace, ace_entry in iteritems(v):
                                 if serve_have.get("access_lists"):
                                     for hk, hv in iteritems(
-                                        serve_have["access_lists"]
+                                        serve_have["access_lists"],
                                     ):
                                         for h_k, h_v in iteritems(hv):
                                             h_afi = hv["afi"]
@@ -180,16 +184,16 @@ class Ntp_global(ResourceModule):
                                                     }
                                                     h = {
                                                         "serve": {
-                                                            "access_lists": h_acc
-                                                        }
+                                                            "access_lists": h_acc,
+                                                        },
                                                     }
                                 w = {
                                     "serve": {
                                         "access_lists": {
                                             "afi": afi,
                                             "acls": ace_entry,
-                                        }
-                                    }
+                                        },
+                                    },
                                 }
                                 self.compare(parsers="serve", want=w, have=h)
         for k, v in iteritems(serve_have):
@@ -208,8 +212,8 @@ class Ntp_global(ResourceModule):
                                     "access_lists": {
                                         "afi": hafi,
                                         "acls": v_acl,
-                                    }
-                                }
+                                    },
+                                },
                             }
                             self.compare(parsers="serve", want={}, have=h)
 

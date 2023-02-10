@@ -1,10 +1,10 @@
 ---
-- debug:
-    msg: Start eos_ospfv2 round trip integration tests ansible_connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg:
+      Start eos_ospfv2 round trip integration tests ansible_connection={{ ansible_connection
       }}
 
 - block:
-
     - name: merge attributes of given ospfv2(apply base config).
       become: true
       register: base_config
@@ -57,7 +57,7 @@
       arista.eos.eos_facts:
         gather_network_resources: ospfv2
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - base_config.commands|length == 18
           - base_config.changed == true
@@ -93,8 +93,7 @@
         state: overridden
 
     - name: Assert that config was reverted
-      assert:
+      ansible.builtin.assert:
         that: base_config.after == revert.after
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

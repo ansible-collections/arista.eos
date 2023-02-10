@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,9 +16,11 @@ the given network resource.
 """
 
 import re
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
     normalize_interface,
 )
@@ -89,7 +92,9 @@ def _tmplt_ntp_global_servers(config_data):
 class Ntp_globalTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Ntp_globalTemplate, self).__init__(
-            lines=lines, tmplt=self, module=module
+            lines=lines,
+            tmplt=self,
+            module=module,
         )
 
     # fmt: off
@@ -107,8 +112,8 @@ class Ntp_globalTemplate(NetworkTemplate):
             "result": {
                 "authenticate": {
                     "enable": "{{ True if servers is undefined }}",
-                    "servers": "{{ True if servers is defined }}"
-                }
+                    "servers": "{{ True if servers is defined }}",
+                },
             },
         },
         {
@@ -130,9 +135,9 @@ class Ntp_globalTemplate(NetworkTemplate):
                         "id": "{{ id }}",
                         "algorithm": "{{ algo }}",
                         "encryption": "{{ enc }}",
-                        "key": "{{ line }}"
-                    }
-                }
+                        "key": "{{ line }}",
+                    },
+                },
             },
         },
         {
@@ -146,7 +151,7 @@ class Ntp_globalTemplate(NetworkTemplate):
             ),
             "setval": 'ntp local-interface {{ local_interface }}',
             "result": {
-                "local_interface": "{{ int }}"
+                "local_interface": "{{ int }}",
             },
         },
         {
@@ -160,7 +165,7 @@ class Ntp_globalTemplate(NetworkTemplate):
             ),
             "setval": 'ntp qos dscp {{ qos_dscp }}',
             "result": {
-                "qos_dscp": "{{ val }}"
+                "qos_dscp": "{{ val }}",
             },
         },
         {
@@ -177,7 +182,7 @@ class Ntp_globalTemplate(NetworkTemplate):
             "result": {
                 "serve": {
                     "all": "{{ True if all is defined }}",
-                }
+                },
             },
         },
         {
@@ -204,12 +209,12 @@ class Ntp_globalTemplate(NetworkTemplate):
                                 {
                                     "acl_name": "{{ name }}",
                                     "direction": "{{ dir }}",
-                                    "vrf": "{{ vrf.split(" ")[1] }}"
+                                    "vrf": "{{ vrf.split(" ")[1] }}",
                                 },
                             ],
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -246,8 +251,8 @@ class Ntp_globalTemplate(NetworkTemplate):
                         "source": "{{ source.split(" ")[1] if source is defined }}",
                         "version": "{{ version.split(" ")[1] if version is defined }}",
                         "prefer": "{{ True if prefer is defined }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -261,7 +266,7 @@ class Ntp_globalTemplate(NetworkTemplate):
             ),
             "setval": 'ntp trusted-key {{ trusted_key }}',
             "result": {
-                "trusted_key": "{{ key }}"
+                "trusted_key": "{{ key }}",
             },
         },
     ]

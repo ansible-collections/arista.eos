@@ -1,12 +1,12 @@
 ---
-- debug:
-    msg: Start eos_ospf_interfaces merged integration tests ansible_connection={{
+- ansible.builtin.debug:
+    msg:
+      Start eos_ospf_interfaces merged integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given ospf interfaces configuration
       become: true
       register: result
@@ -46,7 +46,7 @@
       arista.eos.eos_facts:
         gather_network_resources: ospf_interfaces
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 16
           - result.changed == true
@@ -58,10 +58,9 @@
       register: result
       arista.eos.eos_ospf_interfaces: *id001
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -603,13 +604,13 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "peer_filter": {
-                                                            "type": "str"
+                                                            "type": "str",
                                                         },
                                                         "remote_as": {
-                                                            "type": "str"
+                                                            "type": "str",
                                                         },
                                                         "name": {
-                                                            "type": "str"
+                                                            "type": "str",
                                                         },
                                                     },
                                                 },
@@ -652,7 +653,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "confed": {"type": "bool"},
                                                 "missing_as_worst": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -804,7 +805,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "limit_count": {"type": "int"},
                                                 "limit_percent": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },

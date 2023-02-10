@@ -1,17 +1,14 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         ipv4:
-
           - address: 198.51.100.14/24
 
       - name: Ethernet2
         ipv4:
-
           - address: 203.0.113.227/31
 
 - become: true
@@ -22,10 +19,10 @@
   register: result
   become: true
   arista.eos.eos_l3_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: merged
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
         == []
@@ -34,7 +31,7 @@
   arista.eos.eos_facts:
     gather_network_resources: l3_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after)
         == []

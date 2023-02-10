@@ -1,12 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_hostname replaced integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: Replace given hostname configuration
       become: true
       register: result
@@ -15,7 +14,7 @@
         config:
           hostname: "eos"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 1
           - result.changed == true
@@ -28,11 +27,10 @@
       register: result
       arista.eos.eos_hostname: *replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
 
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

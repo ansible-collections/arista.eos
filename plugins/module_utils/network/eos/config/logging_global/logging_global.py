@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,12 +19,13 @@ created.
 """
 
 from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+    ResourceModule,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
-    ResourceModule,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -142,7 +144,9 @@ class Logging_global(ResourceModule):
         vrf_have = have.pop("vrfs", {})
         for name, entry in iteritems(vrf_want):
             self._vrfs_hosts_compare(
-                name, want=entry, have=vrf_have.get(name, {})
+                name,
+                want=entry,
+                have=vrf_have.get(name, {}),
             )
             if entry.get("source_interface"):
                 h = {}
@@ -151,21 +155,24 @@ class Logging_global(ResourceModule):
                         "vrfs": {
                             "name": name,
                             "source_interface": vrf_have[name].pop(
-                                "source_interface", ""
+                                "source_interface",
+                                "",
                             ),
-                        }
+                        },
                     }
                 w = {
                     "vrfs": {
                         "name": name,
                         "source_interface": entry["source_interface"],
-                    }
+                    },
                 }
                 self.compare(parsers="vrf.source_interface", want=w, have=h)
         for name, entry in iteritems(vrf_have):
             self._vrfs_hosts_compare(name, want={}, have=entry)
             self.compare(
-                parsers="vrf.source_interface", want={}, have={"vrfs": entry}
+                parsers="vrf.source_interface",
+                want={},
+                have={"vrfs": entry},
             )
 
     def _logging_global_list_to_dict(self, entry):

@@ -10,6 +10,7 @@ The module file for eos_logging_global
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -905,6 +906,7 @@ EXAMPLES = """
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.logging_global.logging_global import (
     Logging_globalArgs,
 )

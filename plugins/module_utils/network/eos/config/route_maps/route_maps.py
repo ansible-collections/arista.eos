@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,12 +19,13 @@ created.
 """
 
 from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+    ResourceModule,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
-    ResourceModule,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -99,7 +101,8 @@ class Route_maps(ResourceModule):
             for k, have in iteritems(haved):
                 for entry, val in iteritems(have.get("entries", {})):
                     if not wantd.get(k) or entry not in wantd[k].get(
-                        "entries", {}
+                        "entries",
+                        {},
                     ):
                         self._compare_maps(want={}, have={entry: val})
 
@@ -138,7 +141,9 @@ class Route_maps(ResourceModule):
                 )
             for h_k, h_v in iteritems(h_entries.pop(k, {})):
                 self.compare(
-                    parsers=self.parsers, have={"entries": {h_k: h_v}}, want={}
+                    parsers=self.parsers,
+                    have={"entries": {h_k: h_v}},
+                    want={},
                 )
 
             parent_present = False
@@ -281,7 +286,9 @@ class Route_maps(ResourceModule):
                     )
                 continue
             self.compare(
-                parsers=parsers, want={}, have={"entries": {"match": {k: v}}}
+                parsers=parsers,
+                want={},
+                have={"entries": {"match": {k: v}}},
             )
 
     def _comapre_set(self, want, have):
@@ -323,7 +330,9 @@ class Route_maps(ResourceModule):
             )
         for k, v in iteritems(h_set):
             self.compare(
-                parsers=parsers, want={}, have={"entries": {"set": {k: v}}}
+                parsers=parsers,
+                want={},
+                have={"entries": {"set": {k: v}}},
             )
 
     def _route_maps_list_to_dict(self, entry):

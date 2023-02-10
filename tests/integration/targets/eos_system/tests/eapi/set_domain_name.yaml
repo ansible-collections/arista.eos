@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/set_domain_name.yaml"
+- ansible.builtin.debug: msg="START eapi/set_domain_name.yaml"
 
 - name: setup
   become: true
@@ -13,7 +13,7 @@
   arista.eos.eos_system:
     domain_name: eng.ansible.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
@@ -23,7 +23,7 @@
   arista.eos.eos_system:
     domain_name: eng.ansible.com
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -33,4 +33,4 @@
     lines: no dns domain
     match: none
 
-- debug: msg="END eapi/set_domain_name.yaml"
+- ansible.builtin.debug: msg="END eapi/set_domain_name.yaml"

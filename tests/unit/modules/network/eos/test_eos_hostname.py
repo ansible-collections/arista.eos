@@ -5,13 +5,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_hostname
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,14 +24,14 @@ class TestEosHostnameModule(TestEosModule):
         super(TestEosHostnameModule, self).setUp()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.hostname.hostname.HostnameFacts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.hostname.hostname.HostnameFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -54,13 +56,13 @@ class TestEosHostnameModule(TestEosModule):
 
     def test_eos_hostname_replaced_idempotent(self):
         set_module_args(
-            dict(config=dict(hostname="eos_test"), state="replaced")
+            dict(config=dict(hostname="eos_test"), state="replaced"),
         )
         self.execute_module(changed=False, commands=[])
 
     def test_eos_hostname_overridden_idempotent(self):
         set_module_args(
-            dict(config=dict(hostname="eos_test"), state="overridden")
+            dict(config=dict(hostname="eos_test"), state="overridden"),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -82,7 +84,8 @@ class TestEosHostnameModule(TestEosModule):
     def test_eos_hostname_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_hostname_config.cfg"
+            changed=False,
+            filename="eos_hostname_config.cfg",
         )
         gathered_list = {"hostname": "eos_test"}
         self.assertEqual(sorted(gathered_list), sorted(result["gathered"]))
@@ -96,10 +99,12 @@ class TestEosHostnameModule(TestEosModule):
 
     def test_eos_hostname_rendered(self):
         set_module_args(
-            dict(state="rendered", config=dict(hostname="eos_test"))
+            dict(state="rendered", config=dict(hostname="eos_test")),
         )
         commands = ["hostname eos_test"]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )

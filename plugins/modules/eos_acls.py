@@ -28,6 +28,7 @@ The module file for eos_acls
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -863,6 +864,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.acls.acls import (
     AclsArgs,
 )

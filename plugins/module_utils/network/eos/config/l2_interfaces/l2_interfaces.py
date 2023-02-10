@@ -12,15 +12,17 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     param_list_to_dict,
+    to_list,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
@@ -46,10 +48,12 @@ class L2_interfaces(ConfigBase):
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         l2_interfaces_facts = facts["ansible_network_resources"].get(
-            "l2_interfaces"
+            "l2_interfaces",
         )
         if not l2_interfaces_facts:
             return []
@@ -91,10 +95,10 @@ class L2_interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_l2_interfaces_facts(
-                data=running_config
+                data=running_config,
             )
 
         if self.state in self.ACTION_STATES:
@@ -137,8 +141,8 @@ class L2_interfaces(ConfigBase):
         ):
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
         want = param_list_to_dict(want)
         have = param_list_to_dict(have)
@@ -272,7 +276,7 @@ def set_interface(want, have):
         native_vlan = wants_trunk.get("native_vlan")
         if native_vlan and native_vlan != has_trunk.get("native_vlan"):
             commands.append(
-                "switchport trunk native vlan {0}".format(native_vlan)
+                "switchport trunk native vlan {0}".format(native_vlan),
             )
         for con in [want, have]:
             expand_trunk_allowed_vlans(con)
@@ -283,24 +287,24 @@ def set_interface(want, have):
         if want_allowed_vlans and has_allowed_vlans:
             allowed_vlans = list(
                 set(want_allowed_vlans.split(","))
-                - set(has_allowed_vlans.split(","))
+                - set(has_allowed_vlans.split(",")),
             )
         elif want_allowed_vlans:
             allowed_vlans = want_allowed_vlans.split(",")
         if allowed_vlans:
             allowed_vlans.sort()
             allowed_vlans = ",".join(
-                ["{0}".format(vlan) for vlan in allowed_vlans]
+                ["{0}".format(vlan) for vlan in allowed_vlans],
             )
             if has_allowed_vlans:
                 commands.append(
                     "switchport trunk allowed vlan add {0}".format(
-                        allowed_vlans
-                    )
+                        allowed_vlans,
+                    ),
                 )
             else:
                 commands.append(
-                    "switchport trunk allowed vlan {0}".format(allowed_vlans)
+                    "switchport trunk allowed vlan {0}".format(allowed_vlans),
                 )
     return commands
 
@@ -311,7 +315,7 @@ def expand_trunk_allowed_vlans(want):
     if want.get("trunk"):
         if "trunk_allowed_vlans" in want["trunk"]:
             allowed_vlans = vlan_range_to_list(
-                want["trunk"]["trunk_allowed_vlans"]
+                want["trunk"]["trunk_allowed_vlans"],
             )
             vlans_list = [str(num) for num in sorted(allowed_vlans)]
             want["trunk"]["trunk_allowed_vlans"] = ",".join(vlans_list)
@@ -343,17 +347,17 @@ def clear_interface(want, have):
         has_allowed_vlans = has_trunk.get("trunk_allowed_vlans")
         allowed_vlans = list(
             set(has_allowed_vlans.split(","))
-            - set(want_allowed_vlans.split(","))
+            - set(want_allowed_vlans.split(",")),
         )
         if allowed_vlans:
             allowed_vlans = ",".join(
-                ["{0}".format(vlan) for vlan in allowed_vlans]
+                ["{0}".format(vlan) for vlan in allowed_vlans],
             )
 
             commands.append(
                 "switchport trunk allowed vlan remove {0}".format(
-                    allowed_vlans
-                )
+                    allowed_vlans,
+                ),
             )
 
     if "native_vlan" in has_trunk and "native_vlan" not in wants_trunk:

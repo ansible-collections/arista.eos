@@ -1,12 +1,12 @@
 ---
-- debug: msg="START cli/default_facts.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/default_facts.yaml on connection={{ ansible_connection }}"
 
 - name: test getting default facts
   become: true
   register: result
   arista.eos.eos_facts:
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - "'default' in result.ansible_facts.ansible_net_gather_subset"
@@ -20,4 +20,4 @@
       - result.ansible_facts.ansible_net_version is defined
       - result.ansible_facts.ansible_network_resources == {}
 
-- debug: msg="END cli/default_facts.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/default_facts.yaml on connection={{ ansible_connection }}"

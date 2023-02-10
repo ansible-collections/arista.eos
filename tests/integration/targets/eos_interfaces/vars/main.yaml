@@ -2,10 +2,10 @@
 parsed:
   config:
     - name: Ethernet1
-      description: 'this is interface for testing'
+      description: "this is interface for testing"
       enabled: true
     - name: Ethernet2
-      description: 'Configured by Ansible'
+      description: "Configured by Ansible"
       enabled: false
 
 rendered:

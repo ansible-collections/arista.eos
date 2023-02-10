@@ -1,15 +1,14 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         trunk:
           native_vlan: 20
           trunk_allowed_vlans:
             - 5-10
-            - '15'
+            - "15"
 
 - become: true
   arista.eos.eos_facts:
@@ -19,10 +18,10 @@
   register: result
   become: true
   arista.eos.eos_l2_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: replaced
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before)
         == []
@@ -31,7 +30,7 @@
   arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.after)
         == []

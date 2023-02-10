@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -360,11 +361,12 @@ commands:
     - exit-address-family
 """
 from ansible.module_utils._text import to_text
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.module import (
-    NetworkModule,
-)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.process import (
     REDISTRIBUTE_PROTOCOLS,
+)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.module import (
+    NetworkModule,
 )
 
 
@@ -413,10 +415,14 @@ def main():
         "afi": dict(choices=["ipv4", "ipv6"], required=True),
         "networks": dict(type="list", elements="dict", options=network_spec),
         "redistribute": dict(
-            type="list", elements="dict", options=redistribute_spec
+            type="list",
+            elements="dict",
+            options=redistribute_spec,
         ),
         "neighbors": dict(
-            type="list", elements="dict", options=af_neighbor_spec
+            type="list",
+            elements="dict",
+            options=af_neighbor_spec,
         ),
     }
 
@@ -426,10 +432,14 @@ def main():
         "log_neighbor_changes": dict(type="bool"),
         "neighbors": dict(type="list", elements="dict", options=neighbor_spec),
         "address_family": dict(
-            type="list", elements="dict", options=address_family_spec
+            type="list",
+            elements="dict",
+            options=address_family_spec,
         ),
         "redistribute": dict(
-            type="list", elements="dict", options=redistribute_spec
+            type="list",
+            elements="dict",
+            options=redistribute_spec,
         ),
         "networks": dict(type="list", elements="dict", options=network_spec),
     }
@@ -437,12 +447,14 @@ def main():
     argument_spec = {
         "config": dict(type="dict", options=config_spec),
         "operation": dict(
-            default="merge", choices=["merge", "replace", "override", "delete"]
+            default="merge",
+            choices=["merge", "replace", "override", "delete"],
         ),
     }
 
     module = NetworkModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
 
     try:

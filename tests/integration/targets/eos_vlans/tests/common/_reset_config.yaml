@@ -14,9 +14,8 @@
   arista.eos.eos_facts:
     gather_network_resources: vlans
 
-- set_fact:
+- ansible.builtin.set_fact:
     expected_config:
-
       - vlan_id: 10
         name: ten
         state: active
@@ -25,7 +24,7 @@
         name: twenty
         state: active
 
-- assert:
+- ansible.builtin.assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.vlans)
         == []

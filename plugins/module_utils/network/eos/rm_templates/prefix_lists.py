@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,10 +16,12 @@ the given network resource.
 """
 
 import re
+
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
+
 
 # diable no-self-use
 # pylint: disable=R0201
@@ -29,7 +32,9 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.n
 class Prefix_listsTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Prefix_listsTemplate, self).__init__(
-            lines=lines, tmplt=self, module=module
+            lines=lines,
+            tmplt=self,
+            module=module,
         )
 
     def _tmplt_prefix_list_ip(config_data):
@@ -84,10 +89,10 @@ class Prefix_listsTemplate(NetworkTemplate):
                     "afi": '{{ "ipv4" if afi == "ip" else afi }}',
                     "prefix_lists": {
                         "{{ name }}": {
-                            "name": "{{ name }}"
-                        }
-                    }
-                }
+                            "name": "{{ name }}",
+                        },
+                    },
+                },
             },
             "shared": True,
         },
@@ -118,13 +123,13 @@ class Prefix_listsTemplate(NetworkTemplate):
                                     "address": "{{ ip }}",
                                     "match": {
                                         "operator": "{{ oper }}",
-                                        "masklen": "{{ len }}"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                                        "masklen": "{{ len }}",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -148,13 +153,13 @@ class Prefix_listsTemplate(NetworkTemplate):
                                     "resequence": {
                                         "default": "{{ True if start_seq is undefined and step is undefined }}",
                                         "start_seq": "{{ start }}",
-                                        "step": "{{ step }}"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+                                        "step": "{{ step }}",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
     ]

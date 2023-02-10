@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,7 +16,8 @@ the given network resource.
 """
 
 import re
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
 
@@ -282,7 +284,9 @@ class Ospfv3Template(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         global os_version
         super(Ospfv3Template, self).__init__(
-            lines=lines, tmplt=self, module=module
+            lines=lines,
+            tmplt=self,
+            module=module,
         )
         if self._connection:
             os_version = self._get_os_version()
@@ -333,8 +337,8 @@ class Ospfv3Template(NetworkTemplate):
             "compval": "address_family",
             "result": {
                 "processes": {
-                    "address_family": {"{{ afi }}": {"afi": "{{ afi }}"}}
-                }
+                    "address_family": {"{{ afi }}": {"afi": "{{ afi }}"}},
+                },
             },
             "shared": True,
         },
@@ -356,12 +360,12 @@ class Ospfv3Template(NetworkTemplate):
                         '{{ afi|default("router", true) }}': {
                             "adjacency": {
                                 "exchange_start": {
-                                    "threshold": "{{ threshold|int }}"
-                                }
-                            }
-                        }
-                    }
-                }
+                                    "threshold": "{{ threshold|int }}",
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -378,11 +382,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "auto_cost": {
-                                "reference_bandwidth": '{{ ref_band.split(" ")[1] }}'
-                            }
-                        }
-                    }
-                }
+                                "reference_bandwidth": '{{ ref_band.split(" ")[1] }}',
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -405,11 +409,11 @@ class Ospfv3Template(NetworkTemplate):
                                 "{{ area_id }}": {
                                     "area_id": "{{ area_id }}",
                                     "default_cost": "{{ default_cost|int }}",
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -447,11 +451,11 @@ class Ospfv3Template(NetworkTemplate):
                                         "passphrase": "{{ line if passphrase is defined }}",
                                         "key": "{{ str(line) if passphrase is undefined }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -492,11 +496,11 @@ class Ospfv3Template(NetworkTemplate):
                                         "hidden_key": "{{ True if type is defined and type == '7'}}",
                                         "key": "{{ line if passphrase is not defined }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -539,11 +543,11 @@ class Ospfv3Template(NetworkTemplate):
                                         "translate": "{{ True if translate is defined }}",
                                         "no_summary": "{{ True if no_summary is defined }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -577,13 +581,13 @@ class Ospfv3Template(NetworkTemplate):
                                             "subnet_mask": "{{ subnet_mask }}",
                                             "advertise": "{{ not not_advertise }}",
                                             "cost": "{{ cost_val }}",
-                                        }
+                                        },
                                     ],
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -608,11 +612,11 @@ class Ospfv3Template(NetworkTemplate):
                                         "set": "{{ True if stub is defined and no_sum is undefined }}",
                                         "summary_lsa": "{{ True if no_sum is defined }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -629,11 +633,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "bfd": {
-                                "all_interfaces": "{{ True if bfd is defined }}"
-                            }
-                        }
-                    }
-                }
+                                "all_interfaces": "{{ True if bfd is defined }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -650,11 +654,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "bfd": {
-                                "all_interfaces": "{{ True if bfd is defined }}"
-                            }
-                        }
-                    }
-                }
+                                "all_interfaces": "{{ True if bfd is defined }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -681,10 +685,10 @@ class Ospfv3Template(NetworkTemplate):
                                 "metric_type": "{{ metric_type.split("
                                 ")[1]|int }}",
                                 "route_map": "{{ route_map.split(" ")[1] }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -699,10 +703,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "default_metric": "{{ default_metric| int}}"
-                        }
-                    }
-                }
+                            "default_metric": "{{ default_metric| int}}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -720,10 +724,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "distance": "{{ distance| int}}"
-                        }
-                    }
-                }
+                            "distance": "{{ distance| int}}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -739,10 +743,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "fips_restrictions": "{{ True if fips is defined }}"
-                        }
-                    }
-                }
+                            "fips_restrictions": "{{ True if fips is defined }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -762,11 +766,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "graceful_restart": {
-                                "grace_period": "{{ period|int }}"
-                            }
-                        }
-                    }
-                }
+                                "grace_period": "{{ period|int }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -783,10 +787,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "graceful_restart": {"set": "{{ True }}"}
-                        }
-                    }
-                }
+                            "graceful_restart": {"set": "{{ True }}"},
+                        },
+                    },
+                },
             },
         },
         {
@@ -802,11 +806,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "graceful_restart_helper": {
-                                "set": "{{ True if grace is defined }}"
-                            }
-                        }
-                    }
-                }
+                                "set": "{{ True if grace is defined }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -825,10 +829,10 @@ class Ospfv3Template(NetworkTemplate):
                             "log_adjacency_changes": {
                                 "set": "{{ True if log is defined and detail is undefined }}",
                                 "detail": "{{ True if detail is defined }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -871,11 +875,11 @@ class Ospfv3Template(NetworkTemplate):
                                         "set": "{{ True if summary_lsa is defined and summary_lsa_metric is undefined }}",
                                         "max_metric_value": "{{ summary_lsa_metric }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -891,10 +895,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "maximum_paths": "{{ paths }}"
-                        }
-                    }
-                }
+                            "maximum_paths": "{{ paths }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -910,10 +914,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "passive_interface": "{{ True if passive is defined }}"
-                        }
-                    }
-                }
+                            "passive_interface": "{{ True if passive is defined }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -936,11 +940,11 @@ class Ospfv3Template(NetworkTemplate):
                                 {
                                     "routes": "{{ route }}",
                                     "route_map": "{{ map }}",
-                                }
-                            ]
-                        }
-                    }
-                }
+                                },
+                            ],
+                        },
+                    },
+                },
             },
         },
         {
@@ -957,10 +961,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "router_id": "{{ id }}"
-                        }
-                    }
-                }
+                            "router_id": "{{ id }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -975,10 +979,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "shutdown": "{{ True if shutdown is defined }}"
-                        }
-                    }
-                }
+                            "shutdown": "{{ True if shutdown is defined }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -995,10 +999,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "timers": {"out_delay": "{{ out_delay }}"}
-                        }
-                    }
-                }
+                            "timers": {"out_delay": "{{ out_delay }}"},
+                        },
+                    },
+                },
             },
         },
         {
@@ -1016,10 +1020,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "timers": {"pacing": "{{ pacing }}"}
-                        }
-                    }
-                }
+                            "timers": {"pacing": "{{ pacing }}"},
+                        },
+                    },
+                },
             },
         },
         {
@@ -1048,11 +1052,11 @@ class Ospfv3Template(NetworkTemplate):
                                     "initial": "{{ initial }}",
                                     "min": "{{ min_delay }}",
                                     "max": "{{ max_delay }}",
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -1077,11 +1081,11 @@ class Ospfv3Template(NetworkTemplate):
                                     "initial": "{{ initial }}",
                                     "min": "{{ min }}",
                                     "max": "{{ max }}",
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
     ]

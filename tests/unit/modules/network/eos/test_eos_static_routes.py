@@ -5,18 +5,21 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.plugins.modules import eos_static_routes
+import itertools
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.static_routes.static_routes import (
     add_commands,
 )
+from ansible_collections.arista.eos.plugins.modules import eos_static_routes
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
-import itertools
 
 
 class TestEosStaticRoutesModule(TestEosModule):
@@ -26,36 +29,36 @@ class TestEosStaticRoutesModule(TestEosModule):
         super(TestEosStaticRoutesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
         self.get_resource_connection_facts = (
             self.mock_get_resource_connection_facts.start()
         )
 
         self.mock_edit_config = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
         )
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.static_routes.static_routes.Static_routesFacts.get_device_data"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.static_routes.static_routes.Static_routesFacts.get_device_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -94,16 +97,16 @@ class TestEosStaticRoutesModule(TestEosModule):
                                             dict(
                                                 interface="Ethernet1",
                                                 admin_distance=55,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = ["ipv6 route vrf testvrf 1200:10::/64 Ethernet1 55"]
         self.execute_module(changed=True, commands=commands)
@@ -124,16 +127,16 @@ class TestEosStaticRoutesModule(TestEosModule):
                                             dict(
                                                 interface="Ethernet1",
                                                 admin_distance=23,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -153,15 +156,15 @@ class TestEosStaticRoutesModule(TestEosModule):
                                             dict(
                                                 interface="Ethernet1",
                                                 admin_distance=55,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
-                ]
-            )
+                    ),
+                ],
+            ),
         )
         commands = ["ipv6 route vrf testvrf 1200:10::/64 Ethernet1 55"]
         self.execute_module(changed=True, commands=commands)
@@ -182,15 +185,15 @@ class TestEosStaticRoutesModule(TestEosModule):
                                             dict(
                                                 interface="Ethernet1",
                                                 admin_distance=23,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
-                ]
-            )
+                    ),
+                ],
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -209,16 +212,16 @@ class TestEosStaticRoutesModule(TestEosModule):
                                             dict(
                                                 interface="Ethernet1",
                                                 admin_distance=55,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
-                        ]
-                    )
+                            ),
+                        ],
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "ipv6 route 1000:10::/64 Ethernet1 55",
@@ -242,16 +245,16 @@ class TestEosStaticRoutesModule(TestEosModule):
                                             dict(
                                                 interface="Ethernet1",
                                                 admin_distance=23,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -271,16 +274,16 @@ class TestEosStaticRoutesModule(TestEosModule):
                                             dict(
                                                 interface="Ethernet1",
                                                 admin_distance=55,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "ipv6 route vrf testvrf 1200:10::/64 Ethernet1 55",
@@ -306,11 +309,11 @@ class TestEosStaticRoutesModule(TestEosModule):
                                             dict(
                                                 interface="Ethernet1",
                                                 admin_distance=23,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                     dict(
@@ -321,12 +324,12 @@ class TestEosStaticRoutesModule(TestEosModule):
                                     dict(
                                         dest="10.1.1.0/24",
                                         next_hops=[
-                                            dict(interface="Management1")
+                                            dict(interface="Management1"),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
-                        ]
+                            ),
+                        ],
                     ),
                     dict(
                         address_families=[
@@ -340,16 +343,16 @@ class TestEosStaticRoutesModule(TestEosModule):
                                                 interface="Ethernet1",
                                                 admin_distance=67,
                                                 tag=98,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
-                        ]
+                            ),
+                        ],
                     ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -358,7 +361,7 @@ class TestEosStaticRoutesModule(TestEosModule):
             dict(
                 config=[dict(address_families=[dict(afi="ipv4")])],
                 state="deleted",
-            )
+            ),
         )
         commands = [
             "no ip route 10.1.1.0/24 Management1",
@@ -369,7 +372,8 @@ class TestEosStaticRoutesModule(TestEosModule):
     def test_eos_static_routes_gathered(self):
         set_module_args(dict(config=[], state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_static_routes_config.cfg"
+            changed=False,
+            filename="eos_static_routes_config.cfg",
         )
         commands = []
         for gathered_cmds in result["gathered"]:
@@ -382,7 +386,9 @@ class TestEosStaticRoutesModule(TestEosModule):
             "ip route vrf testvrf 120.1.1.0/24 Ethernet1 23",
         ]
         self.assertEqual(
-            sorted(config_commands), sorted(commands), result["gathered"]
+            sorted(config_commands),
+            sorted(commands),
+            result["gathered"],
         )
 
     def test_eos_static_routes_rendered(self):
@@ -401,21 +407,23 @@ class TestEosStaticRoutesModule(TestEosModule):
                                             dict(
                                                 interface="Ethernet1",
                                                 admin_distance=55,
-                                            )
+                                            ),
                                         ],
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
+                    ),
                 ],
                 state="rendered",
-            )
+            ),
         )
         commands = ["ipv6 route vrf testvrf 1200:10::/64 Ethernet1 55"]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_eos_static_routes_parsed(self):
@@ -423,7 +431,7 @@ class TestEosStaticRoutesModule(TestEosModule):
             dict(
                 running_config="ipv6 route vrf testvrf 1200:10::/64 Ethernet1 55",
                 state="parsed",
-            )
+            ),
         )
         commands = ["ipv6 route vrf testvrf 1200:10::/64 Ethernet1 55"]
         result = self.execute_module(changed=False)
@@ -433,5 +441,7 @@ class TestEosStaticRoutesModule(TestEosModule):
             parsed_commands.append(cfg)
         parsed_commands = list(itertools.chain(*parsed_commands))
         self.assertEqual(
-            sorted(parsed_commands), sorted(commands), result["parsed"]
+            sorted(parsed_commands),
+            sorted(commands),
+            result["parsed"],
         )

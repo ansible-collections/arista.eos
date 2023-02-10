@@ -1,10 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_snmp_server merged integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
-
     - name: merge given snmp_server configuration
       become: true
       register: result
@@ -55,7 +54,7 @@
             - vrf: "vrf01"
               local_interface: "Ethernet1"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 13
           - result.changed == true
@@ -69,10 +68,9 @@
       register: result
       arista.eos.eos_snmp_server: *merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 1
           - result.changed == true
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

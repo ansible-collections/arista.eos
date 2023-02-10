@@ -18,17 +18,19 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import (
-    patch,
-    MagicMock,
-)
-from ansible_collections.arista.eos.plugins.modules import eos_config
 from ansible_collections.arista.eos.plugins.cliconf.eos import Cliconf
+from ansible_collections.arista.eos.plugins.modules import eos_config
+from ansible_collections.arista.eos.tests.unit.compat.mock import (
+    MagicMock,
+    patch,
+)
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -39,26 +41,26 @@ class TestEosConfigModule(TestEosModule):
     def setUp(self):
         super(TestEosConfigModule, self).setUp()
         self.mock_get_config = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_config.get_config"
+            "ansible_collections.arista.eos.plugins.modules.eos_config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_get_connection = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_config.get_connection"
+            "ansible_collections.arista.eos.plugins.modules.eos_config.get_connection",
         )
         self.get_connection = self.mock_get_connection.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_config.load_config"
+            "ansible_collections.arista.eos.plugins.modules.eos_config.load_config",
         )
         self.load_config = self.mock_load_config.start()
         self.mock_run_commands = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_config.run_commands"
+            "ansible_collections.arista.eos.plugins.modules.eos_config.run_commands",
         )
         self.run_commands = self.mock_run_commands.start()
 
         self.mock_supports_sessions = patch(
-            "ansible_collections.arista.eos.plugins.cliconf.eos.Cliconf.supports_sessions"
+            "ansible_collections.arista.eos.plugins.cliconf.eos.Cliconf.supports_sessions",
         )
         self.supports_sessions = self.mock_supports_sessions.start()
         self.mock_supports_sessions.return_value = True
@@ -86,7 +88,7 @@ class TestEosConfigModule(TestEosModule):
         args = dict(lines=lines)
         set_module_args(args)
         self.conn.get_diff = MagicMock(
-            return_value=self.cliconf_obj.get_diff(config, config)
+            return_value=self.cliconf_obj.get_diff(config, config),
         )
         self.execute_module()
 
@@ -95,7 +97,7 @@ class TestEosConfigModule(TestEosModule):
         args = dict(src=src)
         set_module_args(args)
         self.conn.get_diff = MagicMock(
-            return_value=self.cliconf_obj.get_diff(src, self.running_config)
+            return_value=self.cliconf_obj.get_diff(src, self.running_config),
         )
         result = self.execute_module(changed=True)
         config = [
@@ -106,7 +108,9 @@ class TestEosConfigModule(TestEosModule):
             "ip routing",
         ]
         self.assertEqual(
-            sorted(config), sorted(result["commands"]), result["commands"]
+            sorted(config),
+            sorted(result["commands"]),
+            result["commands"],
         )
 
     def test_eos_config_lines(self):
@@ -115,14 +119,17 @@ class TestEosConfigModule(TestEosModule):
         set_module_args(args)
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(lines), self.running_config
-            )
+                "\n".join(lines),
+                self.running_config,
+            ),
         )
         result = self.execute_module(changed=True)
         config = ["hostname switch01"]
 
         self.assertEqual(
-            sorted(config), sorted(result["commands"]), result["commands"]
+            sorted(config),
+            sorted(result["commands"]),
+            result["commands"],
         )
 
     def test_eos_config_before(self):
@@ -133,13 +140,16 @@ class TestEosConfigModule(TestEosModule):
 
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(lines), self.running_config
-            )
+                "\n".join(lines),
+                self.running_config,
+            ),
         )
         result = self.execute_module(changed=True)
         config = ["before command", "hostname switch01"]
         self.assertEqual(
-            sorted(config), sorted(result["commands"]), result["commands"]
+            sorted(config),
+            sorted(result["commands"]),
+            result["commands"],
         )
         self.assertEqual("before command", result["commands"][0])
 
@@ -150,14 +160,17 @@ class TestEosConfigModule(TestEosModule):
         set_module_args(args)
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(lines), self.running_config
-            )
+                "\n".join(lines),
+                self.running_config,
+            ),
         )
         result = self.execute_module(changed=True)
         config = ["after command", "hostname switch01"]
 
         self.assertEqual(
-            sorted(config), sorted(result["commands"]), result["commands"]
+            sorted(config),
+            sorted(result["commands"]),
+            result["commands"],
         )
         self.assertEqual("after command", result["commands"][-1])
 
@@ -169,8 +182,9 @@ class TestEosConfigModule(TestEosModule):
         set_module_args(args)
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
-                "\n".join(candidate), self.running_config
-            )
+                "\n".join(candidate),
+                self.running_config,
+            ),
         )
 
         result = self.execute_module(changed=True)
@@ -215,7 +229,7 @@ class TestEosConfigModule(TestEosModule):
 
     def test_eos_config_save_when(self):
         mock_run_commands = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_config.run_commands"
+            "ansible_collections.arista.eos.plugins.modules.eos_config.run_commands",
         )
         run_commands = mock_run_commands.start()
 

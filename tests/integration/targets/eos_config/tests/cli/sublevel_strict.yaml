@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli/sublevel_strict.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START cli/sublevel_strict.yaml on connection={{ ansible_connection
     }}"
 
 - name: setup
@@ -31,7 +32,7 @@
     match: strict
     replace: block
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - "'ip access-list test' in result.updates"
@@ -53,7 +54,7 @@
     parents: ip access-list test
     match: strict
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -63,4 +64,4 @@
     lines: no ip access-list test
     match: none
 
-- debug: msg="END cli/sublevel_strict.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/sublevel_strict.yaml on connection={{ ansible_connection }}"

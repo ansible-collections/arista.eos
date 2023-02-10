@@ -1,12 +1,12 @@
 ---
-- debug:
-    msg: Start eos_bgp_address_family rtt integration tests ansible_connection={{
+- ansible.builtin.debug:
+    msg:
+      Start eos_bgp_address_family rtt integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given bgp_address_family configuration
       become: true
       register: baseconfig
@@ -42,7 +42,7 @@
                 target: "33:11"
               vrf: "vrft"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - baseconfig.commands|length == 17
           - baseconfig.changed == true
@@ -78,9 +78,8 @@
         state: overridden
 
     - name: Assert that config was reverted
-      assert:
+      ansible.builtin.assert:
         that: baseconfig.after == revert.after
 
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

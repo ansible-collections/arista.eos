@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli/src_match_none.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START cli/src_match_none.yaml on connection={{ ansible_connection
     }}"
 
 - name: setup
@@ -19,7 +20,7 @@
     src: basic/config.j2
     match: none
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
 
@@ -30,9 +31,9 @@
     src: basic/config.j2
     defaults: true
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.updates is not defined
 
-- debug: msg="END cli/src_match_none.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/src_match_none.yaml on connection={{ ansible_connection }}"

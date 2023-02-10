@@ -5,13 +5,15 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.plugins.modules import eos_prefix_lists
+from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import (
     set_module_args,
 )
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,14 +24,14 @@ class TestEosPrefix_ListsModule(TestEosModule):
         super(TestEosPrefix_ListsModule, self).setUp()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
         self.get_resource_connection_config = (
             self.mock_get_resource_connection_config.start()
         )
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.prefix_lists.prefix_lists.Prefix_listsFacts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.prefix_lists.prefix_lists.Prefix_listsFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -78,7 +80,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         sequence=10,
                                         action="deny",
                                         address="10.1.1.0/24",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
@@ -93,13 +95,13 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         sequence=125,
                                         action="deny",
                                         address="5000:1::/64",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
-                ]
-            )
+                ],
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -118,13 +120,13 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         action="deny",
                                         address="45.55.4.0/24",
                                         match=dict(masklen=32, operator="ge"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
-                    )
-                ]
-            )
+                    ),
+                ],
+            ),
         )
         result = self.execute_module(failed=True)
         self.assertIn(
@@ -148,7 +150,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         address="192.11.2.0/24",
                                     ),
                                     dict(
-                                        resequence=dict(start_seq=20, step=2)
+                                        resequence=dict(start_seq=20, step=2),
                                     ),
                                 ],
                             ),
@@ -160,7 +162,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         action="deny",
                                         address="192.0.2.0/24",
                                         match=dict(masklen=32, operator="le"),
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
@@ -175,13 +177,13 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         sequence=125,
                                         action="deny",
                                         address="5000:1::/64",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
-                ]
-            )
+                ],
+            ),
         )
         commands = [
             "ip prefix-list v401",
@@ -222,7 +224,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         sequence=10,
                                         action="deny",
                                         address="10.1.1.0/24",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
@@ -237,14 +239,14 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         sequence=125,
                                         action="deny",
                                         address="5000:1::/64",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -274,14 +276,14 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         action="deny",
                                         address="192.0.2.0/24",
                                         match=dict(masklen=32, operator="le"),
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "ip prefix-list v401",
@@ -325,7 +327,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         sequence=10,
                                         action="deny",
                                         address="10.1.1.0/24",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
@@ -340,14 +342,14 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         sequence=125,
                                         action="deny",
                                         address="5000:1::/64",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -377,14 +379,14 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         action="deny",
                                         address="192.0.2.0/24",
                                         match=dict(masklen=32, operator="le"),
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
-                    )
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "ip prefix-list v401",
@@ -429,7 +431,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         address="192.11.2.0/24",
                                     ),
                                     dict(
-                                        resequence=dict(start_seq=20, step=2)
+                                        resequence=dict(start_seq=20, step=2),
                                     ),
                                 ],
                             ),
@@ -441,7 +443,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         action="deny",
                                         address="192.0.2.0/24",
                                         match=dict(masklen=32, operator="le"),
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
@@ -456,14 +458,14 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                         sequence=125,
                                         action="deny",
                                         address="5000:1::/64",
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "ip prefix-list v401",
@@ -476,13 +478,16 @@ class TestEosPrefix_ListsModule(TestEosModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_eos_prefix_lists_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_prefix_lists_config.cfg"
+            changed=False,
+            filename="eos_prefix_lists_config.cfg",
         )
         gathered_list = {
             "ipv4": [
@@ -508,7 +513,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                             "action": "deny",
                             "address": "10.1.1.0/24",
                             "sequence": 10,
-                        }
+                        },
                     ],
                     "name": "v402",
                 },
@@ -520,16 +525,17 @@ class TestEosPrefix_ListsModule(TestEosModule):
                             "action": "deny",
                             "address": "5000:1::/64",
                             "sequence": 125,
-                        }
+                        },
                     ],
                     "name": "v601",
-                }
+                },
             ],
         }
         for entry in result["gathered"]:
             if entry.get("afi") in ["ipv4", "ipv6"]:
                 self.assertEqual(
-                    gathered_list[entry["afi"]], entry["prefix_lists"]
+                    gathered_list[entry["afi"]],
+                    entry["prefix_lists"],
                 )
 
     def test_eos_route_maps_parsed(self):
@@ -571,7 +577,7 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                 "action": "deny",
                                 "address": "10.1.1.0/24",
                                 "sequence": 10,
-                            }
+                            },
                         ],
                         "name": "v402",
                     },
@@ -586,10 +592,10 @@ class TestEosPrefix_ListsModule(TestEosModule):
                                 "action": "deny",
                                 "address": "5000:1::/64",
                                 "sequence": 125,
-                            }
+                            },
                         ],
                         "name": "v601",
-                    }
+                    },
                 ],
             },
         ]

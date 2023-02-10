@@ -1,5 +1,5 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
 - become: true
   arista.eos.eos_facts:
@@ -11,7 +11,7 @@
   arista.eos.eos_lldp_global:
     state: deleted
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_global == result.before
 
@@ -19,10 +19,10 @@
   arista.eos.eos_facts:
     gather_network_resources: lldp_global
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_global == result.after
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lldp_global == {}

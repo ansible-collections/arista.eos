@@ -1,7 +1,7 @@
 ---
 # arista.eos.eos_config -> NetworkConfig, dumps
 
-- debug: msg="START cli/common_config.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/common_config.yaml on connection={{ ansible_connection }}"
 
 - name: setup
   arista.eos.eos_config:
@@ -22,7 +22,7 @@
   become: true
   register: result
 
-- assert:
+- ansible.builtin.assert:
     that:
       - "result.changed == true"
       - "'hostname foo' in result.updates"
@@ -67,7 +67,7 @@
       become: true
       register: result
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - "result.changed == true"
           - "'ip access-list test' in result.updates"
@@ -97,4 +97,4 @@
         match: none
       become: true
 
-- debug: msg="END cli/common_config.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/common_config.yaml on connection={{ ansible_connection }}"

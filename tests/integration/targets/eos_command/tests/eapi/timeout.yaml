@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/timeout.yaml"
+- ansible.builtin.debug: msg="START eapi/timeout.yaml"
 
 - name: test bad condition
   register: result
@@ -11,9 +11,9 @@
       - result[0].version foo 4.15
     retries: 1
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.failed == true
       - result.msg is defined
 
-- debug: msg="END eapi/timeout.yaml"
+- ansible.builtin.debug: msg="END eapi/timeout.yaml"

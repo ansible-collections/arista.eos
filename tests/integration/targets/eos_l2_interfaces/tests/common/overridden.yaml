@@ -1,9 +1,8 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
-
       - name: Ethernet2
         access:
           vlan: 30
@@ -12,15 +11,16 @@
   arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
 
-- name: Override device configuration of all L2 interfaces on device with provided
+- name:
+    Override device configuration of all L2 interfaces on device with provided
     configuration.
   register: result
   become: true
   arista.eos.eos_l2_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: overridden
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before)
         == []
@@ -29,7 +29,7 @@
   arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.after)
         == []

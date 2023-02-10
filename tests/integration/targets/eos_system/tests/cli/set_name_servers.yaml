@@ -1,5 +1,6 @@
 ---
-- debug: msg="START cli/set_name_servers.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START cli/set_name_servers.yaml on connection={{ ansible_connection
     }}"
 
 - name: setup
@@ -19,7 +20,7 @@
       - 192.0.2.2
       - 192.0.2.3
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - result.commands|length == 3
@@ -36,7 +37,7 @@
       - 192.0.2.2
       - 192.0.2.3
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -48,7 +49,7 @@
       - 192.0.2.1
       - 192.0.2.2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - result.commands|length == 1
@@ -62,5 +63,6 @@
       - no vrf instance ansible
     match: none
 
-- debug: msg="END cli/set_name_servers.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="END cli/set_name_servers.yaml on connection={{ ansible_connection
     }}"

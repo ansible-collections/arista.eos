@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,21 +19,21 @@ created.
 """
 
 import re
+
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    dict_merge,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_merge,
+    get_from_dict,
+)
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
     Facts,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospfv3 import (
     Ospfv3Template,
-)
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    get_from_dict,
 )
 
 
@@ -140,7 +141,8 @@ class Ospfv3(ResourceModule):
 
         if len(self.commands) != begin or (not have and want):
             self.commands.insert(
-                begin, self._tmplt.render(want or have, "vrf", False)
+                begin,
+                self._tmplt.render(want or have, "vrf", False),
             )
             self.commands.append("exit")
 
@@ -168,27 +170,27 @@ class Ospfv3(ResourceModule):
                         " ** The 'timers' argument has been changed to have separate 'lsa' and 'spf' keys and 'throttle' has been deprecated. ** "
                         " \n** Your task has been modified to use {0}. ** "
                         " \n** timers.throttle will be removed after '2024-01-01' ** ".format(
-                            entry
-                        )
+                            entry,
+                        ),
                     )
                 if entry.get("lsa") and not isinstance(entry["lsa"], dict):
                     modified = {}
                     if not isinstance(entry["lsa"], int):
                         # if neither old or new format, fail !
                         self._module.fail_json(
-                            msg="The lsa key takes a dictionary of arguments. Please consult the documentation for more details"
+                            msg="The lsa key takes a dictionary of arguments. Please consult the documentation for more details",
                         )
                     modified = {
                         "timers": {
-                            "lsa": {"direction": "rx", "min": entry["lsa"]}
-                        }
+                            "lsa": {"direction": "rx", "min": entry["lsa"]},
+                        },
                     }
                     self._module.warn(
                         " ** 'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards. ** "
                         " \n** Your task has been modified to use {0}. ** "
                         " \n** timers.lsa of type int will be removed after '2024-01-01' ** ".format(
-                            modified
-                        )
+                            modified,
+                        ),
                     )
                     entry["lsa"] = modified["timers"]["lsa"]
             if name in ["vrf", "address_family"]:
@@ -202,7 +204,8 @@ class Ospfv3(ResourceModule):
             else:
                 if name == "areas" and entry:
                     self._areas_compare(
-                        want={name: entry}, have={name: have.get(name, {})}
+                        want={name: entry},
+                        have={name: have.get(name, {})},
                     )
                 else:
                     # passing dict without vrf, inorder to avoid  no router ospfv3 command
@@ -260,37 +263,40 @@ class Ospfv3(ResourceModule):
                         " ** The 'timers' argument has been changed to have separate 'lsa' and 'spf' keys and 'throttle' has been deprecated. ** "
                         " \n** Your task has been modified to use {0}. ** "
                         " \n** timers.throttle will be removed after '2024-01-01' ** ".format(
-                            entry["timers"]
-                        )
+                            entry["timers"],
+                        ),
                     )
                 if entry["timers"].get("lsa") and not isinstance(
-                    entry["timers"]["lsa"], dict
+                    entry["timers"]["lsa"],
+                    dict,
                 ):
                     if not isinstance(entry["timers"]["lsa"], int):
                         # It doesn't match the new format or the old format, fail here
                         self._module.fail_json(
-                            msg="The lsa key takes a dictionary of arguments. Please consult the documentation for more details"
+                            msg="The lsa key takes a dictionary of arguments. Please consult the documentation for more details",
                         )
                     modified = {
                         "timers": {
                             "lsa": {
                                 "direction": "rx",
                                 "min": entry["timers"]["lsa"],
-                            }
-                        }
+                            },
+                        },
                     }
                     self._module.warn(
                         " ** 'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards. ** "
                         " \n** Your task has been modified to use {0}. ** "
                         " \n** timers.lsa of type int will be removed after '2024-01-01' ** ".format(
-                            modified
-                        )
+                            modified,
+                        ),
                     )
                     entry["timers"]["lsa"] = modified["timers"]["lsa"]
             self._compare_lists(want=entry, have=hafs.get(name, {}))
             self._areas_compare(want=entry, have=hafs.get(name, {}))
             self.compare(
-                parsers=self.parsers, want=entry, have=hafs.pop(name, {})
+                parsers=self.parsers,
+                want=entry,
+                have=hafs.pop(name, {}),
             )
             if (
                 len(self.commands) != begin
@@ -299,7 +305,8 @@ class Ospfv3(ResourceModule):
             ):
                 self._rotate_commands(begin=begin)
                 self.commands.insert(
-                    begin, self._tmplt.render(entry, "address_family", False)
+                    begin,
+                    self._tmplt.render(entry, "address_family", False),
                 )
                 self.commands.append("exit")
         for name, entry in iteritems(hafs):
@@ -311,7 +318,8 @@ class Ospfv3(ResourceModule):
             negate = re.match(r"^no .*", cmd)
             if negate:
                 self.commands.insert(
-                    begin, self.commands.pop(self.commands.index(cmd))
+                    begin,
+                    self.commands.pop(self.commands.index(cmd)),
                 )
                 begin += 1
 

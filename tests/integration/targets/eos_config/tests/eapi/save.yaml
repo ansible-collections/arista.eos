@@ -1,5 +1,5 @@
 ---
-- debug: msg="START eapi/save.yaml"
+- ansible.builtin.debug: msg="START eapi/save.yaml"
 
 - name: setup
   become: true
@@ -17,7 +17,7 @@
   arista.eos.eos_config: &id001
     save_when: always
 
-- assert: &id002
+- ansible.builtin.assert: &id002
     that:
       - result.changed == true
 
@@ -26,6 +26,6 @@
   register: result
   arista.eos.eos_config: *id001
 
-- assert: *id002
+- ansible.builtin.assert: *id002
 
-- debug: msg="END eapi/save.yaml"
+- ansible.builtin.debug: msg="END eapi/save.yaml"
