@@ -18,7 +18,7 @@
   vars:
     ansible_httpapi_use_ssl: true
     ansible_httpapi_validate_certs: false
-    ansible_httpapi_ciphers: ['AES256-SHA']
+    ansible_httpapi_ciphers: ["AES256-SHA"]
   arista.eos.eos_command:
     commands:
       - show version
