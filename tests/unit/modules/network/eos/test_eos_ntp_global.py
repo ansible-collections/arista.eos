@@ -254,6 +254,32 @@ class TestEosNtp_GlobalModule(TestEosModule):
         ]
         self.execute_module(changed=True, commands=sorted(commands))
 
+    def test_eos_ntp_global_merged_authenate(self):
+        set_module_args(
+            dict(
+                config=dict(
+                    authenticate=dict(
+                            enable=False,
+                            servers=False,
+                        ),
+                ),
+            ),
+        )
+        self.execute_module(changed=False, commands=[])
+    
+    def test_eos_ntp_global_merged_authenate_server_true(self):
+        set_module_args(
+            dict(
+                config=dict(
+                    authenticate=dict(
+                            enable=False,
+                            servers=True,
+                        ),
+                ),
+            ),
+        )
+        self.execute_module(changed=False, commands=[])
+
     def test_eos_ntp_global_replaced(self):
         set_module_args(
             dict(
