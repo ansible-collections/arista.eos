@@ -259,22 +259,22 @@ class TestEosNtp_GlobalModule(TestEosModule):
             dict(
                 config=dict(
                     authenticate=dict(
-                            enable=False,
-                            servers=False,
-                        ),
+                        enable=False,
+                        servers=False,
+                    ),
                 ),
             ),
         )
         self.execute_module(changed=False, commands=[])
-    
+
     def test_eos_ntp_global_merged_authenate_server_true(self):
         set_module_args(
             dict(
                 config=dict(
                     authenticate=dict(
-                            enable=False,
-                            servers=True,
-                        ),
+                        enable=False,
+                        servers=True,
+                    ),
                 ),
             ),
         )
