@@ -42,10 +42,11 @@ def _tmplt_ntp_global_serve(config_data):
 
 def _tmplt_ntp_global_authenticate(config_data):
     el = config_data["authenticate"]
-    command = "ntp authenticate"
-    if el.get("servers"):
-        command += " servers"
-    return command
+    if el.get("enable"):
+        command = "ntp authenticate"
+        if el.get("servers"):
+            command += " servers"
+        return command
 
 
 def _tmplt_ntp_global_authentication_keys(config_data):

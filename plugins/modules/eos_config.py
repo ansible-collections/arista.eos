@@ -579,6 +579,8 @@ def main():
             )
 
             if running_config.sha1 != base_config.sha1:
+                before = ""
+                after = ""
                 if module.params["diff_against"] == "intended":
                     before = running_config
                     after = base_config
