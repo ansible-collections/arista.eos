@@ -60,8 +60,8 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
                 </td>
                 <td>
@@ -80,7 +80,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>This is a dict object containing configurable options related to backup file path. The value of this option is read only when <code>backup</code> is set to <em>yes</em>, if <code>backup</code> is set to <em>no</em> this option will be silently ignored.</div>
+                        <div>This is a dict object containing configurable options related to backup file path. The value of this option is read only when <code>backup</code> is set to <em>true</em>, if <code>backup</code> is set to <em>no</em> this option will be silently ignored.</div>
                 </td>
             </tr>
                                 <tr>
@@ -143,8 +143,8 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
-                                    <li>yes</li>
+                                    <li>no</li>
+                                    <li><div style="color: blue"><b>yes</b>&nbsp;&larr;</div></li>
                         </ul>
                 </td>
                 <td>
@@ -375,7 +375,7 @@ Examples
 
     - name: render a Jinja2 template onto an Arista switch
       arista.eos.eos_config:
-        backup: yes
+        backup: true
         src: eos_template.j2
 
     - name: diff the running config against a master config
@@ -394,7 +394,7 @@ Examples
     - name: configurable backup path
       arista.eos.eos_config:
         src: eos_template.j2
-        backup: yes
+        backup: true
         backup_options:
           filename: backup.cfg
           dir_path: /home/user
@@ -422,7 +422,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">string</span>
                     </div>
                 </td>
-                <td>when backup is yes</td>
+                <td>when backup is true</td>
                 <td>
                             <div>The full path to the backup file</div>
                     <br/>
@@ -456,7 +456,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">string</span>
                     </div>
                 </td>
-                <td>when backup is yes</td>
+                <td>when backup is true</td>
                 <td>
                             <div>The date extracted from the backup file name</div>
                     <br/>
@@ -473,7 +473,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">string</span>
                     </div>
                 </td>
-                <td>when backup is yes and filename is not specified in backup options</td>
+                <td>when backup is true and filename is not specified in backup options</td>
                 <td>
                             <div>The name of the backup file</div>
                     <br/>
@@ -490,7 +490,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">string</span>
                     </div>
                 </td>
-                <td>when backup is yes and filename is not specified in backup options</td>
+                <td>when backup is true and filename is not specified in backup options</td>
                 <td>
                             <div>The full path to the backup file excluding the timestamp</div>
                     <br/>
@@ -507,7 +507,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">string</span>
                     </div>
                 </td>
-                <td>when backup is yes</td>
+                <td>when backup is true</td>
                 <td>
                             <div>The time extracted from the backup file name</div>
                     <br/>

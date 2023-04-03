@@ -329,10 +329,10 @@ EXAMPLES = """
       - afi: ipv4
         neighbors:
         - neighbor: 203.0.113.10
-          activate: yes
+          activate: true
           default_originate: true
         - neighbor: 192.0.2.15
-          activate: yes
+          activate: true
           graceful_restart: true
     operation: merge
 - name: remove bgp as 64496 from config

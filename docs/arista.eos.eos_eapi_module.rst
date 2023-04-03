@@ -254,9 +254,9 @@ Examples
         state: started
         http: false
         https_port: 9443
-        local_http: yes
+        local_http: true
         local_http_port: 80
-        socket: yes
+        socket: true
 
     - name: Shutdown eAPI access
       arista.eos.eos_eapi:
