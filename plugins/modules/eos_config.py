@@ -118,7 +118,7 @@ options:
       playbook root directory or role root directory, if playbook is part of an ansible
       role. If the directory does not exist, it is created.
     type: bool
-    default: true
+    default: false
   running_config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -139,7 +139,7 @@ options:
       the running-config is append with the all keyword.  When the value is set to
       false, the command is issued without the all keyword
     type: bool
-    default: true
+    default: false
   save_when:
     description:
     - When changes are made to the device running-configuration, the changes are not
