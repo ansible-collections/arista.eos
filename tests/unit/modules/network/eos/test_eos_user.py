@@ -29,7 +29,6 @@ from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosUserModule(TestEosModule):
-
     module = eos_user
 
     def setUp(self):

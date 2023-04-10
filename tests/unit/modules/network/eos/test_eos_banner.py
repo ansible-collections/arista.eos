@@ -29,7 +29,6 @@ from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosBannerModule(TestEosModule):
-
     module = eos_banner
 
     def setUp(self):

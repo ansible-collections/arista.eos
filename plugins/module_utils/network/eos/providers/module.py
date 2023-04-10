@@ -16,7 +16,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers i
 
 
 class NetworkModule(AnsibleModule):
-
     fail_on_missing_provider = True
 
     def __init__(self, connection=None, *args, **kwargs):

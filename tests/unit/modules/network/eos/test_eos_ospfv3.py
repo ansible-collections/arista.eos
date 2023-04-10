@@ -812,7 +812,6 @@ class TestEosOspfv3Module(TestEosModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_ospfv3_merged_bfd_command_4_20(self):
-
         set_module_args(
             dict(
                 config=dict(

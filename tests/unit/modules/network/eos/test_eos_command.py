@@ -33,7 +33,6 @@ from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosCommandModule(TestEosModule):
-
     module = eos_command
 
     def setUp(self):
