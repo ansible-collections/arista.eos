@@ -57,6 +57,8 @@ class Bgp_globalFacts(object):
             data = self.get_config(connection)
 
         # remove address_family configs from bgp_global
+        import q
+        q(data)
         bgp_global_config = []
         start = False
         self._af = False
