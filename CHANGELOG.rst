@@ -5,6 +5,15 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v6.0.1
+======
+
+Bugfixes
+--------
+
+- fix ntp_global authenticate config.
+- https://github.com/ansible-collections/arista.eos/issues/399.
+
 v6.0.0
 ======
 

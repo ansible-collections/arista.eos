@@ -495,3 +495,15 @@ releases:
       - remove_provider.yaml
       - sanity.yaml
     release_date: "2022-10-13"
+  6.0.1:
+    changes:
+      bugfixes:
+        - fix ntp_global authenticate config.
+        - https://github.com/ansible-collections/arista.eos/issues/399.
+    fragments:
+      - fix_linting_failures.yaml
+      - fix_ntp_global_authenticate.yaml
+      - rm_base.yaml
+      - sanity_fixes.yaml
+      - trivial_changes.yaml
+    release_date: "2023-04-10"
