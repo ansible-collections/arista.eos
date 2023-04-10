@@ -250,7 +250,11 @@ class TestEosBgpglobalModule(TestEosModule):
                     as_number="65000",
                     router_id="192.168.1.1",
                     neighbor=[
-                        dict(neighbor_address="10.2.2.1", peer_group="evpn", ebgp_multihop=dict(set=True, ttl=2)),
+                        dict(
+                            neighbor_address="10.2.2.1",
+                            peer_group="evpn",
+                            ebgp_multihop=dict(set=True, ttl=2),
+                        ),
                     ],
                 ),
                 state="merged",
@@ -261,8 +265,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor evpn ebgp-multihop 2",
             "neighbor evpn peer-group evpn",
             "neighbor 10.2.2.1 peer-group evpn",
-            "router-id 192.168.1.1"
-
+            "router-id 192.168.1.1",
         ]
         self.execute_module(changed=True, commands=commands)
 
