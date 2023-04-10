@@ -1,2 +1,1 @@
 plugins/action/eos.py action-plugin-docs # base class for deprecated network platform modules using `connection: local`
-tests/unit/compat/builtins.py pylint:unused-import

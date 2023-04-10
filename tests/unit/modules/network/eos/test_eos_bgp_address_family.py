@@ -356,7 +356,6 @@ class TestEosBgpafModule(TestEosModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_bgp_af_parsed(self):
-
         commands = [
             "router bgp 10",
             "address-family ipv4",

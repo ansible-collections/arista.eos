@@ -18,7 +18,7 @@
   vars:
     ansible_connection: ansible.netcommon.network_cli
 
-- name: run test cases with single_user_mode (connection=network_cli)
+- name: Run test cases with single_user_mode (connection=network_cli)
   ansible.builtin.include_tasks: "{{ role_path }}/tests/cli/caching.yaml"
   vars:
     ansible_connection: ansible.netcommon.network_cli

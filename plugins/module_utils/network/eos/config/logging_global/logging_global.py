@@ -115,7 +115,6 @@ class Logging_global(ResourceModule):
         host_want = want.pop("hosts", {})
         host_have = have.pop("hosts", {})
         for name, entry in iteritems(host_want):
-
             h = {}
             if host_have:
                 h = {"hosts": host_have.pop(name, {})}
