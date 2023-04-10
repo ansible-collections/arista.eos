@@ -9,7 +9,7 @@
       register: base_config
       arista.eos.eos_acl_interfaces:
         config:
-          - name: "{{ Interfaces['int1'] }}"
+          - name: "{{ interfaces_lst['int1'] }}"
             access_groups:
               - afi: ipv4
                 acls:
@@ -24,7 +24,7 @@
                   - name: aclv601
                     direction: out
 
-          - name: "{{ Interfaces['int2'] }}"
+          - name: "{{ interfaces_lst['int2'] }}"
             access_groups:
               - afi: ipv6
                 acls:
@@ -43,7 +43,7 @@
       register: result
       arista.eos.eos_acl_interfaces:
         config:
-          - name: "{{ Interfaces['int2'] }}"
+          - name: "{{ interfaces_lst['int2'] }}"
             access_groups:
               - afi: ipv4
                 acls:
