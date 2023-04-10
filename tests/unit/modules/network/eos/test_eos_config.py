@@ -35,7 +35,6 @@ from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosConfigModule(TestEosModule):
-
     module = eos_config
 
     def setUp(self):

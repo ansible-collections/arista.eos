@@ -27,7 +27,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils
 
 
 def _tmplt_ntp_global_serve(config_data):
-
     el = config_data["serve"]
     command = "ntp serve"
     if el.get("access_lists"):

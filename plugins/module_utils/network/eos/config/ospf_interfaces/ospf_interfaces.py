@@ -138,7 +138,6 @@ class Ospf_interfaces(ResourceModule):
         begin = len(self.commands)
         self._compare_addr_family(want=want, have=have)
         if len(self.commands) != begin:
-
             tmp = want or have
             tmp.pop("address_family", {})
             self.commands.insert(

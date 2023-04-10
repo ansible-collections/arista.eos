@@ -64,7 +64,6 @@ class TestEosModule(ModuleTestCase):
         transport="cli",
         filename=None,
     ):
-
         if filename is None:
             self.load_fixtures(commands, transport=transport)
         else:
