@@ -637,7 +637,7 @@ EXAMPLES = """
   - name: Delete all logging configs
     arista.eos.eos_logging_global:
       state: deleted
-    become: yes
+    become: true
 
 # After state:
 # test(config)#show running-config | section logging

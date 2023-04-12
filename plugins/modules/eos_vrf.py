@@ -143,7 +143,7 @@ EXAMPLES = """
     - name: test5
       rd: 1:205
     state: present
-    purge: yes
+    purge: true
 
 - name: Delete aggregate of VRFs
   arista.eos.eos_vrf:

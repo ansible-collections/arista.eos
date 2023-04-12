@@ -169,7 +169,7 @@ EXAMPLES = """
 
 - name: remove all users except admin
   arista.eos.eos_user:
-    purge: yes
+    purge: true
 
 - name: set multiple users to privilege level 15
   arista.eos.eos_user:
