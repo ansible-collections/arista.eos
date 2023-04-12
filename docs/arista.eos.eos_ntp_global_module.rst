@@ -1458,7 +1458,7 @@ Examples
                      - acl_name: "acl02"
                        direction: "in"
           state: rendered
-        become: yes
+        become: true
 
     # Module Execution:
     # "rendered": [
