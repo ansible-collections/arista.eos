@@ -485,6 +485,7 @@ def main():
 
             replace = module.params["replace"] == "config"
             commit = not module.check_mode
+            timer = module.params['timer']
 
             response = load_config(
                 module,
