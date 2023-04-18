@@ -402,6 +402,7 @@ def main():
         diff_ignore_lines=dict(type="list", elements="str"),
         running_config=dict(aliases=["config"]),
         intended_config=dict(),
+        timer=dict(type="str"),
     )
 
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
@@ -490,6 +491,7 @@ def main():
                 commands,
                 replace=replace,
                 commit=commit,
+                timer=timer,
             )
 
             result["changed"] = True
