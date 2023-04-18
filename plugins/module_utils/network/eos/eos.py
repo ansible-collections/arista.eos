@@ -480,9 +480,9 @@ class HttpApi:
             "show session-config",
         ]
         if commit:
-            commands.append("commit timer 00:01:00")
+            commands.append("commit")
         else:
-            commands.append("commit timer 00:01:00")
+            commands.append("abort")
         response = self._connection.send_request(commands, output="text")
         for out in response:
             if out:
