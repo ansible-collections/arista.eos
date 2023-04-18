@@ -365,16 +365,16 @@ class HttpApi:
         )
         return diff
 
-    def load_config(self, config, commit=False, replace=False):
+    def load_config(self, config, timer, commit=False, replace=False):
         """Loads the configuration onto the remote devices
 
         If the device doesn't support configuration sessions, this will
         fallback to using configure() to load the commands.  If that happens,
         there will be no returned diff or session values
         """
-        return self.edit_config(config, commit, replace)
+        return self.edit_config(config, timer, commit, replace)
 
-    def edit_config(self, config, commit=False, replace=False):
+    def edit_config(self, config, timer, commit=False, replace=False):
         """Loads the configuration onto the remote devices
 
         If the device doesn't support configuration sessions, this will
@@ -419,7 +419,9 @@ class HttpApi:
             "configure session %s" % session,
             "show session-config diffs",
         ]
-        if commit:
+        if commit and timer:
+            commands.append("commit timer %s" % timer)
+        elif commit:
             commands.append("commit")
         else:
             commands.append("abort")
