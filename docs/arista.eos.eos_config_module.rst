@@ -347,7 +347,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The <em>timer</em> argument will configure a value in times for the commit to be confirmed before it is automatically rolled back</div>
+                        <div>The <em>timer</em> argument will configure a value in times for the commit to be confirmed before it is automatically rolled back. Value is define as 1h2m3s and will be converted on the switches using the arista format 01:02:03.</div>
                 </td>
             </tr>
     </table>
