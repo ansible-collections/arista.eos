@@ -485,14 +485,12 @@ def main():
 
             replace = module.params["replace"] == "config"
             commit = not module.check_mode
-            timer = module.params['timer']
 
             response = load_config(
                 module,
                 commands,
                 replace=replace,
                 commit=commit,
-                timer=timer,
             )
 
             result["changed"] = True
