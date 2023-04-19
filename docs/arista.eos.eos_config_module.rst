@@ -416,7 +416,7 @@ Examples
 
     - name: adding a commit timer
       arista.eos.eos_config:
-        timer: 1m
+        timer: 1m30s
 
 
 Return Values
