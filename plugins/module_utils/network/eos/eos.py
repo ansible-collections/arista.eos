@@ -33,8 +33,9 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import json
 import os
-import time
 import re
+import time
+
 from datetime import timedelta
 
 from ansible.module_utils._text import to_text
@@ -237,7 +238,9 @@ class Cli:
 
 
 class HttpApi:
-    _TIMER_REGEX = re.compile(r'(^(?P<hour>\d+)h)?((?P<min>\d+)m)?((?P<sec>\d+)s)?$')
+    _TIMER_REGEX = re.compile(
+        r"(^(?P<hour>\d+)h)?((?P<min>\d+)m)?((?P<sec>\d+)s)?$"
+    )
 
     def __init__(self, module):
         self._module = module
@@ -424,7 +427,7 @@ class HttpApi:
             "show session-config diffs",
         ]
 
-        timer = self._parse_timer(self._module.params['timer'])
+        timer = self._parse_timer(self._module.params["timer"])
 
         if commit and timer:
             commands.append("commit timer %s" % timer)
@@ -508,22 +511,23 @@ class HttpApi:
         return json.loads(capabilities)
 
     def _parse_timer(self, timer):
-        """ Parse commit timer as "1h2m3s" format
-            and return "10:20:10" formatted string.
+        """Parse commit timer as "1h2m3s" format
+        and return "10:20:10" formatted string.
         """
         if timer is not None:
             match = self._TIMER_REGEX.match(timer)
             if not match:
                 self._module.fail_json(
-                    msg="Invalid value for commit timer %r" % timer
+                    msg="Invalid value for commit timer %r" % timer,
                 )
             vals = match.groupdict()
             total_secs = (
-                int(vals['hour'] or 0) * 60 * 60 +
-                int(vals['min'] or 0) * 60 +
-                int(vals['sec'] or 0)
+                int(vals["hour"] or 0) * 60 * 60
+                + int(vals["min"] or 0) * 60
+                + int(vals["sec"] or 0)
             )
             return str(timedelta(seconds=total_secs))
+
 
 def is_json(cmd):
     return to_text(cmd, errors="surrogate_then_replace").endswith("| json")
