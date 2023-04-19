@@ -226,6 +226,12 @@ options:
           in C(filename) within I(backup) directory.
         type: path
     type: dict
+  timer:
+    description:
+    - This argument will configure a value in times for the commit to be confirmed 
+      before it is automatically rolled back. Value is define as 1h2m3s and will be
+      converted on the switches using the arista format 01:02:03.
+    type: str
 """
 # noqa: E501
 
@@ -274,6 +280,10 @@ EXAMPLES = """
     backup_options:
       filename: backup.cfg
       dir_path: /home/user
+
+- name: adding a commit timer
+  arista.eos.eos_config:
+    timer: 1m
 """
 
 RETURN = """
