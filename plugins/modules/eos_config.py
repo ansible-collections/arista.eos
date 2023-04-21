@@ -418,7 +418,7 @@ def main():
         diff_ignore_lines=dict(type="list", elements="str"),
         running_config=dict(aliases=["config"]),
         intended_config=dict(),
-        timer=dict(type="str"),
+        timer=dict(),
     )
 
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
