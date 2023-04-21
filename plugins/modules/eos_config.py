@@ -228,9 +228,10 @@ options:
     type: dict
   timer:
     description:
-    - This argument will configure a value in times for the commit to be confirmed 
-      before it is automatically rolled back. Value is define as 1h2m3s and will be
-      converted on the switches using the arista format 01:02:03.
+    - This argument will configure a commit timer which will need to be confirmed
+      before it is automatically rolled back. I(timer) is define as HhMmSs and will be
+      converted on the switches using the Arista format HH:MM:SS.
+      Example values: 10h, 10h19m5s, 1m60s, 10s
     type: str
 """
 # noqa: E501
@@ -281,7 +282,7 @@ EXAMPLES = """
       filename: backup.cfg
       dir_path: /home/user
 
-- name: adding a commit timer
+- name: adding a 1 minute commit timer
   arista.eos.eos_config:
     timer: 1m
 """
@@ -322,7 +323,12 @@ time:
   returned: when backup is true
   type: str
   sample: "22:28:34"
-"""
+session:
+  description: Unique session ID to use when confirming changes with commit timer
+  returned: always
+  type: str
+  sample: "ansible_168207712846"
+  """
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError

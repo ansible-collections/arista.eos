@@ -508,8 +508,11 @@ class HttpApi:
         return json.loads(capabilities)
 
     def _parse_timer(self, timer):
-        """ Parse commit timer as "1h2m3s" format
-            and return "10:20:10" formatted string.
+        """ Parse commit timer as "HhMmSs" format.
+            Eg 10h, 10h19m5s, 1m60s, 10s
+            Returns Arista compatible string
+            of form "HH:MM:SS"
+            Value must be non-zero and below 24 hours
         """
         if timer is not None:
             match = self._TIMER_REGEX.match(timer)
@@ -523,7 +526,15 @@ class HttpApi:
                 int(vals['min'] or 0) * 60 +
                 int(vals['sec'] or 0)
             )
-            return str(timedelta(seconds=total_secs))
+
+            td = timedelta(seconds=total_secs)
+
+            if not (timedelta(0) < td < timedelta(hours=24)):
+                self._module.fail_json(
+                    msg="commit timer must be > 0 and < 24 hours"
+                )
+            return str(td)
+
 
 def is_json(cmd):
     return to_text(cmd, errors="surrogate_then_replace").endswith("| json")
