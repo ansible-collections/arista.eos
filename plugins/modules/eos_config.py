@@ -328,7 +328,7 @@ session:
   returned: always
   type: str
   sample: "ansible_168207712846"
-  """
+"""
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import ConnectionError
