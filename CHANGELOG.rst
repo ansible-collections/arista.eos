@@ -5,6 +5,14 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v6.1.0
+======
+
+Minor Changes
+-------------
+
+- Add support for commit timer
+
 v6.0.1
 ======
 
