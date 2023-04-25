@@ -231,7 +231,7 @@ options:
     - This argument will configure a commit timer which will need to be confirmed
       before it is automatically rolled back. I(timer) is define as HhMmSs and will be
       converted on the switches using the Arista format HH:MM:SS.
-      Example values: 10h, 10h19m5s, 1m60s, 10s
+      Example values - 10h, 10h19m5s, 1m60s, 10s
     type: str
 """
 # noqa: E501
