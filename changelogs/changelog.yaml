@@ -507,8 +507,3 @@ releases:
       - sanity_fixes.yaml
       - trivial_changes.yaml
     release_date: "2023-04-10"
-  6.1.0:
-    changes:
-      minor_changes:
-        - Add support for commit timer
-    release_date: "2023-04-24"
