@@ -511,6 +511,4 @@ releases:
     changes:
       minor_changes:
         - Add support for commit timer
-    fragments:
-      - eos_config
     release_date: "2023-04-24"
