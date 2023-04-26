@@ -396,8 +396,8 @@ Examples
         src: eos_template.j2
         backup: true
         backup_options:
-        filename: backup.cfg
-        dir_path: /home/user
+          filename: backup.cfg
+          dir_path: /home/user
 
     - name: deploying with a commit timer
       arista.eos.eos_config:
