@@ -393,11 +393,19 @@ Examples
 
     - name: configurable backup path
       arista.eos.eos_config:
-        src: eos_template.j2
-        backup: true
-        backup_options:
-          filename: backup.cfg
-          dir_path: /home/user
+            src: eos_template.j2
+            backup: true
+            backup_options:
+            filename: backup.cfg
+            dir_path: /home/user
+
+    - name: deploying with a commit timer
+      arista.eos.eos_config:
+        timer: 1m
+
+    - name: commit using the session id
+      arista.eos.eos_command:
+        commands: configure session {{ eos.session }} commit
 
 
 
