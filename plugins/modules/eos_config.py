@@ -282,9 +282,14 @@ EXAMPLES = """
       filename: backup.cfg
       dir_path: /home/user
 
-- name: adding a 1 minute commit timer
+- name: deploying with a commit timer
   arista.eos.eos_config:
     timer: 1m
+  register: eos
+
+- name: commit using the session id
+  arista.eos.eos_command:
+    commands: configure session {{ eos.session }} commit
 """
 
 RETURN = """
