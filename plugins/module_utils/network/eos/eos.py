@@ -34,6 +34,8 @@ __metaclass__ = type
 import json
 import os
 import time
+import re
+from datetime import timedelta
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.connection import Connection, ConnectionError
@@ -235,6 +237,8 @@ class Cli:
 
 
 class HttpApi:
+    _TIMER_REGEX = re.compile(r'(^(?P<hour>\d+)h)?((?P<min>\d+)m)?((?P<sec>\d+)s)?$')
+
     def __init__(self, module):
         self._module = module
         self._device_configs = {}
@@ -419,7 +423,12 @@ class HttpApi:
             "configure session %s" % session,
             "show session-config diffs",
         ]
-        if commit:
+
+        timer = self._parse_timer(self._module.params['timer'])
+
+        if commit and timer:
+            commands.append("commit timer %s" % timer)
+        elif commit:
             commands.append("commit")
         else:
             commands.append("abort")
@@ -497,6 +506,34 @@ class HttpApi:
             )
 
         return json.loads(capabilities)
+
+    def _parse_timer(self, timer):
+        """ Parse commit timer as "HhMmSs" format.
+            Eg 10h, 10h19m5s, 1m60s, 10s
+            Returns Arista compatible string
+            of form "HH:MM:SS"
+            Value must be non-zero and below 24 hours
+        """
+        if timer is not None:
+            match = self._TIMER_REGEX.match(timer)
+            if not match:
+                self._module.fail_json(
+                    msg="Invalid value for commit timer %r" % timer
+                )
+            vals = match.groupdict()
+            total_secs = (
+                int(vals['hour'] or 0) * 60 * 60 +
+                int(vals['min'] or 0) * 60 +
+                int(vals['sec'] or 0)
+            )
+
+            td = timedelta(seconds=total_secs)
+
+            if not (timedelta(0) < td < timedelta(hours=24)):
+                self._module.fail_json(
+                    msg="commit timer must be > 0 and < 24 hours"
+                )
+            return str(td)
 
 
 def is_json(cmd):
