@@ -335,21 +335,6 @@ Parameters
                         <div>The <em>src</em> argument provides a path to the configuration file to load into the remote system.  The path can either be a full system path to the configuration file if the value starts with / or relative to the root of the implemented role or playbook. This argument is mutually exclusive with the <em>lines</em> and <em>parents</em> arguments. It can be a Jinja2 template as well. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration (live switch config) of the device i ncluding the indentation to ensure idempotency and correct diff. Arista EOS device config has 3 spaces indentation.</div>
                 </td>
             </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>timer</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>The <em>timer</em> argument will configure a value in times for the commit to be confirmed before it is automatically rolled back. Value is define as 1h2m3s and will be converted on the switches using the arista format 01:02:03.</div>
-                </td>
-            </tr>
     </table>
     <br/>
 
@@ -405,18 +390,6 @@ Examples
         - shutdown
         # parents: int eth1
         parents: interface Ethernet1
-
-    - name: configurable backup path
-      arista.eos.eos_config:
-        src: eos_template.j2
-        backup: true
-        backup_options:
-          filename: backup.cfg
-          dir_path: /home/user
-
-    - name: adding a commit timer
-      arista.eos.eos_config:
-        timer: 1m30s
 
 
 Return Values
