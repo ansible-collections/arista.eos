@@ -399,15 +399,6 @@ Examples
           filename: backup.cfg
           dir_path: /home/user
 
-    - name: deploying with a commit timer
-      arista.eos.eos_config:
-        timer: 1m
-      register: eos
-
-    - name: commit using the session id
-      arista.eos.eos_command:
-        commands: configure session {{ eos.session }} commit
-
 
 
 Return Values
@@ -488,23 +479,6 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">eos_config.2016-07-16@22:28:34</div>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="1">
-                    <div class="ansibleOptionAnchor" id="return-"></div>
-                    <b>session</b>
-                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
-                    <div style="font-size: small">
-                      <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>always</td>
-                <td>
-                            <div>Unique session ID to use when confirming changes with commit timer</div>
-                    <br/>
-                        <div style="font-size: smaller"><b>Sample:</b></div>
-                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">ansible_168207712846</div>
                 </td>
             </tr>
             <tr>
