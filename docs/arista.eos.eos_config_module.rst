@@ -335,6 +335,21 @@ Parameters
                         <div>The <em>src</em> argument provides a path to the configuration file to load into the remote system.  The path can either be a full system path to the configuration file if the value starts with / or relative to the root of the implemented role or playbook. This argument is mutually exclusive with the <em>lines</em> and <em>parents</em> arguments. It can be a Jinja2 template as well. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration (live switch config) of the device i ncluding the indentation to ensure idempotency and correct diff. Arista EOS device config has 3 spaces indentation.</div>
                 </td>
             </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>timer</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>This argument will configure a commit timer which will need to be confirmed before it is automatically rolled back. <em>timer</em> is define as HhMmSs and will be converted on the switches using the Arista format HH:MM:SS. Example values - 10h, 10h19m5s, 1m60s, 10s</div>
+                </td>
+            </tr>
     </table>
     <br/>
 
@@ -398,6 +413,15 @@ Examples
         backup_options:
           filename: backup.cfg
           dir_path: /home/user
+
+    - name: deploying with a commit timer
+      arista.eos.eos_config:
+        timer: 1m
+      register: eos
+
+    - name: commit using the session id
+      arista.eos.eos_command:
+        commands: configure session {{ eos.session }} commit
 
 
 
@@ -479,6 +503,23 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">eos_config.2016-07-16@22:28:34</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>session</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>Unique session ID to use when confirming changes with commit timer</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">ansible_168207712846</div>
                 </td>
             </tr>
             <tr>
