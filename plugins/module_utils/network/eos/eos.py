@@ -239,7 +239,7 @@ class Cli:
 
 class HttpApi:
     _TIMER_REGEX = re.compile(
-        r"(^(?P<hour>\d+)h)?((?P<min>\d+)m)?((?P<sec>\d+)s)?$"
+        r"(^(?P<hour>\d+)h)?((?P<min>\d+)m)?((?P<sec>\d+)s)?$",
     )
 
     def __init__(self, module):
