@@ -1,0 +1,4 @@
+---
+bugfixes:
+  - fix facts gathering for ebgp-multihop attribute.
+  - fix bgp neighbor peer-group command formation.
