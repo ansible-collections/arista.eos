@@ -40,9 +40,7 @@ def _tmplt_bgp_address_family(config_data):
 def _tmplt_bgp_params(config_data):
     command = "bgp"
     if config_data["bgp_params"].get("additional_paths"):
-        command += " additional-paths {additional_paths}".format(
-            **config_data["bgp_params"]
-        )
+        command += " additional-paths {additional_paths}".format(**config_data["bgp_params"])
         if config_data["bgp_params"]["additional_paths"] == "send":
             command += " any"
     elif config_data["bgp_params"].get("next_hop_address_family"):
@@ -52,9 +50,7 @@ def _tmplt_bgp_params(config_data):
     elif config_data["bgp_params"].get("redistribute_internal"):
         command += " redistribute-internal"
     elif config_data["bgp_params"].get("route"):
-        command += " route install-map {route}".format(
-            **config_data["bgp_params"]
-        )
+        command += " route install-map {route}".format(**config_data["bgp_params"])
     return command
 
 
@@ -66,9 +62,7 @@ def _tmplt_bgp_graceful_restart(config_data):
 def _tmplt_bgp_neighbor(config_data):
     command = "neighbor {peer}".format(**config_data["neighbor"])
     if config_data["neighbor"].get("additional_paths"):
-        command += " additional-paths {additional_paths}".format(
-            **config_data["neighbor"]
-        )
+        command += " additional-paths {additional_paths}".format(**config_data["neighbor"])
         if config_data["neighbor"]["additional_paths"] == "send":
             command += "any"
     elif config_data["neighbor"].get("activate"):
@@ -92,20 +86,14 @@ def _tmplt_bgp_neighbor(config_data):
             **config_data["neighbor"]["prefix_list"]
         )
     elif config_data["neighbor"].get("route_map"):
-        command += " route-map {name} {direction}".format(
-            **config_data["neighbor"]["route_map"]
-        )
+        command += " route-map {name} {direction}".format(**config_data["neighbor"]["route_map"])
     elif config_data["neighbor"].get("weight"):
         command += " weight {weight}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("encapsulation"):
-        command += " encapsulation {transport}".format(
-            **config_data["neighbor"]
-        )
+        command += " encapsulation {transport}".format(**config_data["neighbor"])
         if config_data["neighbor"]["encapsulation"].get("source_interface"):
-            command += (
-                " next-hop-self source-interface {source_interface}".format(
-                    **config_data["neighbor"]
-                )
+            command += " next-hop-self source-interface {source_interface}".format(
+                **config_data["neighbor"]
             )
     return command
 

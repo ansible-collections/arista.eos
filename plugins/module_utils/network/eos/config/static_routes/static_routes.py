@@ -25,9 +25,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     remove_empties,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 
 
 class Static_routes(ConfigBase):
@@ -264,11 +262,7 @@ def add_commands(want):
     commandset = []
     if not want:
         return commandset
-    vrf = (
-        want["vrf"]
-        if "vrf" in want.keys() and want["vrf"] is not None
-        else None
-    )
+    vrf = want["vrf"] if "vrf" in want.keys() and want["vrf"] is not None else None
     for address_family in want["address_families"]:
         for route in address_family["routes"]:
             for next_hop in route["next_hops"]:
@@ -326,11 +320,7 @@ def del_commands(want, have):
         for command in haveconfigs:
             if want["vrf"] in command:
                 commandset.append(command)
-    elif (
-        want is not None
-        and "vrf" not in want.keys()
-        and "address_families" not in want.keys()
-    ):
+    elif want is not None and "vrf" not in want.keys() and "address_families" not in want.keys():
         commandset = []
         for command in haveconfigs:
             if "vrf" not in command:
