@@ -10,9 +10,7 @@ __metaclass__ = type
 
 from ansible_collections.arista.eos.plugins.modules import eos_ospfv3
 from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
 
@@ -25,9 +23,7 @@ class TestEosOspfv3Module(TestEosModule):
         self.mock_get_resource_connection_config = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_execute_show_command = patch(
             "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospfv3.ospfv3.Ospfv3Facts.get_config",

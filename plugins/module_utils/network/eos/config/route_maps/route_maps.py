@@ -26,9 +26,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     dict_merge,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.route_maps import (
     Route_mapsTemplate,
 )
@@ -151,9 +149,9 @@ class Route_maps(ResourceModule):
                 if c.startswith("route-map"):
                     parent_present = True
                     break
-            if (
-                before_maps == after_maps and len(self.commands) > after_maps
-            ) or (not parent_present and len(self.commands) > after_maps):
+            if (before_maps == after_maps and len(self.commands) > after_maps) or (
+                not parent_present and len(self.commands) > after_maps
+            ):
                 self._compare_maps({k: v}, {})
                 self.commands.insert(after_maps, self.commands.pop(-1))
 
@@ -199,11 +197,7 @@ class Route_maps(ResourceModule):
 
     def _select_parser(self, w):
         parser = ""
-        if (
-            "statement" in w.keys()
-            and "action" in w.keys()
-            and "sequence" in w.keys()
-        ):
+        if "statement" in w.keys() and "action" in w.keys() and "sequence" in w.keys():
             parser = "route_map.statement.entries"
         elif "statement" in w.keys() and "action" in w.keys():
             parser = "route_map.statement.action"

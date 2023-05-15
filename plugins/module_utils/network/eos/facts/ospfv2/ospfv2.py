@@ -19,9 +19,7 @@ import re
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ospfv2.ospfv2 import (
     Ospfv2Args,
@@ -66,9 +64,7 @@ class Ospfv2Facts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
         objs_list = []
         objs = {}
         for resource in resources:
@@ -467,16 +463,11 @@ class Ospfv2Facts(object):
                                     },
                                 )
                         elif val == "external_lsa":
-                            if (
-                                i < len(config_params)
-                                and config_params[i + 1].isdigit()
-                            ):
+                            if i < len(config_params) and config_params[i + 1].isdigit():
                                 router_lsa_dict.update(
                                     {
                                         "external_lsa": {
-                                            "max_metric_value": config_params[
-                                                i + 1
-                                            ],
+                                            "max_metric_value": config_params[i + 1],
                                         },
                                     },
                                 )
@@ -485,16 +476,11 @@ class Ospfv2Facts(object):
                                     {"external_lsa": {"set": True}},
                                 )
                         elif val == "summary_lsa":
-                            if (
-                                i < len(config_params) - 1
-                                and config_params[i + 1].isdigit()
-                            ):
+                            if i < len(config_params) - 1 and config_params[i + 1].isdigit():
                                 router_lsa_dict.update(
                                     {
                                         "summary_lsa": {
-                                            "max_metric_value": config_params[
-                                                i + 1
-                                            ],
+                                            "max_metric_value": config_params[i + 1],
                                         },
                                     },
                                 )

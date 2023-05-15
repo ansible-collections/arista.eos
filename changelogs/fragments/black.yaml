@@ -1,0 +1,3 @@
+---
+trivial:
+  - Fix black line-length to 100 to match isort (and other collections).

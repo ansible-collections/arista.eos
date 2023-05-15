@@ -295,9 +295,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.vlans.vlans import (
     VlansArgs,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.vlans.vlans import (
-    Vlans,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.vlans.vlans import Vlans
 
 
 def main():

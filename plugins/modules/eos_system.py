@@ -199,13 +199,11 @@ def map_obj_to_commands(want, have, module):
                             )
                         values = (item["vrf"], item["interface"])
                         commands.append(
-                            "no ip domain lookup vrf %s source-interface %s"
-                            % values,
+                            "no ip domain lookup vrf %s source-interface %s" % values,
                         )
                     else:
                         commands.append(
-                            "no ip domain lookup source-interface %s"
-                            % item["interface"],
+                            "no ip domain lookup source-interface %s" % item["interface"],
                         )
 
             # handle lookup_source items to be added
@@ -218,13 +216,11 @@ def map_obj_to_commands(want, have, module):
                             )
                         values = (item["vrf"], item["interface"])
                         commands.append(
-                            "ip domain lookup vrf %s source-interface %s"
-                            % values,
+                            "ip domain lookup vrf %s source-interface %s" % values,
                         )
                     else:
                         commands.append(
-                            "ip domain lookup source-interface %s"
-                            % item["interface"],
+                            "ip domain lookup source-interface %s" % item["interface"],
                         )
 
         if want["name_servers"]:
