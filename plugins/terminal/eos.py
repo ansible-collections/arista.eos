@@ -27,9 +27,7 @@ import re
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_bytes, to_text
-from ansible_collections.ansible.netcommon.plugins.plugin_utils.terminal_base import (
-    TerminalBase,
-)
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.terminal_base import TerminalBase
 
 
 class TerminalModule(TerminalBase):
@@ -89,8 +87,7 @@ class TerminalModule(TerminalBase):
             prompt = self._get_prompt()
             if prompt is None or not prompt.endswith(b"#"):
                 raise AnsibleConnectionFailure(
-                    "failed to elevate privilege to enable mode still at prompt [%s]"
-                    % prompt,
+                    "failed to elevate privilege to enable mode still at prompt [%s]" % prompt,
                 )
         except AnsibleConnectionFailure as e:
             prompt = self._get_prompt()

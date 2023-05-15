@@ -26,9 +26,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
     normalize_interface,
 )
@@ -131,10 +129,7 @@ class Interfaces(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
-        if (
-            state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
                     state,
@@ -172,10 +167,7 @@ class Interfaces(ConfigBase):
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
 
-            if (
-                "speed" in add_config.keys()
-                and "duplex" not in add_config.keys()
-            ):
+            if "speed" in add_config.keys() and "duplex" not in add_config.keys():
                 add_config.update({"duplex": desired.get("duplex")})
 
             commands.extend(generate_commands(key, add_config, del_config))
@@ -200,10 +192,7 @@ class Interfaces(ConfigBase):
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
 
-            if (
-                "speed" in add_config.keys()
-                and "duplex" not in add_config.keys()
-            ):
+            if "speed" in add_config.keys() and "duplex" not in add_config.keys():
                 add_config.update({"duplex": desired.get("duplex")})
 
             commands.extend(generate_commands(key, add_config, del_config))
@@ -227,10 +216,7 @@ class Interfaces(ConfigBase):
                 extant = dict()
 
             add_config = dict_diff(extant, desired)
-            if (
-                "speed" in add_config.keys()
-                and "duplex" not in add_config.keys()
-            ):
+            if "speed" in add_config.keys() and "duplex" not in add_config.keys():
                 add_config.update({"duplex": desired.get("duplex")})
             commands.extend(generate_commands(key, add_config, {}))
 

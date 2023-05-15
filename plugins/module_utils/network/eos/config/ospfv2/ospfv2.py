@@ -27,9 +27,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 
 
 class Ospfv2(ConfigBase):
@@ -130,10 +128,7 @@ class Ospfv2(ConfigBase):
                   to the desired configuration
         """
         commands = []
-        if (
-            self.state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if self.state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
                     self.state,
@@ -152,9 +147,7 @@ class Ospfv2(ConfigBase):
     def _get_os_version(self):
         os_version = "4.20"
         if self._connection():
-            os_version = self._connection.get_device_info()[
-                "network_os_version"
-            ]
+            os_version = self._connection.get_device_info()["network_os_version"]
         return os_version
 
     def _state_replaced(self, want, have):
@@ -357,9 +350,7 @@ class Ospfv2(ConfigBase):
             if ospf_params.get("traffic_engineering"):
                 commands.append("traffic-engineering")
             if ospf_params.get("adjacency"):
-                threshold = ospf_params["adjacency"]["exchange_start"][
-                    "threshold"
-                ]
+                threshold = ospf_params["adjacency"]["exchange_start"]["threshold"]
                 commands.append(
                     "adjacency exchange-start threshold " + str(threshold),
                 )
@@ -369,8 +360,7 @@ class Ospfv2(ConfigBase):
                     commands.append(c)
             if ospf_params.get("auto_cost"):
                 commands.append(
-                    "auto-cost reference-bandwidth "
-                    + ospf_params["auto_cost"],
+                    "auto-cost reference-bandwidth " + ospf_params["auto_cost"],
                 )
             if ospf_params.get("bfd"):
                 os_version = self._get_os_version()
@@ -386,9 +376,7 @@ class Ospfv2(ConfigBase):
                 )
             if ospf_params.get("default_metric"):
                 commands.append(
-                    "default-metric"
-                    + " "
-                    + str(ospf_params["default_metric"]),
+                    "default-metric" + " " + str(ospf_params["default_metric"]),
                 )
             if ospf_params.get("distance"):
                 for k, v in ospf_params["distance"].items():
@@ -441,8 +429,7 @@ class Ospfv2(ConfigBase):
             if ospf_params.get("passive_interface"):
                 if "interface_list" in ospf_params["passive_interface"].keys():
                     commands.append(
-                        "passive-interface "
-                        + ospf_params["passive_interface"]["interface_list"],
+                        "passive-interface " + ospf_params["passive_interface"]["interface_list"],
                     )
                 else:
                     commands.append("passive-interface default")
@@ -454,8 +441,7 @@ class Ospfv2(ConfigBase):
                     commands.append(c)
             if ospf_params.get("retransmission_threshold"):
                 commands.append(
-                    "retransmission-threshold lsa "
-                    + str(ospf_params["retransmission_threshold"]),
+                    "retransmission-threshold lsa " + str(ospf_params["retransmission_threshold"]),
                 )
             if ospf_params.get("rfc1583compatibility"):
                 commands.append("compatible rfc1583")
@@ -506,8 +492,7 @@ class Ospfv2(ConfigBase):
                                 w_inst.keys(),
                             ) == ["process_id"]:
                                 commands.append(
-                                    "no router ospf "
-                                    + str(w_inst["process_id"]),
+                                    "no router ospf " + str(w_inst["process_id"]),
                                 )
                                 router_context = 1
                             if not router_context:
@@ -528,15 +513,8 @@ class Ospfv2(ConfigBase):
                                         if cmd not in commands:
                                             commands.append(cmd)
                                             other_commands += 1
-                if (
-                    not other_commands
-                    and len(commands) == 1
-                    and not router_context
-                ):
-                    if (
-                        "no" not in commands[0]
-                        and "router ospf" in commands[0]
-                    ):
+                if not other_commands and len(commands) == 1 and not router_context:
+                    if "no" not in commands[0] and "router ospf" in commands[0]:
                         commands[0] = "no " + commands[0]
         return commands
 
@@ -544,9 +522,7 @@ class Ospfv2(ConfigBase):
 def _get_router_command(inst):
     command = ""
     if inst.get("vrf") and inst.get("vrf") != "default":
-        command = (
-            "router ospf " + str(inst["process_id"]) + " vrf " + inst["vrf"]
-        )
+        command = "router ospf " + str(inst["process_id"]) + " vrf " + inst["vrf"]
     else:
         command = "router ospf " + str(inst["process_id"])
     return command
@@ -576,9 +552,7 @@ def _parse_areas(areas):
             )
         elif area.get("not_so_stubby"):
             command.append(
-                area_cmd
-                + " "
-                + _parse_areas_filter_notsostubby(area["not_so_stubby"]),
+                area_cmd + " " + _parse_areas_filter_notsostubby(area["not_so_stubby"]),
             )
         elif area.get("nssa"):
             command.append(
@@ -597,10 +571,7 @@ def _parse_areas_filter(filter_dict):
         filter_cmd = filter_cmd + filter_dict.get("address")
     else:
         filter_cmd = (
-            filter_cmd
-            + filter_dict.get("subnet_address")
-            + " "
-            + filter_dict.get("subnet_mask")
+            filter_cmd + filter_dict.get("subnet_address") + " " + filter_dict.get("subnet_mask")
         )
     return filter_cmd
 
@@ -610,17 +581,11 @@ def _parse_areas_filter_notsostubby(nss_dict):
     if nss_dict.get("default_information_originate"):
         nss_cmd = nss_cmd + "default-information-originate "
         for def_keys in nss_dict["default_information_originate"].keys():
-            if (
-                def_keys == "nssa_only"
-                and nss_dict["default_information_originate"]["nssa_only"]
-            ):
+            if def_keys == "nssa_only" and nss_dict["default_information_originate"]["nssa_only"]:
                 nss_cmd = nss_cmd + " nssa-only "
             elif nss_dict["default_information_originate"].get(def_keys):
                 nss_cmd = (
-                    nss_cmd
-                    + def_keys
-                    + " "
-                    + nss_dict["default_information_originate"][def_keys]
+                    nss_cmd + def_keys + " " + nss_dict["default_information_originate"][def_keys]
                 )
     elif "lsa" in nss_dict.keys() and nss_dict.get("lsa"):
         nss_cmd = nss_cmd + " lsa type-7 convert type-5"
@@ -636,17 +601,11 @@ def _parse_areas_filter_nssa(nss_dict):
     if nss_dict.get("default_information_originate"):
         nss_cmd = nss_cmd + "default-information-originate "
         for def_keys in nss_dict["default_information_originate"].keys():
-            if (
-                def_keys == "nssa_only"
-                and nss_dict["default_information_originate"]["nssa_only"]
-            ):
+            if def_keys == "nssa_only" and nss_dict["default_information_originate"]["nssa_only"]:
                 nss_cmd = nss_cmd + " nssa-only "
             elif nss_dict["default_information_originate"].get(def_keys):
                 nss_cmd = (
-                    nss_cmd
-                    + def_keys
-                    + " "
-                    + nss_dict["default_information_originate"][def_keys]
+                    nss_cmd + def_keys + " " + nss_dict["default_information_originate"][def_keys]
                 )
     elif "no_summary" in nss_dict.keys() and nss_dict.get("no_summary"):
         nss_cmd = nss_cmd + " no-summary"
@@ -660,12 +619,7 @@ def _parse_areas_range(range_dict):
     if range_dict.get("address"):
         range_cmd = range_cmd + range_dict["address"]
     if range_dict.get("subnet_address"):
-        range_cmd = (
-            range_cmd
-            + range_dict["subnet_address"]
-            + " "
-            + range_dict["subnet_mask"]
-        )
+        range_cmd = range_cmd + range_dict["subnet_address"] + " " + range_dict["subnet_mask"]
     if range_dict.get("advertise") is not None:
         if range_dict["advertise"]:
             range_cmd = range_cmd + " advertise "
@@ -719,9 +673,7 @@ def _parse_max_metric(max_metric_dict):
             if v.get("set"):
                 metric_cmd = metric_cmd + " " + k
             else:
-                metric_cmd = (
-                    metric_cmd + " " + k + " " + str(v.get("max_metric_value"))
-                )
+                metric_cmd = metric_cmd + " " + k + " " + str(v.get("max_metric_value"))
     return metric_cmd
 
 
@@ -732,12 +684,7 @@ def _parse_networks(net_list):
         if net_dict.get("prefix"):
             net_cmd = net_cmd + net_dict.get("prefix")
         else:
-            net_cmd = (
-                net_cmd
-                + net_dict.get("network_address")
-                + " "
-                + net_dict.get("mask")
-            )
+            net_cmd = net_cmd + net_dict.get("network_address") + " " + net_dict.get("mask")
         if net_dict.get("area"):
             net_cmd = net_cmd + " area " + net_dict.get("area")
         network_cmd.append(net_cmd)
@@ -763,9 +710,7 @@ def _parse_summary_address(addr_dict):
     if addr_dict.get("prefix"):
         sum_cmd = sum_cmd + addr_dict.get("prefix")
     else:
-        sum_cmd = (
-            sum_cmd + addr_dict.get("address") + " " + addr_dict.get("mask")
-        )
+        sum_cmd = sum_cmd + addr_dict.get("address") + " " + addr_dict.get("mask")
     if "attribute_map" in addr_dict.keys():
         sum_cmd = sum_cmd + " attribute-map " + addr_dict["attribute_map"]
     elif addr_dict.get("not_advertise"):
@@ -785,11 +730,7 @@ def _parse_timers(timers_list, os_version="4.20"):
             if t_key == "lsa":
                 if t_dict["lsa"].get("rx"):
                     if os_version < "4.23":
-                        t_cmd = (
-                            t_cmd
-                            + "lsa arrival "
-                            + str(t_dict["lsa"]["rx"]["min_interval"])
-                        )
+                        t_cmd = t_cmd + "lsa arrival " + str(t_dict["lsa"]["rx"]["min_interval"])
                     else:
                         t_cmd = (
                             t_cmd

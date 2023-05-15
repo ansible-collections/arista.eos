@@ -442,9 +442,7 @@ def main():
             msg="Cannot diff against sessions when sessions are disabled. Please change diff_against to another value",
         )
 
-    if module.params["backup"] or (
-        module._diff and module.params["diff_against"] == "running"
-    ):
+    if module.params["backup"] or (module._diff and module.params["diff_against"] == "running"):
         contents = get_config(module, flags=flags)
         config = NetworkConfig(indent=1, contents=contents)
         if module.params["backup"]:

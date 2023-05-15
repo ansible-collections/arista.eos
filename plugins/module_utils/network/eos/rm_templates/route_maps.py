@@ -71,9 +71,7 @@ def _tmplt_route_map_extcommunity_rt(config_data):
 def _tmplt_route_maps_subroutemap(config_data):
     command = ""
     if config_data["entries"].get("sub_route_map"):
-        command = (
-            "sub-route-map " + config_data["entries"]["sub_route_map"]["name"]
-        )
+        command = "sub-route-map " + config_data["entries"]["sub_route_map"]["name"]
     if config_data["entries"]["sub_route_map"].get("invert_result"):
         command += " invert-result"
     return command
@@ -147,9 +145,7 @@ def _tmplt_route_map_match_aspath(config_data):
 
 
 def _tmplt_route_map_match_invert_aggregator_role(config_data):
-    config_data = config_data["entries"]["match"]["invert_result"][
-        "aggregate_role"
-    ]
+    config_data = config_data["entries"]["match"]["invert_result"]["aggregate_role"]
     command = "match invert-result as-path aggregate-role contributor"
     if config_data.get("route_map"):
         command += " aggregator-attributes " + config_data["route_map"]
@@ -204,10 +200,7 @@ def _tmplt_route_map_match_ip(config_data):
         if config_data.get("next_hop"):
             command += "next-hop prefix-list " + config_data["next_hop"]
         elif config_data.get("resolved_next_hop"):
-            command += (
-                "resolved-next-hop prefix-list "
-                + config_data["resolved_next_hop"]
-            )
+            command += "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
     return command
 
 
@@ -219,10 +212,7 @@ def _tmplt_route_map_match_ipv6(config_data):
         if config_data.get("next_hop"):
             command += "next-hop prefix-list " + config_data["next_hop"]
         elif config_data.get("resolved_next_hop"):
-            command += (
-                "resolved-next-hop prefix-list "
-                + config_data["resolved_next_hop"]
-            )
+            command += "resolved-next-hop prefix-list " + config_data["resolved_next_hop"]
     return command
 
 
