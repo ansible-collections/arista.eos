@@ -26,9 +26,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     dict_merge,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_global import (
     Bgp_globalTemplate,
 )
@@ -85,10 +83,7 @@ class Bgp_global(ResourceModule):
         """
         wantd = {}
         haved = {}
-        if (
-            self.want.get("as_number") == self.have.get("as_number")
-            or not self.have
-        ):
+        if self.want.get("as_number") == self.have.get("as_number") or not self.have:
             if self.want:
                 wantd = {self.want["as_number"]: self.want}
             if self.have:

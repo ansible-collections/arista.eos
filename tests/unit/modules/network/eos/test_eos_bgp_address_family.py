@@ -8,13 +8,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from ansible_collections.arista.eos.plugins.modules import (
-    eos_bgp_address_family,
-)
+from ansible_collections.arista.eos.plugins.modules import eos_bgp_address_family
 from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
 
@@ -28,9 +24,7 @@ class TestEosBgpafModule(TestEosModule):
         self.mock_get_resource_connection_config = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_execute_show_command = patch(
             "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_address_family.bgp_address_family.Bgp_afFacts.get_config",

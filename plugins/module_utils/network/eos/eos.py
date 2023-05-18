@@ -157,10 +157,7 @@ class Cli:
             response = conn.get_session_config(commands, commit, replace)
         except ConnectionError as exc:
             message = getattr(exc, "err", to_text(exc))
-            if (
-                "check mode is not supported without configuration session"
-                in message
-            ):
+            if "check mode is not supported without configuration session" in message:
                 self._module.warn(
                     "EOS can not check config without config session",
                 )
@@ -180,10 +177,7 @@ class Cli:
             response = conn.edit_config(commands, commit, replace)
         except ConnectionError as exc:
             message = getattr(exc, "err", to_text(exc))
-            if (
-                "check mode is not supported without configuration session"
-                in message
-            ):
+            if "check mode is not supported without configuration session" in message:
                 self._module.warn(
                     "EOS can not check config without config session",
                 )
@@ -367,9 +361,7 @@ class HttpApi:
         else:
             configdiffobjs = candidate_obj.items
 
-        diff["config_diff"] = (
-            dumps(configdiffobjs, "commands") if configdiffobjs else {}
-        )
+        diff["config_diff"] = dumps(configdiffobjs, "commands") if configdiffobjs else {}
         return diff
 
     def load_config(self, config, commit=False, replace=False):

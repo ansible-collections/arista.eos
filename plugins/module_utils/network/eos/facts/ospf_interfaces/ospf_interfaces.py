@@ -17,9 +17,7 @@ based on the configuration.
 
 import re
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ospf_interfaces.ospf_interfaces import (
     Ospf_interfacesArgs,
@@ -62,9 +60,7 @@ class Ospf_interfacesFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
         # parse native config using the Ospf_interfaces template
         ospf_interfaces_facts = []
         for resource in resources:

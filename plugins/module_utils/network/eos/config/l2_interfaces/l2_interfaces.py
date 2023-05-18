@@ -23,9 +23,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
     normalize_interface,
     vlan_range_to_list,
@@ -135,10 +133,7 @@ class L2_interfaces(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
-        if (
-            state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
                     state,
@@ -286,8 +281,7 @@ def set_interface(want, have):
 
         if want_allowed_vlans and has_allowed_vlans:
             allowed_vlans = list(
-                set(want_allowed_vlans.split(","))
-                - set(has_allowed_vlans.split(",")),
+                set(want_allowed_vlans.split(",")) - set(has_allowed_vlans.split(",")),
             )
         elif want_allowed_vlans:
             allowed_vlans = want_allowed_vlans.split(",")
@@ -332,22 +326,15 @@ def clear_interface(want, have):
 
     has_trunk = have.get("trunk") or {}
     wants_trunk = want.get("trunk") or {}
-    if (
-        "trunk_allowed_vlans" in has_trunk
-        and "trunk_allowed_vlans" not in wants_trunk
-    ):
+    if "trunk_allowed_vlans" in has_trunk and "trunk_allowed_vlans" not in wants_trunk:
         commands.append("no switchport trunk allowed vlan")
-    if (
-        "trunk_allowed_vlans" in has_trunk
-        and "trunk_allowed_vlans" in wants_trunk
-    ):
+    if "trunk_allowed_vlans" in has_trunk and "trunk_allowed_vlans" in wants_trunk:
         for con in [want, have]:
             expand_trunk_allowed_vlans(con)
         want_allowed_vlans = want["trunk"].get("trunk_allowed_vlans")
         has_allowed_vlans = has_trunk.get("trunk_allowed_vlans")
         allowed_vlans = list(
-            set(has_allowed_vlans.split(","))
-            - set(want_allowed_vlans.split(",")),
+            set(has_allowed_vlans.split(",")) - set(want_allowed_vlans.split(",")),
         )
         if allowed_vlans:
             allowed_vlans = ",".join(

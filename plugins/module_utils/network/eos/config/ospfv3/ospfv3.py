@@ -29,9 +29,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     get_from_dict,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospfv3 import (
     Ospfv3Template,
 )
@@ -298,11 +296,7 @@ class Ospfv3(ResourceModule):
                 want=entry,
                 have=hafs.pop(name, {}),
             )
-            if (
-                len(self.commands) != begin
-                and "afi" in entry
-                and entry["afi"] != "router"
-            ):
+            if len(self.commands) != begin and "afi" in entry and entry["afi"] != "router":
                 self._rotate_commands(begin=begin)
                 self.commands.insert(
                     begin,
