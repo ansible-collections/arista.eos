@@ -93,7 +93,7 @@ def _tmplt_bgp_params(config_data):
         command += " confederation"
         if config_data["bgp_params"]["confederation"].get("identifier"):
             command += " identifier {identifier}".format(
-                **config_data["bgp_params"]["confederation"]
+                **config_data["bgp_params"]["confederation"],
             )
         else:
             command += " peers {peers}".format(**config_data["bgp_params"]["confederation"])
@@ -119,23 +119,23 @@ def _tmplt_bgp_params(config_data):
             command += "{limit}".format(**config_data["bgp_params"]["listen"])
         else:
             command += " range {address} peer group".format(
-                **config_data["bgp_params"]["listen"]["range"]
+                **config_data["bgp_params"]["listen"]["range"],
             )
             if config_data["bgp_params"]["listen"]["range"]["peer_group"].get(
                 "peer_filter",
             ):
                 command += " {name} peer-filter {peer_filter}".format(
-                    **config_data["bgp_params"]["listen"]["range"]["peer_group"]
+                    **config_data["bgp_params"]["listen"]["range"]["peer_group"],
                 )
             else:
                 command += " {name} remote-as {remote_as}".format(
-                    **config_data["bgp_params"]["listen"]["range"]["peer_group"]
+                    **config_data["bgp_params"]["listen"]["range"]["peer_group"],
                 )
     elif config_data["bgp_params"].get("log_neighbor_changes"):
         command += " log-neighbor-changes"
     elif config_data["bgp_params"].get("missing_policy"):
         command += " missing-policy direction {direction} action {action}".format(
-            **config_data["bgp_params"]["missing_policy"]
+            **config_data["bgp_params"]["missing_policy"],
         )
     elif config_data["bgp_params"].get("monitoring"):
         command += " monitoring"
@@ -257,7 +257,7 @@ def _tmplt_bgp_neighbor(config_data):
         command += " default-originate"
         if config_data["neighbor"]["default_originate"].get("route_map"):
             command += " route-map {route_map}".format(
-                **config_data["neighbor"]["default_originate"]
+                **config_data["neighbor"]["default_originate"],
             )
         if config_data["neighbor"]["default_originate"].get("always"):
             command += " always"
@@ -271,7 +271,7 @@ def _tmplt_bgp_neighbor(config_data):
             command += " {ttl}".format(**config_data["neighbor"]["ebgp_multihop"])
     elif config_data["neighbor"].get("encryption_password"):
         command += " password {type} {password}".format(
-            **config_data["neighbor"]["encryption_password"]
+            **config_data["neighbor"]["encryption_password"],
         )
     elif config_data["neighbor"].get("enforce_first_as"):
         command += " enforce-first-as"
@@ -295,11 +295,11 @@ def _tmplt_bgp_neighbor(config_data):
             command += " default {default}".format(**config_data["neighbor"]["link_bandwidth"])
         if config_data["neighbor"]["link_bandwidth"].get("update_delay"):
             command += " update-delay {update_delay}".format(
-                **config_data["neighbor"]["link_bandwidth"]
+                **config_data["neighbor"]["link_bandwidth"],
             )
     elif config_data["neighbor"].get("local_as"):
         command += " local-as {as_number} no-prepend replace-as".format(
-            **config_data["neighbor"]["local_as"]
+            **config_data["neighbor"]["local_as"],
         )
         if config_data["neighbor"]["local_as"].get("fallback"):
             command += " fallback"
@@ -307,17 +307,17 @@ def _tmplt_bgp_neighbor(config_data):
         command += " local-v6-addr {local_v6_addr}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("maximum_accepted_routes"):
         command += " maximum-accepted-routes {count}".format(
-            **config_data["neighbor"]["maximum_accepted_routes"]
+            **config_data["neighbor"]["maximum_accepted_routes"],
         )
         if config_data["neighbor"]["maximum_accepted_routes"].get(
             "warning_limit",
         ):
             command += " warning-limit {warning_limit}".format(
-                **config_data["neighbor"]["maximum_accepted_routes"]
+                **config_data["neighbor"]["maximum_accepted_routes"],
             )
     elif config_data["neighbor"].get("maximum_received_routes"):
         command += " maximum-routes {count}".format(
-            **config_data["neighbor"]["maximum_received_routes"]
+            **config_data["neighbor"]["maximum_received_routes"],
         )
         if config_data["neighbor"]["maximum_received_routes"].get(
             "warning_limit",
@@ -326,7 +326,7 @@ def _tmplt_bgp_neighbor(config_data):
                 "limit_count",
             ):
                 command += " warning-limit {limit_count}".format(
-                    **config_data["neighbor"]["maximum_received_routes"]["warning_limit"]
+                    **config_data["neighbor"]["maximum_received_routes"]["warning_limit"],
                 )
             if config_data["neighbor"]["maximum_received_routes"]["warning_limit"].get(
                 "limit_percent",
@@ -368,7 +368,7 @@ def _tmplt_bgp_neighbor(config_data):
         command += " peer-as {peer_as}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("prefix_list"):
         command += " prefix-list {name} {direction}".format(
-            **config_data["neighbor"]["prefix_list"]
+            **config_data["neighbor"]["prefix_list"],
         )
     elif config_data["neighbor"].get("route_map"):
         command += " route-map {name} {direction}".format(**config_data["neighbor"]["route_map"])
