@@ -52,6 +52,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 _DEVICE_CONNECTION = None
 
+_TIMER_REGEX = re.compile(
+    r"(^(?P<hour>\d+)h)?((?P<min>\d+)m)?((?P<sec>\d+)s)?$",
+)
+
 
 def get_connection(module):
     global _DEVICE_CONNECTION
@@ -174,7 +178,8 @@ class Cli:
         """Loads the config commands onto the remote device"""
         conn = self._get_connection()
         try:
-            response = conn.edit_config(commands, commit, replace)
+            timer = parse_timer(self._module.params["timer"])
+            response = conn.edit_config(commands, commit, replace, None, timer)
         except ConnectionError as exc:
             message = getattr(exc, "err", to_text(exc))
             if "check mode is not supported without configuration session" in message:
@@ -232,9 +237,7 @@ class Cli:
 
 
 class HttpApi:
-    _TIMER_REGEX = re.compile(
-        r"(^(?P<hour>\d+)h)?((?P<min>\d+)m)?((?P<sec>\d+)s)?$",
-    )
+
 
     def __init__(self, module):
         self._module = module
@@ -419,7 +422,7 @@ class HttpApi:
             "show session-config diffs",
         ]
 
-        timer = self._parse_timer(self._module.params["timer"])
+        timer = parse_timer(self._module.params["timer"])
 
         if commit and timer:
             commands.append("commit timer %s" % timer)
@@ -502,33 +505,34 @@ class HttpApi:
 
         return json.loads(capabilities)
 
-    def _parse_timer(self, timer):
-        """Parse commit timer as "HhMmSs" format.
-        Eg 10h, 10h19m5s, 1m60s, 10s
-        Returns Arista compatible string
-        of form "HH:MM:SS"
-        Value must be non-zero and below 24 hours
-        """
-        if timer is not None:
-            match = self._TIMER_REGEX.match(timer)
-            if not match:
-                self._module.fail_json(
-                    msg="Invalid value for commit timer %r" % timer,
-                )
-            vals = match.groupdict()
-            total_secs = (
-                int(vals["hour"] or 0) * 60 * 60
-                + int(vals["min"] or 0) * 60
-                + int(vals["sec"] or 0)
+
+def parse_timer(timer):
+    """Parse commit timer as "HhMmSs" format.
+    Eg 10h, 10h19m5s, 1m60s, 10s
+    Returns Arista compatible string
+    of form "HH:MM:SS"
+    Value must be non-zero and below 24 hours
+    """
+    if timer is not None:
+        match = _TIMER_REGEX.match(timer)
+        if not match:
+            self._module.fail_json(
+                msg="Invalid value for commit timer %r" % timer,
             )
+        vals = match.groupdict()
+        total_secs = (
+            int(vals["hour"] or 0) * 60 * 60
+            + int(vals["min"] or 0) * 60
+            + int(vals["sec"] or 0)
+        )
 
-            td = timedelta(seconds=total_secs)
+        td = timedelta(seconds=total_secs)
 
-            if not (timedelta(0) < td < timedelta(hours=24)):
-                self._module.fail_json(
-                    msg="commit timer must be > 0 and < 24 hours",
-                )
-            return str(td)
+        if not (timedelta(0) < td < timedelta(hours=24)):
+            self._module.fail_json(
+                msg="commit timer must be > 0 and < 24 hours",
+            )
+        return str(td)
 
 
 def is_json(cmd):
