@@ -203,7 +203,6 @@ class Cliconf(CliconfBase):
             replace,
             comment,
         )
-
         if (commit is False) and (not self.supports_sessions()):
             raise ValueError(
                 "check mode is not supported without configuration session",
@@ -217,6 +216,8 @@ class Cliconf(CliconfBase):
             self.send_command("configure session %s" % session)
             if replace:
                 self.send_command("rollback clean-config")
+            if timer and commit:
+                self.send_command("commit timer %s" % timer)
         else:
             self.send_command("configure")
 
