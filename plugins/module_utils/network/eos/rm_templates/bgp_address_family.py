@@ -71,7 +71,7 @@ def _tmplt_bgp_neighbor(config_data):
         command += " default-originate"
         if config_data["neighbor"]["default_originate"].get("route_map"):
             command += " route-map {route_map}".format(
-                **config_data["neighbor"]["default_originate"]
+                **config_data["neighbor"]["default_originate"],
             )
         if config_data["neighbor"]["default_originate"].get("always"):
             command += " always"
@@ -83,7 +83,7 @@ def _tmplt_bgp_neighbor(config_data):
         command += " next-hop addres-family ipv6"
     elif config_data["neighbor"].get("prefix_list"):
         command += " prefix-list {name} {direction}".format(
-            **config_data["neighbor"]["prefix_list"]
+            **config_data["neighbor"]["prefix_list"],
         )
     elif config_data["neighbor"].get("route_map"):
         command += " route-map {name} {direction}".format(**config_data["neighbor"]["route_map"])
@@ -93,7 +93,7 @@ def _tmplt_bgp_neighbor(config_data):
         command += " encapsulation {transport}".format(**config_data["neighbor"])
         if config_data["neighbor"]["encapsulation"].get("source_interface"):
             command += " next-hop-self source-interface {source_interface}".format(
-                **config_data["neighbor"]
+                **config_data["neighbor"],
             )
     return command
 
