@@ -216,8 +216,6 @@ class Cliconf(CliconfBase):
             self.send_command("configure session %s" % session)
             if replace:
                 self.send_command("rollback clean-config")
-            if timer and commit:
-                self.send_command("commit timer %s" % timer)
         else:
             self.send_command("configure")
 
@@ -255,7 +253,11 @@ class Cliconf(CliconfBase):
                 resp["diff"] = out.strip()
 
             if commit:
-                self.commit()
+                if timer:
+                    self.send_command("commit timer %s" % timer)
+                    resp["session_name"] = session
+                else:
+                    self.commit()
             else:
                 self.discard_changes(session)
         else:
