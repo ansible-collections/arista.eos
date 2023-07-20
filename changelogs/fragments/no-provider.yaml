@@ -1,0 +1,4 @@
+---
+trivial:
+  - provider no longer haunts us, so don't pass nonexistant provider
+    dictionaries to include_tasks.
