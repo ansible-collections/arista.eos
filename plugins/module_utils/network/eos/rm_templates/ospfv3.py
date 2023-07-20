@@ -51,7 +51,7 @@ def _tmplt_ospf_auto_cost(config_data):
         command = "auto-cost"
         if "reference_bandwidth" in config_data["auto_cost"]:
             command += " reference-bandwidth {reference_bandwidth}".format(
-                **config_data["auto_cost"]
+                **config_data["auto_cost"],
             )
         return command
 
@@ -109,11 +109,11 @@ def _tmplt_ospf_area_nssa(config_data):
             command += " default-information-originate"
             if "metric" in config_data["nssa"]["default_information_originate"]:
                 command += " metric {metric}".format(
-                    **config_data["nssa"]["default_information_originate"]
+                    **config_data["nssa"]["default_information_originate"],
                 )
             if "metric_type" in config_data["nssa"]["default_information_originate"]:
                 command += " metric-type {metric_type}".format(
-                    **config_data["nssa"]["default_information_originate"]
+                    **config_data["nssa"]["default_information_originate"],
                 )
             if "nssa_only" in config_data["nssa"]["default_information_originate"]:
                 command += " nssa-only"
@@ -188,20 +188,20 @@ def _tmplt_ospf_max_metric(config_data):
             command += " external-lsa"
             if "max_metric_value" in config_data["max_metric"]["router_lsa"]["external_lsa"]:
                 command += " {max_metric_value}".format(
-                    **config_data["max_metric"]["router_lsa"]["external_lsa"]
+                    **config_data["max_metric"]["router_lsa"]["external_lsa"],
                 )
         if "include_stub" in config_data["max_metric"]["router_lsa"]:
             if config_data["max_metric"]["router_lsa"].get("include_stub"):
                 command += " include-stub"
         if "on_startup" in config_data["max_metric"]["router_lsa"]:
             command += " on-startup {wait_period}".format(
-                **config_data["max_metric"]["router_lsa"]["on_startup"]
+                **config_data["max_metric"]["router_lsa"]["on_startup"],
             )
         if "summary_lsa" in config_data["max_metric"]["router_lsa"]:
             command += " summary-lsa"
             if "max_metric_value" in config_data["max_metric"]["router_lsa"]["summary_lsa"]:
                 command += " {max_metric_value}".format(
-                    **config_data["max_metric"]["router_lsa"]["summary_lsa"]
+                    **config_data["max_metric"]["router_lsa"]["summary_lsa"],
                 )
         return command
 

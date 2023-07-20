@@ -130,7 +130,7 @@ def _tmplt_ospf_int_priority(config_data):
 def _tmplt_ospf_int_retransmit_interval(config_data):
     if "ip_params" in config_data:
         command = "ospfv3 {afi} retransmit-interval {retransmit_interval}".format(
-            **config_data["ip_params"]
+            **config_data["ip_params"],
         )
     else:
         if config_data["afi"] == "ipv4":
