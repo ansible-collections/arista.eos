@@ -193,6 +193,7 @@ class Cliconf(CliconfBase):
         commit=True,
         replace=None,
         comment=None,
+        timer=None,
     ):
         operations = self.get_device_operations()
         self.check_edit_config_capability(
@@ -202,7 +203,6 @@ class Cliconf(CliconfBase):
             replace,
             comment,
         )
-
         if (commit is False) and (not self.supports_sessions()):
             raise ValueError(
                 "check mode is not supported without configuration session",
@@ -253,7 +253,11 @@ class Cliconf(CliconfBase):
                 resp["diff"] = out.strip()
 
             if commit:
-                self.commit()
+                if timer:
+                    self.send_command("commit timer %s" % timer)
+                    resp["session_name"] = session
+                else:
+                    self.commit()
             else:
                 self.discard_changes(session)
         else:
