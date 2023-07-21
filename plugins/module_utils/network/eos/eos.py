@@ -237,8 +237,6 @@ class Cli:
 
 
 class HttpApi:
-
-
     def __init__(self, module):
         self._module = module
         self._device_configs = {}
@@ -521,9 +519,7 @@ def parse_timer(timer):
             )
         vals = match.groupdict()
         total_secs = (
-            int(vals["hour"] or 0) * 60 * 60
-            + int(vals["min"] or 0) * 60
-            + int(vals["sec"] or 0)
+            int(vals["hour"] or 0) * 60 * 60 + int(vals["min"] or 0) * 60 + int(vals["sec"] or 0)
         )
 
         td = timedelta(seconds=total_secs)
