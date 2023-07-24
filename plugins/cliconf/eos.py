@@ -193,8 +193,9 @@ class Cliconf(CliconfBase):
         commit=True,
         replace=None,
         comment=None,
-        timer=None,
+        **kwargs,
     ):
+        timer = kwargs.get('timer')
         operations = self.get_device_operations()
         self.check_edit_config_capability(
             operations,
