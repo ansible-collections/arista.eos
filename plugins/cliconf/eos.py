@@ -195,7 +195,7 @@ class Cliconf(CliconfBase):
         comment=None,
         **kwargs,
     ):
-        timer = kwargs.get('timer')
+        timer = kwargs.get("timer")
         operations = self.get_device_operations()
         self.check_edit_config_capability(
             operations,
