@@ -178,7 +178,7 @@ class Cli:
         """Loads the config commands onto the remote device"""
         conn = self._get_connection()
         try:
-            timer = parse_timer(self._module.params["timer"])
+            timer = parse_timer(self._module)
             response = conn.edit_config(commands, commit, replace, None, timer)
         except ConnectionError as exc:
             message = getattr(exc, "err", to_text(exc))
@@ -420,7 +420,7 @@ class HttpApi:
             "show session-config diffs",
         ]
 
-        timer = parse_timer(self._module.params["timer"])
+        timer = parse_timer(self._module)
 
         if commit and timer:
             commands.append("commit timer %s" % timer)
@@ -504,17 +504,19 @@ class HttpApi:
         return json.loads(capabilities)
 
 
-def parse_timer(timer):
-    """Parse commit timer as "HhMmSs" format.
-    Eg 10h, 10h19m5s, 1m60s, 10s
-    Returns Arista compatible string
-    of form "HH:MM:SS"
-    Value must be non-zero and below 24 hours
+def parse_timer(module):
+    """ Parse commit timer as "HhMmSs" format.
+        Eg 10h, 10h19m5s, 1m60s, 10s
+        Returns Arista compatible string
+        of form "HH:MM:SS"
+        Value must be non-zero and below 24 hours
     """
+    timer = module.params["timer"]
+
     if timer is not None:
         match = _TIMER_REGEX.match(timer)
         if not match:
-            self._module.fail_json(
+            module.fail_json(
                 msg="Invalid value for commit timer %r" % timer,
             )
         vals = match.groupdict()
@@ -525,7 +527,7 @@ def parse_timer(timer):
         td = timedelta(seconds=total_secs)
 
         if not (timedelta(0) < td < timedelta(hours=24)):
-            self._module.fail_json(
+            module.fail_json(
                 msg="commit timer must be > 0 and < 24 hours",
             )
         return str(td)
