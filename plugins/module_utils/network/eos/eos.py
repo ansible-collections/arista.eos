@@ -505,11 +505,11 @@ class HttpApi:
 
 
 def parse_timer(module):
-    """ Parse commit timer as "HhMmSs" format.
-        Eg 10h, 10h19m5s, 1m60s, 10s
-        Returns Arista compatible string
-        of form "HH:MM:SS"
-        Value must be non-zero and below 24 hours
+    """Parse commit timer as "HhMmSs" format.
+    Eg 10h, 10h19m5s, 1m60s, 10s
+    Returns Arista compatible string
+    of form "HH:MM:SS"
+    Value must be non-zero and below 24 hours
     """
     timer = module.params["timer"]
 
