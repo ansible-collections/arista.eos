@@ -23,9 +23,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
     normalize_interface,
 )
@@ -133,10 +131,7 @@ class L3_interfaces(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
-        if (
-            state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
                     state,
@@ -274,12 +269,8 @@ class L3_interfaces(ConfigBase):
 
 def set_interface(want, have):
     commands = []
-    want_ipv4 = set(
-        tuple(sorted(address.items())) for address in want.get("ipv4") or []
-    )
-    have_ipv4 = set(
-        tuple(sorted(address.items())) for address in have.get("ipv4") or []
-    )
+    want_ipv4 = set(tuple(sorted(address.items())) for address in want.get("ipv4") or [])
+    have_ipv4 = set(tuple(sorted(address.items())) for address in have.get("ipv4") or [])
     for address in want_ipv4 - have_ipv4:
         address = dict(address)
         for param in ["secondary", "virtual"]:
@@ -295,12 +286,8 @@ def set_interface(want, have):
             address_cmd = "ip address virtual {0}".format(address["address"])
         commands.append(address_cmd)
 
-    want_ipv6 = set(
-        tuple(sorted(address.items())) for address in want.get("ipv6") or []
-    )
-    have_ipv6 = set(
-        tuple(sorted(address.items())) for address in have.get("ipv6") or []
-    )
+    want_ipv6 = set(tuple(sorted(address.items())) for address in want.get("ipv6") or [])
+    have_ipv6 = set(tuple(sorted(address.items())) for address in have.get("ipv6") or [])
     for address in want_ipv6 - have_ipv6:
         address = dict(address)
         commands.append("ipv6 address {0}".format(address["address"]))
@@ -309,12 +296,8 @@ def set_interface(want, have):
 
 def clear_interface(want, have):
     commands = []
-    want_ipv4 = set(
-        tuple(sorted(address.items())) for address in want.get("ipv4") or []
-    )
-    have_ipv4 = set(
-        tuple(sorted(address.items())) for address in have.get("ipv4") or []
-    )
+    want_ipv4 = set(tuple(sorted(address.items())) for address in want.get("ipv4") or [])
+    have_ipv4 = set(tuple(sorted(address.items())) for address in have.get("ipv4") or [])
     if not want_ipv4 and have_ipv4:
         commands.append("no ip address")
     else:
@@ -339,12 +322,8 @@ def clear_interface(want, have):
                 # Removing non-secondary removes all other interfaces
                 break
 
-    want_ipv6 = set(
-        tuple(sorted(address.items())) for address in want.get("ipv6") or []
-    )
-    have_ipv6 = set(
-        tuple(sorted(address.items())) for address in have.get("ipv6") or []
-    )
+    want_ipv6 = set(tuple(sorted(address.items())) for address in want.get("ipv6") or [])
+    have_ipv6 = set(tuple(sorted(address.items())) for address in have.get("ipv6") or [])
     for address in have_ipv6 - want_ipv6:
         address = dict(address)
         commands.append("no ipv6 address {0}".format(address["address"]))

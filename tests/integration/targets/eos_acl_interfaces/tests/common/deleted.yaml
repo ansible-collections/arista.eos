@@ -11,7 +11,7 @@
       register: result
       arista.eos.eos_acl_interfaces:
         config:
-          - name: "{{ Interfaces['int1'] }}"
+          - name: "{{ interfaces_lst['int1'] }}"
             access_groups:
               - afi: ipv6
         state: deleted
@@ -26,7 +26,7 @@
       register: result
       arista.eos.eos_acl_interfaces:
         config:
-          - name: "{{ Interfaces['int1'] }}"
+          - name: "{{ interfaces_lst['int1'] }}"
             access_groups:
               - afi: ipv4
                 acls:
@@ -44,7 +44,7 @@
       register: result
       arista.eos.eos_acl_interfaces:
         config:
-          - name: "{{ Interfaces['int1'] }}"
+          - name: "{{ interfaces_lst['int1'] }}"
         state: deleted
 
     - ansible.builtin.assert:

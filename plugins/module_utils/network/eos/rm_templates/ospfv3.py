@@ -42,9 +42,7 @@ def _tmplt_ospf_address_family_cmd(config_data):
 def _tmplt_ospf_adjacency_cmd(config_data):
     command = "adjacency exchange-start threshold"
     if "adjacency" in config_data:
-        command += " {threshold}".format(
-            **config_data["adjacency"]["exchange_start"]
-        )
+        command += " {threshold}".format(**config_data["adjacency"]["exchange_start"])
     return command
 
 
@@ -53,16 +51,14 @@ def _tmplt_ospf_auto_cost(config_data):
         command = "auto-cost"
         if "reference_bandwidth" in config_data["auto_cost"]:
             command += " reference-bandwidth {reference_bandwidth}".format(
-                **config_data["auto_cost"]
+                **config_data["auto_cost"],
             )
         return command
 
 
 def _tmplt_ospf_area_authentication(config_data):
     if "area_id" in config_data:
-        command = "area {area_id} authentication ipsec spi ".format(
-            **config_data
-        )
+        command = "area {area_id} authentication ipsec spi ".format(**config_data)
         command += "{spi} {algorithm}".format(**config_data["authentication"])
         if "passphrase" in config_data["authentication"]:
             command += " passphrase"
@@ -86,9 +82,7 @@ def _tmplt_ospf_area_authentication(config_data):
 def _tmplt_ospf_area_encryption(config_data):
     if "area_id" in config_data:
         command = "area {area_id} encryption ipsec spi ".format(**config_data)
-        command += "{spi} esp {encryption} {algorithm}".format(
-            **config_data["encryption"]
-        )
+        command += "{spi} esp {encryption} {algorithm}".format(**config_data["encryption"])
         if "passphrase" in config_data["encryption"]:
             command += " passphrase"
         if (
@@ -113,24 +107,15 @@ def _tmplt_ospf_area_nssa(config_data):
         command = "area {area_id} nssa".format(**config_data)
         if "default_information_originate" in config_data["nssa"]:
             command += " default-information-originate"
-            if (
-                "metric"
-                in config_data["nssa"]["default_information_originate"]
-            ):
+            if "metric" in config_data["nssa"]["default_information_originate"]:
                 command += " metric {metric}".format(
-                    **config_data["nssa"]["default_information_originate"]
+                    **config_data["nssa"]["default_information_originate"],
                 )
-            if (
-                "metric_type"
-                in config_data["nssa"]["default_information_originate"]
-            ):
+            if "metric_type" in config_data["nssa"]["default_information_originate"]:
                 command += " metric-type {metric_type}".format(
-                    **config_data["nssa"]["default_information_originate"]
+                    **config_data["nssa"]["default_information_originate"],
                 )
-            if (
-                "nssa_only"
-                in config_data["nssa"]["default_information_originate"]
-            ):
+            if "nssa_only" in config_data["nssa"]["default_information_originate"]:
                 command += " nssa-only"
         if config_data["nssa"].get("nssa_only"):
             command += " nssa-only"
@@ -177,17 +162,11 @@ def _tmplt_ospf_default_information(config_data):
         if "always" in config_data["default_information"]:
             command += " always"
         if "metric" in config_data["default_information"]:
-            command += " metric {metric}".format(
-                **config_data["default_information"]
-            )
+            command += " metric {metric}".format(**config_data["default_information"])
         if "metric_type" in config_data["default_information"]:
-            command += " metric-type {metric_type}".format(
-                **config_data["default_information"]
-            )
+            command += " metric-type {metric_type}".format(**config_data["default_information"])
         if "route_map" in config_data["default_information"]:
-            command += " route-map {route_map}".format(
-                **config_data["default_information"]
-            )
+            command += " route-map {route_map}".format(**config_data["default_information"])
         return command
 
 
@@ -207,28 +186,22 @@ def _tmplt_ospf_max_metric(config_data):
             command += " router-lsa"
         if "external_lsa" in config_data["max_metric"]["router_lsa"]:
             command += " external-lsa"
-            if (
-                "max_metric_value"
-                in config_data["max_metric"]["router_lsa"]["external_lsa"]
-            ):
+            if "max_metric_value" in config_data["max_metric"]["router_lsa"]["external_lsa"]:
                 command += " {max_metric_value}".format(
-                    **config_data["max_metric"]["router_lsa"]["external_lsa"]
+                    **config_data["max_metric"]["router_lsa"]["external_lsa"],
                 )
         if "include_stub" in config_data["max_metric"]["router_lsa"]:
             if config_data["max_metric"]["router_lsa"].get("include_stub"):
                 command += " include-stub"
         if "on_startup" in config_data["max_metric"]["router_lsa"]:
             command += " on-startup {wait_period}".format(
-                **config_data["max_metric"]["router_lsa"]["on_startup"]
+                **config_data["max_metric"]["router_lsa"]["on_startup"],
             )
         if "summary_lsa" in config_data["max_metric"]["router_lsa"]:
             command += " summary-lsa"
-            if (
-                "max_metric_value"
-                in config_data["max_metric"]["router_lsa"]["summary_lsa"]
-            ):
+            if "max_metric_value" in config_data["max_metric"]["router_lsa"]["summary_lsa"]:
                 command += " {max_metric_value}".format(
-                    **config_data["max_metric"]["router_lsa"]["summary_lsa"]
+                    **config_data["max_metric"]["router_lsa"]["summary_lsa"],
                 )
         return command
 
@@ -243,9 +216,7 @@ def _tmplt_ospf_redistribute(config_data):
 def _tmplt_ospf_timers_lsa(config_data):
     command = ""
     if "lsa" in config_data["timers"]:
-        command += "timers lsa {direction}".format(
-            **config_data["timers"]["lsa"]
-        )
+        command += "timers lsa {direction}".format(**config_data["timers"]["lsa"])
         if config_data["timers"]["lsa"]["direction"] == "rx":
             command += " min interval "
         else:
@@ -263,9 +234,7 @@ def _tmplt_ospf_timers_spf(config_data):
     command = ""
     if "spf" in config_data["timers"]:
         command += "timers spf delay initial "
-        command += "{initial} {min} {max}".format(
-            **config_data["timers"]["spf"]
-        )
+        command += "{initial} {min} {max}".format(**config_data["timers"]["spf"])
     return command
 
 
@@ -534,10 +503,8 @@ class Ospfv3Template(NetworkTemplate):
                                         "default_information_originate": {
                                             "set": "{{ True if def_origin is defined and metric is undefined and "
                                             "metric_type is undefined and nssa_only is undefined }}",
-                                            "metric": "{{ metric.split("
-                                            ")[1]|int }}",
-                                            "metric_type": "{{ metric_type.split("
-                                            ")[1]|int }}",
+                                            "metric": "{{ metric.split(" ")[1]|int }}",
+                                            "metric_type": "{{ metric_type.split(" ")[1]|int }}",
                                             "nssa_only": "{{ True if nssa_only is defined }}",
                                         },
                                         "translate": "{{ True if translate is defined }}",
@@ -682,8 +649,7 @@ class Ospfv3Template(NetworkTemplate):
                                 "originate": "{{ True if originate is defined }}",
                                 "always": "{{ True if always is defined }}",
                                 "metric": "{{ metric.split(" ")[1]|int }}",
-                                "metric_type": "{{ metric_type.split("
-                                ")[1]|int }}",
+                                "metric_type": "{{ metric_type.split(" ")[1]|int }}",
                                 "route_map": "{{ route_map.split(" ")[1] }}",
                             },
                         },

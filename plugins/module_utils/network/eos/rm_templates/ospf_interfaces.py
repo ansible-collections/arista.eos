@@ -30,9 +30,7 @@ def _tmplt_ospf_int_authentication(config_data):
         return command
     if "authentication_v3" in config_data:
         command = "ospfv3 authentication ipsec spi "
-        command += "{spi} {algorithm}".format(
-            **config_data["authentication_v3"]
-        )
+        command += "{spi} {algorithm}".format(**config_data["authentication_v3"])
         if "passphrase" in config_data["authentication_v3"]:
             command += " passphrase"
         if "keytype" in config_data["authentication_v3"]:
@@ -40,18 +38,14 @@ def _tmplt_ospf_int_authentication(config_data):
         if "passphrase" not in config_data["authentication_v3"]:
             command += " {key}".format(**config_data["authentication_v3"])
         else:
-            command += " {passphrase}".format(
-                **config_data["authentication_v3"]
-            )
+            command += " {passphrase}".format(**config_data["authentication_v3"])
         return command
 
 
 def _tmplt_ospf_int_encryption_v3(config_data):
     if "encryption" in config_data:
         command = "ospfv3 encryption ipsec spi ".format(**config_data)
-        command += "{spi} esp {encryption} {algorithm}".format(
-            **config_data["encryption"]
-        )
+        command += "{spi} esp {encryption} {algorithm}".format(**config_data["encryption"])
         if "passphrase" in config_data["encryption"]:
             command += " passphrase"
         if "keytype" in config_data["encryption"]:
@@ -67,9 +61,7 @@ def _tmplt_ospf_int_authentication_key(config_data):
     if "authentication_key" in config_data:
         command = "ip ospf authentication-key"
         if "encryption" in config_data["authentication_key"]:
-            command += " {encryption} {key}".format(
-                **config_data["authentication_key"]
-            )
+            command += " {encryption} {key}".format(**config_data["authentication_key"])
         else:
             command += " {key}".format(**config_data["authentication_key"])
         return command
@@ -93,18 +85,12 @@ def _tmplt_ospf_int_bfd(config_data):
 
 def _tmplt_ospf_int_hello_interval(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} hello-interval {hello_interval}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} hello-interval {hello_interval}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
-            command = "ip ospf hello-interval {hello_interval}".format(
-                **config_data
-            )
+            command = "ip ospf hello-interval {hello_interval}".format(**config_data)
         else:
-            command = "ospfv3 hello-interval {hello_interval}".format(
-                **config_data
-            )
+            command = "ospfv3 hello-interval {hello_interval}".format(**config_data)
     return command
 
 
@@ -121,9 +107,7 @@ def _tmplt_ospf_int_mtu_ignore(config_data):
 
 def _tmplt_ospf_int_network(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} network {network}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} network {network}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
             command = "ip ospf network {network}".format(**config_data)
@@ -134,9 +118,7 @@ def _tmplt_ospf_int_network(config_data):
 
 def _tmplt_ospf_int_priority(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} priority {priority}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} priority {priority}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
             command = "ip ospf priority {priority}".format(**config_data)
@@ -147,58 +129,36 @@ def _tmplt_ospf_int_priority(config_data):
 
 def _tmplt_ospf_int_retransmit_interval(config_data):
     if "ip_params" in config_data:
-        command = (
-            "ospfv3 {afi} retransmit-interval {retransmit_interval}".format(
-                **config_data["ip_params"]
-            )
+        command = "ospfv3 {afi} retransmit-interval {retransmit_interval}".format(
+            **config_data["ip_params"],
         )
     else:
         if config_data["afi"] == "ipv4":
-            command = (
-                "ip ospf retransmit-interval {retransmit_interval}".format(
-                    **config_data
-                )
-            )
+            command = "ip ospf retransmit-interval {retransmit_interval}".format(**config_data)
         else:
-            command = (
-                "ospfv3 retransmit-interval {retransmit_interval}".format(
-                    **config_data
-                )
-            )
+            command = "ospfv3 retransmit-interval {retransmit_interval}".format(**config_data)
     return command
 
 
 def _tmplt_ospf_int_transmit_delay(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} transmit-delay {transmit_delay}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} transmit-delay {transmit_delay}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
-            command = "ip ospf transmit-delay {transmit_delay}".format(
-                **config_data
-            )
+            command = "ip ospf transmit-delay {transmit_delay}".format(**config_data)
         else:
-            command = "ospfv3 transmit-delay {transmit_delay}".format(
-                **config_data
-            )
+            command = "ospfv3 transmit-delay {transmit_delay}".format(**config_data)
     return command
 
 
 def _tmplt_ospf_int_dead_interval(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} dead-interval {dead_interval}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} dead-interval {dead_interval}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
-            command = "ip ospf dead-interval {dead_interval}".format(
-                **config_data
-            )
+            command = "ip ospf dead-interval {dead_interval}".format(**config_data)
         else:
-            command = "ospfv3 dead-interval {dead_interval}".format(
-                **config_data
-            )
+            command = "ospfv3 dead-interval {dead_interval}".format(**config_data)
     return command
 
 

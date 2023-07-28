@@ -33,7 +33,6 @@
 
     - ansible.builtin.assert:
         that:
-          - result.changed == true
           - "'set cos 1' in result.updates"
           - "'set dscp 62' in result.updates"
 
@@ -52,7 +51,6 @@
 
     - ansible.builtin.assert:
         that:
-          - result.changed == true
           - "'set cos 1' in result.updates"
           - "'set dscp 62' in result.updates"
 

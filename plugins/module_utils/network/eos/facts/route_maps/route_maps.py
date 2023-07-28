@@ -20,9 +20,7 @@ import re
 from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.route_maps.route_maps import (
     Route_mapsArgs,
@@ -76,9 +74,7 @@ class Route_mapsFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
         # parse native config using the Ospf_interfaces template
         route_maps_facts = []
         # parse native config using the Route_maps template

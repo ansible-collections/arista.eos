@@ -868,9 +868,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.acls.acls import (
     AclsArgs,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.acls.acls import (
-    Acls,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.acls.acls import Acls
 
 
 def main():

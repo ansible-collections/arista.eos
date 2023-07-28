@@ -23,15 +23,12 @@ __metaclass__ = type
 
 from ansible_collections.arista.eos.plugins.modules import eos_logging
 from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosLoggingModule(TestEosModule):
-
     module = eos_logging
 
     def setUp(self):

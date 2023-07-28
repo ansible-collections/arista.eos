@@ -10,13 +10,10 @@ from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
 from ansible.module_utils.connection import Connection
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers import (
-    providers,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers import providers
 
 
 class NetworkModule(AnsibleModule):
-
     fail_on_missing_provider = True
 
     def __init__(self, connection=None, *args, **kwargs):
@@ -45,10 +42,7 @@ class NetworkModule(AnsibleModule):
             )
 
             if not cls:
-                msg = (
-                    "unable to find suitable provider for network os %s"
-                    % network_os
-                )
+                msg = "unable to find suitable provider for network os %s" % network_os
                 if self.fail_on_missing_provider:
                     self.fail_json(msg=msg)
                 else:

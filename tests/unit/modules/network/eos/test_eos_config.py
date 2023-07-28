@@ -23,19 +23,13 @@ __metaclass__ = type
 
 from ansible_collections.arista.eos.plugins.cliconf.eos import Cliconf
 from ansible_collections.arista.eos.plugins.modules import eos_config
-from ansible_collections.arista.eos.tests.unit.compat.mock import (
-    MagicMock,
-    patch,
-)
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.compat.mock import MagicMock, patch
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosConfigModule(TestEosModule):
-
     module = eos_config
 
     def setUp(self):

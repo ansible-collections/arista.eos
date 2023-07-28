@@ -951,7 +951,7 @@ EXAMPLES = """
       config:
         - route_map: "mapmerge"
       state: deleted
-    become: yes
+    become: true
     tags:
       - deleted1
 

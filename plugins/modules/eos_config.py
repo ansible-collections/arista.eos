@@ -118,7 +118,7 @@ options:
       playbook root directory or role root directory, if playbook is part of an ansible
       role. If the directory does not exist, it is created.
     type: bool
-    default: no
+    default: false
   running_config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -139,7 +139,7 @@ options:
       the running-config is append with the all keyword.  When the value is set to
       false, the command is issued without the all keyword
     type: bool
-    default: no
+    default: false
   save_when:
     description:
     - When changes are made to the device running-configuration, the changes are not
@@ -206,7 +206,7 @@ options:
   backup_options:
     description:
     - This is a dict object containing configurable options related to backup file
-      path. The value of this option is read only when C(backup) is set to I(yes),
+      path. The value of this option is read only when C(backup) is set to I(true),
       if C(backup) is set to I(no) this option will be silently ignored.
     suboptions:
       filename:
@@ -251,7 +251,7 @@ EXAMPLES = """
 
 - name: render a Jinja2 template onto an Arista switch
   arista.eos.eos_config:
-    backup: yes
+    backup: true
     src: eos_template.j2
 
 - name: diff the running config against a master config
@@ -270,7 +270,7 @@ EXAMPLES = """
 - name: configurable backup path
   arista.eos.eos_config:
     src: eos_template.j2
-    backup: yes
+    backup: true
     backup_options:
       filename: backup.cfg
       dir_path: /home/user
@@ -289,27 +289,27 @@ updates:
   sample: ['hostname switch01', 'interface Ethernet1', 'no shutdown']
 backup_path:
   description: The full path to the backup file
-  returned: when backup is yes
+  returned: when backup is true
   type: str
   sample: /playbooks/ansible/backup/eos_config.2016-07-16@22:28:34
 filename:
   description: The name of the backup file
-  returned: when backup is yes and filename is not specified in backup options
+  returned: when backup is true and filename is not specified in backup options
   type: str
   sample: eos_config.2016-07-16@22:28:34
 shortname:
   description: The full path to the backup file excluding the timestamp
-  returned: when backup is yes and filename is not specified in backup options
+  returned: when backup is true and filename is not specified in backup options
   type: str
   sample: /playbooks/ansible/backup/eos_config
 date:
   description: The date extracted from the backup file name
-  returned: when backup is yes
+  returned: when backup is true
   type: str
   sample: "2016-07-16"
 time:
   description: The time extracted from the backup file name
-  returned: when backup is yes
+  returned: when backup is true
   type: str
   sample: "22:28:34"
 """
@@ -442,9 +442,7 @@ def main():
             msg="Cannot diff against sessions when sessions are disabled. Please change diff_against to another value",
         )
 
-    if module.params["backup"] or (
-        module._diff and module.params["diff_against"] == "running"
-    ):
+    if module.params["backup"] or (module._diff and module.params["diff_against"] == "running"):
         contents = get_config(module, flags=flags)
         config = NetworkConfig(indent=1, contents=contents)
         if module.params["backup"]:
@@ -579,6 +577,8 @@ def main():
             )
 
             if running_config.sha1 != base_config.sha1:
+                before = ""
+                after = ""
                 if module.params["diff_against"] == "intended":
                     before = running_config
                     after = base_config

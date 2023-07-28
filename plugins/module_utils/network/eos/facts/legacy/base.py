@@ -20,7 +20,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
 
 
 class FactsBase(object):
-
     COMMANDS = frozenset()
 
     def __init__(self, module):
@@ -38,7 +37,6 @@ class FactsBase(object):
 
 
 class Default(FactsBase):
-
     SYSTEM_MAP = {"serialNumber": "serialnum"}
 
     COMMANDS = ["show version | json", "show hostname | json"]
@@ -73,7 +71,6 @@ class Default(FactsBase):
 
 
 class Hardware(FactsBase):
-
     COMMANDS = ["dir all-filesystems", "show version | json"]
 
     def populate(self):
@@ -99,7 +96,6 @@ class Hardware(FactsBase):
 
 
 class Config(FactsBase):
-
     COMMANDS = ["show running-config"]
 
     def populate(self):
@@ -108,7 +104,6 @@ class Config(FactsBase):
 
 
 class Interfaces(FactsBase):
-
     INTERFACE_MAP = {
         "description": "description",
         "physicalAddress": "macaddress",

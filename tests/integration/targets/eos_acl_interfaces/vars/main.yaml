@@ -1,5 +1,5 @@
 ---
-Interfaces:
+interfaces_lst:
   int1: GigabitEthernet0/0
   int2: GigabitEthernet0/1
 deleted1:

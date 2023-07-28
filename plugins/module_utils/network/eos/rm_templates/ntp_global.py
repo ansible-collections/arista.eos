@@ -27,7 +27,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils
 
 
 def _tmplt_ntp_global_serve(config_data):
-
     el = config_data["serve"]
     command = "ntp serve"
     if el.get("access_lists"):
@@ -42,10 +41,11 @@ def _tmplt_ntp_global_serve(config_data):
 
 def _tmplt_ntp_global_authenticate(config_data):
     el = config_data["authenticate"]
-    command = "ntp authenticate"
-    if el.get("servers"):
-        command += " servers"
-    return command
+    if el.get("enable"):
+        command = "ntp authenticate"
+        if el.get("servers"):
+            command += " servers"
+        return command
 
 
 def _tmplt_ntp_global_authentication_keys(config_data):

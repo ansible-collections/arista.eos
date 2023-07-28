@@ -25,15 +25,12 @@ import json
 
 from ansible_collections.arista.eos.plugins.modules import eos_command
 from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosCommandModule(TestEosModule):
-
     module = eos_command
 
     def setUp(self):

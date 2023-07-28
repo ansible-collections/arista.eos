@@ -253,7 +253,6 @@ def map_obj_to_commands(updates, module):
                 commands.append("logging on")
 
             elif dest == "buffered" and size:
-
                 present = False
 
                 # Deals with the following two cases:
@@ -266,7 +265,6 @@ def map_obj_to_commands(updates, module):
 
                 for entry in have:
                     if entry["dest"] == "buffered" and entry["size"] == size:
-
                         if not level or entry["level"] == level:
                             present = True
 
@@ -331,7 +329,6 @@ def parse_level(line, dest):
     level = None
 
     if dest != "host":
-
         # Line for buffer logging entry in running-config is of the form:
         # logging buffered <size> <level>
 
@@ -354,7 +351,6 @@ def map_config_to_obj(module):
     data = get_config(module, flags=["section logging"])
 
     for line in data.split("\n"):
-
         match = re.search(r"logging (\S+)", line, re.M)
 
         if match:

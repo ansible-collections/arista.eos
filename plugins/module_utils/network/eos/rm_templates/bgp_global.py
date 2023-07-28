@@ -50,10 +50,7 @@ def _tmplt_bgp_aggregate_address(config_data):
 def _tmplt_bgp_params(config_data):
     command = "bgp"
     if config_data["bgp_params"].get("additional_paths"):
-        command += (
-            " additional-paths "
-            + config_data["bgp_params"]["additional_paths"]
-        )
+        command += " additional-paths " + config_data["bgp_params"]["additional_paths"]
         if config_data["bgp_params"]["additional_paths"] == "send":
             command += " any"
     elif config_data["bgp_params"].get("advertise_inactive"):
@@ -61,9 +58,7 @@ def _tmplt_bgp_params(config_data):
     elif config_data["bgp_params"].get("allowas_in"):
         command += " allowas-in"
         if config_data["bgp_params"]["allowas_in"].get("count"):
-            command += " {count}".format(
-                **config_data["bgp_params"]["allowas_in"]
-            )
+            command += " {count}".format(**config_data["bgp_params"]["allowas_in"])
     elif config_data["bgp_params"].get("always_compare_med"):
         command += " always-comapre-med"
     elif config_data["bgp_params"].get("asn"):
@@ -72,9 +67,7 @@ def _tmplt_bgp_params(config_data):
         command += " auto-local-addr"
     elif config_data["bgp_params"].get("bestpath"):
         if config_data["bgp_params"]["bestpath"].get("as_path"):
-            command += " bestpath as-path {as_path}".format(
-                **config_data["bgp_params"]["bestpath"]
-            )
+            command += " bestpath as-path {as_path}".format(**config_data["bgp_params"]["bestpath"])
         elif config_data["bgp_params"]["bestpath"].get("ecmp_fast"):
             command += " bestpath ecmp-fast"
         elif config_data["bgp_params"]["bestpath"].get("med"):
@@ -95,28 +88,22 @@ def _tmplt_bgp_params(config_data):
     elif config_data["bgp_params"].get("client_to_client"):
         command += " client-to-client"
     elif config_data["bgp_params"].get("cluster_id"):
-        command += " cluster-id {cluster_id}".format(
-            **config_data["bgp_params"]
-        )
+        command += " cluster-id {cluster_id}".format(**config_data["bgp_params"])
     elif config_data["bgp_params"].get("confederation"):
         command += " confederation"
         if config_data["bgp_params"]["confederation"].get("identifier"):
             command += " identifier {identifier}".format(
-                **config_data["bgp_params"]["confederation"]
+                **config_data["bgp_params"]["confederation"],
             )
         else:
-            command += " peers {peers}".format(
-                **config_data["bgp_params"]["confederation"]
-            )
+            command += " peers {peers}".format(**config_data["bgp_params"]["confederation"])
     elif config_data["bgp_params"].get("control_plane_filter"):
         command += " control-plane-filter default-allow"
     elif config_data["bgp_params"].get("convergence"):
         command += " convergence"
         if config_data["bgp_params"]["convergence"].get("slow_peer"):
             command += " slow-peer"
-        command += " time {time}".format(
-            **config_data["bgp_params"]["convergence"]
-        )
+        command += " time {time}".format(**config_data["bgp_params"]["convergence"])
     elif config_data["bgp_params"].get("default"):
         command += " default {default}".format(**config_data["bgp_params"])
     elif config_data["bgp_params"].get("enforce_first_as"):
@@ -124,9 +111,7 @@ def _tmplt_bgp_params(config_data):
     elif config_data["bgp_params"].get("host_routes"):
         command += " host-routes fib direct-install"
     elif config_data["bgp_params"].get("labeled_unicast"):
-        command += " labeled-unicast rib {labeled_unicast}".format(
-            **config_data["bgp_params"]
-        )
+        command += " labeled-unicast rib {labeled_unicast}".format(**config_data["bgp_params"])
     elif config_data["bgp_params"].get("listen"):
         # from eos 4.23 , 'bgp listen limit ' is replaced by 'dynamic peer max'.
         command = "dynamic peer max "
@@ -134,29 +119,23 @@ def _tmplt_bgp_params(config_data):
             command += "{limit}".format(**config_data["bgp_params"]["listen"])
         else:
             command += " range {address} peer group".format(
-                **config_data["bgp_params"]["listen"]["range"]
+                **config_data["bgp_params"]["listen"]["range"],
             )
             if config_data["bgp_params"]["listen"]["range"]["peer_group"].get(
                 "peer_filter",
             ):
                 command += " {name} peer-filter {peer_filter}".format(
-                    **config_data["bgp_params"]["listen"]["range"][
-                        "peer_group"
-                    ]
+                    **config_data["bgp_params"]["listen"]["range"]["peer_group"],
                 )
             else:
                 command += " {name} remote-as {remote_as}".format(
-                    **config_data["bgp_params"]["listen"]["range"][
-                        "peer_group"
-                    ]
+                    **config_data["bgp_params"]["listen"]["range"]["peer_group"],
                 )
     elif config_data["bgp_params"].get("log_neighbor_changes"):
         command += " log-neighbor-changes"
     elif config_data["bgp_params"].get("missing_policy"):
-        command += (
-            " missing-policy direction {direction} action {action}".format(
-                **config_data["bgp_params"]["missing_policy"]
-            )
+        command += " missing-policy direction {direction} action {action}".format(
+            **config_data["bgp_params"]["missing_policy"],
         )
     elif config_data["bgp_params"].get("monitoring"):
         command += " monitoring"
@@ -165,17 +144,13 @@ def _tmplt_bgp_params(config_data):
     elif config_data["bgp_params"].get("redistribute_internal"):
         command += " redistribute-internal"
     elif config_data["bgp_params"].get("route"):
-        command += " route install-map {route}".format(
-            **config_data["bgp_params"]
-        )
+        command += " route install-map {route}".format(**config_data["bgp_params"])
     elif config_data["bgp_params"].get("route_reflector"):
         command += " route-reflector preserve-attributes"
         if config_data["bgp_params"]["route_reflector"].get("preserve"):
             command += " always"
     elif config_data["bgp_params"].get("transport"):
-        command += " transport listen-port {transport}".format(
-            **config_data["bgp_params"]
-        )
+        command += " transport listen-port {transport}".format(**config_data["bgp_params"])
     return command
 
 
@@ -238,13 +213,9 @@ def _tmplt_bgp_access_group(config_data):
 
 
 def _tmplt_bgp_maximum_paths(config_data):
-    command = "maximum-paths {max_equal_cost_paths}".format(
-        **config_data["maximum_paths"]
-    )
+    command = "maximum-paths {max_equal_cost_paths}".format(**config_data["maximum_paths"])
     if config_data["maximum_paths"].get("max_installed_ecmp_paths"):
-        command += " ecmp {max_installed_ecmp_paths}".format(
-            **config_data["maximum_paths"]
-        )
+        command += " ecmp {max_installed_ecmp_paths}".format(**config_data["maximum_paths"])
     return command
 
 
@@ -265,24 +236,17 @@ def _tmplt_bgp_monitoring(config_data):
 def _tmplt_bgp_neighbor(config_data):
     command = "neighbor {neighbor_address}".format(**config_data["neighbor"])
     if config_data["neighbor"].get("additional_paths"):
-        command += " additional-paths {additional_paths}".format(
-            **config_data["neighbor"]
-        )
+        command += " additional-paths {additional_paths}".format(**config_data["neighbor"])
         if config_data["neighbor"]["additional_paths"] == "send":
             command += "any"
     elif config_data["neighbor"].get("peer_group"):
         command += " peer group"
-        if (
-            config_data["neighbor"]["peer_group"]
-            != config_data["neighbor"]["peer_group"]
-        ):
+        if config_data["neighbor"]["peer_group"] != config_data["neighbor"]["peer_group"]:
             command += config_data["neighbor"]["peer_group"]
     elif config_data["neighbor"].get("allowas_in"):
         command += " allowas-in"
         if config_data["neighbor"]["allowas_in"].get("count"):
-            command += " {count}".format(
-                **config_data["neighbor"]["allowas_in"]
-            )
+            command += " {count}".format(**config_data["neighbor"]["allowas_in"])
     elif config_data["neighbor"].get("auto_local_addr"):
         command += " auto-local-addr"
     elif config_data["neighbor"].get("bfd"):
@@ -293,32 +257,26 @@ def _tmplt_bgp_neighbor(config_data):
         command += " default-originate"
         if config_data["neighbor"]["default_originate"].get("route_map"):
             command += " route-map {route_map}".format(
-                **config_data["neighbor"]["default_originate"]
+                **config_data["neighbor"]["default_originate"],
             )
         if config_data["neighbor"]["default_originate"].get("always"):
             command += " always"
     elif config_data["neighbor"].get("description"):
-        command += " description {description}".format(
-            **config_data["neighbor"]
-        )
+        command += " description {description}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("dont_capability_negotiate"):
         command += " dont-capability-negotiate"
     elif config_data["neighbor"].get("ebgp_multihop"):
         command += " ebgp-multiphop"
         if config_data["neighbor"]["ebgp_multihop"].get("ttl"):
-            command += " {ttl}".format(
-                **config_data["neighbor"]["ebgp_multihop"]
-            )
+            command += " {ttl}".format(**config_data["neighbor"]["ebgp_multihop"])
     elif config_data["neighbor"].get("encryption_password"):
         command += " password {type} {password}".format(
-            **config_data["neighbor"]["encryption_password"]
+            **config_data["neighbor"]["encryption_password"],
         )
     elif config_data["neighbor"].get("enforce_first_as"):
         command += " enforce-first-as"
     elif config_data["neighbor"].get("export_localpref"):
-        command += " export-localpref {export_localpref}".format(
-            **config_data["neighbor"]
-        )
+        command += " export-localpref {export_localpref}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("fall_over"):
         command += " fall-over bfd"
     elif config_data["neighbor"].get("graceful_restart"):
@@ -326,69 +284,59 @@ def _tmplt_bgp_neighbor(config_data):
     elif config_data["neighbor"].get("graceful_restart_helper"):
         command += " graceful-restart-helper"
     elif config_data["neighbor"].get("idle_restart_timer"):
-        command += " idle-restart-timer {idle_restart_timer}".format(
-            **config_data["neighbor"]
-        )
+        command += " idle-restart-timer {idle_restart_timer}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("import_localpref"):
-        command += " import-localpref {import_localpref}".format(
-            **config_data["neighbor"]
-        )
+        command += " import-localpref {import_localpref}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("link_bandwidth"):
         command += " link-bandwidth"
         if config_data["neighbor"]["link_bandwidth"].get("auto"):
             command += " auto"
         if config_data["neighbor"]["link_bandwidth"].get("default"):
-            command += " default {default}".format(
-                **config_data["neighbor"]["link_bandwidth"]
-            )
+            command += " default {default}".format(**config_data["neighbor"]["link_bandwidth"])
         if config_data["neighbor"]["link_bandwidth"].get("update_delay"):
             command += " update-delay {update_delay}".format(
-                **config_data["neighbor"]["link_bandwidth"]
+                **config_data["neighbor"]["link_bandwidth"],
             )
     elif config_data["neighbor"].get("local_as"):
         command += " local-as {as_number} no-prepend replace-as".format(
-            **config_data["neighbor"]["local_as"]
+            **config_data["neighbor"]["local_as"],
         )
         if config_data["neighbor"]["local_as"].get("fallback"):
             command += " fallback"
     elif config_data["neighbor"].get("local_v6_addr"):
-        command += " local-v6-addr {local_v6_addr}".format(
-            **config_data["neighbor"]
-        )
+        command += " local-v6-addr {local_v6_addr}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("maximum_accepted_routes"):
         command += " maximum-accepted-routes {count}".format(
-            **config_data["neighbor"]["maximum_accepted_routes"]
+            **config_data["neighbor"]["maximum_accepted_routes"],
         )
         if config_data["neighbor"]["maximum_accepted_routes"].get(
             "warning_limit",
         ):
             command += " warning-limit {warning_limit}".format(
-                **config_data["neighbor"]["maximum_accepted_routes"]
+                **config_data["neighbor"]["maximum_accepted_routes"],
             )
     elif config_data["neighbor"].get("maximum_received_routes"):
         command += " maximum-routes {count}".format(
-            **config_data["neighbor"]["maximum_received_routes"]
+            **config_data["neighbor"]["maximum_received_routes"],
         )
         if config_data["neighbor"]["maximum_received_routes"].get(
             "warning_limit",
         ):
-            if config_data["neighbor"]["maximum_received_routes"][
-                "warning_limit"
-            ].get("limit_count"):
+            if config_data["neighbor"]["maximum_received_routes"]["warning_limit"].get(
+                "limit_count",
+            ):
                 command += " warning-limit {limit_count}".format(
-                    **config_data["neighbor"]["maximum_received_routes"][
-                        "warning_limit"
-                    ]
+                    **config_data["neighbor"]["maximum_received_routes"]["warning_limit"],
                 )
-            if config_data["neighbor"]["maximum_received_routes"][
-                "warning_limit"
-            ].get("limit_percent"):
+            if config_data["neighbor"]["maximum_received_routes"]["warning_limit"].get(
+                "limit_percent",
+            ):
                 command += (
                     " warning-limit "
                     + str(
-                        config_data["neighbor"]["maximum_received_routes"][
-                            "warning_limit"
-                        ]["limit_percent"],
+                        config_data["neighbor"]["maximum_received_routes"]["warning_limit"][
+                            "limit_percent"
+                        ],
                     )
                     + " percent"
                 )
@@ -405,9 +353,7 @@ def _tmplt_bgp_neighbor(config_data):
     elif config_data["neighbor"].get("next_hop_unchanged"):
         command += " next-hop-unchanged"
     elif config_data["neighbor"].get("next_hop_v6_address"):
-        command += " next-hop-v6-addr {next_hop_v6_address} in".format(
-            **config_data["neighbor"]
-        )
+        command += " next-hop-v6-addr {next_hop_v6_address} in".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("out_delay"):
         command += " out-delay {out_delay}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("remote_as"):
@@ -422,12 +368,10 @@ def _tmplt_bgp_neighbor(config_data):
         command += " peer-as {peer_as}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("prefix_list"):
         command += " prefix-list {name} {direction}".format(
-            **config_data["neighbor"]["prefix_list"]
+            **config_data["neighbor"]["prefix_list"],
         )
     elif config_data["neighbor"].get("route_map"):
-        command += " route-map {name} {direction}".format(
-            **config_data["neighbor"]["route_map"]
-        )
+        command += " route-map {name} {direction}".format(**config_data["neighbor"]["route_map"])
     elif config_data["neighbor"].get("route_reflector_client"):
         command += " route-reflector-client"
     elif config_data["neighbor"].get("route_to_peer"):
@@ -437,32 +381,17 @@ def _tmplt_bgp_neighbor(config_data):
         if config_data["neighbor"]["send_community"].get(
             "community_attribute",
         ):
-            command += (
-                " "
-                + config_data["neighbor"]["send_community"][
-                    "community_attribute"
-                ]
-            )
+            command += " " + config_data["neighbor"]["send_community"]["community_attribute"]
         if config_data["neighbor"]["send_community"].get("sub_attribute"):
-            command += (
-                " "
-                + config_data["neighbor"]["send_community"]["sub_attribute"]
-            )
+            command += " " + config_data["neighbor"]["send_community"]["sub_attribute"]
         if config_data["neighbor"]["send_community"].get(
             "link_bandwidth_attribute",
         ):
-            command += (
-                " "
-                + config_data["neighbor"]["send_community"][
-                    "link_bandwidth_attribute"
-                ]
-            )
+            command += " " + config_data["neighbor"]["send_community"]["link_bandwidth_attribute"]
         if config_data["neighbor"]["send_community"].get("speed"):
             command += " " + config_data["neighbor"]["send_community"]["speed"]
         if config_data["neighbor"]["send_community"].get("divide"):
-            command += (
-                " " + config_data["neighbor"]["send_community"]["divide"]
-            )
+            command += " " + config_data["neighbor"]["send_community"]["divide"]
     elif config_data["neighbor"].get("shutdown"):
         command += " shutdown"
     elif config_data["neighbor"].get("soft_reconfiguration"):
@@ -474,19 +403,13 @@ def _tmplt_bgp_neighbor(config_data):
         if config_data["neighbor"]["transport"].get("connection_mode"):
             command += " connection-mode passive"
         else:
-            command += " remote-port {remote_port}".format(
-                **config_data["neighbor"]["transport"]
-            )
+            command += " remote-port {remote_port}".format(**config_data["neighbor"]["transport"])
     elif config_data["neighbor"].get("timers"):
-        command += " timers {keepalive} {holdtime}".format(
-            **config_data["neighbor"]["timers"]
-        )
+        command += " timers {keepalive} {holdtime}".format(**config_data["neighbor"]["timers"])
     elif config_data["neighbor"].get("ttl"):
         command += " ttl maximum-hops {ttl}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("update_source"):
-        command += " update-source {update_source}".format(
-            **config_data["neighbor"]
-        )
+        command += " update-source {update_source}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("weight"):
         command += " weight {weight}".format(**config_data["neighbor"])
     return command
@@ -523,9 +446,7 @@ def _tmplt_bgp_shutdown(config_data):
 
 
 def _tmplt_bgp_timers(config_data):
-    command = "timers bgp {keepalive} {holdtime}".format(
-        **config_data["timers"]
-    )
+    command = "timers bgp {keepalive} {holdtime}".format(**config_data["timers"])
     return command
 
 
@@ -533,17 +454,11 @@ def _tmplt_bgp_ucmp(config_data):
     command = "ucmp"
     if "fec" in config_data["ucmp"]:
         command += " fec threshold trigger"
-        command += " {trigger} clear {clear} warning-only".format(
-            **config_data["ucmp"]["fec"]
-        )
+        command += " {trigger} clear {clear} warning-only".format(**config_data["ucmp"]["fec"])
     if "link_bandwidth" in config_data["ucmp"]:
-        command += " link-bandwidth {mode}".format(
-            **config_data["ucmp"]["link_bandwidth"]
-        )
+        command += " link-bandwidth {mode}".format(**config_data["ucmp"]["link_bandwidth"])
         if config_data["ucmp"]["link_bandwidth"].get("mode") == "update_delay":
-            command += " {update_delay}".format(
-                **config_data["ucmp"]["link_bandwidth"]
-            )
+            command += " {update_delay}".format(**config_data["ucmp"]["link_bandwidth"])
     if "mode" in config_data["ucmp"]:
         command += " mode 1"
         if config_data["ucmp"]["mode"].get("nexthops"):
