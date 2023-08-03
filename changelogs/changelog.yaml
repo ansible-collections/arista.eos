@@ -237,7 +237,11 @@ releases:
     fragments:
       - 177-remove_tests_sanity_requirements.yml
       - 183-check_required_if.yaml
+      - add_gha_periodic.yaml
       - add_remove_config_integrationtests.yml
+      - black.yaml
+      - boolean_normalization.yaml
+      - no-provider.yaml
     release_date: "2021-03-30"
   2.1.1:
     changes:
