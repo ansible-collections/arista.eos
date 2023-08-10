@@ -1,5 +1,11 @@
 ---
 repos:
+  - repo: https://github.com/ansible-network/collection_prep
+    rev: 1.1.1
+    hooks:
+      # - id: autoversion # removed as being handled by GHA push and release drafter
+      - id: update-docs
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
     hooks:
@@ -20,6 +26,9 @@ repos:
     rev: "v3.0.0"
     hooks:
       - id: prettier
+        entry: env CI=1 bash -c "prettier --list-different . || ec=$? && prettier --loglevel=error --write . && exit $ec"
+        pass_filenames: false
+        args: []
         additional_dependencies:
           - prettier
           - prettier-plugin-toml
@@ -29,13 +38,9 @@ repos:
     hooks:
       - id: isort
         name: Sort import statements using isort
+        args: ["--filter-files"]
 
   - repo: https://github.com/psf/black
     rev: 23.7.0
     hooks:
       - id: black
-
-  - repo: https://github.com/ansible-network/collection_prep
-    rev: 1.1.1
-    hooks:
-      - id: update-docs
