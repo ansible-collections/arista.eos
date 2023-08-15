@@ -1,7 +1,5 @@
 # constants.py
 
-"""This module defines project-level constants."""
-
 from __future__ import absolute_import, division, print_function
 
 
@@ -189,3 +187,5 @@ PORT_NUMBERS = [
     993,  # Internet Message Access Protocol over SSL
     995,  # Post Office Protocol 3 over TLS/SSL
 ]
+"""A base list of port numbers which have an IANA assigned service name mapping that is recognized
+by all EOS versions under the access-list configuration mode."""
