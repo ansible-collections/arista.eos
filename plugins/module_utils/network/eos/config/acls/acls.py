@@ -28,6 +28,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     remove_empties,
     to_list,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.acls import constants
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 
