@@ -156,7 +156,7 @@ class Acls(ConfigBase):
                             if seq_num.group(1) == have_seq_num.group(
                                 1,
                             ) and have_seq_num.group(
-                                2
+                                2,
                             ) != seq_num.group(2):
                                 negate_cmd = "no " + seq_num.group(1)
                                 config.insert(config.index(w), negate_cmd)
