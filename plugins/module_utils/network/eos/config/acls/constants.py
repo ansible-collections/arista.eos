@@ -2,6 +2,11 @@
 
 """This module defines project-level constants."""
 
+from __future__ import absolute_import, division, print_function
+
+
+__metaclass__ = type
+
 PORT_NUMBERS = [
     1,  # TCP Port Service Multiplexer
     101,  # NIC hostname server
