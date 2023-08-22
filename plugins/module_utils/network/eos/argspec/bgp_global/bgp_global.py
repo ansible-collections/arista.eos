@@ -47,6 +47,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                 "purged",
                 "merged",
                 "replaced",
+                "overridden",
                 "gathered",
                 "rendered",
                 "parsed",
