@@ -54,7 +54,7 @@
       arista.eos.eos_config:
         src: populate_af.cfg
 
-    - name: Replace in presence of address_family
+    - name: Override in presence of address_family
       become: true
       ignore_errors: true
       register: result

@@ -2337,60 +2337,60 @@ EXAMPLES = """
 
 # Using rendered
 
-- name: Render platform specific configuration lines (without connecting to the device)
-  arista.eos.eos_bgp_global:
-    config:
-      as_number: "100"
-      bgp_params:
-        host_routes: True
-        convergence:
-          slow_peer: True
-          time: 6
-        additional_paths: "send"
-        log_neighbor_changes: True
-      maximum_paths:
-        max_equal_cost_paths: 55
-      aggregate_address:
-        - address: "1.2.1.0/24"
-          as_set: true
-          match_map: "match01"
-        - address: "5.2.1.0/24"
-          attribute_map: "attrmatch01"
-          advertise_only: true
-      redistribute:
-        - protocol: "static"
-          route_map: "map_static"
-        - protocol: "attached-host"
-      distance:
-        internal: 50
-      neighbor:
-        - peer: "10.1.3.2"
-          allowas_in:
-            set: true
-          default_originate:
-            always: true
-          dont_capability_negotiate: true
-          export_localpref: 4000
-          maximum_received_routes:
-            count: 500
-            warning_limit:
-              limit_percent: 5
-          next_hop_unchanged: true
-          prefix_list:
-            name: "prefix01"
-            direction: "out"
-        - neighbor_address: "peer1"
-          fall_over: true
-          link_bandwidth:
-            update_delay: 5
-          monitoring: True
-          send_community:
-            community_attribute: "extended"
-            sub_attribute: "link-bandwidth"
-            link_bandwidth_attribute: "aggregate"
-            speed: "600"
-      vlan: 5
-    state: rendered
+  - name: Render command lines for provided configuration
+    arista.eos.eos_bgp_global:
+      config:
+        as_number: "100"
+        bgp_params:
+          host_routes: True
+          convergence:
+            slow_peer: True
+            time: 6
+          additional_paths: "send"
+          log_neighbor_changes: True
+        maximum_paths:
+          max_equal_cost_paths: 55
+        aggregate_address:
+          - address: "1.2.1.0/24"
+            as_set: true
+            match_map: "match01"
+          - address: "5.2.1.0/24"
+            attribute_map: "attrmatch01"
+            advertise_only: true
+        redistribute:
+          - protocol: "static"
+            route_map: "map_static"
+          - protocol: "attached-host"
+        distance:
+          internal: 50
+        neighbor:
+          - peer: "10.1.3.2"
+            allowas_in:
+              set: true
+            default_originate:
+              always: true
+            dont_capability_negotiate: true
+            export_localpref: 4000
+            maximum_received_routes:
+              count: 500
+              warning_limit:
+                limit_percent: 5
+            next_hop_unchanged: true
+            prefix_list:
+              name: "prefix01"
+              direction: "out"
+          - neighbor_address: "peer1"
+            fall_over: true
+            link_bandwidth:
+              update_delay: 5
+            monitoring: True
+            send_community:
+              community_attribute: "extended"
+              sub_attribute: "link-bandwidth"
+              link_bandwidth_attribute: "aggregate"
+              speed: "600"
+        vlan: 5
+      state: rendered
 
 # Task output:
 # ------------
@@ -2642,6 +2642,54 @@ EXAMPLES = """
 #         action: import
 #         target: '54:11'
 #       vrf: vrf01
+"""
+RETURN = """
+before:
+  description: The configuration prior to the model invocation.
+  returned: always
+  type: dict
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+after:
+  description: The resulting configuration model invocation.
+  returned: when changed
+  type: dict
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: always
+  type: list
+  sample:
+    - router bgp 100
+    - neighbor 10.1.3.2 allowas-in
+    - neighbor 10.1.3.2 default-originate always
+    - neighbor 10.1.3.2 dont-capability-negotiate
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+    - router bgp 100
+    - neighbor 10.1.3.2 allowas-in
+    - neighbor 10.1.3.2 default-originate always
+    - neighbor 10.1.3.2 dont-capability-negotiate
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 from ansible.module_utils.basic import AnsibleModule
