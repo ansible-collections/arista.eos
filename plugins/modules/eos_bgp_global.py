@@ -2570,9 +2570,9 @@ EXAMPLES = """
 #       neighbor 12.1.3.2 default-originate always
 #       neighbor 12.1.3.2 maximum-routes 12000
 
-- name: Gather BGP facts using gathered
-  arista.eos.eos_bgp_global:
-    state: gathered
+  - name: Gather BGP facts using gathered
+    arista.eos.eos_bgp_global:
+      state: gathered
 
 # Task output:
 # ------------

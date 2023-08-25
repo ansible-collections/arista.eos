@@ -528,7 +528,7 @@ EXAMPLES = """
             neighbor:
               - peer: "peer2"
                 default_originate:
-                  always: True
+                  always: true
       state: overridden
 
 
@@ -646,7 +646,7 @@ EXAMPLES = """
             neighbor:
               - peer: "peer2"
                 default_originate:
-                  always: True
+                  always: true
             vrf: vrft
       state: overridden
 
@@ -1010,7 +1010,7 @@ EXAMPLES = """
             neighbor:
               - peer: "peer2"
                 default_originate:
-                  always: True
+                  always: true
           - afi: "ipv6"
             redistribute:
               - protocol: "isis"
