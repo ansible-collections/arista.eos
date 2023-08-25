@@ -1246,7 +1246,7 @@ EXAMPLES = """
 
 # using rendered
 
-  - render CLI commands for provided config
+  - name: render CLI commands for provided config
     arista.eos.eos_ospfv3:
       config:
         processes:
