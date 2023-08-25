@@ -2423,7 +2423,7 @@ EXAMPLES = """
 # Using parsed
 
 # parsed.cfg
-# ------------
+# ----------
 # router bgp 100
 #    bgp convergence slow-peer time 6
 #    distance bgp 50 50 50
@@ -2458,10 +2458,10 @@ EXAMPLES = """
 #       neighbor 12.1.3.2 default-originate always
 #       neighbor 12.1.3.2 maximum-routes 12000
 
-- name: Parse externally provided BGP config
-  arista.eos.eos_bgp_global:
-    running_config: "{{ lookup('file', 'parsed.cfg') }}"
-    state: parsed
+  - name: Parse externally provided BGP config
+    arista.eos.eos_bgp_global:
+      running_config: "{{ lookup('file', 'parsed.cfg') }}"
+      state: parsed
 
 # Task output:
 # ------------
