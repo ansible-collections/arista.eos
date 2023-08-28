@@ -308,8 +308,8 @@ EXAMPLES = """
 
 # Using merged
 
-# Before state
-
+# Before state:
+# -------------
 # veos(config)#show running-config | section interface | ospf
 # veos(config)#
 
@@ -331,8 +331,36 @@ EXAMPLES = """
                   network: "point-to-point"
       state: merged
 
-# After State
+# Task output:
+# ------------
+# before: []
+#
+# commands:
+# - interface Vlan1
+# - ip ospf area 0.0.0.50
+# - ip ospf cost 500
+# - ip ospf mtu-ignore
+# - ospfv3 dead-interval 44
+# - ospfv3 ipv6 mtu-ignore
+# - ospfv3 ipv6 network point-to-point
+#
+# after:
+#   - address_family:
+#     - afi: ipv4
+#       area:
+#         area_id: 0.0.0.50
+#       cost: 500
+#       mtu_ignore: true
+#     - afi: ipv6
+#       dead_interval: 44
+#       ip_params:
+#       - afi: ipv6
+#         mtu_ignore: true
+#         network: point-to-point
+#     name: Vlan1
 
+# After state:
+# ------------
 # veos(config)#show running-config | section interface | ospf
 # interface Vlan1
 #    ip ospf cost 500
@@ -341,74 +369,11 @@ EXAMPLES = """
 #    ospfv3 dead-interval 44
 #    ospfv3 ipv6 network point-to-point
 #    ospfv3 ipv6 mtu-ignore
-# veos(config)#
-#
-#
-# Module Execution:
-#
-#   "after": [
-#         {
-#             "name": "Ethernet1"
-#         },
-#         {
-#             "name": "Ethernet2"
-#         },
-#         {
-#             "name": "Management1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "area": {
-#                         "area_id": "0.0.0.50"
-#                     },
-#                     "cost": 500,
-#                     "mtu_ignore": True
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "dead_interval": 44,
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv6",
-#                             "mtu_ignore": True,
-#                             "network": "point-to-point"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan1"
-#         }
-#     ],
-#     "before": [
-#         {
-#             "name": "Ethernet1"
-#         },
-#         {
-#             "name": "Ethernet2"
-#         },
-#         {
-#             "name": "Management1"
-#         }
-#     ],
-#     "changed": True,
-#     "commands": [
-#         "interface Vlan1",
-#         "ip ospf area 0.0.0.50",
-#         "ip ospf cost 500",
-#         "ip ospf mtu-ignore",
-#         "ospfv3 dead-interval 44",
-#         "ospfv3 ipv6 mtu-ignore",
-#         "ospfv3 ipv6 network point-to-point"
-#     ],
-#
 
 # Using replaced
-#---------------
 
-# Before State:
-
+# Before state:
+# -------------
 # veos(config)#show running-config | section interface | ospf
 # interface Vlan1
 #    ip ospf cost 500
@@ -431,8 +396,6 @@ EXAMPLES = """
 #    ospfv3 ipv4 hello-interval 45
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
-# veos(config)#
-
 
   - name: Replace device configuration with provided configuration
     arista.eos.eos_ospf_interfaces:
@@ -449,8 +412,84 @@ EXAMPLES = """
                   dead_interval: 56
       state: replaced
 
-# After State:
+# Task output:
+# ------------
+# before:
+#   - address_family:
+#     - afi: ipv4
+#       area:
+#         area_id: 0.0.0.50
+#       cost: 500
+#       dead_interval: 29
+#       hello_interval: 66
+#       mtu_ignore: true
+#     - afi: ipv6
+#       cost: 106
+#       dead_interval: 44
+#       hello_interval: 77
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.5
+#         priority: 45
+#       - afi: ipv6
+#         mtu_ignore: true
+#         network: point-to-point
+#         passive_interface: true
+#         retransmit_interval: 115
+#       transmit_delay: 100
+#     name: Vlan1
+#   - address_family:
+#     - afi: ipv6
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.6
+#         hello_interval: 45
+#         retransmit_interval: 100
+#     name: Vlan2
+#
+# commands:
+# - interface Vlan1
+# - no ip ospf cost 500
+# - no ip ospf dead-interval 29
+# - no ip ospf hello-interval 66
+# - no ip ospf mtu-ignore
+# - no ip ospf area 0.0.0.50
+# - ospfv3 cost 44
+# - ospfv3 bfd
+# - ospfv3 authentication ipsec spi 30 md5 passphrase 7 7hl8FV3lZ6H1mAKpjL47hQ==
+# - no ospfv3 ipv4 priority 45
+# - no ospfv3 ipv4 area 0.0.0.5
+# - ospfv3 ipv6 dead-interval 56
+# - no ospfv3 ipv6 passive-interface
+# - no ospfv3 ipv6 retransmit-interval 115
+# - no ospfv3 hello-interval 77
+# - no ospfv3 dead-interval 44
+# - no ospfv3 transmit-delay 100
+#
+# after:
+#   - address_family:
+#     - afi: ipv6
+#       bfd: true
+#       cost: 44
+#       ip_params:
+#       - afi: ipv6
+#         mtu_ignore: true
+#         network: point-to-point
+#     name: Vlan1
+#   - address_family:
+#     - afi: ipv6
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.6
+#         hello_interval: 45
+#         retransmit_interval: 100
+#     name: Vlan2
 
+# After state:
+# ------------
 # veos(config)#show running-config | section interface | ospf
 # interface Vlan1
 #    ospfv3 bfd
@@ -463,149 +502,11 @@ EXAMPLES = """
 #    ospfv3 ipv4 hello-interval 45
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
-# veos(config)#
-#
-# Module Execution:
-#
-# "after": [
-#         {
-#             "name": "Ethernet1"
-#         },
-#         {
-#             "name": "Ethernet2"
-#         },
-#         {
-#             "name": "Management1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv6",
-#                     "bfd": True,
-#                     "cost": 44,
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv6",
-#                             "mtu_ignore": True,
-#                             "network": "point-to-point"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv6",
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.6"
-#                             },
-#                             "hello_interval": 45,
-#                             "retransmit_interval": 100
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan2"
-#         }
-#     ],
-#     "before": [
-#         {
-#             "name": "Ethernet1"
-#         },
-#         {
-#             "name": "Ethernet2"
-#         },
-#         {
-#             "name": "Management1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "area": {
-#                         "area_id": "0.0.0.50"
-#                     },
-#                     "cost": 500,
-#                     "dead_interval": 29,
-#                     "hello_interval": 66,
-#                     "mtu_ignore": True
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "cost": 106,
-#                     "dead_interval": 44,
-#                     "hello_interval": 77,
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.5"
-#                             },
-#                             "priority": 45
-#                         },
-#                         {
-#                             "afi": "ipv6",
-#                             "mtu_ignore": True,
-#                             "network": "point-to-point",
-#                             "passive_interface": True,
-#                             "retransmit_interval": 115
-#                         }
-#                     ],
-#                     "transmit_delay": 100
-#                 }
-#             ],
-#             "name": "Vlan1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv6",
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.6"
-#                             },
-#                             "hello_interval": 45,
-#                             "retransmit_interval": 100
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan2"
-#         }
-#     ],
-#     "changed": True,
-#     "commands": [
-#         "interface Vlan1",
-#         "no ip ospf cost 500",
-#         "no ip ospf dead-interval 29",
-#         "no ip ospf hello-interval 66",
-#         "no ip ospf mtu-ignore",
-#         "no ip ospf area 0.0.0.50",
-#         "ospfv3 cost 44",
-#         "ospfv3 bfd",
-#         "ospfv3 authentication ipsec spi 30 md5 passphrase 7 7hl8FV3lZ6H1mAKpjL47hQ==",
-#         "no ospfv3 ipv4 priority 45",
-#         "no ospfv3 ipv4 area 0.0.0.5",
-#         "ospfv3 ipv6 dead-interval 56",
-#         "no ospfv3 ipv6 passive-interface",
-#         "no ospfv3 ipv6 retransmit-interval 115",
-#         "no ospfv3 hello-interval 77",
-#         "no ospfv3 dead-interval 44",
-#         "no ospfv3 transmit-delay 100"
-#     ],
-#
 
-# Using overidden:
-# ----------------
+# Using overidden
 
-# Before State:
+# Before state:
+# -------------
 # veos(config)#show running-config | section interface | ospf
 # interface Vlan1
 #    ip ospf dead-interval 29
@@ -627,7 +528,6 @@ EXAMPLES = """
 #    ospfv3 ipv4 hello-interval 45
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
-# veos(config)#
 
   - name: Override device configuration with provided configuration
     arista.eos.eos_ospf_interfaces:
@@ -644,8 +544,73 @@ EXAMPLES = """
                   dead_interval: 56
       state: overridden
 
-# After State:
+# Task output:
+# ------------
+# before:
+#   - address_family:
+#     - afi: ipv4
+#       dead_interval: 29
+#       hello_interval: 66
+#       mtu_ignore: true
+#     - afi: ipv6
+#       bfd: true
+#       cost: 106
+#       hello_interval: 77
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.5
+#         priority: 45
+#       - afi: ipv6
+#         dead_interval: 56
+#         mtu_ignore: true
+#         network: point-to-point
+#         passive_interface: true
+#         retransmit_interval: 115
+#       transmit_delay: 100
+#     name: Vlan1
+#   - address_family:
+#     - afi: ipv6
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.6
+#         hello_interval: 45
+#         retransmit_interval: 100
+#     name: Vlan2
+#
+# commands:
+# - interface Vlan2
+# - no ospfv3 ipv4 hello-interval 45
+# - no ospfv3 ipv4 retransmit-interval 100
+# - no ospfv3 ipv4 area 0.0.0.6
+# - interface Vlan1
+# - no ip ospf dead-interval 29
+# - no ip ospf hello-interval 66
+# - no ip ospf mtu-ignore
+# - ospfv3 cost 44
+# - ospfv3 authentication ipsec spi 30 md5 passphrase 7 7hl8FV3lZ6H1mAKpjL47hQ==
+# - no ospfv3 ipv4 priority 45
+# - no ospfv3 ipv4 area 0.0.0.5
+# - no ospfv3 ipv6 passive-interface
+# - no ospfv3 ipv6 retransmit-interval 115
+# - no ospfv3 hello-interval 77
+# - no ospfv3 transmit-delay 100
+#
+# after:
+#   - address_family:
+#     - afi: ipv6
+#       bfd: true
+#       cost: 44
+#       ip_params:
+#       - afi: ipv6
+#         dead_interval: 56
+#         mtu_ignore: true
+#         network: point-to-point
+#     name: Vlan1
 
+# After state:
+# ------------
 # veos(config)#show running-config | section interface | ospf
 # interface Vlan1
 #    ospfv3 bfd
@@ -654,133 +619,11 @@ EXAMPLES = """
 #    ospfv3 ipv6 dead-interval 56
 #    ospfv3 ipv6 network point-to-point
 #    ospfv3 ipv6 mtu-ignore
-# veos(config)#
-#
-#
-# Module Execution:
-#
-#  "after": [
-#         {
-#             "name": "Ethernet1"
-#         },
-#         {
-#             "name": "Ethernet2"
-#         },
-#         {
-#             "name": "Management1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv6",
-#                     "bfd": True,
-#                     "cost": 44,
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv6",
-#                             "dead_interval": 56,
-#                             "mtu_ignore": True,
-#                             "network": "point-to-point"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan1"
-#         },
-#         {
-#             "name": "Vlan2"
-#         }
-#     ],
-#     "before": [
-#         {
-#             "name": "Ethernet1"
-#         },
-#         {
-#             "name": "Ethernet2"
-#         },
-#         {
-#             "name": "Management1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "dead_interval": 29,
-#                     "hello_interval": 66,
-#                     "mtu_ignore": True
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "bfd": True,
-#                     "cost": 106,
-#                     "hello_interval": 77,
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.5"
-#                             },
-#                             "priority": 45
-#                         },
-#                         {
-#                             "afi": "ipv6",
-#                             "dead_interval": 56,
-#                             "mtu_ignore": True,
-#                             "network": "point-to-point",
-#                             "passive_interface": True,
-#                             "retransmit_interval": 115
-#                         }
-#                     ],
-#                     "transmit_delay": 100
-#                 }
-#             ],
-#             "name": "Vlan1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv6",
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.6"
-#                             },
-#                             "hello_interval": 45,
-#                             "retransmit_interval": 100
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan2"
-#         }
-#     ],
-#     "changed": True,
-#     "commands": [
-#         "interface Vlan2",
-#         "no ospfv3 ipv4 hello-interval 45",
-#         "no ospfv3 ipv4 retransmit-interval 100",
-#         "no ospfv3 ipv4 area 0.0.0.6",
-#         "interface Vlan1",
-#         "no ip ospf dead-interval 29",
-#         "no ip ospf hello-interval 66",
-#         "no ip ospf mtu-ignore",
-#         "ospfv3 cost 44",
-#         "ospfv3 authentication ipsec spi 30 md5 passphrase 7 7hl8FV3lZ6H1mAKpjL47hQ==",
-#         "no ospfv3 ipv4 priority 45",
-#         "no ospfv3 ipv4 area 0.0.0.5",
-#         "no ospfv3 ipv6 passive-interface",
-#         "no ospfv3 ipv6 retransmit-interval 115",
-#         "no ospfv3 hello-interval 77",
-#         "no ospfv3 transmit-delay 100"
-#     ],
-#
 
-# Using deleted:
-#--------------
+# Using deleted
 
-# before State:
-
+# Before state:
+# -------------
 # veos(config)#show running-config | section interface | ospf
 # interface Vlan1
 #    ip ospf dead-interval 29
@@ -802,146 +645,88 @@ EXAMPLES = """
 #    ospfv3 ipv4 hello-interval 45
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
-# veos(config)#
 
-  - name: Delete device configuration
+  - name: Delete provided ospf interface config
     arista.eos.eos_ospf_interfaces:
       config:
         - name: "Vlan1"
       state: deleted
 
-# After State:
+# Task output:
+# ------------
+# before:
+#   - address_family:
+#     - afi: ipv4
+#       dead_interval: 29
+#       hello_interval: 66
+#       mtu_ignore: true
+#     - afi: ipv6
+#       bfd: true
+#       cost: 106
+#       hello_interval: 77
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.5
+#         priority: 45
+#       - afi: ipv6
+#         dead_interval: 56
+#         mtu_ignore: true
+#         network: point-to-point
+#         passive_interface: true
+#         retransmit_interval: 115
+#       transmit_delay: 100
+#     name: Vlan1
+#   - address_family:
+#     - afi: ipv6
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.6
+#         hello_interval: 45
+#         retransmit_interval: 100
+#     name: Vlan2
 
+# commands:
+# - interface Vlan1
+# - no ip ospf dead-interval 29
+# - no ip ospf hello-interval 66
+# - no ip ospf mtu-ignore
+# - no ospfv3 bfd
+# - no ospfv3 cost 106
+# - no ospfv3 hello-interval 77
+# - no ospfv3 transmit-delay 100
+# - no ospfv3 ipv4 priority 45
+# - no ospfv3 ipv4 area 0.0.0.5
+# - no ospfv3 ipv6 passive-interface
+# - no ospfv3 ipv6 dead-interval 56
+# - no ospfv3 ipv6 retransmit-interval 115
+# - no ospfv3 ipv6 network point-to-point
+# - no ospfv3 ipv6 mtu-ignore
+#
+# after:
+#   - address_family:
+#     - afi: ipv6
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.6
+#         hello_interval: 45
+#         retransmit_interval: 100
+#     name: Vlan2
+
+# After state:
+# ------------
 # veos#show running-config | section interface | ospf
 # interface Vlan2
 #    ospfv3 ipv4 hello-interval 45
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
-#
-# Module Execution:
-#
-# "after": [
-#         {
-#             "name": "Ethernet1"
-#         },
-#         {
-#             "name": "Ethernet2"
-#         },
-#         {
-#             "name": "Management1"
-#         },
-#         {
-#             "name": "Vlan1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv6",
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.6"
-#                             },
-#                             "hello_interval": 45,
-#                             "retransmit_interval": 100
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan2"
-#         }
-#     ],
-#     "before": [
-#         {
-#             "name": "Ethernet1"
-#         },
-#         {
-#             "name": "Ethernet2"
-#         },
-#         {
-#             "name": "Management1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "dead_interval": 29,
-#                     "hello_interval": 66,
-#                     "mtu_ignore": True
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "bfd": True,
-#                     "cost": 106,
-#                     "hello_interval": 77,
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.5"
-#                             },
-#                             "priority": 45
-#                         },
-#                         {
-#                             "afi": "ipv6",
-#                             "dead_interval": 56,
-#                             "mtu_ignore": True,
-#                             "network": "point-to-point",
-#                             "passive_interface": True,
-#                             "retransmit_interval": 115
-#                         }
-#                     ],
-#                     "transmit_delay": 100
-#                 }
-#             ],
-#             "name": "Vlan1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv6",
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.6"
-#                             },
-#                             "hello_interval": 45,
-#                             "retransmit_interval": 100
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan2"
-#         }
-#     ],
-#     "changed": True,
-#     "commands": [
-#         "interface Vlan1",
-#         "no ip ospf dead-interval 29",
-#         "no ip ospf hello-interval 66",
-#         "no ip ospf mtu-ignore",
-#         "no ospfv3 bfd",
-#         "no ospfv3 cost 106",
-#         "no ospfv3 hello-interval 77",
-#         "no ospfv3 transmit-delay 100",
-#         "no ospfv3 ipv4 priority 45",
-#         "no ospfv3 ipv4 area 0.0.0.5",
-#         "no ospfv3 ipv6 passive-interface",
-#         "no ospfv3 ipv6 dead-interval 56",
-#         "no ospfv3 ipv6 retransmit-interval 115",
-#         "no ospfv3 ipv6 network point-to-point",
-#         "no ospfv3 ipv6 mtu-ignore"
-#     ],
-#
 
-# Using parsed:
-# ------------
+# Using parsed
 
-# parsed.cfg:
+# parsed.cfg
 # ----------
-
 # interface Vlan1
 #    ip ospf dead-interval 29
 #    ip ospf hello-interval 66
@@ -965,73 +750,50 @@ EXAMPLES = """
 #    ospfv3 ipv4 area 0.0.0.6
 #
 
-  - name: parse configs
+  - name: parse provided config into structured facts
     arista.eos.eos_ospf_interfaces:
       running_config: "{{ lookup('file', './parsed.cfg') }}"
       state: parsed
 
-# Module Execution:
-# "parsed": [
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "cost": 500,
-#                     "dead_interval": 29,
-#                     "hello_interval": 66,
-#                     "mtu_ignore": True
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "bfd": True,
-#                     "cost": 106,
-#                     "hello_interval": 77,
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.5"
-#                             },
-#                             "priority": 45
-#                         },
-#                         {
-#                             "afi": "ipv6",
-#                             "dead_interval": 56,
-#                             "mtu_ignore": True,
-#                             "network": "point-to-point",
-#                             "passive_interface": True,
-#                             "retransmit_interval": 115
-#                         }
-#                     ],
-#                     "transmit_delay": 100
-#                 }
-#             ],
-#             "name": "Vlan1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv6",
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.6"
-#                             },
-#                             "hello_interval": 45,
-#                             "retransmit_interval": 100
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan2"
-#         }
-#     ]
+# Task output:
+# ------------
+# parsed:
+#   - address_family:
+#     - afi: ipv4
+#       cost: 500
+#       dead_interval: 29
+#       hello_interval: 66
+#       mtu_ignore: true
+#     - afi: ipv6
+#       bfd: true
+#       cost: 106
+#       hello_interval: 77
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.5
+#         priority: 45
+#       - afi: ipv6
+#         dead_interval: 56
+#         mtu_ignore: true
+#         network: point-to-point
+#         passive_interface: true
+#         retransmit_interval: 115
+#       transmit_delay: 100
+#     name: Vlan1
+#   - address_family:
+#     - afi: ipv6
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.6
+#         hello_interval: 45
+#         retransmit_interval: 100
+#     name: Vlan2
 
 # Using gathered:
 
-# Device COnfig:
-
+# Device config:
 # veos#show running-config | section interface | ospf
 # interface Vlan1
 #    ip ospf cost 500
@@ -1054,86 +816,49 @@ EXAMPLES = """
 #    ospfv3 ipv4 hello-interval 45
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
-# veos#
 
-  - name: gather configs
+  - name: gather runnig config
     arista.eos.eos_ospf_interfaces:
       state: gathered
 
-# Module Execution:
-#
-#  "gathered": [
-#         {
-#             "name": "Ethernet1"
-#         },
-#         {
-#             "name": "Ethernet2"
-#         },
-#         {
-#             "name": "Management1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv4",
-#                     "area": {
-#                         "area_id": "0.0.0.50"
-#                     },
-#                     "cost": 500,
-#                     "dead_interval": 29,
-#                     "hello_interval": 66,
-#                     "mtu_ignore": True
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "cost": 106,
-#                     "hello_interval": 77,
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.5"
-#                             },
-#                             "priority": 45
-#                         },
-#                         {
-#                             "afi": "ipv6",
-#                             "dead_interval": 56,
-#                             "mtu_ignore": True,
-#                             "network": "point-to-point",
-#                             "passive_interface": True,
-#                             "retransmit_interval": 115
-#                         }
-#                     ],
-#                     "transmit_delay": 100
-#                 }
-#             ],
-#             "name": "Vlan1"
-#         },
-#         {
-#             "address_family": [
-#                 {
-#                     "afi": "ipv6",
-#                     "ip_params": [
-#                         {
-#                             "afi": "ipv4",
-#                             "area": {
-#                                 "area_id": "0.0.0.6"
-#                             },
-#                             "hello_interval": 45,
-#                             "retransmit_interval": 100
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "name": "Vlan2"
-#         }
-#     ],
-#
+# Task output:
+# ------------
+# gathered:
+#   - address_family:
+#     - afi: ipv4
+#       area:
+#         area_id: 0.0.0.50
+#       cost: 500
+#       dead_interval: 29
+#       hello_interval: 66
+#       mtu_ignore: true
+#     - afi: ipv6
+#       cost: 106
+#       hello_interval: 77
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.5
+#         priority: 45
+#       - afi: ipv6
+#         dead_interval: 56
+#         mtu_ignore: true
+#         network: point-to-point
+#         passive_interface: true
+#         retransmit_interval: 115
+#       transmit_delay: 100
+#     name: Vlan1
+#   - address_family:
+#     - afi: ipv6
+#       ip_params:
+#       - afi: ipv4
+#         area:
+#           area_id: 0.0.0.6
+#         hello_interval: 45
+#         retransmit_interval: 100
+#     name: Vlan2
 
-
-# Using rendered:
-# --------------
+# Using rendered
 
   - name: Render provided configuration
     arista.eos.eos_ospf_interfaces:
@@ -1174,29 +899,72 @@ EXAMPLES = """
 
       state: rendered
 
-# Module Execution:
-#
-# "rendered": [
-#         "interface Vlan1",
-#         "ip ospf dead-interval 29",
-#         "ip ospf mtu-ignore",
-#         "ip ospf hello-interval 66",
-#         "ospfv3 hello-interval 77",
-#         "ospfv3 cost 106",
-#         "ospfv3 transmit-delay 100",
-#         "ospfv3 ipv4 area 0.0.0.5",
-#         "ospfv3 ipv4 priority 45",
-#         "ospfv3 ipv6 retransmit-interval 115",
-#         "ospfv3 ipv6 dead-interval 56",
-#         "ospfv3 ipv6 passive-interface",
-#         "interface Vlan2",
-#         "ip ospf message-digest-key 200 md5 7 hkdfhtu==",
-#         "ospfv3 ipv4 area 0.0.0.6",
-#         "ospfv3 ipv4 hello-interval 45",
-#         "ospfv3 ipv4 retransmit-interval 100"
-#     ]
-#
-
+# Task output:
+# ------------
+# rendered:
+# - interface Vlan1
+# - ip ospf dead-interval 29
+# - ip ospf mtu-ignore
+# - ip ospf hello-interval 66
+# - ospfv3 hello-interval 77
+# - ospfv3 cost 106
+# - ospfv3 transmit-delay 100
+# - ospfv3 ipv4 area 0.0.0.5
+# - ospfv3 ipv4 priority 45
+# - ospfv3 ipv6 retransmit-interval 115
+# - ospfv3 ipv6 dead-interval 56
+# - ospfv3 ipv6 passive-interface
+# - interface Vlan2
+# - ip ospf message-digest-key 200 md5 7 hkdfhtu==
+# - ospfv3 ipv4 area 0.0.0.6
+# - ospfv3 ipv4 hello-interval 45
+# - ospfv3 ipv4 retransmit-interval 100
+"""
+RETURN = """
+before:
+  description: The configuration prior to the module execution.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+after:
+  description: The resulting configuration after module execution.
+  returned: when changed
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: list
+  sample:
+    - interface Vlan1
+    - ip ospf dead-interval 29
+    - ip ospf mtu-ignore
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+    - interface Vlan1
+    - ip ospf dead-interval 29
+    - ip ospf mtu-ignore
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 from ansible.module_utils.basic import AnsibleModule
