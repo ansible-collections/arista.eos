@@ -236,11 +236,27 @@ Bugfixes
 v2.0.1
 ======
 
+Minor Changes
+-------------
+
+- Add support for overridden operation in bgp_global resource module.
+
 Bugfixes
 --------
 
 - Add _remove_config before starting every integration test.
 - galaxy.yml - change wrong dependency ``ansible.netcommon`` from ``2.0.0`` to ``>= 2.0.0`` (https://github.com/ansible-collections/overview/issues/43).
+
+Documentation Changes
+---------------------
+
+- Update bgp examples with yaml callback result
+- Update bgp_global examples with yaml callback result
+- Update examples with yaml formatted output in ospf_interfaces.
+- Update ospf_interfaces examples with yaml callback result
+- Update ospfv2 examples with yaml callback result
+- Update ospfv3 examples with yaml callback result
+- Updateb bgp_address_family examples with yaml callback result
 
 v2.0.0
 ======
