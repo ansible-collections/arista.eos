@@ -75,7 +75,7 @@ def _tmplt_ntp_global_servers(config_data):
         command += " key {key_id}".format(**el)
     if el.get("local_interface"):
         linterface = el.get("local_interface").replace(" ", "")
-        command += " local-interface {}".format(linterface)
+        command += " local-interface " + linterface
     if el.get("maxpoll"):
         command += " maxpoll {maxpoll}".format(**el)
     if el.get("minpoll"):
