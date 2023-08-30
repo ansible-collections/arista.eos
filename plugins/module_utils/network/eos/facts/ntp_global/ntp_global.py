@@ -54,8 +54,6 @@ class Ntp_globalFacts(object):
         if not data:
             data = self.get_config(connection)
 
-        import q
-        q(data)
         # parse native config using the Ntp_global template
         ntp_global_parser = Ntp_globalTemplate(
             lines=data.splitlines(),
