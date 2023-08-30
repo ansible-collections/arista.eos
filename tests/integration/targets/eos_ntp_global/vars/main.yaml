@@ -8,6 +8,7 @@ merged:
     - "ntp server vrf vrf01 10.1.1.1 burst prefer"
     - "ntp server vrf vrf01 11.21.1.1 burst minpoll 13 prefer"
     - "ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15"
+    - "ntp server 1.1.1.1 local-interface Management1"
     - "ntp authenticate"
     - "ntp local-interface Ethernet1"
     - "ntp qos dscp 10"
