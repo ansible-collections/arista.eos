@@ -5,6 +5,26 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v6.1.0
+======
+
+Minor Changes
+-------------
+
+- Add support for overridden operation in bgp_global resource module.
+
+Documentation Changes
+---------------------
+
+- Update bgp examples with yaml callback result
+- Update bgp_global examples with yaml callback result
+- Update examples for ospfv3
+- Update examples with yaml formatted output in ospf_interfaces.
+- Update ospf_interfaces examples with yaml callback result
+- Update ospfv2 examples with yaml callback result
+- Update ospfv3 examples with yaml callback result
+- Updateb bgp_address_family examples with yaml callback result
+
 v6.0.1
 ======
 
