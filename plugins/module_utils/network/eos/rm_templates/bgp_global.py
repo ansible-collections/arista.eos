@@ -93,8 +93,7 @@ def _tmplt_bgp_params(config_data):
         command += " confederation"
         if config_data["bgp_params"]["confederation"].get("identifier"):
             command += " identifier {identifier}".format(
-                **config_data["bgp_params"]["confederation"],
-            )
+                **config_data["bgp_params"]["confederation"])
         else:
             command += " peers {peers}".format(**config_data["bgp_params"]["confederation"])
     elif config_data["bgp_params"].get("control_plane_filter"):

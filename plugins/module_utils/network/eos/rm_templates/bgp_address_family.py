@@ -71,8 +71,7 @@ def _tmplt_bgp_neighbor(config_data):
         command += " default-originate"
         if config_data["neighbor"]["default_originate"].get("route_map"):
             command += " route-map {route_map}".format(
-                **config_data["neighbor"]["default_originate"],
-            )
+                **config_data["neighbor"]["default_originate"])
         if config_data["neighbor"]["default_originate"].get("always"):
             command += " always"
     elif config_data["neighbor"].get("graceful_restart"):
