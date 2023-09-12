@@ -529,3 +529,11 @@ releases:
       - update_docs.yaml
       - update_ospf_intefaces_docs.yaml
     release_date: "2023-09-06"
+  6.1.1:
+    changes:
+      bugfixes:
+        - fix sanity issues w.r.t python27
+    fragments:
+      - fix_27_sanity.yaml
+      - sanity_fix.yaml
+    release_date: "2023-09-12"
