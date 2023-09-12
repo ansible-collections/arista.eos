@@ -5,6 +5,14 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v6.1.1
+======
+
+Bugfixes
+--------
+
+- fix sanity issues w.r.t python27
+
 v6.1.0
 ======
 
