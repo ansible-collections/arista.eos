@@ -537,3 +537,10 @@ releases:
       - fix_27_sanity.yaml
       - sanity_fix.yaml
     release_date: "2023-09-12"
+  6.1.2:
+    changes:
+      bugfixes:
+        - Skip compile testing for python <3.6.
+    fragments:
+      - conpile_test36.yaml
+    release_date: "2023-09-14"
