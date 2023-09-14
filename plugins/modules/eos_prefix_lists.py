@@ -892,6 +892,59 @@ EXAMPLES = """
 #     name: v601
 
 """
+RETURN = """
+before:
+  description: The configuration prior to the model invocation.
+  returned: always
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+after:
+  description: The resulting configuration model invocation.
+  returned: when changed
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: always
+  type: list
+  sample:
+    - ip prefix-list v401
+    - seq 25 deny 45.55.4.0/24
+    - seq 200 permit 200.11.2.0/24 ge 32
+    - ip prefix-list v403
+    - seq 10 deny 10.1.1.0/24
+rendered:
+  description: The set of CLI commands generated from the value in C(config) option
+  returned: When C(state) is I(rendered)
+  type: list
+  sample: >
+    - ip prefix-list v401
+    - seq 25 deny 45.55.4.0/24
+    - seq 200 permit 200.11.2.0/24 ge 32
+    - ip prefix-list v403
+    - seq 10 deny 10.1.1.0/24
+gathered:
+  description: The configuration as structured data transformed for the running configuration
+               fetched from remote host
+  returned: When C(state) is I(gathered)
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+    of the parameters above.
+parsed:
+  description: The configuration as structured data transformed for the value of
+               C(running_config) option
+  returned: When C(state) is I(parsed)
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+    of the parameters above.
+"""
+
 
 from ansible.module_utils.basic import AnsibleModule
 

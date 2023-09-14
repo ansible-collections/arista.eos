@@ -653,40 +653,14 @@ commands:
   type: list
   sample:
     - ip route vrf vrf1 192.2.2.0/24 125.2.3.1 93
+    - ipv6 route 5001::/64 Ethernet1
 rendered:
   description: The set of CLI commands generated from the value in C(config) option
   returned: When C(state) is I(rendered)
   type: list
   sample: >
-    "address_families": [
-                        {
-                            "afi": "ipv4",
-                            "routes": [
-                                {
-                                    "dest": "192.2.2.0/24",
-                                    "next_hops": [
-                                        {
-                                            "admin_distance": 93,
-                                            "description": null,
-                                            "forward_router_address": null,
-                                            "interface": "125.2.3.1",
-                                            "mpls_label": null,
-                                            "nexthop_grp": null,
-                                            "tag": null,
-                                            "track": null,
-                                            "vrf": null
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ],
-                    "vrf": "vrf1"
-                }
-            ],
-            "running_config": null,
-            "state": "rendered"
-        }
+    - ip route 165.10.1.0/24 Ethernet1 10.1.1.2 100
+    - ipv6 route 5001::/64 Ethernet1
 gathered:
   description: The configuration as structured data transformed for the running configuration
                fetched from remote host
