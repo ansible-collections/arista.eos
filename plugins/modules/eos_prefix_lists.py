@@ -347,7 +347,7 @@ EXAMPLES = """
                     operator: "ge"
       state: replaced
 
-      
+
 # Task Output
 # -------------
 # before:
@@ -771,7 +771,7 @@ EXAMPLES = """
       running_config: "{{ lookup('file', './parsed_prefix_lists.cfg') }}"
       state: parsed
 
-      
+
 # Task Output
 # -------------
 # parsed:
@@ -858,7 +858,7 @@ EXAMPLES = """
     arista.eos.eos_prefix_lists:
       state: gathered
 
-      
+
 # Task Output
 # -------------
 # gathered:

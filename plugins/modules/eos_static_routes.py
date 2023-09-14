@@ -215,7 +215,7 @@ EXAMPLES = """
 #         description: testroute1
 #         interface: Null0
 #   vrf: testvrf
-# commands: 
+# commands:
 # - no ip route vrf testvrf 22.65.1.0/24 Null0 90 name testroute
 # after:
 # - address_families:
@@ -303,7 +303,7 @@ EXAMPLES = """
 #       - interface: Ethernet1
 #         tag: 50
 #   vrf: testvrf
-# commands: 
+# commands:
 # - ipv6 route 2211::/64 Ethernet1 100:1::2
 # after:
 # - address_families:
@@ -372,7 +372,7 @@ EXAMPLES = """
           - interface: Ethernet1
     state: replaced
 
-    
+
 # Task Output
 # -------------
 # before:
@@ -450,7 +450,6 @@ EXAMPLES = """
     state: replaced
 
 
-   
 # Task Output
 # -------------
 # before:
@@ -609,12 +608,12 @@ EXAMPLES = """
 #
 
 
-  - name: parse configs
-    arista.eos.eos_static_routes:
-      running_config: "{{ lookup('file', './parse_static_routes.cfg') }}"
-      state: parsed
+- name: parse configs
+  arista.eos.eos_static_routes:
+    running_config: "{{ lookup('file', './parse_static_routes.cfg') }}"
+    state: parsed
 
-      
+
 # Task Output
 # -------------
 # parsed:
