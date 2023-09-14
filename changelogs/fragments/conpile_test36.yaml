@@ -1,0 +1,3 @@
+---
+trivial:
+  - Skip compile testing for python <3.6.
