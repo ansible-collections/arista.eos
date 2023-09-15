@@ -5,6 +5,14 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v6.1.2
+======
+
+Bugfixes
+--------
+
+- Skip compile testing for python <3.6.
+
 v6.1.1
 ======
 
