@@ -36,13 +36,14 @@ DOCUMENTATION = """
 module: eos_interfaces
 short_description: Interfaces resource module
 description:
-- This module manages the interface attributes of Arista EOS interfaces.
+  - This module manages the interface attributes of Arista EOS interfaces.
 version_added: 1.0.0
 author:
-- Nathaniel Case (@qalthos)
+  - Nathaniel Case (@Qalthos)
 notes:
-- Tested against Arista EOS 4.24.6F
-- This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
+  - Tested against Arista EOS 4.24.6F
+  - This module works with connection C(network_cli).
+    See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_eos.html)
 options:
   config:
     description: The provided configuration
@@ -51,66 +52,65 @@ options:
     suboptions:
       name:
         description:
-        - Full name of the interface, e.g. GigabitEthernet1.
+          - Full name of the interface, e.g. GigabitEthernet1.
         type: str
         required: True
       description:
         description:
-        - Interface description
+          - Interface description
         type: str
       duplex:
         description:
-        - Interface link status. Applicable for Ethernet interfaces only.
-        - Values other than C(auto) must also set I(speed).
-        - Ignored when I(speed) is set above C(1000).
+          - Interface link status. Applicable for Ethernet interfaces only.
+          - Values other than C(auto) must also set I(speed).
+          - Ignored when I(speed) is set above C(1000).
         type: str
       enabled:
         default: true
         description:
-        - Administrative state of the interface.
-        - Set the value to C(true) to administratively enable the interface or C(false)
-          to disable it.
+          - Administrative state of the interface.
+          - Set the value to C(true) to administratively enable the interface or C(false)
+            to disable it.
         type: bool
       mtu:
         description:
-        - MTU for a specific interface. Must be an even number between 576 and 9216.
-          Applicable for Ethernet interfaces only.
+          - MTU for a specific interface. Must be an even number between 576 and 9216.
+            Applicable for Ethernet interfaces only.
         type: int
       speed:
         description:
-        - Interface link speed. Applicable for Ethernet interfaces only.
+          - Interface link speed. Applicable for Ethernet interfaces only.
         type: str
       mode:
         description:
-        - Manage Layer2 or Layer3 state of the interface. Applicable for Ethernet
-          and port channel interfaces only.
+          - Manage Layer2 or Layer3 state of the interface. Applicable for Ethernet
+            and port channel interfaces only.
         choices:
-        - layer2
-        - layer3
+          - layer2
+          - layer3
         type: str
   running_config:
     description:
-    - This option is used only with state I(parsed).
-    - The value of this option should be the output received from the EOS device by
-      executing the command B(show running-config | section ^interface).
-    - The state I(parsed) reads the configuration from C(running_config) option and
-      transforms it into Ansible structured data as per the resource module's argspec
-      and the value is then returned in the I(parsed) key within the result.
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the EOS device by
+        executing the command B(show running-config | section ^interface).
+      - The state I(parsed) reads the configuration from C(running_config) option and
+        transforms it into Ansible structured data as per the resource module's argspec
+        and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     choices:
-    - merged
-    - replaced
-    - overridden
-    - deleted
-    - parsed
-    - rendered
-    - gathered
+      - merged
+      - replaced
+      - overridden
+      - deleted
+      - parsed
+      - rendered
+      - gathered
     default: merged
     description:
-    - The state of the configuration after module completion.
+      - The state of the configuration after module completion.
     type: str
-
 """
 
 EXAMPLES = """
@@ -456,20 +456,49 @@ EXAMPLES = """
 
 RETURN = """
 before:
-  description: The configuration as structured data prior to module invocation.
-  returned: always
+  description: The configuration prior to the module execution.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: dict
-  sample: The configuration returned will always be in the same format of the parameters above.
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 after:
-  description: The configuration as structured data after module completion.
+  description: The resulting configuration after module execution.
   returned: when changed
   type: dict
-  sample: The configuration returned will always be in the same format of the parameters above.
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 commands:
   description: The set of commands pushed to the remote device.
-  returned: always
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: list
-  sample: ['interface Ethernet2', 'shutdown', 'speed 10full']
+  sample:
+    - interface Ethernet1
+    - no shutdown
+    - no switchport
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+    - interface Ethernet1
+    - no shutdown
+    - no switchport
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 
