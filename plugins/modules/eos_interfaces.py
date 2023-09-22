@@ -114,66 +114,88 @@ options:
 """
 
 EXAMPLES = """
-
 # Using merged
 
 # Before state:
 # -------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    description "Interface 1"
 # !
 # interface Ethernet2
 # !
 # interface Management1
-#    description "Management interface"
 #    ip address dhcp
-# !
+#    dhcp client accept default-route
 
 - name: Merge provided configuration with device configuration
   arista.eos.eos_interfaces:
     config:
-    - name: Ethernet1
-      enabled: true
-      mode: layer3
-    - name: Ethernet2
-      description: Configured by Ansible
-      enabled: false
+      - name: Ethernet1
+        enabled: true
+        mode: layer3
+      - name: Ethernet2
+        description: Configured by Ansible
+        enabled: false
     state: merged
+
+# Task Output
+# -----------
+#
+# before:
+# - enabled: true
+#   name: Ethernet1
+# - enabled: true
+#   name: Ethernet2
+# - enabled: true
+#   name: Management1
+# commands:
+# - interface Ethernet1
+# - no switchport
+# - interface Ethernet2
+# - shutdown
+# - description Configured by Ansible
+# after:
+# - enabled: true
+#   mode: layer3
+#   name: Ethernet1
+# - description: Configured by Ansible
+#   enabled: false
+#   name: Ethernet2
+# - enabled: true
+#   name: Management1
 
 # After state:
 # ------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    description "Interface 1"
 #    no switchport
 # !
 # interface Ethernet2
-#    description "Configured by Ansible"
+#    description Configured by Ansible
 #    shutdown
 # !
 # interface Management1
-#    description "Management interface"
 #    ip address dhcp
-# !
+#    dhcp client accept default-route
 
 # Using replaced
 
 # Before state:
 # -------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    description "Interface 1"
+#    no switchport
 # !
 # interface Ethernet2
+#    description Configured by Ansible
+#    shutdown
 # !
 # interface Management1
-#    description "Management interface"
 #    ip address dhcp
-# !
+#    dhcp client accept default-route
 
 - name: Replaces device configuration of listed interfaces with provided configuration
   arista.eos.eos_interfaces:
@@ -185,36 +207,59 @@ EXAMPLES = """
       enabled: false
     state: replaced
 
+# Task Output
+# -----------
+#
+# before:
+# - enabled: true
+#   mode: layer3
+#   name: Ethernet1
+# - description: Configured by Ansible
+#   enabled: false
+#   name: Ethernet2
+# - enabled: true
+#   name: Management1
+# commands:
+# - interface Ethernet1
+# - switchport
+# after:
+# - enabled: true
+#   name: Ethernet1
+# - description: Configured by Ansible
+#   enabled: false
+#   name: Ethernet2
+# - enabled: true
+#   name: Management1
+
 # After state:
 # ------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
 # !
 # interface Ethernet2
-#    description "Configured by Ansible"
+#    description Configured by Ansible
 #    shutdown
 # !
 # interface Management1
-#    description "Management interface"
 #    ip address dhcp
-# !
+#    dhcp client accept default-route
 
 # Using overridden
 
 # Before state:
 # -------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    description "Interface 1"
 # !
 # interface Ethernet2
+#    description Configured by Ansible
+#    shutdown
 # !
 # interface Management1
-#    description "Management interface"
 #    ip address dhcp
-# !
+#    dhcp client accept default-route
 
 - name: Overrides all device configuration with provided configuration
   arista.eos.eos_interfaces:
@@ -226,36 +271,58 @@ EXAMPLES = """
       enabled: false
     state: overridden
 
+# Task Output
+# -----------
+#
+# before:
+# - enabled: true
+#   name: Ethernet1
+# - description: Configured by Ansible
+#   enabled: false
+#   name: Ethernet2
+# - enabled: true
+#   name: Management1
+# commands:
+# - interface Management1
+# - no shutdown
+# after:
+# - enabled: true
+#   name: Ethernet1
+# - description: Configured by Ansible
+#   enabled: false
+#   name: Ethernet2
+# - enabled: true
+#   name: Management1
+
 # After state:
 # ------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
 # !
 # interface Ethernet2
-#    description "Configured by Ansible"
+#    description Configured by Ansible
 #    shutdown
 # !
 # interface Management1
 #    ip address dhcp
-# !
+#    dhcp client accept default-route
 
 # Using deleted
 
 # Before state:
 # -------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    description "Interface 1"
-#    no switchport
 # !
 # interface Ethernet2
+#    description Configured by Ansible
+#    shutdown
 # !
 # interface Management1
-#    description "Management interface"
 #    ip address dhcp
-# !
+#    dhcp client accept default-route
 
 - name: Delete or return interface parameters to default settings
   arista.eos.eos_interfaces:
@@ -263,22 +330,46 @@ EXAMPLES = """
     - name: Ethernet1
     state: deleted
 
+# Task Output
+# -----------
+#
+# before:
+# - enabled: true
+#   name: Ethernet1
+# - description: Configured by Ansible
+#   enabled: false
+#   name: Ethernet2
+# - enabled: true
+#   name: Management1
+# commands:
+# - interface Ethernet1
+# - no shutdown
+# after:
+# - enabled: true
+#   name: Ethernet1
+# - description: Configured by Ansible
+#   enabled: false
+#   name: Ethernet2
+# - enabled: true
+#   name: Management1
+
 # After state:
 # ------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
 # !
 # interface Ethernet2
+#    description Configured by Ansible
+#    shutdown
 # !
 # interface Management1
-#    description "Management interface"
 #    ip address dhcp
-# !
+#    dhcp client accept default-route
 
 # Using rendered
 
-- name: Use Rendered to convert the structured data to native config
+- name: Render the provided configuration into platform specific configuration lines
   arista.eos.eos_interfaces:
     config:
     - name: Ethernet1
@@ -287,24 +378,24 @@ EXAMPLES = """
     - name: Ethernet2
       description: Configured by Ansible
       enabled: false
-    state: merged
+    state: rendered
 
-# Output:
-# ------------
+# Module Execution Result:
+# ------------------------
+#
+# rendered:
+# - interface Ethernet1
+# - no shutdown
+# - no switchport
+# - interface Ethernet2
+# - shutdown
+# - description Configured by Ansible
 
-# - "interface Ethernet1"
-# - "description "Interface 1""
-# - "no swithcport"
-# - "interface Ethernet2"
-# - "description "Configured by Ansible""
-# - "shutdown"
-# - "interface Management1"
-# - "description "Management interface""
-# - "ip address dhcp"
+# Using Parsed
 
-# Using parsed
-# parsed.cfg
-
+# File: parsed.cfg
+# ----------------
+#
 # interface Ethernet1
 #    description "Interface 1"
 # !
@@ -313,46 +404,54 @@ EXAMPLES = """
 #    shutdown
 # !
 
-- name: Use parsed to convert native configs to structured data
+- name: Parse the commands for provided configuration
   arista.eos.interfaces:
     running_config: "{{ lookup('file', 'parsed.cfg') }}"
     state: parsed
 
-# Output
+# Module Execution Result:
+# ------------------------
+#
 # parsed:
-#     - name: Ethernet1
-#       enabled: True
-#       mode: layer2
-#     - name: Ethernet2
-#       description: 'Configured by Ansible'
-#       enabled: False
-#       mode: layer2
+#  - name: Ethernet1
+#    enabled: True
+#    mode: layer2
+#  - name: Ethernet2
+#    description: 'Configured by Ansible'
+#    enabled: False
+#    mode: layer2
 
-# Using gathered:
+# Using Gathered
 
-# Existing config on the device
-# -----------------------------
+# Before state:
+# -------------
+#
+# test#show running-config | section interface
 # interface Ethernet1
-#    description "Interface 1"
 # !
 # interface Ethernet2
-#    description "Configured by Ansible"
+#    description Configured by Ansible
 #    shutdown
 # !
+# interface Management1
+#    ip address dhcp
+#    dhcp client accept default-route
 
 - name: Gather interfaces facts from the device
   arista.eos.interfaces:
     state: gathered
 
-# output
+# Module Execution Result:
+# ------------------------
+#
 # gathered:
-#      - name: Ethernet1
-#        enabled: True
-#        mode: layer2
-#      - name: Ethernet2
-#        description: 'Configured by Ansible'
-#        enabled: False
-#        mode: layer2
+# - enabled: true
+#   name: Ethernet1
+# - description: Configured by Ansible
+#   enabled: false
+#   name: Ethernet2
+# - enabled: true
+#   name: Management1
 """
 
 RETURN = """
