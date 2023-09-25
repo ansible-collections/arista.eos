@@ -534,8 +534,7 @@ Examples
     # - switchport mode access
     # - switchport access vlan 30
 
-
-    # Using Parsed
+    # Using parsed
 
     # File: parsed.cfg
     # ----------------
@@ -557,17 +556,16 @@ Examples
     # ------------------------
     #
     # parsed:
-    #    - name: Ethernet1
-    #      mode: trunk
-    #      trunk:
-    #        native_vlan: 10
-    #    - name: Ethernet2
-    #      mode: access
-    #      access:
-    #        vlan: 30
+    #  - name: Ethernet1
+    #    mode: trunk
+    #    trunk:
+    #      native_vlan: 10
+    #  - name: Ethernet2
+    #    mode: access
+    #    access:
+    #      vlan: 30
 
-
-    # Using Gathered
+    # Using gathered
 
     # Before state:
     # -------------
