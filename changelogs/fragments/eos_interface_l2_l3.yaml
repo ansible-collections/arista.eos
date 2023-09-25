@@ -1,5 +1,5 @@
 ---
 doc_changes:
-  - "eos_interfaces - update examples and use YAML output in them for better readability."
-  - "eos_l2_interfaces - update examples and use YAML output in them for better readability."
-  - "eos_l3_interfaces - update examples and use YAML output in them for better readability."
+  - "eos_interfaces - update examples and use YAML output for better readability."
+  - "eos_l2_interfaces - update examples and use YAML output for better readability."
+  - "eos_l3_interfaces - update examples and use YAML output for better readability."
