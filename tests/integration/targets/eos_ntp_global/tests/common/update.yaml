@@ -1,13 +1,13 @@
 ---
 - ansible.builtin.debug:
-    msg: Start eos_ntp_global merged integration tests ansible_connection={{
+    msg: Start eos_ntp_global update integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
     - name: merge given ntp_global configuration
       become: true
       register: result
-      arista.eos.eos_ntp_global: &merged
+      arista.eos.eos_ntp_global: &update
         config:
           authenticate:
             enable: true
@@ -46,20 +46,23 @@
               maxpoll: 15
               server: "25.1.1.1"
               vrf: "vrf01"
+            - server: "1.1.1.1"
+              vrf: "vrf01"
+              local_interface: "Management1"
           trusted_key: "23"
 
     - ansible.builtin.assert:
         that:
-          - result.commands|length == 11
+          - result.commands|length == 12
           - result.changed == true
-          - result.commands|symmetric_difference(merged.commands) == []
-          - result.after == replaced.before
+          - result.commands|symmetric_difference(updated.commands) == []
+          - result.after == updated.after
           - result.before == {}
 
     - name: Idempotency check
       become: true
       register: result
-      arista.eos.eos_ntp_global: *merged
+      arista.eos.eos_ntp_global: *update
 
     - ansible.builtin.assert:
         that:
