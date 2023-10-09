@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - fix line attribute fact generation and placement in ACE, when ACE is not fully parsed.

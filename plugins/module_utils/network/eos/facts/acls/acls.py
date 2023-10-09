@@ -331,8 +331,7 @@ class AclsFacts(object):
                             ace_dict.update({config_remainder: True})
                             dev_config_remainder.pop(0)
                     if dev_config_remainder:
-                        config.update({"line": dev_config})
-                        return utils.remove_empties(config)
+                        ace_dict.update({"line": dev_config})
             if bool(ace_dict):
                 ace_list.append(ace_dict.copy())
             if len(ace_list):
