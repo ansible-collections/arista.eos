@@ -47,6 +47,7 @@
               server: "25.1.1.1"
               vrf: "vrf01"
             - server: "1.1.1.1"
+              vrf: "vrf01"
               local_interface: "Management1"
           trusted_key: "23"
 
