@@ -8,3 +8,5 @@
       - "35 deny tcp 20.0.0.0/8 any log"
       - "45 remark Run by ansible"
       - "55 permit tcp any any"
+      - "ipv6 access-list test2"
+      - "10 deny icmpv6 any any reject-route hop-limit eq 20"
