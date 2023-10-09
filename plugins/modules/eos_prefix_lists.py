@@ -112,6 +112,8 @@ options:
 """
 EXAMPLES = """
 # Using merged
+
+
 # Before state
 # veos#show running-config | section prefix-lists
 # veos#
@@ -148,7 +150,51 @@ EXAMPLES = """
                   action: "deny"
                   address: "5000:1::/64"
 
-# After State
+
+# Task Output
+# -------------
+# before: {}
+# commands:
+# - ipv6 prefix-list v601
+# - seq 125 deny 5000:1::/64
+# - ip prefix-list v401
+# - seq 25 deny 45.55.4.0/24
+# - seq 100 permit 11.11.2.0/24 ge 32
+# - ip prefix-list v402
+# - seq 10 deny 10.1.1.0/24 ge 32
+# after:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       sequence: 25
+#     - action: permit
+#       address: 11.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 100
+#     name: v401
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 10
+#     name: v402
+# - afi: ipv6
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 5000:1::/64
+#       sequence: 125
+#     name: v601
+
+
+# After state:
+# ------------
 # veos#
 # veos#show running-config | section prefix-list
 # ip prefix-list v401
@@ -161,81 +207,13 @@ EXAMPLES = """
 # ipv6 prefix-list v601
 #    seq 125 deny 5000:1::/64
 # veos#
-#
-# Module Execution:
-# "after": [
-#         {
-#             "afi": "ipv4",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "45.55.4.0/24",
-#                             "sequence": 25
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "11.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 100
-#                         }
-#                     ],
-#                     "name": "v401"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v402"
-#                 }
-#             ]
-#         },
-#         {
-#             "afi": "ipv6",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "5000:1::/64",
-#                             "sequence": 125
-#                         }
-#                     ],
-#                     "name": "v601"
-#                 }
-#             ]
-#         }
-#     ],
-#     "before": {},
-#     "changed": true,
-#     "commands": [
-#         "ipv6 prefix-list v601",
-#         "seq 125 deny 5000:1::/64",
-#         "ip prefix-list v401",
-#         "seq 25 deny 45.55.4.0/24",
-#         "seq 100 permit 11.11.2.0/24 ge 32",
-#         "ip prefix-list v402",
-#         "seq 10 deny 10.1.1.0/24 ge 32"
-#     ],
-#
 
-# using merged:
+
+# Using merged:
 # Failure scenario : 'merged' should not be used when an existing prefix-list (sequence number)
 # is to be modified.
 
-# Before State:
+
 # veos#show running-config | section prefix-list
 # ip prefix-list v401
 #    seq 25 deny 45.55.4.0/24
@@ -284,82 +262,53 @@ EXAMPLES = """
                   address: "5000:1::/64"
       state: merged
 
-# Module Execution:
-# fatal: [192.168.122.113]: FAILED! => {
-#     "changed": false,
-#     "invocation": {
-#         "module_args": {
-#             "config": [
-#                 {
-#                     "afi": "ipv4",
-#                     "prefix_lists": [
-#                         {
-#                             "entries": [
-#                                 {
-#                                     "action": "deny",
-#                                     "address": "45.55.4.0/24",
-#                                     "match": {
-#                                         "masklen": 32,
-#                                         "operator": "ge"
-#                                     },
-#                                     "resequence": null,
-#                                     "sequence": 25
-#                                 },
-#                                 {
-#                                     "action": "permit",
-#                                     "address": "11.11.2.0/24",
-#                                     "match": {
-#                                         "masklen": 32,
-#                                         "operator": "ge"
-#                                     },
-#                                     "resequence": null,
-#                                     "sequence": 100
-#                                 }
-#                             ],
-#                             "name": "v401"
-#                         },
-#                         {
-#                             "entries": [
-#                                 {
-#                                     "action": "deny",
-#                                     "address": "10.1.1.0/24",
-#                                     "match": {
-#                                         "masklen": 32,
-#                                         "operator": "ge"
-#                                     },
-#                                     "resequence": null,
-#                                     "sequence": 10
-#                                 }
-#                             ],
-#                             "name": "v402"
-#                         }
-#                     ]
-#                 },
-#                 {
-#                     "afi": "ipv6",
-#                     "prefix_lists": [
-#                         {
-#                             "entries": [
-#                                 {
-#                                     "action": "deny",
-#                                     "address": "5000:1::/64",
-#                                     "match": null,
-#                                     "resequence": null,
-#                                     "sequence": 125
-#                                 }
-#                             ],
-#                             "name": "v601"
-#                         }
-#                     ]
-#                 }
-#             ],
-#             "running_config": null,
-#             "state": "merged"
-#         }
-#     },
-#     "msg": "Sequence number 25 is already present. Use replaced/overridden operation to change the configuration"
-# }
-#
+# Task Output
+# -------------
+# changed: false
+# invocation:
+#   module_args:
+#     config:
+#     - afi: ipv4
+#       prefix_lists:
+#       - entries:
+#         - action: deny
+#           address: 45.55.4.0/24
+#           match:
+#             masklen: 32
+#             operator: ge
+#           resequence:
+#           sequence: 25
+#         - action: permit
+#           address: 11.11.2.0/24
+#           match:
+#             masklen: 32
+#             operator: ge
+#           resequence:
+#           sequence: 100
+#         name: v401
+#       - entries:
+#         - action: deny
+#           address: 10.1.1.0/24
+#           match:
+#             masklen: 32
+#             operator: ge
+#           resequence:
+#           sequence: 10
+#         name: v402
+#     - afi: ipv6
+#       prefix_lists:
+#       - entries:
+#         - action: deny
+#           address: 5000:1::/64
+#           match:
+#           resequence:
+#           sequence: 125
+#         name: v601
+#     running_config:
+#     state: merged
+# msg: Sequence number 25 is already present. Use replaced/overridden operation to change
+#   the configuration
+
 
 # Using Replaced:
 
@@ -375,7 +324,9 @@ EXAMPLES = """
 # ipv6 prefix-list v601
 #    seq 125 deny 5000:1::/64
 # veos#
-  - name: Replace
+
+
+  - name: Replace Provided configuration with given configuration
     arista.eos.eos_prefix_lists:
       config:
         - afi: "ipv4"
@@ -395,6 +346,72 @@ EXAMPLES = """
                     masklen: 32
                     operator: "ge"
       state: replaced
+
+
+# Task Output
+# -------------
+# before:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       sequence: 25
+#     - action: permit
+#       address: 11.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 100
+#     name: v401
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 10
+#     name: v402
+# - afi: ipv6
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 5000:1::/64
+#       sequence: 125
+#     name: v601
+# commands:
+# - ip prefix-list v401
+# - no seq 25
+# - seq 25 deny 45.55.4.0/24 ge 32
+# - seq 200 permit 200.11.2.0/24 ge 32
+# - no seq 100
+# - no ip prefix-list v402
+# after:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 25
+#     - action: permit
+#       address: 200.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 200
+#     name: v401
+# - afi: ipv6
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 5000:1::/64
+#       sequence: 125
+#     name: v601
+
+
 # After State:
 # veos#show running-config | section prefix-list
 # ip prefix-list v401
@@ -406,121 +423,12 @@ EXAMPLES = """
 # veos#
 #
 #
-# Module Execution:
-#
-# "after": [
-#         {
-#             "afi": "ipv4",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "45.55.4.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 25
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "200.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 200
-#                         }
-#                     ],
-#                     "name": "v401"
-#                 }
-#             ]
-#         },
-#         {
-#             "afi": "ipv6",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "5000:1::/64",
-#                             "sequence": 125
-#                         }
-#                     ],
-#                     "name": "v601"
-#                 }
-#             ]
-#         }
-#     ],
-#     "before": [
-#         {
-#             "afi": "ipv4",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "45.55.4.0/24",
-#                             "sequence": 25
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "11.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 100
-#                         }
-#                     ],
-#                     "name": "v401"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v402"
-#                 }
-#             ]
-#         },
-#         {
-#             "afi": "ipv6",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "5000:1::/64",
-#                             "sequence": 125
-#                         }
-#                     ],
-#                     "name": "v601"
-#                 }
-#             ]
-#         }
-#     ],
-#     "changed": true,
-#     "commands": [
-#         "ip prefix-list v401",
-#         "no seq 25",
-#         "seq 25 deny 45.55.4.0/24 ge 32",
-#         "seq 200 permit 200.11.2.0/24 ge 32",
-#         "no seq 100",
-#         "no ip prefix-list v402"
-#     ],
+
 
 # Using overridden:
-# Before State:
 
+
+# Before State:
 # veos#show running-config | section prefix-list
 # ip prefix-list v401
 #    seq 25 deny 45.55.4.0/24 ge 32
@@ -558,6 +466,81 @@ EXAMPLES = """
                   sequence: 10
       state: overridden
 
+
+# Task Output
+# -------------
+# before:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 25
+#     - action: permit
+#       address: 11.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 100
+#     - action: permit
+#       address: 200.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 200
+#     name: v401
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 10
+#     name: v402
+# - afi: ipv6
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 5000:1::/64
+#       sequence: 125
+#     name: v601
+# commands:
+# - no ipv6 prefix-list v601
+# - ip prefix-list v401
+# - seq 25 deny 45.55.4.0/24
+# - seq 300 permit 30.11.2.0/24 ge 32
+# - no seq 100
+# - no seq 200
+# - ip prefix-list v403
+# - seq 10 deny 10.1.1.0/24
+# - no ip prefix-list v402
+# after:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 25
+#     - action: permit
+#       address: 30.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 300
+#     name: v401
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       sequence: 10
+#     name: v403
+
+
 # After State
 # veos#
 # veos#show running-config | section prefix-list
@@ -568,134 +551,12 @@ EXAMPLES = """
 # ip prefix-list v403
 #    seq 10 deny 10.1.1.0/24
 # veos#
-#
-#
-# Module Execution:
-# "after": [
-#         {
-#             "afi": "ipv4",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "45.55.4.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 25
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "30.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 300
-#                         }
-#                     ],
-#                     "name": "v401"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v403"
-#                 }
-#             ]
-#         }
-#     ],
-#     "before": [
-#         {
-#             "afi": "ipv4",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "45.55.4.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 25
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "11.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 100
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "200.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 200
-#                         }
-#                     ],
-#                     "name": "v401"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v402"
-#                 }
-#             ]
-#         },
-#         {
-#             "afi": "ipv6",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "5000:1::/64",
-#                             "sequence": 125
-#                         }
-#                     ],
-#                     "name": "v601"
-#                 }
-#             ]
-#         }
-#     ],
-#     "changed": true,
-#     "commands": [
-#         "no ipv6 prefix-list v601",
-#         "ip prefix-list v401",
-#         "seq 25 deny 45.55.4.0/24",
-#         "seq 300 permit 30.11.2.0/24 ge 32",
-#         "no seq 100",
-#         "no seq 200",
-#         "ip prefix-list v403",
-#         "seq 10 deny 10.1.1.0/24",
-#         "no ip prefix-list v402"
-#     ],
-#
+
 
 # Using deleted:
-# Before State:
 
+
+# Before State:
 # veos#show running-config | section prefix-list
 # ip prefix-list v401
 #    seq 25 deny 45.55.4.0/24 ge 32
@@ -719,6 +580,90 @@ EXAMPLES = """
       state: deleted
 
 
+# Task Output
+# -------------
+# before:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 25
+#     - action: permit
+#       address: 11.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 100
+#     - action: permit
+#       address: 30.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 300
+#     name: v401
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 10
+#     name: v402
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       sequence: 10
+#     name: v403
+# - afi: ipv6
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 5000:1::/64
+#       sequence: 125
+#     name: v601
+# commands:
+# - no ipv6 prefix-list v601
+# after:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 25
+#     - action: permit
+#       address: 11.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 100
+#     - action: permit
+#       address: 30.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 300
+#     name: v401
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 10
+#     name: v402
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       sequence: 10
+#     name: v403
+
 # after State:
 # veos#show running-config | section prefix-list
 # ip prefix-list v401
@@ -732,158 +677,12 @@ EXAMPLES = """
 # ip prefix-list v403
 #    seq 10 deny 10.1.1.0/24
 #
-#
-# Module Execution:
-#     "after": [
-#         {
-#             "afi": "ipv4",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "45.55.4.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 25
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "11.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 100
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "30.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 300
-#                         }
-#                     ],
-#                     "name": "v401"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v402"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v403"
-#                 }
-#             ]
-#         }
-#     ],
-#     "before": [
-#         {
-#             "afi": "ipv4",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "45.55.4.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 25
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "11.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 100
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "30.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 300
-#                         }
-#                     ],
-#                     "name": "v401"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v402"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v403"
-#                 }
-#             ]
-#         },
-#         {
-#             "afi": "ipv6",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "5000:1::/64",
-#                             "sequence": 125
-#                         }
-#                     ],
-#                     "name": "v601"
-#                 }
-#             ]
-#         }
-#     ],
-#     "changed": true,
-#     "commands": [
-#         "no ipv6 prefix-list v601"
-#     ],
-#
+
 
 # Using deleted
-# Before state:
 
+
+# Before state:
 # veos#show running-config | section prefix-list
 # ip prefix-list v401
 #    seq 25 deny 45.55.4.0/24 ge 32
@@ -901,84 +700,59 @@ EXAMPLES = """
     arista.eos.eos_prefix_lists:
       state: deleted
 
+
+# Task Output
+# -------------
+# before:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 25
+#     - action: permit
+#       address: 11.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 100
+#     - action: permit
+#       address: 30.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 300
+#     name: v401
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 10
+#     name: v402
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       sequence: 10
+#     name: v403
+# commands:
+# - no ip prefix-list v401
+# - no ip prefix-list v402
+# - no ip prefix-list v403
+# after: {}
+
 # After State:
 # veos#show running-config | section prefix-list
 # veos#
-#
-# Module Execution:
-#    "after": {},
-#    "before": [
-#        {
-#            "afi": "ipv4",
-#            "prefix_lists": [
-#                {
-#                    "entries": [
-#                        {
-#                            "action": "deny",
-#                            "address": "45.55.4.0/24",
-#                            "match": {
-#                                "masklen": 32,
-#                                "operator": "ge"
-#                            },
-#                            "sequence": 25
-#                        },
-#                        {
-#                            "action": "permit",
-#                            "address": "11.11.2.0/24",
-#                            "match": {
-#                                "masklen": 32,
-#                                "operator": "ge"
-#                            },
-#                            "sequence": 100
-#                        },
-#                        {
-#                            "action": "permit",
-#                            "address": "30.11.2.0/24",
-#                            "match": {
-#                                "masklen": 32,
-#                                "operator": "ge"
-#                            },
-#                            "sequence": 300
-#                        }
-#                    ],
-#                    "name": "v401"
-#                },
-#                {
-#                    "entries": [
-#                        {
-#                            "action": "deny",
-#                            "address": "10.1.1.0/24",
-#                            "match": {
-#                                "masklen": 32,
-#                                "operator": "ge"
-#                            },
-#                            "sequence": 10
-#                        }
-#                    ],
-#                    "name": "v402"
-#                },
-#                {
-#                    "entries": [
-#                        {
-#                            "action": "deny",
-#                            "address": "10.1.1.0/24",
-#                            "sequence": 10
-#                        }
-#                    ],
-#                    "name": "v403"
-#                }
-#            ]
-#        }
-#    ],
-#    "changed": true,
-#    "commands": [
-#        "no ip prefix-list v401",
-#        "no ip prefix-list v402",
-#        "no ip prefix-list v403"
-#    ],
-#
+
 
 # Using parsed:
+
+
 # parse_prefix_lists.cfg
 # ip prefix-list v401
 #    seq 25 deny 45.55.4.0/24
@@ -990,65 +764,47 @@ EXAMPLES = """
 # ipv6 prefix-list v601
 #    seq 125 deny 5000:1::/64
 #
+
+
   - name: parse configs
     arista.eos.eos_prefix_lists:
       running_config: "{{ lookup('file', './parsed_prefix_lists.cfg') }}"
       state: parsed
 
-# Module Execution:
-#     "parsed": [
-#         {
-#             "afi": "ipv4",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "45.55.4.0/24",
-#                             "sequence": 25
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "11.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 100
-#                         }
-#                     ],
-#                     "name": "v401"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v402"
-#                 }
-#             ]
-#         },
-#         {
-#             "afi": "ipv6",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "5000:1::/64",
-#                             "sequence": 125
-#                         }
-#                     ],
-#                     "name": "v601"
-#                 }
-#             ]
-#         }
-#     ]
+
+# Task Output
+# -------------
+# parsed:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       sequence: 25
+#     - action: permit
+#       address: 11.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 100
+#     name: v401
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       sequence: 10
+#     name: v402
+# - afi: ipv6
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 5000:1::/64
+#       sequence: 125
+#     name: v601
+
 
 # Using rendered:
+
+
   - name: Render provided configuration
     arista.eos.eos_prefix_lists:
       config:
@@ -1072,17 +828,18 @@ EXAMPLES = """
                   sequence: 10
       state: rendered
 
-# Module Execution:
-#  "rendered": [
-#         "ip prefix-list v401",
-#         "seq 25 deny 45.55.4.0/24",
-#         "seq 200 permit 200.11.2.0/24 ge 32",
-#         "ip prefix-list v403",
-#         "seq 10 deny 10.1.1.0/24"
-#     ]
-#
+# Task Output
+# -------------
+# rendered:
+# - ip prefix-list v401
+# - seq 25 deny 45.55.4.0/24
+# - seq 200 permit 200.11.2.0/24 ge 32
+# - ip prefix-list v403
+# - seq 10 deny 10.1.1.0/24
 
 # using gathered:
+
+
 # Device config:
 # veos#show running-config | section prefix-list
 # ip prefix-list v401
@@ -1096,69 +853,98 @@ EXAMPLES = """
 #    seq 125 deny 5000:1::/64
 # veos#
 
+
   - name: gather configs
     arista.eos.eos_prefix_lists:
       state: gathered
 
-# Module Execution:
-#
-# "gathered": [
-#         {
-#             "afi": "ipv4",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "45.55.4.0/24",
-#                             "sequence": 25
-#                         },
-#                         {
-#                             "action": "permit",
-#                             "address": "11.11.2.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 100
-#                         }
-#                     ],
-#                     "name": "v401"
-#                 },
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "10.1.1.0/24",
-#                             "match": {
-#                                 "masklen": 32,
-#                                 "operator": "ge"
-#                             },
-#                             "sequence": 10
-#                         }
-#                     ],
-#                     "name": "v402"
-#                 }
-#             ]
-#         },
-#         {
-#             "afi": "ipv6",
-#             "prefix_lists": [
-#                 {
-#                     "entries": [
-#                         {
-#                             "action": "deny",
-#                             "address": "5000:1::/64",
-#                             "sequence": 125
-#                         }
-#                     ],
-#                     "name": "v601"
-#                 }
-#             ]
-#         }
-#     ],
+
+# Task Output
+# -------------
+# gathered:
+# - afi: ipv4
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 45.55.4.0/24
+#       sequence: 25
+#     - action: permit
+#       address: 11.11.2.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 100
+#     name: v401
+#   - entries:
+#     - action: deny
+#       address: 10.1.1.0/24
+#       match:
+#         masklen: 32
+#         operator: ge
+#       sequence: 10
+#     name: v402
+# - afi: ipv6
+#   prefix_lists:
+#   - entries:
+#     - action: deny
+#       address: 5000:1::/64
+#       sequence: 125
+#     name: v601
 
 """
+RETURN = """
+before:
+  description: The configuration prior to the model invocation.
+  returned: always
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+after:
+  description: The resulting configuration model invocation.
+  returned: when changed
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+     of the parameters above.
+commands:
+  description: The set of commands pushed to the remote device.
+  returned: always
+  type: list
+  sample:
+    - ip prefix-list v401
+    - seq 25 deny 45.55.4.0/24
+    - seq 200 permit 200.11.2.0/24 ge 32
+    - ip prefix-list v403
+    - seq 10 deny 10.1.1.0/24
+rendered:
+  description: The set of CLI commands generated from the value in C(config) option
+  returned: When C(state) is I(rendered)
+  type: list
+  sample: >
+    - ip prefix-list v401
+    - seq 25 deny 45.55.4.0/24
+    - seq 200 permit 200.11.2.0/24 ge 32
+    - ip prefix-list v403
+    - seq 10 deny 10.1.1.0/24
+gathered:
+  description: The configuration as structured data transformed for the running configuration
+               fetched from remote host
+  returned: When C(state) is I(gathered)
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+    of the parameters above.
+parsed:
+  description: The configuration as structured data transformed for the value of
+               C(running_config) option
+  returned: When C(state) is I(parsed)
+  type: list
+  sample: >
+    The configuration returned will always be in the same format
+    of the parameters above.
+"""
+
 
 from ansible.module_utils.basic import AnsibleModule
 
