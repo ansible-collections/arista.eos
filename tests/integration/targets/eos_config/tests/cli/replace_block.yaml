@@ -1,0 +1,40 @@
+---
+- ansible.builtin.debug: msg="START cli/replace_block.yaml on connection={{ ansible_connection }}"
+
+- name: setup
+  become: true
+  arista.eos.eos_config:
+    commands:
+      - no description
+      - no shutdown
+    parents:
+      - interface Ethernet5
+    match: none
+
+- name: configure device with config
+  become: true
+  register: result
+  arista.eos.eos_config:
+    lines:
+      - description this is a test
+      - shutdown
+    parents: "interface Ethernet5"
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+
+- name: "Populate acl configuration with replace block and src options"
+  become: true 
+  arista.eos.eos_config:
+    src: basic/interface_config.j2
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+
+- name: Teardown
+  become: true
+  arista.eos.eos_config:
+    commands:
+      - no interface Ethernet5
