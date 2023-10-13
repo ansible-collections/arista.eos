@@ -24,6 +24,16 @@
     that:
       - result.changed == true
 
+- name: setup
+  become: true
+  arista.eos.eos_config:
+    commands:
+      - no description
+      - no shutdown
+    parents:
+      - interface Ethernet2
+    match: none
+
 - name: "Populate acl configuration with replace block and src options"
   become: true 
   arista.eos.eos_config:
