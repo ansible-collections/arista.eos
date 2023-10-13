@@ -100,7 +100,7 @@ class L3_interfacesFacts(object):
             for match in matches:
                 address, dummy, remainder = match.partition(" ")
                 if address == "virtual":
-                    ipv4 = {"virtual": True, "address": remainder.split(' ')[0]}
+                    ipv4 = {"virtual": True, "address": remainder.split(" ")[0]}
                 else:
                     ipv4 = {"address": address}
                 if "secondary" in remainder:
