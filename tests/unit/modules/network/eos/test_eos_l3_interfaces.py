@@ -294,6 +294,8 @@ class TestEosL3InterfacesModule(TestEosModule):
             "ip address 198.51.100.14/24",
             "interface Ethernet2",
             "ip address 203.0.113.27/24",
+            "interface Vlan100",
+            "ip address virtual 192.13.45.13/24 secondary",
         ]
         parsed_str = "\n".join(commands)
         set_module_args(dict(running_config=parsed_str, state="parsed"))
@@ -301,6 +303,10 @@ class TestEosL3InterfacesModule(TestEosModule):
         parsed_list = [
             {"name": "Ethernet1", "ipv4": [{"address": "198.51.100.14/24"}]},
             {"name": "Ethernet2", "ipv4": [{"address": "203.0.113.27/24"}]},
+            {
+                "name": "Vlan100",
+                "ipv4": [{"address": "192.13.45.13/24", "secondary": True, "virtual": True}],
+            },
         ]
         self.assertEqual(parsed_list, result["parsed"])
 
