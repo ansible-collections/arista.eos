@@ -277,7 +277,7 @@ class TestEosConfigModule(TestEosModule):
         self.assertEqual(self.load_config.call_count, 0)
         args = self.run_commands.call_args[0][1][0]["command"]
         self.assertIn("copy running-config startup-config", args)
-    
+
     def test_eos_config_src(self):
         src = load_fixture("eos_config_candidate.cfg")
         args = dict(src=src, replace="block")
@@ -301,7 +301,7 @@ class TestEosConfigModule(TestEosModule):
 
     def test_eos_config_lines_block(self):
         lines = ["hostname switch01", "ip domain-name eng.ansible.com"]
-        args = dict(lines=lines,replace="block")
+        args = dict(lines=lines, replace="block")
         set_module_args(args)
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(
@@ -317,4 +317,3 @@ class TestEosConfigModule(TestEosModule):
             sorted(result["commands"]),
             result["commands"],
         )
-
