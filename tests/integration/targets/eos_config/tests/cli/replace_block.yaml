@@ -16,7 +16,7 @@
   register: result1
   arista.eos.eos_config:
     lines:
-            "{{ lookup('template', 'basic/acl_config.j2')  }}"
+            "{{ lookup('template', 'basic/interface_config.j2')  }}"
     replace: block
 
 - ansible.builtin.assert:
