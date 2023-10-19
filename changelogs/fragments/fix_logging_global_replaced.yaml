@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fix command generation for source_interface attribute.
