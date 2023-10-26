@@ -50,9 +50,7 @@ def _tmplt_ospf_auto_cost(config_data):
     if "auto_cost" in config_data:
         command = "auto-cost"
         if "reference_bandwidth" in config_data["auto_cost"]:
-            command += " reference-bandwidth {reference_bandwidth}".format(
-                **config_data["auto_cost"],
-            )
+            command += " reference-bandwidth " + config_data["auto_cost"]["reference_bandwidth"]
         return command
 
 

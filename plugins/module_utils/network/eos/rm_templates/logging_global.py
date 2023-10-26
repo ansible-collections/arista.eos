@@ -373,6 +373,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": 'logging source-interface {{ source_interface }}',
+            "compval": "source_interface",
             "result": {
                 "source_interface": "{{ val }}",
             },
