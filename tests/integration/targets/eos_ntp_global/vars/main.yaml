@@ -65,6 +65,9 @@ updated:
               direction: "in"
           afi: "ipv6"
     servers:
+      - local_interface: "Management1"
+        server: "1.1.1.1"
+        vrf: "vrf01"
       - burst: true
         prefer: true
         server: "10.1.1.1"
@@ -78,9 +81,6 @@ updated:
         maxpoll: 15
         server: "25.1.1.1"
         vrf: "vrf01"
-      - server: "1.1.1.1"
-        vrf: "vrf01"
-        local_interface: "Management1"
     trusted_key: "23"
 
 replaced:
