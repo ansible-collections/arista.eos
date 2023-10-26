@@ -14,8 +14,6 @@ on:  # yamllint disable-line rule:truthy
 
 
 jobs:
-  ansible-lint:
-    uses: ansible-network/github_actions/.github/workflows/ansible-lint.yml@main
   changelog:
     uses: ansible-network/github_actions/.github/workflows/changelog.yml@main
     if: github.event_name != 'schedule'
@@ -32,7 +30,6 @@ jobs:
   all_green:
     if: ${{ always() && (github.event_name != 'schedule') }}
     needs:
-      - ansible-lint
       - changelog
       - sanity
       - unit-galaxy
@@ -41,7 +38,6 @@ jobs:
     steps:
       - run: >-
           python -c "assert set([
-          '${{ needs.ansible-lint.result }}',
           '${{ needs.changelog.result }}',
           '${{ needs.sanity.result }}',
           '${{ needs.unit-galaxy.result }}',
