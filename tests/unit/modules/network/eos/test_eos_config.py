@@ -278,7 +278,7 @@ class TestEosConfigModule(TestEosModule):
         args = self.run_commands.call_args[0][1][0]["command"]
         self.assertIn("copy running-config startup-config", args)
 
-    def test_eos_config_src(self):
+    def test_eos_config_src_replace(self):
         src = load_fixture("eos_config_candidate.cfg")
         args = dict(src=src, replace="block")
         set_module_args(args)
