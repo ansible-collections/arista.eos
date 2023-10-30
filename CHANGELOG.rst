@@ -5,6 +5,30 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v6.2.0
+======
+
+Minor Changes
+-------------
+
+- arista_config - Relax restrictions on I(src) parameter so it can be used more like I(lines).
+
+Bugfixes
+--------
+
+- Fix command generated for local-interface with in ntp server attribute.
+- Fix command generation for source_interface attribute.
+- Fix secondary ip address parsing.
+- fix line attribute fact generation and placement in ACE, when ACE is not fully parsed.
+
+Documentation Changes
+---------------------
+
+- Fix docs for static_routes and prefix_lists Resource modules.
+- eos_interfaces - update examples and use YAML output for better readability.
+- eos_l2_interfaces - update examples and use YAML output for better readability.
+- eos_l3_interfaces - update examples and use YAML output for better readability.
+
 v6.1.2
 ======
 
