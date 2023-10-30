@@ -200,11 +200,11 @@ EXAMPLES = """
 - name: Replaces device configuration of listed interfaces with provided configuration
   arista.eos.eos_interfaces:
     config:
-    - name: Ethernet1
-      enabled: true
-    - name: Ethernet2
-      description: Configured by Ansible
-      enabled: false
+      - name: Ethernet1
+        enabled: true
+      - name: Ethernet2
+        description: Configured by Ansible
+        enabled: false
     state: replaced
 
 # Task Output
@@ -264,11 +264,11 @@ EXAMPLES = """
 - name: Overrides all device configuration with provided configuration
   arista.eos.eos_interfaces:
     config:
-    - name: Ethernet1
-      enabled: true
-    - name: Ethernet2
-      description: Configured by Ansible
-      enabled: false
+      - name: Ethernet1
+        enabled: true
+      - name: Ethernet2
+        description: Configured by Ansible
+        enabled: false
     state: overridden
 
 # Task Output
@@ -327,7 +327,7 @@ EXAMPLES = """
 - name: Delete or return interface parameters to default settings
   arista.eos.eos_interfaces:
     config:
-    - name: Ethernet1
+      - name: Ethernet1
     state: deleted
 
 # Task Output
@@ -372,12 +372,12 @@ EXAMPLES = """
 - name: Render the provided configuration into platform specific configuration lines
   arista.eos.eos_interfaces:
     config:
-    - name: Ethernet1
-      enabled: true
-      mode: layer3
-    - name: Ethernet2
-      description: Configured by Ansible
-      enabled: false
+      - name: Ethernet1
+        enabled: true
+        mode: layer3
+      - name: Ethernet2
+        description: Configured by Ansible
+        enabled: false
     state: rendered
 
 # Module Execution Result:

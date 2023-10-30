@@ -118,38 +118,37 @@ EXAMPLES = """
 # veos#show running-config | section prefix-lists
 # veos#
 
-  - name: Merge provided configuration with device configuration
-    arista.eos.eos_prefix_lists:
-      config:
-        - afi: "ipv4"
-          prefix_lists:
-            - name: "v401"
-              entries:
-                - sequence: 25
-                  action: "deny"
-                  address: "45.55.4.0/24"
-                - sequence: 100
-                  action: "permit"
-                  address: "11.11.2.0/24"
-                  match:
-                    masklen: 32
-                    operator: "ge"
-            - name: "v402"
-              entries:
-                - action: "deny"
-                  address: "10.1.1.0/24"
-                  sequence: 10
-                  match:
-                    masklen: 32
-                    operator: "ge"
-        - afi: "ipv6"
-          prefix_lists:
-            - name: "v601"
-              entries:
-                - sequence: 125
-                  action: "deny"
-                  address: "5000:1::/64"
-
+- name: Merge provided configuration with device configuration
+  arista.eos.eos_prefix_lists:
+    config:
+      - afi: "ipv4"
+        prefix_lists:
+          - name: "v401"
+            entries:
+              - sequence: 25
+                action: "deny"
+                address: "45.55.4.0/24"
+              - sequence: 100
+                action: "permit"
+                address: "11.11.2.0/24"
+                match:
+                  masklen: 32
+                  operator: "ge"
+          - name: "v402"
+            entries:
+              - action: "deny"
+                address: "10.1.1.0/24"
+                sequence: 10
+                match:
+                  masklen: 32
+                  operator: "ge"
+      - afi: "ipv6"
+        prefix_lists:
+          - name: "v601"
+            entries:
+              - sequence: 125
+                action: "deny"
+                address: "5000:1::/64"
 
 # Task Output
 # -------------
@@ -226,41 +225,41 @@ EXAMPLES = """
 #    seq 125 deny 5000:1::/64
 # veos#
 
-  - name: Merge provided configuration with device configuration
-    arista.eos.eos_prefix_lists:
-      config:
-        - afi: "ipv4"
-          prefix_lists:
-            - name: "v401"
-              entries:
-                - sequence: 25
-                  action: "deny"
-                  address: "45.55.4.0/24"
-                  match:
-                    masklen: 32
-                    operator: "ge"
-                - sequence: 100
-                  action: "permit"
-                  address: "11.11.2.0/24"
-                  match:
-                    masklen: 32
-                    operator: "ge"
-            - name: "v402"
-              entries:
-                - action: "deny"
-                  address: "10.1.1.0/24"
-                  sequence: 10
-                  match:
-                    masklen: 32
-                    operator: "ge"
-        - afi: "ipv6"
-          prefix_lists:
-            - name: "v601"
-              entries:
-                - sequence: 125
-                  action: "deny"
-                  address: "5000:1::/64"
-      state: merged
+- name: Merge provided configuration with device configuration
+  arista.eos.eos_prefix_lists:
+    config:
+      - afi: "ipv4"
+        prefix_lists:
+          - name: "v401"
+            entries:
+              - sequence: 25
+                action: "deny"
+                address: "45.55.4.0/24"
+                match:
+                  masklen: 32
+                  operator: "ge"
+              - sequence: 100
+                action: "permit"
+                address: "11.11.2.0/24"
+                match:
+                  masklen: 32
+                  operator: "ge"
+          - name: "v402"
+            entries:
+              - action: "deny"
+                address: "10.1.1.0/24"
+                sequence: 10
+                match:
+                  masklen: 32
+                  operator: "ge"
+      - afi: "ipv6"
+        prefix_lists:
+          - name: "v601"
+            entries:
+              - sequence: 125
+                action: "deny"
+                address: "5000:1::/64"
+    state: merged
 
 # Task Output
 # -------------
@@ -326,26 +325,26 @@ EXAMPLES = """
 # veos#
 
 
-  - name: Replace Provided configuration with given configuration
-    arista.eos.eos_prefix_lists:
-      config:
-        - afi: "ipv4"
-          prefix_lists:
-            - name: "v401"
-              entries:
-                - sequence: 25
-                  action: "deny"
-                  address: "45.55.4.0/24"
-                  match:
-                    masklen: 32
-                    operator: "ge"
-                - sequence: 200
-                  action: "permit"
-                  address: "200.11.2.0/24"
-                  match:
-                    masklen: 32
-                    operator: "ge"
-      state: replaced
+- name: Replace Provided configuration with given configuration
+  arista.eos.eos_prefix_lists:
+    config:
+      - afi: "ipv4"
+        prefix_lists:
+          - name: "v401"
+            entries:
+              - sequence: 25
+                action: "deny"
+                address: "45.55.4.0/24"
+                match:
+                  masklen: 32
+                  operator: "ge"
+              - sequence: 200
+                action: "permit"
+                address: "200.11.2.0/24"
+                match:
+                  masklen: 32
+                  operator: "ge"
+    state: replaced
 
 
 # Task Output
@@ -442,29 +441,28 @@ EXAMPLES = """
 #    seq 125 deny 5000:1::/64
 # veos#
 
-
-  - name: Override
-    arista.eos.eos_prefix_lists:
-      config:
-        - afi: "ipv4"
-          prefix_lists:
-            - name: "v401"
-              entries:
-                - sequence: 25
-                  action: "deny"
-                  address: "45.55.4.0/24"
-                - sequence: 300
-                  action: "permit"
-                  address: "30.11.2.0/24"
-                  match:
-                    masklen: 32
-                    operator: "ge"
-            - name: "v403"
-              entries:
-                - action: "deny"
-                  address: "10.1.1.0/24"
-                  sequence: 10
-      state: overridden
+- name: Override
+  arista.eos.eos_prefix_lists:
+    config:
+      - afi: "ipv4"
+        prefix_lists:
+          - name: "v401"
+            entries:
+              - sequence: 25
+                action: "deny"
+                address: "45.55.4.0/24"
+              - sequence: 300
+                action: "permit"
+                address: "30.11.2.0/24"
+                match:
+                  masklen: 32
+                  operator: "ge"
+          - name: "v403"
+            entries:
+              - action: "deny"
+                address: "10.1.1.0/24"
+                sequence: 10
+    state: overridden
 
 
 # Task Output
@@ -552,9 +550,7 @@ EXAMPLES = """
 #    seq 10 deny 10.1.1.0/24
 # veos#
 
-
 # Using deleted:
-
 
 # Before State:
 # veos#show running-config | section prefix-list
@@ -573,12 +569,11 @@ EXAMPLES = """
 #    seq 125 deny 5000:1::/64
 # veos#
 
-  - name: Delete device configuration
-    arista.eos.eos_prefix_lists:
-      config:
-        - afi: "ipv6"
-      state: deleted
-
+- name: Delete device configuration
+  arista.eos.eos_prefix_lists:
+    config:
+      - afi: "ipv6"
+    state: deleted
 
 # Task Output
 # -------------
@@ -696,9 +691,9 @@ EXAMPLES = """
 #    seq 10 deny 10.1.1.0/24
 # veos#
 
-  - name: Delete device configuration
-    arista.eos.eos_prefix_lists:
-      state: deleted
+- name: Delete device configuration
+  arista.eos.eos_prefix_lists:
+    state: deleted
 
 
 # Task Output
@@ -766,10 +761,10 @@ EXAMPLES = """
 #
 
 
-  - name: parse configs
-    arista.eos.eos_prefix_lists:
-      running_config: "{{ lookup('file', './parsed_prefix_lists.cfg') }}"
-      state: parsed
+- name: parse configs
+  arista.eos.eos_prefix_lists:
+    running_config: "{{ lookup('file', './parsed_prefix_lists.cfg') }}"
+    state: parsed
 
 
 # Task Output
@@ -804,29 +799,28 @@ EXAMPLES = """
 
 # Using rendered:
 
-
-  - name: Render provided configuration
-    arista.eos.eos_prefix_lists:
-      config:
-        - afi: "ipv4"
-          prefix_lists:
-            - name: "v401"
-              entries:
-                - sequence: 25
-                  action: "deny"
-                  address: "45.55.4.0/24"
-                - sequence: 200
-                  action: "permit"
-                  address: "200.11.2.0/24"
-                  match:
-                    masklen: 32
-                    operator: "ge"
-            - name: "v403"
-              entries:
-                - action: "deny"
-                  address: "10.1.1.0/24"
-                  sequence: 10
-      state: rendered
+- name: Render provided configuration
+  arista.eos.eos_prefix_lists:
+    config:
+      - afi: "ipv4"
+        prefix_lists:
+          - name: "v401"
+            entries:
+              - sequence: 25
+                action: "deny"
+                address: "45.55.4.0/24"
+              - sequence: 200
+                action: "permit"
+                address: "200.11.2.0/24"
+                match:
+                  masklen: 32
+                  operator: "ge"
+          - name: "v403"
+            entries:
+              - action: "deny"
+                address: "10.1.1.0/24"
+                sequence: 10
+    state: rendered
 
 # Task Output
 # -------------
@@ -853,11 +847,9 @@ EXAMPLES = """
 #    seq 125 deny 5000:1::/64
 # veos#
 
-
-  - name: gather configs
-    arista.eos.eos_prefix_lists:
-      state: gathered
-
+- name: gather configs
+  arista.eos.eos_prefix_lists:
+    state: gathered
 
 # Task Output
 # -------------
@@ -890,7 +882,6 @@ EXAMPLES = """
 #       address: 5000:1::/64
 #       sequence: 125
 #     name: v601
-
 """
 RETURN = """
 before:

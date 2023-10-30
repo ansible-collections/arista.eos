@@ -59,12 +59,12 @@ EXAMPLES = """
 - name: Gather only the config and default facts
   arista.eos.eos_facts:
     gather_subset:
-    - config
+      - config
 
 - name: Do not gather hardware facts
   arista.eos.eos_facts:
     gather_subset:
-    - '!hardware'
+      - '!hardware'
 
 - name: Gather legacy and resource facts
   arista.eos.eos_facts:
@@ -74,10 +74,10 @@ EXAMPLES = """
 - name: Gather only the interfaces resource facts and no legacy facts
 - arista.eos.eos_facts:
     gather_subset:
-    - '!all'
-    - '!min'
+      - '!all'
+      - '!min'
     gather_network_resources:
-    - interfaces
+      - interfaces
 
 - name: Gather all resource facts and minimal legacy facts
   arista.eos.eos_facts:

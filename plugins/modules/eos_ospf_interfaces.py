@@ -59,7 +59,7 @@ options:
             - Address Family Identifier (AFI) for OSPF settings on the interfaces.
             type: str
             choices: ['ipv4', 'ipv6']
-            required: True
+            required: true
           area:
             description:
             - Area associated with interface.
@@ -70,7 +70,7 @@ options:
                 description:
                 - Area ID as a decimal or IP address format.
                 type: str
-                required: True
+                required: true
           authentication_v2:
             description:
             - Authentication settings on the interface.
@@ -181,7 +181,7 @@ options:
                 - Address Family Identifier (AFI) for OSPF settings on the interfaces.
                 type: str
                 choices: ['ipv4', 'ipv6']
-                required: True
+                required: true
               area:
                 description:
                 - Area associated with interface.
@@ -192,7 +192,7 @@ options:
                     description:
                     - Area ID as a decimal or IP address format.
                     type: str
-                    required: True
+                    required: true
               bfd:
                 description: Enable BFD.
                 type: bool
@@ -210,7 +210,7 @@ options:
                 type: int
               mtu_ignore:
                 description:
-                - if True, Disable MTU check for Database Description packets.
+                - if true, Disable MTU check for Database Description packets.
                 type: bool
               network:
                 description:
@@ -252,7 +252,7 @@ options:
                 type: str
           mtu_ignore:
             description:
-            - if True, Disable MTU check for Database Description packets.
+            - if true, Disable MTU check for Database Description packets.
             type: bool
           network:
             description:
@@ -313,23 +313,23 @@ EXAMPLES = """
 # veos(config)#show running-config | section interface | ospf
 # veos(config)#
 
-  - name: Merge provided configuration with device configuration
-    arista.eos.eos_ospf_interfaces:
-      config:
-        - name: "Vlan1"
-          address_family:
-            - afi: "ipv4"
-              area:
-                area_id: "0.0.0.50"
-              cost: 500
-              mtu_ignore: True
-            - afi: "ipv6"
-              dead_interval: 44
-              ip_params:
-                - afi: "ipv6"
-                  mtu_ignore: True
-                  network: "point-to-point"
-      state: merged
+- name: Merge provided configuration with device configuration
+  arista.eos.eos_ospf_interfaces:
+    config:
+      - name: "Vlan1"
+        address_family:
+          - afi: "ipv4"
+            area:
+              area_id: "0.0.0.50"
+            cost: 500
+            mtu_ignore: true
+          - afi: "ipv6"
+            dead_interval: 44
+            ip_params:
+              - afi: "ipv6"
+                mtu_ignore: true
+                network: "point-to-point"
+    state: merged
 
 # Task output:
 # ------------
@@ -397,20 +397,20 @@ EXAMPLES = """
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
 
-  - name: Replace device configuration with provided configuration
-    arista.eos.eos_ospf_interfaces:
-      config:
-        - name: "Vlan1"
-          address_family:
-            - afi: "ipv6"
-              cost: 44
-              bfd: True
-              ip_params:
-                - afi: "ipv6"
-                  mtu_ignore: True
-                  network: "point-to-point"
-                  dead_interval: 56
-      state: replaced
+- name: Replace device configuration with provided configuration
+  arista.eos.eos_ospf_interfaces:
+    config:
+      - name: "Vlan1"
+        address_family:
+          - afi: "ipv6"
+            cost: 44
+            bfd: true
+            ip_params:
+              - afi: "ipv6"
+                mtu_ignore: true
+                network: "point-to-point"
+                dead_interval: 56
+    state: replaced
 
 # Task output:
 # ------------
@@ -529,20 +529,20 @@ EXAMPLES = """
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
 
-  - name: Override device configuration with provided configuration
-    arista.eos.eos_ospf_interfaces:
-      config:
-        - name: "Vlan1"
-          address_family:
-            - afi: "ipv6"
-              cost: 44
-              bfd: True
-              ip_params:
-                - afi: "ipv6"
-                  mtu_ignore: True
-                  network: "point-to-point"
-                  dead_interval: 56
-      state: overridden
+- name: Override device configuration with provided configuration
+  arista.eos.eos_ospf_interfaces:
+    config:
+      - name: "Vlan1"
+        address_family:
+          - afi: "ipv6"
+            cost: 44
+            bfd: true
+            ip_params:
+              - afi: "ipv6"
+                mtu_ignore: true
+                network: "point-to-point"
+                dead_interval: 56
+    state: overridden
 
 # Task output:
 # ------------
@@ -646,11 +646,11 @@ EXAMPLES = """
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
 
-  - name: Delete provided ospf interface config
-    arista.eos.eos_ospf_interfaces:
-      config:
-        - name: "Vlan1"
-      state: deleted
+- name: Delete provided ospf interface config
+  arista.eos.eos_ospf_interfaces:
+    config:
+      - name: "Vlan1"
+    state: deleted
 
 # Task output:
 # ------------
@@ -750,10 +750,10 @@ EXAMPLES = """
 #    ospfv3 ipv4 area 0.0.0.6
 #
 
-  - name: parse provided config into structured facts
-    arista.eos.eos_ospf_interfaces:
-      running_config: "{{ lookup('file', './parsed.cfg') }}"
-      state: parsed
+- name: parse provided config into structured facts
+  arista.eos.eos_ospf_interfaces:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
 
 # Task output:
 # ------------
@@ -817,9 +817,9 @@ EXAMPLES = """
 #    ospfv3 ipv4 retransmit-interval 100
 #    ospfv3 ipv4 area 0.0.0.6
 
-  - name: gather runnig config
-    arista.eos.eos_ospf_interfaces:
-      state: gathered
+- name: gather runnig config
+  arista.eos.eos_ospf_interfaces:
+    state: gathered
 
 # Task output:
 # ------------
@@ -860,44 +860,44 @@ EXAMPLES = """
 
 # Using rendered
 
-  - name: Render provided configuration
-    arista.eos.eos_ospf_interfaces:
-      config:
-        - name: "Vlan1"
-          address_family:
-            - afi: "ipv4"
-              dead_interval: 29
-              mtu_ignore: True
-              hello_interval: 66
-            - afi: "ipv6"
-              hello_interval: 77
-              cost : 106
-              transmit_delay: 100
-              ip_params:
-                - afi: "ipv6"
-                  retransmit_interval: 115
-                  dead_interval: 56
-                  passive_interface: True
-                - afi: "ipv4"
-                  area:
-                    area_id: "0.0.0.5"
-                  priority: 45
-        - name: "Vlan2"
-          address_family:
-            - afi: "ipv6"
-              ip_params:
-                - afi: "ipv4"
-                  area:
-                    area_id: "0.0.0.6"
-                  hello_interval: 45
-                  retransmit_interval: 100
-            - afi: "ipv4"
-              message_digest_key:
-                key_id: 200
-                encryption: 7
-                key: "hkdfhtu=="
+- name: Render provided configuration
+  arista.eos.eos_ospf_interfaces:
+    config:
+      - name: "Vlan1"
+        address_family:
+          - afi: "ipv4"
+            dead_interval: 29
+            mtu_ignore: true
+            hello_interval: 66
+          - afi: "ipv6"
+            hello_interval: 77
+            cost: 106
+            transmit_delay: 100
+            ip_params:
+              - afi: "ipv6"
+                retransmit_interval: 115
+                dead_interval: 56
+                passive_interface: true
+              - afi: "ipv4"
+                area:
+                  area_id: "0.0.0.5"
+                priority: 45
+      - name: "Vlan2"
+        address_family:
+          - afi: "ipv6"
+            ip_params:
+              - afi: "ipv4"
+                area:
+                  area_id: "0.0.0.6"
+                hello_interval: 45
+                retransmit_interval: 100
+          - afi: "ipv4"
+            message_digest_key:
+              key_id: 200
+              encryption: 7
+              key: "hkdfhtu=="
 
-      state: rendered
+    state: rendered
 
 # Task output:
 # ------------

@@ -325,11 +325,11 @@ Examples
     - name: Replace device configuration of specified L2 interfaces with provided configuration.
       arista.eos.eos_l2_interfaces:
         config:
-        - name: Ethernet1
-          mode: trunk
-          trunk:
-            native_vlan: 20
-            trunk_allowed_vlans: 5-10, 15
+          - name: Ethernet1
+            mode: trunk
+            trunk:
+              native_vlan: 20
+              trunk_allowed_vlans: 5-10, 15
         state: replaced
 
     # Task Output
@@ -403,10 +403,10 @@ Examples
         configuration.
       arista.eos.eos_l2_interfaces:
         config:
-        - name: Ethernet2
-          mode: access
-          access:
-            vlan: 30
+          - name: Ethernet2
+            mode: access
+            access:
+              vlan: 30
         state: overridden
 
     # Task Output
@@ -513,14 +513,14 @@ Examples
     - name: Use Rendered to convert the structured data to native config
       arista.eos.eos_l2_interfaces:
         config:
-        - name: Ethernet1
-          mode: trunk
-          trunk:
-            native_vlan: 10
-        - name: Ethernet2
-          mode: access
-          access:
-            vlan: 30
+          - name: Ethernet1
+            mode: trunk
+            trunk:
+              native_vlan: 10
+          - name: Ethernet2
+            mode: access
+            access:
+              vlan: 30
         state: rendered
 
     # Module Execution Result:

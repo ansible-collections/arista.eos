@@ -97,10 +97,10 @@ options:
                       type: str
                       choices: ['md5', 'sha1']
                     encrypt_key:
-                      description: If False, key string is not encrypted
+                      description: If false, key string is not encrypted
                       type: bool
                     hidden_key:
-                      description: If True, Specifies that a HIDDEN key will follow.
+                      description: If true, Specifies that a HIDDEN key will follow.
                       type: bool
                     key:
                       description: 128 bit MD5 key or 140 bit SHA1 key.
@@ -124,10 +124,10 @@ options:
                       type: str
                       choices: ['sha1', 'md5']
                     encrypt_key:
-                      description: If False, key string is not encrypted
+                      description: If false, key string is not encrypted
                       type: bool
                     hidden_key:
-                      description: If True, Specifies that a HIDDEN key will follow.
+                      description: If true, Specifies that a HIDDEN key will follow.
                       type: bool
                     key:
                       description: 128 bit MD5 key or 140 bit SHA1 key.
@@ -153,7 +153,7 @@ options:
                             description: Limit default advertisement to this NSSA area.
                             type: bool
                           set:
-                            description: True if only default information orignate is set
+                            description: true if only default information orignate is set
                             type: bool
                       no_summary:
                         description: Filter all type-3 LSAs in the nssa area.
@@ -165,17 +165,17 @@ options:
                         description: Enable LSA translation.
                         type: bool
                       set:
-                        description: True if only nssa is set
+                        description: true if only nssa is set
                         type: bool
                 stub:
                   description: Stub area.
                   type: dict
                   suboptions:
                     set:
-                      description: True if only stub is set.
+                      description: true if only stub is set.
                       type: bool
                     summary_lsa:
-                      description: If False , Filter all type-3 LSAs in the stub area.
+                      description: If false , Filter all type-3 LSAs in the stub area.
                       type: bool
 
           bfd:
@@ -200,7 +200,7 @@ options:
                   description: When true sets the grace_fulrestart config alone.
                   type: bool
           graceful_restart_helper:
-            description: If True, Enable graceful restart helper.
+            description: If true, Enable graceful restart helper.
             type: bool
           log_adjacency_changes:
             description: To configure link-state changes and transitions of OSPFv3
@@ -387,10 +387,10 @@ options:
                         type: str
                         choices: ['md5', 'sha1']
                       encrypt_key:
-                        description: If False, key string is not encrypted
+                        description: If false, key string is not encrypted
                         type: bool
                       hidden_key:
-                        description: If True, Specifies that a HIDDEN key will follow.
+                        description: If true, Specifies that a HIDDEN key will follow.
                         type: bool
                       key:
                         description: 128 bit MD5 key or 140 bit SHA1 key.
@@ -414,10 +414,10 @@ options:
                         type: str
                         choices: ['sha1', 'md5']
                       encrypt_key:
-                        description: If False, key string is not encrypted
+                        description: If false, key string is not encrypted
                         type: bool
                       hidden_key:
-                        description: If True, Specifies that a HIDDEN key will follow.
+                        description: If true, Specifies that a HIDDEN key will follow.
                         type: bool
                       key:
                         description: 128 bit MD5 key or 140 bit SHA1 key.
@@ -443,7 +443,7 @@ options:
                               description: Limit default advertisement to this NSSA area.
                               type: bool
                             set:
-                              description: True if only default information orignate is set
+                              description: true if only default information orignate is set
                               type: bool
                         no_summary:
                           description: Filter all type-3 LSAs in the nssa area.
@@ -455,7 +455,7 @@ options:
                           description: Enable LSA translation.
                           type: bool
                         set:
-                          description: True if only nssa is set
+                          description: true if only nssa is set
                           type: bool
                   ranges:
                     description: Configure route summarization.
@@ -482,10 +482,10 @@ options:
                     type: dict
                     suboptions:
                       set:
-                        description: True if only stub is set
+                        description: true if only stub is set
                         type: bool
                       summary_lsa:
-                        description: If False , Filter all type-3 LSAs in the stub area.
+                        description: If false , Filter all type-3 LSAs in the stub area.
                         type: bool
 
               bfd:
@@ -534,7 +534,7 @@ options:
                     description: When true sets the grace_fulrestart config alone.
                     type: bool
               graceful_restart_helper:
-                description: If True, Enable graceful restart helper.
+                description: If true, Enable graceful restart helper.
                 type: bool
               log_adjacency_changes:
                 description: To configure link-state changes and transitions of OSPFv3
@@ -708,22 +708,22 @@ EXAMPLES = """
 # veos#show running-config | section ospfv3
 # veos#
 
-  - name: Merge the provided configuration with the existing running configuration
-    arista.eos.eos_ospfv3:
-      config:
-        processes:
-          - address_family:
-              - timers:
-                  lsa: 22
-                graceful_restart:
-                  grace_period: 35
-                afi: "ipv6"
-            timers:
-              pacing: 55
-            fips_restrictions: True
-            router_id: "2.2.2.2"
-            vrf: "vrfmerge"
-      state: merged
+- name: Merge the provided configuration with the existing running configuration
+  arista.eos.eos_ospfv3:
+    config:
+      processes:
+        - address_family:
+            - timers:
+                lsa: 22
+              graceful_restart:
+                grace_period: 35
+              afi: "ipv6"
+          timers:
+            pacing: 55
+          fips_restrictions: true
+          router_id: "2.2.2.2"
+          vrf: "vrfmerge"
+    state: merged
 
 
 # Task output:
@@ -787,24 +787,23 @@ EXAMPLES = """
 #       timers lsa arrival 22
 #       graceful-restart grace-period 35
 
-  - name: Replace a section of running config with provided config
-    arista.eos.eos_ospfv3:
-      config:
-        processes:
-          - areas:
-              - area_id: "0.0.0.0"
-                encryption:
-                  spi: 43
-                  encryption: "null"
-                  algorithm: "md5"
-                  encrypt_key: False
-                  passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
-            vrf: "default"
-            address_family:
-              - afi: "ipv4"
-                router_id: "7.1.1.1"
-      state: replaced
-
+- name: Replace a section of running config with provided config
+  arista.eos.eos_ospfv3:
+    config:
+      processes:
+        - areas:
+            - area_id: "0.0.0.0"
+              encryption:
+                spi: 43
+                encryption: "null"
+                algorithm: "md5"
+                encrypt_key: false
+                passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+          vrf: "default"
+          address_family:
+            - afi: "ipv4"
+              router_id: "7.1.1.1"
+    state: replaced
 
 # Task output:
 # ------------
@@ -896,23 +895,23 @@ EXAMPLES = """
 #       area 0.0.0.3 range 10.1.2.0/24
 #       area 0.0.0.3 range 60.1.0.0/16 cost 30
 
-  - name: Override running config with provided config
-    arista.eos.eos_ospfv3:
-      config:
-        processes:
-          - address_family:
-              - areas:
-                  - area_id: "0.0.0.3"
-                    ranges:
-                      - address: 10.1.2.2/24
-                        advertise: True
-                      - address: 60.1.1.1
-                        subnet_mask: 255.255.0.0
-                        cost: 30
-                afi: "ipv6"
-            passive_interface: True
-            vrf: "vrfmerge"
-      state: overridden
+- name: Override running config with provided config
+  arista.eos.eos_ospfv3:
+    config:
+      processes:
+        - address_family:
+            - areas:
+                - area_id: "0.0.0.3"
+                  ranges:
+                    - address: 10.1.2.2/24
+                      advertise: true
+                    - address: 60.1.1.1
+                      subnet_mask: 255.255.0.0
+                      cost: 30
+              afi: "ipv6"
+          passive_interface: true
+          vrf: "vrfmerge"
+    state: overridden
 
 # Task output:
 # ------------
@@ -993,13 +992,14 @@ EXAMPLES = """
 #       area 0.0.0.3 range 10.1.2.0/24
 #       area 0.0.0.3 range 60.1.0.0/16 cost 30
 
-  - name: Delete OSPFv3 config
-    arista.eos.eos_ospfv3:
-      config:
-      state: deleted
+- name: Delete OSPFv3 config
+  arista.eos.eos_ospfv3:
+    config:
+    state: deleted
 
 # Task output:
 # ------------
+
 # before:
 #     processes:
 #     - areas:
@@ -1104,10 +1104,10 @@ EXAMPLES = """
 #       timers spf delay initial 56 56 56
 #       timers out-delay 10
 
-  - name: Parse the provided config
-    arista.eos.eos_ospfv3:
-      running_config: "{{ lookup('file', './parsed_ospfv3.cfg') }}"
-      state: parsed
+- name: Parse the provided config
+  arista.eos.eos_ospfv3:
+    running_config: "{{ lookup('file', './parsed_ospfv3.cfg') }}"
+    state: parsed
 
 # Task output:
 # ------------
@@ -1213,9 +1213,9 @@ EXAMPLES = """
 #       area 0.0.0.3 range 10.1.2.0/24
 #       area 0.0.0.3 range 60.1.0.0/16 cost 30
 
-  - name: Gather running configuration
-    arista.eos.eos_ospfv3:
-      state: gathered
+- name: Gather running configuration
+  arista.eos.eos_ospfv3:
+    state: gathered
 
 # Task output:
 # ------------
@@ -1246,22 +1246,22 @@ EXAMPLES = """
 
 # using rendered
 
-  - name: render CLI commands for provided config
-    arista.eos.eos_ospfv3:
-      config:
-        processes:
-          - address_family:
-              - timers:
-                  lsa: 22
-                graceful_restart:
-                  grace_period: 35
-                afi: "ipv6"
-            timers:
-              pacing: 55
-            fips_restrictions: True
-            router_id: "2.2.2.2"
-            vrf: "vrfmerge"
-      state: rendered
+- name: render CLI commands for provided config
+  arista.eos.eos_ospfv3:
+    config:
+      processes:
+        - address_family:
+            - timers:
+                lsa: 22
+              graceful_restart:
+                grace_period: 35
+              afi: "ipv6"
+          timers:
+            pacing: 55
+          fips_restrictions: true
+          router_id: "2.2.2.2"
+          vrf: "vrfmerge"
+    state: rendered
 
 # Task output:
 # ------------

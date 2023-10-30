@@ -164,22 +164,22 @@ Examples
     - name: configure DNS lookup sources with VRF support
       arista.eos.eos_system:
         lookup_source:
-        - interface: Management1
-          vrf: mgmt
-        - interface: Ethernet1
-          vrf: myvrf
+          - interface: Management1
+            vrf: mgmt
+          - interface: Ethernet1
+            vrf: myvrf
 
     - name: configure name servers
       arista.eos.eos_system:
         name_servers:
-        - 8.8.8.8
-        - 8.8.4.4
+          - 8.8.8.8
+          - 8.8.4.4
 
     - name: configure name servers with VRF support
       arista.eos.eos_system:
         name_servers:
-        - {server: 8.8.8.8, vrf: mgmt}
-        - {server: 8.8.4.4, vrf: mgmt}
+          - {server: 8.8.8.8, vrf: mgmt}
+          - {server: 8.8.4.4, vrf: mgmt}
 
 
 
