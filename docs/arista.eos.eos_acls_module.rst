@@ -2857,17 +2857,17 @@ Examples
     - name: Merge provided configuration with device configuration
       arista.eos.eos_acls:
         config:
-        - afi: ipv4
-          acls:
-          - name: test1
-            aces:
-            - sequence: 35
-              grant: deny
-              protocol: ospf
-              source:
-                subnet_address: 20.0.0.0/8
-              destination:
-                any: true
+          - afi: ipv4
+            acls:
+              - name: test1
+                aces:
+                  - sequence: 35
+                    grant: deny
+                    protocol: ospf
+                    source:
+                      subnet_address: 20.0.0.0/8
+                    destination:
+                      any: true
         state: merged
 
     # After state:
@@ -2899,14 +2899,14 @@ Examples
     - name: Merge to update the given configuration with an existing ace
       arista.eos.eos_acls:
         config:
-        - afi: ipv4
-          acls:
-          - name: test1
-            aces:
-            - sequence: 35
-              log: true
-              ttl:
-                eq: 33
+          - afi: ipv4
+            acls:
+              - name: test1
+                aces:
+                  - sequence: 35
+                    log: true
+                    ttl:
+                      eq: 33
         state: merged
 
     # After state:
@@ -2939,22 +2939,20 @@ Examples
     # ipv6 access-list test2
     #     10 deny icmpv6 any any reject-route hop-limit eq 20
 
-
-
     - name: Replace device configuration with provided configuration
       arista.eos.eos_acls:
         config:
-        - afi: ipv4
-          acls:
-          - name: test1
-            aces:
-            - sequence: 35
-              grant: permit
-              protocol: ospf
-              source:
-                subnet_address: 20.0.0.0/8
-              destination:
-                any: true
+          - afi: ipv4
+            acls:
+              - name: test1
+                aces:
+                  - sequence: 35
+                    grant: permit
+                    protocol: ospf
+                    source:
+                      subnet_address: 20.0.0.0/8
+                    destination:
+                      any: true
         state: replaced
 
     # After state:
@@ -2969,7 +2967,6 @@ Examples
     # !
     # ipv6 access-list test2
     #     10 deny icmpv6 any any reject-route hop-limit eq 20
-
 
     # Using overridden
 
@@ -2989,21 +2986,20 @@ Examples
     #     10 deny icmpv6 any any reject-route hop-limit eq 20
 
 
-
     - name: override device configuration with  provided configuration
       arista.eos.eos_acls:
         config:
-        - afi: ipv4
-          acls:
-          - name: test1
-            aces:
-            - sequence: 35
-              grant: permit
-              protocol: ospf
-              source:
-                subnet_address: 20.0.0.0/8
-              destination:
-                any: true
+          - afi: ipv4
+            acls:
+              - name: test1
+                aces:
+                  - sequence: 35
+                    grant: permit
+                    protocol: ospf
+                    source:
+                      subnet_address: 20.0.0.0/8
+                    destination:
+                      any: true
         state: overridden
 
     # After state:
@@ -3032,9 +3028,9 @@ Examples
     - name: Delete provided configuration
       arista.eos.eos_acls:
         config:
-        - afi: ipv4
-          acls:
-          - name: test1
+          - afi: ipv4
+            acls:
+              - name: test1
         state: deleted
 
     # After state:
@@ -3059,64 +3055,62 @@ Examples
 
     # returns:
 
-
     #  arista.eos.eos_acls:
     #    config:
-    #     - afi: "ipv4"
-    #       acls:
-    #        - name: test1
-    #          aces:
-    #          - sequence: 35
-    #            grant: "deny"
-    #            protocol: "ospf"
-    #            source:
-    #              subnet_address: 20.0.0.0/8
-    #            destination:
-    #              any: true
-    #     - afi: "ipv6"
-    #       acls:
-    #        - name: test2
-    #          aces:
-    #           - sequence: 40
-    #             grant: "permit"
-    #             vlan: "55 0xE2"
-    #             protocol: "icmpv6"
-    #             log: true
-    #             source:
-    #               any: true
-    #             destination:
-    #               any: true
-
+    #      - afi: "ipv4"
+    #        acls:
+    #          - name: test1
+    #            aces:
+    #            - sequence: 35
+    #              grant: "deny"
+    #              protocol: "ospf"
+    #              source:
+    #                subnet_address: 20.0.0.0/8
+    #              destination:
+    #                any: true
+    #      - afi: "ipv6"
+    #         acls:
+    #           - name: test2
+    #             aces:
+    #               - sequence: 40
+    #                 grant: "permit"
+    #                 vlan: "55 0xE2"
+    #                 protocol: "icmpv6"
+    #                 log: true
+    #                 source:
+    #                   any: true
+    #                 destination:
+    #                   any: true
 
     # using rendered
 
     - name: Delete provided configuration
       arista.eos.eos_acls:
         config:
-        - afi: ipv4
-          acls:
-          - name: test1
-            aces:
-            - sequence: 35
-              grant: deny
-              protocol: ospf
-              source:
-                subnet_address: 20.0.0.0/8
-              destination:
-                any: true
-        - afi: ipv6
-          acls:
-          - name: test2
-            aces:
-            - sequence: 40
-              grant: permit
-              vlan: 55 0xE2
-              protocol: icmpv6
-              log: true
-              source:
-                any: true
-              destination:
-                any: true
+          - afi: ipv4
+            acls:
+              - name: test1
+                aces:
+                  - sequence: 35
+                    grant: deny
+                    protocol: ospf
+                    source:
+                      subnet_address: 20.0.0.0/8
+                    destination:
+                      any: true
+          - afi: ipv6
+            acls:
+              - name: test2
+                aces:
+                  - sequence: 40
+                    grant: permit
+                    vlan: 55 0xE2
+                    protocol: icmpv6
+                    log: true
+                    source:
+                      any: true
+                    destination:
+                      any: true
         state: rendered
 
     # returns:
@@ -3125,7 +3119,6 @@ Examples
     #    35 deny ospf 20.0.0.0/8 any
     # ip access-list test2
     #    40 permit vlan 55 0xE2 icmpv6 any any log
-
 
     # Using Parsed
 

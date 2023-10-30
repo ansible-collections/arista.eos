@@ -382,7 +382,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, it is set.</div>
+                        <div>When true, it is set.</div>
                 </td>
             </tr>
 
@@ -1251,7 +1251,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True route_reflector is set.</div>
+                        <div>When true route_reflector is set.</div>
                 </td>
             </tr>
 
@@ -1408,7 +1408,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, graceful restart is set.</div>
+                        <div>When true, graceful restart is set.</div>
                 </td>
             </tr>
             <tr>
@@ -1686,7 +1686,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, it is set.</div>
+                        <div>When true, it is set.</div>
                 </td>
             </tr>
 
@@ -1864,7 +1864,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, ttl is not set.</div>
+                        <div>If true, ttl is not set.</div>
                 </td>
             </tr>
             <tr>
@@ -2155,7 +2155,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, set link bandwidth</div>
+                        <div>If true, set link bandwidth</div>
                 </td>
             </tr>
             <tr>
@@ -2725,7 +2725,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, set remove_private_as.</div>
+                        <div>If true, set remove_private_as.</div>
                 </td>
             </tr>
 
@@ -3422,7 +3422,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, shut down BGP.</div>
+                        <div>When true, shut down BGP.</div>
                 </td>
             </tr>
             <tr>
@@ -3658,7 +3658,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, ucmp mode is set to 1.</div>
+                        <div>If true, ucmp mode is set to 1.</div>
                 </td>
             </tr>
 
@@ -4102,7 +4102,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, it is set.</div>
+                        <div>When true, it is set.</div>
                 </td>
             </tr>
 
@@ -5014,7 +5014,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True route_reflector is set.</div>
+                        <div>When true route_reflector is set.</div>
                 </td>
             </tr>
 
@@ -5180,7 +5180,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, graceful restart is set.</div>
+                        <div>When true, graceful restart is set.</div>
                 </td>
             </tr>
             <tr>
@@ -5375,7 +5375,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, it is set.</div>
+                        <div>When true, it is set.</div>
                 </td>
             </tr>
 
@@ -5562,7 +5562,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, ttl is not set.</div>
+                        <div>If true, ttl is not set.</div>
                 </td>
             </tr>
             <tr>
@@ -5868,7 +5868,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, set link bandwidth</div>
+                        <div>If true, set link bandwidth</div>
                 </td>
             </tr>
             <tr>
@@ -6468,7 +6468,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, set remove_private_as.</div>
+                        <div>If true, set remove_private_as.</div>
                 </td>
             </tr>
 
@@ -7241,7 +7241,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, shut down BGP.</div>
+                        <div>When true, shut down BGP.</div>
                 </td>
             </tr>
             <tr>
@@ -7491,7 +7491,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, ucmp mode is set to 1.</div>
+                        <div>If true, ucmp mode is set to 1.</div>
                 </td>
             </tr>
 
@@ -7637,67 +7637,67 @@ Examples
 
 .. code-block:: yaml
 
-    # Using merged
+    # Using Merged
 
     # Before state:
     # -------------
     # veos(config)#show running-config | section bgp
     # veos(config)#
 
-      - name: Merge provided configuration with device configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-            bgp_params:
-              host_routes: True
-              convergence:
-                slow_peer: True
-                time: 6
-              additional_paths: "send"
-              log_neighbor_changes: True
-            maximum_paths:
-              max_equal_cost_paths: 55
-            aggregate_address:
-              - address: "1.2.1.0/24"
-                as_set: true
-                match_map: "match01"
-              - address: "5.2.1.0/24"
-                attribute_map: "attrmatch01"
-                advertise_only: true
-            redistribute:
-              - protocol: "static"
-                route_map: "map_static"
-              - protocol: "attached-host"
-            distance:
-              internal: 50
-            neighbor:
-              - peer: "10.1.3.2"
-                allowas_in:
-                  set: true
-                default_originate:
-                  always: true
-                dont_capability_negotiate: true
-                export_localpref: 4000
-                maximum_received_routes:
-                  count: 500
-                  warning_limit:
-                    limit_percent: 5
-                next_hop_unchanged: true
-                prefix_list:
-                  name: "prefix01"
-                  direction: "out"
-              - neighbor_address: "peer1"
-                fall_over: true
-                link_bandwidth:
-                  update_delay: 5
-                monitoring: True
-                send_community:
-                  community_attribute: "extended"
-                  sub_attribute: "link-bandwidth"
-                  link_bandwidth_attribute: "aggregate"
-                  speed: "600"
-            vlan: 5
-          state: merged
+    - name: Merge provided configuration with device configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+          bgp_params:
+            host_routes: true
+            convergence:
+              slow_peer: true
+              time: 6
+            additional_paths: "send"
+            log_neighbor_changes: true
+          maximum_paths:
+            max_equal_cost_paths: 55
+          aggregate_address:
+            - address: "1.2.1.0/24"
+              as_set: true
+              match_map: "match01"
+            - address: "5.2.1.0/24"
+              attribute_map: "attrmatch01"
+              advertise_only: true
+          redistribute:
+            - protocol: "static"
+              route_map: "map_static"
+            - protocol: "attached-host"
+          distance:
+            internal: 50
+          neighbor:
+            - peer: "10.1.3.2"
+              allowas_in:
+                set: true
+              default_originate:
+                always: true
+              dont_capability_negotiate: true
+              export_localpref: 4000
+              maximum_received_routes:
+                count: 500
+                warning_limit:
+                  limit_percent: 5
+              next_hop_unchanged: true
+              prefix_list:
+                name: "prefix01"
+                direction: "out"
+            - neighbor_address: "peer1"
+              fall_over: true
+              link_bandwidth:
+                update_delay: 5
+              monitoring: true
+              send_community:
+                community_attribute: "extended"
+                sub_attribute: "link-bandwidth"
+                link_bandwidth_attribute: "aggregate"
+                speed: "600"
+          vlan: 5
+        state: merged
 
     # Task output:
     # ------------
@@ -7850,64 +7850,65 @@ Examples
     #       neighbor 12.1.3.2 default-originate always
     #       neighbor 12.1.3.2 maximum-routes 12000
 
-      - name: replace provided configuration with device configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-            bgp_params:
-              host_routes: True
-              convergence:
-                slow_peer: True
-                time: 6
-              additional_paths: "send"
-              log_neighbor_changes: True
-            vrfs:
-              - vrf: "vrf01"
-                maximum_paths:
-                  max_equal_cost_paths: 55
-                aggregate_address:
-                  - address: "1.2.1.0/24"
-                    as_set: true
-                    match_map: "match01"
-                  - address: "5.2.1.0/24"
-                    attribute_map: "attrmatch01"
-                    advertise_only: true
-                redistribute:
-                  - protocol: "static"
-                    route_map: "map_static"
-                  - protocol: "attached-host"
-                distance:
-                  internal: 50
-                neighbor:
-                  - neighbor_address: "10.1.3.2"
-                    allowas_in:
-                      set: true
-                    default_originate:
-                      always: true
-                    dont_capability_negotiate: true
-                    export_localpref: 4000
-                    maximum_received_routes:
-                      count: 500
-                      warning_limit:
-                        limit_percent: 5
-                    next_hop_unchanged: true
-                    prefix_list:
-                      name: "prefix01"
-                      direction: "out"
-                  - neighbor_address: "peer1"
-                    fall_over: true
-                    link_bandwidth:
-                      update_delay: 5
-                    monitoring: True
-                    send_community:
-                      community_attribute: "extended"
-                      sub_attribute: "link-bandwidth"
-                      link_bandwidth_attribute: "aggregate"
-                      speed: "600"
-          state: replaced
+    - name: replace provided configuration with device configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+          bgp_params:
+            host_routes: true
+            convergence:
+              slow_peer: true
+              time: 6
+            additional_paths: "send"
+            log_neighbor_changes: true
+          vrfs:
+            - vrf: "vrf01"
+              maximum_paths:
+                max_equal_cost_paths: 55
+              aggregate_address:
+                - address: "1.2.1.0/24"
+                  as_set: true
+                  match_map: "match01"
+                - address: "5.2.1.0/24"
+                  attribute_map: "attrmatch01"
+                  advertise_only: true
+              redistribute:
+                - protocol: "static"
+                  route_map: "map_static"
+                - protocol: "attached-host"
+              distance:
+                internal: 50
+              neighbor:
+                - neighbor_address: "10.1.3.2"
+                  allowas_in:
+                    set: true
+                  default_originate:
+                    always: true
+                  dont_capability_negotiate: true
+                  export_localpref: 4000
+                  maximum_received_routes:
+                    count: 500
+                    warning_limit:
+                      limit_percent: 5
+                  next_hop_unchanged: true
+                  prefix_list:
+                    name: "prefix01"
+                    direction: "out"
+                - neighbor_address: "peer1"
+                  fall_over: true
+                  link_bandwidth:
+                    update_delay: 5
+                  monitoring: true
+                  send_community:
+                    community_attribute: "extended"
+                    sub_attribute: "link-bandwidth"
+                    link_bandwidth_attribute: "aggregate"
+                    speed: "600"
+        state: replaced
 
     # Task output:
     # ------------
+
     # before:
     #     aggregate_address:
     #     - address: 1.2.1.0/24
@@ -8119,61 +8120,61 @@ Examples
     #       neighbor 12.1.3.2 default-originate always
     #       neighbor 12.1.3.2 maximum-routes 12000
 
-      - name: override running configuration with configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-            bgp_params:
-              host_routes: True
-              convergence:
-                slow_peer: True
-                time: 6
-              additional_paths: "send"
-              log_neighbor_changes: True
-            vrfs:
-              - vrf: "vrf01"
-                maximum_paths:
-                  max_equal_cost_paths: 55
-                aggregate_address:
-                  - address: "1.2.1.0/24"
-                    as_set: true
-                    match_map: "match01"
-                  - address: "5.2.1.0/24"
-                    attribute_map: "attrmatch01"
-                    advertise_only: true
-                redistribute:
-                  - protocol: "static"
-                    route_map: "map_static"
-                  - protocol: "attached-host"
-                distance:
-                  internal: 50
-                neighbor:
-                  - neighbor_address: "10.1.3.2"
-                    allowas_in:
-                      set: true
-                    default_originate:
-                      always: true
-                    dont_capability_negotiate: true
-                    export_localpref: 4000
-                    maximum_received_routes:
-                      count: 500
-                      warning_limit:
-                        limit_percent: 5
-                    next_hop_unchanged: true
-                    prefix_list:
-                      name: "prefix01"
-                      direction: "out"
-                  - neighbor_address: "peer1"
-                    fall_over: true
-                    link_bandwidth:
-                      update_delay: 5
-                    monitoring: True
-                    send_community:
-                      community_attribute: "extended"
-                      sub_attribute: "link-bandwidth"
-                      link_bandwidth_attribute: "aggregate"
-                      speed: "600"
-          state: overridden
+    - name: override running configuration with configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+          bgp_params:
+            host_routes: true
+            convergence:
+              slow_peer: true
+              time: 6
+            additional_paths: "send"
+            log_neighbor_changes: true
+          vrfs:
+            - vrf: "vrf01"
+              maximum_paths:
+                max_equal_cost_paths: 55
+              aggregate_address:
+                - address: "1.2.1.0/24"
+                  as_set: true
+                  match_map: "match01"
+                - address: "5.2.1.0/24"
+                  attribute_map: "attrmatch01"
+                  advertise_only: true
+              redistribute:
+                - protocol: "static"
+                  route_map: "map_static"
+                - protocol: "attached-host"
+              distance:
+                internal: 50
+              neighbor:
+                - neighbor_address: "10.1.3.2"
+                  allowas_in:
+                    set: true
+                  default_originate:
+                    always: true
+                  dont_capability_negotiate: true
+                  export_localpref: 4000
+                  maximum_received_routes:
+                    count: 500
+                    warning_limit:
+                      limit_percent: 5
+                  next_hop_unchanged: true
+                  prefix_list:
+                    name: "prefix01"
+                    direction: "out"
+                - neighbor_address: "peer1"
+                  fall_over: true
+                  link_bandwidth:
+                    update_delay: 5
+                  monitoring: true
+                  send_community:
+                    community_attribute: "extended"
+                    sub_attribute: "link-bandwidth"
+                    link_bandwidth_attribute: "aggregate"
+                    speed: "600"
+        state: overridden
 
     # Task output:
     # ------------
@@ -8372,11 +8373,11 @@ Examples
     #       redistribute attached-host
     #       !
 
-      - name: Delete configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-          state: deleted
+    - name: Delete configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+        state: deleted
 
     # Task output:
     # ------------
@@ -8474,11 +8475,11 @@ Examples
     #       neighbor 12.1.3.2 default-originate always
     #       neighbor 12.1.3.2 maximum-routes 12000
 
-      - name: Purge configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-          state: purged
+    - name: Purge configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+        state: purged
 
 
     # Task output:
@@ -8561,63 +8562,62 @@ Examples
     # veos(config)#show running-config | section bgp
     # veos(config)#
 
-
     # Using rendered
 
-      - name: Render command lines for provided configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-            bgp_params:
-              host_routes: True
-              convergence:
-                slow_peer: True
-                time: 6
-              additional_paths: "send"
-              log_neighbor_changes: True
-            maximum_paths:
-              max_equal_cost_paths: 55
-            aggregate_address:
-              - address: "1.2.1.0/24"
-                as_set: true
-                match_map: "match01"
-              - address: "5.2.1.0/24"
-                attribute_map: "attrmatch01"
-                advertise_only: true
-            redistribute:
-              - protocol: "static"
-                route_map: "map_static"
-              - protocol: "attached-host"
-            distance:
-              internal: 50
-            neighbor:
-              - peer: "10.1.3.2"
-                allowas_in:
-                  set: true
-                default_originate:
-                  always: true
-                dont_capability_negotiate: true
-                export_localpref: 4000
-                maximum_received_routes:
-                  count: 500
-                  warning_limit:
-                    limit_percent: 5
-                next_hop_unchanged: true
-                prefix_list:
-                  name: "prefix01"
-                  direction: "out"
-              - neighbor_address: "peer1"
-                fall_over: true
-                link_bandwidth:
-                  update_delay: 5
-                monitoring: True
-                send_community:
-                  community_attribute: "extended"
-                  sub_attribute: "link-bandwidth"
-                  link_bandwidth_attribute: "aggregate"
-                  speed: "600"
-            vlan: 5
-          state: rendered
+    - name: Render command lines for provided configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+          bgp_params:
+            host_routes: true
+            convergence:
+              slow_peer: true
+              time: 6
+            additional_paths: "send"
+            log_neighbor_changes: true
+          maximum_paths:
+            max_equal_cost_paths: 55
+          aggregate_address:
+            - address: "1.2.1.0/24"
+              as_set: true
+              match_map: "match01"
+            - address: "5.2.1.0/24"
+              attribute_map: "attrmatch01"
+              advertise_only: true
+          redistribute:
+            - protocol: "static"
+              route_map: "map_static"
+            - protocol: "attached-host"
+          distance:
+            internal: 50
+          neighbor:
+            - peer: "10.1.3.2"
+              allowas_in:
+                set: true
+              default_originate:
+                always: true
+              dont_capability_negotiate: true
+              export_localpref: 4000
+              maximum_received_routes:
+                count: 500
+                warning_limit:
+                  limit_percent: 5
+              next_hop_unchanged: true
+              prefix_list:
+                name: "prefix01"
+                direction: "out"
+            - neighbor_address: "peer1"
+              fall_over: true
+              link_bandwidth:
+                update_delay: 5
+              monitoring: true
+              send_community:
+                community_attribute: "extended"
+                sub_attribute: "link-bandwidth"
+                link_bandwidth_attribute: "aggregate"
+                speed: "600"
+          vlan: 5
+        state: rendered
 
     # Task output:
     # ------------
@@ -8685,10 +8685,10 @@ Examples
     #       neighbor 12.1.3.2 default-originate always
     #       neighbor 12.1.3.2 maximum-routes 12000
 
-      - name: Parse externally provided BGP config
-        arista.eos.eos_bgp_global:
-          running_config: "{{ lookup('file', 'parsed.cfg') }}"
-          state: parsed
+    - name: Parse externally provided BGP config
+      arista.eos.eos_bgp_global:
+        running_config: "{{ lookup('file', 'parsed.cfg') }}"
+         state: parsed
 
     # Task output:
     # ------------
@@ -8797,9 +8797,9 @@ Examples
     #       neighbor 12.1.3.2 default-originate always
     #       neighbor 12.1.3.2 maximum-routes 12000
 
-      - name: Gather BGP facts using gathered
-        arista.eos.eos_bgp_global:
-          state: gathered
+    - name: Gather BGP facts using gathered
+      arista.eos.eos_bgp_global:
+        state: gathered
 
     # Task output:
     # ------------

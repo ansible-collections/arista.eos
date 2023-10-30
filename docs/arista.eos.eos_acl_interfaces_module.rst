@@ -322,12 +322,12 @@ Examples
     - name: Override module attributes of given access-groups
       arista.eos.eos_acl_interfaces:
         config:
-        - name: Ethernet2
-          access_groups:
-          - afi: ipv4
-            acls:
-              name: acl01
-              direction: out
+          - name: Ethernet2
+            access_groups:
+              - afi: ipv4
+                acls:
+                  name: acl01
+                  direction: out
         state: overridden
 
     # Commands Fired:

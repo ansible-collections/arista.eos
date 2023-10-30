@@ -372,8 +372,8 @@ Examples
     - name: set multiple users to privilege level 15
       arista.eos.eos_user:
         aggregate:
-        - name: netop
-        - name: netend
+          - name: netop
+          - name: netend
         privilege: 15
         state: present
 
