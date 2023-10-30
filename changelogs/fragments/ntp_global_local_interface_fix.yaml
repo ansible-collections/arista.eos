@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fix command generated for local-interface with in ntp server attribute.
