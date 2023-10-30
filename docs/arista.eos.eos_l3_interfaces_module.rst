@@ -398,9 +398,9 @@ Examples
     - name: Replace device configuration of specified L2 interfaces with provided configuration.
       arista.eos.eos_l3_interfaces:
         config:
-        - name: Ethernet2
-          ipv4:
-          - address: 203.0.113.27/24
+          - name: Ethernet2
+            ipv4:
+              - address: 203.0.113.27/24
         state: replaced
 
     # Task Output
@@ -538,12 +538,12 @@ Examples
     - name: Use Rendered to convert the structured data to native config
       arista.eos.eos_l3_interfaces:
         config:
-        - name: Ethernet1
-          ipv4:
-          - address: 198.51.100.14/24
-        - name: Ethernet2
-          ipv4:
-          - address: 203.0.113.27/24
+          - name: Ethernet1
+            ipv4:
+              - address: 198.51.100.14/24
+          - name: Ethernet2
+            ipv4:
+              - address: 203.0.113.27/24
         state: rendered
 
     # Module Execution Result:

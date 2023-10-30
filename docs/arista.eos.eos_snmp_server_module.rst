@@ -819,7 +819,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>when True Disable implementation of a group of objects</div>
+                        <div>when true Disable implementation of a group of objects</div>
                 </td>
             </tr>
                                 <tr>
@@ -3154,57 +3154,58 @@ Examples
 .. code-block:: yaml
 
     # Using merged:
+
     # Before State
     # eos#show running-config | section snmp-server
     # eos#
 
-        - name: merge given snmp_server configuration
-          arista.eos.eos_snmp_server:
-            config:
-              communities:
-                - name: "comm3"
-                  acl_v6: "list1"
-                  view: "view1"
-                - name: "comm4"
-                  acl_v4: "list3"
-                  view: "view1"
-                - name: "comm5"
-                  acl_v4: "list4"
-                  ro: True
-              contact: "admin"
-              engineid:
-                remote:
-                  host: 1.1.1.1
-                  id: "1234567"
-              groups:
-                - group: "group1"
-                  version: "v1"
-                  read: "view1"
-                - group: "group2"
-                  version: "v3"
-                  auth_privacy: "priv"
-                  notify: "view1"
-                  write: "view2"
-              hosts:
-                - host: "host02"
-                  user: "user01"
-                  udp_port: 23
-                  version: "2c"
-                - host: "host01"
-                  user: "user01"
-                  udp_port: 23
-                  version: "3 priv"
-              traps:
-                capacity:
-                  arista_hardware_utilization_alert: True
-                bgp:
-                  enabled: True
-                external_alarm:
-                  arista_external_alarm_deasserted_notif: True
-                  arista_external_alarm_asserted_notif: True
-              vrfs:
-                - vrf: "vrf01"
-                  local_interface: "Ethernet1"
+    - name: merge given snmp_server configuration
+      arista.eos.eos_snmp_server:
+        config:
+          communities:
+            - name: "comm3"
+              acl_v6: "list1"
+              view: "view1"
+            - name: "comm4"
+              acl_v4: "list3"
+              view: "view1"
+            - name: "comm5"
+              acl_v4: "list4"
+              ro: true
+          contact: "admin"
+          engineid:
+            remote:
+              host: 1.1.1.1
+              id: "1234567"
+          groups:
+            - group: "group1"
+              version: "v1"
+              read: "view1"
+            - group: "group2"
+              version: "v3"
+              auth_privacy: "priv"
+              notify: "view1"
+              write: "view2"
+          hosts:
+            - host: "host02"
+              user: "user01"
+              udp_port: 23
+              version: "2c"
+            - host: "host01"
+              user: "user01"
+              udp_port: 23
+              version: "3 priv"
+          traps:
+            capacity:
+              arista_hardware_utilization_alert: true
+            bgp:
+              enabled: true
+            external_alarm:
+              arista_external_alarm_deasserted_notif: true
+              arista_external_alarm_asserted_notif: true
+          vrfs:
+            - vrf: "vrf01"
+              local_interface: "Ethernet1"
 
     # After state
     # eos#show running-config | section snmp-server
@@ -3311,6 +3312,7 @@ Examples
     #
 
     # Using replaced:
+
     # Before State:
     # eos#show running-config | section snmp-server
     # snmp-server community comm3 view view1 ipv6 list1
@@ -3326,29 +3328,29 @@ Examples
     # snmp-server enable traps capacity arista-hardware-utilization-alert
     # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif
 
-        - name: Replace given snmp_server configuration
-          become: true
-          register: result
-          arista.eos.eos_snmp_server: &replaced
-            state: replaced
-            config:
-              communities:
-                - name: "comm3"
-                  acl_v6: "list1"
-                  view: "view1"
-                - name: "replacecomm"
-                  acl_v4: "list4"
-              extension:
-                root_oid: "123456"
-                script_location: "flash:"
-              traps:
-                test:
-                  arista_test_notification: True
-                bgp:
-                  enabled: True
-              vrfs:
-                - vrf: "vrf_replace"
-                  local_interface: "Ethernet1"
+    - name: Replace given snmp_server configuration
+      become: true
+      register: result
+      arista.eos.eos_snmp_server: &replaced
+        state: replaced
+        config:
+          communities:
+            - name: "comm3"
+              acl_v6: "list1"
+              view: "view1"
+            - name: "replacecomm"
+              acl_v4: "list4"
+          extension:
+            root_oid: "123456"
+            script_location: "flash:"
+          traps:
+            test:
+              arista_test_notification: true
+            bgp:
+              enabled: true
+          vrfs:
+            - vrf: "vrf_replace"
+              local_interface: "Ethernet1"
 
     # After State:
 
@@ -3497,27 +3499,27 @@ Examples
     # snmp-server enable traps capacity arista-hardware-utilization-alert
     # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif
 
-        - name: Override given snmp_server configuration
-          arista.eos.eos_snmp_server:
-            state: overridden
-            config:
-              communities:
-                - name: "comm3"
-                  acl_v6: "list1"
-                  view: "view1"
-                - name: "replacecomm"
-                  acl_v4: "list4"
-              extension:
-                root_oid: "123456"
-                script_location: "flash:"
-              traps:
-                test:
-                  arista_test_notification: True
-                bgp:
-                  enabled: True
-              vrfs:
-                - vrf: "vrf_replace"
-                  local_interface: "Ethernet1"
+    - name: Override given snmp_server configuration
+      arista.eos.eos_snmp_server:
+        state: overridden
+        config:
+          communities:
+            - name: "comm3"
+              acl_v6: "list1"
+              view: "view1"
+            - name: "replacecomm"
+              acl_v4: "list4"
+          extension:
+            root_oid: "123456"
+            script_location: "flash:"
+          traps:
+            test:
+              arista_test_notification: true
+            bgp:
+              enabled: true
+          vrfs:
+            - vrf: "vrf_replace"
+              local_interface: "Ethernet1"
 
     # After State:
 
@@ -3666,9 +3668,9 @@ Examples
     # snmp-server enable traps capacity arista-hardware-utilization-alert
     # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif
 
-        - name: Delete given snmp_server configuration
-          arista.eos.eos_snmp_server:
-            state: deleted
+    - name: Delete given snmp_server configuration
+      arista.eos.eos_snmp_server:
+        state: deleted
 
     # After State:
     # eos#show running-config | section snmp-server
@@ -3778,10 +3780,10 @@ Examples
     # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif
     # snmp-server enable traps external-alarm arista-external-alarm-deasserted-notif
 
-        - name: Provide the running configuration for parsing (config to be parsed)
-          arista.eos.eos_snmp_server:
-            running_config: "{{ lookup('file', '_parsed.cfg') }}"
-            state: parsed
+    - name: Provide the running configuration for parsing (config to be parsed)
+      arista.eos.eos_snmp_server:
+        running_config: "{{ lookup('file', '_parsed.cfg') }}"
+        state: parsed
 
     # Module Execution:
     #     "parsed": {
@@ -3854,54 +3856,54 @@ Examples
     #   }
 
     # Using rendered:
-        - name: Render given snmp_server configuration
-          arista.eos.eos_snmp_server:
-            state: "rendered"
-            config:
-              communities:
-                - name: "comm3"
-                  acl_v6: "list1"
-                  view: "view1"
-                - name: "comm4"
-                  acl_v4: "list3"
-                  view: "view1"
-                - name: "comm5"
-                  acl_v4: "list4"
-                  ro: True
-              contact: "admin"
-              engineid:
-                remote:
-                  host: 1.1.1.1
-                  id: "1234567"
-              groups:
-                - group: "group1"
-                  version: "v1"
-                  read: "view1"
-                - group: "group2"
-                  version: "v3"
-                  auth_privacy: "priv"
-                  notify: "view1"
-                  write: "view2"
-              hosts:
-                - host: "host02"
-                  user: "user01"
-                  udp_port: 23
-                  version: "2c"
-                - host: "host01"
-                  user: "user01"
-                  udp_port: 23
-                  version: "3 priv"
-              traps:
-                capacity:
-                  arista_hardware_utilization_alert: True
-                bgp:
-                  enabled: True
-                external_alarm:
-                  arista_external_alarm_deasserted_notif: True
-                  arista_external_alarm_asserted_notif: True
-              vrfs:
-                - vrf: "vrf01"
-                  local_interface: "Ethernet1"
+    - name: Render given snmp_server configuration
+      arista.eos.eos_snmp_server:
+        state: "rendered"
+        config:
+          communities:
+            - name: "comm3"
+              acl_v6: "list1"
+              view: "view1"
+            - name: "comm4"
+              acl_v4: "list3"
+              view: "view1"
+            - name: "comm5"
+              acl_v4: "list4"
+              ro: true
+          contact: "admin"
+          engineid:
+            remote:
+              host: 1.1.1.1
+              id: "1234567"
+          groups:
+            - group: "group1"
+              version: "v1"
+              read: "view1"
+            - group: "group2"
+              version: "v3"
+              auth_privacy: "priv"
+              notify: "view1"
+              write: "view2"
+          hosts:
+            - host: "host02"
+              user: "user01"
+              udp_port: 23
+              version: "2c"
+            - host: "host01"
+              user: "user01"
+              udp_port: 23
+              version: "3 priv"
+          traps:
+            capacity:
+              arista_hardware_utilization_alert: true
+            bgp:
+              enabled: true
+            external_alarm:
+              arista_external_alarm_deasserted_notif: true
+              arista_external_alarm_asserted_notif: true
+          vrfs:
+            - vrf: "vrf01"
+              local_interface: "Ethernet1"
 
     # Module Execution:
     #    "rendered": [
@@ -3936,10 +3938,10 @@ Examples
     # snmp-server enable traps capacity arista-hardware-utilization-alert
     # snmp-server enable traps external-alarm arista-external-alarm-asserted-notif arista-external-alarm-deasserted-notif
 
-        - name: Gathered the provided configuration with the exisiting running configuration
-          arista.eos.eos_snmp_server:
-            config:
-            state: gathered
+    - name: Gathered the provided configuration with the exisiting running configuration
+      arista.eos.eos_snmp_server:
+        config:
+        state: gathered
 
     # Module Execution:
     #     "gathered": {

@@ -300,23 +300,23 @@ Examples
     - name: run multiple commands on remote nodes
       arista.eos.eos_command:
         commands:
-        - show version
-        - show interfaces
+          - show version
+          - show interfaces
 
     - name: run multiple commands and evaluate the output
       arista.eos.eos_command:
         commands:
-        - show version
-        - show interfaces
+          - show version
+          - show interfaces
         wait_for:
-        - result[0] contains Arista
-        - result[1] contains Loopback0
+          - result[0] contains Arista
+          - result[1] contains Loopback0
 
     - name: run commands and specify the output format
       arista.eos.eos_command:
         commands:
-        - command: show version
-          output: json
+          - command: show version
+            output: json
 
     - name: check whether the switch is in maintenance mode
       arista.eos.eos_command:
@@ -326,8 +326,8 @@ Examples
     - name: check whether the switch is in maintenance mode using json output
       arista.eos.eos_command:
         commands:
-        - command: show maintenance
-          output: json
+          - command: show maintenance
+            output: json
         wait_for: result[0].units.System.state eq 'underMaintenance'
 
     - name: check whether the switch is in maintenance, with 8 retries
@@ -343,10 +343,10 @@ Examples
         need to be escaped.
       arista.eos.eos_command:
         commands:
-        - command: reload power
-          prompt: \[confirm\]
-          answer: y
-          newline: false
+          - command: reload power
+            prompt: \[confirm\]
+            answer: y
+            newline: false
 
 
 

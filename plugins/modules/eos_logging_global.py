@@ -240,31 +240,29 @@ options:
       default: merged
 """
 EXAMPLES = """
-
 # Using merged
-
 # Before state
 
 # test(config)#show running-config | section logging
 # test(config)#
 
-  - name: Merge provided configuration with device configuration
-    arista.eos.eos_logging_global:
-      config:
-        hosts:
-          - name: "host01"
-            protocol: "tcp"
-          - name: "11.11.11.1"
-            port: 25
-        vrfs:
-          - name: "vrf01"
-            source_interface: "Ethernet1"
-          - name: "vrf02"
-            hosts:
-              - name: "hostvrf1"
-                protocol: "tcp"
-              - name: "24.1.1.1"
-                port: "33"
+- name: Merge provided configuration with device configuration
+  arista.eos.eos_logging_global:
+    config:
+      hosts:
+        - name: "host01"
+          protocol: "tcp"
+        - name: "11.11.11.1"
+          port: 25
+      vrfs:
+        - name: "vrf01"
+          source_interface: "Ethernet1"
+        - name: "vrf02"
+          hosts:
+            - name: "hostvrf1"
+              protocol: "tcp"
+            - name: "24.1.1.1"
+              port: "33"
 
 # After State:
 
@@ -338,25 +336,25 @@ EXAMPLES = """
 # logging level AAA alerts
 # test(config)#
 
-  - name: Repalce
-    arista.eos.eos_logging_global:
-      config:
-        synchronous:
-          set: True
-        trap:
-          severity: "critical"
-        hosts:
-          - name: "host02"
-            protocol: "tcp"
-        vrfs:
-          - name: "vrf03"
-            source_interface: "Vlan100"
-          - name: "vrf04"
-            hosts:
-              - name: "hostvrf1"
-                protocol: "tcp"
+- name: Repalce
+  arista.eos.eos_logging_global:
+    config:
+      synchronous:
+        set: true
+      trap:
+        severity: "critical"
+      hosts:
+        - name: "host02"
+          protocol: "tcp"
+      vrfs:
+        - name: "vrf03"
+          source_interface: "Vlan100"
+        - name: "vrf04"
+          hosts:
+            - name: "hostvrf1"
+              protocol: "tcp"
 
-      state: replaced
+    state: replaced
 
 # After State:
 # test(config)#show running-config | section logging
@@ -377,7 +375,7 @@ EXAMPLES = """
 #             }
 #         ],
 #         "synchronous": {
-#             "set": True
+#             "set": true
 #         },
 #         "trap": {
 #            "severity": "critical"
@@ -487,25 +485,25 @@ EXAMPLES = """
 # logging level AAA alerts
 # test(config)#
 
-  - name: Repalce
-    arista.eos.eos_logging_global:
-      config:
-        synchronous:
-          set: True
-        trap:
-          severity: "critical"
-        hosts:
-          - name: "host02"
-            protocol: "tcp"
-        vrfs:
-          - name: "vrf03"
-            source_interface: "Vlan100"
-          - name: "vrf04"
-            hosts:
-              - name: "hostvrf1"
-                protocol: "tcp"
+- name: Repalce
+  arista.eos.eos_logging_global:
+    config:
+      synchronous:
+        set: true
+      trap:
+        severity: "critical"
+      hosts:
+        - name: "host02"
+          protocol: "tcp"
+      vrfs:
+        - name: "vrf03"
+          source_interface: "Vlan100"
+        - name: "vrf04"
+          hosts:
+            - name: "hostvrf1"
+              protocol: "tcp"
 
-      state: overridden
+    state: overridden
 
 # After State:
 # test(config)#show running-config | section logging
@@ -526,7 +524,7 @@ EXAMPLES = """
 #             }
 #         ],
 #         "synchronous": {
-#             "set": True
+#             "set": true
 #         },
 #         "trap": {
 #            "severity": "critical"
@@ -634,10 +632,10 @@ EXAMPLES = """
 # logging vrf vrf03 source-interface Vlan100
 # test(config)#
 
-  - name: Delete all logging configs
-    arista.eos.eos_logging_global:
-      state: deleted
-    become: true
+- name: Delete all logging configs
+  arista.eos.eos_logging_global:
+    state: deleted
+  become: true
 
 # After state:
 # test(config)#show running-config | section logging
@@ -726,10 +724,10 @@ EXAMPLES = """
 # !
 # logging level AAA alerts
 
-  - name: parse configs
-    arista.eos.eos_logging_global:
-      running_config: "{{ lookup('file', './parsed.cfg') }}"
-      state: parsed
+- name: parse configs
+  arista.eos.eos_logging_global:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
 
 # Module Execution
 # "parsed": {
@@ -800,9 +798,9 @@ EXAMPLES = """
 # logging level AAA alerts
 # test(config)#
 
-  - name: gather configs
-    arista.eos.eos_logging_global:
-      state: gathered
+- name: gather configs
+  arista.eos.eos_logging_global:
+    state: gathered
 
 # Module Execution:
 # "gathered": {
@@ -859,35 +857,35 @@ EXAMPLES = """
 #
 
 # Using rendered:
-  - name: Render provided configuration
-    arista.eos.eos_logging_global:
-      config:
-        format:
-          timestamp:
-            traditional:
-              timezone: True
-        level:
-          facility: "AAA"
-          severity: "alerts"
-        persistent:
-          size: 4096
-        policy:
-          invert_result: True
-          match_list: "list01"
-        hosts:
-          - name: "host01"
-            protocol: "tcp"
-          - name: "11.11.11.1"
-            port: 25
-        vrfs:
-          - name: "vrf01"
-            source_interface: "Ethernet1"
-          - name: "vrf02"
-            hosts:
-              - name: "hostvrf1"
-                protocol: "tcp"
-              - name: "24.1.1.1"
-                port: "33"
+- name: Render provided configuration
+  arista.eos.eos_logging_global:
+    config:
+      format:
+        timestamp:
+          traditional:
+            timezone: true
+      level:
+        facility: "AAA"
+        severity: "alerts"
+      persistent:
+        size: 4096
+      policy:
+        invert_result: true
+        match_list: "list01"
+      hosts:
+        - name: "host01"
+          protocol: "tcp"
+        - name: "11.11.11.1"
+          port: 25
+      vrfs:
+        - name: "vrf01"
+          source_interface: "Ethernet1"
+        - name: "vrf02"
+          hosts:
+            - name: "hostvrf1"
+              protocol: "tcp"
+            - name: "24.1.1.1"
+              port: "33"
 # Module Execution:
 
 # "rendered": [
@@ -902,7 +900,6 @@ EXAMPLES = """
 #         "logging policy match invert-result match-list list01 discard"
 #     ]
 #
-
 """
 
 from ansible.module_utils.basic import AnsibleModule

@@ -424,9 +424,9 @@ Examples
     - name: Delete afi
       arista.eos.eos_static_routes:
         config:
-        - vrf: testvrf
-          address_families:
-          - afi: ipv4
+          - vrf: testvrf
+            address_families:
+              - afi: ipv4
         state: deleted
 
 
@@ -510,14 +510,14 @@ Examples
     - name: Merge new static route configuration
       arista.eos.eos_static_routes:
         config:
-        - vrf: testvrf
-          address_families:
-          - afi: ipv6
-            routes:
-            - dest: 2211::0/64
-              next_hop:
-              - forward_router_address: 100:1::2
-                interface: Ethernet1
+          - vrf: testvrf
+            address_families:
+              - afi: ipv6
+                routes:
+                  - dest: 2211::0/64
+                    next_hop:
+                      - forward_router_address: 100:1::2
+                        interface: Ethernet1
         state: merged
 
 
@@ -609,12 +609,12 @@ Examples
     - name: Overridden static route configuration
       arista.eos.eos_static_routes:
         config:
-        - address_families:
-          - afi: ipv4
-            routes:
-            - dest: 10.2.2.0/24
-              next_hop:
-              - interface: Ethernet1
+          - address_families:
+              - afi: ipv4
+                routes:
+                  - dest: 10.2.2.0/24
+                    next_hop:
+                      - interface: Ethernet1
         state: replaced
 
 
@@ -645,7 +645,7 @@ Examples
     #       - interface: Ethernet1
     #         tag: 50
     #   vrf: testvrf
-    #commands:
+    # commands:
     # - no ip route 165.10.1.0/24 Ethernet1 100
     # - no ip route 172.17.252.0/24 Nexthop-Group testgroup
     # - no ip route vrf testvrf 130.1.122.0/24 Ethernet1 tag 50
@@ -684,14 +684,14 @@ Examples
     - name: Replace nexthop
       arista.eos.eos_static_routes:
         config:
-        - vrf: testvrf
-          address_families:
-          - afi: ipv6
-            routes:
-            - dest: 2222:6::/64
-              next_hops:
-              - admin_distance: 56
-                interface: Ethernet1
+          - vrf: testvrf
+            address_families:
+              - afi: ipv6
+                routes:
+                  - dest: 2222:6::/64
+                    next_hops:
+                      - admin_distance: 56
+                        interface: Ethernet1
         state: replaced
 
 
