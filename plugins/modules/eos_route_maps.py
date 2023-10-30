@@ -1178,9 +1178,9 @@ EXAMPLES = """
 #    set as-path prepend last-as 2
 # veos#
 
-  - name: gather configs
-    arista.eos.eos_route_maps:
-      state: gathered
+- name: gather configs
+  arista.eos.eos_route_maps:
+    state: gathered
 
 # Module Execution:
 #   "gathered": [
@@ -1312,10 +1312,10 @@ EXAMPLES = """
 #    set metric 25 +igp-metric
 #    set as-path prepend last-as 2
 
-  - name: parse configs
-    arista.eos.eos_route_maps:
-      running_config: "{{ lookup('file', './parsed.cfg') }}"
-      state: parsed
+- name: parse configs
+  arista.eos.eos_route_maps:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
 
 # Module Execution:
 # "parsed": [

@@ -8688,10 +8688,11 @@ Examples
     - name: Parse externally provided BGP config
       arista.eos.eos_bgp_global:
         running_config: "{{ lookup('file', 'parsed.cfg') }}"
-         state: parsed
+        state: parsed
 
     # Task output:
     # ------------
+
     # parsed:
     #     aggregate_address:
     #     - address: 1.2.1.0/24

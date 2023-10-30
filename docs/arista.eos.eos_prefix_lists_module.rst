@@ -729,9 +729,9 @@ Examples
                   - sequence: 300
                     action: "permit"
                     address: "30.11.2.0/24"
-                   match:
-                     masklen: 32
-                      operator: "ge"
+                    match:
+                      masklen: 32
+                       operator: "ge"
               - name: "v403"
                 entries:
                   - action: "deny"
