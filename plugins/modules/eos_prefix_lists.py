@@ -457,7 +457,7 @@ EXAMPLES = """
                 address: "30.11.2.0/24"
                 match:
                   masklen: 32
-                   operator: "ge"
+                  operator: "ge"
           - name: "v403"
             entries:
               - action: "deny"
@@ -572,12 +572,11 @@ EXAMPLES = """
 #    seq 125 deny 5000:1::/64
 # veos#
 
-  - name: Delete device configuration
-    arista.eos.eos_prefix_lists:
-      config:
-        - afi: "ipv6"
-      state: deleted
-
+- name: Delete device configuration
+  arista.eos.eos_prefix_lists:
+    config:
+      - afi: "ipv6"
+    state: deleted
 
 # Task Output
 # -------------
