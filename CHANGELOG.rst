@@ -29,9 +29,6 @@ Documentation Changes
 - eos_l2_interfaces - update examples and use YAML output for better readability.
 - eos_l3_interfaces - update examples and use YAML output for better readability.
 
-v6.1.3
-======
-
 v6.1.2
 ======
 
