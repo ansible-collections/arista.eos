@@ -715,7 +715,6 @@ Examples
     #    seq 125 deny 5000:1::/64
     # veos#
 
-
     - name: Override
       arista.eos.eos_prefix_lists:
         config:
@@ -825,9 +824,7 @@ Examples
     #    seq 10 deny 10.1.1.0/24
     # veos#
 
-
     # Using deleted:
-
 
     # Before State:
     # veos#show running-config | section prefix-list
@@ -968,9 +965,9 @@ Examples
     #    seq 10 deny 10.1.1.0/24
     # veos#
 
-      - name: Delete device configuration
-        arista.eos.eos_prefix_lists:
-          state: deleted
+    - name: Delete device configuration
+      arista.eos.eos_prefix_lists:
+        state: deleted
 
 
     # Task Output
@@ -1077,28 +1074,28 @@ Examples
     # Using rendered:
 
 
-      - name: Render provided configuration
-        arista.eos.eos_prefix_lists:
-          config:
-            - afi: "ipv4"
-              prefix_lists:
-                - name: "v401"
-                  entries:
-                    - sequence: 25
-                      action: "deny"
-                      address: "45.55.4.0/24"
-                    - sequence: 200
-                      action: "permit"
-                      address: "200.11.2.0/24"
-                      match:
-                        masklen: 32
-                        operator: "ge"
-                - name: "v403"
-                  entries:
-                    - action: "deny"
-                      address: "10.1.1.0/24"
-                      sequence: 10
-          state: rendered
+    - name: Render provided configuration
+      arista.eos.eos_prefix_lists:
+        config:
+          - afi: "ipv4"
+            prefix_lists:
+              - name: "v401"
+                entries:
+                  - sequence: 25
+                    action: "deny"
+                    address: "45.55.4.0/24"
+                  - sequence: 200
+                    action: "permit"
+                    address: "200.11.2.0/24"
+                    match:
+                      masklen: 32
+                      operator: "ge"
+              - name: "v403"
+                entries:
+                  - action: "deny"
+                    address: "10.1.1.0/24"
+                    sequence: 10
+        state: rendered
 
     # Task Output
     # -------------
