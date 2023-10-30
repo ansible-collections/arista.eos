@@ -544,3 +544,32 @@ releases:
     fragments:
       - conpile_test36.yaml
     release_date: "2023-09-14"
+  6.2.0:
+    changes:
+      bugfixes:
+        - Fix command generated for local-interface with in ntp server attribute.
+        - Fix command generation for source_interface attribute.
+        - Fix secondary ip address parsing.
+        - fix line attribute fact generation and placement in ACE, when ACE is not fully
+          parsed.
+      doc_changes:
+        - Fix docs for static_routes and prefix_lists Resource modules.
+        - eos_interfaces - update examples and use YAML output for better readability.
+        - eos_l2_interfaces - update examples and use YAML output for better readability.
+        - eos_l3_interfaces - update examples and use YAML output for better readability.
+      minor_changes:
+        - arista_config - Relax restrictions on I(src) parameter so it can be used more
+          like I(lines).
+    fragments:
+      - Fix_config.yaml
+      - docs_fix.yaml
+      - eos_interface_l2_l3.yaml
+      - fix_logging_global_replaced.yaml
+      - fix_tox.yaml
+      - fix_virtual_ip_facts_issue.yaml
+      - ipv6_acl_facts_gather_fix.yaml
+      - lint_fixtures.yaml
+      - ntp_global_local_interface_fix.yaml
+      - sanity_job_fix.yaml
+      - trivial_lint.yaml
+    release_date: "2023-10-30"
