@@ -70,7 +70,7 @@ options:
                   description: Source route map name.
                   type: str
                 overwrite:
-                  description: if True, overwrite existing config.
+                  description: if true, overwrite existing config.
                   type: bool
             action:
               description: Action for matching routes
@@ -420,39 +420,39 @@ EXAMPLES = """
 # veos#show running-config | section route-map
 # veos#
 
-  - name: Merge provided configuration with device configuration
-    arista.eos.eos_route_maps:
-      config:
-        - route_map: "mapmerge"
-          entries:
-            - description: "merged_map"
-              action: "permit"
-              sequence: 10
-              match:
-                router_id: 22
-            - description: "newmap"
-              action: "deny"
-              sequence: 25
-              continue_sequence: 45
-              match:
-                interface: "Ethernet1"
-        - route_map: "mapmerge2"
-          entries:
-            - sub_route_map:
-                name: "mapmerge"
-              action: "deny"
-              sequence: 45
-              set:
-                metric:
-                  value: 25
-                  add: "igp-metric"
-                as_path:
-                  prepend:
-                    last_as: 2
-              match:
-                ipv6:
-                  resolved_next_hop: "list1"
-      state: merged
+- name: Merge provided configuration with device configuration
+  arista.eos.eos_route_maps:
+    config:
+      - route_map: "mapmerge"
+        entries:
+          - description: "merged_map"
+            action: "permit"
+            sequence: 10
+            match:
+              router_id: 22
+          - description: "newmap"
+            action: "deny"
+            sequence: 25
+            continue_sequence: 45
+            match:
+              interface: "Ethernet1"
+      - route_map: "mapmerge2"
+        entries:
+          - sub_route_map:
+              name: "mapmerge"
+            action: "deny"
+            sequence: 45
+            set:
+              metric:
+                value: 25
+                add: "igp-metric"
+              as_path:
+                prepend:
+                  last_as: 2
+            match:
+              ipv6:
+                resolved_next_hop: "list1"
+    state: merged
 
 # After State:
 
@@ -474,7 +474,6 @@ EXAMPLES = """
 # !
 # route-map test permit 10
 # veos#
-
 
 # Module Execution:
 
@@ -570,26 +569,26 @@ EXAMPLES = """
 # !
 # veos#
 
-  - name: Replace
-    arista.eos.eos_route_maps:
-      config:
-        - route_map: "mapmerge"
-          entries:
-            - action: "permit"
-              sequence: 10
-              match:
-                ipv6:
-                  resolved_next_hop: "listr"
-            - action: "deny"
-              sequence: 90
-              set:
-                extcommunity:
-                  rt:
-                    vpn: "22:11"
-                    delete: True
-                ip:
-                  unchanged: True
-      state: replaced
+- name: Replace
+  arista.eos.eos_route_maps:
+    config:
+      - route_map: "mapmerge"
+        entries:
+          - action: "permit"
+            sequence: 10
+            match:
+              ipv6:
+                resolved_next_hop: "listr"
+          - action: "deny"
+            sequence: 90
+            set:
+              extcommunity:
+                rt:
+                  vpn: "22:11"
+                  delete: true
+              ip:
+                unchanged: true
+    state: replaced
 
 # After State:
 
@@ -781,22 +780,22 @@ EXAMPLES = """
 # route-map test permit 10
 # veos#
 
-  - name: Override
-    arista.eos.eos_route_maps:
-      config:
-        - route_map: "mapmerge"
-          entries:
-            - action: "permit"
-              sequence: 10
-              match:
-                ipv6:
-                  resolved_next_hop: "listr"
-            - action: "deny"
-              sequence: 90
-              set:
-                metric:
-                  igp_param: "igp-nexthop-cost"
-      state: overridden
+- name: Override
+  arista.eos.eos_route_maps:
+    config:
+      - route_map: "mapmerge"
+        entries:
+          - action: "permit"
+            sequence: 10
+            match:
+              ipv6:
+                resolved_next_hop: "listr"
+          - action: "deny"
+            sequence: 90
+            set:
+              metric:
+                igp_param: "igp-nexthop-cost"
+    state: overridden
 
 # After State:
 
@@ -946,14 +945,14 @@ EXAMPLES = """
 #    set as-path prepend last-as 2
 # veos#
 
-  - name: Delete route-map
-    arista.eos.eos_route_maps:
-      config:
-        - route_map: "mapmerge"
-      state: deleted
-    become: true
-    tags:
-      - deleted1
+- name: Delete route-map
+  arista.eos.eos_route_maps:
+    config:
+      - route_map: "mapmerge"
+    state: deleted
+  become: true
+  tags:
+    - deleted1
 
 # After State:
 
@@ -1087,11 +1086,13 @@ EXAMPLES = """
 #    set as-path prepend last-as 2
 # veos#
 
-  - name: Delete all route-maps
-    arista.eos.eos_route_maps:
-      state: deleted
+- name: Delete all route-maps
+  arista.eos.eos_route_maps:
+    state: deleted
 
 # After State:
+# ------------
+
 # veos#show running-config | section route-map
 # veos#
 #
@@ -1237,43 +1238,45 @@ EXAMPLES = """
 
 # Using rendered:
 
-  - name: Render provided configuration
-    arista.eos.eos_route_maps:
-      config:
-        - route_map: "mapmerge"
-          entries:
-            - description: "merged_map"
-              action: "permit"
-              sequence: 10
-              match:
-                router_id: 22
-              set:
-                bgp: 20
-            - description: "newmap"
-              action: "deny"
-              sequence: 25
-              continue_sequence: 45
-              match:
-                interface: "Ethernet1"
-        - route_map: "mapmerge2"
-          entries:
-            - sub_route_map:
-                name: "mapmerge"
-              action: "deny"
-              sequence: 45
-              set:
-                metric:
-                  value: 25
-                  add: "igp-metric"
-                as_path:
-                  prepend:
-                    last_as: 2
-              match:
-                ipv6:
-                  resolved_next_hop: "list1"
-      state: rendered
+- name: Render provided configuration
+  arista.eos.eos_route_maps:
+    config:
+      - route_map: "mapmerge"
+        entries:
+          - description: "merged_map"
+            action: "permit"
+            sequence: 10
+            match:
+              router_id: 22
+            set:
+              bgp: 20
+          - description: "newmap"
+            action: "deny"
+            sequence: 25
+            continue_sequence: 45
+            match:
+              interface: "Ethernet1"
+      - route_map: "mapmerge2"
+        entries:
+          - sub_route_map:
+              name: "mapmerge"
+            action: "deny"
+            sequence: 45
+            set:
+              metric:
+                value: 25
+                add: "igp-metric"
+              as_path:
+                prepend:
+                  last_as: 2
+            match:
+              ipv6:
+                resolved_next_hop: "list1"
+    state: rendered
 
-# Module Execution:
+# Task output:
+# ------------
+
 # "rendered": [
 #         "route-map mapmerge permit 10",
 #         "match router-id prefix-list 22",
@@ -1370,9 +1373,6 @@ EXAMPLES = """
 #             "route_map": "mapmerge2"
 #         }
 #     ]
-
-
-
 """
 
 from ansible.module_utils.basic import AnsibleModule

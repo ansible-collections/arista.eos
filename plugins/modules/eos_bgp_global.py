@@ -91,7 +91,7 @@ options:
               type: dict
               suboptions:
                 set:
-                  description: When True, it is set.
+                  description: When true, it is set.
                   type: bool
                 count:
                   description: Number of local ASNs allowed in a BGP update.
@@ -238,7 +238,7 @@ options:
               type: dict
               suboptions:
                 set:
-                  description: When True route_reflector is set.
+                  description: When true route_reflector is set.
                   type: bool
                 preserve:
                   description: preserve route attributes, overwriting route-map changes
@@ -267,7 +267,7 @@ options:
           type: dict
           suboptions:
             set:
-              description: When True, graceful restart is set.
+              description: When true, graceful restart is set.
               type: bool
             restart_time:
               description: Set the max time needed to restart and come back up.
@@ -340,7 +340,7 @@ options:
               type: dict
               suboptions:
                 set:
-                  description: When True, it is set.
+                  description: When true, it is set.
                   type: bool
                 count:
                   description: Number of local ASNs allowed in a BGP update.
@@ -379,7 +379,7 @@ options:
                   description: Time-to-live in the range 1-255 hops.
                   type: int
                 set:
-                  description: If True, ttl is not set.
+                  description: If true, ttl is not set.
                   type: bool
             enforce_first_as:
               description: Enforce the First AS for EBGP routes(default).
@@ -410,7 +410,7 @@ options:
               type: dict
               suboptions:
                 set:
-                  description: If True, set link bandwidth
+                  description: If true, set link bandwidth
                   type: bool
                 auto:
                   description: Enable link bandwidth auto generation for routes from this peer.
@@ -505,7 +505,7 @@ options:
               type: dict
               suboptions:
                 set:
-                  description: If True, set remove_private_as.
+                  description: If true, set remove_private_as.
                   type: bool
                 all:
                   description: Remove private AS number.
@@ -657,7 +657,7 @@ options:
               description: Route Target.
               type: str
         shutdown:
-          description: When True, shut down BGP.
+          description: When true, shut down BGP.
           type: bool
         timers:
           description: Timers.
@@ -699,7 +699,7 @@ options:
               type: dict
               suboptions:
                 set:
-                  description: If True, ucmp mode is set to 1.
+                  description: If true, ucmp mode is set to 1.
                   type: bool
                 nexthops:
                   description: Value for total number UCMP nexthops.
@@ -771,7 +771,7 @@ options:
                   type: dict
                   suboptions:
                     set:
-                      description: When True, it is set.
+                      description: When true, it is set.
                       type: bool
                     count:
                       description: Number of local ASNs allowed in a BGP update.
@@ -918,7 +918,7 @@ options:
                   type: dict
                   suboptions:
                     set:
-                      description: When True route_reflector is set.
+                      description: When true route_reflector is set.
                       type: bool
                     preserve:
                       description: preserve route attributes, overwriting route-map changes
@@ -947,7 +947,7 @@ options:
               type: dict
               suboptions:
                 set:
-                  description: When True, graceful restart is set.
+                  description: When true, graceful restart is set.
                   type: bool
                 restart_time:
                   description: Set the max time needed to restart and come back up.
@@ -1003,7 +1003,7 @@ options:
                   type: dict
                   suboptions:
                     set:
-                      description: When True, it is set.
+                      description: When true, it is set.
                       type: bool
                     count:
                       description: Number of local ASNs allowed in a BGP update.
@@ -1042,7 +1042,7 @@ options:
                       description: Time-to-live in the range 1-255 hops.
                       type: int
                     set:
-                      description: If True, ttl is not set.
+                      description: If true, ttl is not set.
                       type: bool
                 enforce_first_as:
                   description: Enforce the First AS for EBGP routes(default).
@@ -1073,7 +1073,7 @@ options:
                   type: dict
                   suboptions:
                     set:
-                      description: If True, set link bandwidth
+                      description: If true, set link bandwidth
                       type: bool
                     auto:
                       description: Enable link bandwidth auto generation for routes from this peer.
@@ -1168,7 +1168,7 @@ options:
                   type: dict
                   suboptions:
                     set:
-                      description: If True, set remove_private_as.
+                      description: If true, set remove_private_as.
                       type: bool
                     all:
                       description: Remove private AS number.
@@ -1325,7 +1325,7 @@ options:
               description: Router id.
               type: str
             shutdown:
-              description: When True, shut down BGP.
+              description: When true, shut down BGP.
               type: bool
             timers:
               description: Timers.
@@ -1367,7 +1367,7 @@ options:
                   type: dict
                   suboptions:
                     set:
-                      description: If True, ucmp mode is set to 1.
+                      description: If true, ucmp mode is set to 1.
                       type: bool
                     nexthops:
                       description: Value for total number UCMP nexthops.
@@ -1410,67 +1410,67 @@ options:
       default: merged
 """
 EXAMPLES = """
-# Using merged
+# Using Merged
 
 # Before state:
 # -------------
 # veos(config)#show running-config | section bgp
 # veos(config)#
 
-  - name: Merge provided configuration with device configuration
-    arista.eos.eos_bgp_global:
-      config:
-        as_number: "100"
-        bgp_params:
-          host_routes: True
-          convergence:
-            slow_peer: True
-            time: 6
-          additional_paths: "send"
-          log_neighbor_changes: True
-        maximum_paths:
-          max_equal_cost_paths: 55
-        aggregate_address:
-          - address: "1.2.1.0/24"
-            as_set: true
-            match_map: "match01"
-          - address: "5.2.1.0/24"
-            attribute_map: "attrmatch01"
-            advertise_only: true
-        redistribute:
-          - protocol: "static"
-            route_map: "map_static"
-          - protocol: "attached-host"
-        distance:
-          internal: 50
-        neighbor:
-          - peer: "10.1.3.2"
-            allowas_in:
-              set: true
-            default_originate:
-              always: true
-            dont_capability_negotiate: true
-            export_localpref: 4000
-            maximum_received_routes:
-              count: 500
-              warning_limit:
-                limit_percent: 5
-            next_hop_unchanged: true
-            prefix_list:
-              name: "prefix01"
-              direction: "out"
-          - neighbor_address: "peer1"
-            fall_over: true
-            link_bandwidth:
-              update_delay: 5
-            monitoring: True
-            send_community:
-              community_attribute: "extended"
-              sub_attribute: "link-bandwidth"
-              link_bandwidth_attribute: "aggregate"
-              speed: "600"
-        vlan: 5
-      state: merged
+- name: Merge provided configuration with device configuration
+  arista.eos.eos_bgp_global:
+    config:
+      as_number: "100"
+      bgp_params:
+        host_routes: true
+        convergence:
+          slow_peer: true
+          time: 6
+        additional_paths: "send"
+        log_neighbor_changes: true
+      maximum_paths:
+        max_equal_cost_paths: 55
+      aggregate_address:
+        - address: "1.2.1.0/24"
+          as_set: true
+          match_map: "match01"
+        - address: "5.2.1.0/24"
+          attribute_map: "attrmatch01"
+          advertise_only: true
+      redistribute:
+        - protocol: "static"
+          route_map: "map_static"
+        - protocol: "attached-host"
+      distance:
+        internal: 50
+      neighbor:
+        - peer: "10.1.3.2"
+          allowas_in:
+            set: true
+          default_originate:
+            always: true
+          dont_capability_negotiate: true
+          export_localpref: 4000
+          maximum_received_routes:
+            count: 500
+            warning_limit:
+              limit_percent: 5
+          next_hop_unchanged: true
+          prefix_list:
+            name: "prefix01"
+            direction: "out"
+        - neighbor_address: "peer1"
+          fall_over: true
+          link_bandwidth:
+            update_delay: 5
+          monitoring: true
+          send_community:
+            community_attribute: "extended"
+            sub_attribute: "link-bandwidth"
+            link_bandwidth_attribute: "aggregate"
+            speed: "600"
+      vlan: 5
+    state: merged
 
 # Task output:
 # ------------
@@ -1623,64 +1623,65 @@ EXAMPLES = """
 #       neighbor 12.1.3.2 default-originate always
 #       neighbor 12.1.3.2 maximum-routes 12000
 
-  - name: replace provided configuration with device configuration
-    arista.eos.eos_bgp_global:
-      config:
-        as_number: "100"
-        bgp_params:
-          host_routes: True
-          convergence:
-            slow_peer: True
-            time: 6
-          additional_paths: "send"
-          log_neighbor_changes: True
-        vrfs:
-          - vrf: "vrf01"
-            maximum_paths:
-              max_equal_cost_paths: 55
-            aggregate_address:
-              - address: "1.2.1.0/24"
-                as_set: true
-                match_map: "match01"
-              - address: "5.2.1.0/24"
-                attribute_map: "attrmatch01"
-                advertise_only: true
-            redistribute:
-              - protocol: "static"
-                route_map: "map_static"
-              - protocol: "attached-host"
-            distance:
-              internal: 50
-            neighbor:
-              - neighbor_address: "10.1.3.2"
-                allowas_in:
-                  set: true
-                default_originate:
-                  always: true
-                dont_capability_negotiate: true
-                export_localpref: 4000
-                maximum_received_routes:
-                  count: 500
-                  warning_limit:
-                    limit_percent: 5
-                next_hop_unchanged: true
-                prefix_list:
-                  name: "prefix01"
-                  direction: "out"
-              - neighbor_address: "peer1"
-                fall_over: true
-                link_bandwidth:
-                  update_delay: 5
-                monitoring: True
-                send_community:
-                  community_attribute: "extended"
-                  sub_attribute: "link-bandwidth"
-                  link_bandwidth_attribute: "aggregate"
-                  speed: "600"
-      state: replaced
+- name: replace provided configuration with device configuration
+  arista.eos.eos_bgp_global:
+    config:
+      as_number: "100"
+      bgp_params:
+        host_routes: true
+        convergence:
+          slow_peer: true
+          time: 6
+        additional_paths: "send"
+        log_neighbor_changes: true
+      vrfs:
+        - vrf: "vrf01"
+          maximum_paths:
+            max_equal_cost_paths: 55
+          aggregate_address:
+            - address: "1.2.1.0/24"
+              as_set: true
+              match_map: "match01"
+            - address: "5.2.1.0/24"
+              attribute_map: "attrmatch01"
+              advertise_only: true
+          redistribute:
+            - protocol: "static"
+              route_map: "map_static"
+            - protocol: "attached-host"
+          distance:
+            internal: 50
+          neighbor:
+            - neighbor_address: "10.1.3.2"
+              allowas_in:
+                set: true
+              default_originate:
+                always: true
+              dont_capability_negotiate: true
+              export_localpref: 4000
+              maximum_received_routes:
+                count: 500
+                warning_limit:
+                  limit_percent: 5
+              next_hop_unchanged: true
+              prefix_list:
+                name: "prefix01"
+                direction: "out"
+            - neighbor_address: "peer1"
+              fall_over: true
+              link_bandwidth:
+                update_delay: 5
+              monitoring: true
+              send_community:
+                community_attribute: "extended"
+                sub_attribute: "link-bandwidth"
+                link_bandwidth_attribute: "aggregate"
+                speed: "600"
+    state: replaced
 
 # Task output:
 # ------------
+
 # before:
 #     aggregate_address:
 #     - address: 1.2.1.0/24
@@ -1892,61 +1893,61 @@ EXAMPLES = """
 #       neighbor 12.1.3.2 default-originate always
 #       neighbor 12.1.3.2 maximum-routes 12000
 
-  - name: override running configuration with configuration
-    arista.eos.eos_bgp_global:
-      config:
-        as_number: "100"
-        bgp_params:
-          host_routes: True
-          convergence:
-            slow_peer: True
-            time: 6
-          additional_paths: "send"
-          log_neighbor_changes: True
-        vrfs:
-          - vrf: "vrf01"
-            maximum_paths:
-              max_equal_cost_paths: 55
-            aggregate_address:
-              - address: "1.2.1.0/24"
-                as_set: true
-                match_map: "match01"
-              - address: "5.2.1.0/24"
-                attribute_map: "attrmatch01"
-                advertise_only: true
-            redistribute:
-              - protocol: "static"
-                route_map: "map_static"
-              - protocol: "attached-host"
-            distance:
-              internal: 50
-            neighbor:
-              - neighbor_address: "10.1.3.2"
-                allowas_in:
-                  set: true
-                default_originate:
-                  always: true
-                dont_capability_negotiate: true
-                export_localpref: 4000
-                maximum_received_routes:
-                  count: 500
-                  warning_limit:
-                    limit_percent: 5
-                next_hop_unchanged: true
-                prefix_list:
-                  name: "prefix01"
-                  direction: "out"
-              - neighbor_address: "peer1"
-                fall_over: true
-                link_bandwidth:
-                  update_delay: 5
-                monitoring: True
-                send_community:
-                  community_attribute: "extended"
-                  sub_attribute: "link-bandwidth"
-                  link_bandwidth_attribute: "aggregate"
-                  speed: "600"
-      state: overridden
+- name: override running configuration with configuration
+  arista.eos.eos_bgp_global:
+    config:
+      as_number: "100"
+      bgp_params:
+        host_routes: true
+        convergence:
+          slow_peer: true
+          time: 6
+        additional_paths: "send"
+        log_neighbor_changes: true
+      vrfs:
+        - vrf: "vrf01"
+          maximum_paths:
+            max_equal_cost_paths: 55
+          aggregate_address:
+            - address: "1.2.1.0/24"
+              as_set: true
+              match_map: "match01"
+            - address: "5.2.1.0/24"
+              attribute_map: "attrmatch01"
+              advertise_only: true
+          redistribute:
+            - protocol: "static"
+              route_map: "map_static"
+            - protocol: "attached-host"
+          distance:
+            internal: 50
+          neighbor:
+            - neighbor_address: "10.1.3.2"
+              allowas_in:
+                set: true
+              default_originate:
+                always: true
+              dont_capability_negotiate: true
+              export_localpref: 4000
+              maximum_received_routes:
+                count: 500
+                warning_limit:
+                  limit_percent: 5
+              next_hop_unchanged: true
+              prefix_list:
+                name: "prefix01"
+                direction: "out"
+            - neighbor_address: "peer1"
+              fall_over: true
+              link_bandwidth:
+                update_delay: 5
+              monitoring: true
+              send_community:
+                community_attribute: "extended"
+                sub_attribute: "link-bandwidth"
+                link_bandwidth_attribute: "aggregate"
+                speed: "600"
+    state: overridden
 
 # Task output:
 # ------------
@@ -2145,11 +2146,11 @@ EXAMPLES = """
 #       redistribute attached-host
 #       !
 
-  - name: Delete configuration
-    arista.eos.eos_bgp_global:
-      config:
-        as_number: "100"
-      state: deleted
+- name: Delete configuration
+  arista.eos.eos_bgp_global:
+    config:
+      as_number: "100"
+    state: deleted
 
 # Task output:
 # ------------
@@ -2247,11 +2248,11 @@ EXAMPLES = """
 #       neighbor 12.1.3.2 default-originate always
 #       neighbor 12.1.3.2 maximum-routes 12000
 
-  - name: Purge configuration
-    arista.eos.eos_bgp_global:
-      config:
-        as_number: "100"
-      state: purged
+- name: Purge configuration
+  arista.eos.eos_bgp_global:
+    config:
+      as_number: "100"
+    state: purged
 
 
 # Task output:
@@ -2334,63 +2335,62 @@ EXAMPLES = """
 # veos(config)#show running-config | section bgp
 # veos(config)#
 
-
 # Using rendered
 
-  - name: Render command lines for provided configuration
-    arista.eos.eos_bgp_global:
-      config:
-        as_number: "100"
-        bgp_params:
-          host_routes: True
-          convergence:
-            slow_peer: True
-            time: 6
-          additional_paths: "send"
-          log_neighbor_changes: True
-        maximum_paths:
-          max_equal_cost_paths: 55
-        aggregate_address:
-          - address: "1.2.1.0/24"
-            as_set: true
-            match_map: "match01"
-          - address: "5.2.1.0/24"
-            attribute_map: "attrmatch01"
-            advertise_only: true
-        redistribute:
-          - protocol: "static"
-            route_map: "map_static"
-          - protocol: "attached-host"
-        distance:
-          internal: 50
-        neighbor:
-          - peer: "10.1.3.2"
-            allowas_in:
-              set: true
-            default_originate:
-              always: true
-            dont_capability_negotiate: true
-            export_localpref: 4000
-            maximum_received_routes:
-              count: 500
-              warning_limit:
-                limit_percent: 5
-            next_hop_unchanged: true
-            prefix_list:
-              name: "prefix01"
-              direction: "out"
-          - neighbor_address: "peer1"
-            fall_over: true
-            link_bandwidth:
-              update_delay: 5
-            monitoring: True
-            send_community:
-              community_attribute: "extended"
-              sub_attribute: "link-bandwidth"
-              link_bandwidth_attribute: "aggregate"
-              speed: "600"
-        vlan: 5
-      state: rendered
+- name: Render command lines for provided configuration
+  arista.eos.eos_bgp_global:
+    config:
+      as_number: "100"
+      bgp_params:
+        host_routes: true
+        convergence:
+          slow_peer: true
+          time: 6
+        additional_paths: "send"
+        log_neighbor_changes: true
+      maximum_paths:
+        max_equal_cost_paths: 55
+      aggregate_address:
+        - address: "1.2.1.0/24"
+          as_set: true
+          match_map: "match01"
+        - address: "5.2.1.0/24"
+          attribute_map: "attrmatch01"
+          advertise_only: true
+      redistribute:
+        - protocol: "static"
+          route_map: "map_static"
+        - protocol: "attached-host"
+      distance:
+        internal: 50
+      neighbor:
+        - peer: "10.1.3.2"
+          allowas_in:
+            set: true
+          default_originate:
+            always: true
+          dont_capability_negotiate: true
+          export_localpref: 4000
+          maximum_received_routes:
+            count: 500
+            warning_limit:
+              limit_percent: 5
+          next_hop_unchanged: true
+          prefix_list:
+            name: "prefix01"
+            direction: "out"
+        - neighbor_address: "peer1"
+          fall_over: true
+          link_bandwidth:
+            update_delay: 5
+          monitoring: true
+          send_community:
+            community_attribute: "extended"
+            sub_attribute: "link-bandwidth"
+            link_bandwidth_attribute: "aggregate"
+            speed: "600"
+      vlan: 5
+    state: rendered
 
 # Task output:
 # ------------
@@ -2458,10 +2458,10 @@ EXAMPLES = """
 #       neighbor 12.1.3.2 default-originate always
 #       neighbor 12.1.3.2 maximum-routes 12000
 
-  - name: Parse externally provided BGP config
-    arista.eos.eos_bgp_global:
-      running_config: "{{ lookup('file', 'parsed.cfg') }}"
-      state: parsed
+- name: Parse externally provided BGP config
+  arista.eos.eos_bgp_global:
+    running_config: "{{ lookup('file', 'parsed.cfg') }}"
+     state: parsed
 
 # Task output:
 # ------------
@@ -2570,9 +2570,9 @@ EXAMPLES = """
 #       neighbor 12.1.3.2 default-originate always
 #       neighbor 12.1.3.2 maximum-routes 12000
 
-  - name: Gather BGP facts using gathered
-    arista.eos.eos_bgp_global:
-      state: gathered
+- name: Gather BGP facts using gathered
+  arista.eos.eos_bgp_global:
+    state: gathered
 
 # Task output:
 # ------------

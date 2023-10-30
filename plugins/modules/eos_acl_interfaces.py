@@ -124,16 +124,16 @@ EXAMPLES = """
 - name: Merge module attributes of given access-groups
   arista.eos.eos_acl_interfaces:
     config:
-    - name: Ethernet2
-      access_groups:
-      - afi: ipv4
-        acls:
-          name: acl01
-          direction: in
-      - afi: ipv6
-        acls:
-          name: acl03
-          direction: out
+      - name: Ethernet2
+        access_groups:
+          - afi: ipv4
+            acls:
+              name: acl01
+              direction: in
+          - afi: ipv6
+            acls:
+              name: acl03
+              direction: out
     state: merged
 
 # Commands Fired:
@@ -171,12 +171,12 @@ EXAMPLES = """
 - name: Replace module attributes of given access-groups
   arista.eos.eos_acl_interfaces:
     config:
-    - name: Ethernet2
-      access_groups:
-      - afi: ipv4
-        acls:
-          name: acl01
-          direction: out
+      - name: Ethernet2
+        access_groups:
+          - afi: ipv4
+            acls:
+              name: acl01
+              direction: out
     state: replaced
 
 # Commands Fired:
@@ -215,12 +215,12 @@ EXAMPLES = """
 - name: Override module attributes of given access-groups
   arista.eos.eos_acl_interfaces:
     config:
-    - name: Ethernet2
-      access_groups:
-      - afi: ipv4
-        acls:
-          name: acl01
-          direction: out
+      - name: Ethernet2
+        access_groups:
+          - afi: ipv4
+            acls:
+              name: acl01
+              direction: out
     state: overridden
 
 # Commands Fired:
@@ -260,16 +260,16 @@ EXAMPLES = """
 - name: Delete module attributes of given access-groups
   arista.eos.eos_acl_interfaces:
     config:
-    - name: Ethernet2
-      access_groups:
-      - afi: ipv4
-        acls:
-          name: acl01
-          direction: in
-      - afi: ipv6
-        acls:
-          name: acl03
-          direction: out
+      - name: Ethernet2
+        access_groups:
+          - afi: ipv4
+            acls:
+              name: acl01
+              direction: in
+          - afi: ipv6
+            acls:
+              name: acl03
+              direction: out
     state: deleted
 
 # Commands Fired:
@@ -338,12 +338,12 @@ EXAMPLES = """
 - name: Delete acls under afi
   arista.eos.eos_acl_interfaces:
     config:
-    - name: Ethernet3
-      access_groups:
-      - afi: ipv4
-    - name: Ethernet2
-      access_groups:
-      - afi: ipv6
+      - name: Ethernet3
+        access_groups:
+          - afi: ipv4
+      - name: Ethernet2
+        access_groups:
+          - afi: ipv6
     state: deleted
 
 # Commands Fired:
@@ -363,8 +363,6 @@ EXAMPLES = """
 # interface Ethernet2
 #   ip access-group acl01 in
 # interface Ethernet3
-
-
 """
 RETURN = """
 before:

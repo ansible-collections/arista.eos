@@ -150,8 +150,8 @@ EXAMPLES = """
 - name: Configure logging using aggregate
   arista.eos.eos_logging:
     aggregate:
-    - {dest: console, level: warnings}
-    - {dest: buffered, size: 480000}
+      - {dest: console, level: warnings}
+      - {dest: buffered, size: 480000}
     state: present
 """
 
