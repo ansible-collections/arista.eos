@@ -11,4 +11,4 @@ readme: README.md
 repository: https://github.com/ansible-collections/arista.eos
 issues: https://github.com/ansible-collections/arista.eos/issues
 tags: [arista, eos, networking, eapi]
-version: 6.1.2
+version: 6.2.0
