@@ -1073,7 +1073,6 @@ Examples
 
     # Using rendered:
 
-
     - name: Render provided configuration
       arista.eos.eos_prefix_lists:
         config:
@@ -1122,11 +1121,9 @@ Examples
     #    seq 125 deny 5000:1::/64
     # veos#
 
-
-      - name: gather configs
-        arista.eos.eos_prefix_lists:
-          state: gathered
-
+    - name: gather configs
+      arista.eos.eos_prefix_lists:
+        state: gathered
 
     # Task Output
     # -------------
