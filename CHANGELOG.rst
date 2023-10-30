@@ -5,6 +5,14 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v6.2.1
+======
+
+Release Summary
+---------------
+
+Rereleased 6.2.0 with updated galaxy reference.
+
 v6.2.0
 ======
 
