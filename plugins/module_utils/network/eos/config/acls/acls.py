@@ -528,7 +528,10 @@ def add_commands(want):
                 if "port_protocol" in ace["source"].keys():
                     for op, val in ace["source"]["port_protocol"].items():
                         if val.isdigit():
-                            val = socket.getservbyport(int(val))
+                            try:
+                                val = socket.getservbyport(int(val))
+                            except socket.error:
+                                pass
                         command = command + " " + op + " " + val.replace("_", "-")
             if "destination" in ace.keys():
                 if "any" in ace["destination"].keys():
