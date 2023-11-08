@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - "Add check mode support to route_maps"
