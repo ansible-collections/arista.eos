@@ -140,6 +140,10 @@ options:
       false, the command is issued without the all keyword
     type: bool
     default: false
+  diff_onbox:
+    description: Specify the status for on-box-diff
+    type: bool
+    default: true
   save_when:
     description:
     - When changes are made to the device running-configuration, the changes are not
@@ -375,6 +379,7 @@ def main():
         parents=dict(type="list", elements="str"),
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
+        diff_onbox=dict(type="bool", default=True),
         match=dict(
             default="line",
             choices=["line", "strict", "exact", "none"],
@@ -453,18 +458,19 @@ def main():
 
         candidate = get_candidate(module)
         running = get_running_config(module, contents, flags=flags)
-
         try:
             response = connection.get_diff(
                 candidate=candidate,
                 running=running,
                 diff_match=match,
+                diff_onbox=module.params["diff_onbox"],
                 diff_ignore_lines=diff_ignore_lines,
                 path=path,
                 diff_replace=replace,
             )
         except ConnectionError as exc:
             module.fail_json(msg=to_text(exc, errors="surrogate_then_replace"))
+
 
         config_diff = response["config_diff"]
         if config_diff:
