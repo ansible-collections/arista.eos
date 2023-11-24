@@ -342,7 +342,7 @@ def main():
         # { interface: <str>, vrf: <str> }
         lookup_source=dict(type="list", elements="raw"),
         # { server: <str>; vrf: <str> }
-        name_servers=dict(type="list", elements="str"),
+        name_servers=dict(type="list", elements="raw"),
         state=dict(default="present", choices=["present", "absent"]),
     )
 
