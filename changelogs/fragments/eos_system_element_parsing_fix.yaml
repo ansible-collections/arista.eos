@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - correct the parsing of the elements in 'name_servers' in 'eos_system' module.
