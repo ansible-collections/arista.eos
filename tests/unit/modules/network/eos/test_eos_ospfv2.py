@@ -594,6 +594,9 @@ class TestEosOspfv2Module(TestEosModule):
                                     ),
                                 ),
                             ],
+                            auto_cost=dict(
+                                reference_bandwidth=1000000
+                            ),
                             default_information=dict(
                                 metric=100,
                                 metric_type=1,
@@ -641,6 +644,7 @@ class TestEosOspfv2Module(TestEosModule):
             "adjacency exchange-start threshold 20045623",
             "area 0.0.0.2 filter 10.1.1.0/24",
             "area 0.0.0.50  range 172.20.0.0/16 cost 34",
+            "auto-cost reference-bandwidth 1000000",
             "default-information originate metric 100 metric-type 1",
             "distance ospf intra-area 85",
             "max-lsa  80000 40 ignore-count 3  ignore-time 6  reset-time 20",
