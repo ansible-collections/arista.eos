@@ -595,7 +595,7 @@ class TestEosOspfv2Module(TestEosModule):
                                 ),
                             ],
                             auto_cost=dict(
-                                reference_bandwidth=1000000
+                                reference_bandwidth=1000000,
                             ),
                             default_information=dict(
                                 metric=100,
