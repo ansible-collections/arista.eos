@@ -579,3 +579,10 @@ releases:
     fragments:
       - rerelease.yaml
     release_date: "2023-10-30"
+  6.2.2:
+    changes:
+      bugfixes:
+        - correct the reference of string attribute 'reference_bandwith'.
+    fragments:
+      - ospf_v2_reference_bandwidth_fix.yaml
+    release_date: "2023-11-27"
