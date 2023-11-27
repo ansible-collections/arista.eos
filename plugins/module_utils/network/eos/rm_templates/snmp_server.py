@@ -334,7 +334,7 @@ def _tmplt_snmp_server_users_auth(config_data):
         command += " udp-port " + str(el["udp_port"])
     command += " " + el["version"]
     if el.get("auth"):
-        command += " " + el["auth"]["algorithm"] + " " + el["auth"]["auth_passphrase"]
+        command += " auth " + el["auth"]["algorithm"] + " " + el["auth"]["auth_passphrase"]
         if el["auth"].get("encryption"):
             command += " priv " + el["auth"]["encryption"] + " " + el["auth"]["priv_passphrase"]
     return command
