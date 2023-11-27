@@ -2,6 +2,8 @@
 
 # Arista EOS Collection
 [![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/arista.eos) <!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/arista.eos)-->
+[![Codecov](https://codecov.io/gh/ansible-collections/arista.eos/branch/main/graph/badge.svg)](https://codecov.io/gh/ansible-collections/arista.eos)
+[![CI](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml/badge.svg?branch=main&event=schedule)](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml)
 
 The Ansible Arista EOS collection includes a variety of Ansible content to help automate the management of Arista EOS network appliances.
 
