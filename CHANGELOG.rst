@@ -5,6 +5,14 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v6.2.2
+======
+
+Bugfixes
+--------
+
+- correct the reference of string attribute 'reference_bandwith'.
+
 v6.2.1
 ======
 
