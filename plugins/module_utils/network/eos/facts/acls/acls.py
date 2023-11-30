@@ -143,7 +143,6 @@ class AclsFacts(object):
             else:
                 source_dict = {}
                 dest_dict = {}
-                dev_config = re.sub("-", "_", dev_config)
                 dev_config_remainder = dev_config.split()
                 if "fragment_rules" in dev_config:
                     ace_dict.update({"sequence": dev_config_remainder.pop(0)})

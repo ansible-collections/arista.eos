@@ -136,6 +136,21 @@ class TestEosAclsModule(TestEosModule):
                                         log="true",
                                     ),
                                     dict(
+                                        sequence="40",
+                                        grant="permit",
+                                        protocol="udp",
+                                        source=dict(
+                                            any="true",
+                                        ),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(
+                                                eq="bfd-echo"
+                                            )
+                                        ),
+                                        log="true",
+                                    ),
+                                    dict(
                                         grant="permit",
                                         source=dict(any="true"),
                                         destination=dict(any="true"),
@@ -207,6 +222,7 @@ class TestEosAclsModule(TestEosModule):
         commands = [
             "ip access-list test1",
             "no 35",
+            "no 40",
             "no 45",
             "10 permit ospf 30.2.0.0/8 any log",
             "20 permit ospf 40.2.0.0/8 any log",
@@ -233,6 +249,21 @@ class TestEosAclsModule(TestEosModule):
                                             subnet_address="20.0.0.0/8",
                                         ),
                                         destination=dict(any="true"),
+                                        log="true",
+                                    ),
+                                    dict(
+                                        sequence="40",
+                                        grant="permit",
+                                        protocol="udp",
+                                        source=dict(
+                                            any="true",
+                                        ),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(
+                                                eq="bfd-echo"
+                                            )
+                                        ),
                                         log="true",
                                     ),
                                     dict(
@@ -298,6 +329,7 @@ class TestEosAclsModule(TestEosModule):
         commands = [
             "ip access-list test1",
             "no 35",
+            "no 40",
             "no 45",
             "10 permit ospf 30.2.0.0/8 any log",
             "ip access-list test3",
@@ -323,6 +355,21 @@ class TestEosAclsModule(TestEosModule):
                                             subnet_address="20.0.0.0/8",
                                         ),
                                         destination=dict(any="true"),
+                                        log="true",
+                                    ),
+                                    dict(
+                                        sequence="40",
+                                        grant="permit",
+                                        protocol="udp",
+                                        source=dict(
+                                            any="true",
+                                        ),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(
+                                                eq="bfd-echo"
+                                            )
+                                        ),
                                         log="true",
                                     ),
                                     dict(
@@ -371,6 +418,7 @@ class TestEosAclsModule(TestEosModule):
         config_commands = [
             "ip access-list test1",
             "35 deny tcp 20.0.0.0/8 any log",
+            "40 permit udp any any eq bfd-echo log",
             "45 permit tcp any any",
         ]
         self.assertEqual(
