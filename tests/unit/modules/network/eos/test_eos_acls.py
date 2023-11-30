@@ -145,8 +145,8 @@ class TestEosAclsModule(TestEosModule):
                                         destination=dict(
                                             any="true",
                                             port_protocol=dict(
-                                                eq="bfd-echo"
-                                            )
+                                                eq="bfd-echo",
+                                            ),
                                         ),
                                         log="true",
                                     ),
@@ -261,8 +261,8 @@ class TestEosAclsModule(TestEosModule):
                                         destination=dict(
                                             any="true",
                                             port_protocol=dict(
-                                                eq="bfd-echo"
-                                            )
+                                                eq="bfd-echo",
+                                            ),
                                         ),
                                         log="true",
                                     ),
@@ -367,8 +367,8 @@ class TestEosAclsModule(TestEosModule):
                                         destination=dict(
                                             any="true",
                                             port_protocol=dict(
-                                                eq="bfd-echo"
-                                            )
+                                                eq="bfd-echo",
+                                            ),
                                         ),
                                         log="true",
                                     ),
