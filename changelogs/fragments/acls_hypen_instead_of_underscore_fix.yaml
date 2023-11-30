@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - ACEs with '-'' in port_protocol were wrongly replaced by '_' in dictionary key comparison.
