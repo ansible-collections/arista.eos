@@ -478,7 +478,7 @@ def main():
             result["commands"] = commands
             result["updates"] = commands
 
-            replace = module.params["replace"] == "list"
+            replace = module.params["replace"] == "config"
             commit = not module.check_mode
 
             response = load_config(
