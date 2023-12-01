@@ -589,10 +589,11 @@ def main():
                         None,
                         flags=flags,
                     )
+                    replace = module.params["replace"] == "list"
                     after = get_session_config(
                         module,
                         contents.split("\n"),
-                        replace=module.params["replace"],
+                        replace=replace,
                         commit=False,
                     )
 
