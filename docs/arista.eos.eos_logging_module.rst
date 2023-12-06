@@ -325,7 +325,7 @@ Examples
 
     - name: enable logging to all
       arista.eos.eos_logging:
-        dest: on
+        dest: "on"
 
     - name: configure buffer size
       arista.eos.eos_logging:
