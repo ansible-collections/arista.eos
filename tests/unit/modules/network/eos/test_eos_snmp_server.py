@@ -450,7 +450,7 @@ class TestEosSnmp_ServerModule(TestEosModule):
             "no snmp-server group group2 v3 priv write view2 notify view1",
             "no snmp-server host host01 version 3 priv user01 udp-port 23",
             "no snmp-server host host02 version 2c user01 udp-port 23",
-            "snmp-server user user01 grp01 remote 1.1.1.1 udp-port 100 v3 localized abcdef md5 password123 priv aes abcdef",
+            "snmp-server user user01 grp01 remote 1.1.1.1 udp-port 100 v3 localized abcdef auth md5 password123 priv aes abcdef",
             "snmp-server view view1 mib1 excluded",
             "no snmp-server vrf vrf01 local-interface Ethernet1",
             "snmp-server transport tcp",
