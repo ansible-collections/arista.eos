@@ -66,7 +66,7 @@ options:
       argument accepts either a list of DNS servers or a list of hashes that configure
       the name server and VRF name.  See examples.
     type: list
-    elements: str
+    elements: raw
   state:
     description:
     - State of the configuration values in the device's current active configuration.  When
