@@ -115,7 +115,7 @@ EXAMPLES = """
       - name: 5
         members:
           - member: Ethernet2
-            mode: on
+            mode: "on"
     state: merged
 
 # After state:
@@ -144,7 +144,7 @@ EXAMPLES = """
       - name: 5
         members:
           - member: Ethernet2
-            mode: on
+            mode: "on"
     state: replaced
 
 # After state:
@@ -172,7 +172,7 @@ EXAMPLES = """
       - name: 10
         members:
           - member: Ethernet2
-            mode: on
+            mode: "on"
     state: overridden
 
 # After state:
@@ -229,9 +229,9 @@ EXAMPLES = """
 #     - name: 5
 #       members:
 #         - member: Ethernet2
-#           mode: on
+#           mode: "on"
 #         - member: Ethernet1
-#           mode: on
+#           mode: "on"
 
 # using rendered:
 
@@ -241,9 +241,9 @@ EXAMPLES = """
       - name: 5
         members:
           - member: Ethernet2
-            mode: on
+            mode: "on"
           - member: Ethernet1
-            mode: on
+            mode: "on"
     state: rendered
 # -----------
 # Output
