@@ -387,7 +387,7 @@ def main():
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
         off_box_diff=dict(type="dict", options=dict(
-           enable=dict(type=bool), context_lines=dict(type=int)
+           enable=dict(type="bool"), context_lines=dict(type="int")
         )),
         match=dict(
             default="line",
