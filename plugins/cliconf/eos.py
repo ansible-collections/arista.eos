@@ -210,7 +210,7 @@ class Cliconf(CliconfBase):
 
         resp = {}
         session = None
-        diff_onbox = self.get_option("diff_onbox")
+        # diff_onbox = self.get_option("diff_onbox")
         
         if self.supports_sessions():
             session = session_name()

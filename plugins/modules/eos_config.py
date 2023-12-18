@@ -140,10 +140,16 @@ options:
       false, the command is issued without the all keyword
     type: bool
     default: false
-  diff_onbox:
-    description: Specify the status for on-box-diff
-    type: bool
-    default: true
+  off_box_diff:
+    description: Specify the off-box diff parameters
+    type: dict
+    suboptions:
+      enable:
+        description: Enable off box diff
+        type: bool
+      context_lines:
+        description: Specify The number of context lines, by default it includes all lines.
+        type: int
   save_when:
     description:
     - When changes are made to the device running-configuration, the changes are not
@@ -322,6 +328,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     NetworkConfig,
     dumps,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import unified_diff
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
@@ -379,7 +386,9 @@ def main():
         parents=dict(type="list", elements="str"),
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
-        diff_onbox=dict(type="bool", default=True),
+        off_box_diff=dict(type="dict", options=dict(
+           enable=dict(type=bool), context_lines=dict(type=int)
+        )),
         match=dict(
             default="line",
             choices=["line", "strict", "exact", "none"],
@@ -463,14 +472,12 @@ def main():
                 candidate=candidate,
                 running=running,
                 diff_match=match,
-                diff_onbox=module.params["diff_onbox"],
                 diff_ignore_lines=diff_ignore_lines,
                 path=path,
                 diff_replace=replace,
             )
         except ConnectionError as exc:
             module.fail_json(msg=to_text(exc, errors="surrogate_then_replace"))
-
 
         config_diff = response["config_diff"]
         if config_diff:
@@ -493,12 +500,14 @@ def main():
                 replace=replace,
                 commit=commit,
             )
-
             result["changed"] = True
 
             if module.params["diff_against"] == "session":
                 if "diff" in response:
-                    result["diff"] = {"prepared": response["diff"]}
+                    if module.params.get("off_box_diff"):
+                        result["off_box_diff"] = unified_diff(candidate.split("\n"), running.split("\n"))
+                    else:
+                        result["diff"] = {"prepared": response["diff"]}
                 else:
                     result["changed"] = False
 
@@ -624,7 +633,6 @@ def main():
             result["warnings"].append(msg)
         else:
             result["warnings"] = msg
-
     module.exit_json(**result)
 
 

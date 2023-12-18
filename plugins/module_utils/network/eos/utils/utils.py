@@ -10,6 +10,7 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+import difflib
 
 def get_interface_number(name):
     digits = ""
@@ -82,3 +83,7 @@ def numerical_sort(string_int_list):
         as_int_list.append(int(vlan))
     as_int_list.sort()
     return list(set(as_int_list))
+
+def unified_diff(content1, content2):
+    unified_diff = difflib.unified_diff(content1, content2, n=70, lineterm='\n')
+    return "\n".join(unified_diff)
