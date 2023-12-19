@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - validate_config in eos_config / diff_against was not triggering a "rollback clean-config" causing innacurate comparaison.
