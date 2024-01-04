@@ -101,7 +101,7 @@
   become: true
   register: result
   arista.eos.eos_config:
-    src: ./fixtures/candidate.cfg
+    src: defaults/candidate.j2
     backup: true
     context_diff:
       enable: true
