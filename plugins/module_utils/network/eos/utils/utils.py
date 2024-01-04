@@ -84,6 +84,9 @@ def numerical_sort(string_int_list):
     as_int_list.sort()
     return list(set(as_int_list))
 
-def unified_diff(content1, content2):
-    unified_diff = difflib.unified_diff(content1, content2, n=70, lineterm='\n')
+def unified_diff(content1, content2, count):
+    """
+    Provide the unified diff in context to number of lines specified with count
+    """
+    unified_diff = difflib.unified_diff(content1, content2, n=count, lineterm='\n')
     return "\n".join(unified_diff)

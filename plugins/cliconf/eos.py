@@ -210,7 +210,6 @@ class Cliconf(CliconfBase):
 
         resp = {}
         session = None
-        
         if self.supports_sessions():
             session = session_name()
             resp.update({"session": session})

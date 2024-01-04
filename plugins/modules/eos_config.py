@@ -140,8 +140,8 @@ options:
       false, the command is issued without the all keyword
     type: bool
     default: false
-  off_box_diff:
-    description: Specify the off-box diff parameters
+  context_diff:
+    description: Specify the off-box diff options
     type: dict
     suboptions:
       enable:
@@ -386,7 +386,7 @@ def main():
         parents=dict(type="list", elements="str"),
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
-        off_box_diff=dict(type="dict", options=dict(
+        context_diff=dict(type="dict", options=dict(
            enable=dict(type="bool"), context_lines=dict(type="int")
         )),
         match=dict(
@@ -501,11 +501,15 @@ def main():
                 commit=commit,
             )
             result["changed"] = True
-
             if module.params["diff_against"] == "session":
                 if "diff" in response:
-                    if module.params.get("off_box_diff"):
-                        result["off_box_diff"] = unified_diff(candidate.split("\n"), running.split("\n"))
+                    context_diff =  module.params.get("context_diff")
+                    if context_diff and context_diff.get("enable"):
+                        if context_diff.get("context_lines"):
+                            count = context_diff.get("context_lines")
+                        else:
+                            count = max(len(candidate), len(running))
+                        result["context_diff"] = unified_diff(candidate.split("\n"), running.split("\n"), count)
                     else:
                         result["diff"] = {"prepared": response["diff"]}
                 else:
