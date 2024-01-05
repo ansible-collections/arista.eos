@@ -97,7 +97,7 @@
     that:
       - result.changed == true
 
-- name: take configuration backup in custom filename
+- name: get the context diff with backup config
   become: true
   register: result
   arista.eos.eos_config:
@@ -106,7 +106,6 @@
     context_diff:
       enable: true
       context_lines: 10
-    enable: true
     backup_options:
       filename: backup.cfg
 
