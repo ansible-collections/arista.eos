@@ -107,7 +107,7 @@
       enable: true
       context_lines: 10
     backup_options:
-      filename: backup.cfg
+      filename: running_backup.cfg
 
 - ansible.builtin.assert:
     that:

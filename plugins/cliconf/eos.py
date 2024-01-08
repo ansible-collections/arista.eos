@@ -378,6 +378,7 @@ class Cliconf(CliconfBase):
 
         else:
             configdiffobjs = candidate_obj.items
+
         diff["config_diff"] = dumps(configdiffobjs, "commands") if configdiffobjs else ""
         return diff
 
@@ -449,7 +450,6 @@ class Cliconf(CliconfBase):
             "format": ["text", "json"],
             "diff_match": ["line", "strict", "exact", "none"],
             "diff_replace": ["line", "block", "config"],
-            "diff_onbox": [True, False],
             "output": ["text", "json"],
         }
 
