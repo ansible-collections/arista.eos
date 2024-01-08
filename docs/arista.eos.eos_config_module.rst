@@ -449,6 +449,16 @@ Examples
           filename: backup.cfg
           dir_path: /home/user
 
+    - name:Get the full context diff
+      arista.eos.eos_config:
+        src: candidate.cfg
+        backup: true
+        context_diff:
+          enable: true
+        backup_options:
+          filename: backup.cfg
+          dir_path: /home/user
+
 
 
 Return Values
@@ -495,6 +505,23 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                     <br/>
                         <div style="font-size: smaller"><b>Sample:</b></div>
                         <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;hostname switch01&#x27;, &#x27;interface Ethernet1&#x27;, &#x27;no shutdown&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>context_diff</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td></td>
+                <td>
+                            <div>The diff between candidate and target config.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">&#x27; --- +++ @@ -1,7 +1,7 @@ ! Command: show running-config -! device: arista (vEOS, EOS-4.24.6M) +! device: candidate-arista-11 (vEOS, EOS-4.24.6M)&#x27;</div>
                 </td>
             </tr>
             <tr>

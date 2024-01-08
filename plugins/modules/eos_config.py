@@ -282,6 +282,16 @@ EXAMPLES = """
     backup_options:
       filename: backup.cfg
       dir_path: /home/user
+
+- name:Get the full context diff
+  arista.eos.eos_config:
+    src: candidate.cfg
+    backup: true
+    context_diff:
+      enable: true
+    backup_options:
+      filename: backup.cfg
+      dir_path: /home/user
 """
 
 RETURN = """
@@ -320,6 +330,16 @@ time:
   returned: when backup is true
   type: str
   sample: "22:28:34"
+context_diff:
+  description: The diff between candidate and target config.
+  type: str
+  sample: '''
+    ---
+    +++
+    @@ -1,7 +1,7 @@
+     ! Command: show running-config
+    -! device: arista (vEOS, EOS-4.24.6M)
+    +! device: candidate-arista-11 (vEOS, EOS-4.24.6M)'''
 """
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
