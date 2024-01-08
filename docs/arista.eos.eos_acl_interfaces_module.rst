@@ -146,7 +146,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Specifies the AFI for the ACL(s) to be configured on this interface.</div>
+                        <div>Specifies the AFI for the ACL(s) to be configured on this interfaces.</div>
                 </td>
             </tr>
 
