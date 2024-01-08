@@ -449,7 +449,7 @@ Examples
           filename: backup.cfg
           dir_path: /home/user
 
-    - name:Get the full context diff
+    - name: Get the full context diff
       arista.eos.eos_config:
         src: candidate.cfg
         backup: true
