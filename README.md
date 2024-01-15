@@ -2,6 +2,8 @@
 
 # Arista EOS Collection
 [![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/arista.eos) <!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/arista.eos)-->
+[![Codecov](https://codecov.io/gh/ansible-collections/arista.eos/branch/main/graph/badge.svg)](https://codecov.io/gh/ansible-collections/arista.eos)
+[![CI](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml/badge.svg?branch=main&event=schedule)](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml)
 
 The Ansible Arista EOS collection includes a variety of Ansible content to help automate the management of Arista EOS network appliances.
 
@@ -10,7 +12,7 @@ This collection has been tested against Arista EOS 4.24.6F.
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.9.10**.
+This collection has been tested against following Ansible versions: **>=2.14.0**.
 
 For collections that support Ansible 2.9, please ensure you update your `network_os` to use the
 fully qualified collection name (for example, `cisco.ios.ios`).
@@ -111,8 +113,6 @@ The following example task replaces configuration changes in the existing config
             trunk_vlans: 5-10, 15
       state: replaced
 ```
-
-**NOTE**: For Ansible 2.9, you may not see deprecation warnings when you run your playbooks with this collection. Use this documentation to track when a module is deprecated.
 
 ### See Also:
 

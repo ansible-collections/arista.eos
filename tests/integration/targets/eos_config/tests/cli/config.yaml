@@ -17,13 +17,13 @@
   become: true
   register: result
   arista.eos.eos_config:
-    lines: hostname foo
+    lines: hostname int_tests
     config: "{{ config.stdout[0] }}"
 
 - ansible.builtin.assert:
     that:
       - result.changed == true
-      - "'hostname foo' in result.updates"
+      - "'hostname int_tests' in result.updates"
 
 - name: get current running-config
   become: true
@@ -35,7 +35,7 @@
   become: true
   register: result
   arista.eos.eos_config:
-    lines: hostname foo
+    lines: hostname int_tests
     config: "{{ config.stdout[0] }}"
 
 - ansible.builtin.assert:

@@ -4,6 +4,12 @@
 - name: setup
   become: true
   arista.eos.eos_config:
+    lines:
+      - no hostname
+
+- name: setup
+  become: true
+  arista.eos.eos_config:
     lines: hostname {{ inventory_hostname_short }}
     match: none
 
