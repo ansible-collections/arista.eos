@@ -301,14 +301,15 @@ class TestEosConfigModule(TestEosModule):
 
     def test_eos_config_context_diff(self):
         src = load_fixture("eos_candidate.cfg")
-        args = dict(src=src,
-                    backup=True,
-                    context_diff=dict(enable=True),
-                    backup_options=dict(
-                    filename="backup.cfg",
-                    dir_path="./"
-                    ),
-                    )
+        args = dict(
+            src=src,
+            backup=True,
+            context_diff=dict(enable=True),
+            backup_options=dict(
+                filename="backup.cfg",
+                dir_path="./",
+            ),
+        )
         set_module_args(args)
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(src, self.running_config),
@@ -318,14 +319,15 @@ class TestEosConfigModule(TestEosModule):
 
     def test_eos_config_context_diff_lines(self):
         src = load_fixture("eos_candidate.cfg")
-        args = dict(src=src,
-                    backup=True,
-                    context_diff=dict(enable=True, context_lines=10),
-                    backup_options=dict(
-                    filename="backup.cfg",
-                    dir_path="./"
-                    ),
-                    )
+        args = dict(
+            src=src,
+            backup=True,
+            context_diff=dict(enable=True, context_lines=10),
+            backup_options=dict(
+                filename="backup.cfg",
+                dir_path="./",
+            ),
+        )
         set_module_args(args)
         self.conn.get_diff = MagicMock(
             return_value=self.cliconf_obj.get_diff(src, self.running_config),

@@ -349,7 +349,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     NetworkConfig,
     dumps,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import unified_diff
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
@@ -358,6 +357,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
     run_commands,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import unified_diff
 
 
 def get_candidate(module):
@@ -407,9 +407,13 @@ def main():
         parents=dict(type="list", elements="str"),
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
-        context_diff=dict(type="dict", options=dict(
-           enable=dict(type="bool"), context_lines=dict(type="int")
-        )),
+        context_diff=dict(
+            type="dict",
+            options=dict(
+                enable=dict(type="bool"),
+                context_lines=dict(type="int"),
+            ),
+        ),
         match=dict(
             default="line",
             choices=["line", "strict", "exact", "none"],
@@ -524,13 +528,15 @@ def main():
             result["changed"] = True
             if module.params["diff_against"] == "session":
                 if "diff" in response:
-                    context_diff =  module.params.get("context_diff")
+                    context_diff = module.params.get("context_diff")
                     if context_diff and context_diff.get("enable"):
                         if context_diff.get("context_lines"):
                             count = context_diff.get("context_lines")
                         else:
                             count = max(len(candidate), len(running))
-                        result["context_diff"] = unified_diff(candidate.split("\n"), running.split("\n"), count)
+                        result["context_diff"] = unified_diff(
+                            candidate.split("\n"), running.split("\n"), count
+                        )
                     else:
                         result["diff"] = {"prepared": response["diff"]}
                 else:
