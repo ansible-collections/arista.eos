@@ -332,6 +332,7 @@ time:
   sample: "22:28:34"
 context_diff:
   description: The diff between candidate and target config.
+  returned: when user opt for off-box-diff through context_diff option.
   type: str
   sample: '''
     ---

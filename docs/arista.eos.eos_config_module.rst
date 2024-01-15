@@ -516,7 +516,7 @@ Common return values are documented `here <https://docs.ansible.com/ansible/late
                       <span style="color: purple">string</span>
                     </div>
                 </td>
-                <td></td>
+                <td>when user opt for off-box-diff through context_diff option.</td>
                 <td>
                             <div>The diff between candidate and target config.</div>
                     <br/>
