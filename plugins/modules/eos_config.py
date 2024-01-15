@@ -535,7 +535,9 @@ def main():
                         else:
                             count = max(len(candidate), len(running))
                         result["context_diff"] = unified_diff(
-                            candidate.split("\n"), running.split("\n"), count
+                            candidate.split("\n"),
+                            running.split("\n"),
+                            count,
                         )
                     else:
                         result["diff"] = {"prepared": response["diff"]}
