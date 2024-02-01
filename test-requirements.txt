@@ -6,3 +6,4 @@ pexpect
 pytest-xdist
 yamllint
 rstcheck<4,>=3
+pytest-ansible
