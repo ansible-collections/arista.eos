@@ -96,7 +96,7 @@ class Static_routesFacts(object):
                 if obj:
                     objs.append(obj)
         ansible_facts["ansible_network_resources"].pop("static_routes", None)
-        facts = {}
+        facts = {"static_routes": []}
         if objs:
             facts["static_routes"] = []
             params = utils.validate_config(
