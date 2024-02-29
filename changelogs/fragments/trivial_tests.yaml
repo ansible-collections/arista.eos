@@ -1,0 +1,3 @@
+---
+trivial:
+  - ignore connection error for downstreaming tests.
