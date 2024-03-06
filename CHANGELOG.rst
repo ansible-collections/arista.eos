@@ -5,6 +5,23 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v7.1.0
+======
+
+Bugfixes
+--------
+
+- This fix is needed because static_routes and vlans are not returning anything when resources are not configured.
+- This got noticed in this issue (https://github.com/network-automation/toolkit/issues/47)
+- correct a missing whitespace and add 'auth' string.
+- correct the parsing of the elements in 'name_servers' in 'eos_system' module.
+- when static_routes and vlans are not confirgured then return empty list.
+
+Documentation Changes
+---------------------
+
+- eos_lag_interface - Updated examples for lag_interface module.
+
 v7.0.0
 ======
 
