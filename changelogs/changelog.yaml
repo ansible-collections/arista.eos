@@ -598,3 +598,22 @@ releases:
     fragments:
       - fix_downstream_tests.yaml
     release_date: "2023-11-30"
+  7.1.0:
+    changes:
+      bugfixes:
+        - This fix is needed because static_routes and vlans are not returning anything
+          when resources are not configured.
+        - This got noticed in this issue (https://github.com/network-automation/toolkit/issues/47)
+        - correct a missing whitespace and add 'auth' string.
+        - correct the parsing of the elements in 'name_servers' in 'eos_system' module.
+        - when static_routes and vlans are not confirgured then return empty list.
+      doc_changes:
+        - eos_lag_interface - Updated examples for lag_interface module.
+    fragments:
+      - bugfixes_return_empty_data_structure_for_no_facts.yaml
+      - eos_system_element_parsing_fix.yaml
+      - lag_interface_docupdate.yml
+      - snmp_missing_whitespace_and_authentication_fix.yaml
+      - tests_trivial.yaml
+      - trivial_tests.yaml
+    release_date: "2024-03-06"
