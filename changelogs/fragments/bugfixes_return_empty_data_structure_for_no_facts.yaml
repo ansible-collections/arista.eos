@@ -1,0 +1,4 @@
+bugfixes:
+  - This fix is needed because static_routes and vlans are not returning anything when resources are not configured.
+  - This got noticed in this issue (https://github.com/network-automation/toolkit/issues/47)
+  - when static_routes and vlans are not confirgured then return empty list.
