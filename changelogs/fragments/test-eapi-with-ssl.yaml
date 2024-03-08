@@ -1,0 +1,3 @@
+---
+trivial:
+  - tests - add integration tests for eapi with ssl. (https://github.com/ansible-collections/arista.eos/pull/393)
