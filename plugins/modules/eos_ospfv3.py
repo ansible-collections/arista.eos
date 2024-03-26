@@ -627,25 +627,6 @@ options:
                 description: Configure OSPF timers.
                 type: dict
                 suboptions:
-                  throttle:
-                    description: This command is deprecated by 'timers lsa' or 'timers spf'.
-                    type: dict
-                    suboptions:
-                      initial:
-                        description: Initial SPF schedule delay in msecs.
-                        type: int
-                      min:
-                        description: Min Hold time between two SPFs in msecs
-                        type: int
-                      max:
-                        description: Max wait time between two SPFs in msecs.
-                        type: int
-                      lsa:
-                        description: Configure threshold for retransmission of lsa
-                        type: bool
-                      spf:
-                        description: Configure time between SPF calculations
-                        type: bool
                   out_delay:
                     description: Configure out-delay timer.
                     type: int
