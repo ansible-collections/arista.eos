@@ -284,25 +284,6 @@ options:
               pacing:
                 description: Configure OSPF packet pacing.
                 type: int
-              throttle:
-                description: This command is deprecated by 'timers lsa' or 'timers spf'.
-                type: dict
-                suboptions:
-                  initial:
-                    description: Initial SPF schedule delay in msecs.
-                    type: int
-                  min:
-                    description: Min Hold time between two SPFs in msecs
-                    type: int
-                  max:
-                    description: Max wait time between two SPFs in msecs.
-                    type: int
-                  lsa:
-                    description: Configure threshold for retransmission of lsa
-                    type: bool
-                  spf:
-                    description: Configure time between SPF calculations
-                    type: bool
               spf:
                 description: Configure OSPFv3 spf timers.
                 type: dict
