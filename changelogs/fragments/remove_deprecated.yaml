@@ -3,5 +3,5 @@ major_changes:
   - "This release removes previously deprecated modules and attributes from this collection. Please refer to the **Removed Features** section for details."
 removed_features:
   - Remove depreacted eos_bgp module which is replaced with eos_bgp_global and eos_bgp_address_family.
-  - Remove deprecated eos_logging module which is replaced with eos_logging_global resource module. 
+  - Remove deprecated eos_logging module which is replaced with eos_logging_global resource module.
   - Remove deprecated timers.throttle attribute.
