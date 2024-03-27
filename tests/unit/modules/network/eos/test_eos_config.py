@@ -21,9 +21,10 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import MagicMock, patch
+
 from ansible_collections.arista.eos.plugins.cliconf.eos import Cliconf
 from ansible_collections.arista.eos.plugins.modules import eos_config
-from unittest.mock import MagicMock, patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture

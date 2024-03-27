@@ -23,8 +23,9 @@ __metaclass__ = type
 
 import json
 
-from ansible_collections.arista.eos.plugins.modules import eos_command
 from unittest.mock import patch
+
+from ansible_collections.arista.eos.plugins.modules import eos_command
 from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
