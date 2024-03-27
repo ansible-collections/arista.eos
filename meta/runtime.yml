@@ -4,83 +4,119 @@ plugin_routing:
   modules:
     acl_interfaces:
       redirect: arista.eos.eos_acl_interfaces
+      action_plugin: arista.eos.eos
     acls:
       redirect: arista.eos.eos_acls
+      action_plugin: arista.eos.eos
     banner:
       redirect: arista.eos.eos_banner
+      action_plugin: arista.eos.eos
     bgp:
       redirect: arista.eos.eos_bgp
       deprecation:
         removal_date: "2023-01-01"
         warning_text: See the plugin documentation for more details
+      action_plugin: arista.eos.eos
     eos_bgp:
       deprecation:
         removal_date: "2023-01-01"
         warning_text: See the plugin documentation for more details
+      action_plugin: arista.eos.eos
     bgp_address_family:
       redirect: arista.eos.eos_bgp_address_family
+      action_plugin: arista.eos.eos
     bgp_global:
       redirect: arista.eos.eos_bgp_global
+      action_plugin: arista.eos.eos
     command:
       redirect: arista.eos.eos_command
+      action_plugin: arista.eos.eos
     config:
       redirect: arista.eos.eos_config
+      action_plugin: arista.eos.eos
     eapi:
       redirect: arista.eos.eos_eapi
+      action_plugin: arista.eos.eos
     facts:
       redirect: arista.eos.eos_facts
+      action_plugin: arista.eos.eos
     hostname:
       redirect: arista.eos.eos_hostname
+      action_plugin: arista.eos.eos
     interfaces:
       redirect: arista.eos.eos_interfaces
+      action_plugin: arista.eos.eos
     l2_interfaces:
       redirect: arista.eos.eos_l2_interfaces
+      action_plugin: arista.eos.eos
     l3_interfaces:
       redirect: arista.eos.eos_l3_interfaces
+      action_plugin: arista.eos.eos
     lacp:
       redirect: arista.eos.eos_lacp
+      action_plugin: arista.eos.eos
     lacp_interfaces:
       redirect: arista.eos.eos_lacp_interfaces
+      action_plugin: arista.eos.eos
     lag_interfaces:
       redirect: arista.eos.eos_lag_interfaces
+      action_plugin: arista.eos.eos
     lldp:
       redirect: arista.eos.eos_lldp
+      action_plugin: arista.eos.eos
     lldp_global:
       redirect: arista.eos.eos_lldp_global
+      action_plugin: arista.eos.eos
     lldp_interfaces:
       redirect: arista.eos.eos_lldp_interfaces
+      action_plugin: arista.eos.eos
     logging:
       redirect: arista.eos.eos_logging
       deprecation:
         removal_date: "2024-01-01"
         warning_text: See the plugin documentation for more details
+      action_plugin: arista.eos.eos
     eos_logging:
       deprecation:
         removal_date: "2024-01-01"
         warning_text: See the plugin documentation for more details
+      action_plugin: arista.eos.eos
     logging_global:
       redirect: arista.eos.eos_logging_global
+      action_plugin: arista.eos.eos
     ntp_global:
       redirect: arista.eos.eos_ntp_global
+      action_plugin: arista.eos.eos
     ospfv2:
       redirect: arista.eos.eos_ospfv2
+      action_plugin: arista.eos.eos
     ospfv3:
       redirect: arista.eos.eos_ospfv3
+      action_plugin: arista.eos.eos
     ospf_interfaces:
       redirect: arista.eos.eos_ospf_interfaces
+      action_plugin: arista.eos.eos
     prefix_lists:
       redirect: arista.eos.eos_prefix_lists
+      action_plugin: arista.eos.eos
     route_maps:
       redirect: arista.eos.eos_route_maps
+      action_plugin: arista.eos.eos
     snmp_server:
       redirect: arista.eos.eos_snmp_server
+      action_plugin: arista.eos.eos
     static_routes:
       redirect: arista.eos.eos_static_routes
+      action_plugin: arista.eos.eos
     system:
       redirect: arista.eos.eos_system
+      action_plugin: arista.eos.eos
     user:
       redirect: arista.eos.eos_user
+      action_plugin: arista.eos.eos
     vlans:
       redirect: arista.eos.eos_vlans
+      action_plugin: arista.eos.eos
     vrf:
       redirect: arista.eos.eos_vrf
+      action_plugin: arista.eos.eos
