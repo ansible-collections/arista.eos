@@ -11,6 +11,11 @@ releases:
       - description: Manage multiline banners on Arista EOS devices
         name: eos_banner
         namespace: ""
+      - description:
+          (deprecated, removed after 2023-01-29) Configure global BGP protocol
+          settings on Arista EOS.
+        name: eos_bgp
+        namespace: ""
       - description: Run arbitrary commands on an Arista EOS device
         name: eos_command
         namespace: ""
@@ -49,6 +54,9 @@ releases:
         namespace: ""
       - description: LLDP interfaces resource module
         name: eos_lldp_interfaces
+        namespace: ""
+      - description: Manage logging on network devices
+        name: eos_logging
         namespace: ""
       - description: OSPFv2 resource module
         name: eos_ospfv2
