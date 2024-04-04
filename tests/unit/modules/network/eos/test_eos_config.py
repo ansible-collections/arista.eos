@@ -300,6 +300,26 @@ class TestEosConfigModule(TestEosModule):
             result["commands"],
         )
 
+    def test_eos_config_src_replace_multiline(self):
+        src = load_fixture("eos_config_candidate_multiline.cfg")
+        args = dict(src=src, replace="config")
+        set_module_args(args)
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(src, self.running_config),
+        )
+        result = self.execute_module(changed=True)
+        config = [
+            "hostname switch01",
+            "banner login",
+            "*** LOGIN TEST BANNER ***",
+            "EOF",
+        ]
+        self.assertEqual(
+            config,
+            result["commands"],
+            result["commands"],
+        )
+
     def test_eos_config_lines_block(self):
         lines = ["hostname switch01", "ip domain-name eng.ansible.com"]
         args = dict(lines=lines, replace="block")
