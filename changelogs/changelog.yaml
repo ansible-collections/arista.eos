@@ -11,11 +11,6 @@ releases:
       - description: Manage multiline banners on Arista EOS devices
         name: eos_banner
         namespace: ""
-      - description:
-          (deprecated, removed after 2023-01-29) Configure global BGP protocol
-          settings on Arista EOS.
-        name: eos_bgp
-        namespace: ""
       - description: Run arbitrary commands on an Arista EOS device
         name: eos_command
         namespace: ""
@@ -54,9 +49,6 @@ releases:
         namespace: ""
       - description: LLDP interfaces resource module
         name: eos_lldp_interfaces
-        namespace: ""
-      - description: Manage logging on network devices
-        name: eos_logging
         namespace: ""
       - description: OSPFv2 resource module
         name: eos_ospfv2
@@ -632,3 +624,15 @@ releases:
       - remove_deprecated.yaml
       - trivial_tests_updates.yaml
     release_date: "2024-03-27"
+  9.0.0:
+    changes:
+      major_changes:
+        - Update the netcommon base version 6.1.0 to support cli_restore plugin.
+      minor_changes:
+        - Add support for cli_restore functionality.
+        - Please refer the PR to know more about core changes (https://github.com/ansible-collections/ansible.netcommon/pull/618).
+        - cli_restore module is part of netcommon.
+    fragments:
+      - 218sanity.yml
+      - add_restore_support.yaml
+    release_date: "2024-04-13"
