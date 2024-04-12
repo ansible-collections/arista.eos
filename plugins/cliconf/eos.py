@@ -327,7 +327,7 @@ class Cliconf(CliconfBase):
 
                 responses.append(out)
         return responses
-    
+
     def restore(self, filename=None, path=""):
         if not filename:
             raise ValueError("'file_name' value is required for restore")
