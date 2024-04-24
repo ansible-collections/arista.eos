@@ -234,44 +234,42 @@ options:
 """
 
 EXAMPLES = """
-
-# Using merged
+# Using Merged
 
 # Before state:
 # -------------
 # veos(config)#show running-config | section bgp
 # veos(config)#
 
-  - name: Merge provided configuration with device configuration
-    arista.eos.eos_bgp_address_family:
-      config:
-        as_number: "10"
-        address_family:
-          - afi: "ipv4"
-            redistribute:
-              - protocol: "ospfv3"
-                ospf_route: "external"
-            network:
-              - address: "1.1.1.0/24"
-              - address: "1.5.1.0/24"
-                route_map: "MAP01"
-          - afi: "ipv6"
-            bgp_params:
-              additional_paths: "receive"
-            neighbor:
-              - peer: "peer2"
-                default_originate:
-                  always: true
-          - afi: "ipv6"
-            redistribute:
-              - protocol: "isis"
-                isis_level: "level-2"
-            route_target:
-              mode: "export"
-              target: "33:11"
-            vrf: "vrft"
-      state: merged
-
+- name: Merge provided configuration with device configuration
+  arista.eos.eos_bgp_address_family:
+    config:
+      as_number: "10"
+      address_family:
+        - afi: "ipv4"
+          redistribute:
+            - protocol: "ospfv3"
+              ospf_route: "external"
+          network:
+            - address: "1.1.1.0/24"
+            - address: "1.5.1.0/24"
+              route_map: "MAP01"
+        - afi: "ipv6"
+          bgp_params:
+            additional_paths: "receive"
+          neighbor:
+            - peer: "peer2"
+              default_originate:
+                always: true
+        - afi: "ipv6"
+          redistribute:
+            - protocol: "isis"
+              isis_level: "level-2"
+          route_target:
+            mode: "export"
+            target: "33:11"
+          vrf: "vrft"
+    state: merged
 
 
 # Task output:
@@ -379,21 +377,21 @@ EXAMPLES = """
 #          route-target export 33:11
 #          redistribute isis level-2
 
-  - name: Replace running config section with provided config
-    arista.eos.eos_bgp_address_family:
-      config:
-        as_number: "10"
-        address_family:
-          - afi: "ipv6"
-            vrf: "vrft"
-            redistribute:
-              - protocol: "ospfv3"
-                ospf_route: "external"
-          - afi: "ipv6"
-            redistribute:
-              - protocol: "isis"
-                isis_level: "level-2"
-      state: replaced
+- name: Replace running config section with provided config
+  arista.eos.eos_bgp_address_family:
+    config:
+      as_number: "10"
+      address_family:
+        - afi: "ipv6"
+          vrf: "vrft"
+          redistribute:
+            - protocol: "ospfv3"
+              ospf_route: "external"
+        - afi: "ipv6"
+          redistribute:
+            - protocol: "isis"
+              isis_level: "level-2"
+    state: replaced
 
 # Task output:
 # ------------
@@ -517,19 +515,19 @@ EXAMPLES = """
 #       address-family ipv6
 #          redistribute ospfv3 match external
 
-  - name: Override running config with provided config
-    arista.eos.eos_bgp_address_family:
-      config:
-        as_number: "10"
-        address_family:
-          - afi: "ipv4"
-            bgp_params:
-              additional_paths: "receive"
-            neighbor:
-              - peer: "peer2"
-                default_originate:
-                  always: true
-      state: overridden
+- name: Override running config with provided config
+  arista.eos.eos_bgp_address_family:
+    config:
+      as_number: "10"
+      address_family:
+        - afi: "ipv4"
+          bgp_params:
+            additional_paths: "receive"
+          neighbor:
+            - peer: "peer2"
+              default_originate:
+                always: true
+    state: overridden
 
 
 #
@@ -635,20 +633,20 @@ EXAMPLES = """
 #          redistribute isis level-2
 #          redistribute ospfv3 match external
 
-  - name: Override running config with provided config
-    arista.eos.eos_bgp_address_family:
-      config:
-        as_number: "10"
-        address_family:
-          - afi: "ipv4"
-            bgp_params:
-              additional_paths: "receive"
-            neighbor:
-              - peer: "peer2"
-                default_originate:
-                  always: true
-            vrf: vrft
-      state: overridden
+- name: Override running config with provided config
+  arista.eos.eos_bgp_address_family:
+    config:
+      as_number: "10"
+      address_family:
+        - afi: "ipv4"
+          bgp_params:
+            additional_paths: "receive"
+          neighbor:
+            - peer: "peer2"
+              default_originate:
+                always: true
+          vrf: vrft
+    state: overridden
 
 # Task output:
 # ------------
@@ -776,15 +774,15 @@ EXAMPLES = """
 #       address-family ipv4
 #          bgp additional-paths receive
 
-  - name: Delete running config for provided afi
-    arista.eos.eos_bgp_address_family:
-      config:
-        as_number: "10"
-        address_family:
-          - afi: "ipv6"
-            vrf: "vrft"
-          - afi: "ipv6"
-      state: deleted
+- name: Delete running config for provided afi
+  arista.eos.eos_bgp_address_family:
+    config:
+      as_number: "10"
+      address_family:
+        - afi: "ipv6"
+          vrf: "vrft"
+        - afi: "ipv6"
+    state: deleted
 
 # Task output:
 # ------------
@@ -897,10 +895,10 @@ EXAMPLES = """
 #       address-family ipv6
 #          redistribute ospfv3 match external
 
-  - name: parse running config and generate structred facts
-    arista.eos.eos_bgp_address_family:
-      running_config: "{{ lookup('file', './parsed_bgp_address_family.cfg') }}"
-      state: parsed
+- name: parse running config and generate structred facts
+  arista.eos.eos_bgp_address_family:
+    running_config: "{{ lookup('file', './parsed_bgp_address_family.cfg') }}"
+    state: parsed
 
 # Task output:
 # ------------
@@ -961,9 +959,9 @@ EXAMPLES = """
 #       address-family ipv4
 #          bgp additional-paths receive
 
-  - name: gather running config
-    arista.eos.eos_bgp_address_family:
-      state: gathered
+- name: gather running config
+  arista.eos.eos_bgp_address_family:
+    state: gathered
 
 # Task output:
 # ------------
@@ -991,36 +989,35 @@ EXAMPLES = """
 
 # using rendered
 
-  - name: Render CLI commands for provided config
-    arista.eos.eos_bgp_address_family:
-      config:
-        as_number: "10"
-        address_family:
-          - afi: "ipv4"
-            redistribute:
-              - protocol: "ospfv3"
-                ospf_route: "external"
-            network:
-              - address: "1.1.1.0/24"
-              - address: "1.5.1.0/24"
-                route_map: "MAP01"
-          - afi: "ipv6"
-            bgp_params:
-              additional_paths: "receive"
-            neighbor:
-              - peer: "peer2"
-                default_originate:
-                  always: true
-          - afi: "ipv6"
-            redistribute:
-              - protocol: "isis"
-                isis_level: "level-2"
-            route_target:
-              mode: "export"
-              target: "33:11"
-            vrf: "vrft"
-
-      state: rendered
+- name: Render CLI commands for provided config
+  arista.eos.eos_bgp_address_family:
+    config:
+      as_number: "10"
+      address_family:
+        - afi: "ipv4"
+          redistribute:
+            - protocol: "ospfv3"
+              ospf_route: "external"
+          network:
+            - address: "1.1.1.0/24"
+            - address: "1.5.1.0/24"
+              route_map: "MAP01"
+        - afi: "ipv6"
+          bgp_params:
+            additional_paths: "receive"
+          neighbor:
+            - peer: "peer2"
+              default_originate:
+                always: true
+        - afi: "ipv6"
+          redistribute:
+            - protocol: "isis"
+              isis_level: "level-2"
+          route_target:
+            mode: "export"
+            target: "33:11"
+          vrf: "vrft"
+    state: rendered
 
 # Task output:
 # ------------

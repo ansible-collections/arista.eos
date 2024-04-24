@@ -110,10 +110,10 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   arista.eos.eos_lacp_interfaces:
     config:
-    - name: Ethernet1
-      rate: fast
-    - name: Ethernet2
-      rate: normal
+      - name: Ethernet1
+        rate: fast
+      - name: Ethernet2
+        rate: normal
     state: merged
 
 #
@@ -135,7 +135,6 @@ EXAMPLES = """
 # Before state
 # ------------
 #
-#
 # veos#show run | section ^interface
 # interface Ethernet1
 #    lacp port-priority 30
@@ -146,8 +145,8 @@ EXAMPLES = """
     configuration
   arista.eos.eos_lacp_interfaces:
     config:
-    - name: Ethernet1
-      rate: fast
+      - name: Ethernet1
+        rate: fast
     state: replaced
 
 #
@@ -179,8 +178,8 @@ EXAMPLES = """
 - name: Override the LACP configuration of all the interfaces with provided configuration
   arista.eos.eos_lacp_interfaces:
     config:
-    - name: Ethernet1
-      rate: fast
+      - name: Ethernet1
+        rate: fast
     state: overridden
 
 #
@@ -226,10 +225,10 @@ EXAMPLES = """
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_lacp_interfaces:
     config:
-    - name: Ethernet1
-      rate: fast
-    - name: Ethernet2
-      rate: normal
+      - name: Ethernet1
+        rate: fast
+      - name: Ethernet2
+        rate: normal
     state: rendered
 
 #
@@ -276,7 +275,6 @@ EXAMPLES = """
 #   - name: Ethernet1
 #   - name: Ethernet2
 #     rate: fast
-
 """
 RETURN = """
 before:

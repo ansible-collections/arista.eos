@@ -360,7 +360,8 @@ class Ospfv2(ConfigBase):
                     commands.append(c)
             if ospf_params.get("auto_cost"):
                 commands.append(
-                    "auto-cost reference-bandwidth " + ospf_params["auto_cost"],
+                    "auto-cost reference-bandwidth "
+                    + str(ospf_params["auto_cost"]["reference_bandwidth"]),
                 )
             if ospf_params.get("bfd"):
                 os_version = self._get_os_version()

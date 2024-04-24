@@ -21,9 +21,10 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import MagicMock, patch
+
 from ansible_collections.arista.eos.plugins.cliconf.eos import Cliconf
 from ansible_collections.arista.eos.plugins.modules import eos_config
-from ansible_collections.arista.eos.tests.unit.compat.mock import MagicMock, patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
@@ -277,3 +278,43 @@ class TestEosConfigModule(TestEosModule):
         self.assertEqual(self.load_config.call_count, 0)
         args = self.run_commands.call_args[0][1][0]["command"]
         self.assertIn("copy running-config startup-config", args)
+
+    def test_eos_config_src_replace(self):
+        src = load_fixture("eos_config_candidate.cfg")
+        args = dict(src=src, replace="block")
+        set_module_args(args)
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(src, self.running_config),
+        )
+        result = self.execute_module(changed=True)
+        config = [
+            "hostname switch01",
+            "interface Ethernet1",
+            "description test interface",
+            "no shutdown",
+            "ip routing",
+        ]
+        self.assertEqual(
+            sorted(config),
+            sorted(result["commands"]),
+            result["commands"],
+        )
+
+    def test_eos_config_lines_block(self):
+        lines = ["hostname switch01", "ip domain-name eng.ansible.com"]
+        args = dict(lines=lines, replace="block")
+        set_module_args(args)
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(
+                "\n".join(lines),
+                self.running_config,
+            ),
+        )
+        result = self.execute_module(changed=True)
+        config = ["hostname switch01"]
+
+        self.assertEqual(
+            sorted(config),
+            sorted(result["commands"]),
+            result["commands"],
+        )

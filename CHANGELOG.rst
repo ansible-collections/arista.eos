@@ -5,6 +5,106 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v9.0.0
+======
+
+Major Changes
+-------------
+
+- Update the netcommon base version 6.1.0 to support cli_restore plugin.
+
+Minor Changes
+-------------
+
+- Add support for cli_restore functionality.
+- Please refer the PR to know more about core changes (https://github.com/ansible-collections/ansible.netcommon/pull/618).
+- cli_restore module is part of netcommon.
+
+v8.0.0
+======
+
+Major Changes
+-------------
+
+- This release removes previously deprecated modules and attributes from this collection. Please refer to the **Removed Features** section for details.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- Remove depreacted eos_bgp module which is replaced with eos_bgp_global and eos_bgp_address_family.
+- Remove deprecated eos_logging module which is replaced with eos_logging_global resource module.
+- Remove deprecated timers.throttle attribute.
+
+v7.1.0
+======
+
+Bugfixes
+--------
+
+- This fix is needed because static_routes and vlans are not returning anything when resources are not configured.
+- This got noticed in this issue (https://github.com/network-automation/toolkit/issues/47)
+- correct a missing whitespace and add 'auth' string.
+- correct the parsing of the elements in 'name_servers' in 'eos_system' module.
+- when static_routes and vlans are not confirgured then return empty list.
+
+Documentation Changes
+---------------------
+
+- eos_lag_interface - Updated examples for lag_interface module.
+
+v7.0.0
+======
+
+Release Summary
+---------------
+
+Starting from this release, the minimum `ansible-core` version this collection requires is `2.14.0`. The last known version compatible with ansible-core<2.14 is `v6.2.2`.
+
+Major Changes
+-------------
+
+- Bumping `requires_ansible` to `>=2.14.0`, since previous ansible-core versions are EoL now.
+
+v6.2.2
+======
+
+Bugfixes
+--------
+
+- correct the reference of string attribute 'reference_bandwith'.
+
+v6.2.1
+======
+
+Release Summary
+---------------
+
+Rereleased 6.2.0 with updated galaxy reference.
+
+v6.2.0
+======
+
+Minor Changes
+-------------
+
+- arista_config - Relax restrictions on I(src) parameter so it can be used more like I(lines).
+
+Bugfixes
+--------
+
+- Fix command generated for local-interface with in ntp server attribute.
+- Fix command generation for source_interface attribute.
+- Fix secondary ip address parsing.
+- fix line attribute fact generation and placement in ACE, when ACE is not fully parsed.
+
+Documentation Changes
+---------------------
+
+- Fix docs for static_routes and prefix_lists Resource modules.
+- eos_interfaces - update examples and use YAML output for better readability.
+- eos_l2_interfaces - update examples and use YAML output for better readability.
+- eos_l3_interfaces - update examples and use YAML output for better readability.
+
 v6.1.2
 ======
 
@@ -416,7 +516,6 @@ New Modules
 - eos_acl_interfaces - ACL interfaces resource module
 - eos_acls - ACLs resource module
 - eos_banner - Manage multiline banners on Arista EOS devices
-- eos_bgp - (deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.
 - eos_command - Run arbitrary commands on an Arista EOS device
 - eos_config - Manage Arista EOS configuration sections
 - eos_eapi - Manage and configure Arista EOS eAPI.
@@ -430,7 +529,6 @@ New Modules
 - eos_lldp - Manage LLDP configuration on Arista EOS network devices
 - eos_lldp_global - LLDP resource module
 - eos_lldp_interfaces - LLDP interfaces resource module
-- eos_logging - Manage logging on network devices
 - eos_ospfv2 - OSPFv2 resource module
 - eos_static_routes - Static routes resource module
 - eos_system - Manage the system attributes on Arista EOS devices

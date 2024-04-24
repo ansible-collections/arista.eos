@@ -8,8 +8,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_logging_global
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
@@ -162,6 +163,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                 config=dict(
                     synchronous=dict(set=True),
                     trap=dict(severity="critical"),
+                    source_interface="Loopback6",
                     hosts=[dict(name="host02", protocol="tcp")],
                     vrfs=[
                         dict(name="vrf03", source_interface="vlan100"),
@@ -191,6 +193,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
             "logging vrf vrf03 source-interface vlan100",
             "logging synchronous",
             "logging trap critical",
+            "logging source-interface Loopback6",
         ]
         self.execute_module(changed=True, commands=sorted(commands))
 

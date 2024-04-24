@@ -266,7 +266,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False, key string is not encrypted</div>
+                        <div>If false, key string is not encrypted</div>
                 </td>
             </tr>
             <tr>
@@ -290,7 +290,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Specifies that a HIDDEN key will follow.</div>
+                        <div>If true, Specifies that a HIDDEN key will follow.</div>
                 </td>
             </tr>
             <tr>
@@ -437,7 +437,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False, key string is not encrypted</div>
+                        <div>If false, key string is not encrypted</div>
                 </td>
             </tr>
             <tr>
@@ -488,7 +488,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Specifies that a HIDDEN key will follow.</div>
+                        <div>If true, Specifies that a HIDDEN key will follow.</div>
                 </td>
             </tr>
             <tr>
@@ -680,7 +680,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only default information orignate is set</div>
+                        <div>true if only default information orignate is set</div>
                 </td>
             </tr>
 
@@ -753,7 +753,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only nssa is set</div>
+                        <div>true if only nssa is set</div>
                 </td>
             </tr>
             <tr>
@@ -946,7 +946,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only stub is set</div>
+                        <div>true if only stub is set</div>
                 </td>
             </tr>
             <tr>
@@ -970,7 +970,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False , Filter all type-3 LSAs in the stub area.</div>
+                        <div>If false , Filter all type-3 LSAs in the stub area.</div>
                 </td>
             </tr>
 
@@ -1315,7 +1315,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Enable graceful restart helper.</div>
+                        <div>If true, Enable graceful restart helper.</div>
                 </td>
             </tr>
             <tr>
@@ -2054,134 +2054,6 @@ Parameters
                 </td>
             </tr>
 
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>throttle</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>This command is deprecated by &#x27;timers lsa&#x27; or &#x27;timers spf&#x27;.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>initial</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Initial SPF schedule delay in msecs.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>lsa</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure threshold for retransmission of lsa</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>max</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Max wait time between two SPFs in msecs.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>min</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Min Hold time between two SPFs in msecs</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>spf</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure time between SPF calculations</div>
-                </td>
-            </tr>
-
 
 
             <tr>
@@ -2337,7 +2209,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False, key string is not encrypted</div>
+                        <div>If false, key string is not encrypted</div>
                 </td>
             </tr>
             <tr>
@@ -2360,7 +2232,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Specifies that a HIDDEN key will follow.</div>
+                        <div>If true, Specifies that a HIDDEN key will follow.</div>
                 </td>
             </tr>
             <tr>
@@ -2500,7 +2372,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False, key string is not encrypted</div>
+                        <div>If false, key string is not encrypted</div>
                 </td>
             </tr>
             <tr>
@@ -2549,7 +2421,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Specifies that a HIDDEN key will follow.</div>
+                        <div>If true, Specifies that a HIDDEN key will follow.</div>
                 </td>
             </tr>
             <tr>
@@ -2732,7 +2604,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only default information orignate is set</div>
+                        <div>true if only default information orignate is set</div>
                 </td>
             </tr>
 
@@ -2802,7 +2674,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only nssa is set</div>
+                        <div>true if only nssa is set</div>
                 </td>
             </tr>
             <tr>
@@ -2867,7 +2739,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only stub is set.</div>
+                        <div>true if only stub is set.</div>
                 </td>
             </tr>
             <tr>
@@ -2890,7 +2762,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False , Filter all type-3 LSAs in the stub area.</div>
+                        <div>If false , Filter all type-3 LSAs in the stub area.</div>
                 </td>
             </tr>
 
@@ -3068,7 +2940,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Enable graceful restart helper.</div>
+                        <div>If true, Enable graceful restart helper.</div>
                 </td>
             </tr>
             <tr>
@@ -3695,128 +3567,6 @@ Parameters
                 </td>
             </tr>
 
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>throttle</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>This command is deprecated by &#x27;timers lsa&#x27; or &#x27;timers spf&#x27;.</div>
-                </td>
-            </tr>
-                                <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>initial</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Initial SPF schedule delay in msecs.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>lsa</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure threshold for retransmission of lsa</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>max</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Max wait time between two SPFs in msecs.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>min</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">integer</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Min Hold time between two SPFs in msecs</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>spf</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure time between SPF calculations</div>
-                </td>
-            </tr>
-
 
             <tr>
                     <td class="elbow-placeholder"></td>
@@ -3903,22 +3653,22 @@ Examples
     # veos#show running-config | section ospfv3
     # veos#
 
-      - name: Merge the provided configuration with the existing running configuration
-        arista.eos.eos_ospfv3:
-          config:
-            processes:
-              - address_family:
-                  - timers:
-                      lsa: 22
-                    graceful_restart:
-                      grace_period: 35
-                    afi: "ipv6"
-                timers:
-                  pacing: 55
-                fips_restrictions: True
-                router_id: "2.2.2.2"
-                vrf: "vrfmerge"
-          state: merged
+    - name: Merge the provided configuration with the existing running configuration
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - timers:
+                    lsa: 22
+                  graceful_restart:
+                    grace_period: 35
+                  afi: "ipv6"
+              timers:
+                pacing: 55
+              fips_restrictions: true
+              router_id: "2.2.2.2"
+              vrf: "vrfmerge"
+        state: merged
 
 
     # Task output:
@@ -3982,24 +3732,23 @@ Examples
     #       timers lsa arrival 22
     #       graceful-restart grace-period 35
 
-      - name: Replace a section of running config with provided config
-        arista.eos.eos_ospfv3:
-          config:
-            processes:
-              - areas:
-                  - area_id: "0.0.0.0"
-                    encryption:
-                      spi: 43
-                      encryption: "null"
-                      algorithm: "md5"
-                      encrypt_key: False
-                      passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
-                vrf: "default"
-                address_family:
-                  - afi: "ipv4"
-                    router_id: "7.1.1.1"
-          state: replaced
-
+    - name: Replace a section of running config with provided config
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - areas:
+                - area_id: "0.0.0.0"
+                  encryption:
+                    spi: 43
+                    encryption: "null"
+                    algorithm: "md5"
+                    encrypt_key: false
+                    passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+              vrf: "default"
+              address_family:
+                - afi: "ipv4"
+                  router_id: "7.1.1.1"
+        state: replaced
 
     # Task output:
     # ------------
@@ -4091,23 +3840,23 @@ Examples
     #       area 0.0.0.3 range 10.1.2.0/24
     #       area 0.0.0.3 range 60.1.0.0/16 cost 30
 
-      - name: Override running config with provided config
-        arista.eos.eos_ospfv3:
-          config:
-            processes:
-              - address_family:
-                  - areas:
-                      - area_id: "0.0.0.3"
-                        ranges:
-                          - address: 10.1.2.2/24
-                            advertise: True
-                          - address: 60.1.1.1
-                            subnet_mask: 255.255.0.0
-                            cost: 30
-                    afi: "ipv6"
-                passive_interface: True
-                vrf: "vrfmerge"
-          state: overridden
+    - name: Override running config with provided config
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - areas:
+                    - area_id: "0.0.0.3"
+                      ranges:
+                        - address: 10.1.2.2/24
+                          advertise: true
+                        - address: 60.1.1.1
+                          subnet_mask: 255.255.0.0
+                          cost: 30
+                  afi: "ipv6"
+              passive_interface: true
+              vrf: "vrfmerge"
+        state: overridden
 
     # Task output:
     # ------------
@@ -4188,13 +3937,14 @@ Examples
     #       area 0.0.0.3 range 10.1.2.0/24
     #       area 0.0.0.3 range 60.1.0.0/16 cost 30
 
-      - name: Delete OSPFv3 config
-        arista.eos.eos_ospfv3:
-          config:
-          state: deleted
+    - name: Delete OSPFv3 config
+      arista.eos.eos_ospfv3:
+        config:
+        state: deleted
 
     # Task output:
     # ------------
+
     # before:
     #     processes:
     #     - areas:
@@ -4299,10 +4049,10 @@ Examples
     #       timers spf delay initial 56 56 56
     #       timers out-delay 10
 
-      - name: Parse the provided config
-        arista.eos.eos_ospfv3:
-          running_config: "{{ lookup('file', './parsed_ospfv3.cfg') }}"
-          state: parsed
+    - name: Parse the provided config
+      arista.eos.eos_ospfv3:
+        running_config: "{{ lookup('file', './parsed_ospfv3.cfg') }}"
+        state: parsed
 
     # Task output:
     # ------------
@@ -4408,9 +4158,9 @@ Examples
     #       area 0.0.0.3 range 10.1.2.0/24
     #       area 0.0.0.3 range 60.1.0.0/16 cost 30
 
-      - name: Gather running configuration
-        arista.eos.eos_ospfv3:
-          state: gathered
+    - name: Gather running configuration
+      arista.eos.eos_ospfv3:
+        state: gathered
 
     # Task output:
     # ------------
@@ -4441,22 +4191,22 @@ Examples
 
     # using rendered
 
-      - name: render CLI commands for provided config
-        arista.eos.eos_ospfv3:
-          config:
-            processes:
-              - address_family:
-                  - timers:
-                      lsa: 22
-                    graceful_restart:
-                      grace_period: 35
-                    afi: "ipv6"
-                timers:
-                  pacing: 55
-                fips_restrictions: True
-                router_id: "2.2.2.2"
-                vrf: "vrfmerge"
-          state: rendered
+    - name: render CLI commands for provided config
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - timers:
+                    lsa: 22
+                  graceful_restart:
+                    grace_period: 35
+                  afi: "ipv6"
+              timers:
+                pacing: 55
+              fips_restrictions: true
+              router_id: "2.2.2.2"
+              vrf: "vrfmerge"
+        state: rendered
 
     # Task output:
     # ------------
