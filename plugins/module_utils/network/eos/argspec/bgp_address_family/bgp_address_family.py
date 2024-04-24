@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -31,8 +32,7 @@ The arg spec for the eos_bgp_address_family module
 
 
 class Bgp_afArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_bgp_address_family module
-    """
+    """The arg spec for the eos_bgp_address_family module"""
 
     def __init__(self, **kwargs):
         pass
@@ -84,7 +84,7 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                                 "route_map": {"type": "str"},
                                 "protocol": {
                                     "type": "str",
-                                    "choices": ["isis", "ospf3", "dhcp"],
+                                    "choices": ["isis", "ospfv3", "dhcp"],
                                 },
                                 "isis_level": {
                                     "type": "str",
@@ -99,11 +99,22 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                         "route_target": {
                             "type": "dict",
                             "options": {
-                                "mode": {
+                                "action": {
                                     "type": "str",
                                     "choices": ["both", "import", "export"],
+                                    "aliases": ["mode"],
                                 },
+                                "type": {
+                                    "type": "str",
+                                    "choices": [
+                                        "evpn",
+                                        "vpn-ipv4",
+                                        "vpn-ipv6",
+                                    ],
+                                },
+                                "route_map": {"type": "str"},
                                 "target": {"type": "str"},
+                                "imported_route": {"type": "bool"},
                             },
                         },
                         "graceful_restart": {"type": "bool"},

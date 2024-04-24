@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,20 +16,18 @@ based on the configuration.
 """
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp_global.bgp_global import (
+    Bgp_globalArgs,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_global import (
     Bgp_globalTemplate,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp_global.bgp_global import (
-    Bgp_globalArgs,
-)
 
 
 class Bgp_globalFacts(object):
-    """ The eos bgp_global facts class
-    """
+    """The eos bgp_global facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -38,10 +37,10 @@ class Bgp_globalFacts(object):
         """Wrapper method for `connection.get()`
         This method exists solely to allow the unit test framework to mock device connection calls.
         """
-        return connection.get("show running-config | section bgp ")
+        return connection.get("show running-config | section router\\sbgp ")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Bgp_global network resource
+        """Populate the facts for Bgp_global network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -52,7 +51,6 @@ class Bgp_globalFacts(object):
         """
         facts = {}
         objs = []
-
         if not data:
             data = self.get_config(connection)
 
@@ -60,8 +58,15 @@ class Bgp_globalFacts(object):
         bgp_global_config = []
         start = False
         self._af = False
+        not_bgp = False
         for bgp_line in data.splitlines():
-            if not start:
+            if "router " in bgp_line:
+                # Skip other protocol configs like router ospf etc
+                if "router bgp" not in bgp_line:
+                    not_bgp = True
+                    continue
+                not_bgp = False
+            if not start and not not_bgp:
                 bgp_global_config.append(bgp_line)
             if "address-family" in bgp_line:
                 start = True
@@ -71,7 +76,8 @@ class Bgp_globalFacts(object):
 
         # parse native config using the Bgp_global template
         bgp_global_parser = Bgp_globalTemplate(
-            lines=bgp_global_config, module=self._module
+            lines=bgp_global_config,
+            module=self._module,
         )
         objs = bgp_global_parser.parse()
 
@@ -88,7 +94,8 @@ class Bgp_globalFacts(object):
                     if "network" in vrf:
                         vrf["network"] = list(vrf["network"].values())
                         vrf["network"] = sorted(
-                            vrf["network"], key=lambda k: k["address"]
+                            vrf["network"],
+                            key=lambda k: k["address"],
                         )
                     if "aggregate_address" in vrf:
                         vrf["aggregate_address"] = sorted(
@@ -102,19 +109,23 @@ class Bgp_globalFacts(object):
             if "network" in objs:
                 objs["network"] = list(objs["network"].values())
                 objs["network"] = sorted(
-                    objs["network"], key=lambda k: k["address"]
+                    objs["network"],
+                    key=lambda k: k["address"],
                 )
             if "aggregate_address" in objs:
                 objs["aggregate_address"] = sorted(
-                    objs["aggregate_address"], key=lambda k: k["address"]
+                    objs["aggregate_address"],
+                    key=lambda k: k["address"],
                 )
 
         ansible_facts["ansible_network_resources"].pop("bgp_global", None)
 
         params = utils.remove_empties(
             bgp_global_parser.validate_config(
-                self.argument_spec, {"config": objs}, redact=True
-            )
+                self.argument_spec,
+                {"config": objs},
+                redact=True,
+            ),
         )
 
         facts["bgp_global"] = params.get("config", [])

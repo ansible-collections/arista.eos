@@ -5,25 +5,24 @@
     lines:
       - "interface Ethernet1"
       - "   lacp port-priority 30"
-      - "   lacp rate normal"
+      - "   lacp timer normal"
       - "interface Ethernet2"
       - "   no lacp port-priority"
-      - "   lacp rate fast"
+      - "   lacp timer fast"
 
 - become: true
   arista.eos.eos_facts:
     gather_network_resources: lacp_interfaces
 
-- set_fact:
+- ansible.builtin.set_fact:
     expected_config:
-
       - name: Ethernet1
         port_priority: 30
 
       - name: Ethernet2
-        rate: fast
+        timer: fast
 
-- assert:
+- ansible.builtin.assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.lacp_interfaces)
         == []

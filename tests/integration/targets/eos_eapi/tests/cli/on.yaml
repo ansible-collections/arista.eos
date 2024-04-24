@@ -1,5 +1,5 @@
 ---
-- debug: msg="START CLI/ON.YAML"
+- ansible.builtin.debug: msg="START CLI/ON.YAML"
 
 - name: Turn on all endpoints
   become: true
@@ -9,19 +9,14 @@
     enable_https: true
     enable_local_http: true
     enable_socket: true
-    provider: '{{ cli }}'
 
 - register: http_config
   arista.eos.eos_command:
     commands:
       - show management api http-commands | json
-    provider: '{{ cli }}'
-
-- debug: var=http_config
-  when: debug
 
 - name: Expect all EAPI endpoints to be in on state
-  assert:
+  ansible.builtin.assert:
     that:
       - http_config.stdout[0].httpServer.running == true
       - http_config.stdout[0].httpsServer.running == true
@@ -36,13 +31,12 @@
     enable_https: true
     enable_local_http: true
     enable_socket: true
-    provider: '{{ cli }}'
 
-- debug: var=eos_eapi_output
+- ansible.builtin.debug: var=eos_eapi_output
 
 - name: Expect action to be idempotent
-  assert:
+  ansible.builtin.assert:
     that:
       - eos_eapi_output.changed == false
 
-- debug: msg="START CLI/ON.YAML"
+- ansible.builtin.debug: msg="START CLI/ON.YAML"

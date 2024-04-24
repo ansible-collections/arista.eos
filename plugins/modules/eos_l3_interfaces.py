@@ -28,21 +28,24 @@ The module file for eos_l3_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 DOCUMENTATION = """
 module: eos_l3_interfaces
 short_description: L3 interfaces resource module
-description: This module provides declarative management of Layer 3 interfaces on
+description:
+  This module provides declarative management of Layer 3 interfaces on
   Arista EOS devices.
 version_added: 1.0.0
-author: Nathaniel Case (@qalthos)
+author: Nathaniel Case (@Qalthos)
 notes:
-- Tested against Arista EOS 4.20.10M
-- This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
-  'eos_l2_interfaces/eos_interfaces' should be used for preparing the interfaces , before applying L3 configurations using
-  this module (eos_l3_interfaces).
+  - Tested against Arista EOS 4.24.6F
+  - This module works with connection C(network_cli).
+    See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_eos.html)
+    'eos_l2_interfaces/eos_interfaces' should be used for preparing the interfaces,
+    before applying L3 configurations using this module (eos_l3_interfaces).
 options:
   config:
     description: A dictionary of Layer 3 interface options
@@ -51,233 +54,337 @@ options:
     suboptions:
       name:
         description:
-        - Full name of the interface, i.e. Ethernet1.
+          - Full name of the interface, i.e. Ethernet1.
         type: str
         required: true
       ipv4:
         description:
-        - List of IPv4 addresses to be set for the Layer 3 interface mentioned in
-          I(name) option.
+          - List of IPv4 addresses to be set for the Layer 3 interface mentioned in
+            I(name) option.
         type: list
         elements: dict
         suboptions:
           address:
             description:
-            - IPv4 address to be set in the format <ipv4 address>/<mask> eg. 192.0.2.1/24,
-              or C(dhcp) to query DHCP for an IP address.
+              - IPv4 address to be set in the format <ipv4 address>/<mask> eg. 192.0.2.1/24,
+                or C(dhcp) to query DHCP for an IP address.
             type: str
           secondary:
             description:
-            - Whether or not this address is a secondary address.
+              - Whether or not this address is a secondary address.
             type: bool
           virtual:
             description:
-            - Whether or not this address is a virtual address.
+              - Whether or not this address is a virtual address.
             type: bool
       ipv6:
         description:
-        - List of IPv6 addresses to be set for the Layer 3 interface mentioned in
-          I(name) option.
+          - List of IPv6 addresses to be set for the Layer 3 interface mentioned in
+            I(name) option.
         type: list
         elements: dict
         suboptions:
           address:
             description:
-            - IPv6 address to be set in the address format is <ipv6 address>/<mask>
-              eg. 2001:db8:2201:1::1/64 or C(auto-config) to use SLAAC to chose an
-              address.
+              - IPv6 address to be set in the address format is <ipv6 address>/<mask>
+                eg. 2001:db8:2201:1::1/64 or C(auto-config) to use SLAAC to chose an
+                address.
             type: str
   running_config:
     description:
-    - This option is used only with state I(parsed).
-    - The value of this option should be the output received from the EOS device by
-      executing the command B(show running-config | section ^interface).
-    - The state I(parsed) reads the configuration from C(running_config) option and
-      transforms it into Ansible structured data as per the resource module's argspec
-      and the value is then returned in the I(parsed) key within the result.
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the EOS device by
+        executing the command B(show running-config | section ^interface).
+      - The state I(parsed) reads the configuration from C(running_config) option and
+        transforms it into Ansible structured data as per the resource module's argspec
+        and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     description:
-    - The state of the configuration after module completion
+      - The state of the configuration after module completion
     type: str
     choices:
-    - merged
-    - replaced
-    - overridden
-    - deleted
-    - parsed
-    - gathered
-    - rendered
+      - merged
+      - replaced
+      - overridden
+      - deleted
+      - parsed
+      - gathered
+      - rendered
     default: merged
-
 """
 
 EXAMPLES = """
-
-# Using deleted
-
-# Before state:
-# -------------
-#
-# veos#show running-config | section interface
-# interface Ethernet1
-#    ip address 192.0.2.12/24
-# !
-# interface Ethernet2
-#    ipv6 address 2001:db8::1/64
-# !
-# interface Management1
-#    ip address dhcp
-#    ipv6 address auto-config
-
-- name: Delete L3 attributes of given interfaces.
-  arista.eos.eos_l3_interfaces:
-    config:
-    - name: Ethernet1
-    - name: Ethernet2
-    state: deleted
-
-# After state:
-# ------------
-#
-# veos#show running-config | section interface
-# interface Ethernet1
-# !
-# interface Ethernet2
-# !
-# interface Management1
-#    ip address dhcp
-#    ipv6 address auto-config
-
-
 # Using merged
 
 # Before state:
 # -------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    ip address 192.0.2.12/24
 # !
 # interface Ethernet2
-#    ipv6 address 2001:db8::1/64
+#    description Configured by Ansible
+#    shutdown
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
+#    dhcp client accept default-route
 
 - name: Merge provided configuration with device configuration.
   arista.eos.eos_l3_interfaces:
     config:
-    - name: Ethernet1
-      ipv4:
-      - address: 198.51.100.14/24
-    - name: Ethernet2
-      ipv4:
-      - address: 203.0.113.27/24
+      - name: Ethernet1
+        ipv4:
+          - address: 198.51.100.14/24
+      - name: Ethernet2
+        ipv4:
+          - address: 203.0.113.27/24
     state: merged
+
+# Task Output
+# -----------
+#
+# before:
+# - name: Ethernet1
+# - name: Ethernet2
+# - ipv4:
+#   - address: dhcp
+#   name: Management1
+# commands:
+# - interface Ethernet1
+# - ip address 198.51.100.14/24
+# - interface Ethernet2
+#   - ip address 203.0.113.27/24
+# after:
+# - ipv4:
+#   - address: 198.51.100.14/24
+#   name: Ethernet1
+# - ipv4:
+#   - address: 203.0.113.27/24
+#   name: Ethernet2
+# - ipv4:
+#   - address: dhcp
+#   name: Management1
 
 # After state:
 # ------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
 #    ip address 198.51.100.14/24
 # !
 # interface Ethernet2
+#    description Configured by Ansible
+#    shutdown
 #    ip address 203.0.113.27/24
-#    ipv6 address 2001:db8::1/64
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
-
+#    dhcp client accept default-route
 
 # Using overridden
 
 # Before state:
 # -------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    ip address 192.0.2.12/24
-# !
-# interface Ethernet2
-#    ipv6 address 2001:db8::1/64
-# !
-# interface Management1
-#    ip address dhcp
-#    ipv6 address auto-config
-
-- name: Override device configuration of all L2 interfaces on device with provided
-    configuration.
-  arista.eos.eos_l3_interfaces:
-    config:
-    - name: Ethernet1
-      ipv6:
-      - address: 2001:db8:feed::1/96
-    - name: Management1
-      ipv4:
-      - address: dhcp
-    ipv6: auto-config
-    state: overridden
-
-# After state:
-# ------------
-#
-# veos#show running-config | section interface
-# interface Ethernet1
-#    ipv6 address 2001:db8:feed::1/96
-# !
-# interface Ethernet2
-# !
-# interface Management1
-#    ip address dhcp
-#    ipv6 address auto-config
-
-
-# Using replaced
-
-# Before state:
-# -------------
-#
-# veos#show running-config | section interface
-# interface Ethernet1
-#    ip address 192.0.2.12/24
-# !
-# interface Ethernet2
-#    ipv6 address 2001:db8::1/64
-# !
-# interface Management1
-#    ip address dhcp
-#    ipv6 address auto-config
-
-- name: Replace device configuration of specified L2 interfaces with provided configuration.
-  arista.eos.eos_l3_interfaces:
-    config:
-    - name: Ethernet2
-      ipv4:
-      - address: 203.0.113.27/24
-    state: replaced
-
-# After state:
-# ------------
-#
-# veos#show running-config | section interface
-# interface Ethernet1
-#    ip address 192.0.2.12/24
+#    ip address 198.51.100.14/24
 # !
 # interface Ethernet2
 #    ip address 203.0.113.27/24
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
+#    dhcp client accept default-route
 
-# Using parsed:
+- name: Override device configuration of all L2 interfaces on device with provided
+    configuration.
+  arista.eos.eos_l3_interfaces:
+    config:
+      - name: Ethernet1
+        ipv6:
+          - address: 2001:db8:feed::1/96
+      - name: Ethernet2
+        ipv4:
+          - address: 203.0.113.27/24
+      - ipv4:
+          - address: dhcp
+        name: Management1
+    state: overridden
 
-# parsed.cfg
+# Task Output
+# -----------
+#
+# before:
+# - ipv4:
+#   - address: 198.51.100.14/24
+#   name: Ethernet1
+# - ipv4:
+#   - address: 203.0.113.27/24
+#   name: Ethernet2
+# - ipv4:
+#   - address: dhcp
+#   name: Management1
+# commands:
+# - interface Ethernet1
+# - ipv6 address 2001:db8:feed::1/96
+# - no ip address
+# after:
+# - ipv6:
+#   - address: 2001:db8:feed::1/96
+#   name: Ethernet1
+# - ipv4:
+#   - address: 203.0.113.27/24
+#   name: Ethernet2
+# - ipv4:
+#   - address: dhcp
+#   name: Management1
+
+# After state:
 # ------------
+#
+# test#show running-config | section interface
+# interface Ethernet1
+#    ipv6 address 2001:db8:feed::1/96
+# !
+# interface Ethernet2
+#    ip address 203.0.113.27/24
+# !
+# interface Management1
+#    ip address dhcp
+#    dhcp client accept default-route
+
+# Using replaced
+
+# Before state:
+# -------------
+#
+# test#show running-config | section interface
+# interface Ethernet1
+#    ipv6 address 2001:db8:feed::1/96
+# !
+# interface Ethernet2
+#    ip address 203.0.113.27/24
+# !
+# interface Management1
+#    ip address dhcp
+#    dhcp client accept default-route
+
+- name: Replace device configuration of specified L2 interfaces with provided configuration.
+  arista.eos.eos_l3_interfaces:
+    config:
+      - name: Ethernet2
+        ipv4:
+          - address: 203.0.113.27/24
+    state: replaced
+
+# Task Output
+# -----------
+#
+# before:
+# - ipv6:
+#   - address: 2001:db8:feed::1/96
+#   name: Ethernet1
+# - ipv4:
+#   - address: 203.0.113.27/24
+#   name: Ethernet2
+# - ipv4:
+#   - address: dhcp
+#   name: Management1
+# commands:
+# - interface Ethernet2
+# - ip address 203.0.113.28/24
+# after:
+# - ipv6:
+#   - address: 2001:db8:feed::1/96
+#   name: Ethernet1
+# - ipv4:
+#   - address: 203.0.113.28/24
+#   name: Ethernet2
+# - ipv4:
+#   - address: dhcp
+#   name: Management1
+
+# After state:
+# ------------
+#
+# test#show running-config | section interface
+# interface Ethernet1
+#    ipv6 address 2001:db8:feed::1/96
+# !
+# interface Ethernet2
+#    ip address 203.0.113.28/24
+# !
+# interface Management1
+#    ip address dhcp
+#    dhcp client accept default-route
+
+# Using deleted
+
+# Before state:
+# -------------
+#
+# test#show running-config | section interface
+# interface Ethernet1
+#    ipv6 address 2001:db8:feed::1/96
+# !
+# interface Ethernet2
+#    ip address 203.0.113.28/24
+# !
+# interface Management1
+#    ip address dhcp
+#    dhcp client accept default-route
+
+- name: Delete L3 attributes of given interfaces.
+  arista.eos.eos_l3_interfaces:
+    config:
+      - name: Ethernet1
+      - name: Ethernet2
+    state: deleted
+
+# Task Output
+# -----------
+#
+# before:
+# - ipv6:
+#   - address: 2001:db8:feed::1/96
+#   name: Ethernet1
+# - ipv4:
+#   - address: 203.0.113.28/24
+#   name: Ethernet2
+# - ipv4:
+#   - address: dhcp
+#   name: Management1
+# commands:
+# - interface Ethernet1
+# - no ipv6 address 2001:db8:feed::1/96
+# - interface Ethernet2
+# - no ip address
+# after:
+# - name: Ethernet1
+# - name: Ethernet2
+# - ipv4:
+#   - address: dhcp
+#   name: Management1
+
+# After state:
+# ------------
+#
+# test#show running-config | section interface
+# interface Ethernet1
+# !
+# interface Ethernet2
+# !
+# interface Management1
+#    ip address dhcp
+#    dhcp client accept default-route
+
+# Using Parsed
+
+# File: parsed.cfg
+# ----------------
 #
 # veos#show running-config | section interface
 # interface Ethernet1
@@ -292,41 +399,45 @@ EXAMPLES = """
     running_config: "{{ lookup('file', 'parsed.cfg') }}"
     state: parsed
 
-# Output:
-
+# Module Execution Result:
+# ------------------------
+#
 # parsed:
-#    - name: Ethernet1
-#      ipv4:
-#        - address: 198.51.100.14/24
-#    - name: Ethernet2
-#      ipv4:
-#        - address: 203.0.113.27/24
+#  - name: Ethernet1
+#    ipv4:
+#      - address: 198.51.100.14/24
+#  - name: Ethernet2
+#    ipv4:
+#      - address: 203.0.113.27/24
 
 # Using rendered:
 
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_l3_interfaces:
     config:
-    - name: Ethernet1
-      ipv4:
-      - address: 198.51.100.14/24
-    - name: Ethernet2
-      ipv4:
-      - address: 203.0.113.27/24
+      - name: Ethernet1
+        ipv4:
+          - address: 198.51.100.14/24
+      - name: Ethernet2
+        ipv4:
+          - address: 203.0.113.27/24
     state: rendered
 
-# Output
-# ------------
-#rendered:
-#   - "interface Ethernet1"
-#   - "ip address 198.51.100.14/24"
-#   - "interface Ethernet2"
-#   - "ip address 203.0.113.27/24"
+# Module Execution Result:
+# ------------------------
+#
+# rendered:
+# - interface Ethernet1
+# - ip address 198.51.100.14/24
+# - interface Ethernet2
+# - ip address 203.0.113.27/24
 
 # using gathered:
 
-# Native COnfig:
-# veos#show running-config | section interface
+# Before state:
+# -------------
+#
+# test#show running-config | section interface
 # interface Ethernet1
 #    ip address 198.51.100.14/24
 # !
@@ -338,40 +449,67 @@ EXAMPLES = """
   arista.eos.l3_interfaces:
     state: gathered
 
-#    gathered:
-#      - name: Ethernet1
-#        ipv4:
-#          - address: 198.51.100.14/24
-#      - name: Ethernet2
-#        ipv4:
-#          - address: 203.0.113.27/24
-
-
+# Module Execution Result:
+# ------------------------
+#
+# gathered:
+#  - name: Ethernet1
+#    ipv4:
+#      - address: 198.51.100.14/24
+#  - name: Ethernet2
+#    ipv4:
+#      - address: 203.0.113.27/24
 """
 RETURN = """
 before:
-  description: The configuration as structured data prior to module invocation.
-  returned: always
-  type: list
+  description: The configuration prior to the module execution.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: dict
   sample: >
-    The configuration returned will always be in the same format
-     of the parameters above.
+    This output will always be in the same format as the
+    module argspec.
 after:
-  description: The configuration as structured data after module completion.
+  description: The resulting configuration after module execution.
   returned: when changed
-  type: list
+  type: dict
   sample: >
-    The configuration returned will always be in the same format
-     of the parameters above.
+    This output will always be in the same format as the
+    module argspec.
 commands:
   description: The set of commands pushed to the remote device.
-  returned: always
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: list
-  sample: ['interface Ethernet2', 'ip address 192.0.2.12/24']
+  sample:
+    - interface Ethernet1
+    - ip address 198.51.100.14/24
+    - ipv6 address 2001:db8:feed::1/96
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+    - interface Ethernet1
+    - ip address 198.51.100.14/24
+    - ipv6 address 2001:db8:feed::1/96
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.l3_interfaces.l3_interfaces import (
     L3_interfacesArgs,
 )

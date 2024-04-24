@@ -3,8 +3,7 @@
   become: true
   arista.eos.eos_acl_interfaces:
     config:
+      - name: "{{ interfaces_lst['int1'] }}"
 
-      - name: "{{ Interfaces['int1'] }}"
-
-      - name: "{{ Interfaces['int2'] }}"
+      - name: "{{ interfaces_lst['int2'] }}"
     state: deleted

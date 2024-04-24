@@ -1,19 +1,17 @@
 ---
 # arista.eos.eos_config -> NetworkConfig, dumps
 
-- debug: msg="START cli/common_config.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/common_config.yaml on connection={{ ansible_connection }}"
 
 - name: setup
   arista.eos.eos_config:
     lines: hostname {{ inventory_hostname_short }}
     match: none
-    provider: "{{ cli }}"
   become: true
 
 - name: get current running-config
   arista.eos.eos_command:
     commands: show running-config
-    provider: "{{ cli }}"
   become: true
   register: config
 
@@ -21,11 +19,10 @@
   arista.eos.eos_config:
     lines: hostname foo
     config: "{{ config.stdout[0] }}"
-    provider: "{{ cli }}"
   become: true
   register: result
 
-- assert:
+- ansible.builtin.assert:
     that:
       - "result.changed == true"
       - "'hostname foo' in result.updates"
@@ -33,7 +30,6 @@
 - name: get current running-config
   arista.eos.eos_command:
     commands: show running-config
-    provider: "{{ cli }}"
   become: true
   register: config
 
@@ -41,7 +37,6 @@
   arista.eos.eos_config:
     lines: hostname {{ inventory_hostname_short }}
     match: none
-    provider: "{{ cli }}"
   become: true
 
 # hit block and diffs
@@ -56,7 +51,6 @@
         before: no ip access-list test
         after: exit
         match: strict
-        provider: "{{ cli }}"
       become: true
 
     - name: configure sub level command using block replace
@@ -69,12 +63,11 @@
         parents: ip access-list test
         replace: block
         after: exit
-        provider: "{{ cli }}"
         match: line
       become: true
       register: result
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - "result.changed == true"
           - "'ip access-list test' in result.updates"
@@ -93,7 +86,6 @@
         parents: ip access-list test
         replace: block
         after: exit
-        provider: "{{ cli }}"
         match: exact
       become: true
       register: result
@@ -103,7 +95,6 @@
       arista.eos.eos_config:
         lines: no ip access-list test
         match: none
-        provider: "{{ cli }}"
       become: true
 
-- debug: msg="END cli/common_config.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/common_config.yaml on connection={{ ansible_connection }}"

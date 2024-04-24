@@ -5,15 +5,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.plugins.modules import (
-    eos_bgp_address_family,
-)
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from unittest.mock import patch
+
+from ansible_collections.arista.eos.plugins.modules import eos_bgp_address_family
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -24,14 +23,12 @@ class TestEosBgpafModule(TestEosModule):
         super(TestEosBgpafModule, self).setUp()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_address_family.bgp_address_family.Bgp_afFacts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.bgp_address_family.bgp_address_family.Bgp_afFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -59,7 +56,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external"),
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
@@ -69,7 +66,7 @@ class TestEosBgpafModule(TestEosModule):
                                 dict(
                                     peer="peer2",
                                     default_originate=dict(always=True),
-                                )
+                                ),
                             ],
                             bgp_params=dict(additional_paths="receive"),
                         ),
@@ -82,13 +79,13 @@ class TestEosBgpafModule(TestEosModule):
                             afi="ipv6",
                             vrf="vrft",
                             redistribute=[
-                                dict(protocol="isis", isis_level="level-2")
+                                dict(protocol="isis", isis_level="level-2"),
                             ],
                         ),
                     ],
                 ),
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -101,31 +98,35 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external"),
                             ],
                             neighbor=[
                                 dict(
                                     peer="peer2",
                                     default_originate=dict(always=True),
-                                )
+                                ),
                             ],
                         ),
                         dict(afi="ipv6", graceful_restart=True),
                         dict(
                             afi="ipv4",
                             vrf="vrft",
-                            route_target=dict(mode="both", target="465:11"),
+                            route_target=dict(
+                                action="both",
+                                type="evpn",
+                                target="465:11",
+                            ),
                         ),
                     ],
                 ),
                 state="merged",
-            )
+            ),
         )
         commands = [
             "router bgp 10",
             "vrf vrft",
             "address-family ipv4",
-            "route-target both 465:11",
+            "route-target both evpn 465:11",
             "exit",
             "exit",
             "address-family ipv6",
@@ -144,25 +145,29 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external"),
                             ],
                             neighbor=[
                                 dict(
                                     peer="peer2",
                                     default_originate=dict(always=True),
-                                )
+                                ),
                             ],
                         ),
                         dict(afi="ipv6", graceful_restart=True),
                         dict(
                             afi="ipv4",
                             vrf="vrft",
-                            route_target=dict(mode="both", target="465:11"),
+                            route_target=dict(
+                                action="both",
+                                type="vpn-ipv4",
+                                target="465:11",
+                            ),
                         ),
                     ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "router bgp 10",
@@ -177,7 +182,7 @@ class TestEosBgpafModule(TestEosModule):
             "vrf vrft",
             "address-family ipv4",
             "no bgp additional-paths receive",
-            "route-target both 465:11",
+            "route-target both vpn-ipv4 465:11",
             "exit",
             "exit",
         ]
@@ -193,7 +198,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external"),
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
@@ -203,7 +208,7 @@ class TestEosBgpafModule(TestEosModule):
                                 dict(
                                     peer="peer2",
                                     default_originate=dict(always=True),
-                                )
+                                ),
                             ],
                             bgp_params=dict(additional_paths="receive"),
                         ),
@@ -216,13 +221,13 @@ class TestEosBgpafModule(TestEosModule):
                             afi="ipv6",
                             vrf="vrft",
                             redistribute=[
-                                dict(protocol="isis", isis_level="level-2")
+                                dict(protocol="isis", isis_level="level-2"),
                             ],
                         ),
                     ],
                 ),
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -235,25 +240,29 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external"),
                             ],
                             neighbor=[
                                 dict(
                                     peer="peer2",
                                     default_originate=dict(always=True),
-                                )
+                                ),
                             ],
                         ),
                         dict(afi="ipv6", graceful_restart=True),
                         dict(
                             afi="ipv4",
                             vrf="vrft",
-                            route_target=dict(mode="both", target="465:11"),
+                            route_target=dict(
+                                action="both",
+                                type="vpn-ipv6",
+                                target="465:11",
+                            ),
                         ),
                     ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "router bgp 10",
@@ -268,7 +277,7 @@ class TestEosBgpafModule(TestEosModule):
             "vrf vrft",
             "address-family ipv4",
             "no bgp additional-paths receive",
-            "route-target both 465:11",
+            "route-target both vpn-ipv6 465:11",
             "exit",
             "exit",
             "vrf vrft",
@@ -286,7 +295,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external"),
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
@@ -296,7 +305,7 @@ class TestEosBgpafModule(TestEosModule):
                                 dict(
                                     peer="peer2",
                                     default_originate=dict(always=True),
-                                )
+                                ),
                             ],
                             bgp_params=dict(additional_paths="receive"),
                         ),
@@ -309,13 +318,13 @@ class TestEosBgpafModule(TestEosModule):
                             afi="ipv6",
                             vrf="vrft",
                             redistribute=[
-                                dict(protocol="isis", isis_level="level-2")
+                                dict(protocol="isis", isis_level="level-2"),
                             ],
                         ),
                     ],
                 ),
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -330,7 +339,7 @@ class TestEosBgpafModule(TestEosModule):
                     ],
                 ),
                 state="deleted",
-            )
+            ),
         )
         commands = [
             "router bgp 10",
@@ -342,7 +351,6 @@ class TestEosBgpafModule(TestEosModule):
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_bgp_af_parsed(self):
-
         commands = [
             "router bgp 10",
             "address-family ipv4",
@@ -355,8 +363,8 @@ class TestEosBgpafModule(TestEosModule):
             "!",
             "vrf vrft",
             "address-family ipv4",
-            "redistribute ospf3 match external",
-            "route-target both 465:11",
+            "redistribute ospfv3 match external",
+            "route-target both vpn-ipv4 465:11",
             "!",
         ]
 
@@ -369,13 +377,13 @@ class TestEosBgpafModule(TestEosModule):
                 {
                     "afi": "ipv4",
                     "network": [
-                        {"address": "1.5.1.0/24", "route_map": "MAP01"}
+                        {"address": "1.5.1.0/24", "route_map": "MAP01"},
                     ],
                 },
                 {
                     "afi": "ipv6",
                     "redistribute": [
-                        {"protocol": "isis", "isis_level": "level-1"}
+                        {"protocol": "isis", "isis_level": "level-1"},
                     ],
                     "graceful_restart": True,
                     "bgp_params": {"additional_paths": "receive"},
@@ -384,9 +392,13 @@ class TestEosBgpafModule(TestEosModule):
                     "afi": "ipv4",
                     "vrf": "vrft",
                     "redistribute": [
-                        {"protocol": "ospf3", "ospf_route": "external`"}
+                        {"protocol": "ospfv3", "ospf_route": "external`"},
                     ],
-                    "route_target": {"mode": "both", "target": "465:11"},
+                    "route_target": {
+                        "action": "both",
+                        "type": "vpn-ipv4",
+                        "target": "465:11",
+                    },
                 },
             ],
         }
@@ -395,7 +407,8 @@ class TestEosBgpafModule(TestEosModule):
     def test_eos_bgp_af_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_bgp_af_config.cfg"
+            changed=False,
+            filename="eos_bgp_af_config.cfg",
         )
         gather_list = {
             "address_family": [
@@ -406,14 +419,14 @@ class TestEosBgpafModule(TestEosModule):
                         {
                             "default_originate": {"always": True},
                             "peer": "peer2",
-                        }
+                        },
                     ],
                     "network": [
                         {"address": "1.1.1.0/24"},
                         {"address": "1.5.1.0/24", "route_map": "MAP01"},
                     ],
                     "redistribute": [
-                        {"ospf_route": "external", "protocol": "ospf3"}
+                        {"ospf_route": "external", "protocol": "ospfv3"},
                     ],
                 },
                 {
@@ -424,7 +437,7 @@ class TestEosBgpafModule(TestEosModule):
                 {
                     "afi": "ipv6",
                     "redistribute": [
-                        {"isis_level": "level-2", "protocol": "isis"}
+                        {"isis_level": "level-2", "protocol": "isis"},
                     ],
                     "vrf": "vrft",
                 },
@@ -442,7 +455,7 @@ class TestEosBgpafModule(TestEosModule):
                         dict(
                             afi="ipv4",
                             redistribute=[
-                                dict(protocol="ospf3", ospf_route="external")
+                                dict(protocol="ospfv3", ospf_route="external"),
                             ],
                             network=[
                                 dict(address="1.1.1.0/24"),
@@ -452,7 +465,7 @@ class TestEosBgpafModule(TestEosModule):
                                 dict(
                                     peer="peer2",
                                     default_originate=dict(always=True),
-                                )
+                                ),
                             ],
                             bgp_params=dict(additional_paths="receive"),
                         ),
@@ -464,13 +477,13 @@ class TestEosBgpafModule(TestEosModule):
                     ],
                 ),
                 state="rendered",
-            )
+            ),
         )
         self.execute_module(changed=False)
         rendered_cmds = [
             "router bgp 10",
             "address-family ipv4",
-            "redistribute ospf3 match external",
+            "redistribute ospfv3 match external",
             "network 1.1.1.0/24",
             "network 1.5.1.0/24 route-map MAP01",
             "neighbor peer2 default-originate always",

@@ -266,7 +266,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False, key string is not encrypted</div>
+                        <div>If false, key string is not encrypted</div>
                 </td>
             </tr>
             <tr>
@@ -290,7 +290,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Specifies that a HIDDEN key will follow.</div>
+                        <div>If true, Specifies that a HIDDEN key will follow.</div>
                 </td>
             </tr>
             <tr>
@@ -437,7 +437,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False, key string is not encrypted</div>
+                        <div>If false, key string is not encrypted</div>
                 </td>
             </tr>
             <tr>
@@ -488,7 +488,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Specifies that a HIDDEN key will follow.</div>
+                        <div>If true, Specifies that a HIDDEN key will follow.</div>
                 </td>
             </tr>
             <tr>
@@ -680,7 +680,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only default information orignate is set</div>
+                        <div>true if only default information orignate is set</div>
                 </td>
             </tr>
 
@@ -753,7 +753,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only nssa is set</div>
+                        <div>true if only nssa is set</div>
                 </td>
             </tr>
             <tr>
@@ -946,7 +946,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only stub is set</div>
+                        <div>true if only stub is set</div>
                 </td>
             </tr>
             <tr>
@@ -970,7 +970,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False , Filter all type-3 LSAs in the stub area.</div>
+                        <div>If false , Filter all type-3 LSAs in the stub area.</div>
                 </td>
             </tr>
 
@@ -1315,7 +1315,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Enable graceful restart helper.</div>
+                        <div>If true, Enable graceful restart helper.</div>
                 </td>
             </tr>
             <tr>
@@ -1842,15 +1842,100 @@ Parameters
                     <b>lsa</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
+                        <span style="color: purple">raw</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Configure OSPFv3 LSA timers.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>direction</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>rx</li>
+                                    <li>tx</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Configure OSPFv3 LSA receiving/transmission timers.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>initial</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
                         <span style="color: purple">integer</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Configure OSPF LSA timers.</div>
+                        <div>Initial SPF schedule delay in msecs.</div>
                 </td>
             </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>max</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Max wait time between two SPFs in msecs.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>min</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Min Hold time between two SPFs in msecs</div>
+                </td>
+            </tr>
+
             <tr>
                     <td class="elbow-placeholder"></td>
                     <td class="elbow-placeholder"></td>
@@ -1896,7 +1981,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="3">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>throttle</b>
+                    <b>spf</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
@@ -1905,7 +1990,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Configure SPF timers</div>
+                        <div>Configure OSPFv3 spf timers.</div>
                 </td>
             </tr>
                                 <tr>
@@ -1926,30 +2011,6 @@ Parameters
                 </td>
                 <td>
                         <div>Initial SPF schedule delay in msecs.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>lsa</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure threshold for retransmission of lsa</div>
                 </td>
             </tr>
             <tr>
@@ -1990,30 +2051,6 @@ Parameters
                 </td>
                 <td>
                         <div>Min Hold time between two SPFs in msecs</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="2">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>spf</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure time between SPF calculations</div>
                 </td>
             </tr>
 
@@ -2172,7 +2209,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False, key string is not encrypted</div>
+                        <div>If false, key string is not encrypted</div>
                 </td>
             </tr>
             <tr>
@@ -2195,7 +2232,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Specifies that a HIDDEN key will follow.</div>
+                        <div>If true, Specifies that a HIDDEN key will follow.</div>
                 </td>
             </tr>
             <tr>
@@ -2335,7 +2372,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False, key string is not encrypted</div>
+                        <div>If false, key string is not encrypted</div>
                 </td>
             </tr>
             <tr>
@@ -2384,7 +2421,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Specifies that a HIDDEN key will follow.</div>
+                        <div>If true, Specifies that a HIDDEN key will follow.</div>
                 </td>
             </tr>
             <tr>
@@ -2567,7 +2604,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only default information orignate is set</div>
+                        <div>true if only default information orignate is set</div>
                 </td>
             </tr>
 
@@ -2637,7 +2674,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only nssa is set</div>
+                        <div>true if only nssa is set</div>
                 </td>
             </tr>
             <tr>
@@ -2702,7 +2739,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>True if only stub is set.</div>
+                        <div>true if only stub is set.</div>
                 </td>
             </tr>
             <tr>
@@ -2725,7 +2762,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If False , Filter all type-3 LSAs in the stub area.</div>
+                        <div>If false , Filter all type-3 LSAs in the stub area.</div>
                 </td>
             </tr>
 
@@ -2903,7 +2940,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, Enable graceful restart helper.</div>
+                        <div>If true, Enable graceful restart helper.</div>
                 </td>
             </tr>
             <tr>
@@ -3328,15 +3365,96 @@ Parameters
                     <b>lsa</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
+                        <span style="color: purple">raw</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Configure OSPFv3 LSA timers.</div>
+                </td>
+            </tr>
+                                <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>direction</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>rx</li>
+                                    <li>tx</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Configure OSPFv3 LSA receiving/transmission timers.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>initial</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
                         <span style="color: purple">integer</span>
                     </div>
                 </td>
                 <td>
                 </td>
                 <td>
-                        <div>Configure OSPF LSA timers.</div>
+                        <div>Initial SPF schedule delay in msecs.</div>
                 </td>
             </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>max</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Max wait time between two SPFs in msecs.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="3">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>min</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">integer</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Min Hold time between two SPFs in msecs</div>
+                </td>
+            </tr>
+
             <tr>
                     <td class="elbow-placeholder"></td>
                     <td class="elbow-placeholder"></td>
@@ -3379,7 +3497,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>throttle</b>
+                    <b>spf</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">dictionary</span>
@@ -3388,7 +3506,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Configure SPF timers</div>
+                        <div>Configure OSPFv3 spf timers.</div>
                 </td>
             </tr>
                                 <tr>
@@ -3408,29 +3526,6 @@ Parameters
                 </td>
                 <td>
                         <div>Initial SPF schedule delay in msecs.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>lsa</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure threshold for retransmission of lsa</div>
                 </td>
             </tr>
             <tr>
@@ -3469,29 +3564,6 @@ Parameters
                 </td>
                 <td>
                         <div>Min Hold time between two SPFs in msecs</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="3">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>spf</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">boolean</span>
-                    </div>
-                </td>
-                <td>
-                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>no</li>
-                                    <li>yes</li>
-                        </ul>
-                </td>
-                <td>
-                        <div>Configure time between SPF calculations</div>
                 </td>
             </tr>
 
@@ -3564,7 +3636,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Arista EOS 4.23.0F
+   - Tested against Arista EOS 4.24.6F
    - This module works with connection ``network_cli``. See the `EOS Platform Options <../network/user_guide/platform_eos.html>`_.
 
 
@@ -3576,33 +3648,63 @@ Examples
 
     # Using merged
 
-    # Before state
-
+    # Before state:
+    # -------------
     # veos#show running-config | section ospfv3
     # veos#
 
+    - name: Merge the provided configuration with the existing running configuration
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - timers:
+                    lsa: 22
+                  graceful_restart:
+                    grace_period: 35
+                  afi: "ipv6"
+              timers:
+                pacing: 55
+              fips_restrictions: true
+              router_id: "2.2.2.2"
+              vrf: "vrfmerge"
+        state: merged
 
-      -  arista.eos.eos_ospfv3:
-          config:
-            processes:
-              - address_family:
-                  - timers:
-                      lsa: 22
-                    graceful_restart:
-                      grace_period: 35
-                    afi: "ipv6"
-                timers:
-                  pacing: 55
-                fips_restrictions: True
-                router_id: "2.2.2.2"
-                vrf: "vrfmerge"
 
+    # Task output:
+    # ------------
+    # before: {}
+    #
+    # commands:
+    # - router ospfv3 vrf vrfmerge
+    # - address-family ipv6
+    # - graceful-restart grace-period 35
+    # - timers lsa arrival 22
+    # - exit
+    # - timers pacing flood 55
+    # - fips restrictions
+    # - router-id 2.2.2.2
+    # - exit
+    #
+    # after:
+    #     processes:
+    #     - address_family:
+    #       - afi: ipv6
+    #         fips_restrictions: true
+    #         graceful_restart:
+    #           grace_period: 35
+    #       fips_restrictions: true
+    #       router_id: 2.2.2.2
+    #       timers:
+    #         pacing: 55
+    #       vrf: vrfmerge
 
-    # After state
-
+    # After state:
+    # ------------
     # veos#show running-config | section ospfv3
     # router ospfv3 vrf vrfmerge
     #    router-id 2.2.2.2
+    # test
     #    fips restrictions
     #    timers pacing flood 55
     #    !
@@ -3610,52 +3712,11 @@ Examples
     #       fips restrictions
     #       timers lsa arrival 22
     #       graceful-restart grace-period 35
-    # veos#
-
-    # Module Execution
-    #     "after": {
-    #         "processes": [
-    #             {
-    #                 "address_family": [
-    #                     {
-    #                         "afi": "ipv6",
-    #                         "fips_restrictions": true,
-    #                         "graceful_restart": {
-    #                             "grace_period": 35
-    #                         },
-    #                         "timers": {
-    #                             "lsa": 22
-    #                         }
-    #                     }
-    #                 ],
-    #                 "fips_restrictions": true,
-    #                 "router_id": "2.2.2.2",
-    #                 "timers": {
-    #                     "pacing": 55
-    #                 },
-    #                 "vrf": "vrfmerge"
-    #             }
-    #         ]
-    #     },
-    #     "before": {},
-    #     "changed": true,
-    #     "commands": [
-    #         "router ospfv3 vrf vrfmerge",
-    #         "address-family ipv6",
-    #         "graceful-restart grace-period 35",
-    #         "timers lsa arrival 22",
-    #         "exit",
-    #         "timers pacing flood 55",
-    #         "fips restrictions",
-    #         "router-id 2.2.2.2",
-    #         "exit"
-    #     ],
-
 
     # using replaced
 
-    # before state
-
+    # Before state:
+    # -------------
     # veos#show running-config | section ospfv3
     # router ospfv3
     #    fips restrictions
@@ -3670,27 +3731,89 @@ Examples
     #       fips restrictions
     #       timers lsa arrival 22
     #       graceful-restart grace-period 35
-    # veos#
 
+    - name: Replace a section of running config with provided config
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - areas:
+                - area_id: "0.0.0.0"
+                  encryption:
+                    spi: 43
+                    encryption: "null"
+                    algorithm: "md5"
+                    encrypt_key: false
+                    passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
+              vrf: "default"
+              address_family:
+                - afi: "ipv4"
+                  router_id: "7.1.1.1"
+        state: replaced
 
-      - arista.eos.eos_ospfv3:
-          config:
-            processes:
-              - areas:
-                  - area_id: "0.0.0.0"
-                    encryption:
-                      spi: 43
-                      encryption: "null"
-                      algorithm: "md5"
-                      encrypt_key: False
-                      passphrase: "7hl8FV3lZ6H1mAKpjL47hQ=="
-                vrf: "default"
-                address_family:
-                  - afi: "ipv4"
-                    router_id: "7.1.1.1"
-          state: replaced
+    # Task output:
+    # ------------
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: 0.0.0.0
+    #         encryption:
+    #           algorithm: md5
+    #           encryption: 'null'
+    #           hidden_key: true
+    #           passphrase: VALUE_SPECIFIED_IN_NO_LOG_PARAMETER
+    #           spi: 43
+    #       fips_restrictions: true
+    #       vrf: default
+    #     - address_family:
+    #       - afi: ipv6
+    #         fips_restrictions: true
+    #         graceful_restart:
+    #           grace_period: 35
+    #       fips_restrictions: true
+    #       router_id: 2.2.2.2
+    #       timers:
+    #         pacing: 55
+    #       vrf: vrfmerge
+    #
+    # commands:
+    # - router ospfv3 vrf vrfmerge
+    # - address-family ipv6
+    # - no fips restrictions
+    # - no graceful-restart
+    # - no timers lsa arrival 22
+    # - area 0.0.0.3 range 10.1.2.2/24 advertise
+    # - area 0.0.0.3 range 60.1.1.1 255.255.0.0 cost 30
+    # - exit
+    # - passive-interface default
+    # - no router-id
+    # - no fips restrictions
+    # - no timers pacing flood 55
+    # - exit
+    #
+    # after:
+    #     processes:
+    #     - areas:
+    #       - area_id: 0.0.0.0
+    #         encryption:
+    #           algorithm: md5
+    #           encryption: 'null'
+    #           hidden_key: true
+    #           passphrase: VALUE_SPECIFIED_IN_NO_LOG_PARAMETER
+    #           spi: 43
+    #       vrf: default
+    #     - address_family:
+    #       - afi: ipv6
+    #         areas:
+    #         - area_id: 0.0.0.3
+    #           ranges:
+    #           - address: 10.1.2.0/24
+    #           - address: 60.1.0.0/16
+    #             cost: 30
+    #       passive_interface: true
+    #       vrf: vrfmerge
 
-    # After state
+    # After state:
+    # ------------
     # veos#show running-config | section ospfv3
     # router ospfv3
     #    area 0.0.0.0 encryption ipsec spi 43 esp null md5 passphrase 7 h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4=
@@ -3701,112 +3824,11 @@ Examples
     #    address-family ipv6
     #       area 0.0.0.3 range 10.1.2.0/24
     #       area 0.0.0.3 range 60.1.0.0/16 cost 30
-    # veos#
-
-    # Module execution
-
-    # "after": {
-    #     "processes": [
-    #         {
-    #             "areas": [
-    #                 {
-    #                     "area_id": "0.0.0.0",
-    #                     "encryption": {
-    #                         "algorithm": "md5",
-    #                         "encryption": "null",
-    #                         "hidden_key": true,
-    #                         "passphrase": "h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4="
-    #                     }
-    #                 }
-    #             ],
-    #             "vrf": "default"
-    #         },
-    #         {
-    #             "address_family": [
-    #                 {
-    #                     "afi": "ipv6",
-    #                     "areas": [
-    #                         {
-    #                             "area_id": "0.0.0.3",
-    #                             "ranges": [
-    #                                 {
-    #                                     "address": "10.1.2.0/24"
-    #                                 },
-    #                                 {
-    #                                     "address": "60.1.0.0/16",
-    #                                     "cost": 30
-    #                                 }
-    #                             ]
-    #                         }
-    #                     ]
-    #                 }
-    #             ],
-    #             "passive_interface": true,
-    #             "vrf": "vrfmerge"
-    #         }
-    #     ]
-    # },
-    # "before": {
-    #     "processes": [
-    #         {
-    #             "areas": [
-    #                 {
-    #                     "area_id": "0.0.0.0",
-    #                     "encryption": {
-    #                         "algorithm": "md5",
-    #                         "encryption": "null",
-    #                         "hidden_key": true,
-    #                         "passphrase": "h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4="
-    #                     }
-    #                 }
-    #             ],
-    #             "fips_restrictions": true,
-    #             "vrf": "default"
-    #         },
-    #         {
-    #             "address_family": [
-    #                 {
-    #                     "afi": "ipv6",
-    #                     "fips_restrictions": true,
-    #                     "graceful_restart": {
-    #                         "grace_period": 35
-    #                     },
-    #                     "timers": {
-    #                         "lsa": 22
-    #                     }
-    #                 }
-    #             ],
-    #             "fips_restrictions": true,
-    #             "router_id": "2.2.2.2",
-    #             "timers": {
-    #                 "pacing": 55
-    #             },
-    #             "vrf": "vrfmerge"
-    #         }
-    #     ]
-    # },
-    # "changed": true,
-    # "commands": [
-    #     "router ospfv3 vrf vrfmerge",
-    #     "address-family ipv6",
-    #     "no fips restrictions",
-    #     "no graceful-restart",
-    #     "no timers lsa arrival 22",
-    #     "area 0.0.0.3 range 10.1.2.2/24 advertise",
-    #     "area 0.0.0.3 range 60.1.1.1 255.255.0.0 cost 30",
-    #     "exit",
-    #     "passive-interface default",
-    #     "no router-id",
-    #     "no fips restrictions",
-    #     "no timers pacing flood 55",
-    #     "exit"
-    # ],
-
 
     # using overridden
 
-    # before state
-
+    # Before state:
+    # -------------
     # veos#show running-config | section ospfv3
     # router ospfv3
     #    area 0.0.0.0 encryption ipsec spi 43 esp null md5 passphrase 7 h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4=
@@ -3817,28 +3839,75 @@ Examples
     #    address-family ipv6
     #       area 0.0.0.3 range 10.1.2.0/24
     #       area 0.0.0.3 range 60.1.0.0/16 cost 30
-    # veos#
 
+    - name: Override running config with provided config
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - areas:
+                    - area_id: "0.0.0.3"
+                      ranges:
+                        - address: 10.1.2.2/24
+                          advertise: true
+                        - address: 60.1.1.1
+                          subnet_mask: 255.255.0.0
+                          cost: 30
+                  afi: "ipv6"
+              passive_interface: true
+              vrf: "vrfmerge"
+        state: overridden
 
-      -  arista.eos.eos_ospfv3:
-          config:
-            processes:
-              - address_family:
-                  - areas:
-                      - area_id: "0.0.0.3"
-                        ranges:
-                          - address: 10.1.2.2/24
-                            advertise: True
-                          - address: 60.1.1.1
-                            subnet_mask: 255.255.0.0
-                            cost: 30
-                    afi: "ipv6"
-                passive_interface: True
-                vrf: "vrfmerge"
-          state: overridden
+    # Task output:
+    # ------------
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: 0.0.0.0
+    #         encryption:
+    #           algorithm: md5
+    #           encryption: 'null'
+    #           hidden_key: true
+    #           passphrase: VALUE_SPECIFIED_IN_NO_LOG_PARAMETER
+    #           spi: 43
+    #       vrf: default
+    #     - address_family:
+    #       - afi: ipv6
+    #         areas:
+    #         - area_id: 0.0.0.3
+    #           ranges:
+    #           - address: 10.1.2.0/24
+    #           - address: 60.1.0.0/16
+    #             cost: 30
+    #       passive_interface: true
+    #       vrf: vrfmerge
+    #
+    # commands:
+    # - no router ospfv3
+    # - router ospfv3 vrf vrfmerge
+    # - address-family ipv6
+    # - no area 0.0.0.3 range 10.1.2.0/24
+    # - no area 0.0.0.3 range 60.1.0.0/16 cost 30
+    # - area 0.0.0.3 range 10.1.2.2/24 advertise
+    # - area 0.0.0.3 range 60.1.1.1 255.255.0.0 cost 30
+    # - exit
+    # - exit
+    #
+    # after:
+    #     processes:
+    #     - address_family:
+    #       - afi: ipv6
+    #         areas:
+    #         - area_id: 0.0.0.3
+    #           ranges:
+    #           - address: 10.1.2.0/24
+    #           - address: 60.1.0.0/16
+    #             cost: 30
+    #       passive_interface: true
+    #       vrf: vrfmerge
 
-    # After state
-
+    # After state:
+    # ------------
     # veos#show running-config | section ospfv3
     # router ospfv3 vrf vrfmerge
     #    passive-interface default
@@ -3846,97 +3915,11 @@ Examples
     #    address-family ipv6
     #       area 0.0.0.3 range 10.1.2.0/24
     #       area 0.0.0.3 range 60.1.0.0/16 cost 30
-    # veos#
-
-
-
-    # Module execution
-
-    # "after": {
-    #     "processes": [
-    #         {
-    #             "address_family": [
-    #                 {
-    #                     "afi": "ipv6",
-    #                     "areas": [
-    #                         {
-    #                             "area_id": "0.0.0.3",
-    #                             "ranges": [
-    #                                 {
-    #                                     "address": "10.1.2.0/24"
-    #                                 },
-    #                                 {
-    #                                     "address": "60.1.0.0/16",
-    #                                     "cost": 30
-    #                                 }
-    #                             ]
-    #                         }
-    #                     ]
-    #                 }
-    #             ],
-    #             "passive_interface": true,
-    #             "vrf": "vrfmerge"
-    #         }
-    #     ]
-    # },
-    # "before": {
-    #     "processes": [
-    #         {
-    #             "areas": [
-    #                 {
-    #                     "area_id": "0.0.0.0",
-    #                     "encryption": {
-    #                         "algorithm": "md5",
-    #                         "encryption": "null",
-    #                         "hidden_key": true,
-    #                         "passphrase": "h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4="
-    #                     }
-    #                 }
-    #             ],
-    #             "vrf": "default"
-    #         },
-    #         {
-    #             "address_family": [
-    #                 {
-    #                     "afi": "ipv6",
-    #                     "areas": [
-    #                         {
-    #                             "area_id": "0.0.0.3",
-    #                             "ranges": [
-    #                                 {
-    #                                     "address": "10.1.2.0/24"
-    #                                 },
-    #                                 {
-    #                                     "address": "60.1.0.0/16",
-    #                                     "cost": 30
-    #                                 }
-    #                             ]
-    #                         }
-    #                     ]
-    #                 }
-    #             ],
-    #             "passive_interface": true,
-    #             "vrf": "vrfmerge"
-    #         }
-    #     ]
-    # },
-    # "changed": true,
-    # "commands": [
-    #     "no router ospfv3",
-    #     "router ospfv3 vrf vrfmerge",
-    #     "address-family ipv6",
-    #     "no area 0.0.0.3 range 10.1.2.0/24",
-    #     "no area 0.0.0.3 range 60.1.0.0/16 cost 30",
-    #     "area 0.0.0.3 range 10.1.2.2/24 advertise",
-    #     "area 0.0.0.3 range 60.1.1.1 255.255.0.0 cost 30",
-    #     "exit",
-    #     "exit"
-    # ],
 
     # using deleted
 
-    # Before state
-
+    # Before state:
+    # -------------
     # veos#show running-config | section ospfv3
     # router ospfv3
     #    area 0.0.0.0 encryption ipsec spi 43 esp null md5 passphrase 7 h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4=
@@ -3953,17 +3936,56 @@ Examples
     #    address-family ipv6
     #       area 0.0.0.3 range 10.1.2.0/24
     #       area 0.0.0.3 range 60.1.0.0/16 cost 30
-    # veos#
 
+    - name: Delete OSPFv3 config
+      arista.eos.eos_ospfv3:
+        config:
+        state: deleted
 
-      -  arista.eos.eos_ospfv3:
-          config:
-            processes:
-              - vrf: "default"
-          state: deleted
+    # Task output:
+    # ------------
 
-    # After state
+    # before:
+    #     processes:
+    #     - areas:
+    #       - area_id: 0.0.0.0
+    #         encryption:
+    #           algorithm: md5
+    #           encryption: 'null'
+    #           hidden_key: true
+    #           passphrase: VALUE_SPECIFIED_IN_NO_LOG_PARAMETER
+    #           spi: 43
+    #       vrf: default
+    #     - address_family:
+    #       - afi: ipv4
+    #         areas:
+    #         - area_id: 0.0.0.3
+    #           ranges:
+    #           - address: 10.1.2.0/24
+    #           - address: 60.1.0.0/16
+    #             cost: 30
+    #         redistribute:
+    #         - routes: connected
+    #         - route_map: MAP01
+    #           routes: static
+    #       - afi: ipv6
+    #         areas:
+    #         - area_id: 0.0.0.3
+    #           ranges:
+    #           - address: 10.1.2.0/24
+    #           - address: 60.1.0.0/16
+    #             cost: 30
+    #       passive_interface: true
+    #       vrf: vrfmerge
+    #
+    # commands:
+    #
+    # - no router ospfv3
+    #
+    # after: {}
 
+    # After state:
+    # ------------
     # veos#show running-config | section ospfv3
     # router ospfv3 vrf vrfmerge
     #    passive-interface default
@@ -3977,139 +3999,10 @@ Examples
     #    address-family ipv6
     #       area 0.0.0.3 range 10.1.2.0/24
     #       area 0.0.0.3 range 60.1.0.0/16 cost 30
-    # veos#
-
-
-    # Module execution
-    # "after": {
-    #     "processes": [
-    #         {
-    #             "address_family": [
-    #                 {
-    #                     "afi": "ipv4",
-    #                     "areas": [
-    #                         {
-    #                             "area_id": "0.0.0.3",
-    #                             "ranges": [
-    #                                 {
-    #                                     "address": "10.1.2.0/24"
-    #                                 },
-    #                                 {
-    #                                     "address": "60.1.0.0/16",
-    #                                     "cost": 30
-    #                                 }
-    #                             ]
-    #                         }
-    #                     ],
-    #                     "redistribute": [
-    #                         {
-    #                             "routes": "connected"
-    #                         },
-    #                         {
-    #                             "route_map": "MAP01",
-    #                             "routes": "static"
-    #                         }
-    #                     ]
-    #                 },
-    #                 {
-    #                     "afi": "ipv6",
-    #                     "areas": [
-    #                         {
-    #                             "area_id": "0.0.0.3",
-    #                             "ranges": [
-    #                                 {
-    #                                     "address": "10.1.2.0/24"
-    #                                 },
-    #                                 {
-    #                                     "address": "60.1.0.0/16",
-    #                                     "cost": 30
-    #                                 }
-    #                             ]
-    #                         }
-    #                     ]
-    #                 }
-    #             ],
-    #             "passive_interface": true,
-    #             "vrf": "vrfmerge"
-    #         }
-    #     ]
-    # },
-    # "before": {
-    #     "processes": [
-    #         {
-    #             "areas": [
-    #                 {
-    #                     "area_id": "0.0.0.0",
-    #                     "encryption": {
-    #                         "algorithm": "md5",
-    #                         "encryption": "null",
-    #                         "hidden_key": true,
-    #                         "passphrase": "h8pZp9eprTYjjoY/NKFFe0Ei7x03Y7dyLotRhI0a5t4="
-    #                     }
-    #                 }
-    #             ],
-    #             "vrf": "default"
-    #         },
-    #         {
-    #             "address_family": [
-    #                 {
-    #                     "afi": "ipv4",
-    #                     "areas": [
-    #                         {
-    #                             "area_id": "0.0.0.3",
-    #                             "ranges": [
-    #                                 {
-    #                                     "address": "10.1.2.0/24"
-    #                                 },
-    #                                 {
-    #                                     "address": "60.1.0.0/16",
-    #                                     "cost": 30
-    #                                 }
-    #                             ]
-    #                         }
-    #                     ],
-    #                     "redistribute": [
-    #                         {
-    #                             "routes": "connected"
-    #                         },
-    #                         {
-    #                             "route_map": "MAP01",
-    #                             "routes": "static"
-    #                         }
-    #                     ]
-    #                 },
-    #                 {
-    #                     "afi": "ipv6",
-    #                     "areas": [
-    #                         {
-    #                             "area_id": "0.0.0.3",
-    #                             "ranges": [
-    #                                 {
-    #                                     "address": "10.1.2.0/24"
-    #                                 },
-    #                                 {
-    #                                     "address": "60.1.0.0/16",
-    #                                     "cost": 30
-    #                                 }
-    #                             ]
-    #                         }
-    #                     ]
-    #                 }
-    #             ],
-    #             "passive_interface": true,
-    #             "vrf": "vrfmerge"
-    #         }
-    #     ]
-    # },
-    # "changed": true,
-    # "commands": [
-    #     "no router ospfv3"
-    # ],
 
     # using parsed
 
     # parsed_ospfv3.cfg
-
     # router ospfv3
     #    fips restrictions
     #    area 0.0.0.20 stub
@@ -4153,163 +4046,104 @@ Examples
     #       distance ospf intra-area 200
     #       fips restrictions
     #       area 0.0.0.1 stub
-    #       timers throttle spf 56 56 56
+    #       timers spf delay initial 56 56 56
     #       timers out-delay 10
 
+    - name: Parse the provided config
+      arista.eos.eos_ospfv3:
+        running_config: "{{ lookup('file', './parsed_ospfv3.cfg') }}"
+        state: parsed
 
-      -  arista.eos.eos_ospfv3:
-          running_config: "{{ lookup('file', './parsed_ospfv3.cfg') }}"
-          state: parsed
-
-    # Module execution
-
-    # "parsed": {
-    #         "processes": [
-    #             {
-    #                 "address_family": [
-    #                     {
-    #                         "afi": "ipv4",
-    #                         "fips_restrictions": true,
-    #                         "redistribute": [
-    #                             {
-    #                                 "routes": "connected"
-    #                             }
-    #                         ]
-    #                     },
-    #                     {
-    #                         "afi": "ipv6",
-    #                         "fips_restrictions": true,
-    #                         "router_id": "10.1.1.1"
-    #                     }
-    #                 ],
-    #                 "adjacency": {
-    #                     "exchange_start": {
-    #                         "threshold": 11
-    #                     }
-    #                 },
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "0.0.0.20",
-    #                         "authentication": {
-    #                             "algorithm": "sha1",
-    #                             "hidden_key": true,
-    #                             "passphrase": "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w",
-    #                             "spi": 33
-    #                         },
-    #                         "stub": {
-    #                             "set": true
-    #                         }
-    #                     },
-    #                     {
-    #                         "area_id": "0.0.0.40",
-    #                         "default_cost": 45,
-    #                         "stub": {
-    #                             "set": true
-    #                         }
-    #                     }
-    #                 ],
-    #                 "fips_restrictions": true,
-    #                 "timers": {
-    #                     "pacing": 7
-    #                 },
-    #                 "vrf": "default"
-    #             },
-    #             {
-    #                 "address_family": [
-    #                     {
-    #                         "afi": "ipv4",
-    #                         "fips_restrictions": true,
-    #                         "maximum_paths": 100,
-    #                         "passive_interface": true,
-    #                         "redistribute": [
-    #                             {
-    #                                 "route_map": "MAP01",
-    #                                 "routes": "connected"
-    #                             }
-    #                         ]
-    #                     },
-    #                     {
-    #                         "afi": "ipv6",
-    #                         "areas": [
-    #                             {
-    #                                 "area_id": "0.0.0.10",
-    #                                 "nssa": {
-    #                                     "no_summary": true
-    #                                 }
-    #                             }
-    #                         ],
-    #                         "default_information": {
-    #                             "originate": true,
-    #                             "route_map": "DefaultRouteFilter"
-    #                         },
-    #                         "fips_restrictions": true,
-    #                         "max_metric": {
-    #                             "router_lsa": {
-    #                                 "external_lsa": {
-    #                                     "max_metric_value": 25
-    #                                 },
-    #                                 "summary_lsa": {
-    #                                     "set": true
-    #                                 }
-    #                             }
-    #                         }
-    #                     }
-    #                 ],
-    #                 "areas": [
-    #                     {
-    #                         "area_id": "0.0.0.0",
-    #                         "encryption": {
-    #                             "algorithm": "sha1",
-    #                             "encryption": "null",
-    #                             "hidden_key": true,
-    #                             "passphrase": "7hl8FV3lZ6H1mAKpjL47hQ=="
-    #                         }
-    #                     }
-    #                 ],
-    #                 "bfd": {
-    #                     "all_interfaces": true
-    #                 },
-    #                 "fips_restrictions": true,
-    #                 "log_adjacency_changes": {
-    #                     "detail": true
-    #                 },
-    #                 "vrf": "vrf01"
-    #             },
-    #             {
-    #                 "address_family": [
-    #                     {
-    #                         "afi": "ipv6",
-    #                         "areas": [
-    #                             {
-    #                                 "area_id": "0.0.0.1",
-    #                                 "stub": {
-    #                                     "set": true
-    #                                 }
-    #                             }
-    #                         ],
-    #                         "distance": 200,
-    #                         "fips_restrictions": true,
-    #                         "router_id": "10.17.0.3",
-    #                         "timers": {
-    #                             "out_delay": 10,
-    #                             "throttle": {
-    #                                 "initial": 56,
-    #                                 "max": 56,
-    #                                 "min": 56,
-    #                                 "spf": true
-    #                             }
-    #                         }
-    #                     }
-    #                 ],
-    #                 "fips_restrictions": true,
-    #                 "vrf": "vrf02"
-    #             }
-    #         ]
+    # Task output:
+    # ------------
+    # parsed:
+    #     processes:
+    #     - address_family:
+    #       - afi: ipv4
+    #         fips_restrictions: true
+    #         redistribute:
+    #         - routes: connected
+    #       - afi: ipv6
+    #         fips_restrictions: true
+    #         router_id: 10.1.1.1
+    #       adjacency:
+    #         exchange_start:
+    #           threshold: 11
+    #       areas:
+    #       - area_id: 0.0.0.20
+    #         authentication:
+    #           algorithm: sha1
+    #           hidden_key: true
+    #           passphrase: VALUE_SPECIFIED_IN_NO_LOG_PARAMETER
+    #           spi: 33
+    #         stub:
+    #           set: true
+    #       - area_id: 0.0.0.40
+    #         default_cost: 45
+    #         stub:
+    #           set: true
+    #       fips_restrictions: true
+    #       timers:
+    #         pacing: 7
+    #       vrf: default
+    #     - address_family:
+    #       - afi: ipv4
+    #         fips_restrictions: true
+    #         maximum_paths: 100
+    #         passive_interface: true
+    #         redistribute:
+    #         - route_map: MAP01
+    #           routes: connected
+    #       - afi: ipv6
+    #         areas:
+    #         - area_id: 0.0.0.10
+    #           nssa:
+    #             no_summary: true
+    #         default_information:
+    #           originate: true
+    #           route_map: DefaultRouteFilter
+    #         fips_restrictions: true
+    #         max_metric:
+    #           router_lsa:
+    #             external_lsa:
+    #               max_metric_value: 25
+    #             summary_lsa:
+    #               set: true
+    #       areas:
+    #       - area_id: 0.0.0.0
+    #         encryption:
+    #           algorithm: sha1
+    #           encryption: 'null'
+    #           hidden_key: true
+    #           passphrase: VALUE_SPECIFIED_IN_NO_LOG_PARAMETER
+    #           spi: 256
+    #       bfd:
+    #         all_interfaces: true
+    #       fips_restrictions: true
+    #       log_adjacency_changes:
+    #         detail: true
+    #       vrf: vrf01
+    #     - address_family:
+    #       - afi: ipv6
+    #         areas:
+    #         - area_id: 0.0.0.1
+    #           stub:
+    #             set: true
+    #         distance: 200
+    #         fips_restrictions: true
+    #         router_id: 10.17.0.3
+    #         timers:
+    #           out_delay: 10
+    #           spf:
+    #             initial: 56
+    #             max: 56
+    #             min: 56
+    #       fips_restrictions: true
+    #       vrf: vrf02
 
     # using gathered
 
-    # native config
-
+    # native config:
     # veos#show running-config | section ospfv3
     # router ospfv3 vrf vrfmerge
     #    passive-interface default
@@ -4323,100 +4157,188 @@ Examples
     #    address-family ipv6
     #       area 0.0.0.3 range 10.1.2.0/24
     #       area 0.0.0.3 range 60.1.0.0/16 cost 30
-    # veos#
 
+    - name: Gather running configuration
+      arista.eos.eos_ospfv3:
+        state: gathered
 
-      -  arista.eos.eos_ospfv3:
-          state: gathered
+    # Task output:
+    # ------------
+    # gathered:
+    #     processes:
+    #     - address_family:
+    #       - afi: ipv4
+    #         areas:
+    #         - area_id: 0.0.0.3
+    #           ranges:
+    #           - address: 10.1.2.0/24
+    #           - address: 60.1.0.0/16
+    #             cost: 30
+    #         redistribute:
+    #         - routes: connected
+    #         - route_map: MAP01
+    #           routes: static
+    #       - afi: ipv6
+    #         areas:
+    #         - area_id: 0.0.0.3
+    #           ranges:
+    #           - address: 10.1.2.0/24
+    #           - address: 60.1.0.0/16
+    #             cost: 30
+    #       passive_interface: true
+    #       vrf: vrfmerge
 
-    # module execution
-
-    # "gathered": {
-    #     "processes": [
-    #         {
-    #             "address_family": [
-    #                 {
-    #                     "afi": "ipv4",
-    #                     "areas": [
-    #                         {
-    #                             "area_id": "0.0.0.3",
-    #                             "ranges": [
-    #                                 {
-    #                                     "address": "10.1.2.0/24"
-    #                                 },
-    #                                 {
-    #                                     "address": "60.1.0.0/16",
-    #                                     "cost": 30
-    #                                 }
-    #                             ]
-    #                         }
-    #                     ],
-    #                     "redistribute": [
-    #                         {
-    #                             "routes": "connected"
-    #                         },
-    #                         {
-    #                             "route_map": "MAP01",
-    #                             "routes": "static"
-    #                         }
-    #                     ]
-    #                 },
-    #                 {
-    #                     "afi": "ipv6",
-    #                     "areas": [
-    #                         {
-    #                             "area_id": "0.0.0.3",
-    #                             "ranges": [
-    #                                 {
-    #                                     "address": "10.1.2.0/24"
-    #                                 },
-    #                                 {
-    #                                     "address": "60.1.0.0/16",
-    #                                     "cost": 30
-    #                                 }
-    #                             ]
-    #                         }
-    #                     ]
-    #                 }
-    #             ],
-    #             "passive_interface": true,
-    #             "vrf": "vrfmerge"
-    #         }
-    #     ]
 
     # using rendered
 
-      -  arista.eos.eos_ospfv3:
-          config:
-            processes:
-              - address_family:
-                  - timers:
-                      lsa: 22
-                    graceful_restart:
-                      grace_period: 35
-                    afi: "ipv6"
-                timers:
-                  pacing: 55
-                fips_restrictions: True
-                router_id: "2.2.2.2"
-                vrf: "vrfmerge"
-          state: rendered
+    - name: render CLI commands for provided config
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - timers:
+                    lsa: 22
+                  graceful_restart:
+                    grace_period: 35
+                  afi: "ipv6"
+              timers:
+                pacing: 55
+              fips_restrictions: true
+              router_id: "2.2.2.2"
+              vrf: "vrfmerge"
+        state: rendered
 
-    # module execution
+    # Task output:
+    # ------------
+    # rendered:
+    # - router ospfv3 vrf vrfmerge
+    # - address-family ipv6
+    # - graceful-restart grace-period 35
+    # - timers lsa arrival 22
+    # - exit
+    # - timers pacing flood 55
+    # - fips restrictions
+    # - router-id 2.2.2.2
+    # - exit
 
-    # "rendered": [
-    #         "router ospfv3 vrf vrfmerge",
-    #         "address-family ipv6",
-    #         "graceful-restart grace-period 35",
-    #         "timers lsa arrival 22",
-    #         "exit",
-    #         "timers pacing flood 55",
-    #         "fips restrictions",
-    #         "router-id 2.2.2.2",
-    #         "exit"
-    #     ]
 
 
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>after</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when changed</td>
+                <td>
+                            <div>The resulting configuration after module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>before</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>
+                            <div>The configuration prior to the module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>commands</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>
+                            <div>The set of commands pushed to the remote device.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router ospfv3 vrf vrfmerge&#x27;, &#x27;address-family ipv6&#x27;, &#x27;graceful-restart grace-period 35&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>gathered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>gathered</code></td>
+                <td>
+                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>parsed</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>parsed</code></td>
+                <td>
+                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rendered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>rendered</code></td>
+                <td>
+                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router ospfv3 vrf vrfmerge&#x27;, &#x27;address-family ipv6&#x27;, &#x27;graceful-restart grace-period 35&#x27;]</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
 
 
 Status

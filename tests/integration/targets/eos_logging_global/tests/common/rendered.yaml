@@ -1,0 +1,46 @@
+---
+- ansible.builtin.debug:
+    msg:
+      Start eos_logging_global rendered integration tests ansible_connection={{
+      ansible_connection }}
+
+- block:
+    - name: merge given logging_global configuration
+      become: true
+      register: result
+      arista.eos.eos_logging_global: &rendered
+        state: rendered
+        config:
+          format:
+            timestamp:
+              traditional:
+                timezone: true
+          level:
+            facility: "AAA"
+            severity: "alerts"
+          persistent:
+            size: 4096
+          policy:
+            invert_result: true
+            match_list: "list01"
+          hosts:
+            - name: "host01"
+              protocol: "tcp"
+            - name: "11.11.11.1"
+              port: 25
+          vrfs:
+            - name: "vrf01"
+              source_interface: "Ethernet1"
+            - name: "vrf02"
+              hosts:
+                - name: "hostvrf1"
+                  protocol: "tcp"
+                - name: "24.1.1.1"
+                  port: "33"
+
+    - ansible.builtin.assert:
+        that:
+          - result.changed == false
+          - result.rendered|symmetric_difference(merged.commands) == []
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

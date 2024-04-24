@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -31,8 +32,7 @@ The arg spec for the eos_ospfv2 module
 
 
 class Ospfv2Args(object):  # pylint: disable=R0903
-    """The arg spec for the eos_ospfv2 module
-    """
+    """The arg spec for the eos_ospfv2 module"""
 
     def __init__(self, **kwargs):
         pass
@@ -51,7 +51,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                 "exchange_start": {
                                     "options": {"threshold": {"type": "int"}},
                                     "type": "dict",
-                                }
+                                },
                             },
                             "type": "dict",
                         },
@@ -124,7 +124,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                         },
                         "auto_cost": {
                             "options": {
-                                "reference_bandwidth": {"type": "int"}
+                                "reference_bandwidth": {"type": "int"},
                             },
                             "type": "dict",
                         },
@@ -191,14 +191,14 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "include_stub": {"type": "bool"},
                                         "on_startup": {
                                             "options": {
-                                                "wait_period": {"type": "int"}
+                                                "wait_period": {"type": "int"},
                                             },
                                             "type": "dict",
                                         },
                                         "summary_lsa": {
                                             "options": {
                                                 "max_metric_value": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "set": {"type": "bool"},
                                             },
@@ -207,7 +207,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         "external_lsa": {
                                             "options": {
                                                 "max_metric_value": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                                 "set": {"type": "bool"},
                                             },
@@ -215,7 +215,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                         },
                                     },
                                     "type": "dict",
-                                }
+                                },
                             },
                             "type": "dict",
                         },
@@ -270,7 +270,9 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                     "options": {
                                         "rx": {
                                             "options": {
-                                                "min_interval": {"type": "int"}
+                                                "min_interval": {
+                                                    "type": "int",
+                                                },
                                             },
                                             "type": "dict",
                                         },
@@ -279,13 +281,13 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                                                 "delay": {
                                                     "options": {
                                                         "initial": {
-                                                            "type": "int"
+                                                            "type": "int",
                                                         },
                                                         "max": {"type": "int"},
                                                         "min": {"type": "int"},
                                                     },
                                                     "type": "dict",
-                                                }
+                                                },
                                             },
                                             "type": "dict",
                                         },
@@ -317,7 +319,7 @@ class Ospfv2Args(object):  # pylint: disable=R0903
                         },
                     },
                     "type": "list",
-                }
+                },
             },
             "type": "dict",
         },

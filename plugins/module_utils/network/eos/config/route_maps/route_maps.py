@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -18,15 +19,14 @@ created.
 """
 
 from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+    ResourceModule,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
-    ResourceModule,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.route_maps import (
     Route_mapsTemplate,
 )
@@ -39,7 +39,7 @@ class Route_maps(ResourceModule):
 
     def __init__(self, module):
         super(Route_maps, self).__init__(
-            empty_fact_val={},
+            empty_fact_val=[],
             facts_module=Facts(module),
             module=module,
             resource="route_maps",
@@ -54,7 +54,7 @@ class Route_maps(ResourceModule):
         ]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -65,8 +65,8 @@ class Route_maps(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-            want, have and desired state.
+        """Generate configuration commands to send based on
+        want, have and desired state.
         """
         wantd = {}
         haved = {}
@@ -99,7 +99,8 @@ class Route_maps(ResourceModule):
             for k, have in iteritems(haved):
                 for entry, val in iteritems(have.get("entries", {})):
                     if not wantd.get(k) or entry not in wantd[k].get(
-                        "entries", {}
+                        "entries",
+                        {},
                     ):
                         self._compare_maps(want={}, have={entry: val})
 
@@ -108,9 +109,9 @@ class Route_maps(ResourceModule):
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Route_maps network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Route_maps network resource.
         """
         self._compare_entries(want=want, have=have)
 
@@ -138,7 +139,9 @@ class Route_maps(ResourceModule):
                 )
             for h_k, h_v in iteritems(h_entries.pop(k, {})):
                 self.compare(
-                    parsers=self.parsers, have={"entries": {h_k: h_v}}, want={}
+                    parsers=self.parsers,
+                    have={"entries": {h_k: h_v}},
+                    want={},
                 )
 
             parent_present = False
@@ -146,9 +149,9 @@ class Route_maps(ResourceModule):
                 if c.startswith("route-map"):
                     parent_present = True
                     break
-            if (
-                before_maps == after_maps and len(self.commands) > after_maps
-            ) or (not parent_present and len(self.commands) > after_maps):
+            if (before_maps == after_maps and len(self.commands) > after_maps) or (
+                not parent_present and len(self.commands) > after_maps
+            ):
                 self._compare_maps({k: v}, {})
                 self.commands.insert(after_maps, self.commands.pop(-1))
 
@@ -194,11 +197,7 @@ class Route_maps(ResourceModule):
 
     def _select_parser(self, w):
         parser = ""
-        if (
-            "statement" in w.keys()
-            and "action" in w.keys()
-            and "sequence" in w.keys()
-        ):
+        if "statement" in w.keys() and "action" in w.keys() and "sequence" in w.keys():
             parser = "route_map.statement.entries"
         elif "statement" in w.keys() and "action" in w.keys():
             parser = "route_map.statement.action"
@@ -243,14 +242,47 @@ class Route_maps(ResourceModule):
         w_match = want.pop("match", {})
         h_match = have.pop("match", {})
         for k, v in iteritems(w_match):
+            if k in ["ip", "ipv6"]:
+                for k_ip, v_ip in iteritems(v):
+                    if h_match.get(k):
+                        h = {k_ip: h_match[k].pop(k_ip, {})}
+                    else:
+                        h = {}
+                    self.compare(
+                        parsers=[
+                            "match.ip",
+                            "match.ipaddress",
+                            "match.ipv6address",
+                            "match.ipv6",
+                        ],
+                        want={"entries": {"match": {k: {k_ip: v_ip}}}},
+                        have={"entries": {"match": {k: h}}},
+                    )
+                h_match.pop(k, {})
+                continue
             self.compare(
                 parsers=parsers,
                 want={"entries": {"match": {k: v}}},
                 have={"entries": {"match": {k: h_match.pop(k, {})}}},
             )
         for k, v in iteritems(h_match):
+            if k in ["ip", "ipv6"]:
+                for hk, hv in iteritems(v):
+                    self.compare(
+                        parsers=[
+                            "match.ip",
+                            "match.ipaddress",
+                            "match.ipv6address",
+                            "match.ipv6",
+                        ],
+                        want={},
+                        have={"entries": {"match": {k: {hk: hv}}}},
+                    )
+                continue
             self.compare(
-                parsers=parsers, want={}, have={"entries": {"match": {k: v}}}
+                parsers=parsers,
+                want={},
+                have={"entries": {"match": {k: v}}},
             )
 
     def _comapre_set(self, want, have):
@@ -292,7 +324,9 @@ class Route_maps(ResourceModule):
             )
         for k, v in iteritems(h_set):
             self.compare(
-                parsers=parsers, want={}, have={"entries": {"set": {k: v}}}
+                parsers=parsers,
+                want={},
+                have={"entries": {"set": {k: v}}},
             )
 
     def _route_maps_list_to_dict(self, entry):

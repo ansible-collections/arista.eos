@@ -13,18 +13,19 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
+
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_empties,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 
 
 class Static_routes(ConfigBase):
@@ -40,23 +41,25 @@ class Static_routes(ConfigBase):
         super(Static_routes, self).__init__(module)
 
     def get_static_routes_facts(self, data=None):
-        """ Get the 'facts' (the current configuration)
+        """Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         static_routes_facts = facts["ansible_network_resources"].get(
-            "static_routes"
+            "static_routes",
         )
         if not static_routes_facts:
             return []
         return static_routes_facts
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -85,10 +88,10 @@ class Static_routes(ConfigBase):
         elif self.state == "parsed":
             if not self._module.params["running_config"]:
                 self._module.fail_json(
-                    msg="Value of running_config parameter must not be empty for state parsed"
+                    msg="Value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_static_routes_facts(
-                data=self._module.params["running_config"]
+                data=self._module.params["running_config"],
             )
         else:
             changed_static_routes_facts = []
@@ -104,7 +107,7 @@ class Static_routes(ConfigBase):
         return result
 
     def set_config(self, existing_static_routes_facts):
-        """ Collect the configuration from the args passed to the module,
+        """Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
         :rtype: A list
@@ -130,7 +133,7 @@ class Static_routes(ConfigBase):
         return commands
 
     def set_state(self, want, have):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
 
         :param want: the desired configuration as a dictionary
         :param have: the current configuration as a dictionary
@@ -142,8 +145,8 @@ class Static_routes(ConfigBase):
         if self.state in ("merged", "replaced", "overridden") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    self.state
-                )
+                    self.state,
+                ),
             )
         state = self._module.params["state"]
         if state == "overridden":
@@ -158,7 +161,7 @@ class Static_routes(ConfigBase):
 
     @staticmethod
     def _state_replaced(want, have):
-        """ The command generator when state is replaced
+        """The command generator when state is replaced
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -190,7 +193,7 @@ class Static_routes(ConfigBase):
 
     @staticmethod
     def _state_overridden(want, have):
-        """ The command generator when state is overridden
+        """The command generator when state is overridden
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -215,7 +218,7 @@ class Static_routes(ConfigBase):
 
     @staticmethod
     def _state_merged(want, have):
-        """ The command generator when state is merged
+        """The command generator when state is merged
 
         :rtype: A list
         :returns: the commands necessary to merge the provided into
@@ -225,7 +228,7 @@ class Static_routes(ConfigBase):
 
     @staticmethod
     def _state_deleted(want, have):
-        """ The command generator when state is deleted
+        """The command generator when state is deleted
 
         :rtype: A list
         :returns: the commands necessary to remove the current configuration
@@ -259,11 +262,7 @@ def add_commands(want):
     commandset = []
     if not want:
         return commandset
-    vrf = (
-        want["vrf"]
-        if "vrf" in want.keys() and want["vrf"] is not None
-        else None
-    )
+    vrf = want["vrf"] if "vrf" in want.keys() and want["vrf"] is not None else None
     for address_family in want["address_families"]:
         for route in address_family["routes"]:
             for next_hop in route["next_hops"]:
@@ -278,7 +277,7 @@ def add_commands(want):
                     mask = route["dest"].split()[1]
                     cidr = get_net_size(mask)
                     commands.append(
-                        " " + route["dest"].split()[0] + "/" + cidr
+                        " " + route["dest"].split()[0] + "/" + cidr,
                     )
                 else:
                     commands.append(" " + route["dest"])
@@ -286,7 +285,7 @@ def add_commands(want):
                     commands.append(" " + next_hop["interface"])
                 if "nexthop_grp" in next_hop.keys():
                     commands.append(
-                        " Nexthop-Group" + " " + next_hop["nexthop_grp"]
+                        " Nexthop-Group" + " " + next_hop["nexthop_grp"],
                     )
                 if "forward_router_address" in next_hop.keys():
                     commands.append(" " + next_hop["forward_router_address"])
@@ -321,11 +320,7 @@ def del_commands(want, have):
         for command in haveconfigs:
             if want["vrf"] in command:
                 commandset.append(command)
-    elif (
-        want is not None
-        and "vrf" not in want.keys()
-        and "address_families" not in want.keys()
-    ):
+    elif want is not None and "vrf" not in want.keys() and "address_families" not in want.keys():
         commandset = []
         for command in haveconfigs:
             if "vrf" not in command:

@@ -1,12 +1,13 @@
 ---
-- debug:
-    msg: START eos_lacp_interfaces parsed integration tests on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg:
+      START eos_lacp_interfaces parsed integration tests on connection={{ ansible_connection
       }}
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
       - name: Ethernet1
-        rate: fast
+        timer: fast
         port_priority: 30
       - name: Ethernet2
 
@@ -17,7 +18,7 @@
     running_config: "{{ lookup('file', '_parsed.cfg') }}"
     state: parsed
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - config == result['parsed']

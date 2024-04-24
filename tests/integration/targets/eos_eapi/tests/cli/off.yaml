@@ -1,5 +1,5 @@
 ---
-- debug: msg="START CLI/OFF.YAML"
+- ansible.builtin.debug: msg="START CLI/OFF.YAML"
 
 - name: Turn all endpoints off
   become: true
@@ -9,20 +9,18 @@
     enable_https: false
     enable_local_http: false
     enable_socket: false
-    provider: '{{ cli }}'
 
-- debug: var=eos_eapi_output
+- ansible.builtin.debug: var=eos_eapi_output
 
 - register: http_config
   arista.eos.eos_command:
     commands:
       - show management api http-commands | json
-    provider: '{{ cli }}'
 
-- debug: var=http_config
+- ansible.builtin.debug: var=http_config
 
 - name: Expect all EAPI endpoints to be in off state
-  assert:
+  ansible.builtin.assert:
     that:
       - http_config.stdout[0].httpServer.running == false
       - http_config.stdout[0].httpsServer.running == false
@@ -37,14 +35,10 @@
     enable_https: false
     enable_local_http: false
     enable_socket: false
-    provider: '{{ cli }}'
-
-- debug: var=eos_eapi_output
-  when: debug
 
 - name: Expect action to be idempotent
-  assert:
+  ansible.builtin.assert:
     that:
       - eos_eapi_output.changed == false
 
-- debug: msg="END CLI/OFF.YAML"
+- ansible.builtin.debug: msg="END CLI/OFF.YAML"

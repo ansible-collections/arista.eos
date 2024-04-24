@@ -19,16 +19,18 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-import sys
 import json
+import sys
 
 from contextlib import contextmanager
 from io import BytesIO, StringIO
-from ansible_collections.arista.eos.tests.unit.compat import unittest
-from ansible.module_utils.six import PY3
+from unittest import TestCase
+
 from ansible.module_utils._text import to_bytes
+from ansible.module_utils.six import PY3
 
 
 @contextmanager
@@ -75,7 +77,7 @@ def swap_stdout():
         sys.stdout = old_stdout
 
 
-class ModuleTestCase(unittest.TestCase):
+class ModuleTestCase(TestCase):
     def setUp(self, module_args=None):
         if module_args is None:
             module_args = {

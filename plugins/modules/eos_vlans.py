@@ -28,6 +28,7 @@ The module file for eos_vlans
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -39,7 +40,7 @@ description: This module provides declarative management of VLANs on Arista EOS 
 version_added: 1.0.0
 author: Nathaniel Case (@qalthos)
 notes:
-- Tested against Arista EOS 4.20.10M
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
@@ -103,7 +104,7 @@ EXAMPLES = """
 - name: Delete attributes of the given VLANs.
   arista.eos.eos_vlans:
     config:
-    - vlan_id: 20
+      - vlan_id: 20
     state: deleted
 
 # After state:
@@ -129,8 +130,8 @@ EXAMPLES = """
 - name: Merge given VLAN attributes with device configuration
   arista.eos.eos_vlans:
     config:
-    - vlan_id: 20
-      state: suspend
+      - vlan_id: 20
+        state: suspend
     state: merged
 
 # After state:
@@ -160,8 +161,8 @@ EXAMPLES = """
 - name: Override device configuration of all VLANs with provided configuration
   arista.eos.eos_vlans:
     config:
-    - vlan_id: 20
-      state: suspend
+      - vlan_id: 20
+        state: suspend
     state: overridden
 
 # After state:
@@ -187,8 +188,8 @@ EXAMPLES = """
 - name: Replace all attributes of specified VLANs with provided configuration
   arista.eos.eos_vlans:
     config:
-    - vlan_id: 20
-      state: suspend
+      - vlan_id: 20
+        state: suspend
     state: replaced
 
 # After state:
@@ -229,10 +230,10 @@ EXAMPLES = """
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_vlans:
     config:
-    - vlan_id: 10
-      name: ten
-    - vlan_id: 20
-      state: suspend
+      - vlan_id: 10
+        name: ten
+      - vlan_id: 20
+        state: suspend
     state: rendered
 
 # Output:
@@ -264,7 +265,6 @@ EXAMPLES = """
 #     name: ten
 #   - vlan_id: 20
 #     state: suspend
-
 """
 RETURN = """
 before:
@@ -290,12 +290,11 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.vlans.vlans import (
     VlansArgs,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.vlans.vlans import (
-    Vlans,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.vlans.vlans import Vlans
 
 
 def main():

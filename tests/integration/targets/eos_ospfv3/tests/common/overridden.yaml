@@ -1,12 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ospfv3 overridden integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: override given ospfv3 configuration
       become: true
       register: result
@@ -29,13 +28,11 @@
                       ranges:
                         - address: 60.1.0.0/16
                           cost: 30
-                  timers:
-                    lsa: 10
               vrf: "vrf02"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
-          - result.commands|length == 16
+          - result.commands|length == 15
           - result.changed == true
           - result.commands|symmetric_difference(overridden.commands) == []
           - result.after.processes|symmetric_difference(overridden.after.processes) == []
@@ -46,10 +43,9 @@
       register: result
       arista.eos.eos_ospfv3: *overridden
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

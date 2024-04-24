@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,7 +16,8 @@ the given network resource.
 """
 
 import re
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
 
@@ -28,9 +30,7 @@ def _tmplt_ospf_int_authentication(config_data):
         return command
     if "authentication_v3" in config_data:
         command = "ospfv3 authentication ipsec spi "
-        command += "{spi} {algorithm}".format(
-            **config_data["authentication_v3"]
-        )
+        command += "{spi} {algorithm}".format(**config_data["authentication_v3"])
         if "passphrase" in config_data["authentication_v3"]:
             command += " passphrase"
         if "keytype" in config_data["authentication_v3"]:
@@ -38,18 +38,14 @@ def _tmplt_ospf_int_authentication(config_data):
         if "passphrase" not in config_data["authentication_v3"]:
             command += " {key}".format(**config_data["authentication_v3"])
         else:
-            command += " {passphrase}".format(
-                **config_data["authentication_v3"]
-            )
+            command += " {passphrase}".format(**config_data["authentication_v3"])
         return command
 
 
 def _tmplt_ospf_int_encryption_v3(config_data):
     if "encryption" in config_data:
         command = "ospfv3 encryption ipsec spi ".format(**config_data)
-        command += "{spi} esp {encryption} {algorithm}".format(
-            **config_data["encryption"]
-        )
+        command += "{spi} esp {encryption} {algorithm}".format(**config_data["encryption"])
         if "passphrase" in config_data["encryption"]:
             command += " passphrase"
         if "keytype" in config_data["encryption"]:
@@ -65,9 +61,7 @@ def _tmplt_ospf_int_authentication_key(config_data):
     if "authentication_key" in config_data:
         command = "ip ospf authentication-key"
         if "encryption" in config_data["authentication_key"]:
-            command += " {encryption} {key}".format(
-                **config_data["authentication_key"]
-            )
+            command += " {encryption} {key}".format(**config_data["authentication_key"])
         else:
             command += " {key}".format(**config_data["authentication_key"])
         return command
@@ -91,18 +85,12 @@ def _tmplt_ospf_int_bfd(config_data):
 
 def _tmplt_ospf_int_hello_interval(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} hello-interval {hello_interval}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} hello-interval {hello_interval}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
-            command = "ip ospf hello-interval {hello_interval}".format(
-                **config_data
-            )
+            command = "ip ospf hello-interval {hello_interval}".format(**config_data)
         else:
-            command = "ospfv3 hello-interval {hello_interval}".format(
-                **config_data
-            )
+            command = "ospfv3 hello-interval {hello_interval}".format(**config_data)
     return command
 
 
@@ -119,9 +107,7 @@ def _tmplt_ospf_int_mtu_ignore(config_data):
 
 def _tmplt_ospf_int_network(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} network {network}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} network {network}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
             command = "ip ospf network {network}".format(**config_data)
@@ -132,9 +118,7 @@ def _tmplt_ospf_int_network(config_data):
 
 def _tmplt_ospf_int_priority(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} priority {priority}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} priority {priority}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
             command = "ip ospf priority {priority}".format(**config_data)
@@ -145,59 +129,48 @@ def _tmplt_ospf_int_priority(config_data):
 
 def _tmplt_ospf_int_retransmit_interval(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} retransmit-interval {retransmit_interval}".format(
-            **config_data["ip_params"]
+        command = (
+            "ospfv3 "
+            + config_data["ip_params"]["afi"]
+            + " retransmit-interval "
+            + str(config_data["ip_params"]["retransmit_interval"])
         )
     else:
         if config_data["afi"] == "ipv4":
-            command = "ip ospf retransmit-interval {retransmit_interval}".format(
-                **config_data
-            )
+            command = "ip ospf retransmit-interval {retransmit_interval}".format(**config_data)
         else:
-            command = "ospfv3 retransmit-interval {retransmit_interval}".format(
-                **config_data
-            )
+            command = "ospfv3 retransmit-interval {retransmit_interval}".format(**config_data)
     return command
 
 
 def _tmplt_ospf_int_transmit_delay(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} transmit-delay {transmit_delay}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} transmit-delay {transmit_delay}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
-            command = "ip ospf transmit-delay {transmit_delay}".format(
-                **config_data
-            )
+            command = "ip ospf transmit-delay {transmit_delay}".format(**config_data)
         else:
-            command = "ospfv3 transmit-delay {transmit_delay}".format(
-                **config_data
-            )
+            command = "ospfv3 transmit-delay {transmit_delay}".format(**config_data)
     return command
 
 
 def _tmplt_ospf_int_dead_interval(config_data):
     if "ip_params" in config_data:
-        command = "ospfv3 {afi} dead-interval {dead_interval}".format(
-            **config_data["ip_params"]
-        )
+        command = "ospfv3 {afi} dead-interval {dead_interval}".format(**config_data["ip_params"])
     else:
         if config_data["afi"] == "ipv4":
-            command = "ip ospf dead-interval {dead_interval}".format(
-                **config_data
-            )
+            command = "ip ospf dead-interval {dead_interval}".format(**config_data)
         else:
-            command = "ospfv3 dead-interval {dead_interval}".format(
-                **config_data
-            )
+            command = "ospfv3 dead-interval {dead_interval}".format(**config_data)
     return command
 
 
 class Ospf_interfacesTemplate(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         super(Ospf_interfacesTemplate, self).__init__(
-            lines=lines, tmplt=self, module=module
+            lines=lines,
+            tmplt=self,
+            module=module,
         )
 
     PARSERS = [
@@ -232,8 +205,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "area": {"area_id": "{{ area_id }}"},
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -257,8 +230,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "set": "{{ True if message_digest is undefined }}",
                             "message_digest": "{{ True if message_digest is defined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -290,8 +263,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "passphrase": "{{ line if passphrase is defined }}",
                             "key": "{{ str(line) if passphrase is undefined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -316,8 +289,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "encryption": "{{ encryption }}",
                             "key": "{{ line }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -337,8 +310,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "bfd": "{{ True }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -359,8 +332,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "dead_interval": "{{ interval }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -395,8 +368,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "passphrase": "{{ line if passphrase is defined }}",
                             "key": "{{ str(line) if passphrase is undefined }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -417,8 +390,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "hello_interval": "{{ interval }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -437,8 +410,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "bfd": "{{ True }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -459,8 +432,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "cost": "{{ val }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -480,8 +453,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "cost": "{{ cost }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -501,8 +474,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "dead_interval": "{{ interval }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -522,8 +495,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "hello_interval": "{{ interval }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -547,10 +520,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "area": {"area_id": "{{ area_id }}"},
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -573,10 +546,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "bfd": "{{ True }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -600,10 +573,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "cost": "{{ cost }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -627,10 +600,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "dead_interval": "{{ interval }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -654,10 +627,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "hello_interval": "{{ interval }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -680,10 +653,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "mtu_ignore": "{{ True if mtu is defined}}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -707,10 +680,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "network": "{{ val }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -734,10 +707,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "priority": "{{ val }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -760,10 +733,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "passive_interface": "{{ True }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -787,10 +760,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "retransmit_interval": "{{ val }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -814,10 +787,10 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "{{ afi }}": {
                                 "afi": "{{ afi }}",
                                 "transmit_delay": "{{ val }}",
-                            }
+                            },
                         },
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -836,8 +809,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "mtu_ignore": "{{ True }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -857,8 +830,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "network": "{{ interface }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -878,8 +851,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "priority": "{{ val }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -898,8 +871,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "passive_interface": "{{ True }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -919,8 +892,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "retransmit_interval": "{{ val }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -940,8 +913,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv6' }}": {
                         "afi": '{{ "ipv6" }}',
                         "transmit_delay": "{{ val }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -961,8 +934,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "mtu_ignore": "{{ True }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -983,8 +956,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "network": "{{ interface }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1004,8 +977,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "priority": "{{ val }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1026,8 +999,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "retransmit_interval": "{{ val }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1048,8 +1021,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                     "{{ 'ipv4' }}": {
                         "afi": '{{ "ipv4" }}',
                         "transmit_delay": "{{ val }}",
-                    }
-                }
+                    },
+                },
             },
         },
         {
@@ -1077,8 +1050,8 @@ class Ospf_interfacesTemplate(NetworkTemplate):
                             "encryption": "{{ type }}",
                             "key": "{{ line }}",
                         },
-                    }
-                }
+                    },
+                },
             },
         },
     ]

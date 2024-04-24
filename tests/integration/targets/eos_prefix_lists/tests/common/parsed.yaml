@@ -1,0 +1,17 @@
+---
+- ansible.builtin.debug:
+    msg:
+      START eos_prefix_lists parsed integration tests on connection={{ ansible_connection
+      }}
+
+- name: Provide the running configuration for parsing (config to be parsed)
+  become: true
+  register: result
+  arista.eos.eos_prefix_lists:
+    running_config: "{{ lookup('file', '_parsed.cfg') }}"
+    state: parsed
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - gathered['config']|symmetric_difference(result.parsed) == []

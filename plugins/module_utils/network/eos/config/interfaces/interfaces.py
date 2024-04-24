@@ -12,6 +12,7 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
@@ -20,13 +21,12 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     dict_diff,
     param_list_to_dict,
+    to_list,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
     normalize_interface,
 )
@@ -42,13 +42,15 @@ class Interfaces(ConfigBase):
     gather_network_resources = ["interfaces"]
 
     def get_interfaces_facts(self, data=None):
-        """ Get the 'facts' (the current configuration)
+        """Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         interfaces_facts = facts["ansible_network_resources"].get("interfaces")
         if not interfaces_facts:
@@ -56,7 +58,7 @@ class Interfaces(ConfigBase):
         return interfaces_facts
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -90,7 +92,7 @@ class Interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_interfaces_facts(data=running_config)
 
@@ -105,7 +107,7 @@ class Interfaces(ConfigBase):
         return result
 
     def set_config(self, existing_interfaces_facts):
-        """ Collect the configuration from the args passed to the module,
+        """Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
         :rtype: A list
@@ -118,7 +120,7 @@ class Interfaces(ConfigBase):
         return to_list(resp)
 
     def set_state(self, want, have):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
 
         :param want: the desired configuration as a dictionary
         :param have: the current configuration as a dictionary
@@ -127,14 +129,11 @@ class Interfaces(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
-        if (
-            state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
         want = param_list_to_dict(want)
         have = param_list_to_dict(have)
@@ -151,7 +150,7 @@ class Interfaces(ConfigBase):
 
     @staticmethod
     def _state_replaced(want, have):
-        """ The command generator when state is replaced
+        """The command generator when state is replaced
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -168,10 +167,7 @@ class Interfaces(ConfigBase):
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
 
-            if (
-                "speed" in add_config.keys()
-                and "duplex" not in add_config.keys()
-            ):
+            if "speed" in add_config.keys() and "duplex" not in add_config.keys():
                 add_config.update({"duplex": desired.get("duplex")})
 
             commands.extend(generate_commands(key, add_config, del_config))
@@ -180,7 +176,7 @@ class Interfaces(ConfigBase):
 
     @staticmethod
     def _state_overridden(want, have):
-        """ The command generator when state is overridden
+        """The command generator when state is overridden
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -196,10 +192,7 @@ class Interfaces(ConfigBase):
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
 
-            if (
-                "speed" in add_config.keys()
-                and "duplex" not in add_config.keys()
-            ):
+            if "speed" in add_config.keys() and "duplex" not in add_config.keys():
                 add_config.update({"duplex": desired.get("duplex")})
 
             commands.extend(generate_commands(key, add_config, del_config))
@@ -208,7 +201,7 @@ class Interfaces(ConfigBase):
 
     @staticmethod
     def _state_merged(want, have):
-        """ The command generator when state is merged
+        """The command generator when state is merged
 
         :rtype: A list
         :returns: the commands necessary to merge the provided into
@@ -223,10 +216,7 @@ class Interfaces(ConfigBase):
                 extant = dict()
 
             add_config = dict_diff(extant, desired)
-            if (
-                "speed" in add_config.keys()
-                and "duplex" not in add_config.keys()
-            ):
+            if "speed" in add_config.keys() and "duplex" not in add_config.keys():
                 add_config.update({"duplex": desired.get("duplex")})
             commands.extend(generate_commands(key, add_config, {}))
 
@@ -234,7 +224,7 @@ class Interfaces(ConfigBase):
 
     @staticmethod
     def _state_deleted(want, have):
-        """ The command generator when state is deleted
+        """The command generator when state is deleted
 
         :rtype: A list
         :returns: the commands necessary to remove the current configuration

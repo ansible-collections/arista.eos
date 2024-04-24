@@ -28,12 +28,12 @@ The arg spec for the eos_lacp_interfaces module
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 class Lacp_interfacesArgs(object):
-    """The arg spec for the eos_lacp_interfaces module
-    """
+    """The arg spec for the eos_lacp_interfaces module"""
 
     def __init__(self, **kwargs):
         pass
@@ -44,7 +44,11 @@ class Lacp_interfacesArgs(object):
             "options": {
                 "name": {"type": "str"},
                 "port_priority": {"type": "int"},
-                "rate": {"choices": ["fast", "normal"], "type": "str"},
+                "timer": {
+                    "choices": ["fast", "normal"],
+                    "type": "str",
+                    "aliases": ["rate"],
+                },
             },
             "type": "list",
         },

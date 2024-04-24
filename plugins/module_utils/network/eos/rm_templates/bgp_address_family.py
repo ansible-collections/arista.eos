@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -16,7 +17,7 @@ the given network resource.
 
 import re
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
 
@@ -39,9 +40,7 @@ def _tmplt_bgp_address_family(config_data):
 def _tmplt_bgp_params(config_data):
     command = "bgp"
     if config_data["bgp_params"].get("additional_paths"):
-        command += " additional-paths {additional_paths}".format(
-            **config_data["bgp_params"]
-        )
+        command += " additional-paths {additional_paths}".format(**config_data["bgp_params"])
         if config_data["bgp_params"]["additional_paths"] == "send":
             command += " any"
     elif config_data["bgp_params"].get("next_hop_address_family"):
@@ -51,9 +50,7 @@ def _tmplt_bgp_params(config_data):
     elif config_data["bgp_params"].get("redistribute_internal"):
         command += " redistribute-internal"
     elif config_data["bgp_params"].get("route"):
-        command += " route install-map {route}".format(
-            **config_data["bgp_params"]
-        )
+        command += " route install-map {route}".format(**config_data["bgp_params"])
     return command
 
 
@@ -65,9 +62,7 @@ def _tmplt_bgp_graceful_restart(config_data):
 def _tmplt_bgp_neighbor(config_data):
     command = "neighbor {peer}".format(**config_data["neighbor"])
     if config_data["neighbor"].get("additional_paths"):
-        command += " additional-paths {additional_paths}".format(
-            **config_data["neighbor"]
-        )
+        command += " additional-paths {additional_paths}".format(**config_data["neighbor"])
         if config_data["neighbor"]["additional_paths"] == "send":
             command += "any"
     elif config_data["neighbor"].get("activate"):
@@ -75,9 +70,7 @@ def _tmplt_bgp_neighbor(config_data):
     elif config_data["neighbor"].get("default_originate"):
         command += " default-originate"
         if config_data["neighbor"]["default_originate"].get("route_map"):
-            command += " route-map {route_map}".format(
-                **config_data["neighbor"]["default_originate"]
-            )
+            command += " route-map " + config_data["neighbor"]["default_originate"]["route_map"]
         if config_data["neighbor"]["default_originate"].get("always"):
             command += " always"
     elif config_data["neighbor"].get("graceful_restart"):
@@ -88,21 +81,17 @@ def _tmplt_bgp_neighbor(config_data):
         command += " next-hop addres-family ipv6"
     elif config_data["neighbor"].get("prefix_list"):
         command += " prefix-list {name} {direction}".format(
-            **config_data["neighbor"]["prefix_list"]
+            **config_data["neighbor"]["prefix_list"],
         )
     elif config_data["neighbor"].get("route_map"):
-        command += " route-map {name} {direction}".format(
-            **config_data["neighbor"]["route_map"]
-        )
+        command += " route-map {name} {direction}".format(**config_data["neighbor"]["route_map"])
     elif config_data["neighbor"].get("weight"):
         command += " weight {weight}".format(**config_data["neighbor"])
     elif config_data["neighbor"].get("encapsulation"):
-        command += " encapsulation {transport}".format(
-            **config_data["neighbor"]
-        )
+        command += " encapsulation {transport}".format(**config_data["neighbor"])
         if config_data["neighbor"]["encapsulation"].get("source_interface"):
             command += " next-hop-self source-interface {source_interface}".format(
-                **config_data["neighbor"]
+                **config_data["neighbor"],
             )
     return command
 
@@ -126,9 +115,13 @@ def _tmplt_bgp_redistribute(config_data):
 
 
 def _tmplt_bgp_route_target(config_data):
-    command = "route-target {mode} {target}".format(
-        **config_data["route_target"]
-    )
+    command = "route-target {action}".format(**config_data["route_target"])
+    if config_data["route_target"].get("type"):
+        command += " {type}".format(**config_data["route_target"])
+    if config_data["route_target"].get("route_map"):
+        command += " {route_map}".format(**config_data["route_target"])
+    if config_data["route_target"].get("target"):
+        command += " {target}".format(**config_data["route_target"])
     return command
 
 
@@ -151,7 +144,7 @@ class Bgp_afTemplate(NetworkTemplate):
             "setval": _tmplt_router_bgp_cmd,
             "compval": "as_number",
             "result": {"as_number": "{{ as_num }}"},
-            "shared": True
+            "shared": True,
         },
         {
             "name": "address_family",
@@ -170,9 +163,9 @@ class Bgp_afTemplate(NetworkTemplate):
                     '{{ afi + "_" + vrf|d() }}': {
                         "afi": "{{ afi }}",
                         "safi": "{{ type }}",
-                        "vrf": "{{ vrf.split(" ")[1] }}"
-                    }
-                }
+                        "vrf": "{{ vrf.split(" ")[1] }}",
+                    },
+                },
             },
             "shared": True,
         },
@@ -192,10 +185,10 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "bgp_params": {
-                            "additional_paths": "{{ action }}"
-                        }
-                    }
-                }
+                            "additional_paths": "{{ action }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -215,10 +208,10 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "bgp_params": {
-                            "next_hop_unchanged": "{{ 'ipv6' }}"
-                        }
-                    }
-                }
+                            "next_hop_unchanged": "{{ 'ipv6' }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -236,10 +229,10 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "bgp_params": {
-                            "next_hop_unchanged": "{{ True }}"
-                        }
-                    }
-                }
+                            "next_hop_unchanged": "{{ True }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -257,10 +250,10 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "bgp_params": {
-                            "redistribute_internal": "{{ True }}"
-                        }
-                    }
-                }
+                            "redistribute_internal": "{{ True }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -280,10 +273,10 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "bgp_params": {
-                            "route": "{{ route }}"
-                        }
-                    }
-                }
+                            "route": "{{ route }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -298,9 +291,9 @@ class Bgp_afTemplate(NetworkTemplate):
             "result": {
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
-                        "graceful_restart": "{{ True }}"
-                    }
-                }
+                        "graceful_restart": "{{ True }}",
+                    },
+                },
             },
         },
         {
@@ -322,10 +315,10 @@ class Bgp_afTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "activate": "{{ True }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -348,10 +341,10 @@ class Bgp_afTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "additional_paths": "{{ action }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -376,12 +369,12 @@ class Bgp_afTemplate(NetworkTemplate):
                                 "peer": "{{ peer }}",
                                 "default_originate": {
                                     "route_map": "{{ route_map.split(" ")[1] }}",
-                                    "always": "{{ True if always is defined }}"
-                                }
-                            }
-                        }
-                    }
-                }
+                                    "always": "{{ True if always is defined }}",
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -403,10 +396,10 @@ class Bgp_afTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "graceful_restart": "{{ True }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -428,10 +421,10 @@ class Bgp_afTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "next_hop_unchanged": "{{ True }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -455,10 +448,10 @@ class Bgp_afTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "next_hop_address_family": "{{ 'ipv6' }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -483,12 +476,12 @@ class Bgp_afTemplate(NetworkTemplate):
                                 "peer": "{{ peer }}",
                                 "prefix_list": {
                                     "name": "{{ name }}",
-                                    "direction": "{{ dir }}"
-                                }
-                            }
-                        }
-                    }
-                }
+                                    "direction": "{{ dir }}",
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -513,12 +506,12 @@ class Bgp_afTemplate(NetworkTemplate):
                                 "peer": "{{ peer }}",
                                 "route_map": {
                                     "name": "{{ name }}",
-                                    "direction": "{{ dir }}"
-                                }
-                            }
-                        }
-                    }
-                }
+                                    "direction": "{{ dir }}",
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -541,10 +534,10 @@ class Bgp_afTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "peer": "{{ peer }}",
                                 "weight": "{{ weight }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -571,12 +564,12 @@ class Bgp_afTemplate(NetworkTemplate):
                                 "peer": "{{ peer }}",
                                 "encapsulation": {
                                     "transport": "{{ type }}",
-                                    "source_interface": "{{ interface }}"
-                                }
-                            }
-                        }
-                    }
-                }
+                                    "source_interface": "{{ interface }}",
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -599,10 +592,10 @@ class Bgp_afTemplate(NetworkTemplate):
                             "{{ address }}": {
                                 "address": "{{ address }}",
                                 "route_map": "{{ route_map }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -627,11 +620,11 @@ class Bgp_afTemplate(NetworkTemplate):
                                 "protocol": "{{ route }}",
                                 "route_map": "{{ route_map.split(" ")[1] }}",
                                 "isis_level": "{{ level }}",
-                                "ospf_route": "{{ match.split(" ")[1] }}"
-                            }
-                        ]
-                    }
-                }
+                                "ospf_route": "{{ match.split(" ")[1] }}",
+                            },
+                        ],
+                    },
+                },
             },
         },
         {
@@ -639,7 +632,9 @@ class Bgp_afTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*route-target
-                \s+(?P<mode>both|import|export)
+                \s+(?P<action>\S+)
+                \s*(?P<type>evpn|vpn-ipv4|vpn-ipv6)*
+                \s*(?P<map>route-map\s\S+)*
                 \s+(?P<target>\S+)
                 *$""",
                 re.VERBOSE,
@@ -650,11 +645,13 @@ class Bgp_afTemplate(NetworkTemplate):
                 "address_family": {
                     '{{ afi + "_" + vrf|d() }}': {
                         "route_target": {
-                            "mode": "{{ mode }}",
+                            "action": "{{ action }}",
+                            "type": "{{ type }}",
+                            "route_map": "{{ map.split(" ")[1] }}",
                             "target": "{{ target }}",
-                        }
-                    }
-                }
+                        },
+                    },
+                },
             },
         },
     ]

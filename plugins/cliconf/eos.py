@@ -19,11 +19,12 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
-author: Ansible Networking Team
-cliconf: eos
+author: Ansible Networking Team (@ansible-network)
+name: eos
 short_description: Use eos cliconf to run command on Arista EOS platform
 description:
 - This eos plugin provides low level abstraction apis for sending and receiving CLI
@@ -55,26 +56,29 @@ options:
       to the device is present in this list, the existing cache is invalidated.
     version_added: 2.0.0
     type: list
+    elements: str
     default: []
     vars:
     - name: ansible_eos_config_commands
 """
 
 import json
-import time
 import re
 
 from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_text
 from ansible.module_utils.common._collections_compat import Mapping
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.config import (
     NetworkConfig,
     dumps,
 )
-from ansible.plugins.cliconf import CliconfBase, enable_mode
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.cliconf_base import (
+    CliconfBase,
+    enable_mode,
+)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import session_name
 
 
 class Cliconf(CliconfBase):
@@ -92,18 +96,18 @@ class Cliconf(CliconfBase):
         self._session_support = None
 
     @enable_mode
-    def get_config(self, source="running", format="text", flags=None):
+    def get_config(self, source="running", flags=None, format="text"):
         options_values = self.get_option_values()
         if format not in options_values["format"]:
             raise ValueError(
                 "'format' value %s is invalid. Valid values are %s"
-                % (format, ",".join(options_values["format"]))
+                % (format, ",".join(options_values["format"])),
             )
 
         lookup = {"running": "running-config", "startup": "startup-config"}
         if source not in lookup:
             raise ValueError(
-                "fetching configuration from %s is not supported" % source
+                "fetching configuration from %s is not supported" % source,
             )
 
         cmd = "show %s " % lookup[source]
@@ -115,24 +119,107 @@ class Cliconf(CliconfBase):
         return self.send_command(cmd)
 
     @enable_mode
-    def edit_config(
-        self, candidate=None, commit=True, replace=None, comment=None
+    def get_session_config(
+        self,
+        candidate=None,
+        commit=True,
+        replace=None,
+        comment=None,
     ):
-
         operations = self.get_device_operations()
         self.check_edit_config_capability(
-            operations, candidate, commit, replace, comment
+            operations,
+            candidate,
+            commit,
+            replace,
+            comment,
         )
 
         if (commit is False) and (not self.supports_sessions()):
             raise ValueError(
-                "check mode is not supported without configuration session"
+                "check mode is not supported without configuration session",
             )
 
         resp = {}
         session = None
         if self.supports_sessions():
-            session = "ansible_%s" % int(time.time())
+            session = session_name()
+            resp.update({"session": session})
+            self.send_command("configure session %s" % session)
+            if replace:
+                self.send_command("rollback clean-config")
+        else:
+            self.send_command("configure")
+
+        results = []
+        requests = []
+        multiline = False
+        for line in to_list(candidate):
+            if not isinstance(line, Mapping):
+                line = {"command": line}
+
+            cmd = line["command"]
+            if cmd == "end":
+                continue
+            if cmd.startswith("banner") or multiline:
+                multiline = True
+            elif cmd == "EOF" and multiline:
+                multiline = False
+
+            if multiline:
+                line["sendonly"] = True
+
+            if cmd != "end" and not cmd.startswith("!"):
+                try:
+                    results.append(self.send_command(**line))
+                    requests.append(cmd)
+                except AnsibleConnectionFailure as e:
+                    self.discard_changes(session)
+                    raise AnsibleConnectionFailure(e.message)
+
+        resp["request"] = requests
+        resp["response"] = results
+        if self.supports_sessions():
+            out = self.send_command("show session-config")
+            if out:
+                resp["diff"] = out.strip()
+
+            if commit:
+                self.commit()
+            else:
+                self.discard_changes(session)
+        else:
+            self.send_command("end")
+        if resp.get("diff"):
+            return resp["diff"]
+        return resp
+
+    @enable_mode
+    def edit_config(
+        self,
+        candidate=None,
+        commit=True,
+        replace=None,
+        comment=None,
+    ):
+        operations = self.get_device_operations()
+        self.check_edit_config_capability(
+            operations,
+            candidate,
+            commit,
+            replace,
+            comment,
+        )
+
+        if (commit is False) and (not self.supports_sessions()):
+            raise ValueError(
+                "check mode is not supported without configuration session",
+            )
+
+        resp = {}
+        session = None
+        if self.supports_sessions():
+            session = session_name()
             resp.update({"session": session})
             self.send_command("configure session %s" % session)
             if replace:
@@ -187,12 +274,13 @@ class Cliconf(CliconfBase):
         prompt=None,
         answer=None,
         sendonly=False,
-        output=None,
         newline=True,
+        output=None,
         check_all=False,
+        version=None,
     ):
         if output:
-            command = self._get_command_with_output(command, output)
+            command = self._get_command_with_output(command, output, version)
         return self.send_command(
             command=command,
             prompt=prompt,
@@ -223,9 +311,12 @@ class Cliconf(CliconfBase):
                 cmd = {"command": cmd}
 
             output = cmd.pop("output", None)
+            version = cmd.pop("version", None)
             if output:
                 cmd["command"] = self._get_command_with_output(
-                    cmd["command"], output
+                    cmd["command"],
+                    output,
+                    version,
                 )
 
             try:
@@ -245,6 +336,12 @@ class Cliconf(CliconfBase):
                 responses.append(out)
         return responses
 
+    def restore(self, filename=None, path=""):
+        if not filename:
+            raise ValueError("'file_name' value is required for restore")
+        cmd = f"configure replace {path}{filename} best-effort"
+        return self.send_command(cmd)
+
     def get_diff(
         self,
         candidate=None,
@@ -260,19 +357,19 @@ class Cliconf(CliconfBase):
 
         if candidate is None and device_operations["supports_generate_diff"]:
             raise ValueError(
-                "candidate configuration is required to generate diff"
+                "candidate configuration is required to generate diff",
             )
 
         if diff_match not in option_values["diff_match"]:
             raise ValueError(
                 "'match' value %s in invalid, valid values are %s"
-                % (diff_match, ", ".join(option_values["diff_match"]))
+                % (diff_match, ", ".join(option_values["diff_match"])),
             )
 
         if diff_replace not in option_values["diff_replace"]:
             raise ValueError(
                 "'replace' value %s in invalid, valid values are %s"
-                % (diff_replace, ", ".join(option_values["diff_replace"]))
+                % (diff_replace, ", ".join(option_values["diff_replace"])),
             )
 
         # prepare candidate configuration
@@ -282,18 +379,21 @@ class Cliconf(CliconfBase):
         if running and diff_match != "none" and diff_replace != "config":
             # running configuration
             running_obj = NetworkConfig(
-                indent=3, contents=running, ignore_lines=diff_ignore_lines
+                indent=3,
+                contents=running,
+                ignore_lines=diff_ignore_lines,
             )
             configdiffobjs = candidate_obj.difference(
-                running_obj, path=path, match=diff_match, replace=diff_replace
+                running_obj,
+                path=path,
+                match=diff_match,
+                replace=diff_replace,
             )
 
         else:
             configdiffobjs = candidate_obj.items
 
-        diff["config_diff"] = (
-            dumps(configdiffobjs, "commands") if configdiffobjs else ""
-        )
+        diff["config_diff"] = dumps(configdiffobjs, "commands") if configdiffobjs else ""
         return diff
 
     def supports_sessions(self):
@@ -381,19 +481,22 @@ class Cliconf(CliconfBase):
         """
         if self._connection.connected:
             self._update_cli_prompt_context(
-                config_context="(config", exit_command="abort"
+                config_context="(config",
+                exit_command="abort",
             )
 
-    def _get_command_with_output(self, command, output):
+    def _get_command_with_output(self, command, output, version):
         options_values = self.get_option_values()
         if output not in options_values["output"]:
             raise ValueError(
                 "'output' value %s is invalid. Valid values are %s"
-                % (output, ",".join(options_values["output"]))
+                % (output, ",".join(options_values["output"])),
             )
 
         if output == "json" and not command.endswith("| json"):
             cmd = "%s | json" % command
         else:
             cmd = command
+        if version != "latest" and "| json" in cmd:
+            cmd = "%s version %s" % (cmd, version)
         return cmd

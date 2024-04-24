@@ -1,14 +1,14 @@
 ---
-- debug:
-    msg: Start eos_bgp_address_family replaced integration tests ansible_connection={{
+- ansible.builtin.debug:
+    msg:
+      Start eos_bgp_address_family replaced integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: Replace given bgp_address_family configuration
       become: true
       register: result
@@ -20,7 +20,7 @@
             - afi: "ipv4"
               vrf: "vrft"
               redistribute:
-                - protocol: "ospf3"
+                - protocol: "ospfv3"
                   ospf_route: "external"
               bgp_params:
                 additional_paths: "receive"
@@ -29,7 +29,7 @@
                 - protocol: "isis"
                   isis_level: "level-2"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 15
           - result.changed == true
@@ -42,10 +42,10 @@
       register: result
       arista.eos.eos_bgp_address_family: *replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
 
   always:
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

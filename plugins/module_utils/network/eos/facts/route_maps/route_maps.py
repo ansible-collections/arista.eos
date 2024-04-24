@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -14,24 +15,23 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
 import re
 
+from copy import deepcopy
+
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.route_maps.route_maps import (
+    Route_mapsArgs,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.route_maps import (
     Route_mapsTemplate,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.route_maps.route_maps import (
-    Route_mapsArgs,
-)
 
 
 class Route_mapsFacts(object):
-    """ The eos route_maps facts class
-    """
+    """The eos route_maps facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -54,7 +54,7 @@ class Route_mapsFacts(object):
         return connection.get("show running-config | section route-map ")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Route_maps network resource
+        """Populate the facts for Route_maps network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -74,9 +74,7 @@ class Route_mapsFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
         # parse native config using the Ospf_interfaces template
         route_maps_facts = []
         # parse native config using the Route_maps template
@@ -89,17 +87,31 @@ class Route_mapsFacts(object):
                     if k == "entries":
                         e_list = []
                         match_dict = {}
+                        match_ip = {}
+                        match_ipv6 = {}
                         set_dict = {}
                         for el in v:
                             for entry_k, entry_v in iteritems(el):
                                 if entry_k == "match":
-                                    match_dict.update(entry_v)
+                                    if "ip" in entry_v or "ipv6" in entry_v:
+                                        for ipk, ipv in iteritems(entry_v):
+                                            if "ip" in entry_v:
+                                                match_ip.update(ipv)
+                                            if "ipv6" in entry_v:
+                                                match_ipv6.update(ipv)
+                                        matchv = {
+                                            "ip": match_ip,
+                                            "ipv6": match_ipv6,
+                                        }
+                                    else:
+                                        matchv = entry_v
+                                    match_dict.update(matchv)
                                 elif entry_k == "set":
                                     set_dict.update(entry_v)
                                 else:
                                     dict_update.update(el)
                         dict_update.update(
-                            {"match": match_dict, "set": set_dict}
+                            {"match": match_dict, "set": set_dict},
                         )
                         e_list.append(dict_update)
                         objs.update({"entries": e_list})
@@ -117,7 +129,7 @@ class Route_mapsFacts(object):
         ansible_facts["ansible_network_resources"].pop("route_maps", None)
         facts = {"route_maps": []}
         params = utils.remove_empties(
-            utils.validate_config(self.argument_spec, {"config": r_facts})
+            utils.validate_config(self.argument_spec, {"config": r_facts}),
         )
         if params.get("config"):
             for cfg in params["config"]:

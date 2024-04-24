@@ -1,0 +1,52 @@
+---
+- ansible.builtin.debug:
+    msg:
+      Start eos_logging_global overridden integration tests ansible_connection={{
+      ansible_connection }}
+
+- ansible.builtin.include_tasks: _populate.yaml
+
+- block:
+    - name: override given logging_global configuration
+      become: true
+      register: result
+      arista.eos.eos_logging_global: &replaced
+        state: overridden
+        config:
+          synchronous:
+            level: "critical"
+          trap:
+            severity: "emergencies"
+          hosts:
+            - name: "host02"
+              protocol: "tcp"
+              port: "80"
+          vrfs:
+            - name: "vrf03"
+              source_interface: "Vlan100"
+            - name: "vrf04"
+              hosts:
+                - name: "hostvrf1"
+                  protocol: "tcp"
+                  port: "23"
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 14
+          - result.changed == true
+          - result.commands|symmetric_difference(replaced.commands) == []
+          - result.after == replaced.after
+          - result.before == replaced.before
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_logging_global: *replaced
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

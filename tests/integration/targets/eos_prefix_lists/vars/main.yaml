@@ -1,0 +1,94 @@
+---
+merged:
+  commands:
+    - ip prefix-list v401
+    - seq 25 deny 45.55.4.0/24
+    - seq 100 permit 11.11.2.0/24 ge 32
+    - ip prefix-list v402
+    - seq 10 deny 10.1.1.0/24
+    - ipv6 prefix-list v601
+    - seq 125 deny 5000:1::/64
+
+replaced:
+  commands:
+    - ip prefix-list v401
+    - no seq 100
+    - seq 200 permit 200.11.0.0/16 eq 32
+    - no ip prefix-list v402
+  config:
+    - afi: "ipv4"
+      prefix_lists:
+        - entries:
+            - action: "deny"
+              address: "45.55.4.0/24"
+              sequence: 25
+            - action: "permit"
+              address: "200.11.0.0/16"
+              match:
+                masklen: 32
+                operator: "eq"
+              sequence: 200
+          name: "v401"
+    - afi: "ipv6"
+      prefix_lists:
+        - entries:
+            - action: "deny"
+              address: "5000:1::/64"
+              sequence: 125
+          name: "v601"
+
+overridden:
+  commands:
+    - no ipv6 prefix-list v601
+    - ip prefix-list v401
+    - seq 200 permit 200.11.0.0/16 eq 32
+    - no seq 100
+    - no ip prefix-list v402
+
+  config:
+    - afi: "ipv4"
+      prefix_lists:
+        - entries:
+            - action: "deny"
+              address: "45.55.4.0/24"
+              sequence: 25
+            - action: "permit"
+              address: "200.11.0.0/16"
+              match:
+                masklen: 32
+                operator: "eq"
+              sequence: 200
+          name: "v401"
+
+rtt:
+  commands:
+    - ip prefix-list v401
+    - no seq 200
+
+gathered:
+  config:
+    - afi: "ipv4"
+      prefix_lists:
+        - entries:
+            - action: "deny"
+              address: "45.55.4.0/24"
+              sequence: 25
+            - action: "permit"
+              address: "11.11.2.0/24"
+              match:
+                masklen: 32
+                operator: "ge"
+              sequence: 100
+          name: "v401"
+        - entries:
+            - action: "deny"
+              address: "10.1.1.0/24"
+              sequence: 10
+          name: "v402"
+    - afi: "ipv6"
+      prefix_lists:
+        - entries:
+            - action: "deny"
+              address: "5000:1::/64"
+              sequence: 125
+          name: "v601"

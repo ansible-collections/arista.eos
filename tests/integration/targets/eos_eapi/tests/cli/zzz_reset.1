@@ -1,22 +1,20 @@
-- debug: msg="START CLI/RESET.YAML"
+- ansible.builtin.debug: msg="START CLI/RESET.YAML"
 
 - name: Change endpoint ports back to default values
   eos_config:
     lines: default management api http-commands
     match: none
-    provider: "{{ cli }}"
   register: eos_eapi_output
   connection: local
 
 - eos_command:
     commands:
       - show management api http-commands | json
-    provider: "{{ cli }}"
   register: http_config
   connection: local
 
 - name: Expect endpoint ports to have default port values
-  assert:
+  ansible.builtin.assert:
     that:
         - http_config.stdout[0].httpServer.port == 80
         - http_config.stdout[0].httpsServer.port == 443
@@ -26,13 +24,12 @@
   eos_config:
     lines: default management api http-commands
     match: none
-    provider: "{{ cli }}"
   register: eos_eapi_output
   connection: local
 
 - name: Expect action to be idempotent
-  assert:
+  ansible.builtin.assert:
     that:
       - "eos_eapi_output.changed == false"
 
-- debug: msg="END CLI/RESET.YAML"
+- ansible.builtin.debug: msg="END CLI/RESET.YAML"

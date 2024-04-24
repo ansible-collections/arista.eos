@@ -11,22 +11,22 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
 import re
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from copy import deepcopy
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lag_interfaces.lag_interfaces import (
     Lag_interfacesArgs,
 )
 
 
 class Lag_interfacesFacts(object):
-    """ The eos lag_interfaces fact class
-    """
+    """The eos lag_interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -46,7 +46,7 @@ class Lag_interfacesFacts(object):
         return connection.get("show running-config | section ^interface")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for lag_interfaces
+        """Populate the facts for lag_interfaces
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected configuration
@@ -62,9 +62,7 @@ class Lag_interfacesFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
 
         objs = {}
         for resource in resources:
@@ -83,11 +81,10 @@ class Lag_interfacesFacts(object):
         facts = {"lag_interfaces": []}
         if objs:
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
-            facts["lag_interfaces"] = [
-                utils.remove_empties(cfg) for cfg in params["config"]
-            ]
+            facts["lag_interfaces"] = [utils.remove_empties(cfg) for cfg in params["config"]]
         ansible_facts["ansible_network_resources"].update(facts)
         return ansible_facts
 
@@ -109,7 +106,9 @@ class Lag_interfacesFacts(object):
 
         interface = {"member": interface_name}
         match = re.match(
-            r".*channel-group (\d+) mode (\S+)", conf, re.MULTILINE | re.DOTALL
+            r".*channel-group (\d+) mode (\S+)",
+            conf,
+            re.MULTILINE | re.DOTALL,
         )
         if match:
             config["name"], interface["mode"] = match.groups()

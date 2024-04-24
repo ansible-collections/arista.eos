@@ -27,12 +27,12 @@ The arg spec for the eos_static_routes module
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 class Static_routesArgs(object):
-    """The arg spec for the eos_static_routes module
-    """
+    """The arg spec for the eos_static_routes module"""
 
     def __init__(self, **kwargs):
         pass
@@ -59,7 +59,7 @@ class Static_routesArgs(object):
                                         "admin_distance": {"type": "int"},
                                         "description": {"type": "str"},
                                         "forward_router_address": {
-                                            "type": "str"
+                                            "type": "str",
                                         },
                                         "interface": {"type": "str"},
                                         "nexthop_grp": {"type": "str"},

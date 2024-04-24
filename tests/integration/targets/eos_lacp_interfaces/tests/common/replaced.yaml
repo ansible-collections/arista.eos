@@ -1,16 +1,14 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
-        rate: fast
+        timer: fast
         port_priority: 45
     other_config:
-
       - name: Ethernet2
-        rate: fast
+        timer: fast
 
 - become: true
   arista.eos.eos_facts:
@@ -20,10 +18,10 @@
   register: result
   become: true
   arista.eos.eos_lacp_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: replaced
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lacp_interfaces|symmetric_difference(result.before)
         == []
@@ -32,15 +30,15 @@
   arista.eos.eos_facts:
     gather_network_resources: lacp_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.lacp_interfaces|symmetric_difference(result.after)
         == []
 
-- set_fact:
-    expected_config: '{{ config }} + {{ other_config }}'
+- ansible.builtin.set_fact:
+    expected_config: "{{ config + other_config }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - expected_config|symmetric_difference(ansible_facts.network_resources.lacp_interfaces)
         == []

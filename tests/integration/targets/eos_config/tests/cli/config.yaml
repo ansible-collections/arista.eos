@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/config.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/config.yaml on connection={{ ansible_connection }}"
 
 - name: setup
   become: true
@@ -17,13 +17,13 @@
   become: true
   register: result
   arista.eos.eos_config:
-    lines: hostname foo
-    config: '{{ config.stdout[0] }}'
+    lines: hostname int_tests
+    config: "{{ config.stdout[0] }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
-      - "'hostname foo' in result.updates"
+      - "'hostname int_tests' in result.updates"
 
 - name: get current running-config
   become: true
@@ -35,10 +35,10 @@
   become: true
   register: result
   arista.eos.eos_config:
-    lines: hostname foo
-    config: '{{ config.stdout[0] }}'
+    lines: hostname int_tests
+    config: "{{ config.stdout[0] }}"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -48,4 +48,4 @@
     lines: hostname {{ inventory_hostname_short }}
     match: none
 
-- debug: msg="END cli/config.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/config.yaml on connection={{ ansible_connection }}"

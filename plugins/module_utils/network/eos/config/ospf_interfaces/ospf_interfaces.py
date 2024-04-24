@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -17,15 +18,14 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+    ResourceModule,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
-    ResourceModule,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospf_interfaces import (
     Ospf_interfacesTemplate,
 )
@@ -38,7 +38,7 @@ class Ospf_interfaces(ResourceModule):
 
     def __init__(self, module):
         super(Ospf_interfaces, self).__init__(
-            empty_fact_val={},
+            empty_fact_val=[],
             facts_module=Facts(module),
             module=module,
             resource="ospf_interfaces",
@@ -76,7 +76,7 @@ class Ospf_interfaces(ResourceModule):
         ]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -87,8 +87,8 @@ class Ospf_interfaces(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-            want, have and desired state.
+        """Generate configuration commands to send based on
+        want, have and desired state.
         """
 
         # convert list of dicts to dicts of dicts
@@ -129,18 +129,18 @@ class Ospf_interfaces(ResourceModule):
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Ospf_interfaces network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Ospf_interfaces network resource.
         """
         begin = len(self.commands)
         self._compare_addr_family(want=want, have=have)
         if len(self.commands) != begin:
-
             tmp = want or have
             tmp.pop("address_family", {})
             self.commands.insert(
-                begin, self._tmplt.render(tmp, "interfaces", False)
+                begin,
+                self._tmplt.render(tmp, "interfaces", False),
             )
 
     def _compare_addr_family(self, want, have):

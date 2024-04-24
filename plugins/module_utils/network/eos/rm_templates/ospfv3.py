@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -15,7 +16,8 @@ the given network resource.
 """
 
 import re
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network_template import (
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
 
@@ -40,9 +42,7 @@ def _tmplt_ospf_address_family_cmd(config_data):
 def _tmplt_ospf_adjacency_cmd(config_data):
     command = "adjacency exchange-start threshold"
     if "adjacency" in config_data:
-        command += " {threshold}".format(
-            **config_data["adjacency"]["exchange_start"]
-        )
+        command += " {threshold}".format(**config_data["adjacency"]["exchange_start"])
     return command
 
 
@@ -50,17 +50,13 @@ def _tmplt_ospf_auto_cost(config_data):
     if "auto_cost" in config_data:
         command = "auto-cost"
         if "reference_bandwidth" in config_data["auto_cost"]:
-            command += " reference-bandwidth {reference_bandwidth}".format(
-                **config_data["auto_cost"]
-            )
+            command += " reference-bandwidth " + config_data["auto_cost"]["reference_bandwidth"]
         return command
 
 
 def _tmplt_ospf_area_authentication(config_data):
     if "area_id" in config_data:
-        command = "area {area_id} authentication ipsec spi ".format(
-            **config_data
-        )
+        command = "area {area_id} authentication ipsec spi ".format(**config_data)
         command += "{spi} {algorithm}".format(**config_data["authentication"])
         if "passphrase" in config_data["authentication"]:
             command += " passphrase"
@@ -84,9 +80,7 @@ def _tmplt_ospf_area_authentication(config_data):
 def _tmplt_ospf_area_encryption(config_data):
     if "area_id" in config_data:
         command = "area {area_id} encryption ipsec spi ".format(**config_data)
-        command += "{spi} esp {encryption} {algorithm}".format(
-            **config_data["encryption"]
-        )
+        command += "{spi} esp {encryption} {algorithm}".format(**config_data["encryption"])
         if "passphrase" in config_data["encryption"]:
             command += " passphrase"
         if (
@@ -111,24 +105,15 @@ def _tmplt_ospf_area_nssa(config_data):
         command = "area {area_id} nssa".format(**config_data)
         if "default_information_originate" in config_data["nssa"]:
             command += " default-information-originate"
-            if (
-                "metric"
-                in config_data["nssa"]["default_information_originate"]
-            ):
+            if "metric" in config_data["nssa"]["default_information_originate"]:
                 command += " metric {metric}".format(
-                    **config_data["nssa"]["default_information_originate"]
+                    **config_data["nssa"]["default_information_originate"],
                 )
-            if (
-                "metric_type"
-                in config_data["nssa"]["default_information_originate"]
-            ):
+            if "metric_type" in config_data["nssa"]["default_information_originate"]:
                 command += " metric-type {metric_type}".format(
-                    **config_data["nssa"]["default_information_originate"]
+                    **config_data["nssa"]["default_information_originate"],
                 )
-            if (
-                "nssa_only"
-                in config_data["nssa"]["default_information_originate"]
-            ):
+            if "nssa_only" in config_data["nssa"]["default_information_originate"]:
                 command += " nssa-only"
         if config_data["nssa"].get("nssa_only"):
             command += " nssa-only"
@@ -175,17 +160,11 @@ def _tmplt_ospf_default_information(config_data):
         if "always" in config_data["default_information"]:
             command += " always"
         if "metric" in config_data["default_information"]:
-            command += " metric {metric}".format(
-                **config_data["default_information"]
-            )
+            command += " metric {metric}".format(**config_data["default_information"])
         if "metric_type" in config_data["default_information"]:
-            command += " metric-type {metric_type}".format(
-                **config_data["default_information"]
-            )
+            command += " metric-type {metric_type}".format(**config_data["default_information"])
         if "route_map" in config_data["default_information"]:
-            command += " route-map {route_map}".format(
-                **config_data["default_information"]
-            )
+            command += " route-map {route_map}".format(**config_data["default_information"])
         return command
 
 
@@ -205,28 +184,22 @@ def _tmplt_ospf_max_metric(config_data):
             command += " router-lsa"
         if "external_lsa" in config_data["max_metric"]["router_lsa"]:
             command += " external-lsa"
-            if (
-                "max_metric_value"
-                in config_data["max_metric"]["router_lsa"]["external_lsa"]
-            ):
+            if "max_metric_value" in config_data["max_metric"]["router_lsa"]["external_lsa"]:
                 command += " {max_metric_value}".format(
-                    **config_data["max_metric"]["router_lsa"]["external_lsa"]
+                    **config_data["max_metric"]["router_lsa"]["external_lsa"],
                 )
         if "include_stub" in config_data["max_metric"]["router_lsa"]:
             if config_data["max_metric"]["router_lsa"].get("include_stub"):
                 command += " include-stub"
         if "on_startup" in config_data["max_metric"]["router_lsa"]:
             command += " on-startup {wait_period}".format(
-                **config_data["max_metric"]["router_lsa"]["on_startup"]
+                **config_data["max_metric"]["router_lsa"]["on_startup"],
             )
         if "summary_lsa" in config_data["max_metric"]["router_lsa"]:
             command += " summary-lsa"
-            if (
-                "max_metric_value"
-                in config_data["max_metric"]["router_lsa"]["summary_lsa"]
-            ):
+            if "max_metric_value" in config_data["max_metric"]["router_lsa"]["summary_lsa"]:
                 command += " {max_metric_value}".format(
-                    **config_data["max_metric"]["router_lsa"]["summary_lsa"]
+                    **config_data["max_metric"]["router_lsa"]["summary_lsa"],
                 )
         return command
 
@@ -238,23 +211,29 @@ def _tmplt_ospf_redistribute(config_data):
     return command
 
 
-def _tmplt_ospf_timers_throttle(config_data):
-    if "throttle" in config_data["timers"]:
-        command = "timers throttle"
-        if "lsa" in config_data["timers"]["throtle"]:
-            if config_data["timers"]["throtle"].get("lsa"):
-                command += " lsa all"
-        if "spf" in config_data["timers"]["throtle"]:
-            if config_data["timers"]["throtle"].get("spf"):
-                command += " spf"
-        if "initial" in config_data["timers"]["throttle"]:
-            command += " {initial}".format(**config_data["timers"]["throttle"])
-        if "min" in config_data["timers"]["throttle"]:
-            command += " {min}".format(**config_data["timers"]["throttle"])
-        if "max" in config_data["timers"]["throttle"]:
-            command += " {max}".format(**config_data["timers"]["max"])
+def _tmplt_ospf_timers_lsa(config_data):
+    command = ""
+    if "lsa" in config_data["timers"]:
+        command += "timers lsa {direction}".format(**config_data["timers"]["lsa"])
+        if config_data["timers"]["lsa"]["direction"] == "rx":
+            command += " min interval "
+        else:
+            command += " delay initial "
+        if config_data["timers"]["lsa"].get("initial"):
+            command += str(config_data["timers"]["lsa"]["initial"])
+        if config_data["timers"]["lsa"].get("min"):
+            command += str(config_data["timers"]["lsa"]["min"])
+        if config_data["timers"]["lsa"].get("max"):
+            command += str(config_data["timers"]["lsa"]["max"])
+    return command
 
-        return command
+
+def _tmplt_ospf_timers_spf(config_data):
+    command = ""
+    if "spf" in config_data["timers"]:
+        command += "timers spf delay initial "
+        command += "{initial} {min} {max}".format(**config_data["timers"]["spf"])
+    return command
 
 
 def _tmplt_ospf_bfd(config_data):
@@ -272,7 +251,9 @@ class Ospfv3Template(NetworkTemplate):
     def __init__(self, lines=None, module=None):
         global os_version
         super(Ospfv3Template, self).__init__(
-            lines=lines, tmplt=self, module=module
+            lines=lines,
+            tmplt=self,
+            module=module,
         )
         if self._connection:
             os_version = self._get_os_version()
@@ -323,8 +304,8 @@ class Ospfv3Template(NetworkTemplate):
             "compval": "address_family",
             "result": {
                 "processes": {
-                    "address_family": {"{{ afi }}": {"afi": "{{ afi }}"}}
-                }
+                    "address_family": {"{{ afi }}": {"afi": "{{ afi }}"}},
+                },
             },
             "shared": True,
         },
@@ -346,12 +327,12 @@ class Ospfv3Template(NetworkTemplate):
                         '{{ afi|default("router", true) }}': {
                             "adjacency": {
                                 "exchange_start": {
-                                    "threshold": "{{ threshold|int }}"
-                                }
-                            }
-                        }
-                    }
-                }
+                                    "threshold": "{{ threshold|int }}",
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -368,11 +349,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "auto_cost": {
-                                "reference_bandwidth": '{{ ref_band.split(" ")[1] }}'
-                            }
-                        }
-                    }
-                }
+                                "reference_bandwidth": '{{ ref_band.split(" ")[1] }}',
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -395,11 +376,11 @@ class Ospfv3Template(NetworkTemplate):
                                 "{{ area_id }}": {
                                     "area_id": "{{ area_id }}",
                                     "default_cost": "{{ default_cost|int }}",
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -437,11 +418,11 @@ class Ospfv3Template(NetworkTemplate):
                                         "passphrase": "{{ line if passphrase is defined }}",
                                         "key": "{{ str(line) if passphrase is undefined }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -482,11 +463,11 @@ class Ospfv3Template(NetworkTemplate):
                                         "hidden_key": "{{ True if type is defined and type == '7'}}",
                                         "key": "{{ line if passphrase is not defined }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -520,20 +501,18 @@ class Ospfv3Template(NetworkTemplate):
                                         "default_information_originate": {
                                             "set": "{{ True if def_origin is defined and metric is undefined and "
                                             "metric_type is undefined and nssa_only is undefined }}",
-                                            "metric": "{{ metric.split("
-                                            ")[1]|int }}",
-                                            "metric_type": "{{ metric_type.split("
-                                            ")[1]|int }}",
+                                            "metric": "{{ metric.split(" ")[1]|int }}",
+                                            "metric_type": "{{ metric_type.split(" ")[1]|int }}",
                                             "nssa_only": "{{ True if nssa_only is defined }}",
                                         },
                                         "translate": "{{ True if translate is defined }}",
                                         "no_summary": "{{ True if no_summary is defined }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -567,13 +546,13 @@ class Ospfv3Template(NetworkTemplate):
                                             "subnet_mask": "{{ subnet_mask }}",
                                             "advertise": "{{ not not_advertise }}",
                                             "cost": "{{ cost_val }}",
-                                        }
+                                        },
                                     ],
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -598,11 +577,11 @@ class Ospfv3Template(NetworkTemplate):
                                         "set": "{{ True if stub is defined and no_sum is undefined }}",
                                         "summary_lsa": "{{ True if no_sum is defined }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -619,11 +598,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "bfd": {
-                                "all_interfaces": "{{ True if bfd is defined }}"
-                            }
-                        }
-                    }
-                }
+                                "all_interfaces": "{{ True if bfd is defined }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -640,11 +619,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "bfd": {
-                                "all_interfaces": "{{ True if bfd is defined }}"
-                            }
-                        }
-                    }
-                }
+                                "all_interfaces": "{{ True if bfd is defined }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -668,13 +647,12 @@ class Ospfv3Template(NetworkTemplate):
                                 "originate": "{{ True if originate is defined }}",
                                 "always": "{{ True if always is defined }}",
                                 "metric": "{{ metric.split(" ")[1]|int }}",
-                                "metric_type": "{{ metric_type.split("
-                                ")[1]|int }}",
+                                "metric_type": "{{ metric_type.split(" ")[1]|int }}",
                                 "route_map": "{{ route_map.split(" ")[1] }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -689,10 +667,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "default_metric": "{{ default_metric| int}}"
-                        }
-                    }
-                }
+                            "default_metric": "{{ default_metric| int}}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -710,10 +688,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "distance": "{{ distance| int}}"
-                        }
-                    }
-                }
+                            "distance": "{{ distance| int}}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -729,10 +707,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "fips_restrictions": "{{ True if fips is defined }}"
-                        }
-                    }
-                }
+                            "fips_restrictions": "{{ True if fips is defined }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -752,11 +730,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "graceful_restart": {
-                                "grace_period": "{{ period|int }}"
-                            }
-                        }
-                    }
-                }
+                                "grace_period": "{{ period|int }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -773,10 +751,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "graceful_restart": {"set": "{{ True }}"}
-                        }
-                    }
-                }
+                            "graceful_restart": {"set": "{{ True }}"},
+                        },
+                    },
+                },
             },
         },
         {
@@ -792,11 +770,11 @@ class Ospfv3Template(NetworkTemplate):
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "graceful_restart_helper": {
-                                "set": "{{ True if grace is defined }}"
-                            }
-                        }
-                    }
-                }
+                                "set": "{{ True if grace is defined }}",
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -815,10 +793,10 @@ class Ospfv3Template(NetworkTemplate):
                             "log_adjacency_changes": {
                                 "set": "{{ True if log is defined and detail is undefined }}",
                                 "detail": "{{ True if detail is defined }}",
-                            }
-                        }
-                    }
-                }
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -861,11 +839,11 @@ class Ospfv3Template(NetworkTemplate):
                                         "set": "{{ True if summary_lsa is defined and summary_lsa_metric is undefined }}",
                                         "max_metric_value": "{{ summary_lsa_metric }}",
                                     },
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
@@ -881,10 +859,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "maximum_paths": "{{ paths }}"
-                        }
-                    }
-                }
+                            "maximum_paths": "{{ paths }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -900,10 +878,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "passive_interface": "{{ True if passive is defined }}"
-                        }
-                    }
-                }
+                            "passive_interface": "{{ True if passive is defined }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -926,11 +904,11 @@ class Ospfv3Template(NetworkTemplate):
                                 {
                                     "routes": "{{ route }}",
                                     "route_map": "{{ map }}",
-                                }
-                            ]
-                        }
-                    }
-                }
+                                },
+                            ],
+                        },
+                    },
+                },
             },
         },
         {
@@ -947,10 +925,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "router_id": "{{ id }}"
-                        }
-                    }
-                }
+                            "router_id": "{{ id }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -965,31 +943,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "shutdown": "{{ True if shutdown is defined }}"
-                        }
-                    }
-                }
-            },
-        },
-        {
-            "name": "timers.lsa",
-            "getval": re.compile(
-                r"""\s+timers
-                    \slsa
-                    \sarrival
-                    \s(?P<lsa>\d+)
-                    *$""",
-                re.VERBOSE,
-            ),
-            "setval": "timers lsa arrival {{ timers.lsa }}",
-            "result": {
-                "processes": {
-                    "address_family": {
-                        '{{ afi|default("router", true) }}': {
-                            "timers": {"lsa": "{{ lsa }}"}
-                        }
-                    }
-                }
+                            "shutdown": "{{ True if shutdown is defined }}",
+                        },
+                    },
+                },
             },
         },
         {
@@ -1006,10 +963,10 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "timers": {"out_delay": "{{ out_delay }}"}
-                        }
-                    }
-                }
+                            "timers": {"out_delay": "{{ out_delay }}"},
+                        },
+                    },
+                },
             },
         },
         {
@@ -1027,70 +984,72 @@ class Ospfv3Template(NetworkTemplate):
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
-                            "timers": {"pacing": "{{ pacing }}"}
-                        }
-                    }
-                }
+                            "timers": {"pacing": "{{ pacing }}"},
+                        },
+                    },
+                },
             },
         },
         {
-            "name": "timers.throttle.lsa",
+            "name": "timers.lsa",
             "getval": re.compile(
                 r"""\s+timers
-                    \sthrottle
-                    \s*(?P<lsa>lsa all)*
+                    \s(?P<lsa>lsa)
+                    \s(?P<dir>rx|tx)
+                    \s*(min\sinterval)*
+                    \s*(delay\sinitial)*
                     \s*(?P<initial>\d+)*
                     \s*(?P<min>\d+)*
                     \s*(?P<max>\d+)
                     *$""",
                 re.VERBOSE,
             ),
-            "setval": "timers throttle lsa all {{ timers.throttle.initial }} {{ timers.throttle.min }} {{ timers.throttle.max }}",
+            "setval": _tmplt_ospf_timers_lsa,
+            "compval": "timers.lsa",
             "result": {
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "timers": {
-                                "throttle": {
-                                    "lsa": "{{ True if lsa is defined }}",
+                                "lsa": {
+                                    "direction": "{{ dir }}",
                                     "initial": "{{ initial }}",
                                     "min": "{{ min_delay }}",
                                     "max": "{{ max_delay }}",
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
         {
-            "name": "timers.throttle.spf",
+            "name": "timers.spf",
             "getval": re.compile(
                 r"""\s+timers
-                    \sthrottle
-                    \s*(?P<spf>spf)
+                    \s+(?P<spf>spf)
+                    \s+(delay\sinitial)
                     \s*(?P<initial>\d+)
                     \s*(?P<min>\d+)
                     \s*(?P<max>\d+)
                     *$""",
                 re.VERBOSE,
             ),
-            "setval": "timers throttle spf {{ timers.throttle.initial }} {{ timers.throttle.min }} {{ timers.throttle.max }}",
+            "setval": _tmplt_ospf_timers_spf,
             "result": {
                 "processes": {
                     "address_family": {
                         '{{ afi|default("router", true) }}': {
                             "timers": {
-                                "throttle": {
-                                    "spf": "{{ True if spf is defined }}",
+                                "spf": {
                                     "initial": "{{ initial }}",
                                     "min": "{{ min }}",
                                     "max": "{{ max }}",
-                                }
-                            }
-                        }
-                    }
-                }
+                                },
+                            },
+                        },
+                    },
+                },
             },
         },
     ]

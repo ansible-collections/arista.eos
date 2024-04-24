@@ -1,8 +1,16 @@
 ---
-- include: cli.yaml
+- name: Invoke cli tasks
+  ansible.builtin.include_tasks: cli.yaml
   tags:
     - network_cli
 
-- include: eapi.yaml
+- name: Invoke eapi tasks
+  ansible.builtin.include_tasks: eapi.yaml
   tags:
     - httpapi
+
+- name: Invoke redirectional tasks
+  ansible.builtin.include_tasks: redirection.yaml
+  when: ansible_version.full is version('2.10.0', '>=')
+  tags:
+    - network_cli

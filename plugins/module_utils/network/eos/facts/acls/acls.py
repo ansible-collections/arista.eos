@@ -12,22 +12,22 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
+
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.acls.acls import (
     AclsArgs,
 )
 
 
 class AclsFacts(object):
-    """ The eos acls fact class
-    """
+    """The eos acls fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -47,7 +47,7 @@ class AclsFacts(object):
         return connection.get("show running-config | section access-list")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for acls
+        """Populate the facts for acls
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -89,7 +89,8 @@ class AclsFacts(object):
         if objs:
             facts["acls"] = []
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             for cfg in params["config"]:
                 facts["acls"].append(utils.remove_empties(cfg))
@@ -150,79 +151,57 @@ class AclsFacts(object):
                 if "remark" in dev_config:
                     ace_dict.update({"sequence": dev_config_remainder.pop(0)})
                     ace_dict.update(
-                        {"remark": " ".join(dev_config_remainder[1:])}
+                        {"remark": " ".join(dev_config_remainder[1:])},
                     )
                 seq = re.search(r"\d+ (permit|deny) .*", dev_config)
                 if seq:
                     ace_dict.update({"sequence": dev_config_remainder.pop(0)})
                     ace_dict.update({"grant": dev_config_remainder.pop(0)})
-                    if (
-                        dev_config_remainder
-                        and dev_config_remainder[0] == "vlan"
-                    ):
+                    if dev_config_remainder and dev_config_remainder[0] == "vlan":
                         vlan_str = ""
                         dev_config_remainder.pop(0)
-                        if (
-                            dev_config_remainder
-                            and dev_config_remainder[0] == "inner"
-                        ):
+                        if dev_config_remainder and dev_config_remainder[0] == "inner":
                             vlan_str = dev_config_remainder.pop(0) + " "
-                        vlan_str = (
-                            dev_config_remainder.pop(0)
-                            + " "
-                            + dev_config_remainder.pop(0)
-                        )
+                        vlan_str = dev_config_remainder.pop(0) + " " + dev_config_remainder.pop(0)
                         ace_dict.update({"vlan": vlan_str})
                     if not standard:
                         protocol = dev_config_remainder[0]
                         ace_dict.update(
-                            {"protocol": dev_config_remainder.pop(0)}
+                            {"protocol": dev_config_remainder.pop(0)},
                         )
                     src_prefix = re.search(r"/", dev_config_remainder[0])
                     src_address = re.search(
-                        r"[a-z\d:\.]+", dev_config_remainder[0]
+                        r"[a-z\d:\.]+",
+                        dev_config_remainder[0],
                     )
-                    if (
-                        dev_config_remainder
-                        and dev_config_remainder[0] == "host"
-                    ):
+                    if dev_config_remainder and dev_config_remainder[0] == "host":
                         source_dict.update(
-                            {"host": dev_config_remainder.pop(1)}
+                            {"host": dev_config_remainder.pop(1)},
                         )
                         dev_config_remainder.pop(0)
-                    elif (
-                        dev_config_remainder
-                        and dev_config_remainder[0] == "any"
-                    ):
+                    elif dev_config_remainder and dev_config_remainder[0] == "any":
                         source_dict.update({"any": True})
                         dev_config_remainder.pop(0)
                     elif src_prefix:
                         source_dict.update(
-                            {"subnet_address": dev_config_remainder.pop(0)}
+                            {"subnet_address": dev_config_remainder.pop(0)},
                         )
                     elif src_address:
                         source_dict.update(
-                            {"address": dev_config_remainder.pop(0)}
+                            {"address": dev_config_remainder.pop(0)},
                         )
                         source_dict.update(
-                            {"wildcard_bits": dev_config_remainder.pop(0)}
+                            {"wildcard_bits": dev_config_remainder.pop(0)},
                         )
                     if dev_config_remainder:
-                        if (
-                            dev_config_remainder
-                            and dev_config_remainder[0] in operator
-                        ):
+                        if dev_config_remainder and dev_config_remainder[0] in operator:
                             port_dict = {}
                             src_port = ""
                             src_opr = dev_config_remainder.pop(0)
                             portlist = dev_config_remainder[:]
                             for config_remainder in portlist:
                                 addr = re.search(r"[\.\:]", config_remainder)
-                                if (
-                                    config_remainder == "any"
-                                    or config_remainder == "host"
-                                    or addr
-                                ):
+                                if config_remainder == "any" or config_remainder == "host" or addr:
                                     break
                                 src_port = src_port + " " + config_remainder
                                 dev_config_remainder.pop(0)
@@ -231,10 +210,7 @@ class AclsFacts(object):
                             source_dict.update({"port_protocol": port_dict})
                     ace_dict.update({"source": source_dict})
                     if not dev_config_remainder or standard:
-                        if (
-                            dev_config_remainder
-                            and "log" in dev_config_remainder
-                        ):
+                        if dev_config_remainder and "log" in dev_config_remainder:
                             ace_dict.update({"log": True})
                         if bool(ace_dict):
                             ace_list.append(ace_dict.copy())
@@ -245,30 +221,25 @@ class AclsFacts(object):
                         continue
                     dest_prefix = re.search(r"/", dev_config_remainder[0])
                     dest_address = re.search(
-                        r"[a-z\d:\.]+", dev_config_remainder[0]
+                        r"[a-z\d:\.]+",
+                        dev_config_remainder[0],
                     )
-                    if (
-                        dev_config_remainder
-                        and dev_config_remainder[0] == "host"
-                    ):
+                    if dev_config_remainder and dev_config_remainder[0] == "host":
                         dest_dict.update({"host": dev_config_remainder.pop(1)})
                         dev_config_remainder.pop(0)
-                    elif (
-                        dev_config_remainder
-                        and dev_config_remainder[0] == "any"
-                    ):
+                    elif dev_config_remainder and dev_config_remainder[0] == "any":
                         dest_dict.update({"any": True})
                         dev_config_remainder.pop(0)
                     elif dest_prefix:
                         dest_dict.update(
-                            {"subnet_address": dev_config_remainder.pop(0)}
+                            {"subnet_address": dev_config_remainder.pop(0)},
                         )
                     elif dest_address:
                         dest_dict.update(
-                            {"address": dev_config_remainder.pop(0)}
+                            {"address": dev_config_remainder.pop(0)},
                         )
                         dest_dict.update(
-                            {"wildcard_bits": dev_config_remainder.pop(0)}
+                            {"wildcard_bits": dev_config_remainder.pop(0)},
                         )
                     if dev_config_remainder:
                         if dev_config_remainder[0] in operator:
@@ -277,10 +248,7 @@ class AclsFacts(object):
                             dest_opr = dev_config_remainder.pop(0)
                             portlist = dev_config_remainder[:]
                             for config_remainder in portlist:
-                                if (
-                                    config_remainder in operator
-                                    or config_remainder in others
-                                ):
+                                if config_remainder in operator or config_remainder in others:
                                     break
                                 dest_port = dest_port + " " + config_remainder
                                 dev_config_remainder.pop(0)
@@ -300,13 +268,10 @@ class AclsFacts(object):
                             name_dict.update({"aces": ace_list[:]})
                         # acls_list.append(name_dict)
                         continue
-                    if protocol == "tcp" or "6":
+                    if protocol in ["tcp", "6"]:
                         protocol = "tcp"
                         flags_dict = {}
-                        if (
-                            dev_config_remainder
-                            and dev_config_remainder[0] in flags
-                        ):
+                        if dev_config_remainder and dev_config_remainder[0] in flags:
                             flaglist = dev_config_remainder[:]
                             for config_remainder in flaglist:
                                 if config_remainder not in flags:
@@ -327,33 +292,24 @@ class AclsFacts(object):
                             protocol = "icmp"
                         elif protocol == "58":
                             protocol = "icmpv6"
-                        if (
-                            dev_config_remainder
-                            and dev_config_remainder[0] not in others
-                        ):
+                        if dev_config_remainder and dev_config_remainder[0] not in others:
                             icmp_dict.update({dev_config_remainder[0]: True})
                             dev_config_remainder.pop(0)
                     if bool(icmp_dict):
                         protocol_option_dict.update({protocol: icmp_dict})
                     if protocol in ["ip", "ipv6"]:
-                        if (
-                            dev_config_remainder
-                            and dev_config_remainder[0] == "nexthop_group"
-                        ):
+                        if dev_config_remainder and dev_config_remainder[0] == "nexthop_group":
                             dev_config_remainder.pop(0)
                             ip_dict.update(
-                                {"nexthop_group": dev_config_remainder.pop(0)}
+                                {"nexthop_group": dev_config_remainder.pop(0)},
                             )
                     if bool(ip_dict):
                         protocol_option_dict.update({protocol: ip_dict})
                     if bool(protocol_option_dict):
                         ace_dict.update(
-                            {"protocol_options": protocol_option_dict}
+                            {"protocol_options": protocol_option_dict},
                         )
-                    if (
-                        dev_config_remainder
-                        and dev_config_remainder[0] == "ttl"
-                    ):
+                    if dev_config_remainder and dev_config_remainder[0] == "ttl":
                         dev_config_remainder.pop(0)
                         op = dev_config_remainder.pop(0)
                         ttl_dict = {op: dev_config_remainder.pop(0)}
@@ -362,12 +318,12 @@ class AclsFacts(object):
                         if config_remainder in others:
                             if config_remainder == "hop_limit":
                                 hop_index = dev_config_remainder.index(
-                                    config_remainder
+                                    config_remainder,
                                 )
                                 hoplimit_dict = {
-                                    dev_config_remainder[
-                                        hop_index + 1
-                                    ]: dev_config_remainder[hop_index + 2]
+                                    dev_config_remainder[hop_index + 1]: dev_config_remainder[
+                                        hop_index + 2
+                                    ],
                                 }
                                 ace_dict.update({"hop_limit": hoplimit_dict})
                                 dev_config_remainder.pop(0)
@@ -375,8 +331,7 @@ class AclsFacts(object):
                             ace_dict.update({config_remainder: True})
                             dev_config_remainder.pop(0)
                     if dev_config_remainder:
-                        config.update({"line": dev_config})
-                        return utils.remove_empties(config)
+                        ace_dict.update({"line": dev_config})
             if bool(ace_dict):
                 ace_list.append(ace_dict.copy())
             if len(ace_list):

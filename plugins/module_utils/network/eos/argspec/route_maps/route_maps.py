@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -31,8 +32,7 @@ The arg spec for the eos_route_maps module
 
 
 class Route_mapsArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_route_maps module
-    """
+    """The arg spec for the eos_route_maps module"""
 
     def __init__(self, **kwargs):
         pass
@@ -175,11 +175,11 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                                 "list": {"type": "str"},
                                                 "number": {"type": "str"},
                                                 "no_advertise": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "internet": {"type": "bool"},
                                                 "graceful_shutdown": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "delete": {"type": "bool"},
                                             },
@@ -239,10 +239,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "community_list": {
-                                                    "type": "str"
+                                                    "type": "str",
                                                 },
                                                 "exact_match": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -250,10 +250,10 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "community_list": {
-                                                    "type": "str"
+                                                    "type": "str",
                                                 },
                                                 "exact_match": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -261,7 +261,7 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "contributor": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                                 "route_map": {"type": "str"},
                                             },
@@ -277,11 +277,11 @@ class Route_mapsArgs(object):  # pylint: disable=R0903
                                             "type": "dict",
                                             "options": {
                                                 "community_list": {
-                                                    "type": "str"
+                                                    "type": "str",
                                                 },
                                                 "instances": {"type": "str"},
                                                 "exact_match": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },

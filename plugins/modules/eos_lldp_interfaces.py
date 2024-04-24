@@ -28,6 +28,7 @@ The module file for eos_lldp_interfaces
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -40,7 +41,7 @@ description:
 version_added: 1.0.0
 author: Nathaniel Case (@Qalthos)
 notes:
-- Tested against Arista EOS 4.20.10M
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
@@ -102,10 +103,10 @@ EXAMPLES = """
 - name: Merge provided configuration with running configuration
   arista.eos.eos_lldp_interfaces:
     config:
-    - name: Ethernet1
-      transmit: false
-    - name: Ethernet2
-      transmit: false
+      - name: Ethernet1
+        transmit: false
+      - name: Ethernet2
+        transmit: false
     state: merged
 
 #
@@ -139,8 +140,8 @@ EXAMPLES = """
     configuration
   arista.eos.eos_lldp_interfaces:
     config:
-    - name: Ethernet1
-      transmit: false
+      - name: Ethernet1
+        transmit: false
     state: replaced
 
 #
@@ -172,8 +173,8 @@ EXAMPLES = """
 - name: Override the LLDP configuration of all the interfaces with provided configuration
   arista.eos.eos_lldp_interfaces:
     config:
-    - name: Ethernet1
-      transmit: false
+      - name: Ethernet1
+        transmit: false
     state: overridden
 
 #
@@ -220,10 +221,10 @@ EXAMPLES = """
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_lldp_interfaces:
     config:
-    - name: Ethernet1
-      transmit: false
-    - name: Ethernet2
-      transmit: false
+      - name: Ethernet1
+        transmit: false
+      - name: Ethernet2
+        transmit: false
     state: rendered
 
 #
@@ -281,7 +282,6 @@ EXAMPLES = """
 #       transmit: False
 #     - name: Ethernet2
 #       transmit: False
-
 """
 RETURN = """
 before:
@@ -307,6 +307,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lldp_interfaces.lldp_interfaces import (
     Lldp_interfacesArgs,
 )

@@ -28,6 +28,7 @@ The module file for eos_ospfv2
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -39,7 +40,7 @@ description: This module configures and manages the attributes of ospfv2 on Aris
 version_added: 1.0.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
-- Tested against Arista EOS 4.23.0F
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
@@ -185,7 +186,7 @@ options:
                 description: Interface range.
                 type: str
               default:
-                description: If True, Set all interfaces to passive by default
+                description: If true, Set all interfaces to passive by default
                 type: bool
           point_to_point:
             description: Configure Point-to-point specific features.
@@ -384,7 +385,7 @@ options:
             description: Configure the default metric for redistributed routes
             type: int
           dn_bit_ignore:
-            description: If True, Disable dn-bit check for Type-3 LSAs in non-default
+            description: If true, Disable dn-bit check for Type-3 LSAs in non-default
               VRFs.
             type: bool
           graceful_restart:
@@ -399,7 +400,7 @@ options:
                 description: When true sets the grace_fulrestart config alone.
                 type: bool
           graceful_restart_helper:
-            description: If True, Enable graceful restart helper.
+            description: If true, Enable graceful restart helper.
             type: bool
           shutdown:
             description: Disable the OSPF instance.
@@ -524,82 +525,168 @@ EXAMPLES = """
 # Using merged
 
 # Before state:
-# ------------
+# -------------
 # localhost#show running-config | section ospf
 # localhost#
 
-  - name: replace Ospf configs
-    arista.eos.eos_ospfv2:
-      config:
-        - processes:
-            - process_id: 1
-              adjacency:
-                exchange_start:
-                    threshold: 20045623
-              areas:
-                - filter:
-                    address: "10.1.1.0/24"
-                  id: "0.0.0.2"
-                - id: "0.0.0.50"
-                  range:
-                    address: "172.20.0.0/16"
-                    cost: 34
-              default_information:
-                metric: 100
-                metric_type: 1
-                originate: True
-              distance:
-                intra_area: 85
-              max_lsa:
-                count: 8000
-                ignore_count: 3
-                ignore_time: 6
-                reset_time: 20
-                threshold: 40
-              networks:
-                - area: "0.0.0.0"
-                  prefix: 10.10.2.0/24
-                - area: "0.0.0.0"
-                  prefix: "10.10.3.0/24"
-              redistribute:
-                - routes: "static"
-              router_id: "170.21.0.4"
-            - process_id: 2
-              vrf: "vrf01"
-              areas:
-                - id: "0.0.0.9"
-                  default_cost: 20
-              max_lsa:
-                count: 8000
-                ignore_count: 3
-                ignore_time: 6
-                reset_time: 20
-                threshold: 40
-              networks:
-                - area: "0.0.0.0"
-                  prefix: 10.10.2.0/24
-                - area: "0.0.0.0"
-                  prefix: "10.10.3.0/24"
-              redistribute:
-                - routes: "static"
-              router_id: "170.21.0.4"
-            - process_id: 2
-              vrf: "vrf01"
-              areas:
-                - id: "0.0.0.9"
-                  default_cost: 20
-              max_lsa:
-                count: 8000
-                ignore_count: 3
-                ignore_time: 6
-                reset_time: 20
-                threshold: 40
-            - process_id: 3
-              vrf: "vrf02"
-              redistribute:
-                - routes: "connected"
+- name: Merge provided config into running config
+  arista.eos.eos_ospfv2:
+    config:
+      - processes:
+          - process_id: 1
+            adjacency:
+              exchange_start:
+                threshold: 20045623
+            areas:
+              - filter:
+                  address: "10.1.1.0/24"
+                id: "0.0.0.2"
+              - id: "0.0.0.50"
+                range:
+                  address: "172.20.0.0/16"
+                  cost: 34
+            default_information:
+              metric: 100
+              metric_type: 1
+              originate: true
+            distance:
+              intra_area: 85
+            max_lsa:
+              count: 8000
+              ignore_count: 3
+              ignore_time: 6
+              reset_time: 20
+              threshold: 40
+            networks:
+              - area: "0.0.0.0"
+                prefix: 10.10.2.0/24
+              - area: "0.0.0.0"
+                prefix: "10.10.3.0/24"
+            redistribute:
+              - routes: "static"
+            router_id: "170.21.0.4"
+          - process_id: 2
+            vrf: "vrf01"
+            areas:
+              - id: "0.0.0.9"
+                default_cost: 20
+            max_lsa:
+              count: 8000
+              ignore_count: 3
+              ignore_time: 6
+              reset_time: 20
+              threshold: 40
+            networks:
+              - area: "0.0.0.0"
+                prefix: 10.10.2.0/24
+              - area: "0.0.0.0"
+                prefix: "10.10.3.0/24"
+            redistribute:
+              - routes: "static"
+            router_id: "170.21.0.4"
+          - process_id: 2
+            vrf: "vrf01"
+            areas:
+              - id: "0.0.0.9"
+                default_cost: 20
+            max_lsa:
+              count: 8000
+              ignore_count: 3
+              ignore_time: 6
+              reset_time: 20
+              threshold: 40
+          - process_id: 3
+            vrf: "vrf02"
+            redistribute:
+              - routes: "connected"
+
+# Task output:
+# ------------
+#  before: {}
+
+# commands
+# - router ospf 1
+# - adjacency exchange-start threshold 20045623
+# - area 0.0.0.2 filter 10.1.1.0/24
+# - area 0.0.0.50  range 172.20.0.0/16 cost 34
+# - default-information originate metric 100 metric-type 1
+# - distance ospf intra-area 85
+# - max-lsa  8000 40 ignore-count 3  ignore-time 6  reset-time 20
+# - network 10.10.2.0/24 area 0.0.0.0
+# - network 10.10.3.0/24 area 0.0.0.0
+# - redistribute static
+# - router-id 170.21.0.4
+# - exit
+# - router ospf 2 vrf vrf01
+# - area 0.0.0.9 default-cost 20
+# - max-lsa  8000 40 ignore-count 3  ignore-time 6  reset-time 20
+# - network 10.10.2.0/24 area 0.0.0.0
+# - network 10.10.3.0/24 area 0.0.0.0
+# - redistribute static
+# - router-id 170.21.0.4
+# - exit
+# - router ospf 2 vrf vrf01
+# - area 0.0.0.9 default-cost 20
+# - max-lsa  8000 40 ignore-count 3  ignore-time 6  reset-time 20
+# - exit
+# - router ospf 3 vrf vrf02
+# - redistribute connected
+# - exit
+#
+# after:
+#     processes:
+#     - adjacency:
+#         exchange_start:
+#           threshold: 20045623
+#       areas:
+#       - area_id: 0.0.0.2
+#         filter:
+#           address: 10.1.1.0/24
+#       - area_id: 0.0.0.50
+#         range:
+#           address: 172.20.0.0/16
+#           cost: 34
+#       default_information:
+#         metric: 100
+#         metric_type: 1
+#         originate: true
+#       distance:
+#         intra_area: 85
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       networks:
+#       - area: 0.0.0.0
+#         prefix: 10.10.2.0/24
+#       - area: 0.0.0.0
+#         prefix: 10.10.3.0/24
+#       process_id: 1
+#       redistribute:
+#       - routes: static
+#       router_id: 170.21.0.4
+#     - areas:
+#       - area_id: 0.0.0.9
+#         default_cost: 20
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       process_id: 2
+#       vrf: vrf01
+#     - max_lsa:
+#         count: 12000
+#       process_id: 3
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf02
 
 # After state:
+# ------------
 # localhost#show running-config | section ospf
 # router ospf 1
 #    router-id 170.21.0.4
@@ -620,103 +707,11 @@ EXAMPLES = """
 # router ospf 3 vrf vrf02
 #    redistribute connected
 #    max-lsa 12000
-# localhost#
-#
-# "processes": [
-#                 {
-#                     "adjacency": {
-#                         "exchange_start": {
-#                             "threshold": 20045623
-#                         }
-#                     },
-#                     "areas": [
-#                         {
-#                             "filter": {
-#                                 "address": "10.1.1.0/24"
-#                             },
-#                             "id": "0.0.0.2"
-#                         },
-#                         {
-#                             "id": "0.0.0.50",
-#                             "range": {
-#                                 "address": "172.20.0.0/16",
-#                                 "cost": 34
-#                             }
-#                         }
-#                     ],
-#                     "default_information": {
-#                         "metric": 100,
-#                         "metric_type": 1,
-#                         "originate": true
-#                     },
-#                     "distance": {
-#                         "intra_area": 85
-#                     },
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "networks": [
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.2.0/24"
-#                         },
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.3.0/24"
-#                         }
-#                     ],
-#                     "process_id": 1,
-#                     "redistribute": [
-#                         {
-#                             "routes": "static"
-#                         }
-#                     ],
-#                     "router_id": "170.21.0.4"
-#                 },
-#                 {
-#                     "areas": [
-#                         {
-#                             "default_cost": 20,
-#                             "id": "0.0.0.9"
-#                         }
-#                     ],
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "process_id": 2,
-#                     "vrf": "vrf01"
-#                 },
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 3,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf02"
-#                 }
-#             ]
-#         }
-#     ]
-#
 
-
-# Using replaced:
-# --------------
+# Using replaced
 
 # Before State:
-
+# -------------
 # localhost#show running-config | section ospf
 # router ospf 1
 #    router-id 170.21.0.4
@@ -737,210 +732,130 @@ EXAMPLES = """
 # router ospf 3 vrf vrf02
 #    redistribute connected
 #    max-lsa 12000
-# localhost#
 #
-# "before": [
-#         {
-#             "processes": [
-#                 {
-#                     "adjacency": {
-#                         "exchange_start": {
-#                             "threshold": 20045623
-#                         }
-#                     },
-#                     "areas": [
-#                         {
-#                             "filter": {
-#                                 "address": "10.1.1.0/24"
-#                             },
-#                             "id": "0.0.0.2"
-#                         },
-#                         {
-#                             "id": "0.0.0.50",
-#                             "range": {
-#                                 "address": "172.20.0.0/16",
-#                                 "cost": 34
-#                             }
-#                         }
-#                     ],
-#                     "default_information": {
-#                         "metric": 100,
-#                         "metric_type": 1,
-#                         "originate": true
-#                     },
-#                     "distance": {
-#                         "intra_area": 85
-#                     },
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "networks": [
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.2.0/24"
-#                         },
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.3.0/24"
-#                         }
-#                     ],
-#                     "process_id": 1,
-#                     "redistribute": [
-#                         {
-#                             "routes": "static"
-#                         }
-#                     ],
-#                     "router_id": "170.21.0.4"
-#                 },
-#                 {
-#                     "areas": [
-#                         {
-#                             "default_cost": 20,
-#                             "id": "0.0.0.9"
-#                         }
-#                     ],
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "process_id": 2,
-#                     "vrf": "vrf01"
-#                 },
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 3,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf02"
-#                 }
-#             ]
-#         }
-#     ]
+- name: replace Ospf configs
+  arista.eos.eos_ospfv2:
+    config:
+      - processes:
+          - process_id: 2
+            vrf: "vrf01"
+            point_to_point: true
+            redistribute:
+              - routes: "isis"
+                isis_level: "level-1"
+    state: replaced
+
+# Task output:
+# ------------
+# before:
+#     processes:
+#     - adjacency:
+#         exchange_start:
+#           threshold: 20045623
+#       areas:
+#       - area_id: 0.0.0.2
+#         filter:
+#           address: 10.1.1.0/24
+#       - area_id: 0.0.0.50
+#         range:
+#           address: 172.20.0.0/16
+#           cost: 34
+#       default_information:
+#         metric: 100
+#         metric_type: 1
+#         originate: true
+#       distance:
+#         intra_area: 85
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       networks:
+#       - area: 0.0.0.0
+#         prefix: 10.10.2.0/24
+#       - area: 0.0.0.0
+#         prefix: 10.10.3.0/24
+#       process_id: 1
+#       redistribute:
+#       - routes: static
+#       router_id: 170.21.0.4
+#     - areas:
+#       - area_id: 0.0.0.9
+#         default_cost: 20
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       process_id: 2
+#       vrf: vrf01
+#     - max_lsa:
+#         count: 12000
+#       process_id: 3
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf02
 #
-  - name: replace Ospf configs
-    arista.eos.eos_ospfv2:
-          config:
-            - processes:
-                - process_id: 2
-                  vrf: "vrf01"
-                  point_to_point: True
-                  redistribute:
-                    - routes: "isis"
-                      isis_level: "level-1"
-
-          state: replaced
-
-# After State:
-# -----------
-#         "router ospf 2 vrf vrf01",
-#         "no area 0.0.0.9 default-cost 20",
-#         "no max-lsa  8000 40 ignore-time 6  ignore-count 3  reset-time 20",
-#         "point-to-point routes",
-#         "redistribute isis level-1"
+# commands:
+# - router ospf 2 vrf vrf01
+# - no area 0.0.0.9 default-cost 20
+# - no max-lsa  8000 40 ignore-time 6  ignore-count 3  reset-time 20
+# - point-to-point routes
+# - redistribute isis level-1
 #
-# "after": [
-#         {
-#             "processes": [
-#                 {
-#                     "adjacency": {
-#                         "exchange_start": {
-#                             "threshold": 20045623
-#                         }
-#                     },
-#                     "areas": [
-#                         {
-#                             "filter": {
-#                                 "address": "10.1.1.0/24"
-#                             },
-#                             "id": "0.0.0.2"
-#                         },
-#                         {
-#                             "id": "0.0.0.50",
-#                             "range": {
-#                                 "address": "172.20.0.0/16",
-#                                 "cost": 34
-#                             }
-#                         }
-#                     ],
-#                     "default_information": {
-#                         "metric": 100,
-#                         "metric_type": 1,
-#                         "originate": true
-#                     },
-#                     "distance": {
-#                         "intra_area": 85
-#                     },
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "networks": [
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.2.0/24"
-#                         },
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.3.0/24"
-#                         }
-#                     ],
-#                     "process_id": 1,
-#                     "redistribute": [
-#                         {
-#                             "routes": "static"
-#                         }
-#                     ],
-#                     "router_id": "170.21.0.4"
-#                 },
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 2,
-#                     "redistribute": [
-#                         {
-#                             "isis_level": "level-1",
-#                             "routes": "isis"
-#                         }
-#                     ],
-#                     "vrf": "vrf01"
-#                 },
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 3,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf02"
-#                 }
-#             ]
-#         }
-#     ]
-#
+# after:
+#     processes:
+#     - adjacency:
+#         exchange_start:
+#           threshold: 20045623
+#       areas:
+#       - area_id: 0.0.0.2
+#         filter:
+#           address: 10.1.1.0/24
+#       - area_id: 0.0.0.50
+#         range:
+#           address: 172.20.0.0/16
+#           cost: 34
+#       default_information:
+#         metric: 100
+#         metric_type: 1
+#         originate: true
+#       distance:
+#         intra_area: 85
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       networks:
+#       - area: 0.0.0.0
+#         prefix: 10.10.2.0/24
+#       - area: 0.0.0.0
+#         prefix: 10.10.3.0/24
+#       process_id: 1
+#       redistribute:
+#       - routes: static
+#       router_id: 170.21.0.4
+#     - max_lsa:
+#         count: 12000
+#       process_id: 2
+#       redistribute:
+#       - isis_level: level-1
+#         routes: isis
+#       vrf: vrf01
+#     - max_lsa:
+#         count: 12000
+#       process_id: 3
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf02
 
-# Using overridden:
-# ----------------
-
-# Before State:
+# After state:
+# ------------
 # localhost#show running-config | section ospf
 # router ospf 1
 #    router-id 170.21.0.4
@@ -961,135 +876,123 @@ EXAMPLES = """
 # router ospf 3 vrf vrf02
 #    redistribute connected
 #    max-lsa 12000
-# localhost#
+
+# Using overridden
+
+# Before state:
+# -------------
+# localhost#show running-config | section ospf
+# router ospf 1
+#    router-id 170.21.0.4
+#    distance ospf intra-area 85
+#    redistribute static
+#    area 0.0.0.2 filter 10.1.1.0/24
+#    area 0.0.0.50 range 172.20.0.0/16 cost 34
+#    network 10.10.2.0/24 area 0.0.0.0
+#    network 10.10.3.0/24 area 0.0.0.0
+#    max-lsa 8000 40 ignore-time 6 ignore-count 3 reset-time 20
+#    adjacency exchange-start threshold 20045623
+#    default-information originate metric 100 metric-type 1
+# !
+# router ospf 2 vrf vrf01
+#    redistribute isis level-1
+#    max-lsa 12000
+# !
+# router ospf 3 vrf vrf02
+#    redistribute connected
+#    max-lsa 12000
+
+- name: override running config with provided config
+  arista.eos.eos_ospfv2:
+    config:
+      - processes:
+          - process_id: 2
+            vrf: "vrf01"
+            redistribute:
+              - routes: "connected"
+    state: overriden
+
+# Task output:
+# ------------
+
+# before:
+#     processes:
+#     - adjacency:
+#         exchange_start:
+#           threshold: 20045623
+#       areas:
+#       - area_id: 0.0.0.2
+#         filter:
+#           address: 10.1.1.0/24
+#       - area_id: 0.0.0.50
+#         range:
+#           address: 172.20.0.0/16
+#           cost: 34
+#       default_information:
+#         metric: 100
+#         metric_type: 1
+#         originate: true
+#       distance:
+#         intra_area: 85
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       networks:
+#       - area: 0.0.0.0
+#         prefix: 10.10.2.0/24
+#       - area: 0.0.0.0
+#         prefix: 10.10.3.0/24
+#       process_id: 1
+#       redistribute:
+#       - routes: static
+#       router_id: 170.21.0.4
+#     - max_lsa:
+#         count: 12000
+#       process_id: 2
+#       redistribute:
+#       - isis_level: level-1
+#         routes: isis
+#       vrf: vrf01
+#     - max_lsa:
+#         count: 12000
+#       process_id: 3
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf02
 #
-# "before": [
-#         {
-#             "processes": [
-#                 {
-#                     "adjacency": {
-#                         "exchange_start": {
-#                             "threshold": 20045623
-#                         }
-#                     },
-#                     "areas": [
-#                         {
-#                             "filter": {
-#                                 "address": "10.1.1.0/24"
-#                             },
-#                             "id": "0.0.0.2"
-#                         },
-#                         {
-#                             "id": "0.0.0.50",
-#                             "range": {
-#                                 "address": "172.20.0.0/16",
-#                                 "cost": 34
-#                             }
-#                         }
-#                     ],
-#                     "default_information": {
-#                         "metric": 100,
-#                         "metric_type": 1,
-#                         "originate": true
-#                     },
-#                     "distance": {
-#                         "intra_area": 85
-#                     },
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "networks": [
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.2.0/24"
-#                         },
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.3.0/24"
-#                         }
-#                     ],
-#                     "process_id": 1,
-#                     "redistribute": [
-#                         {
-#                             "routes": "static"
-#                         }
-#                     ],
-#                     "router_id": "170.21.0.4"
-#                 },
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 2,
-#                     "redistribute": [
-#                         {
-#                             "isis_level": "level-1",
-#                             "routes": "isis"
-#                         }
-#                     ],
-#                     "vrf": "vrf01"
-#                 },
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 3,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf02"
-#                 }
-#             ]
-#         }
-#     ]
-
-  - name: override Ospf configs
-    arista.eos.eos_ospfv2:
-          config:
-            - processes:
-                - process_id: 2
-                  vrf: "vrf01"
-                  redistribute:
-                    - routes: "connected"
-
-          state: override
-
-# After State:
-
-# "no router ospf 1",
-# "no router ospf 3",
-# "router ospf 2 vrf vrf01",
-# "no max-lsa  12000",
-# "no redistribute isis level-1",
-# "redistribute connected"
+# commands:
+# - no router ospf 1
+# - no router ospf 3
+# - router ospf 2 vrf vrf01
+# - no max-lsa  12000
+# - no redistribute isis level-1
+# - redistribute connected
 #
-# "after": [
-#         {
-#             "processes": [
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 2,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf01"
-#                 }
-#             ]
-#         }
-#     ]
+# after:
+#     processes:
+#     - max_lsa:
+#         count: 12000
+#       process_id: 2
+#       redistribute:
+#       - isis_level: level-1
+#         routes: isis
+#       vrf: vrf01
 
-# Using Deleted:
+# After state:
+# ------------
+# localhost#show running-config | section ospf
+# router ospf 2 vrf vrf01
+#    redistribute isis level-1
+#    max-lsa 12000
+# !
 
+# Using deleted
+
+# Before state:
+# -------------
 # localhost#show running-config | section ospf
 # router ospf 1
 #    router-id 170.21.0.4
@@ -1111,157 +1014,97 @@ EXAMPLES = """
 # router ospf 3 vrf vrf02
 #    redistribute connected
 #    max-lsa 12000
-# localhost#
 #
-# "before": [
-#         {
-#             "processes": [
-#                 {
-#                     "adjacency": {
-#                         "exchange_start": {
-#                             "threshold": 20045623
-#                         }
-#                     },
-#                     "areas": [
-#                         {
-#                             "filter": {
-#                                 "address": "10.1.1.0/24"
-#                             },
-#                             "id": "0.0.0.2"
-#                         },
-#                         {
-#                             "id": "0.0.0.50",
-#                             "range": {
-#                                 "address": "172.20.0.0/16",
-#                                 "cost": 34
-#                             }
-#                         }
-#                     ],
-#                     "default_information": {
-#                         "metric": 100,
-#                         "metric_type": 1,
-#                         "originate": true
-#                     },
-#                     "distance": {
-#                         "intra_area": 85
-#                     },
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "networks": [
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.2.0/24"
-#                         },
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.3.0/24"
-#                         }
-#                     ],
-#                     "process_id": 1,
-#                     "redistribute": [
-#                         {
-#                             "routes": "static"
-#                         }
-#                     ],
-#                     "router_id": "170.21.0.4"
-#                 },
-#                 {
-#                     "areas": [
-#                         {
-#                             "default_cost": 20,
-#                             "id": "0.0.0.9"
-#                         }
-#                     ],
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "process_id": 2,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf01"
-#                 },
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 3,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf02"
-#                 }
-#             ]
-#         }
-#     ]
+- name: Delete OSPF config
+  arista.eos.eos_ospfv2:
+    config:
+      processes:
+        - process_id: 1
+    state: deleted
 
-  - name: Delete Ospf configs
-    arista.eos.eos_ospfv2:
-          config:
-            - processes:
-                - process_id: 1
+# Task output:
+# ------------
+# before:
+#     processes:
+#     - adjacency:
+#         exchange_start:
+#           threshold: 20045623
+#       areas:
+#       - area_id: 0.0.0.2
+#         filter:
+#           address: 10.1.1.0/24
+#       - area_id: 0.0.0.50
+#         range:
+#           address: 172.20.0.0/16
+#           cost: 34
+#       default_information:
+#         metric: 100
+#         metric_type: 1
+#         originate: true
+#       distance:
+#         intra_area: 85
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       networks:
+#       - area: 0.0.0.0
+#         prefix: 10.10.2.0/24
+#       - area: 0.0.0.0
+#         prefix: 10.10.3.0/24
+#       process_id: 1
+#       redistribute:
+#       - routes: static
+#       router_id: 170.21.0.4
+#     - areas:
+#       - area_id: 0.0.0.9
+#         default_cost: 20
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       process_id: 2
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf01
+#     - max_lsa:
+#         count: 12000
+#       process_id: 3
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf02
+#
+# commands:
+# - no router ospf 1
+#
+# after:
+#     processes:
+#     - areas:
+#       - area_id: 0.0.0.9
+#         default_cost: 20
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       process_id: 2
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf01
+#     - max_lsa:
+#         count: 12000
+#       process_id: 3
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf02
 
-          state: deleted
-
-# After State:
-# Commands:
-# "no router ospf 1"
-
-# "after": [
-#         {
-#             "processes": [
-#                 {
-#                     "areas": [
-#                         {
-#                             "default_cost": 20,
-#                             "id": "0.0.0.9"
-#                         }
-#                     ],
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "process_id": 2,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf01"
-#                 },
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 3,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf02"
-#                 }
-#             ]
-#         }
-#     ]
-
-# Using gathered:
+# After state:
+# ------------
 # localhost#show running-config | section ospf
 # router ospf 2 vrf vrf01
 #    redistribute connected
@@ -1271,54 +1114,47 @@ EXAMPLES = """
 # router ospf 3 vrf vrf02
 #    redistribute connected
 #    max-lsa 12000
-# localhost#
 
-  - name: replace Ospf configs
-    arista.eos.eos_ospfv2:
-          state: gathered
+# Using gathered
+# localhost#show running-config | section ospf
+# router ospf 2 vrf vrf01
+#    redistribute connected
+#    area 0.0.0.9 default-cost 20
+#    max-lsa 8000 40 ignore-time 6 ignore-count 3 reset-time 20
+# !
+# router ospf 3 vrf vrf02
+#    redistribute connected
+#    max-lsa 12000
 
-# "gathered": [
-#         {
-#             "processes": [
-#                 {
-#                     "areas": [
-#                         {
-#                             "default_cost": 20,
-#                             "id": "0.0.0.9"
-#                         }
-#                     ],
-#                     "max_lsa": {
-#                         "count": 8000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "process_id": 2,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf01"
-#                 },
-#                 {
-#                     "max_lsa": {
-#                         "count": 12000
-#                     },
-#                     "process_id": 3,
-#                     "redistribute": [
-#                         {
-#                             "routes": "connected"
-#                         }
-#                     ],
-#                     "vrf": "vrf02"
-#                 }
-#             ]
-#         }
-#     ]
+- name: replace Ospf configs
+  arista.eos.eos_ospfv2:
+    state: gathered
 
-# Using parsed:
+# Task output:
+# ------------
+# gathered:
+#     processes:
+#     - areas:
+#       - area_id: 0.0.0.9
+#         default_cost: 20
+#       max_lsa:
+#         count: 8000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       process_id: 2
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf01
+#     - max_lsa:
+#         count: 12000
+#       process_id: 3
+#       redistribute:
+#       - routes: connected
+#       vrf: vrf02
+
+# Using parsed
 # ------------
 
 # parsed.cfg
@@ -1339,189 +1175,216 @@ EXAMPLES = """
 # router ospf 3 vrf vrf02
 #    redistribute static
 
-  - name: Parse Ospf configs
-    arista.eos.eos_ospfv2:
-          running_config: "{{ lookup('file', './parsed.cfg') }}"
-          state: parsed
+- name: Parse running config and display structured facts
+  arista.eos.eos_ospfv2:
+    running_config: "{{ lookup('file', './parsed.cfg') }}"
+    state: parsed
 
-# "parsed": [
-#         {
-#             "processes": [
-#                 {
-#                     "adjacency": {
-#                         "exchange_start": {
-#                             "threshold": 20045623
-#                         }
-#                     },
-#                     "areas": [
-#                         {
-#                             "filter": {
-#                                 "address": "10.1.1.0/24"
-#                             },
-#                             "id": "0.0.0.2"
-#                         },
-#                         {
-#                             "id": "0.0.0.50",
-#                             "range": {
-#                                 "address": "172.20.0.0/16",
-#                                 "cost": 34
-#                             }
-#                         }
-#                     ],
-#                     "default_information": {
-#                         "metric": 100,
-#                         "metric_type": 1,
-#                         "originate": true
-#                     },
-#                     "distance": {
-#                         "intra_area": 85
-#                     },
-#                     "max_lsa": {
-#                         "count": 80000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "networks": [
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.2.0/24"
-#                         },
-#                         {
-#                             "area": "0.0.0.0",
-#                             "prefix": "10.10.3.0/24"
-#                         }
-#                     ],
-#                     "process_id": 1,
-#                     "redistribute": [
-#                         {
-#                             "routes": "static"
-#                         }
-#                     ],
-#                     "router_id": "170.21.0.4"
-#                 },
-#                 {
-#                     "areas": [
-#                         {
-#                             "default_cost": 20,
-#                             "id": "0.0.0.9"
-#                         }
-#                     ],
-#                     "max_lsa": {
-#                         "count": 80000,
-#                         "ignore_count": 3,
-#                         "ignore_time": 6,
-#                         "reset_time": 20,
-#                         "threshold": 40
-#                     },
-#                     "process_id": 2,
-#                     "vrf": "vrf01,"
-#                 },
-#                 {
-#                     "process_id": 3,
-#                     "redistribute": [
-#                         {
-#                             "routes": "static"
-#                         }
-#                     ],
-#                     "vrf": "vrf02"
-#                 }
-#             ]
-#         }
-#     ]
+# Task output:
+# ------------
+# parsed:
+#     processes:
+#     - adjacency:
+#         exchange_start:
+#           threshold: 20045623
+#       areas:
+#       - area_id: 0.0.0.2
+#         filter:
+#           address: 10.1.1.0/24
+#       - area_id: 0.0.0.50
+#         range:
+#           address: 172.20.0.0/16
+#           cost: 34
+#       default_information:
+#         metric: 100
+#         metric_type: 1
+#         originate: true
+#       distance:
+#         intra_area: 85
+#       max_lsa:
+#         count: 80000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       networks:
+#       - area: 0.0.0.0
+#         prefix: 10.10.2.0/24
+#       - area: 0.0.0.0
+#         prefix: 10.10.3.0/24
+#       process_id: 1
+#       redistribute:
+#       - routes: static
+#       router_id: 170.21.0.4
+#     - areas:
+#       - area_id: 0.0.0.9
+#         default_cost: 20
+#       max_lsa:
+#         count: 80000
+#         ignore_count: 3
+#         ignore_time: 6
+#         reset_time: 20
+#         threshold: 40
+#       process_id: 2
+#       vrf: vrf01,
+#     - process_id: 3
+#       redistribute:
+#       - routes: static
+#       vrf: vrf02
 
-# Using rendered:
-# --------------
+# Using rendered
 
-  - name: replace Ospf configs
-    arista.eos.eos_ospfv2:
-          config:
-            - processes:
-              - process_id: 1
-                adjacency:
-                  exchange_start:
-                    threshold: 20045623
-                areas:
-                - filter:
-                    address: 10.1.1.0/24
-                  id: 0.0.0.2
-                - id: 0.0.0.50
-                  range:
-                    address: 172.20.0.0/16
-                    cost: 34
-                default_information:
-                  metric: 100
-                  metric_type: 1
-                  originate: true
-                distance:
-                  intra_area: 85
-                max_lsa:
-                  count: 8000
-                  ignore_count: 3
-                  ignore_time: 6
-                  reset_time: 20
-                  threshold: 40
-                networks:
-                - area: 0.0.0.0
-                  prefix: 10.10.2.0/24
-                - area: 0.0.0.0
-                  prefix: 10.10.3.0/24
-                redistribute:
-                - routes: static
-                router_id: 170.21.0.4
-          state: rendered
+- name: replace Ospf configs
+  arista.eos.eos_ospfv2:
+    config:
+      processes:
+        - process_id: 1
+          adjacency:
+            exchange_start:
+              threshold: 20045623
+          areas:
+            - filter:
+                address: "10.1.1.0/24"
+              area_id: "0.0.0.2"
+            - area_id: "0.0.0.50"
+              range:
+                address: "172.20.0.0/16"
+                cost: 34
+          default_information:
+            metric: 100
+            metric_type: 1
+            originate: true
+          distance:
+            intra_area: 85
+          max_lsa:
+            count: 8000
+            ignore_count: 3
+            ignore_time: 6
+            reset_time: 20
+            threshold: 40
+          networks:
+            - area: "0.0.0.0"
+              prefix: 10.10.2.0/24
+            - area: "0.0.0.0"
+              prefix: "10.10.3.0/24"
+          redistribute:
+            - routes: "static"
+          router_id: "170.21.0.4"
+        - process_id: 2
+          vrf: "vrf01"
+          areas:
+            - area_id: "0.0.0.9"
+              default_cost: 20
+          max_lsa:
+            count: 8000
+            ignore_count: 3
+            ignore_time: 6
+            reset_time: 20
+            threshold: 40
+          networks:
+            - area: "0.0.0.0"
+              prefix: 10.10.2.0/24
+            - area: "0.0.0.0"
+              prefix: "10.10.3.0/24"
+          redistribute:
+            - routes: "static"
+          router_id: "170.21.0.4"
+        - process_id: 2
+          vrf: "vrf01"
+          areas:
+            - area_id: "0.0.0.9"
+              default_cost: 20
+          max_lsa:
+            count: 8000
+            ignore_count: 3
+            ignore_time: 6
+            reset_time: 20
+            threshold: 40
+        - process_id: 3
+          vrf: "vrf02"
+          redistribute:
+            - routes: "connected"
+    state: rendered
 
-# "rendered": [
-#         "router ospf 1",
-#         "adjacency exchange-start threshold 20045623",
-#         "area 0.0.0.2 filter 10.1.1.0/24",
-#         "area 0.0.0.50  range 172.20.0.0/16 cost 34",
-#         "default-information originate metric 100 metric-type 1",
-#         "distance ospf intra-area 85",
-#         "max-lsa  8000 40 ignore-count 3  ignore-time 6  reset-time 20",
-#         "network 10.10.2.0/24 area 0.0.0.0",
-#         "network 10.10.3.0/24 area 0.0.0.0",
-#         "redistribute static",
-#         "router-id 170.21.0.4"
-#     ]
-#
-
+# rendered:
+#   - router ospf 1
+#   - adjacency exchange-start threshold 20045623
+#   - area 0.0.0.2 filter 10.1.1.0/24
+#   - area 0.0.0.50  range 172.20.0.0/16 cost 34
+#   - default-information originate metric 100 metric-type 1
+#   - distance ospf intra-area 85
+#   - max-lsa  8000 40 ignore-count 3  ignore-time 6  reset-time 20
+#   - network 10.10.2.0/24 area 0.0.0.0
+#   - network 10.10.3.0/24 area 0.0.0.0
+#   - redistribute static
+#   - router-id 170.21.0.4
+#   - exit
+#   - router ospf 2 vrf vrf01
+#   - area 0.0.0.9 default-cost 20
+#   - max-lsa  8000 40 ignore-count 3  ignore-time 6  reset-time 20
+#   - network 10.10.2.0/24 area 0.0.0.0
+#   - network 10.10.3.0/24 area 0.0.0.0
+#   - redistribute static
+#   - router-id 170.21.0.4
+#   - exit
+#   - router ospf 2 vrf vrf01
+#   - area 0.0.0.9 default-cost 20
+#   - max-lsa  8000 40 ignore-count 3  ignore-time 6  reset-time 20
+#   - exit
+#   - router ospf 3 vrf vrf02
+#   - redistribute connected
+#   - exit
 """
 RETURN = """
 before:
-  description: The configuration prior to the model invocation.
-  returned: always
+  description: The configuration prior to the module execution.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: dict
   sample: >
-    The configuration returned will always be in the same format
-     of the parameters above.
-  type: list
+    This output will always be in the same format as the
+    module argspec.
 after:
-  description: The resulting configuration model invocation.
+  description: The resulting configuration after module execution.
   returned: when changed
+  type: dict
   sample: >
-    The configuration returned will always be in the same format
-     of the parameters above.
-  type: list
+    This output will always be in the same format as the
+    module argspec.
 commands:
   description: The set of commands pushed to the remote device.
-  returned: always
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: list
-  sample: ["router ospf 1",
-        "adjacency exchange-start threshold 20045623",
-        "area 0.0.0.2 filter 10.1.1.0/24",
-        "area 0.0.0.50  range 172.20.0.0/16 cost 34",
-        "default-information originate metric 100 metric-type 1",
-        "distance ospf intra-area 85",
-        "max-lsa  8000 40 ignore-count 3  ignore-time 6  reset-time 20",
-        "network 10.10.2.0/24 area 0.0.0.0",
-        "network 10.10.3.0/24 area 0.0.0.0",
-        "redistribute static",
-        "router-id 170.21.0.4"]
+  sample:
+    - router ospf 1
+    - adjacency exchange-start threshold 20045623
+    - area 0.0.0.2 filter 10.1.1.0/24
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+    - router ospf 1
+    - adjacency exchange-start threshold 20045623
+    - area 0.0.0.2 filter 10.1.1.0/24
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ospfv2.ospfv2 import (
     Ospfv2Args,
 )

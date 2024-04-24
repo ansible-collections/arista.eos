@@ -1,12 +1,11 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_bgp_global rtt integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml
 
 - block:
-
     - name: merge given bgp_global configuration
       become: true
       register: baseconfig
@@ -57,13 +56,14 @@
                   isis_level: "level-2"
               route_target:
                 action: "export"
+                type: "vpn-ipv4"
                 target: "44:22"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - baseconfig.commands|length == 21
           - baseconfig.changed == true
-          - baseconfig.commands|symmetric_difference(merged.commands) == []
+          - baseconfig.commands|symmetric_difference(rendered.commands) == []
           - baseconfig.after == populate.global
 
     - become: true
@@ -98,9 +98,8 @@
         config: "{{ ansible_facts['network_resources']['bgp_global'] }}"
         state: replaced
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - baseconfig.after == revert.after
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

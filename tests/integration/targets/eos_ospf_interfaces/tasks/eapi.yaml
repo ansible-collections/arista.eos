@@ -1,29 +1,33 @@
 ---
-- name: collect all common test cases
-  find:
-    paths: '{{ role_path }}/tests/common'
-    patterns: '{{ testcase }}.yaml'
+- name: Collect all common test cases
+  ansible.builtin.find:
+    paths: "{{ role_path }}/tests/common"
+    patterns: "{{ testcase }}.yaml"
     use_regex: true
   register: test_cases
   delegate_to: localhost
 
-- name: collect all eapi test cases
-  find:
-    paths: '{{ role_path }}/tests/eapi'
-    patterns: '{{ testcase }}.yaml'
+- name: Collect all eapi test cases
+  ansible.builtin.find:
+    paths: "{{ role_path }}/tests/eapi"
+    patterns: "{{ testcase }}.yaml"
     use_regex: true
   register: eapi_cases
   delegate_to: localhost
 
-- set_fact:
+- name: Set files
+  ansible.builtin.set_fact:
     test_cases:
-      files: '{{ test_cases.files }} + {{ eapi_cases.files }}'
+      files: "{{ test_cases.files + eapi_cases.files }}"
 
-- name: set test_items
-  set_fact: test_items="{{ test_cases.files | map(attribute='path') | list }}"
+- name: Set test_items
+  ansible.builtin.set_fact:
+    test_items: "{{ test_cases.files | map(attribute='path') | list }}"
 
-- name: run test cases (connection=ansible.netcommon.httpapi)
-  include: '{{ test_case_to_run }} ansible_connection=ansible.netcommon.httpapi'
-  with_items: '{{ test_items }}'
+- name: Run test cases (connection=ansible.netcommon.httpapi)
+  ansible.builtin.include_tasks: "{{ test_case_to_run }}"
+  with_items: "{{ test_items }}"
   loop_control:
     loop_var: test_case_to_run
+  vars:
+    ansible_connection: ansible.netcommon.httpapi

@@ -1,0 +1,69 @@
+---
+- ansible.builtin.debug:
+    msg: Start eos_ntp_global merged integration tests ansible_connection={{
+      ansible_connection }}
+
+- block:
+    - name: merge given ntp_global configuration
+      become: true
+      register: result
+      arista.eos.eos_ntp_global: &merged
+        config:
+          authenticate:
+            enable: true
+          authentication_keys:
+            - algorithm: "sha1"
+              encryption: 7
+              id: 2
+              key: "123456"
+            - algorithm: "md5"
+              encryption: 7
+              id: 23
+              key: "123456"
+          local_interface: "Ethernet1"
+          qos_dscp: 10
+          serve:
+            access_lists:
+              - acls:
+                  - acl_name: "acl01"
+                    direction: "in"
+                afi: "ip"
+              - acls:
+                  - acl_name: "acl02"
+                    direction: "in"
+                afi: "ipv6"
+          servers:
+            - burst: true
+              prefer: true
+              server: "10.1.1.1"
+              vrf: "vrf01"
+            - burst: true
+              minpoll: 13
+              prefer: true
+              server: "11.21.1.1"
+              vrf: "vrf01"
+            - key_id: 2
+              maxpoll: 15
+              server: "25.1.1.1"
+              vrf: "vrf01"
+          trusted_key: "23"
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 11
+          - result.changed == true
+          - result.commands|symmetric_difference(merged.commands) == []
+          - result.after == replaced.before
+          - result.before == {}
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_ntp_global: *merged
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

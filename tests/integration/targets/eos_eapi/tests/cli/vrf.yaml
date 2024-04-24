@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/vrf.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/vrf.yaml on connection={{ ansible_connection }}"
 
 - name: Set invalid VRF
   become: true
@@ -7,10 +7,9 @@
   ignore_errors: true
   arista.eos.eos_eapi:
     vrf: foobar
-    provider: '{{ cli }}'
 
 - name: Ensure that setting VRF failed
-  assert:
+  ansible.builtin.assert:
     that:
       - eos_eapi_output.failed == true
       - eos_eapi_output.changed == false
@@ -22,17 +21,15 @@
   ignore_errors: true
   arista.eos.eos_eapi:
     vrf: default
-    provider: '{{ cli }}'
 
 - name: Set VRF to default again (idempotent)
   become: true
   register: eos_eapi_output
   arista.eos.eos_eapi:
     vrf: default
-    provider: '{{ cli }}'
 
 - name: Ensure idempotent
-  assert:
+  ansible.builtin.assert:
     that:
       - eos_eapi_output.changed == false
 
@@ -41,6 +38,5 @@
   when: false
   arista.eos.eos_command:
     commands: show vrf
-    provider: '{{ cli }}'
 
-- debug: msg="END cli/vrf.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/vrf.yaml on connection={{ ansible_connection }}"

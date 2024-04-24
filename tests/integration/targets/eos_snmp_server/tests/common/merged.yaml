@@ -1,0 +1,76 @@
+---
+- ansible.builtin.debug:
+    msg: Start eos_snmp_server merged integration tests ansible_connection={{
+      ansible_connection }}
+
+- block:
+    - name: merge given snmp_server configuration
+      become: true
+      register: result
+      arista.eos.eos_snmp_server: &merged
+        config:
+          communities:
+            - name: "comm3"
+              acl_v6: "list1"
+              view: "view1"
+            - name: "comm4"
+              acl_v4: "list3"
+              view: "view1"
+            - name: "comm5"
+              acl_v4: "list4"
+              ro: true
+          contact: "admin"
+          engineid:
+            remote:
+              host: 1.1.1.1
+              id: "12345678ab"
+          groups:
+            - group: "group1"
+              version: "v1"
+              read: "view1"
+            - group: "group2"
+              version: "v3"
+              auth_privacy: "priv"
+              notify: "view1"
+              write: "view2"
+          hosts:
+            - host: "host02"
+              user: "user01"
+              udp_port: 23
+              version: "2c"
+            - host: "host01"
+              user: "user01"
+              udp_port: 23
+              version: "3 priv"
+          traps:
+            capacity:
+              arista_hardware_utilization_alert: true
+            bgp:
+              enabled: true
+            external_alarm:
+              arista_external_alarm_deasserted_notif: true
+              arista_external_alarm_asserted_notif: true
+          vrfs:
+            - vrf: "vrf01"
+              local_interface: "Ethernet1"
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 13
+          - result.changed == true
+          - result.commands|symmetric_difference(merged.commands) == []
+          - result.after == replaced.before
+          - result.before == {}
+
+    # idempotency fails as 'snmp-server engineID remote 1.1.1.1 1234567' config, doesnot appear on device.
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_snmp_server: *merged
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 1
+          - result.changed == true
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

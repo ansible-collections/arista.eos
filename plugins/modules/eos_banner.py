@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -28,10 +29,8 @@ description:
 - This will configure both login and motd banners on remote devices running Arista
   EOS.  It allows playbooks to add or remote banner text from the active running configuration.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   banner:
     description:
@@ -90,17 +89,14 @@ session_name:
   type: str
   sample: ansible_1479315771
 """
+from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.six import string_types
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     load_config,
     run_commands,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-    is_local_eapi,
-)
-from ansible.module_utils.six import string_types
-from ansible.module_utils._text import to_text
 
 
 def map_obj_to_commands(updates, module):
@@ -122,7 +118,7 @@ def map_obj_to_commands(updates, module):
                 commands.append("EOF")
         else:
             have_text = have["text"].get("loginBanner") or have["text"].get(
-                "motd"
+                "motd",
             )
             if have_text:
                 have_text = have_text.strip()
@@ -134,7 +130,7 @@ def map_obj_to_commands(updates, module):
                     {
                         "cmd": "banner %s" % module.params["banner"],
                         "input": want["text"].strip("\n"),
-                    }
+                    },
                 )
 
     return commands
@@ -144,20 +140,7 @@ def map_config_to_obj(module):
     output = run_commands(module, ["show banner %s" % module.params["banner"]])
     obj = {"banner": module.params["banner"], "state": "absent"}
     if output:
-        if is_local_eapi(module):
-            # On EAPI we need to extract the banner text from dict key
-            # 'loginBanner'
-            if module.params["banner"] == "login":
-                banner_response_key = "loginBanner"
-            else:
-                banner_response_key = "motd"
-            if (
-                isinstance(output[0], dict)
-                and banner_response_key in output[0].keys()
-            ):
-                obj["text"] = output[0]
-        else:
-            obj["text"] = output[0]
+        obj["text"] = output[0]
         obj["state"] = "present"
     return obj
 
@@ -175,15 +158,12 @@ def map_params_to_obj(module):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     argument_spec = dict(
         banner=dict(required=True, choices=["login", "motd"]),
         text=dict(),
         state=dict(default="present", choices=["present", "absent"]),
     )
-
-    argument_spec.update(eos_argument_spec)
 
     required_if = [("state", "present", ("text",))]
 

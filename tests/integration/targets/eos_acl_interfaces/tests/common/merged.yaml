@@ -1,22 +1,18 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_acl_interfaces merged integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
-
     - name: merge given acl interfaces configuration
       become: true
       register: result
       arista.eos.eos_acl_interfaces: &id001
         config:
-
-          - name: "{{ Interfaces['int1'] }}"
+          - name: "{{ interfaces_lst['int1'] }}"
             access_groups:
-
               - afi: ipv4
                 acls:
-
                   - name: aclv401
                     direction: in
 
@@ -25,21 +21,18 @@
 
               - afi: ipv6
                 acls:
-
                   - name: aclv601
                     direction: out
 
-          - name: "{{ Interfaces['int2'] }}"
+          - name: "{{ interfaces_lst['int2'] }}"
             access_groups:
-
               - afi: ipv6
                 acls:
-
                   - name: aclv601
                     direction: in
         state: merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 6
           - result.changed == true
@@ -50,10 +43,9 @@
       register: result
       arista.eos.eos_acl_interfaces: *id001
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

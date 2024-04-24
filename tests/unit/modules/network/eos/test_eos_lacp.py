@@ -4,13 +4,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_lacp
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -21,36 +22,32 @@ class TestEosLacpInterfacesModule(TestEosModule):
         super(TestEosLacpInterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
         self.mock_edit_config = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
         )
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.lacp.lacp.LacpFacts.get_device_data"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.lacp.lacp.LacpFacts.get_device_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -80,27 +77,27 @@ class TestEosLacpInterfacesModule(TestEosModule):
 
     def test_eos_lacp_merged(self):
         set_module_args(
-            dict(config=dict(system=dict(priority=50)), state="merged")
+            dict(config=dict(system=dict(priority=50)), state="merged"),
         )
         commands = ["lacp system-priority 50"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_lacp_merged_idempotent(self):
         set_module_args(
-            dict(config=dict(system=dict(priority=10)), state="merged")
+            dict(config=dict(system=dict(priority=10)), state="merged"),
         )
         self.execute_module(changed=False, commands=[])
 
     def test_eos_l3_interfaces_replaced(self):
         set_module_args(
-            dict(config=dict(system=dict(priority=20)), state="replaced")
+            dict(config=dict(system=dict(priority=20)), state="replaced"),
         )
         commands = ["lacp system-priority 20"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_l3_interfaces_replaced_idempotent(self):
         set_module_args(
-            dict(config=dict(system=dict(priority=10)), state="replaced")
+            dict(config=dict(system=dict(priority=10)), state="replaced"),
         )
         self.execute_module(changed=False, commands=[])
 

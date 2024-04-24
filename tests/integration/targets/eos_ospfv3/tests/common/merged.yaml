@@ -1,10 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ospfv3 merged integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
-
     - name: merge given ospfv3 configuration
       become: true
       register: result
@@ -85,15 +84,14 @@
                   router_id: "10.17.0.3"
                   timers:
                     out_delay: 10
-                    throttle:
+                    spf:
                       initial: 56
                       max: 56
                       min: 56
-                      spf: true
               fips_restrictions: true
               vrf: "vrf02"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 45
           - result.changed == true
@@ -106,10 +104,69 @@
       register: result
       arista.eos.eos_ospfv3: *merged
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 0
           - result.changed == false
-  always:
 
-    - include_tasks: _remove_config.yaml
+    - name: merge given ospfv3 configuration with timers option.
+      become: true
+      register: result
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - afi: "ipv4"
+                  fips_restrictions: true
+                  redistribute:
+                    - routes: "connected"
+                - afi: "ipv6"
+                  fips_restrictions: true
+                  router_id: "10.1.1.1"
+              adjacency:
+                exchange_start:
+                  threshold: 11
+              areas:
+                - area_id: "0.0.0.20"
+                  authentication:
+                    algorithm: "sha1"
+                    hidden_key: true
+                    passphrase: "4O8T3zo4xBdRWXBnsnK934o9SEb+jEhHUN6+xzZgCo2j9EnQBUvtwNxxLEmYmm6w"
+                    spi: 33
+                  stub:
+                    set: true
+                - area_id: "0.0.0.40"
+                  default_cost: 45
+                  stub:
+                    set: true
+              fips_restrictions: true
+              timers:
+                pacing: 7
+              vrf: "default"
+
+    - ansible.builtin.include_tasks: _remove_config.yaml
+
+    - name: merge given ospfv3 configuration with timers.lsa option.
+      become: true
+      register: result
+      arista.eos.eos_ospfv3:
+        config:
+          processes:
+            - address_family:
+                - afi: "ipv4"
+                  fips_restrictions: true
+                  redistribute:
+                    - routes: "connected"
+                - afi: "ipv6"
+                  fips_restrictions: true
+                  router_id: "10.1.1.1"
+              timers:
+                lsa: 33
+              vrf: "default"
+
+    - ansible.builtin.assert:
+        that:
+          - '"timers lsa rx min interval 33" in result["commands"]'
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

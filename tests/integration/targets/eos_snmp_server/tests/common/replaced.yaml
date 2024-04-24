@@ -1,0 +1,53 @@
+---
+- ansible.builtin.debug:
+    msg: Start eos_snmp_server replaced integration tests ansible_connection={{
+      ansible_connection }}
+
+- ansible.builtin.include_tasks: _populate.yaml
+
+- block:
+    - name: Replace given snmp_server configuration
+      become: true
+      register: result
+      arista.eos.eos_snmp_server: &replaced
+        state: replaced
+        config:
+          communities:
+            - name: "comm3"
+              acl_v6: "list1"
+              view: "view1"
+            - name: "replacecomm"
+              acl_v4: "list4"
+          extension:
+            root_oid: "123456"
+            script_location: "flash:"
+          traps:
+            test:
+              arista_test_notification: true
+            bgp:
+              enabled: true
+          vrfs:
+            - vrf: "vrf_replace"
+              local_interface: "Ethernet1"
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 15
+          - result.changed == true
+          - result.commands|symmetric_difference(replaced.commands) == []
+          - result.after == replaced.after
+          - result.before == replaced.before
+
+    # idempotency fails, as attributes are added as default.
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_snmp_server: *replaced
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 3
+          - result.changed == true
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -1,15 +1,14 @@
 ---
-- debug: msg="START eapi/not_hardware.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START eapi/not_hardware.yaml on connection={{ ansible_connection }}"
 
 - name: test not hardware
   become: true
   register: result
   arista.eos.eos_facts:
     gather_subset:
-      - '!hardware'
-    provider: '{{ eapi }}'
+      - "!hardware"
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - "'config' in result.ansible_facts.ansible_net_gather_subset"
@@ -19,4 +18,4 @@
       - result.ansible_facts.ansible_net_interfaces.Management1
       - result.ansible_facts.ansible_net_filesystems is not defined
 
-- debug: msg="END eapi/not_hardware.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END eapi/not_hardware.yaml on connection={{ ansible_connection }}"

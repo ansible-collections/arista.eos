@@ -1,10 +1,9 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_ospfv3 rtt integration tests ansible_connection={{
       ansible_connection }}
 
 - block:
-
     - name: merge given ospfv3 configuration
       become: true
       register: baseconfig
@@ -72,15 +71,14 @@
                   router_id: "10.17.0.3"
                   timers:
                     out_delay: 10
-                    throttle:
+                    spf:
                       initial: 56
                       max: 56
                       min: 56
-                      spf: true
               fips_restrictions: true
               vrf: "vrf02"
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - baseconfig.commands|length == 43
           - baseconfig.changed == true
@@ -113,8 +111,6 @@
                       ranges:
                         - address: 60.1.0.0/16
                           cost: 30
-                  timers:
-                    lsa: 10
               vrf: "vrf02"
 
     - name: Revert back to base config using facts round trip
@@ -125,9 +121,8 @@
         state: overridden
 
     - name: Assert that config was reverted
-      assert:
+      ansible.builtin.assert:
         that: baseconfig.after == revert.after
 
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

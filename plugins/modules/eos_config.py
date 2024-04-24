@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -29,10 +30,8 @@ description:
   into sections.  This module provides an implementation for working with EOS configuration
   sections in a deterministic way.  This module works with either CLI or eAPI transports.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 - Abbreviated commands are NOT idempotent, see
   L(Network FAQ,../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
 - To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they
@@ -119,7 +118,7 @@ options:
       playbook root directory or role root directory, if playbook is part of an ansible
       role. If the directory does not exist, it is created.
     type: bool
-    default: no
+    default: false
   running_config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -140,7 +139,7 @@ options:
       the running-config is append with the all keyword.  When the value is set to
       false, the command is issued without the all keyword
     type: bool
-    default: no
+    default: false
   save_when:
     description:
     - When changes are made to the device running-configuration, the changes are not
@@ -174,6 +173,9 @@ options:
       device configuration.
     - When this option is configured as C(session), the diff returned will be based
       on the configuration session.
+    - When this option is configured as C(validate_config), the module will return before
+      with the running-config before applying the intended config and after with the session
+      config after applying the intended config to the session.
     default: session
     type: str
     choices:
@@ -181,6 +183,7 @@ options:
     - running
     - intended
     - session
+    - validate_config
   diff_ignore_lines:
     description:
     - Use this argument to specify one or more lines that should be ignored during
@@ -203,7 +206,7 @@ options:
   backup_options:
     description:
     - This is a dict object containing configurable options related to backup file
-      path. The value of this option is read only when C(backup) is set to I(yes),
+      path. The value of this option is read only when C(backup) is set to I(true),
       if C(backup) is set to I(no) this option will be silently ignored.
     suboptions:
       filename:
@@ -234,10 +237,10 @@ EXAMPLES = """
 - name: load an acl into the device
   arista.eos.eos_config:
     lines:
-    - 10 permit ip host 192.0.2.1 any log
-    - 20 permit ip host 192.0.2.2 any log
-    - 30 permit ip host 192.0.2.3 any log
-    - 40 permit ip host 192.0.2.4 any log
+      - 10 permit ip host 192.0.2.1 any log
+      - 20 permit ip host 192.0.2.2 any log
+      - 30 permit ip host 192.0.2.3 any log
+      - 40 permit ip host 192.0.2.4 any log
     parents: ip access-list test
     before: no ip access-list test
     replace: block
@@ -248,7 +251,7 @@ EXAMPLES = """
 
 - name: render a Jinja2 template onto an Arista switch
   arista.eos.eos_config:
-    backup: yes
+    backup: true
     src: eos_template.j2
 
 - name: diff the running config against a master config
@@ -259,15 +262,13 @@ EXAMPLES = """
 - name: for idempotency, use full-form commands
   arista.eos.eos_config:
     lines:
-      # - shut
-    - shutdown
-    # parents: int eth1
+      - shutdown
     parents: interface Ethernet1
 
 - name: configurable backup path
   arista.eos.eos_config:
     src: eos_template.j2
-    backup: yes
+    backup: true
     backup_options:
       filename: backup.cfg
       dir_path: /home/user
@@ -286,27 +287,27 @@ updates:
   sample: ['hostname switch01', 'interface Ethernet1', 'no shutdown']
 backup_path:
   description: The full path to the backup file
-  returned: when backup is yes
+  returned: when backup is true
   type: str
   sample: /playbooks/ansible/backup/eos_config.2016-07-16@22:28:34
 filename:
   description: The name of the backup file
-  returned: when backup is yes and filename is not specified in backup options
+  returned: when backup is true and filename is not specified in backup options
   type: str
   sample: eos_config.2016-07-16@22:28:34
 shortname:
   description: The full path to the backup file excluding the timestamp
-  returned: when backup is yes and filename is not specified in backup options
+  returned: when backup is true and filename is not specified in backup options
   type: str
   sample: /playbooks/ansible/backup/eos_config
 date:
   description: The date extracted from the backup file name
-  returned: when backup is yes
+  returned: when backup is true
   type: str
   sample: "2016-07-16"
 time:
   description: The time extracted from the backup file name
-  returned: when backup is yes
+  returned: when backup is true
   type: str
   sample: "22:28:34"
 """
@@ -317,16 +318,13 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.c
     NetworkConfig,
     dumps,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
-    load_config,
     get_connection,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    get_session_config,
+    load_config,
     run_commands,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
 )
 
 
@@ -364,13 +362,12 @@ def save_config(module, result):
         module.warn(
             "Skipping command `copy running-config startup-config` "
             "due to check_mode.  Configuration not copied to "
-            "non-volatile storage"
+            "non-volatile storage",
         )
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     backup_spec = dict(filename=dict(), dir_path=dict(type="path"))
     argument_spec = dict(
         src=dict(type="path"),
@@ -379,17 +376,25 @@ def main():
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
         match=dict(
-            default="line", choices=["line", "strict", "exact", "none"]
+            default="line",
+            choices=["line", "strict", "exact", "none"],
         ),
         replace=dict(default="line", choices=["line", "block", "config"]),
         defaults=dict(type="bool", default=False),
         backup=dict(type="bool", default=False),
         backup_options=dict(type="dict", options=backup_spec),
         save_when=dict(
-            choices=["always", "never", "modified", "changed"], default="never"
+            choices=["always", "never", "modified", "changed"],
+            default="never",
         ),
         diff_against=dict(
-            choices=["startup", "session", "intended", "running"],
+            choices=[
+                "startup",
+                "session",
+                "intended",
+                "running",
+                "validate_config",
+            ],
             default="session",
         ),
         diff_ignore_lines=dict(type="list", elements="str"),
@@ -397,16 +402,15 @@ def main():
         intended_config=dict(),
     )
 
-    argument_spec.update(eos_argument_spec)
-
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 
     required_if = [
-        ("match", "strict", ["lines"]),
-        ("match", "exact", ["lines"]),
-        ("replace", "block", ["lines"]),
+        ("match", "strict", ["lines", "src"], True),
+        ("match", "exact", ["lines", "src"], True),
+        ("replace", "block", ["lines", "src"], True),
         ("replace", "config", ["src"]),
         ("diff_against", "intended", ["intended_config"]),
+        ("diff_against", "validate_config", ["intended_config"]),
     ]
 
     module = AnsibleModule(
@@ -427,19 +431,16 @@ def main():
     contents = None
     flags = ["all"] if module.params["defaults"] else []
     connection = get_connection(module)
-
     # Refuse to diff_against: session if sessions are disabled
     if (
-        module.params["diff_against"] == "session"
+        module.params["diff_against"] in ["session", "validate_config"]
         and not connection.supports_sessions
     ):
         module.fail_json(
-            msg="Cannot diff against sessions when sessions are disabled. Please change diff_against to another value"
+            msg="Cannot diff against sessions when sessions are disabled. Please change diff_against to another value",
         )
 
-    if module.params["backup"] or (
-        module._diff and module.params["diff_against"] == "running"
-    ):
+    if module.params["backup"] or (module._diff and module.params["diff_against"] == "running"):
         contents = get_config(module, flags=flags)
         config = NetworkConfig(indent=1, contents=contents)
         if module.params["backup"]:
@@ -481,7 +482,10 @@ def main():
             commit = not module.check_mode
 
             response = load_config(
-                module, commands, replace=replace, commit=commit
+                module,
+                commands,
+                replace=replace,
+                commit=commit,
             )
 
             result["changed"] = True
@@ -497,7 +501,6 @@ def main():
 
     running_config = module.params["running_config"]
     startup_config = None
-
     if module.params["save_when"] == "always":
         save_config(module, result)
     elif module.params["save_when"] == "modified":
@@ -510,10 +513,14 @@ def main():
         )
 
         running_config = NetworkConfig(
-            indent=3, contents=output[0], ignore_lines=diff_ignore_lines
+            indent=3,
+            contents=output[0],
+            ignore_lines=diff_ignore_lines,
         )
         startup_config = NetworkConfig(
-            indent=3, contents=output[1], ignore_lines=diff_ignore_lines
+            indent=3,
+            contents=output[1],
+            ignore_lines=diff_ignore_lines,
         )
 
         if running_config.sha1 != startup_config.sha1:
@@ -521,11 +528,11 @@ def main():
 
     elif module.params["save_when"] == "changed" and result["changed"]:
         save_config(module, result)
-
     if module._diff:
         if not running_config:
             output = run_commands(
-                module, {"command": "show running-config", "output": "text"}
+                module,
+                {"command": "show running-config", "output": "text"},
             )
             contents = output[0]
         else:
@@ -533,13 +540,15 @@ def main():
 
         # recreate the object in order to process diff_ignore_lines
         running_config = NetworkConfig(
-            indent=3, contents=contents, ignore_lines=diff_ignore_lines
+            indent=3,
+            contents=contents,
+            ignore_lines=diff_ignore_lines,
         )
 
         if module.params["diff_against"] == "running":
             if module.check_mode:
                 module.warn(
-                    "unable to perform diff against running-config due to check mode"
+                    "unable to perform diff against running-config due to check mode",
                 )
                 contents = None
             else:
@@ -555,31 +564,48 @@ def main():
             else:
                 contents = startup_config.config_text
 
-        elif module.params["diff_against"] == "intended":
+        elif module.params["diff_against"] in ["intended", "validate_config"]:
             contents = module.params["intended_config"]
 
         if contents is not None:
             base_config = NetworkConfig(
-                indent=3, contents=contents, ignore_lines=diff_ignore_lines
+                indent=3,
+                contents=contents,
+                ignore_lines=diff_ignore_lines,
             )
 
             if running_config.sha1 != base_config.sha1:
+                before = ""
+                after = ""
                 if module.params["diff_against"] == "intended":
                     before = running_config
                     after = base_config
                 elif module.params["diff_against"] in ("startup", "running"):
                     before = base_config
                     after = running_config
+                elif module.params["diff_against"] == "validate_config":
+                    before = running = get_running_config(
+                        module,
+                        None,
+                        flags=flags,
+                    )
+                    replace = module.params["replace"] == "config"
+                    after = get_session_config(
+                        module,
+                        contents.split("\n"),
+                        replace=replace,
+                        commit=False,
+                    )
 
                 result.update(
                     {
-                        "changed": True,
+                        "changed": False,
                         "diff": {"before": str(before), "after": str(after)},
-                    }
+                    },
                 )
 
     if result.get("changed") and any(
-        (module.params["src"], module.params["lines"])
+        (module.params["src"], module.params["lines"]),
     ):
         msg = (
             "To ensure idempotency and correct diff the input configuration lines should be"

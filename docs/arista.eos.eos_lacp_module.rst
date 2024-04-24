@@ -133,7 +133,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Arista EOS 4.20.10M
+   - Tested against Arista EOS 4.24.6F
    - This module works with connection ``network_cli``. See the `EOS Platform Options <../network/user_guide/platform_eos.html>`_.
 
 
@@ -201,7 +201,7 @@ Examples
     # veos# show running-config | include lacp
     #
 
-    #Using rendered:
+    # Using rendered:
 
     - name: Use Rendered to convert the structured data to native config
       arista.eos.eos_lacp:

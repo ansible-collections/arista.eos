@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -31,8 +32,7 @@ The arg spec for the eos_ospf_interfaces module
 
 
 class Ospf_interfacesArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_ospf_interfaces module
-    """
+    """The arg spec for the eos_ospf_interfaces module"""
 
     def __init__(self, **kwargs):
         pass
@@ -78,7 +78,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                                         "area_id": {
                                             "required": True,
                                             "type": "str",
-                                        }
+                                        },
                                     },
                                 },
                                 "bfd": {"type": "bool"},
@@ -156,7 +156,7 @@ class Ospf_interfacesArgs(object):  # pylint: disable=R0903
                         "area": {
                             "type": "dict",
                             "options": {
-                                "area_id": {"required": True, "type": "str"}
+                                "area_id": {"required": True, "type": "str"},
                             },
                         },
                         "dead_interval": {"type": "int"},

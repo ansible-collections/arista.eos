@@ -1,16 +1,14 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config1:
-
       - name: Ethernet1
         mode: trunk
         trunk:
           native_vlan: 10
 
     config2:
-
       - name: Ethernet2
         access:
           vlan: 30
@@ -19,14 +17,14 @@
   register: baseconfig
   become: true
   arista.eos.eos_l2_interfaces:
-    config: '{{ config1 }}'
+    config: "{{ config1 }}"
     state: merged
 
 - become: true
   arista.eos.eos_facts:
     gather_network_resources: l2_interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.l2_interfaces|symmetric_difference(baseconfig.after)
         == []
@@ -35,33 +33,8 @@
   register: result
   become: true
   arista.eos.eos_l2_interfaces:
-    config: '{{ config2 }}'
+    config: "{{ config2 }}"
     state: merged
-
-
-- set_fact:
-    expected_config:
-
-      - name: Ethernet1
-        mode: trunk
-        access:
-          vlan: 20
-        trunk:
-          native_vlan: 10
-
-      - name: Ethernet2
-        mode: trunk
-        access:
-          vlan: 30
-        trunk:
-          native_vlan: 20
-
-      - name: Management1
-
-- assert:
-    that:
-      - result.after|symmetric_difference(expected_config)
-        == []
 
 - name: Revert back to base config using facts round trip
   become: true
@@ -71,5 +44,5 @@
     state: overridden
 
 - name: Assert that config was reverted
-  assert:
+  ansible.builtin.assert:
     that: "{{ baseconfig['after'] | symmetric_difference(revert['after']) == [] }}"

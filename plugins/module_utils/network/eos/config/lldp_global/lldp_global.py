@@ -13,6 +13,7 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
@@ -22,9 +23,8 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     dict_diff,
     to_list,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 
 
 class Lldp_global(ConfigBase):
@@ -40,23 +40,25 @@ class Lldp_global(ConfigBase):
         super(Lldp_global, self).__init__(module)
 
     def get_lldp_global_facts(self, data=None):
-        """ Get the 'facts' (the current configuration)
+        """Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         lldp_global_facts = facts["ansible_network_resources"].get(
-            "lldp_global"
+            "lldp_global",
         )
         if not lldp_global_facts:
             return {}
         return lldp_global_facts
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -88,7 +90,7 @@ class Lldp_global(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_lldp_global_facts(data=running_config)
 
@@ -104,7 +106,7 @@ class Lldp_global(ConfigBase):
         return result
 
     def set_config(self, existing_lldp_global_facts):
-        """ Collect the configuration from the args passed to the module,
+        """Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
         :rtype: A list
@@ -117,7 +119,7 @@ class Lldp_global(ConfigBase):
         return to_list(resp)
 
     def set_state(self, want, have):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
 
         :param want: the desired configuration as a dictionary
         :param have: the current configuration as a dictionary
@@ -126,14 +128,11 @@ class Lldp_global(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
-        if (
-            state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
         if state == "deleted":
             commands = state_deleted(want, have)
@@ -145,7 +144,7 @@ class Lldp_global(ConfigBase):
 
 
 def state_replaced(want, have):
-    """ The command generator when state is replaced
+    """The command generator when state is replaced
 
     :rtype: A list
     :returns: the commands necessary to migrate the current configuration
@@ -160,7 +159,7 @@ def state_replaced(want, have):
 
 
 def state_merged(want, have):
-    """ The command generator when state is merged
+    """The command generator when state is merged
 
     :rtype: A list
     :returns: the commands necessary to merge the provided into
@@ -170,19 +169,23 @@ def state_merged(want, have):
     to_set = dict_diff(have, want)
     tlv_options = to_set.pop("tlv_select", {})
     for key, value in to_set.items():
+        if key == "holdtime":
+            key = "hold-time"
+        if key == "reinit":
+            key = "timer reinitialization"
         commands.append("lldp {0} {1}".format(key, value))
     for key, value in tlv_options.items():
         device_option = key.replace("_", "-")
         if value is True:
-            commands.append("lldp tlv-select {0}".format(device_option))
+            commands.append("lldp tlv transmit {0}".format(device_option))
         elif value is False:
-            commands.append("no lldp tlv-select {0}".format(device_option))
+            commands.append("no lldp tlv transmit {0}".format(device_option))
 
     return commands
 
 
 def state_deleted(want, have):
-    """ The command generator when state is deleted
+    """The command generator when state is deleted
 
     :rtype: A list
     :returns: the commands necessary to remove the current configuration
@@ -192,12 +195,16 @@ def state_deleted(want, have):
     to_remove = dict_diff(want, have)
     tlv_options = to_remove.pop("tlv_select", {})
     for key in to_remove:
+        if key == "holdtime":
+            key = "hold-time"
+        if key == "reinit":
+            key = "timer reinitialization"
         commands.append("no lldp {0}".format(key))
     for key, value in tlv_options.items():
         device_option = key.replace("_", "-")
         if value is False:
-            commands.append("lldp tlv-select {0}".format(device_option))
+            commands.append("lldp tlv transmit {0}".format(device_option))
         elif value is True:
-            commands.append("no lldp tlv-select {0}".format(device_option))
+            commands.append("no lldp tlv transmit {0}".format(device_option))
 
     return commands

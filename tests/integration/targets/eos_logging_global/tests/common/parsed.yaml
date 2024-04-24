@@ -1,0 +1,17 @@
+---
+- ansible.builtin.debug:
+    msg:
+      START eos_logging_global_interfaces parsed integration tests on connection={{ ansible_connection
+      }}
+
+- name: Provide the running configuration for parsing (config to be parsed)
+  become: true
+  register: result
+  arista.eos.eos_logging_global:
+    running_config: "{{ lookup('file', '_parsed.cfg') }}"
+    state: parsed
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - result.parsed == replaced.before

@@ -1,5 +1,6 @@
 ---
-- debug: msg="START eapi/greaterthanorequal.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START eapi/greaterthanorequal.yaml on connection={{ ansible_connection
     }}"
 
 - name: test ge operator
@@ -11,7 +12,7 @@
     wait_for:
       - result[1].interfaces.Management1.mtu ge 0
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
@@ -25,10 +26,11 @@
     wait_for:
       - result[1].interfaces.Management1.mtu >= 0
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.stdout is defined
 
-- debug: msg="END eapi/greaterthanorequal.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="END eapi/greaterthanorequal.yaml on connection={{ ansible_connection
     }}"

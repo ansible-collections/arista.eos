@@ -5,13 +5,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_ospf_interfaces
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,14 +23,12 @@ class TestEosOspf_InterfacesModule(TestEosModule):
         super(TestEosOspf_InterfacesModule, self).setUp()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospf_interfaces.ospf_interfaces.Ospf_interfacesFacts.get_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ospf_interfaces.ospf_interfaces.Ospf_interfacesFacts.get_config",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -69,7 +68,7 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         afi="ipv6",
                                         mtu_ignore=True,
                                         network="point-to-point",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
@@ -91,13 +90,13 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         afi="ipv4",
                                         priority=9,
                                         area=dict(area_id="0.0.0.6"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
-                ]
-            )
+                ],
+            ),
         )
         commands = [
             "interface Vlan1",
@@ -160,13 +159,13 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         hello_interval=45,
                                         retransmit_interval=100,
                                         area=dict(area_id="0.0.0.6"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
-                ]
-            )
+                ],
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -191,7 +190,7 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         afi="ipv6",
                                         mtu_ignore=True,
                                         network="point-to-point",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
@@ -213,14 +212,14 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         afi="ipv4",
                                         priority=9,
                                         area=dict(area_id="0.0.0.6"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface Vlan1",
@@ -294,14 +293,14 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         hello_interval=45,
                                         retransmit_interval=100,
                                         area=dict(area_id="0.0.0.6"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -326,7 +325,7 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         afi="ipv6",
                                         mtu_ignore=True,
                                         network="point-to-point",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
@@ -348,14 +347,14 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         afi="ipv4",
                                         priority=9,
                                         area=dict(area_id="0.0.0.6"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface Vlan3",
@@ -434,14 +433,14 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         hello_interval=45,
                                         retransmit_interval=100,
                                         area=dict(area_id="0.0.0.6"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -487,7 +486,7 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         afi="ipv6",
                                         mtu_ignore=True,
                                         network="point-to-point",
-                                    )
+                                    ),
                                 ],
                             ),
                         ],
@@ -509,14 +508,14 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                         afi="ipv4",
                                         priority=9,
                                         area=dict(area_id="0.0.0.6"),
-                                    )
+                                    ),
                                 ],
-                            )
+                            ),
                         ],
                     ),
                 ],
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "interface Vlan1",
@@ -534,7 +533,9 @@ class TestEosOspf_InterfacesModule(TestEosModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_vyos_ospf_interfaces_parsed(self):
@@ -565,12 +566,12 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                                 "afi": "ipv6",
                                 "mtu_ignore": True,
                                 "network": "point-to-point",
-                            }
+                            },
                         ],
                     },
                 ],
                 "name": "Vlan1",
-            }
+            },
         ]
 
         self.assertEqual(parsed_list, result["parsed"])
@@ -578,7 +579,8 @@ class TestEosOspf_InterfacesModule(TestEosModule):
     def test_vyos_ospf_interfaces_gathered(self):
         set_module_args(dict(state="gathered"))
         result = self.execute_module(
-            changed=False, filename="eos_ospf_interfaces_config.cfg"
+            changed=False,
+            filename="eos_ospf_interfaces_config.cfg",
         )
         gathered_list = {
             "Vlan1": [
@@ -620,13 +622,14 @@ class TestEosOspf_InterfacesModule(TestEosModule):
                             "area": {"area_id": "0.0.0.6"},
                             "hello_interval": 45,
                             "retransmit_interval": 100,
-                        }
+                        },
                     ],
-                }
+                },
             ],
         }
         for entry in result["gathered"]:
             if entry.get("name") in ["Vlan1", "Vlan3"]:
                 self.assertEqual(
-                    gathered_list[entry["name"]], entry["address_family"]
+                    gathered_list[entry["name"]],
+                    entry["address_family"],
                 )

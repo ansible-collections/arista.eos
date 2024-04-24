@@ -12,23 +12,23 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 import re
+
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.acl_interfaces.acl_interfaces import (
     Acl_interfacesArgs,
 )
 
 
 class Acl_interfacesFacts(object):
-    """ The eos acl_interfaces fact class
-    """
+    """The eos acl_interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -46,11 +46,11 @@ class Acl_interfacesFacts(object):
 
     def get_device_data(self, connection):
         return connection.get(
-            "show running-config | include interface | access-group | traffic-filter"
+            "show running-config | include interface | access-group | traffic-filter",
         )
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for acl_interfaces
+        """Populate the facts for acl_interfaces
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -66,9 +66,7 @@ class Acl_interfacesFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
         objs = []
         for resource in resources:
             if resource:
@@ -80,11 +78,10 @@ class Acl_interfacesFacts(object):
         facts = {}
         if objs:
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
-            facts["acl_interfaces"] = [
-                utils.remove_empties(cfg) for cfg in params["config"]
-            ]
+            facts["acl_interfaces"] = [utils.remove_empties(cfg) for cfg in params["config"]]
 
         ansible_facts["ansible_network_resources"].update(facts)
         return ansible_facts

@@ -4,13 +4,13 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 import re
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
     CliProvider,
 )
@@ -93,7 +93,7 @@ class Neighbors(CliProvider):
             return cmd
 
     def _render_peer_group(self, item, config=None):
-        cmd = "neighbor %s peer-group %s" % (
+        cmd = "neighbor %s peer group %s" % (
             item["neighbor"],
             item["peer_group"],
         )
@@ -127,8 +127,7 @@ class Neighbors(CliProvider):
             return cmd
 
     def _render_timers(self, item, config):
-        """generate bgp timer related configuration
-        """
+        """generate bgp timer related configuration"""
         keepalive = item["timers"]["keepalive"]
         holdtime = item["timers"]["holdtime"]
         neighbor = item["neighbor"]

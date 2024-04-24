@@ -1,0 +1,159 @@
+---
+merged:
+  commands:
+    - "ntp serve ip access-group acl01 in"
+    - "ntp serve ipv6 access-group acl02 in"
+    - "ntp authentication-key 2 sha1 7 ********"
+    - "ntp authentication-key 23 md5 7 ********"
+    - "ntp server vrf vrf01 10.1.1.1 burst prefer"
+    - "ntp server vrf vrf01 11.21.1.1 burst minpoll 13 prefer"
+    - "ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15"
+    - "ntp authenticate"
+    - "ntp local-interface Ethernet1"
+    - "ntp qos dscp 10"
+    - "ntp trusted-key 23"
+deleted:
+  commands:
+    - "no ntp serve ip access-group acl01 in"
+    - "no ntp serve ipv6 access-group acl02 in"
+    - "no ntp authentication-key 2 sha1 7 ********"
+    - "no ntp authentication-key 23 md5 7 ********"
+    - "no ntp server vrf vrf01 10.1.1.1 burst prefer"
+    - "no ntp server vrf vrf01 11.21.1.1 burst minpoll 13 prefer"
+    - "no ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15"
+    - "no ntp authenticate"
+    - "no ntp local-interface Ethernet1"
+    - "no ntp qos dscp 10"
+    - "no ntp trusted-key 23"
+
+updated:
+  commands:
+    - "ntp serve ip access-group acl01 in"
+    - "ntp serve ipv6 access-group acl02 in"
+    - "ntp authentication-key 2 sha1 7 ********"
+    - "ntp authentication-key 23 md5 7 ********"
+    - "ntp server vrf vrf01 10.1.1.1 burst prefer"
+    - "ntp server vrf vrf01 11.21.1.1 burst minpoll 13 prefer"
+    - "ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15"
+    - "ntp server vrf vrf01 1.1.1.1 local-interface Management1"
+    - "ntp authenticate"
+    - "ntp local-interface Ethernet1"
+    - "ntp qos dscp 10"
+    - "ntp trusted-key 23"
+  after:
+    authenticate:
+      enable: true
+    authentication_keys:
+      - algorithm: "sha1"
+        encryption: 7
+        id: 2
+        key: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+      - algorithm: "md5"
+        encryption: 7
+        id: 23
+        key: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+    local_interface: "Ethernet1"
+    qos_dscp: 10
+    serve:
+      access_lists:
+        - acls:
+            - acl_name: "acl01"
+              direction: "in"
+          afi: "ip"
+        - acls:
+            - acl_name: "acl02"
+              direction: "in"
+          afi: "ipv6"
+    servers:
+      - local_interface: "Management1"
+        server: "1.1.1.1"
+        vrf: "vrf01"
+      - burst: true
+        prefer: true
+        server: "10.1.1.1"
+        vrf: "vrf01"
+      - burst: true
+        minpoll: 13
+        prefer: true
+        server: "11.21.1.1"
+        vrf: "vrf01"
+      - key_id: 2
+        maxpoll: 15
+        server: "25.1.1.1"
+        vrf: "vrf01"
+    trusted_key: "23"
+
+replaced:
+  before:
+    authenticate:
+      enable: true
+    authentication_keys:
+      - algorithm: "sha1"
+        encryption: 7
+        id: 2
+        key: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+      - algorithm: "md5"
+        encryption: 7
+        id: 23
+        key: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+    local_interface: "Ethernet1"
+    qos_dscp: 10
+    serve:
+      access_lists:
+        - acls:
+            - acl_name: "acl01"
+              direction: "in"
+          afi: "ip"
+        - acls:
+            - acl_name: "acl02"
+              direction: "in"
+          afi: "ipv6"
+    servers:
+      - burst: true
+        prefer: true
+        server: "10.1.1.1"
+        vrf: "vrf01"
+      - burst: true
+        minpoll: 13
+        prefer: true
+        server: "11.21.1.1"
+        vrf: "vrf01"
+      - key_id: 2
+        maxpoll: 15
+        server: "25.1.1.1"
+        vrf: "vrf01"
+    trusted_key: "23"
+  commands:
+    - "ntp serve ip access-group acl03 in"
+    - "no ntp serve ip access-group acl01 in"
+    - "no ntp serve ipv6 access-group acl02 in"
+    - "ntp authentication-key 25 md5 7 ********"
+    - "no ntp authentication-key 2 sha1 7 ********"
+    - "no ntp authentication-key 23 md5 7 ********"
+    - "ntp server 110.21.1.1 burst minpoll 13 prefer"
+    - "no ntp server vrf vrf01 10.1.1.1 burst prefer"
+    - "no ntp server vrf vrf01 11.21.1.1 burst minpoll 13 prefer"
+    - "no ntp server vrf vrf01 25.1.1.1 key 2 maxpoll 15"
+    - "no ntp authenticate"
+    - "no ntp local-interface Ethernet1"
+    - "ntp qos dscp 15"
+    - "no ntp trusted-key 23"
+
+  after:
+    authentication_keys:
+      - algorithm: "md5"
+        encryption: 7
+        id: 25
+        key: "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER"
+    qos_dscp: 15
+    serve:
+      access_lists:
+        - acls:
+            - acl_name: "acl03"
+              direction: "in"
+          afi: "ip"
+    servers:
+      - burst: true
+        minpoll: 13
+        prefer: true
+        server: "110.21.1.1"

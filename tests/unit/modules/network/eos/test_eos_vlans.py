@@ -5,13 +5,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_vlans
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,36 +23,32 @@ class TestEosVlansModule(TestEosModule):
         super(TestEosVlansModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
         self.mock_edit_config = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
         )
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.config.vlans.vlans.Vlans.get_vlans_facts"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.config.vlans.vlans.Vlans.get_vlans_facts",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -85,7 +82,7 @@ class TestEosVlansModule(TestEosModule):
 
     def test_eos_vlan_default_idempotent(self):
         self.execute_show_command.return_value = load_fixture(
-            "eos_vlan_config.cfg"
+            "eos_vlan_config.cfg",
         )
         set_module_args(dict(config=[dict(vlan_id=10, name="ten")]))
         self.execute_module(changed=False, commands=[])
@@ -93,17 +90,17 @@ class TestEosVlansModule(TestEosModule):
     def test_eos_vlan_merged(self):
         self.execute_show_command.return_value = []
         set_module_args(
-            dict(config=[dict(vlan_id=30, name="thirty")], state="merged")
+            dict(config=[dict(vlan_id=30, name="thirty")], state="merged"),
         )
         commands = ["vlan 30", "name thirty"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_vlan_merged_idempotent(self):
         self.execute_show_command.return_value = load_fixture(
-            "eos_vlan_config.cfg"
+            "eos_vlan_config.cfg",
         )
         set_module_args(
-            dict(config=[dict(vlan_id=10, name="ten")], state="merged")
+            dict(config=[dict(vlan_id=10, name="ten")], state="merged"),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -113,17 +110,17 @@ class TestEosVlansModule(TestEosModule):
             dict(
                 config=[dict(vlan_id=10, name="tenreplaced", state="suspend")],
                 state="replaced",
-            )
+            ),
         )
         commands = ["vlan 10", "name tenreplaced", "state suspend"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_vlan_replaced_idempotent(self):
         self.execute_show_command.return_value = load_fixture(
-            "eos_vlan_config.cfg"
+            "eos_vlan_config.cfg",
         )
         set_module_args(
-            dict(config=[dict(vlan_id=10, name="ten")], state="replaced")
+            dict(config=[dict(vlan_id=10, name="ten")], state="replaced"),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -133,23 +130,23 @@ class TestEosVlansModule(TestEosModule):
             dict(
                 config=[dict(vlan_id=30, name="thirty", state="suspend")],
                 state="overridden",
-            )
+            ),
         )
         commands = ["no vlan 10", "vlan 30", "name thirty", "state suspend"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_vlan_overridden_idempotent(self):
         self.execute_show_command.return_value = load_fixture(
-            "eos_vlan_config.cfg"
+            "eos_vlan_config.cfg",
         )
         set_module_args(
-            dict(config=[dict(vlan_id=10, name="ten")], state="overridden")
+            dict(config=[dict(vlan_id=10, name="ten")], state="overridden"),
         )
         self.execute_module(changed=False, commands=[])
 
     def test_eos_vlan_deleted(self):
         set_module_args(
-            dict(config=[dict(vlan_id=10, name="ten")], state="deleted")
+            dict(config=[dict(vlan_id=10, name="ten")], state="deleted"),
         )
         commands = ["no vlan 10"]
         self.execute_module(changed=True, commands=commands)
@@ -163,5 +160,6 @@ class TestEosVlansModule(TestEosModule):
         set_module_args(dict(config=[dict(vlan_id=30, state=10)]))
         result = self.execute_module(failed=True)
         self.assertIn(
-            "value of state must be one of: active, suspend", result["msg"]
+            "value of state must be one of: active, suspend",
+            result["msg"],
         )

@@ -1,10 +1,10 @@
 ---
-- debug:
-    msg: START eos_ospfv3 rendered integration tests on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg:
+      START eos_ospfv3 rendered integration tests on connection={{ ansible_connection
       }}
 
 - block:
-
     - name: Structure provided configuration into device specific commands
       become: true
       register: result
@@ -85,16 +85,15 @@
                   router_id: "10.17.0.3"
                   timers:
                     out_delay: 10
-                    throttle:
+                    spf:
                       initial: 56
                       max: 56
                       min: 56
-                      spf: true
               fips_restrictions: true
               vrf: "vrf02"
         state: rendered
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
           - result.rendered|symmetric_difference(merged.commands) == []

@@ -46,7 +46,7 @@ round_trip:
                   eq: www
               protocol: tcp
               ttl:
-                eq: '55'
+                eq: "55"
     - afi: ipv6
       acls:
         - name: test2
@@ -97,13 +97,13 @@ base_config:
                   eq: www
               protocol: tcp
               ttl:
-                eq: '55'
+                eq: "55"
     - afi: ipv6
       acls:
         - name: test2
           standard: true
           aces:
             - grant: permit
-              log: 'true'
+              log: "true"
               source:
                 any: true

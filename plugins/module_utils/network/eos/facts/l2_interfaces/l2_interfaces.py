@@ -11,22 +11,22 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
 import re
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from copy import deepcopy
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.l2_interfaces.l2_interfaces import (
     L2_interfacesArgs,
 )
 
 
 class L2_interfacesFacts(object):
-    """ The eos l2_interfaces fact class
-    """
+    """The eos l2_interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -46,7 +46,7 @@ class L2_interfacesFacts(object):
         return connection.get("show running-config | section ^interface")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for l2_interfaces
+        """Populate the facts for l2_interfaces
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -68,11 +68,10 @@ class L2_interfacesFacts(object):
         facts = {}
         if objs:
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
-            facts["l2_interfaces"] = [
-                utils.remove_empties(cfg) for cfg in params["config"]
-            ]
+            facts["l2_interfaces"] = [utils.remove_empties(cfg) for cfg in params["config"]]
         ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

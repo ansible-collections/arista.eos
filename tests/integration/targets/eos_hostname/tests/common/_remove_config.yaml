@@ -1,0 +1,6 @@
+---
+- name: Cleanup
+  become: true
+  ignore_errors: true
+  arista.eos.eos_hostname:
+    state: deleted

@@ -26,12 +26,12 @@ The arg spec for the eos_interfaces module
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
 class InterfacesArgs(object):
-    """The arg spec for the eos_interfaces module
-    """
+    """The arg spec for the eos_interfaces module"""
 
     def __init__(self, **kwargs):
         pass

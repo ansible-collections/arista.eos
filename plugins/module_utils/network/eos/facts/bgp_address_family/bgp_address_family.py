@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -14,23 +15,22 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
+import re
+
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp_address_family.bgp_address_family import (
+    Bgp_afArgs,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_address_family import (
     Bgp_afTemplate,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.bgp_address_family.bgp_address_family import (
-    Bgp_afArgs,
-)
-import re
 
 
 class Bgp_afFacts(object):
-    """ The eos bgp_address_family facts class
-    """
+    """The eos bgp_address_family facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -50,10 +50,10 @@ class Bgp_afFacts(object):
         """Wrapper method for `connection.get()`
         This method exists solely to allow the unit test framework to mock device connection calls.
         """
-        return connection.get("show running-config | section bgp ")
+        return connection.get("show running-config | section router\\sbgp ")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Bgp_af network resource
+        """Populate the facts for Bgp_af network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -99,15 +99,17 @@ class Bgp_afFacts(object):
                     if "network" in af:
                         af["network"] = list(af["network"].values())
                         af["network"] = sorted(
-                            af["network"], key=lambda k: k["address"]
+                            af["network"],
+                            key=lambda k: k["address"],
                         )
 
         ansible_facts["ansible_network_resources"].pop(
-            "bgp_address_family", None
+            "bgp_address_family",
+            None,
         )
 
         params = utils.remove_empties(
-            utils.validate_config(self.argument_spec, {"config": objs})
+            utils.validate_config(self.argument_spec, {"config": objs}),
         )
 
         facts["bgp_address_family"] = params.get("config", [])

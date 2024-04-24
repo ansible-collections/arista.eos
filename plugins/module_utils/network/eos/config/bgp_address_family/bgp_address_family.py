@@ -7,6 +7,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -17,20 +18,20 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
+import re
+
 from ansible.module_utils.six import iteritems
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
+    ResourceModule,
+)
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     dict_merge,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.resource_module import (
-    ResourceModule,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.bgp_address_family import (
     Bgp_afTemplate,
 )
-import re
 
 
 class Bgp_af(ResourceModule):
@@ -71,7 +72,7 @@ class Bgp_af(ResourceModule):
         ]
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -82,8 +83,8 @@ class Bgp_af(ResourceModule):
         return self.result
 
     def generate_commands(self):
-        """ Generate configuration commands to send based on
-            want, have and desired state.
+        """Generate configuration commands to send based on
+        want, have and desired state.
         """
         wantd = {}
         haved = {}
@@ -102,7 +103,7 @@ class Bgp_af(ResourceModule):
             wantd = dict_merge(haved, wantd)
             if len(wantd.keys()) > 1:
                 self._module.fail_json(
-                    msg="Only one bgp instance is allowed per device"
+                    msg="Only one bgp instance is allowed per device",
                 )
                 wantd = {}
         # if state is deleted, empty out wantd and set haved to wantd
@@ -131,7 +132,9 @@ class Bgp_af(ResourceModule):
         for hkey, entry in iteritems(haf):
             if hkey in waf.keys():
                 af_no_command = self._tmplt.render(
-                    entry, "address_family", True
+                    entry,
+                    "address_family",
+                    True,
                 ).split("\n")
                 if re.search(r"\S+_\S+", hkey):
                     af_no_command[0] = af_no_command[0][3:]
@@ -144,9 +147,9 @@ class Bgp_af(ResourceModule):
 
     def _compare(self, want, have):
         """Leverages the base class `compare()` method and
-           populates the list of commands to be run by comparing
-           the `want` and `have` data with the `parsers` defined
-           for the Bgp_af network resource.
+        populates the list of commands to be run by comparing
+        the `want` and `have` data with the `parsers` defined
+        for the Bgp_af network resource.
         """
         for name, entry in iteritems(want):
             if name != "as_number":
@@ -172,12 +175,19 @@ class Bgp_af(ResourceModule):
             begin = len(self.commands)
             self._compare_lists(entry, have=haf.get(name, {}))
             self._compare_neighbor(entry, have=haf.get(name, {}))
+            # Removing the alias key
+            if "route_target" in entry.keys():
+                entry["route_target"].pop("mode", "")
             self.compare(
-                parsers=self.parsers, want=entry, have=haf.pop(name, {})
+                parsers=self.parsers,
+                want=entry,
+                have=haf.pop(name, {}),
             )
             if len(self.commands) != begin:
                 af_command = self._tmplt.render(
-                    entry, "address_family", False
+                    entry,
+                    "address_family",
+                    False,
                 ).split("\n")
                 for cmd in af_command:
                     self.commands.insert(begin, cmd)
@@ -201,7 +211,9 @@ class Bgp_af(ResourceModule):
                 if vrf_present:
                     if re.search(r"\S+_\S+", name):
                         af_no_command = self._tmplt.render(
-                            entry, "address_family", True
+                            entry,
+                            "address_family",
+                            True,
                         ).split("\n")
                         if name not in waf.keys():
                             af_no_command[0] = af_no_command[0][3:]
@@ -255,7 +267,7 @@ class Bgp_af(ResourceModule):
                 addr_dict = {}
                 for entry in proc.get("address_family", []):
                     addr_dict.update(
-                        {entry["afi"] + "_" + entry.get("vrf", ""): entry}
+                        {entry["afi"] + "_" + entry.get("vrf", ""): entry},
                     )
                 proc["address_family"] = addr_dict
                 self._bgp_af_list_to_dict(proc["address_family"])

@@ -12,18 +12,18 @@ created
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
     param_list_to_dict,
+    to_list,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
     normalize_interface,
 )
@@ -39,23 +39,25 @@ class L3_interfaces(ConfigBase):
     gather_network_resources = ["l3_interfaces"]
 
     def get_l3_interfaces_facts(self, data=None):
-        """ Get the 'facts' (the current configuration)
+        """Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         l3_interfaces_facts = facts["ansible_network_resources"].get(
-            "l3_interfaces"
+            "l3_interfaces",
         )
         if not l3_interfaces_facts:
             return []
         return l3_interfaces_facts
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -89,10 +91,10 @@ class L3_interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_l3_interfaces_facts(
-                data=running_config
+                data=running_config,
             )
 
         if self.state in self.ACTION_STATES:
@@ -107,7 +109,7 @@ class L3_interfaces(ConfigBase):
         return result
 
     def set_config(self, existing_l3_interfaces_facts):
-        """ Collect the configuration from the args passed to the module,
+        """Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
         :rtype: A list
@@ -120,7 +122,7 @@ class L3_interfaces(ConfigBase):
         return to_list(resp)
 
     def set_state(self, want, have):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
 
         :param want: the desired configuration as a dictionary
         :param have: the current configuration as a dictionary
@@ -129,14 +131,11 @@ class L3_interfaces(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
-        if (
-            state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
         want = param_list_to_dict(want)
         have = param_list_to_dict(have)
@@ -153,7 +152,7 @@ class L3_interfaces(ConfigBase):
 
     @staticmethod
     def _state_replaced(want, have):
-        """ The command generator when state is replaced
+        """The command generator when state is replaced
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -176,7 +175,7 @@ class L3_interfaces(ConfigBase):
 
     @staticmethod
     def _state_overridden(want, have):
-        """ The command generator when state is overridden
+        """The command generator when state is overridden
 
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
@@ -185,10 +184,14 @@ class L3_interfaces(ConfigBase):
         commands = []
         for key, extant in have.items():
             interface_name = normalize_interface(key)
-            if interface_name in want:
-                desired = want[interface_name]
-            else:
-                desired = dict()
+            desired = dict()
+            if "Management" in interface_name:
+                continue
+            for k in want.keys():
+                k_want = normalize_interface(k)
+                if key == k_want:
+                    desired = want[k]
+                    break
             if desired.get("ipv4"):
                 for ipv4 in desired["ipv4"]:
                     for k in ["secondary", "virtual"]:
@@ -201,11 +204,23 @@ class L3_interfaces(ConfigBase):
                 commands.append("interface {0}".format(interface_name))
                 commands.extend(intf_commands)
 
+        # new interfaces in want
+        new_intf_commands = []
+        for key, desired in want.items():
+            interface_name = normalize_interface(key)
+            if interface_name not in have:
+                extant = dict()
+                new_intf_commands = set_interface(desired, extant)
+
+            if new_intf_commands:
+                commands.append("interface {0}".format(interface_name))
+                commands.extend(new_intf_commands)
+
         return commands
 
     @staticmethod
     def _state_merged(want, have):
-        """ The command generator when state is merged
+        """The command generator when state is merged
 
         :rtype: A list
         :returns: the commands necessary to merge the provided into
@@ -228,7 +243,7 @@ class L3_interfaces(ConfigBase):
 
     @staticmethod
     def _state_deleted(want, have):
-        """ The command generator when state is deleted
+        """The command generator when state is deleted
 
         :rtype: A list
         :returns: the commands necessary to remove the current configuration
@@ -254,12 +269,8 @@ class L3_interfaces(ConfigBase):
 
 def set_interface(want, have):
     commands = []
-    want_ipv4 = set(
-        tuple(sorted(address.items())) for address in want.get("ipv4") or []
-    )
-    have_ipv4 = set(
-        tuple(sorted(address.items())) for address in have.get("ipv4") or []
-    )
+    want_ipv4 = set(tuple(sorted(address.items())) for address in want.get("ipv4") or [])
+    have_ipv4 = set(tuple(sorted(address.items())) for address in have.get("ipv4") or [])
     for address in want_ipv4 - have_ipv4:
         address = dict(address)
         for param in ["secondary", "virtual"]:
@@ -275,12 +286,8 @@ def set_interface(want, have):
             address_cmd = "ip address virtual {0}".format(address["address"])
         commands.append(address_cmd)
 
-    want_ipv6 = set(
-        tuple(sorted(address.items())) for address in want.get("ipv6") or []
-    )
-    have_ipv6 = set(
-        tuple(sorted(address.items())) for address in have.get("ipv6") or []
-    )
+    want_ipv6 = set(tuple(sorted(address.items())) for address in want.get("ipv6") or [])
+    have_ipv6 = set(tuple(sorted(address.items())) for address in have.get("ipv6") or [])
     for address in want_ipv6 - have_ipv6:
         address = dict(address)
         commands.append("ipv6 address {0}".format(address["address"]))
@@ -289,12 +296,8 @@ def set_interface(want, have):
 
 def clear_interface(want, have):
     commands = []
-    want_ipv4 = set(
-        tuple(sorted(address.items())) for address in want.get("ipv4") or []
-    )
-    have_ipv4 = set(
-        tuple(sorted(address.items())) for address in have.get("ipv4") or []
-    )
+    want_ipv4 = set(tuple(sorted(address.items())) for address in want.get("ipv4") or [])
+    have_ipv4 = set(tuple(sorted(address.items())) for address in have.get("ipv4") or [])
     if not want_ipv4 and have_ipv4:
         commands.append("no ip address")
     else:
@@ -308,23 +311,19 @@ def clear_interface(want, have):
 
             if address.get("secondary"):
                 commands.append(
-                    "no ip address {0} secondary".format(address["address"])
+                    "no ip address {0} secondary".format(address["address"]),
                 )
             if address.get("virtual"):
                 commands.append(
-                    "no ip address virtual {0}".format(address["address"])
+                    "no ip address virtual {0}".format(address["address"]),
                 )
 
             if "secondary" not in address:
                 # Removing non-secondary removes all other interfaces
                 break
 
-    want_ipv6 = set(
-        tuple(sorted(address.items())) for address in want.get("ipv6") or []
-    )
-    have_ipv6 = set(
-        tuple(sorted(address.items())) for address in have.get("ipv6") or []
-    )
+    want_ipv6 = set(tuple(sorted(address.items())) for address in want.get("ipv6") or [])
+    have_ipv6 = set(tuple(sorted(address.items())) for address in have.get("ipv6") or [])
     for address in have_ipv6 - want_ipv6:
         address = dict(address)
         commands.append("no ipv6 address {0}".format(address["address"]))

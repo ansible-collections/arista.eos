@@ -14,19 +14,18 @@ from __future__ import absolute_import, division, print_function
 
 import re
 
-__metaclass__ = type
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-    dict_diff,
-)
+__metaclass__ = type
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
+    dict_diff,
+    to_list,
 )
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import (
     normalize_interface,
 )
@@ -42,23 +41,25 @@ class Lag_interfaces(ConfigBase):
     gather_network_resources = ["lag_interfaces"]
 
     def get_lag_interfaces_facts(self, data=None):
-        """ Get the 'facts' (the current configuration)
+        """Get the 'facts' (the current configuration)
 
         :rtype: A dictionary
         :returns: The current configuration as a dictionary
         """
         facts, _warnings = Facts(self._module).get_facts(
-            self.gather_subset, self.gather_network_resources, data=data
+            self.gather_subset,
+            self.gather_network_resources,
+            data=data,
         )
         lag_interfaces_facts = facts["ansible_network_resources"].get(
-            "lag_interfaces"
+            "lag_interfaces",
         )
         if not lag_interfaces_facts:
             return []
         return lag_interfaces_facts
 
     def execute_module(self):
-        """ Execute the module
+        """Execute the module
 
         :rtype: A dictionary
         :returns: The result from module execution
@@ -90,10 +91,10 @@ class Lag_interfaces(ConfigBase):
             running_config = self._module.params["running_config"]
             if not running_config:
                 self._module.fail_json(
-                    msg="value of running_config parameter must not be empty for state parsed"
+                    msg="value of running_config parameter must not be empty for state parsed",
                 )
             result["parsed"] = self.get_lag_interfaces_facts(
-                data=running_config
+                data=running_config,
             )
 
         if self.state in self.ACTION_STATES:
@@ -107,7 +108,7 @@ class Lag_interfaces(ConfigBase):
         return result
 
     def set_config(self, existing_lag_interfaces_facts):
-        """ Collect the configuration from the args passed to the module,
+        """Collect the configuration from the args passed to the module,
             collect the current configuration (as a dict from facts)
 
         :rtype: A list
@@ -120,7 +121,7 @@ class Lag_interfaces(ConfigBase):
         return to_list(resp)
 
     def set_state(self, want, have):
-        """ Select the appropriate function based on the state provided
+        """Select the appropriate function based on the state provided
 
         :param want: the desired configuration as a dictionary
         :param have: the current configuration as a dictionary
@@ -129,14 +130,11 @@ class Lag_interfaces(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
-        if (
-            state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
-                    state
-                )
+                    state,
+                ),
             )
         if state == "overridden":
             commands = self._state_overridden(want, have)
@@ -150,7 +148,7 @@ class Lag_interfaces(ConfigBase):
 
     @staticmethod
     def _state_replaced(want, have):
-        """ The command generator when state is replaced
+        """The command generator when state is replaced
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
@@ -171,7 +169,7 @@ class Lag_interfaces(ConfigBase):
 
     @staticmethod
     def _state_overridden(want, have):
-        """ The command generator when state is overridden
+        """The command generator when state is overridden
         :rtype: A list
         :returns: the commands necessary to migrate the current configuration
                   to the desired configuration
@@ -198,7 +196,7 @@ class Lag_interfaces(ConfigBase):
 
     @staticmethod
     def _state_merged(want, have):
-        """ The command generator when state is merged
+        """The command generator when state is merged
         :rtype: A list
         :returns: the commands necessary to merge the provided into
                   the current configuration
@@ -218,7 +216,7 @@ class Lag_interfaces(ConfigBase):
 
     @staticmethod
     def _state_deleted(want, have):
-        """ The command generator when state is deleted
+        """The command generator when state is deleted
         :rtype: A list
         :returns: the commands necessary to remove the current configuration
                   of the provided objects
@@ -249,9 +247,10 @@ def set_config(want, have):
                 [
                     "interface {0}".format(member["member"]),
                     "channel-group {0} mode {1}".format(
-                        channel_id.group(0), member["mode"]
+                        channel_id.group(0),
+                        member["mode"],
                     ),
-                ]
+                ],
             )
 
     return commands
@@ -265,7 +264,7 @@ def remove_config(want, have):
     to_remove = dict_diff(want, have)
     for member in to_remove.get("members", []):
         commands.extend(
-            ["interface {0}".format(member["member"]), "no channel-group"]
+            ["interface {0}".format(member["member"]), "no channel-group"],
         )
 
     return commands

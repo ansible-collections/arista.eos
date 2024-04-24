@@ -11,22 +11,22 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
 import re
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from copy import deepcopy
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.l3_interfaces.l3_interfaces import (
     L3_interfacesArgs,
 )
 
 
 class L3_interfacesFacts(object):
-    """ The eos l3_interfaces fact class
-    """
+    """The eos l3_interfaces fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -46,7 +46,7 @@ class L3_interfacesFacts(object):
         return connection.get("show running-config | section ^interface")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for l3_interfaces
+        """Populate the facts for l3_interfaces
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected configuration
@@ -62,9 +62,7 @@ class L3_interfacesFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
 
         objs = []
         for resource in resources:
@@ -75,11 +73,10 @@ class L3_interfacesFacts(object):
         facts = {}
         if objs:
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
-            facts["l3_interfaces"] = [
-                utils.remove_empties(cfg) for cfg in params["config"]
-            ]
+            facts["l3_interfaces"] = [utils.remove_empties(cfg) for cfg in params["config"]]
         ansible_facts["ansible_network_resources"].update(facts)
         return ansible_facts
 
@@ -103,10 +100,10 @@ class L3_interfacesFacts(object):
             for match in matches:
                 address, dummy, remainder = match.partition(" ")
                 if address == "virtual":
-                    ipv4 = {"virtual": True, "address": remainder}
+                    ipv4 = {"virtual": True, "address": remainder.split(" ")[0]}
                 else:
                     ipv4 = {"address": address}
-                if remainder == "secondary":
+                if "secondary" in remainder:
                     ipv4["secondary"] = True
                 config["ipv4"].append(ipv4)
 

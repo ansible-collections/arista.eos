@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -29,10 +30,8 @@ description:
   EOS devices.  It provides an option to configure host system parameters or remove
   those parameters from the device active configuration.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   hostname:
     description:
@@ -67,7 +66,7 @@ options:
       argument accepts either a list of DNS servers or a list of hashes that configure
       the name server and VRF name.  See examples.
     type: list
-    elements: str
+    elements: raw
   state:
     description:
     - State of the configuration values in the device's current active configuration.  When
@@ -97,22 +96,22 @@ EXAMPLES = """
 - name: configure DNS lookup sources with VRF support
   arista.eos.eos_system:
     lookup_source:
-    - interface: Management1
-      vrf: mgmt
-    - interface: Ethernet1
-      vrf: myvrf
+      - interface: Management1
+        vrf: mgmt
+      - interface: Ethernet1
+        vrf: myvrf
 
 - name: configure name servers
   arista.eos.eos_system:
     name_servers:
-    - 8.8.8.8
-    - 8.8.4.4
+      - 8.8.8.8
+      - 8.8.4.4
 
 - name: configure name servers with VRF support
   arista.eos.eos_system:
     name_servers:
-    - {server: 8.8.8.8, vrf: mgmt}
-    - {server: 8.8.4.4, vrf: mgmt}
+      - {server: 8.8.8.8, vrf: mgmt}
+      - {server: 8.8.4.4, vrf: mgmt}
 """
 
 RETURN = """
@@ -122,7 +121,7 @@ commands:
   type: list
   sample:
     - hostname eos01
-    - ip domain-name test.example.com
+    - dns domain test.example.com
 session_name:
   description: The EOS config session name used to load the configuration
   returned: changed
@@ -135,13 +134,12 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     ComplexList,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    load_config,
     get_config,
+    load_config,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
+
 
 _CONFIGURED_VRFS = None
 
@@ -151,7 +149,7 @@ def has_vrf(module, vrf):
     if _CONFIGURED_VRFS is not None:
         return vrf in _CONFIGURED_VRFS
     config = get_config(module)
-    _CONFIGURED_VRFS = re.findall(r"vrf definition (\S+)", config)
+    _CONFIGURED_VRFS = re.findall(r"vrf instance (\S+)", config)
     _CONFIGURED_VRFS.append("default")
     return vrf in _CONFIGURED_VRFS
 
@@ -165,7 +163,7 @@ def map_obj_to_commands(want, have, module):
 
     if state == "absent":
         if have["domain_name"]:
-            commands.append("no ip domain-name")
+            commands.append("no dns domain")
 
         if have["hostname"] != "localhost":
             commands.append("no hostname")
@@ -175,18 +173,18 @@ def map_obj_to_commands(want, have, module):
             commands.append("hostname %s" % want["hostname"])
 
         if needs_update("domain_name"):
-            commands.append("ip domain-name %s" % want["domain_name"])
+            commands.append("dns domain %s" % want["domain_name"])
 
         if want["domain_list"]:
             # handle domain_list items to be removed
             for item in set(have["domain_list"]).difference(
-                want["domain_list"]
+                want["domain_list"],
             ):
                 commands.append("no ip domain-list %s" % item)
 
             # handle domain_list items to be added
             for item in set(want["domain_list"]).difference(
-                have["domain_list"]
+                have["domain_list"],
             ):
                 commands.append("ip domain-list %s" % item)
 
@@ -197,17 +195,15 @@ def map_obj_to_commands(want, have, module):
                     if item["vrf"]:
                         if not has_vrf(module, item["vrf"]):
                             module.fail_json(
-                                msg="vrf %s is not configured" % item["vrf"]
+                                msg="vrf %s is not configured" % item["vrf"],
                             )
                         values = (item["vrf"], item["interface"])
                         commands.append(
-                            "no ip domain lookup vrf %s source-interface %s"
-                            % values
+                            "no ip domain lookup vrf %s source-interface %s" % values,
                         )
                     else:
                         commands.append(
-                            "no ip domain lookup source-interface %s"
-                            % item["interface"]
+                            "no ip domain lookup source-interface %s" % item["interface"],
                         )
 
             # handle lookup_source items to be added
@@ -216,17 +212,15 @@ def map_obj_to_commands(want, have, module):
                     if item["vrf"]:
                         if not has_vrf(module, item["vrf"]):
                             module.fail_json(
-                                msg="vrf %s is not configured" % item["vrf"]
+                                msg="vrf %s is not configured" % item["vrf"],
                             )
                         values = (item["vrf"], item["interface"])
                         commands.append(
-                            "ip domain lookup vrf %s source-interface %s"
-                            % values
+                            "ip domain lookup vrf %s source-interface %s" % values,
                         )
                     else:
                         commands.append(
-                            "ip domain lookup source-interface %s"
-                            % item["interface"]
+                            "ip domain lookup source-interface %s" % item["interface"],
                         )
 
         if want["name_servers"]:
@@ -236,14 +230,14 @@ def map_obj_to_commands(want, have, module):
                 if item not in want["name_servers"]:
                     if not has_vrf(module, item["vrf"]):
                         module.fail_json(
-                            msg="vrf %s is not configured" % item["vrf"]
+                            msg="vrf %s is not configured" % item["vrf"],
                         )
                     if item["vrf"] not in ("default", None):
                         values = (item["vrf"], item["server"])
                         commands.append("no ip name-server vrf %s %s" % values)
                     else:
                         commands.append(
-                            "no ip name-server %s" % item["server"]
+                            "no ip name-server %s" % item["server"],
                         )
 
             # handle name_servers items to be added
@@ -251,7 +245,7 @@ def map_obj_to_commands(want, have, module):
                 if item not in have["name_servers"]:
                     if not has_vrf(module, item["vrf"]):
                         module.fail_json(
-                            msg="vrf %s is not configured" % item["vrf"]
+                            msg="vrf %s is not configured" % item["vrf"],
                         )
                     if item["vrf"] not in ("default", None):
                         values = (item["vrf"], item["server"])
@@ -269,7 +263,7 @@ def parse_hostname(config):
 
 
 def parse_domain_name(config):
-    match = re.search(r"^ip domain-name (\S+)", config, re.M)
+    match = re.search(r"^dns domain (\S+)", config, re.M)
     if match:
         return match.group(1)
 
@@ -287,7 +281,9 @@ def parse_lookup_source(config):
 def parse_name_servers(config):
     objects = list()
     for vrf, addr in re.findall(
-        r"ip name-server vrf (\S+) (\S+)", config, re.M
+        r"ip name-server vrf (\S+) (\S+)",
+        config,
+        re.M,
     ):
         objects.append({"server": addr, "vrf": vrf})
     return objects
@@ -312,11 +308,13 @@ def map_params_to_obj(module):
     }
 
     lookup_source = ComplexList(
-        dict(interface=dict(key=True), vrf=dict()), module
+        dict(interface=dict(key=True), vrf=dict()),
+        module,
     )
 
     name_servers = ComplexList(
-        dict(server=dict(key=True), vrf=dict(default="default")), module
+        dict(server=dict(key=True), vrf=dict(default="default")),
+        module,
     )
 
     for arg, cast in [
@@ -332,25 +330,25 @@ def map_params_to_obj(module):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     argument_spec = dict(
         hostname=dict(),
         domain_name=dict(),
         domain_list=dict(
-            type="list", aliases=["domain_search"], elements="str"
+            type="list",
+            aliases=["domain_search"],
+            elements="str",
         ),
         # { interface: <str>, vrf: <str> }
         lookup_source=dict(type="list", elements="raw"),
         # { server: <str>; vrf: <str> }
-        name_servers=dict(type="list", elements="str"),
+        name_servers=dict(type="list", elements="raw"),
         state=dict(default="present", choices=["present", "absent"]),
     )
 
-    argument_spec.update(eos_argument_spec)
-
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
 
     result = {"changed": False}

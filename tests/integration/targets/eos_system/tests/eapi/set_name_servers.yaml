@@ -1,12 +1,12 @@
 ---
-- debug: msg="START eapi/set_name_servers.yaml"
+- ansible.builtin.debug: msg="START eapi/set_name_servers.yaml"
 
 - name: setup
   become: true
   arista.eos.eos_config:
     lines:
       - no ip name-server
-      - vrf definition ansible
+      - vrf instance ansible
     match: none
 
 - name: configure name_servers
@@ -18,7 +18,7 @@
       - 192.0.2.2
       - 192.0.2.3
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - result.commands|length == 3
@@ -35,7 +35,7 @@
       - 192.0.2.2
       - 192.0.2.3
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -47,7 +47,7 @@
       - 192.0.2.1
       - 192.0.2.2
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - result.commands|length == 1
@@ -58,7 +58,7 @@
   arista.eos.eos_config:
     lines:
       - no ip domain lookup source-interface
-      - no vrf definition ansible
+      - no vrf instance ansible
     match: none
 
-- debug: msg="END eapi/set_name_servers.yaml"
+- ansible.builtin.debug: msg="END eapi/set_name_servers.yaml"

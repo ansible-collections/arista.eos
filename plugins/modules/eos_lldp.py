@@ -6,6 +6,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -18,7 +19,7 @@ description:
   devices.
 version_added: 1.0.0
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   state:
     description:
@@ -31,8 +32,6 @@ options:
     - absent
     - enabled
     - disabled
-extends_documentation_fragment:
-- arista.eos.eos
 """
 
 EXAMPLES = """
@@ -54,12 +53,10 @@ commands:
     - lldp run
 """
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
     load_config,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
 )
 
 
@@ -74,19 +71,17 @@ def has_lldp(module):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     argument_spec = dict(
         state=dict(
             default="present",
             choices=["present", "absent", "enabled", "disabled"],
-        )
+        ),
     )
 
-    argument_spec.update(eos_argument_spec)
-
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
 
     warnings = list()

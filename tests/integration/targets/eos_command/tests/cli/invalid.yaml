@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/invalid.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/invalid.yaml on connection={{ ansible_connection }}"
 
 - name: run invalid command
   register: result
@@ -8,7 +8,7 @@
     commands:
       - show foo
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.failed == true
       - result.msg is defined
@@ -21,9 +21,9 @@
       - show version
       - show foo
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.failed == true
       - result.msg is defined
 
-- debug: msg="END cli/invalid.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END cli/invalid.yaml on connection={{ ansible_connection }}"

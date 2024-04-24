@@ -55,7 +55,8 @@ Parameters
                     <b>access_group</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
@@ -381,7 +382,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, it is set.</div>
+                        <div>When true, it is set.</div>
                 </td>
             </tr>
 
@@ -716,7 +717,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>control_plan_filter</b>
+                    <b>control_plane_filter</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -924,7 +925,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Subnet Range to be associated with the peer-group.</div>
+                        <div>Subnet Range to be associated with the peer group.</div>
                 </td>
             </tr>
                                 <tr>
@@ -1250,7 +1251,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True route_reflector is set.</div>
+                        <div>When true route_reflector is set.</div>
                 </td>
             </tr>
 
@@ -1407,7 +1408,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, graceful restart is set.</div>
+                        <div>When true, graceful restart is set.</div>
                 </td>
             </tr>
             <tr>
@@ -1607,6 +1608,7 @@ Parameters
                 </td>
                 <td>
                         <div>Configure routing for a network.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbors</div>
                 </td>
             </tr>
                                 <tr>
@@ -1684,7 +1686,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, it is set.</div>
+                        <div>When true, it is set.</div>
                 </td>
             </tr>
 
@@ -1707,6 +1709,27 @@ Parameters
                 </td>
                 <td>
                         <div>Automatically determine the local address to be used for the non-transport AF.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="5">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>bfd</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>enable</li>
+                                    <li>c_bit</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Configure BFD fallover for this peer</div>
                 </td>
             </tr>
             <tr>
@@ -1841,7 +1864,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, ttl is not set.</div>
+                        <div>If true, ttl is not set.</div>
                 </td>
             </tr>
             <tr>
@@ -2132,7 +2155,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, set link bandwidth</div>
+                        <div>If true, set link bandwidth</div>
                 </td>
             </tr>
             <tr>
@@ -2441,6 +2464,24 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>neighbor_address</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Neighbor address or peer group.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: peer</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="5">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>next_hop_self</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -2517,23 +2558,6 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>peer</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Neighbor address or peer-group.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="5">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>peer_group</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -2543,7 +2567,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Name of the peer-group.</div>
+                        <div>Name of the peer group.</div>
                 </td>
             </tr>
             <tr>
@@ -2701,7 +2725,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, set remove_private_as.</div>
+                        <div>If true, set remove_private_as.</div>
                 </td>
             </tr>
 
@@ -2890,6 +2914,28 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>set</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Enable send-community</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>speed</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -2931,7 +2977,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="5">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>shut_down</b>
+                    <b>shutdown</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -3143,6 +3189,7 @@ Parameters
                 </td>
                 <td>
                         <div>Configure routing for a network.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: networks</div>
                 </td>
             </tr>
                                 <tr>
@@ -3256,7 +3303,7 @@ Parameters
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>isis</li>
-                                    <li>ospf3</li>
+                                    <li>ospfv3</li>
                                     <li>ospf</li>
                                     <li>attached-host</li>
                                     <li>connected</li>
@@ -3375,7 +3422,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, shut down BGP.</div>
+                        <div>When true, shut down BGP.</div>
                 </td>
             </tr>
             <tr>
@@ -3611,7 +3658,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, ucmp mode is set to 1.</div>
+                        <div>If true, ucmp mode is set to 1.</div>
                 </td>
             </tr>
 
@@ -3728,7 +3775,8 @@ Parameters
                     <b>access_group</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
-                        <span style="color: purple">dictionary</span>
+                        <span style="color: purple">list</span>
+                         / <span style="color: purple">elements=dictionary</span>
                     </div>
                 </td>
                 <td>
@@ -3769,7 +3817,7 @@ Parameters
                 </td>
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
-                                    <li>ip</li>
+                                    <li>ipv4</li>
                                     <li>ipv6</li>
                         </ul>
                 </td>
@@ -4054,7 +4102,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, it is set.</div>
+                        <div>When true, it is set.</div>
                 </td>
             </tr>
 
@@ -4624,7 +4672,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Subnet Range to be associated with the peer-group.</div>
+                        <div>Subnet Range to be associated with the peer group.</div>
                 </td>
             </tr>
                                 <tr>
@@ -4966,7 +5014,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True route_reflector is set.</div>
+                        <div>When true route_reflector is set.</div>
                 </td>
             </tr>
 
@@ -5132,7 +5180,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, graceful restart is set.</div>
+                        <div>When true, graceful restart is set.</div>
                 </td>
             </tr>
             <tr>
@@ -5245,6 +5293,7 @@ Parameters
                 </td>
                 <td>
                         <div>Configure routing for a network.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: neighbors</div>
                 </td>
             </tr>
                                 <tr>
@@ -5326,7 +5375,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, it is set.</div>
+                        <div>When true, it is set.</div>
                 </td>
             </tr>
 
@@ -5350,6 +5399,28 @@ Parameters
                 </td>
                 <td>
                         <div>Automatically determine the local address to be used for the non-transport AF.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>bfd</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>enable</li>
+                                    <li>c_bit</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Configure BFD fallover for this peer</div>
                 </td>
             </tr>
             <tr>
@@ -5491,7 +5562,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, ttl is not set.</div>
+                        <div>If true, ttl is not set.</div>
                 </td>
             </tr>
             <tr>
@@ -5797,7 +5868,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, set link bandwidth</div>
+                        <div>If true, set link bandwidth</div>
                 </td>
             </tr>
             <tr>
@@ -6123,6 +6194,25 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>neighbor_address</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Neighbor address or peer group.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: peer</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>next_hop_self</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -6203,24 +6293,6 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>peer</b>
-                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
-                    <div style="font-size: small">
-                        <span style="color: purple">string</span>
-                    </div>
-                </td>
-                <td>
-                </td>
-                <td>
-                        <div>Neighbor address or peer group.</div>
-                </td>
-            </tr>
-            <tr>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                    <td class="elbow-placeholder"></td>
-                <td colspan="4">
-                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>peer_group</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -6230,7 +6302,7 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>Name of the peer-group.</div>
+                        <div>Name of the peer group.</div>
                 </td>
             </tr>
             <tr>
@@ -6396,7 +6468,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, set remove_private_as.</div>
+                        <div>If true, set remove_private_as.</div>
                 </td>
             </tr>
 
@@ -6638,7 +6710,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>shut_down</b>
+                    <b>shutdown</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">boolean</span>
@@ -6861,6 +6933,7 @@ Parameters
                 </td>
                 <td>
                         <div>Configure routing for a network.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: networks</div>
                 </td>
             </tr>
                                 <tr>
@@ -6980,7 +7053,7 @@ Parameters
                 <td>
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>isis</li>
-                                    <li>ospf3</li>
+                                    <li>ospfv3</li>
                                     <li>ospf</li>
                                     <li>attached-host</li>
                                     <li>connected</li>
@@ -7057,6 +7130,46 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="4">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>imported_route</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>no</li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Export routes imported from the same Afi/Safi.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>route_map</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Name of a route map.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>target</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -7067,6 +7180,29 @@ Parameters
                 </td>
                 <td>
                         <div>Route Target.</div>
+                </td>
+            </tr>
+            <tr>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                    <td class="elbow-placeholder"></td>
+                <td colspan="4">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>type</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li>evpn</li>
+                                    <li>vpn-ipv4</li>
+                                    <li>vpn-ipv6</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>Type of address fmaily</div>
                 </td>
             </tr>
 
@@ -7105,7 +7241,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>When True, shut down BGP.</div>
+                        <div>When true, shut down BGP.</div>
                 </td>
             </tr>
             <tr>
@@ -7271,6 +7407,7 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>encoding_weighted</li>
                                     <li>recursive</li>
+                                    <li>update_delay</li>
                         </ul>
                 </td>
                 <td>
@@ -7354,7 +7491,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>If True, ucmp mode is set to 1.</div>
+                        <div>If true, ucmp mode is set to 1.</div>
                 </td>
             </tr>
 
@@ -7466,6 +7603,7 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>deleted</li>
                                     <li><div style="color: blue"><b>merged</b>&nbsp;&larr;</div></li>
+                                    <li>overridden</li>
                                     <li>purged</li>
                                     <li>replaced</li>
                                     <li>gathered</li>
@@ -7489,7 +7627,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Arista EOS 4.23.0F
+   - Tested against Arista EOS 4.24.6F
    - This module works with connection ``network_cli``. See the `EOS Platform Options <eos_platform_options>`_.
 
 
@@ -7499,75 +7637,159 @@ Examples
 
 .. code-block:: yaml
 
-    # Using merged
-    # Before state
+    # Using Merged
 
+    # Before state:
+    # -------------
     # veos(config)#show running-config | section bgp
     # veos(config)#
 
-      - name: Merge provided configuration with device configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-            bgp_params:
-              host_routes: True
-              convergence:
-                slow_peer: True
-                time: 6
-              additional_paths: "send"
-              log_neighbor_changes: True
-            maximum_paths:
-              max_equal_cost_paths: 55
-            aggregate_address:
-              - address: "1.2.1.0/24"
-                as_set: true
-                match_map: "match01"
-              - address: "5.2.1.0/24"
-                attribute_map: "attrmatch01"
-                advertise_only: true
-            redistribute:
-              - protocol: "static"
-                route_map: "map_static"
-              - protocol: "attached-host"
-            distance:
-              internal: 50
-            neighbor:
-              - peer: "10.1.3.2"
-                allowas_in:
-                  set: true
-                default_originate:
-                  always: true
-                dont_capability_negotiate: true
-                export_localpref: 4000
-                maximum_received_routes:
-                  count: 500
-                  warning_limit:
-                    limit_percent: 5
-                next_hop_unchanged: true
-                prefix_list:
-                  name: "prefix01"
-                  direction: "out"
-              - peer: "peer1"
-                fall_over: true
-                link_bandwidth:
-                  update_delay: 5
-                monitoring: True
-                send_community:
-                  community_attribute: "extended"
-                  sub_attribute: "link-bandwidth"
-                  link_bandwidth_attribute: "aggregate"
-                  speed: "600"
-            vlan: 5
-          state: merged
+    - name: Merge provided configuration with device configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+          bgp_params:
+            host_routes: true
+            convergence:
+              slow_peer: true
+              time: 6
+            additional_paths: "send"
+            log_neighbor_changes: true
+          maximum_paths:
+            max_equal_cost_paths: 55
+          aggregate_address:
+            - address: "1.2.1.0/24"
+              as_set: true
+              match_map: "match01"
+            - address: "5.2.1.0/24"
+              attribute_map: "attrmatch01"
+              advertise_only: true
+          redistribute:
+            - protocol: "static"
+              route_map: "map_static"
+            - protocol: "attached-host"
+          distance:
+            internal: 50
+          neighbor:
+            - peer: "10.1.3.2"
+              allowas_in:
+                set: true
+              default_originate:
+                always: true
+              dont_capability_negotiate: true
+              export_localpref: 4000
+              maximum_received_routes:
+                count: 500
+                warning_limit:
+                  limit_percent: 5
+              next_hop_unchanged: true
+              prefix_list:
+                name: "prefix01"
+                direction: "out"
+            - neighbor_address: "peer1"
+              fall_over: true
+              link_bandwidth:
+                update_delay: 5
+              monitoring: true
+              send_community:
+                community_attribute: "extended"
+                sub_attribute: "link-bandwidth"
+                link_bandwidth_attribute: "aggregate"
+                speed: "600"
+          vlan: 5
+        state: merged
 
-    # After State:
+    # Task output:
+    # ------------
+    # before: {}
+    #
+    # commands:
+    # - router bgp 100
+    #   - neighbor 10.1.3.2 allowas-in
+    #   - neighbor 10.1.3.2 default-originate always
+    #   - neighbor 10.1.3.2 dont-capability-negotiate
+    #   - neighbor 10.1.3.2 export-localpref 4000
+    #   - neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+    #   - neighbor 10.1.3.2 next-hop-unchanged
+    #   - neighbor 10.1.3.2 prefix-list prefix01 out
+    #   - neighbor peer1 fall-over bfd
+    #   - neighbor peer1 link-bandwidth update-delay 5
+    #   - neighbor peer1 monitoring
+    #   - neighbor peer1 send-community extended link-bandwidth aggregate 600
+    #   - redistribute static route-map map_static
+    #   - redistribute attached-host
+    #   - aggregate-address 1.2.1.0/24 as-set match-map match01
+    #   - aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+    #   - bgp host-routes fib direct-install
+    #   - bgp convergence slow-peer time 6
+    #   - bgp additional-paths send any
+    #   - bgp log-neighbor-changes
+    #   - maximum-paths 55
+    #   - distance bgp 50
+    #   - vlan 5
+    #
+    # after:
+    #     aggregate_address:
+    #     - address: 1.2.1.0/24
+    #       as_set: true
+    #       match_map: match01
+    #     - address: 5.2.1.0/24
+    #       advertise_only: true
+    #       attribute_map: attrmatch01
+    #     as_number: '100'
+    #     bgp_params:
+    #       additional_paths: send
+    #       convergence:
+    #         slow_peer: true
+    #         time: 6
+    #     distance:
+    #       external: 50
+    #       internal: 50
+    #       local: 50
+    #     maximum_paths:
+    #       max_equal_cost_paths: 55
+    #     neighbor:
+    #     - fall_over: true
+    #       link_bandwidth:
+    #         set: true
+    #         update_delay: 5
+    #       maximum_received_routes:
+    #         count: 12000
+    #       monitoring: true
+    #       neighbor_address: peer1
+    #       peer_group: peer1
+    #       send_community:
+    #         community_attribute: extended
+    #         link_bandwidth_attribute: aggregate
+    #         speed: '600'
+    #         sub_attribute: link-bandwidth
+    #     - allowas_in:
+    #         count: 3
+    #       default_originate:
+    #         always: true
+    #       dont_capability_negotiate: true
+    #       export_localpref: 4000
+    #       maximum_received_routes:
+    #         count: 500
+    #         warning_limit:
+    #           limit_percent: 5
+    #       neighbor_address: 10.1.3.2
+    #       next_hop_unchanged: true
+    #     redistribute:
+    #     - protocol: static
+    #       route_map: map_static
+    #     - protocol: attached-host
+    #     vlan: 5
+
+    # After state:
+    # ------------
     # veos(config)#show running-config | section bgp
     # router bgp 100
     #    bgp convergence slow-peer time 6
     #    distance bgp 50 50 50
     #    maximum-paths 55
     #    bgp additional-paths send any
-    #    neighbor peer1 peer-group
+    #    neighbor peer1 peer group
     #    neighbor peer1 link-bandwidth update-delay 5
     #    neighbor peer1 fall-over bfd
     #    neighbor peer1 monitoring
@@ -7588,127 +7810,18 @@ Examples
     #    !
     #    address-family ipv4
     #       neighbor 10.1.3.2 prefix-list prefix01 out
-    # veos(config)#
-    #
-    # Module Execution:
-    #
-    # "after": {
-    #         "aggregate_address": [
-    #             {
-    #                 "address": "1.2.1.0/24",
-    #                 "as_set": true,
-    #                 "match_map": "match01"
-    #             },
-    #             {
-    #                 "address": "5.2.1.0/24",
-    #                 "advertise_only": true,
-    #                 "attribute_map": "attrmatch01"
-    #             }
-    #         ],
-    #         "as_number": "100",
-    #         "bgp_params": {
-    #             "additional_paths": "send",
-    #             "convergence": {
-    #                 "slow_peer": true,
-    #                 "time": 6
-    #             }
-    #         },
-    #         "distance": {
-    #             "external": 50,
-    #             "internal": 50,
-    #             "local": 50
-    #         },
-    #         "maximum_paths": {
-    #             "max_equal_cost_paths": 55
-    #         },
-    #         "neighbor": [
-    #             {
-    #                 "fall_over": true,
-    #                 "link_bandwidth": {
-    #                     "set": true,
-    #                     "update_delay": 5
-    #                 },
-    #                 "maximum_received_routes": {
-    #                     "count": 12000
-    #                 },
-    #                 "monitoring": true,
-    #                 "peer": "peer1",
-    #                 "peer_group": "peer1",
-    #                 "send_community": {
-    #                     "community_attribute": "extended",
-    #                     "link_bandwidth_attribute": "aggregate",
-    #                     "speed": "600",
-    #                     "sub_attribute": "link-bandwidth"
-    #                 }
-    #             },
-    #             {
-    #                 "allowas_in": {
-    #                     "count": 3
-    #                 },
-    #                 "default_originate": {
-    #                     "always": true
-    #                 },
-    #                 "dont_capability_negotiate": true,
-    #                 "export_localpref": 4000,
-    #                 "maximum_received_routes": {
-    #                     "count": 500,
-    #                     "warning_limit": {
-    #                         "limit_percent": 5
-    #                     }
-    #                 },
-    #                 "next_hop_unchanged": true,
-    #                 "peer": "10.1.3.2"
-    #             }
-    #         ],
-    #         "redistribute": [
-    #             {
-    #                 "protocol": "static",
-    #                 "route_map": "map_static"
-    #             },
-    #             {
-    #                 "protocol": "attached-host"
-    #             }
-    #         ],
-    #         "vlan": 5
-    #     },
-    #     "before": {},
-    #     "changed": true,
-    #     "commands": [
-    #         "router bgp 100",
-    #         "neighbor 10.1.3.2 allowas-in",
-    #         "neighbor 10.1.3.2 default-originate always",
-    #         "neighbor 10.1.3.2 dont-capability-negotiate",
-    #         "neighbor 10.1.3.2 export-localpref 4000",
-    #         "neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent",
-    #         "neighbor 10.1.3.2 next-hop-unchanged",
-    #         "neighbor 10.1.3.2 prefix-list prefix01 out",
-    #         "neighbor peer1 fall-over bfd",
-    #         "neighbor peer1 link-bandwidth update-delay 5",
-    #         "neighbor peer1 monitoring",
-    #         "neighbor peer1 send-community extended link-bandwidth aggregate 600",
-    #         "redistribute static route-map map_static",
-    #         "redistribute attached-host",
-    #         "aggregate-address 1.2.1.0/24 as-set match-map match01",
-    #         "aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only",
-    #         "bgp host-routes fib direct-install",
-    #         "bgp convergence slow-peer time 6",
-    #         "bgp additional-paths send any",
-    #         "bgp log-neighbor-changes",
-    #         "maximum-paths 55",
-    #         "distance bgp 50",
-    #         "vlan 5"
-    #     ],
 
     # Using replaced:
 
     # Before state:
+    # -------------
     # veos(config)#show running-config | section bgp
     # router bgp 100
     #    bgp convergence slow-peer time 6
     #    distance bgp 50 50 50
     #    maximum-paths 55
     #    bgp additional-paths send any
-    #    neighbor peer1 peer-group
+    #    neighbor peer1 peer group
     #    neighbor peer1 link-bandwidth update-delay 5
     #    neighbor peer1 fall-over bfd
     #    neighbor peer1 monitoring
@@ -7736,66 +7849,215 @@ Examples
     #       neighbor 12.1.3.2 allowas-in 3
     #       neighbor 12.1.3.2 default-originate always
     #       neighbor 12.1.3.2 maximum-routes 12000
-    # veos(config)#
 
-      - name: replace provided configuration with device configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-            bgp_params:
-              host_routes: True
-              convergence:
-                slow_peer: True
-                time: 6
-              additional_paths: "send"
-              log_neighbor_changes: True
-            vrfs:
-              - vrf: "vrf01"
-                maximum_paths:
-                  max_equal_cost_paths: 55
-                aggregate_address:
-                  - address: "1.2.1.0/24"
-                    as_set: true
-                    match_map: "match01"
-                  - address: "5.2.1.0/24"
-                    attribute_map: "attrmatch01"
-                    advertise_only: true
-                redistribute:
-                  - protocol: "static"
-                    route_map: "map_static"
-                  - protocol: "attached-host"
-                distance:
-                  internal: 50
-                neighbor:
-                  - peer: "10.1.3.2"
-                    allowas_in:
-                      set: true
-                    default_originate:
-                      always: true
-                    dont_capability_negotiate: true
-                    export_localpref: 4000
-                    maximum_received_routes:
-                      count: 500
-                      warning_limit:
-                        limit_percent: 5
-                    next_hop_unchanged: true
-                    prefix_list:
-                      name: "prefix01"
-                      direction: "out"
-                  - peer: "peer1"
-                    fall_over: true
-                    link_bandwidth:
-                      update_delay: 5
-                    monitoring: True
-                    send_community:
-                      community_attribute: "extended"
-                      sub_attribute: "link-bandwidth"
-                      link_bandwidth_attribute: "aggregate"
-                      speed: "600"
-          state: replaced
+    - name: replace provided configuration with device configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+          bgp_params:
+            host_routes: true
+            convergence:
+              slow_peer: true
+              time: 6
+            additional_paths: "send"
+            log_neighbor_changes: true
+          vrfs:
+            - vrf: "vrf01"
+              maximum_paths:
+                max_equal_cost_paths: 55
+              aggregate_address:
+                - address: "1.2.1.0/24"
+                  as_set: true
+                  match_map: "match01"
+                - address: "5.2.1.0/24"
+                  attribute_map: "attrmatch01"
+                  advertise_only: true
+              redistribute:
+                - protocol: "static"
+                  route_map: "map_static"
+                - protocol: "attached-host"
+              distance:
+                internal: 50
+              neighbor:
+                - neighbor_address: "10.1.3.2"
+                  allowas_in:
+                    set: true
+                  default_originate:
+                    always: true
+                  dont_capability_negotiate: true
+                  export_localpref: 4000
+                  maximum_received_routes:
+                    count: 500
+                    warning_limit:
+                      limit_percent: 5
+                  next_hop_unchanged: true
+                  prefix_list:
+                    name: "prefix01"
+                    direction: "out"
+                - neighbor_address: "peer1"
+                  fall_over: true
+                  link_bandwidth:
+                    update_delay: 5
+                  monitoring: true
+                  send_community:
+                    community_attribute: "extended"
+                    sub_attribute: "link-bandwidth"
+                    link_bandwidth_attribute: "aggregate"
+                    speed: "600"
+        state: replaced
 
-    # After State:
+    # Task output:
+    # ------------
 
+    # before:
+    #     aggregate_address:
+    #     - address: 1.2.1.0/24
+    #       as_set: true
+    #       match_map: match01
+    #     - address: 5.2.1.0/24
+    #       advertise_only: true
+    #       attribute_map: attrmatch01
+    #     as_number: '100'
+    #     bgp_params:
+    #       additional_paths: send
+    #       convergence:
+    #         slow_peer: true
+    #         time: 6
+    #     distance:
+    #       external: 50
+    #       internal: 50
+    #       local: 50
+    #     maximum_paths:
+    #       max_equal_cost_paths: 55
+    #     neighbor:
+    #     - fall_over: true
+    #       link_bandwidth:
+    #         set: true
+    #         update_delay: 5
+    #       maximum_received_routes:
+    #         count: 12000
+    #       monitoring: true
+    #       neighbor_address: peer1
+    #       peer_group: peer1
+    #       send_community:
+    #         community_attribute: extended
+    #         link_bandwidth_attribute: aggregate
+    #         speed: '600'
+    #         sub_attribute: link-bandwidth
+    #     - allowas_in:
+    #         count: 3
+    #       default_originate:
+    #         always: true
+    #       dont_capability_negotiate: true
+    #       export_localpref: 4000
+    #       maximum_received_routes:
+    #         count: 500
+    #         warning_limit:
+    #           limit_percent: 5
+    #       neighbor_address: 10.1.3.2
+    #       next_hop_unchanged: true
+    #     redistribute:
+    #     - protocol: static
+    #       route_map: map_static
+    #     - protocol: attached-host
+    #     vlan: 5
+    #     vrfs:
+    #     - neighbor:
+    #       - allowas_in:
+    #           count: 3
+    #         default_originate:
+    #           always: true
+    #         dont_capability_negotiate: true
+    #         maximum_received_routes:
+    #           count: 12000
+    #         neighbor_address: 12.1.3.2
+    #       route_target:
+    #         action: import
+    #         target: '54:11'
+    #       vrf: vrf01
+    #
+    # commands:
+    # - router bgp 100
+    # - vrf vrf01
+    # - no route-target import 54:11
+    # - neighbor 10.1.3.2 allowas-in
+    # - neighbor 10.1.3.2 default-originate always
+    # - neighbor 10.1.3.2 dont-capability-negotiate
+    # - neighbor 10.1.3.2 export-localpref 4000
+    # - neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+    # - neighbor 10.1.3.2 next-hop-unchanged
+    # - neighbor 10.1.3.2 prefix-list prefix01 out
+    # - neighbor peer1 fall-over bfd
+    # - neighbor peer1 link-bandwidth update-delay 5
+    # - neighbor peer1 monitoring
+    # - neighbor peer1 send-community extended link-bandwidth aggregate 600
+    # - no neighbor 12.1.3.2
+    # - redistribute static route-map map_static
+    # - redistribute attached-host
+    # - aggregate-address 1.2.1.0/24 as-set match-map match01
+    # - aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+    # - maximum-paths 55
+    # - distance bgp 50
+    # - exit
+    # - no neighbor peer1 peer group
+    # - no neighbor peer1 link-bandwidth update-delay 5
+    # - no neighbor peer1 fall-over bfd
+    # - no neighbor peer1 monitoring
+    # - no neighbor peer1 send-community extended link-bandwidth aggregate 600
+    # - no neighbor peer1 maximum-routes 12000
+    # - no neighbor 10.1.3.2
+    # - no redistribute static route-map map_static
+    # - no redistribute attached-host
+    # - no aggregate-address 1.2.1.0/24 as-set match-map match01
+    # - no aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+    # - bgp host-routes fib direct-install
+    # - bgp log-neighbor-changes
+    # - no distance bgp 50 50 50
+    # - no maximum-paths 55
+    # - no vlan 5
+    #
+    # after:
+    #     as_number: '100'
+    #     bgp_params:
+    #       additional_paths: send
+    #       convergence:
+    #         slow_peer: true
+    #         time: 6
+    #     vrfs:
+    #     - aggregate_address:
+    #       - address: 1.2.1.0/24
+    #         as_set: true
+    #         match_map: match01
+    #       - address: 5.2.1.0/24
+    #         advertise_only: true
+    #         attribute_map: attrmatch01
+    #       distance:
+    #         external: 50
+    #         internal: 50
+    #         local: 50
+    #       maximum_paths:
+    #         max_equal_cost_paths: 55
+    #       neighbor:
+    #       - allowas_in:
+    #           count: 3
+    #         default_originate:
+    #           always: true
+    #         dont_capability_negotiate: true
+    #         export_localpref: 4000
+    #         maximum_received_routes:
+    #           count: 500
+    #           warning_limit:
+    #             limit_percent: 5
+    #         neighbor_address: 10.1.3.2
+    #         next_hop_unchanged: true
+    #       redistribute:
+    #       - protocol: static
+    #         route_map: map_static
+    #       - protocol: attached-host
+    #       vrf: vrf01
+    #
+    # After state:
+    # ------------
     # veos(config)#show running-config | section bgp
     # router bgp 100
     #    bgp convergence slow-peer time 6
@@ -7817,225 +8079,255 @@ Examples
     #       !
     #       address-family ipv4
     #          neighbor 10.1.3.2 prefix-list prefix01 out
-    # veos(config)#
-    #
-    #
-    # Module Execution:
-    #
-    # "after": {
-    #         "as_number": "100",
-    #         "bgp_params": {
-    #             "additional_paths": "send",
-    #             "convergence": {
-    #                 "slow_peer": true,
-    #                 "time": 6
-    #             }
-    #         },
-    #         "vrfs": [
-    #             {
-    #                 "aggregate_address": [
-    #                     {
-    #                         "address": "1.2.1.0/24",
-    #                         "as_set": true,
-    #                         "match_map": "match01"
-    #                     },
-    #                     {
-    #                         "address": "5.2.1.0/24",
-    #                         "advertise_only": true,
-    #                         "attribute_map": "attrmatch01"
-    #                     }
-    #                 ],
-    #                 "distance": {
-    #                     "external": 50,
-    #                     "internal": 50,
-    #                     "local": 50
-    #                 },
-    #                 "maximum_paths": {
-    #                     "max_equal_cost_paths": 55
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "allowas_in": {
-    #                             "count": 3
-    #                         },
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "dont_capability_negotiate": true,
-    #                         "export_localpref": 4000,
-    #                         "maximum_received_routes": {
-    #                             "count": 500,
-    #                             "warning_limit": {
-    #                                 "limit_percent": 5
-    #                             }
-    #                         },
-    #                         "next_hop_unchanged": true,
-    #                         "peer": "10.1.3.2"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "protocol": "static",
-    #                         "route_map": "map_static"
-    #                     },
-    #                     {
-    #                         "protocol": "attached-host"
-    #                     }
-    #                 ],
-    #                 "vrf": "vrf01"
-    #             }
-    #         ]
-    #     },
-    #     "before": {
-    #         "aggregate_address": [
-    #             {
-    #                 "address": "1.2.1.0/24",
-    #                 "as_set": true,
-    #                 "match_map": "match01"
-    #             },
-    #             {
-    #                 "address": "5.2.1.0/24",
-    #                 "advertise_only": true,
-    #                 "attribute_map": "attrmatch01"
-    #             }
-    #         ],
-    #         "as_number": "100",
-    #         "bgp_params": {
-    #             "additional_paths": "send",
-    #             "convergence": {
-    #                 "slow_peer": true,
-    #                 "time": 6
-    #             }
-    #         },
-    #         "distance": {
-    #             "external": 50,
-    #             "internal": 50,
-    #             "local": 50
-    #         },
-    #         "maximum_paths": {
-    #             "max_equal_cost_paths": 55
-    #         },
-    #         "neighbor": [
-    #             {
-    #                 "fall_over": true,
-    #                 "link_bandwidth": {
-    #                     "set": true,
-    #                     "update_delay": 5
-    #                 },
-    #                 "maximum_received_routes": {
-    #                     "count": 12000
-    #                 },
-    #                 "monitoring": true,
-    #                 "peer": "peer1",
-    #                 "peer_group": "peer1",
-    #                 "send_community": {
-    #                     "community_attribute": "extended",
-    #                     "link_bandwidth_attribute": "aggregate",
-    #                     "speed": "600",
-    #                     "sub_attribute": "link-bandwidth"
-    #                 }
-    #             },
-    #             {
-    #                 "allowas_in": {
-    #                     "count": 3
-    #                 },
-    #                 "default_originate": {
-    #                     "always": true
-    #                 },
-    #                 "dont_capability_negotiate": true,
-    #                 "export_localpref": 4000,
-    #                 "maximum_received_routes": {
-    #                     "count": 500,
-    #                     "warning_limit": {
-    #                         "limit_percent": 5
-    #                     }
-    #                 },
-    #                 "next_hop_unchanged": true,
-    #                 "peer": "10.1.3.2"
-    #             }
-    #         ],
-    #         "redistribute": [
-    #             {
-    #                 "protocol": "static",
-    #                 "route_map": "map_static"
-    #             },
-    #             {
-    #                 "protocol": "attached-host"
-    #             }
-    #         ],
-    #         "vlan": 5,
-    #         "vrfs": [
-    #             {
-    #                 "neighbor": [
-    #                     {
-    #                         "allowas_in": {
-    #                             "count": 3
-    #                         },
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "dont_capability_negotiate": true,
-    #                         "maximum_received_routes": {
-    #                             "count": 12000
-    #                         },
-    #                         "peer": "12.1.3.2"
-    #                     }
-    #                 ],
-    #                 "route_target": {
-    #                     "action": "import",
-    #                     "target": "54:11"
-    #                 },
-    #                 "vrf": "vrf01"
-    #             }
-    #         ]
-    #     },
-    #     "changed": true,
-    #     "commands": [
-    #         "router bgp 100",
-    #         "vrf vrf01",
-    #         "no route-target import 54:11",
-    #         "neighbor 10.1.3.2 allowas-in",
-    #         "neighbor 10.1.3.2 default-originate always",
-    #         "neighbor 10.1.3.2 dont-capability-negotiate",
-    #         "neighbor 10.1.3.2 export-localpref 4000",
-    #         "neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent",
-    #         "neighbor 10.1.3.2 next-hop-unchanged",
-    #         "neighbor 10.1.3.2 prefix-list prefix01 out",
-    #         "neighbor peer1 fall-over bfd",
-    #         "neighbor peer1 link-bandwidth update-delay 5",
-    #         "neighbor peer1 monitoring",
-    #         "neighbor peer1 send-community extended link-bandwidth aggregate 600",
-    #         "no neighbor 12.1.3.2",
-    #         "redistribute static route-map map_static",
-    #         "redistribute attached-host",
-    #         "aggregate-address 1.2.1.0/24 as-set match-map match01",
-    #         "aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only",
-    #         "maximum-paths 55",
-    #         "distance bgp 50",
-    #         "exit",
-    #         "no neighbor peer1 peer-group",
-    #         "no neighbor peer1 link-bandwidth update-delay 5",
-    #         "no neighbor peer1 fall-over bfd",
-    #         "no neighbor peer1 monitoring",
-    #         "no neighbor peer1 send-community extended link-bandwidth aggregate 600",
-    #         "no neighbor peer1 maximum-routes 12000",
-    #         "no neighbor 10.1.3.2",
-    #         "no redistribute static route-map map_static",
-    #         "no redistribute attached-host",
-    #         "no aggregate-address 1.2.1.0/24 as-set match-map match01",
-    #         "no aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only",
-    #         "bgp host-routes fib direct-install",
-    #         "bgp log-neighbor-changes",
-    #         "no distance bgp 50 50 50",
-    #         "no maximum-paths 55",
-    #         "no vlan 5"
-    #     ],
-    #
 
-    # Using replaced (in presence of address_family under vrf):
-    # Before State:
+    # Using overridden:
+    # (Note: Overridden and replaced operations are identitical)
 
-    #veos(config)#show running-config | section bgp
+    # Before state:
+    # -------------
+    # veos(config)#show running-config | section bgp
+    # router bgp 100
+    #    bgp convergence slow-peer time 6
+    #    distance bgp 50 50 50
+    #    maximum-paths 55
+    #    bgp additional-paths send any
+    #    neighbor peer1 peer group
+    #    neighbor peer1 link-bandwidth update-delay 5
+    #    neighbor peer1 fall-over bfd
+    #    neighbor peer1 monitoring
+    #    neighbor peer1 send-community extended link-bandwidth aggregate 600
+    #    neighbor peer1 maximum-routes 12000
+    #    neighbor 10.1.3.2 export-localpref 4000
+    #    neighbor 10.1.3.2 next-hop-unchanged
+    #    neighbor 10.1.3.2 dont-capability-negotiate
+    #    neighbor 10.1.3.2 allowas-in 3
+    #    neighbor 10.1.3.2 default-originate always
+    #    neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+    #    aggregate-address 1.2.1.0/24 as-set match-map match01
+    #    aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+    #    redistribute static route-map map_static
+    #    redistribute attached-host
+    #    !
+    #    vlan 5
+    #    !
+    #    address-family ipv4
+    #       neighbor 10.1.3.2 prefix-list prefix01 out
+    #    !
+    #    vrf vrf01
+    #       route-target import 54:11
+    #       neighbor 12.1.3.2 dont-capability-negotiate
+    #       neighbor 12.1.3.2 allowas-in 3
+    #       neighbor 12.1.3.2 default-originate always
+    #       neighbor 12.1.3.2 maximum-routes 12000
+
+    - name: override running configuration with configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+          bgp_params:
+            host_routes: true
+            convergence:
+              slow_peer: true
+              time: 6
+            additional_paths: "send"
+            log_neighbor_changes: true
+          vrfs:
+            - vrf: "vrf01"
+              maximum_paths:
+                max_equal_cost_paths: 55
+              aggregate_address:
+                - address: "1.2.1.0/24"
+                  as_set: true
+                  match_map: "match01"
+                - address: "5.2.1.0/24"
+                  attribute_map: "attrmatch01"
+                  advertise_only: true
+              redistribute:
+                - protocol: "static"
+                  route_map: "map_static"
+                - protocol: "attached-host"
+              distance:
+                internal: 50
+              neighbor:
+                - neighbor_address: "10.1.3.2"
+                  allowas_in:
+                    set: true
+                  default_originate:
+                    always: true
+                  dont_capability_negotiate: true
+                  export_localpref: 4000
+                  maximum_received_routes:
+                    count: 500
+                    warning_limit:
+                      limit_percent: 5
+                  next_hop_unchanged: true
+                  prefix_list:
+                    name: "prefix01"
+                    direction: "out"
+                - neighbor_address: "peer1"
+                  fall_over: true
+                  link_bandwidth:
+                    update_delay: 5
+                  monitoring: true
+                  send_community:
+                    community_attribute: "extended"
+                    sub_attribute: "link-bandwidth"
+                    link_bandwidth_attribute: "aggregate"
+                    speed: "600"
+        state: overridden
+
+    # Task output:
+    # ------------
+    # before:
+    #     aggregate_address:
+    #     - address: 1.2.1.0/24
+    #       as_set: true
+    #       match_map: match01
+    #     - address: 5.2.1.0/24
+    #       advertise_only: true
+    #       attribute_map: attrmatch01
+    #     as_number: '100'
+    #     bgp_params:
+    #       additional_paths: send
+    #       convergence:
+    #         slow_peer: true
+    #         time: 6
+    #     distance:
+    #       external: 50
+    #       internal: 50
+    #       local: 50
+    #     maximum_paths:
+    #       max_equal_cost_paths: 55
+    #     neighbor:
+    #     - fall_over: true
+    #       link_bandwidth:
+    #         set: true
+    #         update_delay: 5
+    #       maximum_received_routes:
+    #         count: 12000
+    #       monitoring: true
+    #       neighbor_address: peer1
+    #       peer_group: peer1
+    #       send_community:
+    #         community_attribute: extended
+    #         link_bandwidth_attribute: aggregate
+    #         speed: '600'
+    #         sub_attribute: link-bandwidth
+    #     - allowas_in:
+    #         count: 3
+    #       default_originate:
+    #         always: true
+    #       dont_capability_negotiate: true
+    #       export_localpref: 4000
+    #       maximum_received_routes:
+    #         count: 500
+    #         warning_limit:
+    #           limit_percent: 5
+    #       neighbor_address: 10.1.3.2
+    #       next_hop_unchanged: true
+    #     redistribute:
+    #     - protocol: static
+    #       route_map: map_static
+    #     - protocol: attached-host
+    #     vlan: 5
+    #     vrfs:
+    #     - neighbor:
+    #       - allowas_in:
+    #           count: 3
+    #         default_originate:
+    #           always: true
+    #         dont_capability_negotiate: true
+    #         maximum_received_routes:
+    #           count: 12000
+    #         neighbor_address: 12.1.3.2
+    #       route_target:
+    #         action: import
+    #         target: '54:11'
+    #       vrf: vrf01
+    #
+    # commands:
+    # - router bgp 100
+    # - vrf vrf01
+    # - no route-target import 54:11
+    # - neighbor 10.1.3.2 allowas-in
+    # - neighbor 10.1.3.2 default-originate always
+    # - neighbor 10.1.3.2 dont-capability-negotiate
+    # - neighbor 10.1.3.2 export-localpref 4000
+    # - neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+    # - neighbor 10.1.3.2 next-hop-unchanged
+    # - neighbor 10.1.3.2 prefix-list prefix01 out
+    # - neighbor peer1 fall-over bfd
+    # - neighbor peer1 link-bandwidth update-delay 5
+    # - neighbor peer1 monitoring
+    # - neighbor peer1 send-community extended link-bandwidth aggregate 600
+    # - no neighbor 12.1.3.2
+    # - redistribute static route-map map_static
+    # - redistribute attached-host
+    # - aggregate-address 1.2.1.0/24 as-set match-map match01
+    # - aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+    # - maximum-paths 55
+    # - distance bgp 50
+    # - exit
+    # - no neighbor peer1 peer group
+    # - no neighbor peer1 link-bandwidth update-delay 5
+    # - no neighbor peer1 fall-over bfd
+    # - no neighbor peer1 monitoring
+    # - no neighbor peer1 send-community extended link-bandwidth aggregate 600
+    # - no neighbor peer1 maximum-routes 12000
+    # - no neighbor 10.1.3.2
+    # - no redistribute static route-map map_static
+    # - no redistribute attached-host
+    # - no aggregate-address 1.2.1.0/24 as-set match-map match01
+    # - no aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+    # - bgp host-routes fib direct-install
+    # - bgp log-neighbor-changes
+    # - no distance bgp 50 50 50
+    # - no maximum-paths 55
+    # - no vlan 5
+    #
+    # after:
+    #     as_number: '100'
+    #     bgp_params:
+    #       additional_paths: send
+    #       convergence:
+    #         slow_peer: true
+    #         time: 6
+    #     vrfs:
+    #     - aggregate_address:
+    #       - address: 1.2.1.0/24
+    #         as_set: true
+    #         match_map: match01
+    #       - address: 5.2.1.0/24
+    #         advertise_only: true
+    #         attribute_map: attrmatch01
+    #       distance:
+    #         external: 50
+    #         internal: 50
+    #         local: 50
+    #       maximum_paths:
+    #         max_equal_cost_paths: 55
+    #       neighbor:
+    #       - allowas_in:
+    #           count: 3
+    #         default_originate:
+    #           always: true
+    #         dont_capability_negotiate: true
+    #         export_localpref: 4000
+    #         maximum_received_routes:
+    #           count: 500
+    #           warning_limit:
+    #             limit_percent: 5
+    #         neighbor_address: 10.1.3.2
+    #         next_hop_unchanged: true
+    #       redistribute:
+    #       - protocol: static
+    #         route_map: map_static
+    #       - protocol: attached-host
+    #       vrf: vrf01
+    #
+    # After state:
+    # ------------
+    # veos(config)#show running-config | section bgp
     # router bgp 100
     #    bgp convergence slow-peer time 6
     #    bgp additional-paths send any
@@ -8056,82 +8348,11 @@ Examples
     #       !
     #       address-family ipv4
     #          neighbor 10.1.3.2 prefix-list prefix01 out
-    #       !
-    #       address-family ipv6
-    #          redistribute dhcp
-    # veos(config)#
-
-      - name:  Replace
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-            graceful_restart:
-              set: True
-            router_id: "1.1.1.1"
-            timers:
-              keepalive: 2
-              holdtime: 5
-            ucmp:
-              mode:
-                set: True
-            vlan_aware_bundle: "bundle1 bundle2 bundle3"
-          state: replaced
-
-    # Module Execution:
-
-    # fatal: [192.168.122.113]: FAILED! => {
-    #     "changed": false,
-    #     "invocation": {
-    #         "module_args": {
-    #             "config": {
-    #                 "access_group": null,
-    #                 "aggregate_address": null,
-    #                 "as_number": "100",
-    #                 "bgp_params": null,
-    #                 "default_metric": null,
-    #                 "distance": null,
-    #                 "graceful_restart": {
-    #                     "restart_time": null,
-    #                     "set": true,
-    #                     "stalepath_time": null
-    #                 },
-    #                 "graceful_restart_helper": null,
-    #                 "maximum_paths": null,
-    #                 "monitoring": null,
-    #                 "neighbor": null,
-    #                 "network": null,
-    #                 "redistribute": null,
-    #                 "route_target": null,
-    #                 "router_id": "1.1.1.1",
-    #                 "shutdown": null,
-    #                 "timers": {
-    #                     "holdtime": 5,
-    #                     "keepalive": 2
-    #                 },
-    #                 "ucmp": {
-    #                     "fec": null,
-    #                     "link_bandwidth": null,
-    #                     "mode": {
-    #                         "nexthops": null,
-    #                         "set": true
-    #                     }
-    #                 },
-    #                 "update": null,
-    #                 "vlan": null,
-    #                 "vlan_aware_bundle": "bundle1 bundle2 bundle3",
-    #                 "vrfs": null
-    #             },
-    #             "running_config": null,
-    #             "state": "replaced"
-    #         }
-    #     },
-    #     "msg": "Use the _bgp_af module to delete the address_family under vrf, before replacing/deleting the vrf."
-    # }
 
     # Using deleted:
 
     # Before state:
-
+    # -------------
     # veos(config)#show running-config | section bgp
     # router bgp 100
     #    bgp convergence slow-peer time 6
@@ -8152,107 +8373,80 @@ Examples
     #       redistribute attached-host
     #       !
 
-      - name: Delete configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-          state: deleted
+    - name: Delete configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+        state: deleted
 
-    # After State:
+    # Task output:
+    # ------------
+    # before:
+    #     as_number: '100'
+    #     bgp_params:
+    #       additional_paths: send
+    #       convergence:
+    #         slow_peer: true
+    #         time: 6
+    #     vrfs:
+    #     - aggregate_address:
+    #       - address: 1.2.1.0/24
+    #         as_set: true
+    #         match_map: match01
+    #       - address: 5.2.1.0/24
+    #         advertise_only: true
+    #         attribute_map: attrmatch01
+    #       distance:
+    #         external: 50
+    #         internal: 50
+    #         local: 50
+    #       maximum_paths:
+    #         max_equal_cost_paths: 55
+    #       neighbor:
+    #       - allowas_in:
+    #           count: 3
+    #         default_originate:
+    #           always: true
+    #         dont_capability_negotiate: true
+    #         export_localpref: 4000
+    #         maximum_received_routes:
+    #           count: 500
+    #           warning_limit:
+    #             limit_percent: 5
+    #         neighbor_address: 10.1.3.2
+    #         next_hop_unchanged: true
+    #       redistribute:
+    #       - protocol: static
+    #         route_map: map_static
+    #       - protocol: attached-host
+    #       vrf: vrf01
+    #
+    # commands:
+    # - router bgp 100
+    # - no vrf vrf01
+    # - no bgp convergence slow-peer time 6
+    # - no bgp additional-paths send any
+    #
+    # after:
+    #  as_number: '100'
 
+    #
+    # After state:
+    # ------------
     # veos(config)#show running-config | section bgp
     # router bgp 100
-    #
-    #
-    # Module Execution:
-    #
-    # "after": {
-    #         "as_number": "100"
-    #     },
-    #     "before": {
-    #         "as_number": "100",
-    #         "bgp_params": {
-    #             "additional_paths": "send",
-    #             "convergence": {
-    #                 "slow_peer": true,
-    #                 "time": 6
-    #             }
-    #         },
-    #         "vrfs": [
-    #             {
-    #                 "aggregate_address": [
-    #                     {
-    #                         "address": "1.2.1.0/24",
-    #                         "as_set": true,
-    #                         "match_map": "match01"
-    #                     },
-    #                     {
-    #                         "address": "5.2.1.0/24",
-    #                         "advertise_only": true,
-    #                         "attribute_map": "attrmatch01"
-    #                     }
-    #                 ],
-    #                 "distance": {
-    #                     "external": 50,
-    #                     "internal": 50,
-    #                     "local": 50
-    #                 },
-    #                 "maximum_paths": {
-    #                     "max_equal_cost_paths": 55
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "allowas_in": {
-    #                             "count": 3
-    #                         },
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "dont_capability_negotiate": true,
-    #                         "export_localpref": 4000,
-    #                         "maximum_received_routes": {
-    #                             "count": 500,
-    #                             "warning_limit": {
-    #                                 "limit_percent": 5
-    #                             }
-    #                         },
-    #                         "next_hop_unchanged": true,
-    #                         "peer": "10.1.3.2"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "protocol": "static",
-    #                         "route_map": "map_static"
-    #                     },
-    #                     {
-    #                         "protocol": "attached-host"
-    #                     }
-    #                 ],
-    #                 "vrf": "vrf01"
-    #             }
-    #         ]
-    #     },
-    #     "changed": true,
-    #     "commands": [
-    #         "router bgp 100",
-    #         "no vrf vrf01",
-    #         "no bgp convergence slow-peer time 6",
-    #         "no bgp additional-paths send any"
-    #     ],
-    #
 
     # Using purged:
 
     # Before state:
-
+    # -------------
     # veos(config)#show running-config | section bgp
     # router bgp 100
     #    bgp convergence slow-peer time 6
     #    distance bgp 50 50 50
     #    maximum-paths 55
     #    bgp additional-paths send any
-    #    neighbor peer1 peer-group
+    #    neighbor peer1 peer group
     #    neighbor peer1 link-bandwidth update-delay 5
     #    neighbor peer1 fall-over bfd
     #    neighbor peer1 monitoring
@@ -8280,131 +8474,523 @@ Examples
     #       neighbor 12.1.3.2 allowas-in 3
     #       neighbor 12.1.3.2 default-originate always
     #       neighbor 12.1.3.2 maximum-routes 12000
-    # veos(config)#
 
-      - name: Purge configuration
-        arista.eos.eos_bgp_global:
-          config:
-            as_number: "100"
-          state: purged
+    - name: Purge configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+        state: purged
 
-    # After State:
 
+    # Task output:
+    # ------------
+    # before:
+    #     aggregate_address:
+    #     - address: 1.2.1.0/24
+    #       as_set: true
+    #       match_map: match01
+    #     - address: 5.2.1.0/24
+    #       advertise_only: true
+    #       attribute_map: attrmatch01
+    #     as_number: '100'
+    #     bgp_params:
+    #       additional_paths: send
+    #       convergence:
+    #         slow_peer: true
+    #         time: 6
+    #     distance:
+    #       external: 50
+    #       internal: 50
+    #       local: 50
+    #     maximum_paths:
+    #       max_equal_cost_paths: 55
+    #     neighbor:
+    #     - fall_over: true
+    #       link_bandwidth:
+    #         set: true
+    #         update_delay: 5
+    #       maximum_received_routes:
+    #         count: 12000
+    #       monitoring: true
+    #       neighbor_address: peer1
+    #       peer_group: peer1
+    #       send_community:
+    #         community_attribute: extended
+    #         link_bandwidth_attribute: aggregate
+    #         speed: '600'
+    #         sub_attribute: link-bandwidth
+    #     - allowas_in:
+    #         count: 3
+    #       default_originate:
+    #         always: true
+    #       dont_capability_negotiate: true
+    #       export_localpref: 4000
+    #       maximum_received_routes:
+    #         count: 500
+    #         warning_limit:
+    #           limit_percent: 5
+    #       neighbor_address: 10.1.3.2
+    #       next_hop_unchanged: true
+    #     redistribute:
+    #     - protocol: static
+    #       route_map: map_static
+    #     - protocol: attached-host
+    #     vlan: 5
+    #     vrfs:
+    #     - neighbor:
+    #       - allowas_in:
+    #           count: 3
+    #         default_originate:
+    #           always: true
+    #         dont_capability_negotiate: true
+    #         maximum_received_routes:
+    #           count: 12000
+    #         neighbor_address: 12.1.3.2
+    #       route_target:
+    #         action: import
+    #         target: '54:11'
+    #       vrf: vrf01
+    #     "changed": true,
+    #
+    # commands:
+    # - no router bgp 100
+    #
+    # after: {}
+
+    # After state:
+    # ------------
     # veos(config)#show running-config | section bgp
     # veos(config)#
 
-    # Module Execution:
+    # Using rendered
 
-    # "after": {},
-    #     "before": {
-    #         "aggregate_address": [
-    #             {
-    #                 "address": "1.2.1.0/24",
-    #                 "as_set": true,
-    #                 "match_map": "match01"
-    #             },
-    #             {
-    #                 "address": "5.2.1.0/24",
-    #                 "advertise_only": true,
-    #                 "attribute_map": "attrmatch01"
-    #             }
-    #         ],
-    #         "as_number": "100",
-    #         "bgp_params": {
-    #             "additional_paths": "send",
-    #             "convergence": {
-    #                 "slow_peer": true,
-    #                 "time": 6
-    #             }
-    #         },
-    #         "distance": {
-    #             "external": 50,
-    #             "internal": 50,
-    #             "local": 50
-    #         },
-    #         "maximum_paths": {
-    #             "max_equal_cost_paths": 55
-    #         },
-    #         "neighbor": [
-    #             {
-    #                 "fall_over": true,
-    #                 "link_bandwidth": {
-    #                     "set": true,
-    #                     "update_delay": 5
-    #                 },
-    #                 "maximum_received_routes": {
-    #                     "count": 12000
-    #                 },
-    #                 "monitoring": true,
-    #                 "peer": "peer1",
-    #                 "peer_group": "peer1",
-    #                 "send_community": {
-    #                     "community_attribute": "extended",
-    #                     "link_bandwidth_attribute": "aggregate",
-    #                     "speed": "600",
-    #                     "sub_attribute": "link-bandwidth"
-    #                 }
-    #             },
-    #             {
-    #                 "allowas_in": {
-    #                     "count": 3
-    #                 },
-    #                 "default_originate": {
-    #                     "always": true
-    #                 },
-    #                 "dont_capability_negotiate": true,
-    #                 "export_localpref": 4000,
-    #                 "maximum_received_routes": {
-    #                     "count": 500,
-    #                     "warning_limit": {
-    #                         "limit_percent": 5
-    #                     }
-    #                 },
-    #                 "next_hop_unchanged": true,
-    #                 "peer": "10.1.3.2"
-    #             }
-    #         ],
-    #         "redistribute": [
-    #             {
-    #                 "protocol": "static",
-    #                 "route_map": "map_static"
-    #             },
-    #             {
-    #                 "protocol": "attached-host"
-    #             }
-    #         ],
-    #         "vlan": 5,
-    #         "vrfs": [
-    #             {
-    #                 "neighbor": [
-    #                     {
-    #                         "allowas_in": {
-    #                             "count": 3
-    #                         },
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "dont_capability_negotiate": true,
-    #                         "maximum_received_routes": {
-    #                             "count": 12000
-    #                         },
-    #                         "peer": "12.1.3.2"
-    #                     }
-    #                 ],
-    #                 "route_target": {
-    #                     "action": "import",
-    #                     "target": "54:11"
-    #                 },
-    #                 "vrf": "vrf01"
-    #             }
-    #         ]
-    #     },
-    #     "changed": true,
-    #     "commands": [
-    #         "no router bgp 100"
-    #     ],
+    - name: Render command lines for provided configuration
+      arista.eos.eos_bgp_global:
+        config:
+          as_number: "100"
+          bgp_params:
+            host_routes: true
+            convergence:
+              slow_peer: true
+              time: 6
+            additional_paths: "send"
+            log_neighbor_changes: true
+          maximum_paths:
+            max_equal_cost_paths: 55
+          aggregate_address:
+            - address: "1.2.1.0/24"
+              as_set: true
+              match_map: "match01"
+            - address: "5.2.1.0/24"
+              attribute_map: "attrmatch01"
+              advertise_only: true
+          redistribute:
+            - protocol: "static"
+              route_map: "map_static"
+            - protocol: "attached-host"
+          distance:
+            internal: 50
+          neighbor:
+            - peer: "10.1.3.2"
+              allowas_in:
+                set: true
+              default_originate:
+                always: true
+              dont_capability_negotiate: true
+              export_localpref: 4000
+              maximum_received_routes:
+                count: 500
+                warning_limit:
+                  limit_percent: 5
+              next_hop_unchanged: true
+              prefix_list:
+                name: "prefix01"
+                direction: "out"
+            - neighbor_address: "peer1"
+              fall_over: true
+              link_bandwidth:
+                update_delay: 5
+              monitoring: true
+              send_community:
+                community_attribute: "extended"
+                sub_attribute: "link-bandwidth"
+                link_bandwidth_attribute: "aggregate"
+                speed: "600"
+          vlan: 5
+        state: rendered
+
+    # Task output:
+    # ------------
+    # rendered:
+    #   - router bgp 100
+    #   - neighbor 10.1.3.2 allowas-in
+    #   - neighbor 10.1.3.2 default-originate always
+    #   - neighbor 10.1.3.2 dont-capability-negotiate
+    #   - neighbor 10.1.3.2 export-localpref 4000
+    #   - neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+    #   - neighbor 10.1.3.2 next-hop-unchanged
+    #   - neighbor 10.1.3.2 prefix-list prefix01 out
+    #   - neighbor peer1 fall-over bfd
+    #   - neighbor peer1 link-bandwidth update-delay 5
+    #   - neighbor peer1 monitoring
+    #   - neighbor peer1 send-community extended link-bandwidth aggregate 600
+    #   - redistribute static route-map map_static
+    #   - redistribute attached-host
+    #   - aggregate-address 1.2.1.0/24 as-set match-map match01
+    #   - aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+    #   - bgp host-routes fib direct-install
+    #   - bgp convergence slow-peer time 6
+    #   - bgp additional-paths send any
+    #   - bgp log-neighbor-changes
+    #   - maximum-paths 55
+    #   - distance bgp 50
+    #   - vlan 5
 
 
+    # Using parsed
+
+    # parsed.cfg
+    # ----------
+    # router bgp 100
+    #    bgp convergence slow-peer time 6
+    #    distance bgp 50 50 50
+    #    maximum-paths 55
+    #    bgp additional-paths send any
+    #    neighbor peer1 peer group
+    #    neighbor peer1 link-bandwidth update-delay 5
+    #    neighbor peer1 fall-over bfd
+    #    neighbor peer1 monitoring
+    #    neighbor peer1 send-community extended link-bandwidth aggregate 600
+    #    neighbor peer1 maximum-routes 12000
+    #    neighbor 10.1.3.2 export-localpref 4000
+    #    neighbor 10.1.3.2 next-hop-unchanged
+    #    neighbor 10.1.3.2 dont-capability-negotiate
+    #    neighbor 10.1.3.2 allowas-in 3
+    #    neighbor 10.1.3.2 default-originate always
+    #    neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+    #    aggregate-address 1.2.1.0/24 as-set match-map match01
+    #    aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+    #    redistribute static route-map map_static
+    #    redistribute attached-host
+    #    !
+    #    vlan 5
+    #    !
+    #    address-family ipv4
+    #       neighbor 10.1.3.2 prefix-list prefix01 out
+    #    !
+    #    vrf vrf01
+    #       route-target import 54:11
+    #       neighbor 12.1.3.2 dont-capability-negotiate
+    #       neighbor 12.1.3.2 allowas-in 3
+    #       neighbor 12.1.3.2 default-originate always
+    #       neighbor 12.1.3.2 maximum-routes 12000
+
+    - name: Parse externally provided BGP config
+      arista.eos.eos_bgp_global:
+        running_config: "{{ lookup('file', 'parsed.cfg') }}"
+        state: parsed
+
+    # Task output:
+    # ------------
+
+    # parsed:
+    #     aggregate_address:
+    #     - address: 1.2.1.0/24
+    #       as_set: true
+    #       match_map: match01
+    #     - address: 5.2.1.0/24
+    #       advertise_only: true
+    #       attribute_map: attrmatch01
+    #     as_number: '100'
+    #     bgp_params:
+    #       additional_paths: send
+    #       convergence:
+    #         slow_peer: true
+    #         time: 6
+    #     distance:
+    #       external: 50
+    #       internal: 50
+    #       local: 50
+    #     maximum_paths:
+    #       max_equal_cost_paths: 55
+    #     neighbor:
+    #     - fall_over: true
+    #       link_bandwidth:
+    #         set: true
+    #         update_delay: 5
+    #       maximum_received_routes:
+    #         count: 12000
+    #       monitoring: true
+    #       neighbor_address: peer1
+    #       peer_group: peer1
+    #       send_community:
+    #         community_attribute: extended
+    #         link_bandwidth_attribute: aggregate
+    #         speed: '600'
+    #         sub_attribute: link-bandwidth
+    #     - allowas_in:
+    #         count: 3
+    #       default_originate:
+    #         always: true
+    #       dont_capability_negotiate: true
+    #       export_localpref: 4000
+    #       maximum_received_routes:
+    #         count: 500
+    #         warning_limit:
+    #           limit_percent: 5
+    #       neighbor_address: 10.1.3.2
+    #       next_hop_unchanged: true
+    #     redistribute:
+    #     - protocol: static
+    #       route_map: map_static
+    #     - protocol: attached-host
+    #     vlan: 5
+    #     vrfs:
+    #     - neighbor:
+    #       - allowas_in:
+    #           count: 3
+    #         default_originate:
+    #           always: true
+    #         dont_capability_negotiate: true
+    #         maximum_received_routes:
+    #           count: 12000
+    #         neighbor_address: 12.1.3.2
+    #       route_target:
+    #         action: import
+    #         target: '54:11'
+    #       vrf: vrf01
+
+    # Using gathered
+
+    # existing config
+    # veos(config)#show running-config | section bgp
+    # router bgp 100
+    #    bgp convergence slow-peer time 6
+    #    distance bgp 50 50 50
+    #    maximum-paths 55
+    #    bgp additional-paths send any
+    #    neighbor peer1 peer group
+    #    neighbor peer1 link-bandwidth update-delay 5
+    #    neighbor peer1 fall-over bfd
+    #    neighbor peer1 monitoring
+    #    neighbor peer1 send-community extended link-bandwidth aggregate 600
+    #    neighbor peer1 maximum-routes 12000
+    #    neighbor 10.1.3.2 export-localpref 4000
+    #    neighbor 10.1.3.2 next-hop-unchanged
+    #    neighbor 10.1.3.2 dont-capability-negotiate
+    #    neighbor 10.1.3.2 allowas-in 3
+    #    neighbor 10.1.3.2 default-originate always
+    #    neighbor 10.1.3.2 maximum-routes 500 warning-limit 5 percent
+    #    aggregate-address 1.2.1.0/24 as-set match-map match01
+    #    aggregate-address 5.2.1.0/24 attribute-map attrmatch01 advertise-only
+    #    redistribute static route-map map_static
+    #    redistribute attached-host
+    #    !
+    #    vlan 5
+    #    !
+    #    address-family ipv4
+    #       neighbor 10.1.3.2 prefix-list prefix01 out
+    #    !
+    #    vrf vrf01
+    #       route-target import 54:11
+    #       neighbor 12.1.3.2 dont-capability-negotiate
+    #       neighbor 12.1.3.2 allowas-in 3
+    #       neighbor 12.1.3.2 default-originate always
+    #       neighbor 12.1.3.2 maximum-routes 12000
+
+    - name: Gather BGP facts using gathered
+      arista.eos.eos_bgp_global:
+        state: gathered
+
+    # Task output:
+    # ------------
+    # gathered:
+    #     aggregate_address:
+    #     - address: 1.2.1.0/24
+    #       as_set: true
+    #       match_map: match01
+    #     - address: 5.2.1.0/24
+    #       advertise_only: true
+    #       attribute_map: attrmatch01
+    #     as_number: '100'
+    #     bgp_params:
+    #       additional_paths: send
+    #       convergence:
+    #         slow_peer: true
+    #         time: 6
+    #     distance:
+    #       external: 50
+    #       internal: 50
+    #       local: 50
+    #     maximum_paths:
+    #       max_equal_cost_paths: 55
+    #     neighbor:
+    #     - fall_over: true
+    #       link_bandwidth:
+    #         set: true
+    #         update_delay: 5
+    #       maximum_received_routes:
+    #         count: 12000
+    #       monitoring: true
+    #       neighbor_address: peer1
+    #       peer_group: peer1
+    #       send_community:
+    #         community_attribute: extended
+    #         link_bandwidth_attribute: aggregate
+    #         speed: '600'
+    #         sub_attribute: link-bandwidth
+    #     - allowas_in:
+    #         count: 3
+    #       default_originate:
+    #         always: true
+    #       dont_capability_negotiate: true
+    #       export_localpref: 4000
+    #       maximum_received_routes:
+    #         count: 500
+    #         warning_limit:
+    #           limit_percent: 5
+    #       neighbor_address: 10.1.3.2
+    #       next_hop_unchanged: true
+    #     redistribute:
+    #     - protocol: static
+    #       route_map: map_static
+    #     - protocol: attached-host
+    #     vlan: 5
+    #     vrfs:
+    #     - neighbor:
+    #       - allowas_in:
+    #           count: 3
+    #         default_originate:
+    #           always: true
+    #         dont_capability_negotiate: true
+    #         maximum_received_routes:
+    #           count: 12000
+    #         neighbor_address: 12.1.3.2
+    #       route_target:
+    #         action: import
+    #         target: '54:11'
+    #       vrf: vrf01
+
+
+
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>after</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when changed</td>
+                <td>
+                            <div>The resulting configuration model invocation.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format
+     of the parameters above.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>before</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>The configuration prior to the model invocation.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">The configuration returned will always be in the same format
+     of the parameters above.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>commands</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>always</td>
+                <td>
+                            <div>The set of commands pushed to the remote device.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router bgp 100&#x27;, &#x27;neighbor 10.1.3.2 allowas-in&#x27;, &#x27;neighbor 10.1.3.2 default-originate always&#x27;, &#x27;neighbor 10.1.3.2 dont-capability-negotiate&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>gathered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>gathered</code></td>
+                <td>
+                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>parsed</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>parsed</code></td>
+                <td>
+                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rendered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>rendered</code></td>
+                <td>
+                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router bgp 100&#x27;, &#x27;neighbor 10.1.3.2 allowas-in&#x27;, &#x27;neighbor 10.1.3.2 default-originate always&#x27;, &#x27;neighbor 10.1.3.2 dont-capability-negotiate&#x27;]</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
 
 
 Status

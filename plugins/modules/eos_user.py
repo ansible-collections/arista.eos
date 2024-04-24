@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -30,10 +31,8 @@ description:
   the collection of usernames in the current running config.  It also supports purging
   usernames from the configuration that are not explicitly defined.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   aggregate:
     description:
@@ -50,13 +49,11 @@ options:
         description:
         - The username to be configured on the remote Arista EOS device.  This argument
           accepts a stringv value and is mutually exclusive with the C(aggregate) argument.
-          Please note that this option is not same as C(provider username).
         type: str
       configured_password:
         description:
         - The password to be configured on the remote Arista EOS device. The password
-          needs to be provided in clear and it will be encrypted on the device. Please
-          note that this option is not same as C(provider password).
+          needs to be provided in clear and it will be encrypted on the device.
         type: str
       update_password:
         description:
@@ -104,13 +101,11 @@ options:
     description:
     - The username to be configured on the remote Arista EOS device.  This argument
       accepts a stringv value and is mutually exclusive with the C(aggregate) argument.
-      Please note that this option is not same as C(provider username).
     type: str
   configured_password:
     description:
     - The password to be configured on the remote Arista EOS device. The password
-      needs to be provided in clear and it will be encrypted on the device. Please
-      note that this option is not same as C(provider password).
+      needs to be provided in clear and it will be encrypted on the device.
     type: str
   update_password:
     description:
@@ -174,13 +169,13 @@ EXAMPLES = """
 
 - name: remove all users except admin
   arista.eos.eos_user:
-    purge: yes
+    purge: true
 
 - name: set multiple users to privilege level 15
   arista.eos.eos_user:
     aggregate:
-    - name: netop
-    - name: netend
+      - name: netop
+      - name: netend
     privilege: 15
     state: present
 
@@ -213,24 +208,40 @@ from copy import deepcopy
 from functools import partial
 
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_config,
     load_config,
+    run_commands,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
-)
-from ansible.module_utils.six import iteritems
 
 
 def validate_privilege(value, module):
     if not 1 <= value <= 15:
         module.fail_json(
-            msg="privilege must be between 1 and 15, got %s" % value
+            msg="privilege must be between 1 and 15, got %s" % value,
         )
+
+
+def get_os_version(module):
+    os_version = "4.20.10"
+    response = run_commands(
+        module,
+        'show version | grep "Software image version"',
+    )
+    version_match = re.search(
+        r"Software image version:\s+([\d\.]+)",
+        response[0],
+        re.M,
+    )
+    if version_match:
+        v = version_match.group(1).split(".")
+        os_version = tuple(int(digit) for digit in v)
+    return os_version
 
 
 def map_obj_to_commands(updates, module):
@@ -261,7 +272,12 @@ def map_obj_to_commands(updates, module):
             add("privilege %s" % want["privilege"])
 
         if needs_update("sshkey"):
-            add("sshkey %s" % want["sshkey"])
+            ver = get_os_version(module)
+            # compare against image version 4.20.10
+            if ver > (4, 20, 10):
+                add("ssh-key %s" % want["sshkey"])
+            else:
+                add("sshkey %s" % want["sshkey"])
 
         if needs_update("nopassword"):
             if want["nopassword"]:
@@ -277,9 +293,8 @@ def map_obj_to_commands(updates, module):
             ]
             if all(v is None for v in value) is True:
                 module.fail_json(
-                    msg="configured_password, sshkey or nopassword should be provided"
+                    msg="configured_password, sshkey or nopassword should be provided",
                 )
-
     return commands
 
 
@@ -290,7 +305,7 @@ def parse_role(data):
 
 
 def parse_sshkey(data):
-    match = re.search(r"sshkey (.+)$", data, re.M)
+    match = re.search(r"sshkey|ssh-key (.+)$", data, re.M)
     if match:
         return match.group(1)
 
@@ -397,14 +412,14 @@ def update_objects(want, have):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     element_spec = dict(
         name=dict(),
         configured_password=dict(no_log=True),
         nopassword=dict(type="bool"),
         update_password=dict(
-            default="always", choices=["on_create", "always"]
+            default="always",
+            choices=["on_create", "always"],
         ),
         privilege=dict(type="int"),
         role=dict(),
@@ -428,7 +443,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(eos_argument_spec)
     mutually_exclusive = [("name", "aggregate")]
 
     module = AnsibleModule(

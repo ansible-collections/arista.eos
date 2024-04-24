@@ -1,9 +1,8 @@
 ---
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
-
       - name: Ethernet1
         duplex: auto
         enabled: true
@@ -22,10 +21,10 @@
   register: result
   become: true
   arista.eos.eos_interfaces:
-    config: '{{ config }}'
+    config: "{{ config }}"
     state: replaced
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.before)|length
         == 0
@@ -34,7 +33,7 @@
   arista.eos.eos_facts:
     gather_network_resources: interfaces
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.after)|length
         == 0

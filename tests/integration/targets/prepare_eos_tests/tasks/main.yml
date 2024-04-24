@@ -17,12 +17,13 @@
       - no switchport
     parents: int Ethernet2
 
-- name: enable eapi
+- name: Enable eapi
   become: true
   connection: ansible.netcommon.network_cli
-  tags: eapi
   arista.eos.eos_eapi:
     http: true
     https: true
     local_http: false
     enable_socket: true
+  tags:
+    - httpapi

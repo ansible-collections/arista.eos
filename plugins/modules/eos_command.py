@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -30,23 +31,77 @@ description:
   for a specific condition before returning or timing out if the condition is not
   met.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   commands:
     description:
-    - The commands to send to the remote EOS device over the configured provider.  The
+    - The commands to send to the remote EOS device. The
       resulting output from the command is returned.  If the I(wait_for) argument
       is provided, the module is not returned until the condition is satisfied or
       the number of I(retries) has been exceeded.
-    - If a command sent to the device requires answering a prompt, it is possible to pass
-      a dict containing command, answer and prompt. Common answers are 'y' or "\\r"
-      (carriage return, must be double quotes). Refer below examples.
+    - Commands may be represented either as simple strings or as dictionaries as described below.
+      Refer to the Examples setion for some common uses.
     required: true
     type: list
     elements: raw
+    suboptions:
+      command:
+        description:
+        - The command to send to the remote network device.  The resulting output from
+          the command is returned, unless I(sendonly) is set.
+        required: true
+        type: str
+      output:
+        description:
+        - How the remote device should format the command response data.
+        type: str
+        choices: ["text", "json"]
+      version:
+        description:
+        - Specifies the version of the JSON response returned when I(output=json).
+        type: str
+        choices: ["1", "latest"]
+        default: "latest"
+      prompt:
+        description:
+        - A single regex pattern or a sequence of patterns to evaluate the expected prompt
+          from I(command).
+        required: false
+        type: list
+        elements: str
+      answer:
+        description:
+        - The answer to reply with if I(prompt) is matched. The value can be a single
+          answer or a list of answer for multiple prompts. In case the command execution
+          results in multiple prompts the sequence of the prompt and excepted answer should
+          be in same order.
+        required: false
+        type: list
+        elements: str
+      sendonly:
+        description:
+        - The boolean value, that when set to true will send I(command) to the device
+          but not wait for a result.
+        type: bool
+        default: false
+        required: false
+      newline:
+        description:
+        - The boolean value, that when set to false will send I(answer) to the device
+          without a trailing newline.
+        type: bool
+        default: true
+        required: false
+      check_all:
+        description:
+        - By default if any one of the prompts mentioned in C(prompt) option is matched
+          it won't check for other prompts. This boolean flag, that when set to I(True)
+          will check for all the prompts mentioned in C(prompt) option in the given order.
+          If the option is set to I(True) all the prompts should be received from remote
+          host if not it will result in timeout.
+        type: bool
+        default: false
   wait_for:
     description:
     - Specifies what to evaluate from the output of the command and what conditionals
@@ -86,7 +141,7 @@ options:
     type: int
 """
 
-EXAMPLES = """
+EXAMPLES = r"""
 - name: run show version on remote devices
   arista.eos.eos_command:
     commands: show version
@@ -99,44 +154,53 @@ EXAMPLES = """
 - name: run multiple commands on remote nodes
   arista.eos.eos_command:
     commands:
-    - show version
-    - show interfaces
+      - show version
+      - show interfaces
 
 - name: run multiple commands and evaluate the output
   arista.eos.eos_command:
     commands:
-    - show version
-    - show interfaces
+      - show version
+      - show interfaces
     wait_for:
-    - result[0] contains Arista
-    - result[1] contains Loopback0
+      - result[0] contains Arista
+      - result[1] contains Loopback0
 
 - name: run commands and specify the output format
   arista.eos.eos_command:
     commands:
-    - command: show version
-      output: json
+      - command: show version
+        output: json
 
-- name: using cli transport, check whether the switch is in maintenance mode
+- name: check whether the switch is in maintenance mode
   arista.eos.eos_command:
     commands: show maintenance
     wait_for: result[0] contains 'Under Maintenance'
 
-- name: using cli transport, check whether the switch is in maintenance mode using
-    json output
+- name: check whether the switch is in maintenance mode using json output
   arista.eos.eos_command:
-    commands: show maintenance | json
+    commands:
+      - command: show maintenance
+        output: json
     wait_for: result[0].units.System.state eq 'underMaintenance'
 
-- name: using eapi transport check whether the switch is in maintenance, with 8 retries
+- name: check whether the switch is in maintenance, with 8 retries
     and 2 second interval between retries
   arista.eos.eos_command:
     commands: show maintenance
     wait_for: result[0]['units']['System']['state'] eq 'underMaintenance'
     interval: 2
     retries: 8
-    provider:
-      transport: eapi
+
+- name: run a command that requires a confirmation. Note that prompt
+    takes regexes, and so strings containing characters like brackets
+    need to be escaped.
+  arista.eos.eos_command:
+    commands:
+      - command: reload power
+        prompt: \[confirm\]
+        answer: y
+        newline: false
 """
 
 RETURN = """
@@ -163,15 +227,11 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.parsing import (
     Conditional,
 )
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    transform_commands,
-    to_lines,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_lines
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     run_commands,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
+    transform_commands,
 )
 
 
@@ -183,7 +243,7 @@ def parse_commands(module, warnings):
             if not item["command"].startswith("show"):
                 warnings.append(
                     "Only show commands are supported when using check mode, not "
-                    "executing %s" % item["command"]
+                    "executing %s" % item["command"],
                 )
                 commands.remove(item)
 
@@ -198,8 +258,7 @@ def to_cli(obj):
 
 
 def main():
-    """entry point for module execution
-    """
+    """entry point for module execution"""
     argument_spec = dict(
         commands=dict(type="list", required=True, elements="raw"),
         wait_for=dict(type="list", aliases=["waitfor"], elements="str"),
@@ -208,10 +267,9 @@ def main():
         interval=dict(default=1, type="int"),
     )
 
-    argument_spec.update(eos_argument_spec)
-
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
 
     warnings = list()
@@ -250,7 +308,7 @@ def main():
         module.fail_json(msg=msg, failed_conditions=failed_conditions)
 
     result.update(
-        {"stdout": responses, "stdout_lines": list(to_lines(responses))}
+        {"stdout": responses, "stdout_lines": list(to_lines(responses))},
     )
 
     module.exit_json(**result)

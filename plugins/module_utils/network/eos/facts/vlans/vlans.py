@@ -11,22 +11,22 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from copy import deepcopy
 import re
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from copy import deepcopy
+
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.vlans.vlans import (
     VlansArgs,
 )
 
 
 class VlansFacts(object):
-    """ The eos vlans fact class
-    """
+    """The eos vlans fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -43,7 +43,7 @@ class VlansFacts(object):
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for vlans
+        """Populate the facts for vlans
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected conf
@@ -59,9 +59,7 @@ class VlansFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
 
         objs = []
         for resource in resources:
@@ -71,14 +69,13 @@ class VlansFacts(object):
                     objs.extend(obj)
 
         ansible_facts["ansible_network_resources"].pop("vlans", None)
-        facts = {}
+        facts = {"vlans": []}
         if objs:
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
-            facts["vlans"] = [
-                utils.remove_empties(cfg) for cfg in params["config"]
-            ]
+            facts["vlans"] = [utils.remove_empties(cfg) for cfg in params["config"]]
 
         ansible_facts["ansible_network_resources"].update(facts)
         return ansible_facts

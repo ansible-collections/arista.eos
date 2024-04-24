@@ -5,13 +5,14 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_l3_interfaces
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
+
 from .eos_module import TestEosModule, load_fixture
 
 
@@ -22,36 +23,32 @@ class TestEosL3InterfacesModule(TestEosModule):
         super(TestEosL3InterfacesModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.network.Config.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
         self.mock_get_resource_connection_config = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
-            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection"
+            "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
         self.mock_edit_config = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
         )
         self.edit_config = self.mock_edit_config.start()
 
         self.mock_execute_show_command = patch(
-            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.l3_interfaces.l3_interfaces.L3_interfacesFacts.get_device_data"
+            "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.l3_interfaces.l3_interfaces.L3_interfacesFacts.get_device_data",
         )
         self.execute_show_command = self.mock_execute_show_command.start()
 
@@ -88,7 +85,7 @@ class TestEosL3InterfacesModule(TestEosModule):
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         commands = [
             "interface Ethernet1",
@@ -112,7 +109,8 @@ class TestEosL3InterfacesModule(TestEosModule):
                         ],
                     ),
                     dict(
-                        name="Ethernet2", ipv6=[dict(address="2001:db8::1/64")]
+                        name="Ethernet2",
+                        ipv6=[dict(address="2001:db8::1/64")],
                     ),
                     dict(
                         name="Vlan100",
@@ -120,7 +118,7 @@ class TestEosL3InterfacesModule(TestEosModule):
                     ),
                 ],
                 state="merged",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -137,9 +135,13 @@ class TestEosL3InterfacesModule(TestEosModule):
                         ipv4=[dict(address="dhcp")],
                         ipv6=[dict(address="auto-config")],
                     ),
+                    dict(
+                        name="vlan200",
+                        ipv4=[dict(address="168.0.113.27/24")],
+                    ),
                 ],
                 state="overridden",
-            )
+            ),
         )
         commands = [
             "interface Ethernet2",
@@ -151,6 +153,8 @@ class TestEosL3InterfacesModule(TestEosModule):
             "no ip address",
             "interface Loopback99",
             "no ip address",
+            "interface Vlan200",
+            "ip address 168.0.113.27/24",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -159,7 +163,8 @@ class TestEosL3InterfacesModule(TestEosModule):
             dict(
                 config=[
                     dict(
-                        name="Ethernet2", ipv6=[dict(address="2001:db8::1/64")]
+                        name="Ethernet2",
+                        ipv6=[dict(address="2001:db8::1/64")],
                     ),
                     dict(
                         name="Ethernet1",
@@ -180,7 +185,7 @@ class TestEosL3InterfacesModule(TestEosModule):
                     dict(name="Loopback99", ipv4=[dict(address="1.1.1.1/24")]),
                 ],
                 state="overridden",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -191,10 +196,10 @@ class TestEosL3InterfacesModule(TestEosModule):
                     dict(
                         name="Ethernet2",
                         ipv4=[dict(address="203.0.113.27/24")],
-                    )
+                    ),
                 ],
                 state="replaced",
-            )
+            ),
         )
         commands = [
             "interface Ethernet2",
@@ -208,7 +213,8 @@ class TestEosL3InterfacesModule(TestEosModule):
             dict(
                 config=[
                     dict(
-                        name="Ethernet2", ipv6=[dict(address="2001:db8::1/64")]
+                        name="Ethernet2",
+                        ipv6=[dict(address="2001:db8::1/64")],
                     ),
                     dict(
                         name="Ethernet1",
@@ -229,7 +235,7 @@ class TestEosL3InterfacesModule(TestEosModule):
                     dict(name="Loopback99", ipv4=[dict(address="1.1.1.1/24")]),
                 ],
                 state="replaced",
-            )
+            ),
         )
         self.execute_module(changed=False, commands=[])
 
@@ -238,12 +244,13 @@ class TestEosL3InterfacesModule(TestEosModule):
             dict(
                 config=[
                     dict(
-                        name="Ethernet2", ipv6=[dict(address="2001:db8::1/64")]
+                        name="Ethernet2",
+                        ipv6=[dict(address="2001:db8::1/64")],
                     ),
                     dict(name="lo99", ipv4=[dict(address="1.1.1.1/24")]),
                 ],
                 state="deleted",
-            )
+            ),
         )
         commands = [
             "interface Ethernet2",
@@ -267,7 +274,7 @@ class TestEosL3InterfacesModule(TestEosModule):
                     ),
                 ],
                 state="rendered",
-            )
+            ),
         )
         commands = [
             "interface Ethernet1",
@@ -277,7 +284,9 @@ class TestEosL3InterfacesModule(TestEosModule):
         ]
         result = self.execute_module(changed=False)
         self.assertEqual(
-            sorted(result["rendered"]), sorted(commands), result["rendered"]
+            sorted(result["rendered"]),
+            sorted(commands),
+            result["rendered"],
         )
 
     def test_eos_l3_interfaces_parsed(self):
@@ -286,6 +295,8 @@ class TestEosL3InterfacesModule(TestEosModule):
             "ip address 198.51.100.14/24",
             "interface Ethernet2",
             "ip address 203.0.113.27/24",
+            "interface Vlan100",
+            "ip address virtual 192.13.45.13/24 secondary",
         ]
         parsed_str = "\n".join(commands)
         set_module_args(dict(running_config=parsed_str, state="parsed"))
@@ -293,6 +304,10 @@ class TestEosL3InterfacesModule(TestEosModule):
         parsed_list = [
             {"name": "Ethernet1", "ipv4": [{"address": "198.51.100.14/24"}]},
             {"name": "Ethernet2", "ipv4": [{"address": "203.0.113.27/24"}]},
+            {
+                "name": "Vlan100",
+                "ipv4": [{"address": "192.13.45.13/24", "secondary": True, "virtual": True}],
+            },
         ]
         self.assertEqual(parsed_list, result["parsed"])
 

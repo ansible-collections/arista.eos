@@ -1,5 +1,6 @@
 ---
-- debug: msg="START eos_lldp eapi/basic.yaml on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg="START eos_lldp eapi/basic.yaml on connection={{ ansible_connection
     }}"
 
 - name: Make sure LLDP is not running before tests
@@ -13,7 +14,7 @@
   arista.eos.eos_lldp:
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"lldp run" in result.commands'
@@ -24,7 +25,7 @@
   arista.eos.eos_lldp:
     state: present
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
@@ -34,7 +35,7 @@
   arista.eos.eos_lldp:
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"no lldp run" in result.commands'
@@ -45,8 +46,8 @@
   arista.eos.eos_lldp:
     state: absent
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
 
-- debug: msg="END eos_lldp eapi/basic.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="END eos_lldp eapi/basic.yaml on connection={{ ansible_connection }}"

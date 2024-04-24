@@ -1,0 +1,48 @@
+---
+- ansible.builtin.debug:
+    msg: START cli/diff_against_config.yaml on connection={{ ansible_connection }}
+
+- name: setup
+  become: true
+  arista.eos.eos_config:
+    lines: hostname {{ inventory_hostname_short }}
+    match: none
+
+- block:
+    - name: get current running-config
+      become: true
+      register: config_before
+      arista.eos.eos_command:
+        commands: show running-config
+
+    - name: configure hostname
+      become: true
+      register: result
+      diff: true
+      arista.eos.eos_config:
+        intended_config: "hostname foo"
+        diff_against: validate_config
+
+    - ansible.builtin.assert:
+        that:
+          - result.changed == false
+          - "'hostname foo' in result['diff']['after']"
+          - "'hostname foo' not in result['diff']['before']"
+
+    - name: get current running-config
+      become: true
+      register: config_after
+      arista.eos.eos_command:
+        commands: show running-config
+
+    - ansible.builtin.assert:
+        that:
+          - config_before == config_after
+  always:
+    - name: teardown
+      become: true
+      arista.eos.eos_config:
+        lines: hostname {{ inventory_hostname_short }}
+        match: none
+
+- ansible.builtin.debug: msg="END cli/diff_against_config.yaml on connection={{ ansible_connection }}"

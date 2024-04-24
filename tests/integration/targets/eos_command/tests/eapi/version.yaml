@@ -1,0 +1,31 @@
+---
+- ansible.builtin.debug: msg="START eapi/version.yaml on connection={{ ansible_connection }}"
+
+- name: Check support for "latest" version parameter value.
+  register: result
+  arista.eos.eos_command:
+    commands:
+      - command: "show ip route summary"
+        output: json
+        version: "latest"
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - result.stdout is defined
+      - result.stdout_lines[0].protoModelStatus is defined
+
+- name: Check support for "1" version parameter value
+  register: result
+  arista.eos.eos_command:
+    commands:
+      - command: "show ip route summary"
+        output: json
+        version: "1"
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - result.stdout is defined
+
+- ansible.builtin.debug: msg="END eapi/version.yaml"

@@ -18,30 +18,30 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_system
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
+
 from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosSystemModule(TestEosModule):
-
     module = eos_system
 
     def setUp(self):
         super(TestEosSystemModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_system.get_config"
+            "ansible_collections.arista.eos.plugins.modules.eos_system.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_system.load_config"
+            "ansible_collections.arista.eos.plugins.modules.eos_system.load_config",
         )
         self.load_config = self.mock_load_config.start()
 
@@ -62,7 +62,7 @@ class TestEosSystemModule(TestEosModule):
 
     def test_eos_system_domain_name(self):
         set_module_args(dict(domain_name="test.com"))
-        commands = ["ip domain-name test.com"]
+        commands = ["dns domain test.com"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_system_domain_list(self):
@@ -111,12 +111,12 @@ class TestEosSystemModule(TestEosModule):
 
     def test_eos_system_state_absent(self):
         set_module_args(dict(state="absent"))
-        commands = ["no ip domain-name", "no hostname"]
+        commands = ["no dns domain", "no hostname"]
         self.execute_module(changed=True, commands=commands)
 
     def test_eos_system_no_change(self):
         set_module_args(
-            dict(hostname="switch01", domain_name="eng.ansible.com")
+            dict(hostname="switch01", domain_name="eng.ansible.com"),
         )
         commands = []
         self.execute_module(commands=commands)

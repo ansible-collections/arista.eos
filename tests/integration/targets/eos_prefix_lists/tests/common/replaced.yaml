@@ -1,0 +1,53 @@
+---
+- ansible.builtin.debug:
+    msg: Start eos_prefix_lists replaced integration tests ansible_connection={{
+      ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.include_tasks: _populate.yaml
+
+- block:
+    - name: Override given prefix-list configuration
+      become: true
+      register: result
+      arista.eos.eos_prefix_lists: &id001
+        config:
+          - afi: "ipv4"
+            prefix_lists:
+              - name: "v401"
+                entries:
+                  - sequence: 25
+                    action: "deny"
+                    address: "45.55.4.0/24"
+                  - sequence: 200
+                    action: "permit"
+                    address: "200.11.0.0/16"
+                    match:
+                      masklen: 32
+                      operator: "eq"
+        state: replaced
+
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: prefix_lists
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 4
+          - result.changed == true
+          - result.commands|symmetric_difference(replaced.commands) == []
+          - result.after|symmetric_difference(ansible_facts['network_resources']['prefix_lists']) == []
+          - result.after|symmetric_difference(replaced.config) == []
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_prefix_lists: *id001
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

@@ -28,6 +28,7 @@ The module file for eos_lldp_global
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -40,7 +41,7 @@ description:
 version_added: 1.0.0
 author: Nathaniel Case (@Qalthos)
 notes:
-- Tested against Arista EOS 4.20.10M
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
@@ -281,7 +282,6 @@ EXAMPLES = """
 #        management_address: False
 #        port_description: False
 #        system_description: True
-
 """
 RETURN = """
 before:
@@ -307,6 +307,7 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lldp_global.lldp_global import (
     Lldp_globalArgs,
 )

@@ -1,12 +1,12 @@
 ---
-- debug:
-    msg: START eos_l2_interfaces gathered integration tests on connection={{ ansible_connection
+- ansible.builtin.debug:
+    msg:
+      START eos_l2_interfaces gathered integration tests on connection={{ ansible_connection
       }}
 
-- include_tasks: _reset_config.yaml
+- ansible.builtin.include_tasks: _reset_config.yaml
 
 - block:
-
     - name: Gathered the provided configuration with the exisiting running configuration
       become: true
       register: result
@@ -18,7 +18,7 @@
       arista.eos.eos_facts:
         gather_network_resources: l2_interfaces
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.gathered)|length
             == 0

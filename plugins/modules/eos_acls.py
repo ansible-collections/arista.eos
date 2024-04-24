@@ -28,6 +28,7 @@ The module file for eos_acls
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -38,7 +39,7 @@ description: This module manages the IP access-list attributes of Arista EOS int
 version_added: 1.0.0
 author: Gomathiselvi S (@GomathiselviS)
 notes:
-- Tested against Arista vEOS v4.20.10M
+- Tested against Arista EOS 4.24.6F
 options:
   config:
     description: A dictionary of IP access-list options
@@ -485,17 +486,17 @@ EXAMPLES = """
 - name: Merge provided configuration with device configuration
   arista.eos.eos_acls:
     config:
-    - afi: ipv4
-      acls:
-      - name: test1
-        aces:
-        - sequence: 35
-          grant: deny
-          protocol: ospf
-          source:
-            subnet_address: 20.0.0.0/8
-          destnation:
-            any: true
+      - afi: ipv4
+        acls:
+          - name: test1
+            aces:
+              - sequence: 35
+                grant: deny
+                protocol: ospf
+                source:
+                  subnet_address: 20.0.0.0/8
+                destination:
+                  any: true
     state: merged
 
 # After state:
@@ -527,14 +528,14 @@ EXAMPLES = """
 - name: Merge to update the given configuration with an existing ace
   arista.eos.eos_acls:
     config:
-    - afi: ipv4
-      acls:
-      - name: test1
-        aces:
-        - sequence: 35
-          log: true
-          ttl:
-            eq: 33
+      - afi: ipv4
+        acls:
+          - name: test1
+            aces:
+              - sequence: 35
+                log: true
+                ttl:
+                  eq: 33
     state: merged
 
 # After state:
@@ -567,22 +568,20 @@ EXAMPLES = """
 # ipv6 access-list test2
 #     10 deny icmpv6 any any reject-route hop-limit eq 20
 
-
-
 - name: Replace device configuration with provided configuration
   arista.eos.eos_acls:
     config:
-    - afi: ipv4
-      acls:
-      - name: test1
-        aces:
-        - sequence: 35
-          grant: permit
-          protocol: ospf
-          source:
-            subnet_address: 20.0.0.0/8
-          destination:
-            any: true
+      - afi: ipv4
+        acls:
+          - name: test1
+            aces:
+              - sequence: 35
+                grant: permit
+                protocol: ospf
+                source:
+                  subnet_address: 20.0.0.0/8
+                destination:
+                  any: true
     state: replaced
 
 # After state:
@@ -597,7 +596,6 @@ EXAMPLES = """
 # !
 # ipv6 access-list test2
 #     10 deny icmpv6 any any reject-route hop-limit eq 20
-
 
 # Using overridden
 
@@ -617,21 +615,20 @@ EXAMPLES = """
 #     10 deny icmpv6 any any reject-route hop-limit eq 20
 
 
-
 - name: override device configuration with  provided configuration
   arista.eos.eos_acls:
     config:
-    - afi: ipv4
-      acls:
-      - name: test1
-        aces:
-        - sequence: 35
-          action: permit
-          protocol: ospf
-          source:
-            subnet_address: 20.0.0.0/8
-          destination:
-            any: true
+      - afi: ipv4
+        acls:
+          - name: test1
+            aces:
+              - sequence: 35
+                grant: permit
+                protocol: ospf
+                source:
+                  subnet_address: 20.0.0.0/8
+                destination:
+                  any: true
     state: overridden
 
 # After state:
@@ -660,38 +657,9 @@ EXAMPLES = """
 - name: Delete provided configuration
   arista.eos.eos_acls:
     config:
-    - afi: ipv4
-    state: deleted
-
-# After state:
-# ------------
-#
-# show running-config | section access-list
-
-# ipv6 access-list test2
-#     10 deny icmpv6 any any reject-route hop-limit eq 20
-
-
-
-# Before state:
-# -------------
-# show running-config | section access-list
-# ip access-list test1
-#    10 permit ip 10.10.10.0/24 any ttl eq 200
-#    20 permit ip 10.30.10.0/24 host 10.20.10.1
-#    30 deny tcp host 10.10.20.1 eq finger www any syn log
-#    40 permit ip any any
-# ipv6 access-list test2
-#     10 deny icmpv6 any any reject-route hop-limit eq 20
-
-# !
-
-- name: Delete provided configuration
-  arista.eos.eos_acls:
-    config:
-    - afi: ipv4
-      acls:
-      - name: test1
+      - afi: ipv4
+        acls:
+          - name: test1
     state: deleted
 
 # After state:
@@ -710,70 +678,68 @@ EXAMPLES = """
 # ip access-list test2
 #    40 permit vlan 55 0xE2 icmpv6 any any log
 
-- name: Gather the exisitng condiguration
+- name: Gather the existing configuration
   arista.eos.eos_acls:
     state: gathered
 
 # returns:
 
-
 #  arista.eos.eos_acls:
 #    config:
-#     - afi: "ipv4"
-#       acls:
-#        - name: test1
-#          aces:
-#          - sequence: 35
-#            grant: "deny"
-#            protocol: "ospf"
-#            source:
-#              subnet_address: 20.0.0.0/8
-#            destination:
-#              any: true
-#     - afi: "ipv6"
-#       acls:
-#        - name: test2
-#          aces:
-#           - sequence: 40
-#             grant: "permit"
-#             vlan: "55 0xE2"
-#             protocol: "icmpv6"
-#             log: true
-#             source:
-#               any: true
-#             destination:
-#               any: true
-
+#      - afi: "ipv4"
+#        acls:
+#          - name: test1
+#            aces:
+#            - sequence: 35
+#              grant: "deny"
+#              protocol: "ospf"
+#              source:
+#                subnet_address: 20.0.0.0/8
+#              destination:
+#                any: true
+#      - afi: "ipv6"
+#         acls:
+#           - name: test2
+#             aces:
+#               - sequence: 40
+#                 grant: "permit"
+#                 vlan: "55 0xE2"
+#                 protocol: "icmpv6"
+#                 log: true
+#                 source:
+#                   any: true
+#                 destination:
+#                   any: true
 
 # using rendered
 
 - name: Delete provided configuration
   arista.eos.eos_acls:
     config:
-    - afi: ipv4
-      acls:
-      - name: test1
-        aces:
-        - sequence: 35
-          grant: deny
-          protocol: ospf
-          source:
-            subnet_address: 20.0.0.0/8
-          destination:
-            any: true
-    - afi: ipv6
-      acls:
-      - name: test2
-        aces:
-        - sequence: 40
-          grant: permit
-          vlan: 55 0xE2
-          protocol: icmpv6
-          log: true
-          source:
-            any: true
-          destination:
-            any: true
+      - afi: ipv4
+        acls:
+          - name: test1
+            aces:
+              - sequence: 35
+                grant: deny
+                protocol: ospf
+                source:
+                  subnet_address: 20.0.0.0/8
+                destination:
+                  any: true
+      - afi: ipv6
+        acls:
+          - name: test2
+            aces:
+              - sequence: 40
+                grant: permit
+                vlan: 55 0xE2
+                protocol: icmpv6
+                log: true
+                source:
+                  any: true
+                destination:
+                  any: true
     state: rendered
 
 # returns:
@@ -782,7 +748,6 @@ EXAMPLES = """
 #    35 deny ospf 20.0.0.0/8 any
 # ip access-list test2
 #    40 permit vlan 55 0xE2 icmpv6 any any log
-
 
 # Using Parsed
 
@@ -860,7 +825,6 @@ EXAMPLES = """
 #             "afi": "ipv6"
 #         }
 #     ]
-
 """
 RETURN = """
 before:
@@ -892,12 +856,11 @@ commands:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.acls.acls import (
     AclsArgs,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.acls.acls import (
-    Acls,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.acls.acls import Acls
 
 
 def main():

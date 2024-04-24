@@ -16,38 +16,45 @@
 # Make coding more python3-ish
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_user
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
+
 from .eos_module import TestEosModule, load_fixture
 
 
 class TestEosUserModule(TestEosModule):
-
     module = eos_user
 
     def setUp(self):
         super(TestEosUserModule, self).setUp()
 
         self.mock_get_config = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_user.get_config"
+            "ansible_collections.arista.eos.plugins.modules.eos_user.get_config",
         )
         self.get_config = self.mock_get_config.start()
 
         self.mock_load_config = patch(
-            "ansible_collections.arista.eos.plugins.modules.eos_user.load_config"
+            "ansible_collections.arista.eos.plugins.modules.eos_user.load_config",
         )
         self.load_config = self.mock_load_config.start()
+
+        self.mock_get_os_version = patch(
+            "ansible_collections.arista.eos.plugins.modules.eos_user.get_os_version",
+        )
+        self.get_os_version = self.mock_get_os_version.start()
+        self.get_os_version.return_value = (4, 20, 10)
 
     def tearDown(self):
         super(TestEosUserModule, self).tearDown()
 
         self.mock_get_config.stop()
         self.mock_load_config.stop()
+        self.mock_get_os_version.stop()
 
     def load_fixtures(self, commands=None, transport="cli"):
         self.get_config.return_value = load_fixture("eos_user_config.cfg")
@@ -70,14 +77,14 @@ class TestEosUserModule(TestEosModule):
 
     def test_eos_user_privilege(self):
         set_module_args(
-            dict(name="ansible", privilege=15, configured_password="test")
+            dict(name="ansible", privilege=15, configured_password="test"),
         )
         result = self.execute_module(changed=True)
         self.assertIn("username ansible privilege 15", result["commands"])
 
     def test_eos_user_privilege_invalid(self):
         set_module_args(
-            dict(name="ansible", privilege=25, configured_password="test")
+            dict(name="ansible", privilege=25, configured_password="test"),
         )
         self.execute_module(failed=True)
 
@@ -88,7 +95,7 @@ class TestEosUserModule(TestEosModule):
 
     def test_eos_user_role(self):
         set_module_args(
-            dict(name="ansible", role="test", configured_password="test")
+            dict(name="ansible", role="test", configured_password="test"),
         )
         result = self.execute_module(changed=True)
         self.assertIn("username ansible role test", result["commands"])
@@ -98,13 +105,19 @@ class TestEosUserModule(TestEosModule):
         commands = ["username ansible sshkey test"]
         self.execute_module(changed=True, commands=commands)
 
+    def test_eos_user_sshkey_4_23(self):
+        self.get_os_version.return_value = (4, 23, 00)
+        set_module_args(dict(name="ansible", sshkey="test"))
+        commands = ["username ansible ssh-key test"]
+        self.execute_module(changed=True, commands=commands)
+
     def test_eos_user_update_password_changed(self):
         set_module_args(
             dict(
                 name="test",
                 configured_password="test",
                 update_password="on_create",
-            )
+            ),
         )
         commands = ["username test secret test"]
         self.execute_module(changed=True, commands=commands)
@@ -115,7 +128,7 @@ class TestEosUserModule(TestEosModule):
                 name="ansible",
                 configured_password="test",
                 update_password="on_create",
-            )
+            ),
         )
         self.execute_module()
 
@@ -125,7 +138,7 @@ class TestEosUserModule(TestEosModule):
                 name="ansible",
                 configured_password="test",
                 update_password="always",
-            )
+            ),
         )
         commands = ["username ansible secret test"]
         self.execute_module(changed=True, commands=commands)

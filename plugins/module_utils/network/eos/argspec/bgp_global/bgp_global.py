@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 #############################################
@@ -31,8 +32,7 @@ The arg spec for the eos_bgp_global module
 
 
 class Bgp_globalArgs(object):  # pylint: disable=R0903
-    """The arg spec for the eos_bgp_global module
-    """
+    """The arg spec for the eos_bgp_global module"""
 
     def __init__(self, **kwargs):
         pass
@@ -47,6 +47,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                 "purged",
                 "merged",
                 "replaced",
+                "overridden",
                 "gathered",
                 "rendered",
                 "parsed",
@@ -75,7 +76,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             "type": "str",
                             "choices": [
                                 "isis",
-                                "ospf3",
+                                "ospfv3",
                                 "ospf",
                                 "attached-host",
                                 "connected",
@@ -220,7 +221,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "auto_local_addr": {"type": "bool"},
                         "redistribute_internal": {"type": "bool"},
                         "cluster_id": {"type": "str"},
-                        "control_plan_filter": {"type": "bool"},
+                        "control_plane_filter": {"type": "bool"},
                         "confederation": {
                             "type": "dict",
                             "options": {
@@ -260,7 +261,9 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                 "neighbor": {
                     "elements": "dict",
                     "type": "list",
+                    "aliases": ["neighbors"],
                     "options": {
+                        "bfd": {"type": "str", "choices": ["c_bit", "enable"]},
                         "weight": {"type": "int"},
                         "default_originate": {
                             "type": "dict",
@@ -297,7 +300,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "ttl": {"type": "int"},
                             },
                         },
-                        "shut_down": {"type": "bool"},
+                        "shutdown": {"type": "bool"},
                         "fall_over": {"type": "bool"},
                         "idle_restart_timer": {"type": "int"},
                         "allowas_in": {
@@ -366,7 +369,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "graceful_restart_helper": {"type": "bool"},
-                        "peer": {"type": "str"},
+                        "neighbor_address": {
+                            "type": "str",
+                            "aliases": ["peer"],
+                        },
                         "next_hop_self": {"type": "bool"},
                         "route_to_peer": {"type": "bool"},
                         "soft_recognition": {
@@ -378,6 +384,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "send_community": {
                             "type": "dict",
                             "options": {
+                                "set": {"type": "bool"},
                                 "community_attribute": {"type": "str"},
                                 "sub_attribute": {
                                     "type": "str",
@@ -465,6 +472,18 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     "elements": "dict",
                     "type": "list",
                     "options": {
+                        "access_group": {
+                            "elements": "dict",
+                            "type": "list",
+                            "options": {
+                                "direction": {"type": "str"},
+                                "afi": {
+                                    "type": "str",
+                                    "choices": ["ipv4", "ipv6"],
+                                },
+                                "acl_name": {"type": "str"},
+                            },
+                        },
                         "router_id": {"type": "str"},
                         "vrf": {"type": "str"},
                         "route_target": {
@@ -474,7 +493,17 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": ["both", "import", "export"],
                                 },
+                                "type": {
+                                    "type": "str",
+                                    "choices": [
+                                        "evpn",
+                                        "vpn-ipv4",
+                                        "vpn-ipv6",
+                                    ],
+                                },
+                                "route_map": {"type": "str"},
                                 "target": {"type": "str"},
+                                "imported_route": {"type": "bool"},
                             },
                         },
                         "redistribute": {
@@ -495,7 +524,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": [
                                         "isis",
-                                        "ospf3",
+                                        "ospfv3",
                                         "ospf",
                                         "attached-host",
                                         "connected",
@@ -576,13 +605,13 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                                     "type": "dict",
                                                     "options": {
                                                         "peer_filter": {
-                                                            "type": "str"
+                                                            "type": "str",
                                                         },
                                                         "remote_as": {
-                                                            "type": "str"
+                                                            "type": "str",
                                                         },
                                                         "name": {
-                                                            "type": "str"
+                                                            "type": "str",
                                                         },
                                                     },
                                                 },
@@ -625,7 +654,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "confed": {"type": "bool"},
                                                 "missing_as_worst": {
-                                                    "type": "bool"
+                                                    "type": "bool",
                                                 },
                                             },
                                         },
@@ -688,8 +717,13 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "neighbor": {
                             "elements": "dict",
+                            "aliases": ["neighbors"],
                             "type": "list",
                             "options": {
+                                "bfd": {
+                                    "type": "str",
+                                    "choices": ["c_bit", "enable"],
+                                },
                                 "weight": {"type": "int"},
                                 "default_originate": {
                                     "type": "dict",
@@ -726,7 +760,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "ttl": {"type": "int"},
                                     },
                                 },
-                                "shut_down": {"type": "bool"},
+                                "shutdown": {"type": "bool"},
                                 "fall_over": {"type": "bool"},
                                 "idle_restart_timer": {"type": "int"},
                                 "allowas_in": {
@@ -772,7 +806,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "options": {
                                                 "limit_count": {"type": "int"},
                                                 "limit_percent": {
-                                                    "type": "int"
+                                                    "type": "int",
                                                 },
                                             },
                                         },
@@ -803,7 +837,10 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                     },
                                 },
                                 "graceful_restart_helper": {"type": "bool"},
-                                "peer": {"type": "str"},
+                                "neighbor_address": {
+                                    "type": "str",
+                                    "aliases": ["peer"],
+                                },
                                 "next_hop_self": {"type": "bool"},
                                 "route_to_peer": {"type": "bool"},
                                 "soft_recognition": {
@@ -881,17 +918,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                             },
                         },
                         "shutdown": {"type": "bool"},
-                        "access_group": {
-                            "type": "dict",
-                            "options": {
-                                "direction": {"type": "str"},
-                                "afi": {
-                                    "type": "str",
-                                    "choices": ["ip", "ipv6"],
-                                },
-                                "acl_name": {"type": "str"},
-                            },
-                        },
                         "graceful_restart_helper": {"type": "bool"},
                         "ucmp": {
                             "type": "dict",
@@ -905,6 +931,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "choices": [
                                                 "encoding_weighted",
                                                 "recursive",
+                                                "update_delay",
                                             ],
                                         },
                                     },
@@ -934,6 +961,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "network": {
                             "type": "list",
+                            "aliases": ["networks"],
                             "elements": "dict",
                             "options": {
                                 "route_map": {"type": "str"},
@@ -943,7 +971,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                     },
                 },
                 "access_group": {
-                    "type": "dict",
+                    "elements": "dict",
+                    "type": "list",
                     "options": {
                         "direction": {"type": "str"},
                         "afi": {"type": "str", "choices": ["ipv4", "ipv6"]},
@@ -993,6 +1022,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                 },
                 "network": {
                     "type": "list",
+                    "aliases": ["networks"],
                     "elements": "dict",
                     "options": {
                         "route_map": {"type": "str"},

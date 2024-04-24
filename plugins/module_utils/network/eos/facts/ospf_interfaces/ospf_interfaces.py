@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -16,20 +17,18 @@ based on the configuration.
 
 import re
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ospf_interfaces.ospf_interfaces import (
+    Ospf_interfacesArgs,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospf_interfaces import (
     Ospf_interfacesTemplate,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.ospf_interfaces.ospf_interfaces import (
-    Ospf_interfacesArgs,
-)
 
 
 class Ospf_interfacesFacts(object):
-    """ The eos ospf_interfaces facts class
-    """
+    """The eos ospf_interfaces facts class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -42,7 +41,7 @@ class Ospf_interfacesFacts(object):
         return connection.get("show running-config | section interface ")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Ospf_interfaces network resource
+        """Populate the facts for Ospf_interfaces network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -61,14 +60,13 @@ class Ospf_interfacesFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
         # parse native config using the Ospf_interfaces template
         ospf_interfaces_facts = []
         for resource in resources:
             ospf_interfaces_parser = Ospf_interfacesTemplate(
-                lines=resource.splitlines(), module=self._module
+                lines=resource.splitlines(),
+                module=self._module,
             )
             entry = ospf_interfaces_parser.parse()
             if entry:
@@ -94,7 +92,7 @@ class Ospf_interfacesFacts(object):
                 self.argument_spec,
                 {"config": ospf_interfaces_facts},
                 redact=True,
-            )
+            ),
         )
 
         if params.get("config"):

@@ -1,0 +1,64 @@
+---
+- ansible.builtin.debug:
+    msg: START eos_hostname empty_config integration tests on connection={{
+      ansible_connection }}
+
+- name: Merged with empty config should give appropriate error message
+  register: result
+  ignore_errors: true
+  arista.eos.eos_hostname:
+    config:
+    state: merged
+  become: true
+
+- ansible.builtin.assert:
+    that:
+      - result.msg == 'value of config parameter must not be empty for state merged'
+
+- name: Replaced with empty config should give appropriate error message
+  register: result
+  ignore_errors: true
+  arista.eos.eos_hostname:
+    config:
+    state: replaced
+  become: true
+
+- ansible.builtin.assert:
+    that:
+      - result.msg == 'value of config parameter must not be empty for state replaced'
+
+- name: Overridden with empty config should give appropriate error message
+  register: result
+  ignore_errors: true
+  arista.eos.eos_hostname:
+    config:
+    state: overridden
+  become: true
+
+- ansible.builtin.assert:
+    that:
+      - result.msg == 'value of config parameter must not be empty for state overridden'
+
+- name: Rendered with empty config should give appropriate error message
+  register: result
+  ignore_errors: true
+  arista.eos.eos_hostname:
+    config:
+    state: rendered
+  become: true
+
+- ansible.builtin.assert:
+    that:
+      - result.msg == 'value of config parameter must not be empty for state rendered'
+
+- name: Parsed with empty config should give appropriate error message
+  register: result
+  ignore_errors: true
+  arista.eos.eos_hostname:
+    running_config:
+    state: parsed
+  become: true
+
+- ansible.builtin.assert:
+    that:
+      - result.msg == 'value of running_config parameter must not be empty for state parsed'

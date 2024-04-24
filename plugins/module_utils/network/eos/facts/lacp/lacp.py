@@ -11,22 +11,22 @@ based on the configuration.
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import re
+
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lacp.lacp import (
     LacpArgs,
 )
 
 
 class LacpFacts(object):
-    """ The eos lacp fact class
-    """
+    """The eos lacp fact class"""
 
     def __init__(self, module, subspec="config", options="options"):
         self._module = module
@@ -46,7 +46,7 @@ class LacpFacts(object):
         return connection.get("show running-config | section ^lacp")
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for lacp
+        """Populate the facts for lacp
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
         :param data: previously collected configuration
@@ -62,9 +62,7 @@ class LacpFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
 
         objs = {}
         for resource in resources:
@@ -77,7 +75,8 @@ class LacpFacts(object):
         facts = {"lacp": {}}
         if objs:
             params = utils.validate_config(
-                self.argument_spec, {"config": objs}
+                self.argument_spec,
+                {"config": objs},
             )
             facts["lacp"] = utils.remove_empties(params["config"])
 
@@ -96,7 +95,8 @@ class LacpFacts(object):
         """
         config = deepcopy(spec)
         config["system"]["priority"] = utils.parse_conf_arg(
-            conf, "system-priority"
+            conf,
+            "system-priority",
         )
 
         return utils.remove_empties(config)

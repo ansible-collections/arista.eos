@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 # (c) 2017, Ansible by Red Hat, inc
@@ -31,7 +32,7 @@ description:
 - This module provides declarative management of VRFs on Arista EOS network devices.
 version_added: 1.0.0
 notes:
-- Tested against EOS 4.15
+- Tested against Arista EOS 4.24.6F
 options:
   name:
     description:
@@ -57,7 +58,7 @@ options:
     type: list
     elements: str
   aggregate:
-    description: List of VRFs definitions
+    description: List of VRFs instances
     type: list
     elements: dict
     suboptions:
@@ -118,8 +119,6 @@ options:
     choices:
     - present
     - absent
-extends_documentation_fragment:
-- arista.eos.eos
 """
 
 EXAMPLES = """
@@ -128,7 +127,7 @@ EXAMPLES = """
     name: test
     rd: 1:200
     interfaces:
-    - Ethernet2
+      - Ethernet2
     state: present
 
 - name: Delete VRFs
@@ -139,20 +138,20 @@ EXAMPLES = """
 - name: Create aggregate of VRFs with purge
   arista.eos.eos_vrf:
     aggregate:
-    - name: test4
-      rd: 1:204
-    - name: test5
-      rd: 1:205
+      - name: test4
+        rd: 1:204
+      - name: test5
+        rd: 1:205
     state: present
-    purge: yes
+    purge: true
 
 - name: Delete aggregate of VRFs
   arista.eos.eos_vrf:
     aggregate:
-    - name: test2
-    - name: test3
-    - name: test4
-    - name: test5
+      - name: test2
+      - name: test3
+      - name: test4
+      - name: test5
     state: absent
 """
 
@@ -162,10 +161,10 @@ commands:
   returned: always
   type: list
   sample:
-    - vrf definition test
+    - vrf instance test
     - rd 1:100
     - interface Ethernet1
-    - vrf forwarding test
+    - vrf test
 """
 import re
 import time
@@ -176,12 +175,10 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     load_config,
     run_commands,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
 )
 
 
@@ -205,10 +202,10 @@ def map_obj_to_commands(updates, module):
 
         if state == "absent":
             if obj_in_have:
-                commands.append("no vrf definition %s" % name)
+                commands.append("no vrf instance %s" % name)
         elif state == "present":
             if not obj_in_have:
-                commands.append("vrf definition %s" % name)
+                commands.append("vrf instance %s" % name)
 
                 if rd is not None:
                     commands.append("rd %s" % rd)
@@ -216,32 +213,31 @@ def map_obj_to_commands(updates, module):
                 if w["interfaces"]:
                     for i in w["interfaces"]:
                         commands.append("interface %s" % i)
-                        commands.append("vrf forwarding %s" % w["name"])
+                        commands.append("vrf %s" % w["name"])
             else:
                 if w["rd"] is not None and w["rd"] != obj_in_have["rd"]:
-                    commands.append("vrf definition %s" % w["name"])
+                    commands.append("vrf instance %s" % w["name"])
                     commands.append("rd %s" % w["rd"])
 
                 if w["interfaces"]:
                     if not obj_in_have["interfaces"]:
                         for i in w["interfaces"]:
                             commands.append("interface %s" % i)
-                            commands.append("vrf forwarding %s" % w["name"])
+                            commands.append("vrf %s" % w["name"])
                     elif set(w["interfaces"]) != obj_in_have["interfaces"]:
                         missing_interfaces = list(
-                            set(w["interfaces"])
-                            - set(obj_in_have["interfaces"])
+                            set(w["interfaces"]) - set(obj_in_have["interfaces"]),
                         )
 
                         for i in missing_interfaces:
                             commands.append("interface %s" % i)
-                            commands.append("vrf forwarding %s" % w["name"])
+                            commands.append("vrf %s" % w["name"])
 
     if purge:
         for h in have:
             obj_in_want = search_obj_in_list(h["name"], want)
             if not obj_in_want:
-                commands.append("no vrf definition %s" % h["name"])
+                commands.append("no vrf instance %s" % h["name"])
 
     return commands
 
@@ -301,9 +297,7 @@ def map_params_to_obj(module):
 
             if item.get("interfaces"):
                 item["interfaces"] = [
-                    intf.replace(" ", "").lower()
-                    for intf in item.get("interfaces")
-                    if intf
+                    intf.replace(" ", "").lower() for intf in item.get("interfaces") if intf
                 ]
 
             if item.get("associated_interfaces"):
@@ -320,19 +314,20 @@ def map_params_to_obj(module):
                 "name": module.params["name"],
                 "state": module.params["state"],
                 "rd": module.params["rd"],
-                "interfaces": [
-                    intf.replace(" ", "").lower()
-                    for intf in module.params["interfaces"]
-                ]
-                if module.params["interfaces"]
-                else [],
-                "associated_interfaces": [
-                    intf.replace(" ", "").lower()
-                    for intf in module.params["associated_interfaces"]
-                ]
-                if module.params["associated_interfaces"]
-                else [],
-            }
+                "interfaces": (
+                    [intf.replace(" ", "").lower() for intf in module.params["interfaces"]]
+                    if module.params["interfaces"]
+                    else []
+                ),
+                "associated_interfaces": (
+                    [
+                        intf.replace(" ", "").lower()
+                        for intf in module.params["associated_interfaces"]
+                    ]
+                    if module.params["associated_interfaces"]
+                    else []
+                ),
+            },
         )
 
     return obj
@@ -360,14 +355,12 @@ def check_declarative_intent_params(want, module, result):
                 interfaces = obj_in_have.get("interfaces")
                 if interfaces is not None and i not in interfaces:
                     module.fail_json(
-                        msg="Interface %s not configured on vrf %s"
-                        % (i, w["name"])
+                        msg="Interface %s not configured on vrf %s" % (i, w["name"]),
                     )
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     element_spec = dict(
         name=dict(),
         interfaces=dict(type="list", elements="str"),
@@ -391,7 +384,6 @@ def main():
     )
 
     argument_spec.update(element_spec)
-    argument_spec.update(eos_argument_spec)
 
     required_one_of = [["name", "aggregate"]]
     mutually_exclusive = [["name", "aggregate"]]

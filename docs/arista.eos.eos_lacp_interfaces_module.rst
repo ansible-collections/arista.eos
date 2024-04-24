@@ -85,7 +85,7 @@ Parameters
                     <td class="elbow-placeholder"></td>
                 <td colspan="1">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
-                    <b>rate</b>
+                    <b>timer</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
                         <span style="color: purple">string</span>
@@ -99,6 +99,7 @@ Parameters
                 </td>
                 <td>
                         <div>Rate at which PDUs are sent by LACP. At fast rate LACP is transmitted once every 1 second. At normal rate LACP is transmitted every 30 seconds after the link is bundled.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: rate</div>
                 </td>
             </tr>
 
@@ -151,7 +152,7 @@ Notes
 -----
 
 .. note::
-   - Tested against Arista EOS 4.20.10M
+   - Tested against Arista EOS 4.24.6F
    - This module works with connection ``network_cli``. See the `EOS Platform Options <../network/user_guide/platform_eos.html>`_.
 
 
@@ -178,10 +179,10 @@ Examples
     - name: Merge provided configuration with device configuration
       arista.eos.eos_lacp_interfaces:
         config:
-        - name: Ethernet1
-          rate: fast
-        - name: Ethernet2
-          rate: normal
+          - name: Ethernet1
+            rate: fast
+          - name: Ethernet2
+            rate: normal
         state: merged
 
     #
@@ -203,7 +204,6 @@ Examples
     # Before state
     # ------------
     #
-    #
     # veos#show run | section ^interface
     # interface Ethernet1
     #    lacp port-priority 30
@@ -214,8 +214,8 @@ Examples
         configuration
       arista.eos.eos_lacp_interfaces:
         config:
-        - name: Ethernet1
-          rate: fast
+          - name: Ethernet1
+            rate: fast
         state: replaced
 
     #
@@ -247,8 +247,8 @@ Examples
     - name: Override the LACP configuration of all the interfaces with provided configuration
       arista.eos.eos_lacp_interfaces:
         config:
-        - name: Ethernet1
-          rate: fast
+          - name: Ethernet1
+            rate: fast
         state: overridden
 
     #
@@ -294,10 +294,10 @@ Examples
     - name: Use Rendered to convert the structured data to native config
       arista.eos.eos_lacp_interfaces:
         config:
-        - name: Ethernet1
-          rate: fast
-        - name: Ethernet2
-          rate: normal
+          - name: Ethernet1
+            rate: fast
+          - name: Ethernet2
+            rate: normal
         state: rendered
 
     #

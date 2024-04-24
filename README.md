@@ -2,16 +2,20 @@
 
 # Arista EOS Collection
 [![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/arista.eos) <!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/arista.eos)-->
+[![Codecov](https://codecov.io/gh/ansible-collections/arista.eos/branch/main/graph/badge.svg)](https://codecov.io/gh/ansible-collections/arista.eos)
+[![CI](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml/badge.svg?branch=main&event=schedule)](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml)
 
 The Ansible Arista EOS collection includes a variety of Ansible content to help automate the management of Arista EOS network appliances.
 
-This collection has been tested against Arista EOS 4.20.10M.
+This collection has been tested against Arista EOS 4.24.6F.
 
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.9.10**.
+This collection has been tested against following Ansible versions: **>=2.14.0**.
 
+For collections that support Ansible 2.9, please ensure you update your `network_os` to use the
+fully qualified collection name (for example, `cisco.ios.ios`).
 Plugins and modules within a collection may be tested with only specific Ansible versions.
 A collection may contain metadata that identifies these versions.
 PEP440 is the schema used to describe the versions of Ansible.
@@ -39,36 +43,33 @@ Name | Description
 [arista.eos.eos_acl_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_acl_interfaces_module.rst)|ACL interfaces resource module
 [arista.eos.eos_acls](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_acls_module.rst)|ACLs resource module
 [arista.eos.eos_banner](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_banner_module.rst)|Manage multiline banners on Arista EOS devices
-[arista.eos.eos_bgp](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_module.rst)|(deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.
 [arista.eos.eos_bgp_address_family](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_address_family_module.rst)|Manages BGP address family resource module
 [arista.eos.eos_bgp_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_global_module.rst)|Manages BGP global resource module
 [arista.eos.eos_command](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_command_module.rst)|Run arbitrary commands on an Arista EOS device
 [arista.eos.eos_config](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_config_module.rst)|Manage Arista EOS configuration sections
 [arista.eos.eos_eapi](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_eapi_module.rst)|Manage and configure Arista EOS eAPI.
 [arista.eos.eos_facts](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_facts_module.rst)|Collect facts from remote devices running Arista EOS
-[arista.eos.eos_interface](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_interface_module.rst)|(deprecated, removed after 2022-06-01) Manage Interface on Arista EOS network devices
+[arista.eos.eos_hostname](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_hostname_module.rst)|Manages hostname resource module
 [arista.eos.eos_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_interfaces_module.rst)|Interfaces resource module
-[arista.eos.eos_l2_interface](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_l2_interface_module.rst)|(deprecated, removed after 2022-06-01) Manage L2 interfaces on Arista EOS network devices.
 [arista.eos.eos_l2_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_l2_interfaces_module.rst)|L2 interfaces resource module
-[arista.eos.eos_l3_interface](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_l3_interface_module.rst)|(deprecated, removed after 2022-06-01) Manage L3 interfaces on Arista EOS network devices.
 [arista.eos.eos_l3_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_l3_interfaces_module.rst)|L3 interfaces resource module
 [arista.eos.eos_lacp](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lacp_module.rst)|LACP resource module
 [arista.eos.eos_lacp_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lacp_interfaces_module.rst)|LACP interfaces resource module
 [arista.eos.eos_lag_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lag_interfaces_module.rst)|LAG interfaces resource module
-[arista.eos.eos_linkagg](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_linkagg_module.rst)|(deprecated, removed after 2022-06-01) Manage link aggregation groups on Arista EOS network devices
 [arista.eos.eos_lldp](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_module.rst)|Manage LLDP configuration on Arista EOS network devices
 [arista.eos.eos_lldp_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_global_module.rst)|LLDP resource module
 [arista.eos.eos_lldp_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_interfaces_module.rst)|LLDP interfaces resource module
-[arista.eos.eos_logging](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_logging_module.rst)|Manage logging on network devices
+[arista.eos.eos_logging_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_logging_global_module.rst)|Manages logging resource module
+[arista.eos.eos_ntp_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ntp_global_module.rst)|Manages ntp resource module
 [arista.eos.eos_ospf_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospf_interfaces_module.rst)|OSPF Interfaces Resource Module.
 [arista.eos.eos_ospfv2](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv2_module.rst)|OSPFv2 resource module
 [arista.eos.eos_ospfv3](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospfv3_module.rst)|OSPFv3 resource module
+[arista.eos.eos_prefix_lists](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_prefix_lists_module.rst)|Manages Prefix lists resource module
 [arista.eos.eos_route_maps](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_route_maps_module.rst)|Manages Route Maps resource module
-[arista.eos.eos_static_route](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_static_route_module.rst)|(deprecated, removed after 2022-06-01) Manage static IP routes on Arista EOS network devices
+[arista.eos.eos_snmp_server](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_snmp_server_module.rst)|Manages snmp_server resource module
 [arista.eos.eos_static_routes](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_static_routes_module.rst)|Static routes resource module
 [arista.eos.eos_system](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_system_module.rst)|Manage the system attributes on Arista EOS devices
 [arista.eos.eos_user](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_user_module.rst)|Manage the collection of local users on EOS devices
-[arista.eos.eos_vlan](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlan_module.rst)|(deprecated, removed after 2022-06-01) Manage VLANs on Arista EOS network devices
 [arista.eos.eos_vlans](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlans_module.rst)|VLANs resource module
 [arista.eos.eos_vrf](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vrf_module.rst)|Manage VRFs on Arista EOS network devices
 
@@ -111,8 +112,6 @@ The following example task replaces configuration changes in the existing config
       state: replaced
 ```
 
-**NOTE**: For Ansible 2.9, you may not see deprecation warnings when you run your playbooks with this collection. Use this documentation to track when a module is deprecated.
-
 ### See Also:
 
 * [Arista EOS Platform Options](https://docs.ansible.com/ansible/latest/network/user_guide/platform_eos.html)
@@ -124,7 +123,7 @@ We welcome community contributions to this collection. If you find problems, ple
 
 You can also join us on:
 
-- Freenode IRC - ``#ansible-network`` Freenode channel
+- IRC - the ``#ansible-network`` [irc.libera.chat](https://libera.chat/) channel
 - Slack - https://ansiblenetwork.slack.com
 
 See the [Ansible Community Guide](https://docs.ansible.com/ansible/latest/community/index.html) for details on contributing to Ansible.
@@ -138,7 +137,7 @@ Please read and familiarize yourself with this document.
 <!--Add a link to a changelog.md file or an external docsite to cover this information. -->
 ## Release notes
 
-Release notes are available [here](https://github.com/ansible-collections/arista.eos/blob/main/changelogs/CHANGELOG.rst).
+Release notes are available [here](https://github.com/ansible-collections/arista.eos/blob/main/CHANGELOG.rst).
 
 ## Roadmap
 

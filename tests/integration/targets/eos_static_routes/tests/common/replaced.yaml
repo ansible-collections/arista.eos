@@ -1,21 +1,17 @@
 ---
-- debug:
+- ansible.builtin.debug:
     msg: Start eos_static_routes merged integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
-- set_fact:
+- ansible.builtin.set_fact:
     config:
-
       - address_families:
-
           - afi: ipv4
             routes:
-
               - dest: 10.1.1.0/24
                 next_hops:
-
                   - interface: Management1
 
                   - admin_distance: 200
@@ -25,53 +21,41 @@
 
               - dest: 10.50.0.0/16
                 next_hops:
-
                   - interface: Management1
 
               - dest: 23.1.0.0/16
                 next_hops:
-
                   - nexthop_grp: testgrp
                     tag: 42
 
           - afi: ipv6
             routes:
-
               - dest: 1000:10::/64
                 next_hops:
-
                   - admin_distance: 67
                     interface: Ethernet1
                     tag: 98
 
       - address_families:
-
           - afi: ipv4
             routes:
-
               - dest: 77.77.1.0/24
                 next_hops:
-
                   - interface: 33.1.1.1
         vrf: vrftest1
 
       - address_families:
-
           - afi: ipv4
             routes:
-
               - dest: 120.1.1.0/24
                 next_hops:
-
                   - admin_distance: 23
                     interface: Ethernet1
 
           - afi: ipv6
             routes:
-
               - dest: 1000:10::/64
                 next_hops:
-
                   - admin_distance: 55
                     interface: Ethernet1
         vrf: testvrf
@@ -81,16 +65,12 @@
   register: result
   arista.eos.eos_static_routes: &id001
     config:
-
       - vrf: testvrf
         address_families:
-
           - afi: ipv6
             routes:
-
               - dest: 1000:10::/64
                 next_hops:
-
                   - interface: Ethernet1
                     admin_distance: 55
     state: replaced
@@ -99,7 +79,7 @@
   arista.eos.eos_facts:
     gather_network_resources: static_routes
 
-- assert:
+- ansible.builtin.assert:
     that:
       - ansible_facts.network_resources.static_routes|symmetric_difference(config)
         == []
@@ -111,9 +91,9 @@
   register: result
   arista.eos.eos_static_routes: *id001
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.commands|length == 0
 
-- include_tasks: _remove_config.yaml
+- ansible.builtin.include_tasks: _remove_config.yaml

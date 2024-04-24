@@ -1,0 +1,44 @@
+---
+- ansible.builtin.debug:
+    msg: Start eos_prefix_lists rendered integration tests ansible_connection={{
+      ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- block:
+    - name: merge given prefix-list configuration
+      become: true
+      register: result
+      arista.eos.eos_prefix_lists: &id001
+        config:
+          - afi: "ipv4"
+            prefix_lists:
+              - name: "v401"
+                entries:
+                  - sequence: 25
+                    action: "deny"
+                    address: "45.55.4.0/24"
+                  - sequence: 100
+                    action: "permit"
+                    address: "11.11.2.0/24"
+                    match:
+                      masklen: 32
+                      operator: "ge"
+              - name: "v402"
+                entries:
+                  - action: "deny"
+                    address: "10.1.1.0/24"
+                    sequence: 10
+          - afi: "ipv6"
+            prefix_lists:
+              - name: "v601"
+                entries:
+                  - sequence: 125
+                    action: "deny"
+                    address: "5000:1::/64"
+        state: rendered
+
+    - ansible.builtin.assert:
+        that:
+          - result.changed == false
+          - result.rendered|symmetric_difference(merged.commands) == []

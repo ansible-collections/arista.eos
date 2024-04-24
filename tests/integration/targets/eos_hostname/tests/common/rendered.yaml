@@ -1,0 +1,20 @@
+---
+- ansible.builtin.debug:
+    msg: Start eos_hostname rendered integration tests ansible_connection={{
+      ansible_connection }}
+
+- block:
+    - name: Render given hostname configuration
+      become: true
+      register: result
+      arista.eos.eos_hostname: &rendered
+        state: "rendered"
+        config:
+          hostname: "eos_test"
+
+    - ansible.builtin.assert:
+        that:
+          - result.changed == false
+          - result.rendered|symmetric_difference(merged.commands) == []
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

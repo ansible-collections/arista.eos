@@ -5,20 +5,21 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 import platform
 import re
 
 from ansible.module_utils.six import iteritems
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    run_commands,
     get_capabilities,
+    run_commands,
 )
 
 
 class FactsBase(object):
-
     COMMANDS = frozenset()
 
     def __init__(self, module):
@@ -29,12 +30,13 @@ class FactsBase(object):
 
     def populate(self):
         self.responses = run_commands(
-            self.module, list(self.COMMANDS), check_rc=False
+            self.module,
+            list(self.COMMANDS),
+            check_rc=False,
         )
 
 
 class Default(FactsBase):
-
     SYSTEM_MAP = {"serialNumber": "serialnum"}
 
     COMMANDS = ["show version | json", "show hostname | json"]
@@ -69,7 +71,6 @@ class Default(FactsBase):
 
 
 class Hardware(FactsBase):
-
     COMMANDS = ["dir all-filesystems", "show version | json"]
 
     def populate(self):
@@ -95,7 +96,6 @@ class Hardware(FactsBase):
 
 
 class Config(FactsBase):
-
     COMMANDS = ["show running-config"]
 
     def populate(self):
@@ -104,7 +104,6 @@ class Config(FactsBase):
 
 
 class Interfaces(FactsBase):
-
     INTERFACE_MAP = {
         "description": "description",
         "physicalAddress": "macaddress",
@@ -132,7 +131,7 @@ class Interfaces(FactsBase):
             data = self.responses[1]
             if data:
                 self.facts["neighbors"] = self.populate_neighbors(
-                    data["lldpNeighbors"]
+                    data["lldpNeighbors"],
                 )
 
     def populate_interfaces(self, data):

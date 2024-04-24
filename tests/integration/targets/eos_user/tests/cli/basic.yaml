@@ -1,5 +1,5 @@
 ---
-- debug: msg="START cli/basic.yaml on connection={{ ansible_connection }}"
+- ansible.builtin.debug: msg="START cli/basic.yaml on connection={{ ansible_connection }}"
 
 - name: Set Up
   become: true
@@ -9,7 +9,6 @@
       - no username ansibletest2
       - no username ansibletest3
       - no username ansibletest4
-    provider: '{{ cli }}'
 
 - name: Create user with role
   become: true
@@ -20,9 +19,8 @@
     role: network-operator
     state: present
     configured_password: test1
-    provider: '{{ cli }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"username" in result.commands[0]'
@@ -39,9 +37,8 @@
     state: present
     configured_password: test1
     update_password: on_create
-    provider: '{{ cli }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"username" in result.commands[0]'
@@ -53,7 +50,6 @@
   register: result
   arista.eos.eos_user:
     aggregate:
-
       - name: ansibletest2
         configured_password: test2
 
@@ -61,9 +57,8 @@
         configured_password: test3
     state: present
     role: network-operator
-    provider: '{{ cli }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == true
       - '"username" in result.commands[0]'
@@ -81,9 +76,8 @@
     name: faileduser1
     privilege: 15
     state: present
-    provider: '{{ cli }}'
 
-- assert:
+- ansible.builtin.assert:
     that:
       - result.changed == false
       - result.failed == true
@@ -97,4 +91,3 @@
       - no username ansibletest2
       - no username ansibletest3
       - no username ansibletest4
-    provider: '{{ cli }}'

@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -20,26 +21,24 @@ description:
   facts module will always collect a base set of facts from the device and can enable
   or disable collection of additional facts.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 options:
   gather_subset:
     description:
     - When supplied, this argument will restrict the facts collected to a given subset.  Possible
-      values for this argument include all, hardware, config, and interfaces.  Can
-      specify a list of values to include a larger subset.  Values can also be used
-      with an initial C(M(!)) to specify that a specific subset should not be collected.
+      values for this argument include C(all), C(hardware), C(config), C(legacy), C(interfaces), and C(min).
+      Can specify a list of values to include a larger subset.  Values can also be used
+      with an initial C(!) to specify that a specific subset should not be collected.
     required: false
     type: list
     elements: str
-    default: '!config'
+    default: 'min'
   gather_network_resources:
     description:
     - When supplied, this argument will restrict the facts collected to a given subset.
       Possible values for this argument include all and the resources like interfaces,
       vlans etc. Can specify a list of values to include a larger subset. Values can
-      also be used with an initial C(M(!)) to specify that a specific subset should
-      not be collected. Values can also be used with an initial C(M(!)) to specify
+      also be used with an initial C(!) to specify that a specific subset should
+      not be collected. Values can also be used with an initial C(!) to specify
       that a specific subset should not be collected. Valid subsets are 'all', 'interfaces',
       'l2_interfaces', 'l3_interfaces', 'lacp', 'lacp_interfaces', 'lag_interfaces',
       'lldp_global', 'lldp_interfaces', 'vlans', 'acls'.
@@ -60,12 +59,12 @@ EXAMPLES = """
 - name: Gather only the config and default facts
   arista.eos.eos_facts:
     gather_subset:
-    - config
+      - config
 
 - name: Do not gather hardware facts
   arista.eos.eos_facts:
     gather_subset:
-    - '!hardware'
+      - '!hardware'
 
 - name: Gather legacy and resource facts
   arista.eos.eos_facts:
@@ -75,10 +74,10 @@ EXAMPLES = """
 - name: Gather only the interfaces resource facts and no legacy facts
 - arista.eos.eos_facts:
     gather_subset:
-    - '!all'
-    - '!min'
+      - '!all'
+      - '!min'
     gather_network_resources:
-    - interfaces
+      - interfaces
 
 - name: Gather all resource facts and minimal legacy facts
   arista.eos.eos_facts:
@@ -171,15 +170,13 @@ ansible_net_neighbors:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.facts.facts import (
     FactsArgs,
 )
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
     FACT_RESOURCE_SUBSETS,
-)
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
+    Facts,
 )
 
 
@@ -190,20 +187,16 @@ def main():
     :returns: ansible_facts
     """
     argument_spec = FactsArgs.argument_spec
-    argument_spec.update(eos_argument_spec)
 
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
-    warnings = [
-        "default value for `gather_subset` "
-        "will be changed to `min` from `!config` v2.11 onwards"
-    ]
-
+    warnings = []
     ansible_facts = {}
     if module.params.get("available_network_resources"):
         ansible_facts["available_network_resources"] = sorted(
-            FACT_RESOURCE_SUBSETS.keys()
+            FACT_RESOURCE_SUBSETS.keys(),
         )
     result = Facts(module).get_facts()
     additional_facts, additional_warnings = result

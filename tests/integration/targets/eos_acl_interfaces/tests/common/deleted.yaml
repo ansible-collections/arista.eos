@@ -1,24 +1,22 @@
 ---
-- debug:
-    msg: Start eos_acl_interfaces deleted integration tests ansible_connection={{
+- ansible.builtin.debug:
+    msg:
+      Start eos_acl_interfaces deleted integration tests ansible_connection={{
       ansible_connection }}
 
-- include_tasks: _populate.yaml
+- ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-
     - name: Delete attributes of given acl_interfaces of an afi.
       register: result
       arista.eos.eos_acl_interfaces:
         config:
-
-          - name: "{{ Interfaces['int1'] }}"
+          - name: "{{ interfaces_lst['int1'] }}"
             access_groups:
-
               - afi: ipv6
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 2
           - result.changed == true
@@ -28,18 +26,15 @@
       register: result
       arista.eos.eos_acl_interfaces:
         config:
-
-          - name: "{{ Interfaces['int1'] }}"
+          - name: "{{ interfaces_lst['int1'] }}"
             access_groups:
-
               - afi: ipv4
                 acls:
-
                   - name: aclv401
                     direction: in
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 2
           - result.changed == true
@@ -49,15 +44,13 @@
       register: result
       arista.eos.eos_acl_interfaces:
         config:
-
-          - name: "{{ Interfaces['int1'] }}"
+          - name: "{{ interfaces_lst['int1'] }}"
         state: deleted
 
-    - assert:
+    - ansible.builtin.assert:
         that:
           - result.commands|length == 2
           - result.changed == true
           - "'no ip access-group aclv402 out' in result.commands"
   always:
-
-    - include_tasks: _remove_config.yaml
+    - ansible.builtin.include_tasks: _remove_config.yaml

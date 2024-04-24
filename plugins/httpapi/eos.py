@@ -3,11 +3,12 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
-author: Ansible Networking Team
-httpapi: eos
+author: Ansible Networking Team (@ansible-network)
+name: eos
 short_description: Use eAPI to run command on eos platform
 description:
 - This eos plugin provides low level abstraction api's for sending and receiving CLI
@@ -15,8 +16,8 @@ description:
 version_added: 1.0.0
 options:
   eos_use_sessions:
-    type: int
-    default: 1
+    type: bool
+    default: yes
     description:
     - Specifies if sessions should be used on remote host or not
     env:
@@ -26,14 +27,14 @@ options:
 """
 
 import json
-import time
 
+from ansible.errors import AnsibleConnectionFailure
 from ansible.module_utils._text import to_text
 from ansible.module_utils.connection import ConnectionError
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
-    to_list,
-)
-from ansible.plugins.httpapi import HttpApiBase
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
+from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base import HttpApiBase
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import session_name
 
 
 OPTIONS = {
@@ -51,20 +52,17 @@ class HttpApi(HttpApiBase):
         self._session_support = None
 
     def supports_sessions(self):
-        use_session = self.get_option("eos_use_sessions")
-        try:
-            use_session = int(use_session)
-        except ValueError:
-            pass
-
-        if not bool(use_session):
+        if not self.get_option("eos_use_sessions"):
             self._session_support = False
         else:
             if self._session_support:
                 return self._session_support
 
-            response = self.send_request("show configuration sessions")
-            self._session_support = "error" not in response
+            try:
+                response = self.send_request("show configuration sessions")
+                self._session_support = "error" not in response
+            except AnsibleConnectionFailure:
+                self._session_support = False
 
         return self._session_support
 
@@ -76,11 +74,15 @@ class HttpApi(HttpApiBase):
             data.insert(0, {"cmd": "enable", "input": self._become_pass})
 
         output = message_kwargs.get("output") or "text"
-        request = request_builder(data, output)
+        version = message_kwargs.get("version") or "latest"
+        request = request_builder(data, output, version)
         headers = {"Content-Type": "application/json-rpc"}
 
         _response, response_data = self.connection.send(
-            "/command-api", request, headers=headers, method="POST"
+            "/command-api",
+            request,
+            headers=headers,
+            method="POST",
         )
 
         try:
@@ -88,8 +90,8 @@ class HttpApi(HttpApiBase):
         except ValueError:
             raise ConnectionError(
                 "Response was not valid JSON, got {0}".format(
-                    to_text(response_data.getvalue())
-                )
+                    to_text(response_data.getvalue()),
+                ),
             )
 
         results = handle_response(response_data)
@@ -160,7 +162,7 @@ class HttpApi(HttpApiBase):
 
         session = None
         if self.supports_sessions():
-            session = "ansible_%d" % int(time.time())
+            session = session_name()
             candidate = ["configure session %s" % session] + candidate
         else:
             candidate = ["configure"] + candidate
@@ -200,8 +202,10 @@ def handle_response(response):
     return results
 
 
-def request_builder(commands, output, reqid=None):
-    params = dict(version=1, cmds=commands, format=output)
+def request_builder(commands, output, version, reqid=None):
+    if version != "latest":
+        version = int(version)
+    params = dict(version=version, cmds=commands, format=output)
     return json.dumps(
-        dict(jsonrpc="2.0", id=reqid, method="runCmds", params=params)
+        dict(jsonrpc="2.0", id=reqid, method="runCmds", params=params),
     )

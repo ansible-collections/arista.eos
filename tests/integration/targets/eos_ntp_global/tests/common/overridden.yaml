@@ -1,0 +1,51 @@
+---
+- ansible.builtin.debug:
+    msg: Start eos_ntp_global overridden integration tests ansible_connection={{
+      ansible_connection }}
+
+- ansible.builtin.include_tasks: _populate.yaml
+
+- block:
+    - name: Override given ntp_global configuration
+      become: true
+      register: result
+      arista.eos.eos_ntp_global: &overridden
+        state: overridden
+        config:
+          qos_dscp: 15
+          authentication_keys:
+            - id: 25
+              algorithm: "md5"
+              encryption: 7
+              key: "123456"
+          servers:
+            - server: "110.21.1.1"
+              burst: true
+              prefer: true
+              minpoll: 13
+          serve:
+            access_lists:
+              - afi: "ip"
+                acls:
+                  - acl_name: "acl03"
+                    direction: "in"
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 14
+          - result.changed == true
+          - result.commands|symmetric_difference(replaced.commands) == []
+          - result.after == replaced.after
+          - result.before == replaced.before
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_ntp_global: *overridden
+
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

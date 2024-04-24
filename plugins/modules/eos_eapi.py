@@ -17,6 +17,7 @@
 #
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -34,8 +35,6 @@ description:
   listed below to override the default configuration.
 - Requires EOS v4.12 or greater.
 version_added: 1.0.0
-extends_documentation_fragment:
-- arista.eos.eos
 options:
   http:
     description:
@@ -140,9 +139,9 @@ EXAMPLES = """
     state: started
     http: false
     https_port: 9443
-    local_http: yes
+    local_http: true
     local_http_port: 80
-    socket: yes
+    socket: true
 
 - name: Shutdown eAPI access
   arista.eos.eos_eapi:
@@ -173,23 +172,12 @@ import re
 import time
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    run_commands,
-    load_config,
-)
 from ansible.module_utils.six import iteritems
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    eos_argument_spec,
+    load_config,
+    run_commands,
 )
-
-
-def check_transport(module):
-    transport = (module.params["provider"] or {}).get("transport")
-
-    if transport == "eapi":
-        module.fail_json(
-            msg="eos_eapi module is only supported over cli transport"
-        )
 
 
 def validate_http_port(value, module):
@@ -221,7 +209,7 @@ def validate_vrf(value, module):
     configured_vrfs.append("default")
     if value not in configured_vrfs:
         module.fail_json(
-            msg="vrf `%s` is not configured on the system" % value
+            msg="vrf `%s` is not configured on the system" % value,
         )
 
 
@@ -243,7 +231,7 @@ def map_obj_to_commands(updates, module, warnings):
         else:
             if have["http"] is False and want["http"] in (False, None):
                 warnings.append(
-                    "protocol http is not enabled, not configuring http port value"
+                    "protocol http is not enabled, not configuring http port value",
                 )
             else:
                 port = want["http_port"] or 80
@@ -255,7 +243,7 @@ def map_obj_to_commands(updates, module, warnings):
         else:
             if have["https"] is False and want["https"] in (False, None):
                 warnings.append(
-                    "protocol https is not enabled, not configuring https port value"
+                    "protocol https is not enabled, not configuring https port value",
                 )
             else:
                 port = want["https_port"] or 443
@@ -270,7 +258,7 @@ def map_obj_to_commands(updates, module, warnings):
                 None,
             ):
                 warnings.append(
-                    "protocol local_http is not enabled, not configuring local_http port value"
+                    "protocol local_http is not enabled, not configuring local_http port value",
                 )
             else:
                 port = want["local_http_port"] or 8080
@@ -358,7 +346,8 @@ def verify_state(updates, module):
 
     while invalid_state:
         out = run_commands(
-            module, ["show management api http-commands | json"]
+            module,
+            ["show management api http-commands | json"],
         )
         for index, item in enumerate(invalid_state):
             want_key, eapi_key = item
@@ -374,7 +363,7 @@ def verify_state(updates, module):
         timeout -= 1
         if timeout == 0:
             module.fail_json(
-                msg="timeout expired before eapi running state changed"
+                msg="timeout expired before eapi running state changed",
             )
 
 
@@ -391,8 +380,7 @@ def collect_facts(module, result):
 
 
 def main():
-    """ main entry point for module execution
-    """
+    """main entry point for module execution"""
     argument_spec = dict(
         http=dict(aliases=["enable_http"], type="bool"),
         http_port=dict(type="int"),
@@ -407,20 +395,17 @@ def main():
         state=dict(default="started", choices=["stopped", "started"]),
     )
 
-    argument_spec.update(eos_argument_spec)
-
     module = AnsibleModule(
-        argument_spec=argument_spec, supports_check_mode=True
+        argument_spec=argument_spec,
+        supports_check_mode=True,
     )
-
-    check_transport(module)
 
     result = {"changed": False}
 
     warnings = list()
     if module.params["config"]:
         warnings.append(
-            "config parameter is no longer necessary and will be ignored"
+            "config parameter is no longer necessary and will be ignored",
         )
 
     want = map_params_to_obj(module)

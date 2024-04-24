@@ -28,6 +28,7 @@ The module file for eos_static_routes
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 
@@ -39,7 +40,7 @@ description: This module configures and manages the attributes of static routes 
 version_added: 1.0.0
 author: Gomathi Selvi Srinivasan (@GomathiselviS)
 notes:
-- Tested against Arista EOS 4.20.10M
+- Tested against Arista EOS 4.24.6F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
 options:
   config:
@@ -160,6 +161,7 @@ options:
 
 """
 EXAMPLES = """
+
 # Using deleted
 
 # Before State:
@@ -173,204 +175,83 @@ EXAMPLES = """
 # ipv6 route vrf testvrf 2222:6::/64 Null0 90 name testroute1
 # veos(config)#
 
+
 - name: Delete afi
   arista.eos.eos_static_routes:
     config:
-    - vrf: testvrf
-      address_families:
-      - afi: ipv4
+      - vrf: testvrf
+        address_families:
+          - afi: ipv4
     state: deleted
 
-#    "after": [
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "5222:5::/64",
-#                            "next_hops": [
-#                                {
-#                                    "forward_router_address": "4312:100::1",
-#                                    "interface": "Management1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ]
-#        },
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "2222:6::/64",
-#                            "next_hops": [
-#                                {
-#                                    "forward_router_address": "4312:100::1",
-#                                    "interface": "Management1"
-#                                },
-#                                {
-#                                    "admin_distance": 55,
-#                                    "interface": "Ethernet1"
-#                                },
-#                                {
-#                                    "admin_distance": 90,
-#                                    "description": "testroute1",
-#                                    "interface": "Null0"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ],
-#            "vrf": "testvrf"
-#        }
-#    ],
-#    "before": [
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "5222:5::/64",
-#                            "next_hops": [
-#                                {
-#                                    "forward_router_address": "4312:100::1",
-#                                    "interface": "Management1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ]
-#        },
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "22.65.1.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 90,
-#                                    "description": "testroute",
-#                                    "interface": "Null0"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                },
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "2222:6::/64",
-#                            "next_hops": [
-#                                {
-#                                    "forward_router_address": "4312:100::1",
-#                                    "interface": "Management1"
-#                                },
-#                                {
-#                                    "admin_distance": 55,
-#                                    "interface": "Ethernet1"
-#                                },
-#                                {
-#                                    "admin_distance": 90,
-#                                    "description": "testroute1",
-#                                    "interface": "Null0"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ],
-#            "vrf": "testvrf"
-#        }
-#    ],
-#    "changed": true,
-#    "commands": [
-#        "no ip route vrf testvrf 22.65.1.0/24 Null0 90 name testroute"
-#    ],
+
+# Task Output
+# -------------
+# before:
+# - address_families:
+#   - afi: ipv6
+#     routes:
+#     - dest: 5222:5::/64
+#       next_hops:
+#       - forward_router_address: 4312:100::1
+#         interface: Management1
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 22.65.1.0/24
+#       next_hops:
+#       - admin_distance: 90
+#         description: testroute
+#         interface: Null0
+#   - afi: ipv6
+#     routes:
+#     - dest: 2222:6::/64
+#       next_hops:
+#       - forward_router_address: 4312:100::1
+#         interface: Management1
+#       - admin_distance: 55
+#         interface: Ethernet1
+#       - admin_distance: 90
+#         description: testroute1
+#         interface: Null0
+#   vrf: testvrf
+# commands:
+# - no ip route vrf testvrf 22.65.1.0/24 Null0 90 name testroute
+# after:
+# - address_families:
+#   - afi: ipv6
+#     routes:
+#     - dest: 5222:5::/64
+#       next_hops:
+#       - forward_router_address: 4312:100::1
+#         interface: Management1
+# - address_families:
+#   - afi: ipv6
+#     routes:
+#     - dest: 2222:6::/64
+#       next_hops:
+#       - forward_router_address: 4312:100::1
+#         interface: Management1
+#       - admin_distance: 55
+#         interface: Ethernet1
+#       - admin_distance: 90
+#         description: testroute1
+#         interface: Null0
+#   vrf: testvrf
+
 
 # After State
 # ___________
-
 # veos(config)#show running-config | grep route
 # ipv6 route 5222:5::/64 Management1 4312:100::1
 # ipv6 route vrf testvrf 2222:6::/64 Management1 4312:100::1
 # ipv6 route vrf testvrf 2222:6::/64 Ethernet1 55
 # ipv6 route vrf testvrf 2222:6::/64 Null0 90 name testroute1
 
-#
+
 # Using merged
 
-# Before : [
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "165.10.1.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 100,
-#                                    "interface": "Ethernet1"
-#                                }
-#                            ]
-#                        },
-#                        {
-#                            "dest": "172.17.252.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "nexthop_grp": "testgroup"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                },
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "5001::/64",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 50,
-#                                    "interface": "Ethernet1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ]
-#        },
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "130.1.122.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "interface": "Ethernet1",
-#                                    "tag": 50
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ],
-#            "vrf": "testvrf"
-#        }
-#    ]
-#
+
 # Before State
 # -------------
 # veos(config)#show running-config | grep "route"
@@ -380,99 +261,84 @@ EXAMPLES = """
 # ipv6 route 5001::/64 Ethernet1 50
 # veos(config)#
 
+
 - name: Merge new static route configuration
   arista.eos.eos_static_routes:
     config:
-    - vrf: testvrf
-      address_families:
-      - afi: ipv6
-        routes:
-        - dest: 2211::0/64
-          next_hop:
-          - forward_router_address: 100:1::2
-            interface: Ethernet1
+      - vrf: testvrf
+        address_families:
+          - afi: ipv6
+            routes:
+              - dest: 2211::0/64
+                next_hop:
+                  - forward_router_address: 100:1::2
+                    interface: Ethernet1
     state: merged
+
+
+# Task Output
+# -------------
+# before:
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 165.10.1.0/24
+#       next_hops:
+#       - admin_distance: 100
+#         interface: Ethernet1
+#     - dest: 172.17.252.0/24
+#       next_hops:
+#       - nexthop_grp: testgroup
+#   - afi: ipv6
+#     routes:
+#     - dest: 5001::/64
+#       next_hops:
+#       - admin_distance: 50
+#         interface: Ethernet1
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 130.1.122.0/24
+#       next_hops:
+#       - interface: Ethernet1
+#         tag: 50
+#   vrf: testvrf
+# commands:
+# - ipv6 route 2211::/64 Ethernet1 100:1::2
+# after:
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 165.10.1.0/24
+#       next_hops:
+#       - admin_distance: 100
+#         interface: Ethernet1
+#     - dest: 172.17.252.0/24
+#       next_hops:
+#       - nexthop_grp: testgroup
+#   - afi: ipv6
+#     routes:
+#     - dest: 5001::/64
+#       next_hops:
+#       - admin_distance: 50
+#         interface: Ethernet1
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 130.1.122.0/24
+#       next_hops:
+#       - interface: Ethernet1
+#         tag: 50
+#   - afi: ipv6
+#     routes:
+#     - dest: 2211::0/64
+#       next_hops:
+#       - aforward_router_address: "100:1::2"
+#         interface: Ethernet1
+#   vrf: testvrf
 
 # After State
 # -----------
-
-#After [
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "165.10.1.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 100,
-#                                    "interface": "Ethernet1"
-#                                }
-#                            ]
-#                        },
-#                        {
-#                            "dest": "172.17.252.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "nexthop_grp": "testgroup"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                },
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "5001::/64",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 50,
-#                                    "interface": "Ethernet1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ]
-#        },
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "130.1.122.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "interface": "Ethernet1",
-#                                    "tag": 50
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                },
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "2211::0/64",
-#                            "next_hops": [
-#                                {
-#                                    "aforward_router_address": 100:1::2
-#                                    "interface": "Ethernet1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-
-#            ],
-#            "vrf": "testvrf"
-#        }
-#    ]
-#
 # veos(config)#show running-config | grep "route"
 # ip route 165.10.1.0/24 Ethernet1 100
 # ip route 172.17.252.0/24 Nexthop-Group testgroup
@@ -487,68 +353,6 @@ EXAMPLES = """
 
 # Before State
 # -------------
-
-#    "before": [
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "165.10.1.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 100,
-#                                    "interface": "Ethernet1"
-#                                }
-#                            ]
-#                        },
-#                        {
-#                            "dest": "172.17.252.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "nexthop_grp": "testgroup"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                },
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "5001::/64",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 50,
-#                                    "interface": "Ethernet1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ]
-#        },
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "130.1.122.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "interface": "Ethernet1",
-#                                    "tag": 50
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ],
-#            "vrf": "testvrf"
-#        }
-#    ]
 # veos(config)#show running-config | grep "route"
 # ip route 165.10.1.0/24 Ethernet1 100
 # ip route 172.17.252.0/24 Nexthop-Group testgroup
@@ -556,39 +360,63 @@ EXAMPLES = """
 # ipv6 route 5001::/64 Ethernet1 50
 # veos(config)#
 
+
 - name: Overridden static route configuration
   arista.eos.eos_static_routes:
     config:
-    - address_families:
-      - afi: ipv4
-        routes:
-        - dest: 10.2.2.0/24
-          next_hop:
-          - interface: Ethernet1
+      - address_families:
+          - afi: ipv4
+            routes:
+              - dest: 10.2.2.0/24
+                next_hop:
+                  - interface: Ethernet1
     state: replaced
+
+
+# Task Output
+# -------------
+# before:
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 165.10.1.0/24
+#       next_hops:
+#       - admin_distance: 100
+#         interface: Ethernet1
+#     - dest: 172.17.252.0/24
+#       next_hops:
+#       - nexthop_grp: testgroup
+#   - afi: ipv6
+#     routes:
+#     - dest: 5001::/64
+#       next_hops:
+#       - admin_distance: 50
+#         interface: Ethernet1
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 130.1.122.0/24
+#       next_hops:
+#       - interface: Ethernet1
+#         tag: 50
+#   vrf: testvrf
+# commands:
+# - no ip route 165.10.1.0/24 Ethernet1 100
+# - no ip route 172.17.252.0/24 Nexthop-Group testgroup
+# - no ip route vrf testvrf 130.1.122.0/24 Ethernet1 tag 50
+# - no ipv6 route 5001::/64 Ethernet1 50
+# - ip route 10.2.2.0/24 Ethernet1
+# after:
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 10.2.2.0/24
+#       next_hops:
+#       - interface: Ethernet1
+
 
 # After State
 # -----------
-
-# "after": [
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "10.2.2.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "interface": "Ethernet1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ]
-#        }
-#    ]
 # veos(config)#show running-config | grep "route"
 # ip route 10.2.2.0/24 Ethernet1
 # veos(config)#
@@ -598,7 +426,6 @@ EXAMPLES = """
 
 # Before State
 # -------------
-
 # ip route 10.2.2.0/24 Ethernet1
 # ip route 10.2.2.0/24 64.1.1.1 label 17 33
 # ip route 33.33.33.0/24 Nexthop-Group testgrp
@@ -608,108 +435,102 @@ EXAMPLES = """
 # ipv6 route vrf testvrf 2222:6::/64 Ethernet1 55
 # ipv6 route vrf testvrf 2222:6::/64 Null0 90 name testroute1
 
-# [
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "10.2.2.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "interface": "Ethernet1"
-#                                },
-#                                {
-#                                    "admin_distance": 33,
-#                                    "interface": "64.1.1.1",
-#                                    "mpls_label": 17
-#                                }
-#                            ]
-#                        },
-#                        {
-#                            "dest": "33.33.33.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "nexthop_grp": "testgrp"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                },
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "5222:5::/64",
-#                            "next_hops": [
-#                                {
-#                                    "forward_router_address": "4312:100::1",
-#                                    "interface": "Management1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ]
-#        },
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "22.65.1.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 90,
-#                                    "description": "testroute",
-#                                    "interface": "Null0"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                },
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "2222:6::/64",
-#                            "next_hops": [
-#                                {
-#                                    "forward_router_address": "4312:100::1",
-#                                    "interface": "Management1"
-#                                },
-#                                {
-#                                    "admin_distance": 90,
-#                                    "description": "testroute1",
-#                                    "interface": "Null0"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ],
-#            "vrf": "testvrf"
-#        }
-#    ]
 
 - name: Replace nexthop
   arista.eos.eos_static_routes:
     config:
-    - vrf: testvrf
-      address_families:
-      - afi: ipv6
-        routes:
-        - dest: 2222:6::/64
-          next_hops:
-          - admin_distance: 55
-            interface: Ethernet1
+      - vrf: testvrf
+        address_families:
+          - afi: ipv6
+            routes:
+              - dest: 2222:6::/64
+                next_hops:
+                  - admin_distance: 56
+                    interface: Ethernet1
     state: replaced
+
+
+# Task Output
+# -------------
+# before:
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 10.2.2.0/24
+#       next_hops:
+#       - interface: Ethernet1
+#       - admin_distance: 33
+#         interface: 64.1.1.1
+#         mpls_label: 17
+#     - dest: 33.33.33.0/24
+#       next_hops:
+#       - nexthop_grp: testgrp
+#   - afi: ipv6
+#     routes:
+#     - dest: 5222:5::/64
+#       next_hops:
+#       - forward_router_address: 4312:100::1
+#         interface: Management1
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 22.65.1.0/24
+#       next_hops:
+#       - admin_distance: 90
+#         description: testroute
+#         interface: Null0
+#   - afi: ipv6
+#     routes:
+#     - dest: 2222:6::/64
+#       next_hops:
+#       - forward_router_address: 4312:100::1
+#         interface: Management1
+#       - admin_distance: 90
+#         description: testroute1
+#         interface: Null0
+#   vrf: testvrf
+# commands:
+# - no ipv6 route vrf testvrf 2222:6::/64 Management1 4312:100::1
+# - no  ipv6 route vrf testvrf 2222:6::/64 Ethernet1 55
+# - no  ipv6 route vrf testvrf 2222:6::/64 Null0 90 name testroute1
+# - ipv6 route vrf testvrf 2222:6::/64 Ethernet1 56
+# after:
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 10.2.2.0/24
+#       next_hops:
+#       - interface: Ethernet1
+#       - admin_distance: 33
+#         interface: 64.1.1.1
+#         mpls_label: 17
+#     - dest: 33.33.33.0/24
+#       next_hops:
+#       - nexthop_grp: testgrp
+#   - afi: ipv6
+#     routes:
+#     - dest: 5222:5::/64
+#       next_hops:
+#       - forward_router_address: 4312:100::1
+#         interface: Management1
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 22.65.1.0/24
+#       next_hops:
+#       - admin_distance: 90
+#         description: testroute
+#         interface: Null0
+#   - afi: ipv6
+#     routes:
+#     - dest: 2222:6::/64
+#       next_hops:
+#       - admin_distance: 56
+#         interface: Ethernet1
+#  vrf: testvrf
 
 # After State
 # -----------
-
 # veos(config)#show running-config | grep route
 # ip route 10.2.2.0/24 Ethernet1
 # ip route 10.2.2.0/24 64.1.1.1 label 17 33
@@ -718,86 +539,9 @@ EXAMPLES = """
 # ipv6 route 5222:5::/64 Management1 4312:100::1
 # ipv6 route vrf testvrf 2222:6::/64 Ethernet1 55
 
-# "after": [
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "10.2.2.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "interface": "Ethernet1"
-#                                },
-#                                {
-#                                    "admin_distance": 33,
-#                                    "interface": "64.1.1.1",
-#                                    "mpls_label": 17
-#                                }
-#                            ]
-#                        },
-#                        {
-#                            "dest": "33.33.33.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "nexthop_grp": "testgrp"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                },
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "5222:5::/64",
-#                            "next_hops": [
-#                                {
-#                                    "forward_router_address": "4312:100::1",
-#                                    "interface": "Management1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ]
-#        },
-#        {
-#            "address_families": [
-#                {
-#                    "afi": "ipv4",
-#                    "routes": [
-#                        {
-#                            "dest": "22.65.1.0/24",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 90,
-#                                    "description": "testroute",
-#                                    "interface": "Null0"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                },
-#                {
-#                    "afi": "ipv6",
-#                    "routes": [
-#                        {
-#                            "dest": "2222:6::/64",
-#                            "next_hops": [
-#                                {
-#                                    "admin_distance": 55,
-#                                    "interface": "Ethernet1"
-#                                }
-#                            ]
-#                        }
-#                    ]
-#                }
-#            ],
-#            "vrf": "testvrf"
-#        }
-#    ]
+
+# Using Gathered
+
 
 # Before State
 # -------------
@@ -811,22 +555,22 @@ EXAMPLES = """
   arista.eos.eos_static_routes:
     state: gathered
 
-# returns :
-#  arista.eos.eos_static_routes:
-#    config:
-#      - address_families:
-#          - afi: ipv4
-#            routes:
-#              - dest: 165.10.1.0/24
-#                next_hop:
-#                  - forward_router_address: 10.1.1.2
-#                    interface: "Ethernet1"
-#                    admin_distance: 100
-#          - afi: ipv6
-#            routes:
-#              - dest: 5001::/64
-#                next_hop:
-#                  - interface: "Ethernet1"
+# Task Output
+# -------------
+# gathered:
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 165.10.1.0/24
+#       next_hop:
+#       - forward_router_address: 10.1.1.2
+#         interface: Ethernet1
+#         admin_distance: 100
+#   - afi: ipv6
+#     routes:
+#     - dest: 5001::/64
+#       next_hop:
+#       - interface: Ethernet1
 
 
 # Using rendered
@@ -847,12 +591,45 @@ EXAMPLES = """
 #                next_hop:
 #                  - interface: "Ethernet1"
 
-# returns:
 
+# Task Output
+# -------------
+# rendered:
+# - ip route 165.10.1.0/24 Ethernet1 10.1.1.2 100
+# - ipv6 route 5001::/64 Ethernet1
+
+
+# Using parsed:
+
+
+# parse_static_routes.cfg
 # ip route 165.10.1.0/24 Ethernet1 10.1.1.2 100
 # ipv6 route 5001::/64 Ethernet1
+#
 
 
+- name: parse configs
+  arista.eos.eos_static_routes:
+    running_config: "{{ lookup('file', './parse_static_routes.cfg') }}"
+    state: parsed
+
+
+# Task Output
+# -------------
+# parsed:
+# - address_families:
+#   - afi: ipv4
+#     routes:
+#     - dest: 165.10.1.0/24
+#       next_hop:
+#       - forward_router_address: 10.1.1.2
+#         interface: Ethernet1
+#         admin_distance: 100
+#   - afi: ipv6
+#     routes:
+#     - dest: 5001::/64
+#       next_hop:
+#       - interface: Ethernet1
 """
 RETURN = """
 before:
@@ -875,40 +652,14 @@ commands:
   type: list
   sample:
     - ip route vrf vrf1 192.2.2.0/24 125.2.3.1 93
+    - ipv6 route 5001::/64 Ethernet1
 rendered:
   description: The set of CLI commands generated from the value in C(config) option
   returned: When C(state) is I(rendered)
   type: list
   sample: >
-    "address_families": [
-                        {
-                            "afi": "ipv4",
-                            "routes": [
-                                {
-                                    "dest": "192.2.2.0/24",
-                                    "next_hops": [
-                                        {
-                                            "admin_distance": 93,
-                                            "description": null,
-                                            "forward_router_address": null,
-                                            "interface": "125.2.3.1",
-                                            "mpls_label": null,
-                                            "nexthop_grp": null,
-                                            "tag": null,
-                                            "track": null,
-                                            "vrf": null
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ],
-                    "vrf": "vrf1"
-                }
-            ],
-            "running_config": null,
-            "state": "rendered"
-        }
+    - ip route 165.10.1.0/24 Ethernet1 10.1.1.2 100
+    - ipv6 route 5001::/64 Ethernet1
 gathered:
   description: The configuration as structured data transformed for the running configuration
                fetched from remote host
@@ -929,6 +680,7 @@ parsed:
 
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.static_routes.static_routes import (
     Static_routesArgs,
 )
