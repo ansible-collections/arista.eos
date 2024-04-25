@@ -5,6 +5,21 @@ Arista Eos Collection Release Notes
 .. contents:: Topics
 
 
+v9.0.0
+======
+
+Major Changes
+-------------
+
+- Update the netcommon base version 6.1.0 to support cli_restore plugin.
+
+Minor Changes
+-------------
+
+- Add support for cli_restore functionality.
+- Please refer the PR to know more about core changes (https://github.com/ansible-collections/ansible.netcommon/pull/618).
+- cli_restore module is part of netcommon.
+
 v8.0.0
 ======
 
@@ -501,7 +516,6 @@ New Modules
 - eos_acl_interfaces - ACL interfaces resource module
 - eos_acls - ACLs resource module
 - eos_banner - Manage multiline banners on Arista EOS devices
-- eos_bgp - (deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.
 - eos_command - Run arbitrary commands on an Arista EOS device
 - eos_config - Manage Arista EOS configuration sections
 - eos_eapi - Manage and configure Arista EOS eAPI.
@@ -515,7 +529,6 @@ New Modules
 - eos_lldp - Manage LLDP configuration on Arista EOS network devices
 - eos_lldp_global - LLDP resource module
 - eos_lldp_interfaces - LLDP interfaces resource module
-- eos_logging - Manage logging on network devices
 - eos_ospfv2 - OSPFv2 resource module
 - eos_static_routes - Static routes resource module
 - eos_system - Manage the system attributes on Arista EOS devices
