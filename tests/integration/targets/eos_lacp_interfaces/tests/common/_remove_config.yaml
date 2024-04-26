@@ -15,6 +15,5 @@
       - "   no lacp timer"
 
 - ansible.builtin.debug:
-    msg:
-      End eos_interfaces _remove_config ansible_connection={{
+    msg: End eos_interfaces _remove_config ansible_connection={{
       ansible_connection }}
