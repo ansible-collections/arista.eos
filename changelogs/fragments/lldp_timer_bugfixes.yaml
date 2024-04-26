@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - This fix make sure to fetch timer with `lldp` string at the start.
