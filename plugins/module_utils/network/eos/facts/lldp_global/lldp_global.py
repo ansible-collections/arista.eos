@@ -85,7 +85,7 @@ class Lldp_globalFacts(object):
         config = deepcopy(spec)
         config["holdtime"] = utils.parse_conf_arg(conf, "hold-time")
         config["reinit"] = utils.parse_conf_arg(conf, "timer reinitialization")
-        config["timer"] = utils.parse_conf_arg(conf, "timer")
+        config["timer"] = utils.parse_conf_arg(conf, "lldp timer")
         if config.get("timer") and "reinitialization" in config["timer"]:
             config["timer"] = None
 
