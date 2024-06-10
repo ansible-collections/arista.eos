@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - make sure ipv6 static routes definitions are correctly filtered in facts gathering.

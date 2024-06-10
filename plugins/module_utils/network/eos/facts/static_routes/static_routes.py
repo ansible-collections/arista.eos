@@ -54,11 +54,13 @@ class Static_routesFacts(object):
         :rtype: dictionary
         :returns: facts
         """
+        import q
         if not data:
             data = self.get_device_data(connection)
+            q(data)
 
         # split the config into instances of the resource
-        resource_delim = "ip.* route"
+        resource_delim = "ip.* route|ipv6.* route"
         find_pattern = r"(?:^|\n)%s.*?(?=(?:^|\n)%s|$)" % (
             resource_delim,
             resource_delim,
@@ -66,6 +68,7 @@ class Static_routesFacts(object):
         resources = [p.strip() for p in re.findall(find_pattern, data)]
         resources_without_vrf = []
         resource_vrf = {}
+        q(resources)
         for resource in resources:
             if resource and "vrf" not in resource:
                 resources_without_vrf.append(resource)
