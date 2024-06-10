@@ -201,9 +201,7 @@ releases:
       release_summary:
         "With this release, the minimum required version of `ansible-core`
         for this collection is `2.15.0`. The last version known to be compatible with
-        `ansible-core` versions below `2.15` is v9.0.0.
-
-        "
+        `ansible-core` versions below `2.15` is v9.0.0."
     fragments:
       - bump215.yaml
       - lldp_timer_bugfixes.yaml
