@@ -44,7 +44,7 @@ class Static_routesFacts(object):
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def get_device_data(self, connection):
-        return connection.get("show running-config | grep route")
+        return connection.get("show running-config | include ^ip route|^ipv6 route")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for static_routes
@@ -56,10 +56,12 @@ class Static_routesFacts(object):
         """
         if not data:
             data = self.get_device_data(connection)
-
-        resource_delim = r"(?:ip route|ipv6 route)"
-        find_pattern = r"(?:^|\n)(%s [^\n]*)(?=(?:^|\n)(?:%s|router ospf|$))" % (resource_delim, resource_delim)
-        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
+        resource_delim = "ip.* route"
+        find_pattern = r"(?:^|\n)%s.*?(?=(?:^|\n)%s|$)" % (
+            resource_delim,
+            resource_delim,
+        )
+        resources = [p.strip() for p in re.findall(find_pattern, data)]
         resources_without_vrf = []
         resource_vrf = {}
         
