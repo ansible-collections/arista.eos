@@ -191,6 +191,21 @@ releases:
         name: eos_bgp_global
         namespace: ""
     release_date: "2021-02-01"
+  10.0.0:
+    changes:
+      bugfixes:
+        - This fix make sure to fetch timer with `lldp` string at the start.
+      major_changes:
+        - Bumping `requires_ansible` to `>=2.15.0` due to the end-of-life status of
+          previous `ansible-core` versions.
+      release_summary:
+        "With this release, the minimum required version of `ansible-core`
+        for this collection is `2.15.0`. The last version known to be compatible with
+        `ansible-core` versions below `2.15` is v9.0.0."
+    fragments:
+      - bump215.yaml
+      - lldp_timer_bugfixes.yaml
+    release_date: "2024-06-10"
   2.0.0:
     changes:
       bugfixes:
