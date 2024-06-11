@@ -56,6 +56,8 @@ class Static_routesFacts(object):
         """
         if not data:
             data = self.get_device_data(connection)
+
+        # split the config into instances of the resource
         resource_delim = "ip.* route"
         find_pattern = r"(?:^|\n)%s.*?(?=(?:^|\n)%s|$)" % (
             resource_delim,
@@ -64,7 +66,6 @@ class Static_routesFacts(object):
         resources = [p.strip() for p in re.findall(find_pattern, data)]
         resources_without_vrf = []
         resource_vrf = {}
-        
         for resource in resources:
             if resource and "vrf" not in resource:
                 resources_without_vrf.append(resource)
