@@ -1,5 +1,0 @@
----
-bugfixes:
-  - Ensure IPv6 static route definitions are correctly filtered during facts gathering.
-  - Update the filter to accurately retrieve relevant static route configurations.
-  - Update integration tests for parse operations to ensure that ordering or address family (AF) does not affect assertions.
