@@ -140,6 +140,16 @@ options:
       false, the command is issued without the all keyword
     type: bool
     default: false
+  context_diff:
+    description: Specify the off-box diff options
+    type: dict
+    suboptions:
+      enable:
+        description: Enable off box diff
+        type: bool
+      context_lines:
+        description: Specify The number of context lines, by default it includes all lines.
+        type: int
   save_when:
     description:
     - When changes are made to the device running-configuration, the changes are not
@@ -272,6 +282,16 @@ EXAMPLES = """
     backup_options:
       filename: backup.cfg
       dir_path: /home/user
+
+- name: Get the full context diff
+  arista.eos.eos_config:
+    src: candidate.cfg
+    backup: true
+    context_diff:
+      enable: true
+    backup_options:
+      filename: backup.cfg
+      dir_path: /home/user
 """
 
 RETURN = """
@@ -310,6 +330,17 @@ time:
   returned: when backup is true
   type: str
   sample: "22:28:34"
+context_diff:
+  description: The diff between candidate and target config.
+  returned: when user opt for off-box-diff through context_diff option.
+  type: str
+  sample: '''
+    ---
+    +++
+    @@ -1,7 +1,7 @@
+     ! Command: show running-config
+    -! device: arista (vEOS, EOS-4.24.6M)
+    +! device: candidate-arista-11 (vEOS, EOS-4.24.6M)'''
 """
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
@@ -326,6 +357,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
     run_commands,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.utils.utils import unified_diff
 
 
 def get_candidate(module):
@@ -375,6 +407,13 @@ def main():
         parents=dict(type="list", elements="str"),
         before=dict(type="list", elements="str"),
         after=dict(type="list", elements="str"),
+        context_diff=dict(
+            type="dict",
+            options=dict(
+                enable=dict(type="bool"),
+                context_lines=dict(type="int"),
+            ),
+        ),
         match=dict(
             default="line",
             choices=["line", "strict", "exact", "none"],
@@ -453,7 +492,6 @@ def main():
 
         candidate = get_candidate(module)
         running = get_running_config(module, contents, flags=flags)
-
         try:
             response = connection.get_diff(
                 candidate=candidate,
@@ -487,12 +525,22 @@ def main():
                 replace=replace,
                 commit=commit,
             )
-
             result["changed"] = True
-
             if module.params["diff_against"] == "session":
                 if "diff" in response:
-                    result["diff"] = {"prepared": response["diff"]}
+                    context_diff = module.params.get("context_diff")
+                    if context_diff and context_diff.get("enable"):
+                        if context_diff.get("context_lines"):
+                            count = context_diff.get("context_lines")
+                        else:
+                            count = max(len(candidate), len(running))
+                        result["context_diff"] = unified_diff(
+                            candidate.split("\n"),
+                            running.split("\n"),
+                            count,
+                        )
+                    else:
+                        result["diff"] = {"prepared": response["diff"]}
                 else:
                     result["changed"] = False
 
@@ -618,7 +666,6 @@ def main():
             result["warnings"].append(msg)
         else:
             result["warnings"] = msg
-
     module.exit_json(**result)
 
 
