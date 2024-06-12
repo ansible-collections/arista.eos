@@ -375,27 +375,27 @@ class HttpApi:
         """
         session = session_name()
         result = {"session": session}
-        banner_cmd = None
-        banner_input = []
+        multiline_cmd = None
+        multiline_input = []
 
         commands = ["configure session %s" % session]
         if replace:
             commands.append("rollback clean-config")
 
         for command in config:
-            if command.startswith("banner"):
-                banner_cmd = command
-                banner_input = []
-            elif banner_cmd:
+            if command.startswith(("banner", "code unit")):
+                multiline_cmd = command
+                multiline_input = []
+            elif multiline_cmd:
                 if command == "EOF":
                     command = {
-                        "cmd": banner_cmd,
-                        "input": "\n".join(banner_input),
+                        "cmd": multiline_cmd,
+                        "input": "\n".join(multiline_input),
                     }
-                    banner_cmd = None
+                    multiline_cmd = None
                     commands.append(command)
                 else:
-                    banner_input.append(command)
+                    multiline_input.append(command)
                     continue
             else:
                 commands.append(command)
