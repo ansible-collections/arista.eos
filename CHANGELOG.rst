@@ -13,7 +13,6 @@ Release Summary
 
 With this release, the minimum required version of `ansible-core` for this collection is `2.15.0`. The last version known to be compatible with `ansible-core` versions below `2.15` is v9.0.0.
 
-
 Major Changes
 -------------
 
@@ -22,7 +21,10 @@ Major Changes
 Bugfixes
 --------
 
+- Ensure IPv6 static route definitions are correctly filtered during facts gathering.
 - This fix make sure to fetch timer with `lldp` string at the start.
+- Update integration tests for parse operations to ensure that ordering or address family (AF) does not affect assertions.
+- Update the filter to accurately retrieve relevant static route configurations.
 
 v9.0.0
 ======
