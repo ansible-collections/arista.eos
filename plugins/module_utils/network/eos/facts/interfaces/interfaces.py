@@ -97,7 +97,7 @@ class InterfacesFacts(object):
         config["enabled"] = shutdown if shutdown is False else True
         config["mtu"] = utils.parse_conf_arg(conf, "mtu")
         routed_port = utils.parse_conf_cmd_arg(conf, "no switchport", True)
-        config["mode"] = 'layer3' if routed_port else 'layer2'
+        config["mode"] = "layer3" if routed_port else "layer2"
 
         state = utils.parse_conf_arg(conf, "speed")
         if state:
