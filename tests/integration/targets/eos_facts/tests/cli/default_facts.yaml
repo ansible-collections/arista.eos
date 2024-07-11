@@ -18,5 +18,6 @@
       - result.ansible_facts.ansible_net_memtotal_mb > 10
       - result.ansible_facts.ansible_net_interfaces.Management1
       - result.ansible_facts.ansible_net_config is not defined
+    fail_msg: "assertion failing"
 
 - debug: msg="END cli/default_facts.yaml on connection={{ ansible_connection }}"
