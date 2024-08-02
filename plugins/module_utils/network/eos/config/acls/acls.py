@@ -29,6 +29,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.acls import constants
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 
 
@@ -527,7 +528,7 @@ def add_commands(want):
                     )
                 if "port_protocol" in ace["source"].keys():
                     for op, val in ace["source"]["port_protocol"].items():
-                        if val.isdigit():
+                        if val.isdigit() and int(val) in constants.PORT_NUMBERS:
                             val = socket.getservbyport(int(val))
                         command = command + " " + op + " " + val.replace("_", "-")
             if "destination" in ace.keys():
