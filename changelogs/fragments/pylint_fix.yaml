@@ -1,0 +1,3 @@
+---
+trivial:
+  - Fixes pylint used-before-assignment and undefined error in the codebase.

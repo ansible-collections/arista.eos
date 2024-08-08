@@ -89,6 +89,7 @@ def _tmplt_route_map_extcommunity_soo(config_data):
 
 def _tmplt_route_map_ip(config_data):
     config_data = config_data["entries"]["set"]
+    command = ""
     if config_data.get("ip"):
         command = "set ip next-hop "
         k = "ip"
