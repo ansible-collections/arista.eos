@@ -826,7 +826,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "bgp additional-paths send any",
             "bgp advertise-inactive",
             "bgp allowas-in 4",
-            "bgp always-comapre-med",
+            "bgp always-compare-med",
             "bgp auto-local-addr",
             "redistribute isis level-2",
             "network 6.6.6.0/24 route-map netmap1",
