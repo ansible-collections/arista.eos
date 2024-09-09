@@ -86,7 +86,7 @@ def _tmplt_bgp_params(config_data):
             )
             command += " tie-break " + tie
     elif config_data["bgp_params"].get("client_to_client"):
-        command += " client-to-client"
+        command += " client-to-client reflection"
     elif config_data["bgp_params"].get("cluster_id"):
         command += " cluster-id {cluster_id}".format(**config_data["bgp_params"])
     elif config_data["bgp_params"].get("confederation"):

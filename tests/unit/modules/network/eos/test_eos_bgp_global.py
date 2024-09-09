@@ -835,7 +835,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "route-target export 44:22",
             "bgp bestpath ecmp-fast",
             "bgp bestpath med confed",
-            "bgp client-to-client",
+            "bgp client-to-client reflection",
             "bgp cluster-id 2",
             "bgp control-plane-filter default-allow",
             "bgp convergence slow-peer time 5",
