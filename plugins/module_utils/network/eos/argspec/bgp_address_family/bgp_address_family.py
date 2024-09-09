@@ -85,13 +85,12 @@ class Bgp_afArgs(object):  # pylint: disable=R0903
                                 "protocol": {
                                     "type": "str",
                                     "choices": [
-                                        "isis"
-                                        "ospfv3",
+                                        "isis" "ospfv3",
                                         "ospf",
                                         "attached-host",
                                         "connected",
                                         "rip",
-                                        "static"
+                                        "static",
                                     ],
                                 },
                                 "isis_level": {
