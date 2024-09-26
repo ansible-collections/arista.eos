@@ -1,3 +1,3 @@
 ---
-minor_changes:
+bugfixes:
   - Adds a missing word in the 'bgp client-to-client reflection' command in eos_bgp_global module.
