@@ -60,7 +60,7 @@ def _tmplt_bgp_params(config_data):
         if config_data["bgp_params"]["allowas_in"].get("count"):
             command += " {count}".format(**config_data["bgp_params"]["allowas_in"])
     elif config_data["bgp_params"].get("always_compare_med"):
-        command += " always-comapre-med"
+        command += " always-compare-med"
     elif config_data["bgp_params"].get("asn"):
         command += " asn notaion {asn}".format(**config_data["bgp_params"])
     elif config_data["bgp_params"].get("auto_local_addr"):
