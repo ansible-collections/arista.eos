@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fixes a typo in always-compare-med attribute in eos_bgp_global module.
