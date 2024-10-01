@@ -264,7 +264,7 @@ def _tmplt_bgp_neighbor(config_data):
     elif config_data["neighbor"].get("dont_capability_negotiate"):
         command += " dont-capability-negotiate"
     elif config_data["neighbor"].get("ebgp_multihop"):
-        command += " ebgp-multiphop"
+        command += " ebgp-multihop"
         if config_data["neighbor"]["ebgp_multihop"].get("ttl"):
             command += " {ttl}".format(**config_data["neighbor"]["ebgp_multihop"])
     elif config_data["neighbor"].get("encryption_password"):
