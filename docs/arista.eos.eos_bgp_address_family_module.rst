@@ -840,6 +840,7 @@ Parameters
                 </td>
                 <td>
                         <div>Route action.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: mode</div>
                 </td>
             </tr>
             <tr>
@@ -921,7 +922,6 @@ Parameters
                 </td>
                 <td>
                         <div>Type of address fmaily</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: mode</div>
                 </td>
             </tr>
 

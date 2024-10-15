@@ -8,8 +8,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_bgp_global
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
@@ -825,7 +826,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "bgp additional-paths send any",
             "bgp advertise-inactive",
             "bgp allowas-in 4",
-            "bgp always-comapre-med",
+            "bgp always-compare-med",
             "bgp auto-local-addr",
             "redistribute isis level-2",
             "network 6.6.6.0/24 route-map netmap1",
@@ -834,7 +835,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "route-target export 44:22",
             "bgp bestpath ecmp-fast",
             "bgp bestpath med confed",
-            "bgp client-to-client",
+            "bgp client-to-client reflection",
             "bgp cluster-id 2",
             "bgp control-plane-filter default-allow",
             "bgp convergence slow-peer time 5",

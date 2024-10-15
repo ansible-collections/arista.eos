@@ -66,7 +66,7 @@ options:
       argument accepts either a list of DNS servers or a list of hashes that configure
       the name server and VRF name.  See examples.
     type: list
-    elements: str
+    elements: raw
   state:
     description:
     - State of the configuration values in the device's current active configuration.  When
@@ -342,7 +342,7 @@ def main():
         # { interface: <str>, vrf: <str> }
         lookup_source=dict(type="list", elements="raw"),
         # { server: <str>; vrf: <str> }
-        name_servers=dict(type="list", elements="str"),
+        name_servers=dict(type="list", elements="raw"),
         state=dict(default="present", choices=["present", "absent"]),
     )
 
