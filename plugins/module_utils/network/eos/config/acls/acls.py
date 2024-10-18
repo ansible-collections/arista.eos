@@ -530,7 +530,7 @@ def add_commands(want):
                         if val.isdigit():
                             try:
                                 val = socket.getservbyport(int(val))
-                            except socket.error:
+                            except OSError:
                                 pass
                         command = command + " " + op + " " + val.replace("_", "-")
             if "destination" in ace.keys():

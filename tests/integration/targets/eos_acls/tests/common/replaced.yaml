@@ -37,6 +37,17 @@
                 ttl:
                   eq: "55"
 
+          - name: test2
+            aces:
+              - sequence: 11
+                grant: permit
+                protocol: tcp
+                source:
+                  host: 192.168.2.1
+                  port_protocol:
+                    eq: '8082'
+                destination:
+                  host: 192.168.1.1
       - afi: ipv6
         acls:
           - name: test2
