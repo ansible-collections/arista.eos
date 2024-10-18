@@ -45,7 +45,7 @@
                 source:
                   host: 192.168.2.1
                   port_protocol:
-                    eq: '8082'
+                    eq: '50702'
                 destination:
                   host: 192.168.1.1
       - afi: ipv6
@@ -77,6 +77,17 @@
                     destination:
                       any: true
                     log: true
+              - name: test2
+                aces:
+                  - sequence: 11
+                    grant: permit
+                    protocol: tcp
+                    source:
+                      host: 192.168.2.1
+                      port_protocol:
+                        eq: '50702'
+                    destination:
+                      host: 192.168.1.1
         state: replaced
 
     - become: true
@@ -85,7 +96,7 @@
 
     - ansible.builtin.assert:
         that:
-          - result.commands|length == 5
+          - result.commands|length == 7
           - result.changed == true
           - ansible_facts.network_resources.acls|symmetric_difference(result.after)
             == []
@@ -102,8 +113,8 @@
 
     - ansible.builtin.assert:
         that:
-          - result.changed == false
-          - result.commands|length == 0
+          - result.changed == true
+          - result.commands|length == 2
           - ansible_facts.network_resources.acls|symmetric_difference(result.before)
             == []
   always:
