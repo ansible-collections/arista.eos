@@ -216,6 +216,44 @@ class TestEosAclsModule(TestEosModule):
         ]
         self.execute_module(changed=True, commands=commands)
 
+    def test_eos_acls_replaced_exception(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="test2",
+                                aces=[
+                                    dict(
+                                        sequence="11",
+                                        grant="permit",
+                                        protocol="tcp",
+                                        source=dict(
+                                            host="192.168.2.1",
+                                            port_protocol=dict(
+                                                eq="50702",
+                                            )
+                                        ),
+                                        destination=dict(
+                                            host="192.168.1.1",
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "ip access-list test2",
+            "11 permit tcp host 192.168.2.1 eq 50702 host 192.168.1.1",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
     def test_eos_acls_replaced_idempotent(self):
         set_module_args(
             dict(
