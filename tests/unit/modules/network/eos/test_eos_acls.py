@@ -234,7 +234,7 @@ class TestEosAclsModule(TestEosModule):
                                             host="192.168.2.1",
                                             port_protocol=dict(
                                                 eq="50702",
-                                            )
+                                            ),
                                         ),
                                         destination=dict(
                                             host="192.168.1.1",

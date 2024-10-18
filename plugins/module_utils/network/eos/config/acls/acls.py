@@ -20,6 +20,7 @@ import itertools
 import re
 import socket
 
+from ansible.module_utils._text import to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -30,7 +31,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 )
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
-from ansible.module_utils._text import to_text
 
 
 class Acls(ConfigBase):
