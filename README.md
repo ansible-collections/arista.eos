@@ -95,6 +95,7 @@ Name | Description
 [arista.eos.eos_user](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_user_module.rst)|Manage the collection of local users on EOS devices
 [arista.eos.eos_vlans](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlans_module.rst)|VLANs resource module
 [arista.eos.eos_vrf](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vrf_module.rst)|Manage VRFs on Arista EOS network devices
+[arista.eos.eos_vrf_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vrf_global_module.rst)|Resource module to configure VRF definitions.
 
 <!--end collection content-->
 
