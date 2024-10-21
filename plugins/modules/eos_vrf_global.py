@@ -10,6 +10,7 @@ The module file for eos_vrf_global
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -121,6 +122,7 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
+
 from ansible_collections.arista.eos.eos.plugins.module_utils.network.eos.argspec.vrf_global.vrf_global import (
     Vrf_globalArgs,
 )

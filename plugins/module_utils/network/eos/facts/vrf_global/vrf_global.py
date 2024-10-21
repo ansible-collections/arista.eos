@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import, division, print_function
 
+
 __metaclass__ = type
 
 """
@@ -17,27 +18,25 @@ based on the configuration.
 from copy import deepcopy
 
 from ansible.module_utils.six import iteritems
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
+
+from ansible_collections.arista.eos.eos.plugins.module_utils.network.eos.argspec.vrf_global.vrf_global import (
+    Vrf_globalArgs,
 )
 from ansible_collections.arista.eos.eos.plugins.module_utils.network.eos.rm_templates.vrf_global import (
     Vrf_globalTemplate,
 )
-from ansible_collections.arista.eos.eos.plugins.module_utils.network.eos.argspec.vrf_global.vrf_global import (
-    Vrf_globalArgs,
-)
 
 
 class Vrf_globalFacts(object):
-    """ The eos vrf_global facts class
-    """
+    """The eos vrf_global facts class"""
 
-    def __init__(self, module, subspec='config', options='options'):
+    def __init__(self, module, subspec="config", options="options"):
         self._module = module
         self.argument_spec = Vrf_globalArgs.argument_spec
 
     def populate_facts(self, connection, ansible_facts, data=None):
-        """ Populate the facts for Vrf_global network resource
+        """Populate the facts for Vrf_global network resource
 
         :param connection: the device connection
         :param ansible_facts: Facts dictionary
@@ -56,13 +55,13 @@ class Vrf_globalFacts(object):
         vrf_global_parser = Vrf_globalTemplate(lines=data.splitlines(), module=self._module)
         objs = list(vrf_global_parser.parse().values())
 
-        ansible_facts['ansible_network_resources'].pop('vrf_global', None)
+        ansible_facts["ansible_network_resources"].pop("vrf_global", None)
 
         params = utils.remove_empties(
-            vrf_global_parser.validate_config(self.argument_spec, {"config": objs}, redact=True)
+            vrf_global_parser.validate_config(self.argument_spec, {"config": objs}, redact=True),
         )
 
-        facts['vrf_global'] = params['config']
-        ansible_facts['ansible_network_resources'].update(facts)
+        facts["vrf_global"] = params["config"]
+        ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts
