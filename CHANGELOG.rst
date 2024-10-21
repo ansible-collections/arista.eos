@@ -4,6 +4,20 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v10.0.1
+=======
+
+Bugfixes
+--------
+
+- Adds a missing word in the 'bgp client-to-client reflection' command in eos_bgp_global module.
+- Fixes a typo in always-compare-med attribute in eos_bgp_global module.
+- Handles exception when translating an unknown port to its service name.
+
+Documentation Changes
+---------------------
+
+- Includes a new support related section in the README.
 
 v10.0.0
 =======
