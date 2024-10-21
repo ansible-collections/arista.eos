@@ -211,6 +211,23 @@ releases:
       - fix_statis_routes_ds_issue.yaml
       - lldp_timer_bugfixes.yaml
     release_date: "2024-06-10"
+  10.0.1:
+    changes:
+      bugfixes:
+        - Adds a missing word in the 'bgp client-to-client reflection' command in eos_bgp_global
+          module.
+        - Fixes a typo in always-compare-med attribute in eos_bgp_global module.
+        - Handles exception when translating an unknown port to its service name.
+      doc_changes:
+        - Includes a new support related section in the README.
+    fragments:
+      - bgp_client.yaml
+      - fix_typo.yaml
+      - ignore_219.yaml
+      - port_exception.yaml
+      - pylint_fix.yaml
+      - readme.yaml
+    release_date: "2024-10-21"
   2.0.0:
     changes:
       bugfixes:
