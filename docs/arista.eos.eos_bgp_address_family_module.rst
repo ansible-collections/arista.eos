@@ -776,7 +776,11 @@ Parameters
                         <ul style="margin: 0; padding: 0"><b>Choices:</b>
                                     <li>isis</li>
                                     <li>ospfv3</li>
-                                    <li>dhcp</li>
+                                    <li>ospf</li>
+                                    <li>attached-host</li>
+                                    <li>connected</li>
+                                    <li>rip</li>
+                                    <li>static</li>
                         </ul>
                 </td>
                 <td>
