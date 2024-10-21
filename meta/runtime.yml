@@ -66,3 +66,5 @@ plugin_routing:
       redirect: arista.eos.eos_vlans
     vrf:
       redirect: arista.eos.eos_vrf
+    vrf_global:
+      redirect: arista.eos.eos_vrf_global
