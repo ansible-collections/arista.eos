@@ -13,7 +13,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 DOCUMENTATION = """
-module: ios_vrf_global
+module: eos_vrf_global
 short_description: Resource module to configure VRF definitions.
 description: This module provides declarative management of VRF definitions on Arista EOS platforms.
 version_added: 10.0.0
@@ -41,7 +41,7 @@ options:
   running_config:
     description:
       - This option is used only with state I(parsed).
-      - The value of this option should be the output received from the IOS device by
+      - The value of this option should be the output received from the EOS device by
         executing the command B(show running-config vrf).
       - The state I(parsed) reads the configuration from C(running_config) option and
         transforms it into Ansible structured data as per the resource module's argspec
