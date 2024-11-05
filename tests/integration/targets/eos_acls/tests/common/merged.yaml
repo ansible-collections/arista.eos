@@ -91,7 +91,7 @@
                     source:
                       any: true
                       port_protocol:
-                        eq: "25"
+                        eq: smtp
                     destination:
                       any: true
                       port_protocol:

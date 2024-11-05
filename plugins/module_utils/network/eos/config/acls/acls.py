@@ -20,6 +20,7 @@ import itertools
 import re
 import socket
 
+from ansible.module_utils._text import to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -528,8 +529,15 @@ def add_commands(want):
                 if "port_protocol" in ace["source"].keys():
                     for op, val in ace["source"]["port_protocol"].items():
                         if val.isdigit():
-                            val = socket.getservbyport(int(val))
-                        command = command + " " + op + " " + val.replace("_", "-")
+                            try:
+                                # if its a valid port number, then convert it to service name
+                                # eg: 8082 -> us-cli
+                                val = socket.getservbyport(int(val))
+                                command = command + " " + op + " " + val.replace("_", "-")
+                            except OSError:
+                                # if socket.getservbyport is unable to resolve the port name then directly use the port number
+                                # eg: 50702
+                                command = command + " " + op + " " + to_text(val)
             if "destination" in ace.keys():
                 if "any" in ace["destination"].keys():
                     command = command + " any"
