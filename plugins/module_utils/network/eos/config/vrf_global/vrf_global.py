@@ -71,6 +71,7 @@ class Vrf_global(ResourceModule):
 
         wantd = self._vrf_list_to_dict(wantd)
         haved = self._vrf_list_to_dict(haved)
+
         # if state is merged, merge want onto have and then compare
         if self.state == "merged":
             wantd = dict_merge(haved, wantd)
@@ -105,7 +106,6 @@ class Vrf_global(ResourceModule):
         self.compare(self.parsers, want=want, have=have)
         if len(self.commands) != begin:
             self.commands.insert(begin, self._tmplt.render({"name": vrf}, "name", False))
-
 
     def _vrf_list_to_dict(self, entry):
         """Convert list of items to dict of items

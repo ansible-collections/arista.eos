@@ -14,8 +14,6 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-
-# from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
@@ -25,10 +23,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_template
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.vrf_global.vrf_global import (
     Vrf_globalArgs,
 )
-
-# import debugpy
-# debugpy.listen(3000)
-# debugpy.wait_for_client()
 
 
 class Vrf_globalFacts(object):
