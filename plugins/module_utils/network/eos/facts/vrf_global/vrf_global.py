@@ -14,18 +14,21 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
+# from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
     utils,
 )
-from ansible_collections.arista.eos.eos.plugins.module_utils.network.eos.rm_templates.vrf_global import (
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.vrf_global import (
     Vrf_globalTemplate,
 )
-from ansible_collections.arista.eos.eos.plugins.module_utils.network.eos.argspec.vrf_global.vrf_global import (
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.vrf_global.vrf_global import (
     Vrf_globalArgs,
 )
+
+# import debugpy
+# debugpy.listen(3000)
+# debugpy.wait_for_client()
 
 
 class Vrf_globalFacts(object):
@@ -35,6 +38,11 @@ class Vrf_globalFacts(object):
     def __init__(self, module, subspec='config', options='options'):
         self._module = module
         self.argument_spec = Vrf_globalArgs.argument_spec
+
+    def get_config(self, connection):
+        """Get the configuration from the device"""
+
+        return connection.get("show running-config | section ^vrf")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """ Populate the facts for Vrf_global network resource
@@ -50,7 +58,7 @@ class Vrf_globalFacts(object):
         objs = []
 
         if not data:
-            data = connection.get()
+            data = self.get_config(connection)
 
         # parse native config using the Vrf_global template
         vrf_global_parser = Vrf_globalTemplate(lines=data.splitlines(), module=self._module)
@@ -62,7 +70,7 @@ class Vrf_globalFacts(object):
             vrf_global_parser.validate_config(self.argument_spec, {"config": objs}, redact=True)
         )
 
-        facts['vrf_global'] = params['config']
+        facts["vrf_global"] = params.get("config", [])
         ansible_facts['ansible_network_resources'].update(facts)
 
         return ansible_facts

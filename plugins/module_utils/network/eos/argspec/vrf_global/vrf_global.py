@@ -52,6 +52,7 @@ class Vrf_globalArgs(object):  # pylint: disable=R0903
                 "replaced",
                 "rendered",
                 "overridden",
+                "purged",
             ],
             "default": "merged",
             "type": "str",
