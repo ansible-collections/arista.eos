@@ -16,15 +16,14 @@ DOCUMENTATION = """
 module: eos_vrf_global
 short_description: Resource module to configure VRF definitions.
 description: This module provides declarative management of VRF definitions on Arista EOS platforms.
-version_added: 10.0.1
+version_added: 10.0.0
 author: Ruchi Pakhle (@Ruchip16)
 notes:
 - Tested against Arista EOS 4.23.0F
 - This module works with connection C(network_cli). See the L(EOS Platform Options,eos_platform_options).
 options:
   config:
-    description: A dictionary of options for VRF configurations.
-    options:
+    description: A dictionary containing device configurations for VRF, including a list of VRF definitions.
     type: list
     elements: dict
     suboptions:
@@ -42,7 +41,7 @@ options:
     description:
       - This option is used only with state I(parsed).
       - The value of this option should be the output received from the EOS device by
-        executing the command B(show running-config | section ^vrf).
+        executing the command B(show running-config vrf).
       - The state I(parsed) reads the configuration from C(running_config) option and
         transforms it into Ansible structured data as per the resource module's argspec
         and the value is then returned in the I(parsed) key within the result.
@@ -64,18 +63,12 @@ options:
       - The state I(parsed) reads the configuration from C(running_config) option and
         transforms it into JSON format as per the resource module parameters and the
         value is returned in the I(parsed) key within the result. The value of C(running_config)
-        option should be the same format as the output of command I(show running-config | section ^vrf).
+        option should be the same format as the output of command I(show running-config vrf).
         connection to remote host is not required.
-      - The state I(purged) removes all the VRF configurations from the
-        target device. Use caution with this state.
-      - The state I(deleted) only removes the VRF attributes that this module
-        manages and does not negate the VRF completely.
-      - Refer to examples for more details.
     type: str
 """
 
 EXAMPLES = """
-
 # Using merged
 #
 # Before state:
@@ -385,34 +378,35 @@ EXAMPLES = """
 
 RETURN = """
 before:
-  description: The configuration prior to the model invocation.
-  returned: always
+  description: The configuration prior to the module execution.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: dict
   sample: >
-    The configuration returned will always be in the same format
-     of the parameters above.
+    This output will always be in the same format as the
+    module argspec.
 after:
-  description: The resulting configuration model invocation.
+  description: The resulting configuration after module execution.
   returned: when changed
   type: dict
   sample: >
-    The configuration returned will always be in the same format
-     of the parameters above.
+    This output will always be in the same format as the
+    module argspec.
 commands:
   description: The set of commands pushed to the remote device.
-  returned: always
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: list
   sample:
-  - vrf VRF7
-  - description VRF7 description
-  - rd: 67:9
+    - sample command 1
+    - sample command 2
+    - sample command 3
 rendered:
   description: The provided configuration in the task rendered in device-native format (offline).
   returned: when I(state) is C(rendered)
   type: list
   sample:
-  - vrf VRF4
-  - description VRF4 Description
+    - sample command 1
+    - sample command 2
+    - sample command 3
 gathered:
   description: Facts about the network resource gathered from the remote device as structured data.
   returned: when I(state) is C(gathered)
@@ -430,10 +424,10 @@ parsed:
 """
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.vrf_global.vrf_global import (
+from ansible_collections.arista.eos.eos.plugins.module_utils.network.eos.argspec.vrf_global.vrf_global import (
     Vrf_globalArgs,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.vrf_global.vrf_global import (
+from ansible_collections.arista.eos.eos.plugins.module_utils.network.eos.config.vrf_global.vrf_global import (
     Vrf_global,
 )
 
