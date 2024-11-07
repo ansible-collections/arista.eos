@@ -39,7 +39,7 @@ class TestEosVrfGlobalModule(TestEosModule):
         self.get_config = self.mock_get_config.start()
 
     def tearDown(self):
-        """Tear down for iosxr_vrfs module tests."""
+        """Tear down for eos_vrf_global module tests."""
         super(TestEosVrfGlobalModule, self).tearDown()
         self.get_resource_connection.stop()
         self.get_config.stop()
