@@ -287,7 +287,7 @@ class TestEosVrfGlobalModule(TestEosModule):
         result = self.execute_module(changed=False)
         self.assertEqual(result["commands"], [])
 
-    def test_ios_vrf_global_purged(self):
+    def test_eos_vrf_global_purged(self):
         """Test the purged state of the eos_vrf_global module."""
         run_cfg = dedent(
             """\
