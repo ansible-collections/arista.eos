@@ -1,0 +1,3 @@
+---
+trivial:
+  - Remove ansible-pylibssh from the list of dependencies.
