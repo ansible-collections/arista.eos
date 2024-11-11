@@ -68,3 +68,6 @@ parsed:
     - name: test
       description: "This is test VRF"
       rd: "testing"
+    - name: my_vrf
+      description: "this is sample vrf for feature testing"
+      rd: "2:3"

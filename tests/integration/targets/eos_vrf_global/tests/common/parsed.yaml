@@ -7,3 +7,8 @@
   arista.eos.eos_vrf_global:
     running_config: "{{ lookup('file', './_parsed.cfg') }}"
     state: parsed
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - parsed['after'] == result['parsed']

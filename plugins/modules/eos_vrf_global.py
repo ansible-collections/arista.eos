@@ -380,33 +380,33 @@ RETURN = """
 before:
   description: The configuration prior to the module execution.
   returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
-  type: dict
+  type: list
   sample: >
-    This output will always be in the same format as the
-    module argspec.
+    The configuration returned will always be in the same format
+    of the parameters above.
 after:
   description: The resulting configuration after module execution.
   returned: when changed
-  type: dict
+  type: list
   sample: >
-    This output will always be in the same format as the
-    module argspec.
+    The configuration returned will always be in the same format
+    of the parameters above.
 commands:
   description: The set of commands pushed to the remote device.
   returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: list
   sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
+    - vrf instance test
+    - description "This is test VRF"
+    - rd 3:4
 rendered:
   description: The provided configuration in the task rendered in device-native format (offline).
   returned: when I(state) is C(rendered)
   type: list
   sample:
-    - sample command 1
-    - sample command 2
-    - sample command 3
+    - vrf instance test
+    - description "This is test VRF"
+    - rd 3:4
 gathered:
   description: Facts about the network resource gathered from the remote device as structured data.
   returned: when I(state) is C(gathered)

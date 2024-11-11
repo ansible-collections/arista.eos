@@ -11,6 +11,7 @@
       register: result
       arista.eos.eos_vrf_global: &deleted
         config:
+          - name: VRF4
         state: deleted
 
     - ansible.builtin.assert:
