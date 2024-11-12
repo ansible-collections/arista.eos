@@ -23,7 +23,7 @@ notes:
 - This module works with connection C(network_cli). See the L(EOS Platform Options,eos_platform_options).
 options:
   config:
-    description: A dictionary containing device configurations for VRF, including a list of VRF definitions.
+    description: A list of dictionaries containing device configurations for VRF definitions.
     type: list
     elements: dict
     suboptions:
