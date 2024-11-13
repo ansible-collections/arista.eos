@@ -8,6 +8,7 @@
 
 - block:
     - name: Purge all VRF configuration from the device
+      become: true
       arista.eos.eos_vrf_global: &id001
         state: purged
       register: result
@@ -29,6 +30,7 @@
           - result['after'] == []
 
     - name: Purge all VRF configuration from the device (idempotent)
+      become: true
       register: result
       arista.eos.eos_vrf_global: *id001
     - name: Assert that task was idempotent

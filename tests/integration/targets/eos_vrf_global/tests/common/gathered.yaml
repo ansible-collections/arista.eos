@@ -8,6 +8,7 @@
 
 - block:
     - name: Gather existing running configuration
+      become: true
       register: result
       arista.eos.eos_vrf_global:
         state: gathered

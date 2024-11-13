@@ -8,6 +8,7 @@
 
 - block:
     - name: Delete given vrf configuration
+      become: true
       register: result
       arista.eos.eos_vrf_global: &deleted
         config:
@@ -34,6 +35,7 @@
           - deleted['after'] == result['after']
 
     - name: Idempotency check
+      become: true
       register: result
       arista.eos.eos_vrf_global: *deleted
     - ansible.builtin.assert:

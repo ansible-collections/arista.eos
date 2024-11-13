@@ -6,6 +6,7 @@
 
 - block:
     - name: Merge provided configuration with device configuration
+      become: true
       arista.eos.eos_vrf_global: &merged
         config:
           - name: VRF4
@@ -29,6 +30,7 @@
           - "{{ merged['after'] == result['after'] }}"
 
     - name: Merge the provided configuration with the existing running configuration (idempotent)
+      become: true
       arista.eos.eos_vrf_global: *merged
       register: result
 

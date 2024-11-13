@@ -1,5 +1,6 @@
 ---
 - name: Remove VRF global configurations
+  become: true
   register: result
   arista.eos.eos_config:
     lines:

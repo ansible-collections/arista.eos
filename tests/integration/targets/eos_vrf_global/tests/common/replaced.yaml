@@ -8,6 +8,7 @@
 
 - block:
     - name: Replace given vrf configuration with provided configurations
+      become: true
       arista.eos.eos_vrf_global: &replaced
         config:
           - name: VRF7
@@ -32,6 +33,7 @@
           - "{{ replaced['after'] | symmetric_difference(result['after']) |length == 0 }}"
 
     - name: Idempotency check
+      become: true
       register: result
       arista.eos.eos_vrf_global: *replaced
     - ansible.builtin.assert:

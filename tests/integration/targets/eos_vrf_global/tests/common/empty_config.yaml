@@ -8,6 +8,7 @@
   arista.eos.eos_vrf_global:
     config:
     state: merged
+  become: true
 
 - ansible.builtin.assert:
     that:
@@ -19,6 +20,7 @@
   arista.eos.eos_vrf_global:
     config:
     state: replaced
+  become: true
 
 - ansible.builtin.assert:
     that:
@@ -30,6 +32,7 @@
   arista.eos.eos_vrf_global:
     config:
     state: overridden
+  become: true
 
 - ansible.builtin.assert:
     that:
@@ -41,6 +44,7 @@
   arista.eos.eos_vrf_global:
     config:
     state: rendered
+  become: true
 
 - ansible.builtin.assert:
     that:
@@ -52,6 +56,7 @@
   arista.eos.eos_vrf_global:
     running_config:
     state: parsed
+  become: true
 
 - ansible.builtin.assert:
     that:
