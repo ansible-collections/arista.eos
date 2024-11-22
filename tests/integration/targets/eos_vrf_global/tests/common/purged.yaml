@@ -1,0 +1,43 @@
+---
+- ansible.builtin.debug:
+    msg: Start eos_vrf_global purged integration tests connection={{ ansible_connection}}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.include_tasks: _populate.yaml
+
+- block:
+    - name: Purge all VRF configuration from the device
+      become: true
+      arista.eos.eos_vrf_global: &id001
+        state: purged
+      register: result
+
+    - name: Assert that before dicts are correctly generated
+      ansible.builtin.assert:
+        that:
+          - merged['after'] == result['before']
+
+    - name: Assert that correct set of commands were generated
+      ansible.builtin.assert:
+        that:
+          - "'no vrf instance VRF4' in result.commands"
+          - result.commands|length == 1
+
+    - name: Assert that after dict is correctly generated
+      ansible.builtin.assert:
+        that:
+          - result['after'] == []
+
+    - name: Purge all VRF configuration from the device (idempotent)
+      become: true
+      register: result
+      arista.eos.eos_vrf_global: *id001
+    - name: Assert that task was idempotent
+      ansible.builtin.assert:
+        that:
+          - result['changed'] == false
+          - result.commands|length == 0
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml
