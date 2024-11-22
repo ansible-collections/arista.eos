@@ -91,6 +91,9 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.stati
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.vlans.vlans import (
     VlansFacts,
 )
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.vrf_global.vrf_global import (
+    Vrf_globalFacts,
+)
 
 
 FACT_LEGACY_SUBSETS = dict(
@@ -123,6 +126,7 @@ FACT_RESOURCE_SUBSETS = dict(
     ntp_global=Ntp_globalFacts,
     snmp_server=Snmp_serverFacts,
     hostname=HostnameFacts,
+    vrf_global=Vrf_globalFacts,
 )
 
 
