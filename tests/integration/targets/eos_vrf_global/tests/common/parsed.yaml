@@ -1,0 +1,15 @@
+---
+- ansible.builtin.debug:
+    msg: START eos_vrf_global parsed integration tests on connection={{ ansible_connection }}
+
+- name: Parse externally provided VRF configuration
+  become: true
+  register: result
+  arista.eos.eos_vrf_global:
+    running_config: "{{ lookup('file', './_parsed.cfg') }}"
+    state: parsed
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - parsed['after'] == result['parsed']

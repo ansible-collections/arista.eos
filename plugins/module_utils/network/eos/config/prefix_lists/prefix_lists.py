@@ -103,6 +103,7 @@ class Prefix_lists(ResourceModule):
         the `want` and `have` data with the `parsers` defined
         for the Prefix_lists network resource.
         """
+        h_parent = {}
         for k, v in iteritems(want):
             if k == "afi":
                 continue
