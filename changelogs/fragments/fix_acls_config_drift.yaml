@@ -1,0 +1,18 @@
+---
+bugfixes:
+  - type: bugfix
+    description: |
+      Fixed an issue in the `compare_configs` method where unnecessary negate commands
+      (`no <sequence_number>`) were generated for Access Control List (ACL) entries that
+      were already present in both the `have` and `want` configurations. The updated logic
+      now ensures that sequence numbers and full entry content are validated before
+      generating negate commands, preventing redundant configuration updates.
+    changes:
+      - Improved validation logic for matching sequence numbers and ACL entries.
+      - Removed unnecessary processing of ACL entries already present in `have`.
+      - Optimized handling of `want` entries to avoid redundant commands.
+    impact:
+      - Reduces configuration drift and unnecessary commands.
+      - Ensures `compare_configs` accurately reflects the desired state.
+    references:
+      - JIRA: https://issues.redhat.com/browse/ANA-613
