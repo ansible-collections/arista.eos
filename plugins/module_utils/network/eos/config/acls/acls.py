@@ -160,8 +160,9 @@ class Acls(ConfigBase):
                             have_seq_num = re.search(r"(\d+) (.*)", h)
                             if have_seq_num:
                                 # Match sequence number and full content
-                                if (seq_num.group(1) == have_seq_num.group(1) and
-                                        seq_num.group(2) == have_seq_num.group(2)):
+                                if seq_num.group(1) == have_seq_num.group(1) and seq_num.group(
+                                    2
+                                ) == have_seq_num.group(2):
                                     # Entry already exists, skip
                                     config.remove(w)
                                     break
