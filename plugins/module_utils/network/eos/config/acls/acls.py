@@ -165,6 +165,13 @@ class Acls(ConfigBase):
                                     # Entry already exists, skip
                                     config.remove(w)
                                     break
+                        else:
+                            have_seq_num = re.search(r"(\d+) (.*)", h)
+                            if have_seq_num:
+                                # Match sequence number and full content
+                                if (w == have_seq_num.group(2)):
+                                    config.remove(w)
+                                    break
 
         # Generate commands for any remaining entries in `config`
         for c in config:
