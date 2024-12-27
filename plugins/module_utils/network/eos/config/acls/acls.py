@@ -155,21 +155,20 @@ class Acls(ConfigBase):
                 # Check sequence-specific entries
                 for num, h in enumerate(have, start=h_index + 1):
                     if "access-list" not in h:
-                        seq_num = re.search(r"(\d+) (.*)", w)
-                        if seq_num:
-                            have_seq_num = re.search(r"(\d+) (.*)", h)
-                            if have_seq_num:
+                        snum = re.search(r"(\d+) (.*)", w)
+                        if snum:
+                            have_snum = re.search(r"(\d+) (.*)", h)
+                            if have_snum:
                                 # Match sequence number and full content
-                                if (seq_num.group(1) == have_seq_num.group(1) and
-                                        seq_num.group(2) == have_seq_num.group(2)):
+                                if snum.group(1) == have_snum.group(1) and snum.group(2) == have_snum.group(2):
                                     # Entry already exists, skip
                                     config.remove(w)
                                     break
                         else:
-                            have_seq_num = re.search(r"(\d+) (.*)", h)
-                            if have_seq_num:
+                            have_snum = re.search(r"(\d+) (.*)", h)
+                            if have_snum:
                                 # Match sequence number and full content
-                                if (w == have_seq_num.group(2)):
+                                if w == have_snum.group(2):
                                     config.remove(w)
                                     break
 
