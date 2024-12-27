@@ -159,8 +159,13 @@ class Acls(ConfigBase):
                         if snum:
                             have_snum = re.search(r"(\d+) (.*)", h)
                             if have_snum:
+                                snum_group_2 = snum.group(2)
+                                have_snum_group_2 = have_snum.group(2)
                                 # Match sequence number and full content
-                                if snum.group(1) == have_snum.group(1) and snum.group(2) == have_snum.group(2):
+                                if (
+                                    snum.group(1) == have_snum.group(1)
+                                    and snum_group_2 == have_snum_group_2
+                                ):
                                     # Entry already exists, skip
                                     config.remove(w)
                                     break
