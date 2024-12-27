@@ -141,6 +141,7 @@ class TestEosAclsModule(TestEosModule):
                                         source=dict(any="true"),
                                         destination=dict(any="true"),
                                         protocol=6,
+                                        sequence=45,
                                     ),
                                 ],
                             ),
@@ -150,7 +151,7 @@ class TestEosAclsModule(TestEosModule):
                 state="merged",
             ),
         )
-        self.execute_module(changed=False, commands=[])
+        result = self.execute_module(changed=False)
 
     def test_eos_acls_replaced(self):
         set_module_args(
