@@ -140,8 +140,8 @@
         config:
           - afi: ipv4
             acls:
-               - name: test1
-                 aces:
+              - name: test1
+                aces:
                   - remark: "Update acl"
         state: merged
 
