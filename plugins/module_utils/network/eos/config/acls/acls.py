@@ -140,37 +140,53 @@ class Acls(ConfigBase):
         commands = []
         want = list(itertools.chain(*want))
         have = list(itertools.chain(*have))
+
+        # Flatten the configurations for comparison
         h_index = 0
-        config = list(want)
+        config = list(want)  # Start with a copy of `want`
+
         for w in want:
             access_list = re.findall(r"(ip.*) access-list (.*)", w)
             if access_list:
+                # Check if the whole ACL is already present
                 if w in have:
                     h_index = have.index(w)
             else:
+                # Check sequence-specific entries
                 for num, h in enumerate(have, start=h_index + 1):
                     if "access-list" not in h:
-                        seq_num = re.search(r"(\d+) (.*)", w)
-                        if seq_num:
-                            have_seq_num = re.search(r"(\d+) (.*)", h)
-                            if seq_num.group(1) == have_seq_num.group(
-                                1,
-                            ) and have_seq_num.group(
-                                2,
-                            ) != seq_num.group(2):
-                                negate_cmd = "no " + seq_num.group(1)
-                                config.insert(config.index(w), negate_cmd)
-                        if w in h:
-                            config.pop(config.index(w))
-                            break
+                        snum = re.search(r"(\d+) (.*)", w)
+                        if snum:
+                            have_snum = re.search(r"(\d+) (.*)", h)
+                            if have_snum:
+                                snum_group_2 = snum.group(2)
+                                have_snum_group_2 = have_snum.group(2)
+                                # Match sequence number and full content
+                                if (
+                                    snum.group(1) == have_snum.group(1)
+                                    and snum_group_2 == have_snum_group_2
+                                ):
+                                    # Entry already exists, skip
+                                    config.remove(w)
+                                    break
+                        else:
+                            have_snum = re.search(r"(\d+) (.*)", h)
+                            if have_snum:
+                                # Match sequence number and full content
+                                if w == have_snum.group(2):
+                                    config.remove(w)
+                                    break
+
+        # Generate commands for any remaining entries in `config`
         for c in config:
             access_list = re.findall(r"(ip.*) access-list (.*)", c)
             if access_list:
                 acl_index = config.index(c)
             else:
                 if config[acl_index] not in commands:
-                    commands.append(config[acl_index])
-                commands.append(c)
+                    commands.append(config[acl_index])  # Add ACL definition
+                commands.append(c)  # Add ACL entry
+
         return commands
 
     def set_state(self, want, have):
