@@ -26,9 +26,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 
 
 class Acl_interfaces(ConfigBase):
@@ -442,13 +440,7 @@ def add_commands(want, interface):
         if "acls" in w.keys():
             for acl in w["acls"]:
                 commands.append(
-                    afi
-                    + " "
-                    + a_cmd
-                    + " "
-                    + acl["name"]
-                    + " "
-                    + acl["direction"],
+                    afi + " " + a_cmd + " " + acl["name"] + " " + acl["direction"],
                 )
     return commands
 
@@ -469,13 +461,6 @@ def remove_commands(want, interface):
         if "acls" in w.keys():
             for acl in w["acls"]:
                 commands.append(
-                    "no "
-                    + afi
-                    + " "
-                    + a_cmd
-                    + " "
-                    + acl["name"]
-                    + " "
-                    + acl["direction"],
+                    "no " + afi + " " + a_cmd + " " + acl["name"] + " " + acl["direction"],
                 )
     return commands

@@ -74,7 +74,8 @@ def _tmplt_ntp_global_servers(config_data):
     if el.get("key_id"):
         command += " key {key_id}".format(**el)
     if el.get("local_interface"):
-        command += " local_interface {local_interface}".format(**el)
+        linterface = el.get("local_interface").replace(" ", "")
+        command += " local-interface " + linterface
     if el.get("maxpoll"):
         command += " maxpoll {maxpoll}".format(**el)
     if el.get("minpoll"):
@@ -227,12 +228,12 @@ class Ntp_globalTemplate(NetworkTemplate):
                 \s*(?P<prefer>prefer)*
                 \s*(?P<burst>burst)*
                 \s*(?P<iburst>iburst)*
-                \s*(?P<local_int>local-interface\s.+?)*
                 \s*(?P<maxpoll>maxpoll\s\d+)*
                 \s*(?P<minpoll>minpoll\s\d+)*
                 \s*(?P<source>source\s.+?)*
                 \s*(?P<version>version\s[1-4])*
                 \s*(?P<key>key\s.+)*
+                (\s*local-interface\s(?P<local_int>\S+))?
                 $""",
                 re.VERBOSE,
             ),
@@ -245,7 +246,7 @@ class Ntp_globalTemplate(NetworkTemplate):
                         "burst": "{{ True if burst is defined }}",
                         "iburst": "{{ True if iburst is defined }}",
                         "key_id": "{{ key.split(" ")[1] if key is defined }}",
-                        "local_interface": "{{ local_int.split(" ")[1:] if local_int is defined }}",
+                        "local_interface": "{{ local_int.replace(' ', '') if local_int is defined }}",
                         "maxpoll": "{{ maxpoll.split(" ")[1] if maxpoll is defined }}",
                         "minpoll": "{{ minpoll.split(" ")[1] if minpoll is defined }}",
                         "source": "{{ source.split(" ")[1] if source is defined }}",

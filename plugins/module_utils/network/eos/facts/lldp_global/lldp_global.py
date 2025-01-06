@@ -19,9 +19,7 @@ import re
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lldp_global.lldp_global import (
     Lldp_globalArgs,
@@ -87,7 +85,7 @@ class Lldp_globalFacts(object):
         config = deepcopy(spec)
         config["holdtime"] = utils.parse_conf_arg(conf, "hold-time")
         config["reinit"] = utils.parse_conf_arg(conf, "timer reinitialization")
-        config["timer"] = utils.parse_conf_arg(conf, "timer")
+        config["timer"] = utils.parse_conf_arg(conf, "lldp timer")
         if config.get("timer") and "reinitialization" in config["timer"]:
             config["timer"] = None
 

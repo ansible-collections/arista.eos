@@ -118,7 +118,7 @@ options:
       playbook root directory or role root directory, if playbook is part of an ansible
       role. If the directory does not exist, it is created.
     type: bool
-    default: no
+    default: false
   running_config:
     description:
     - The module, by default, will connect to the remote device and retrieve the current
@@ -139,7 +139,7 @@ options:
       the running-config is append with the all keyword.  When the value is set to
       false, the command is issued without the all keyword
     type: bool
-    default: no
+    default: false
   save_when:
     description:
     - When changes are made to the device running-configuration, the changes are not
@@ -206,7 +206,7 @@ options:
   backup_options:
     description:
     - This is a dict object containing configurable options related to backup file
-      path. The value of this option is read only when C(backup) is set to I(yes),
+      path. The value of this option is read only when C(backup) is set to I(true),
       if C(backup) is set to I(no) this option will be silently ignored.
     suboptions:
       filename:
@@ -237,10 +237,10 @@ EXAMPLES = """
 - name: load an acl into the device
   arista.eos.eos_config:
     lines:
-    - 10 permit ip host 192.0.2.1 any log
-    - 20 permit ip host 192.0.2.2 any log
-    - 30 permit ip host 192.0.2.3 any log
-    - 40 permit ip host 192.0.2.4 any log
+      - 10 permit ip host 192.0.2.1 any log
+      - 20 permit ip host 192.0.2.2 any log
+      - 30 permit ip host 192.0.2.3 any log
+      - 40 permit ip host 192.0.2.4 any log
     parents: ip access-list test
     before: no ip access-list test
     replace: block
@@ -251,7 +251,7 @@ EXAMPLES = """
 
 - name: render a Jinja2 template onto an Arista switch
   arista.eos.eos_config:
-    backup: yes
+    backup: true
     src: eos_template.j2
 
 - name: diff the running config against a master config
@@ -262,15 +262,13 @@ EXAMPLES = """
 - name: for idempotency, use full-form commands
   arista.eos.eos_config:
     lines:
-      # - shut
-    - shutdown
-    # parents: int eth1
+      - shutdown
     parents: interface Ethernet1
 
 - name: configurable backup path
   arista.eos.eos_config:
     src: eos_template.j2
-    backup: yes
+    backup: true
     backup_options:
       filename: backup.cfg
       dir_path: /home/user
@@ -289,27 +287,27 @@ updates:
   sample: ['hostname switch01', 'interface Ethernet1', 'no shutdown']
 backup_path:
   description: The full path to the backup file
-  returned: when backup is yes
+  returned: when backup is true
   type: str
   sample: /playbooks/ansible/backup/eos_config.2016-07-16@22:28:34
 filename:
   description: The name of the backup file
-  returned: when backup is yes and filename is not specified in backup options
+  returned: when backup is true and filename is not specified in backup options
   type: str
   sample: eos_config.2016-07-16@22:28:34
 shortname:
   description: The full path to the backup file excluding the timestamp
-  returned: when backup is yes and filename is not specified in backup options
+  returned: when backup is true and filename is not specified in backup options
   type: str
   sample: /playbooks/ansible/backup/eos_config
 date:
   description: The date extracted from the backup file name
-  returned: when backup is yes
+  returned: when backup is true
   type: str
   sample: "2016-07-16"
 time:
   description: The time extracted from the backup file name
-  returned: when backup is yes
+  returned: when backup is true
   type: str
   sample: "22:28:34"
 """
@@ -407,9 +405,9 @@ def main():
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 
     required_if = [
-        ("match", "strict", ["lines"]),
-        ("match", "exact", ["lines"]),
-        ("replace", "block", ["lines"]),
+        ("match", "strict", ["lines", "src"], True),
+        ("match", "exact", ["lines", "src"], True),
+        ("replace", "block", ["lines", "src"], True),
         ("replace", "config", ["src"]),
         ("diff_against", "intended", ["intended_config"]),
         ("diff_against", "validate_config", ["intended_config"]),
@@ -442,9 +440,7 @@ def main():
             msg="Cannot diff against sessions when sessions are disabled. Please change diff_against to another value",
         )
 
-    if module.params["backup"] or (
-        module._diff and module.params["diff_against"] == "running"
-    ):
+    if module.params["backup"] or (module._diff and module.params["diff_against"] == "running"):
         contents = get_config(module, flags=flags)
         config = NetworkConfig(indent=1, contents=contents)
         if module.params["backup"]:

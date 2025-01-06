@@ -687,47 +687,47 @@ Examples
 
     # Using merged
 
-    # Before state
-
+    # Before state:
+    # -------------
     # localhost(config)#show running-config | section ntp
     # localhost(config)#
 
-      - name: Merge provided configuration with device configuration
-        arista.eos.eos_ntp_global:
-          config:
-            authenticate:
-              enable: true
-            authentication_keys:
-              - id: 2
-                algorithm: "sha1"
-                encryption: 7
-                key: "123456"
-              - id: 23
-                algorithm: "md5"
-                encryption: 7
-                key: "123456"
-            local_interface: "Ethernet1"
-            qos_dscp: 10
-            trusted_key: 23
-            servers:
-              - server: "10.1.1.1"
-                vrf: "vrf01"
-                burst: True
-                prefer: True
-              - server: "25.1.1.1"
-                vrf: "vrf01"
-                maxpoll: 15
-                key_id: 2
-            serve:
-              access_lists:
-                - afi: "ip"
-                  acls:
-                    - acl_name: "acl01"
-                      direction: "in"
-                - afi: "ipv6"
-                  acls:
-                     - acl_name: "acl02"
-                       direction: "in"
+    - name: Merge provided configuration with device configuration
+      arista.eos.eos_ntp_global:
+        config:
+          authenticate:
+            enable: true
+          authentication_keys:
+            - id: 2
+              algorithm: "sha1"
+              encryption: 7
+              key: "123456"
+            - id: 23
+              algorithm: "md5"
+              encryption: 7
+              key: "123456"
+          local_interface: "Ethernet1"
+          qos_dscp: 10
+          trusted_key: 23
+          servers:
+            - server: "10.1.1.1"
+              vrf: "vrf01"
+              burst: true
+              prefer: true
+            - server: "25.1.1.1"
+              vrf: "vrf01"
+              maxpoll: 15
+              key_id: 2
+          serve:
+            access_lists:
+              - afi: "ip"
+                acls:
+                  - acl_name: "acl01"
+                    direction: "in"
+              - afi: "ipv6"
+                acls:
+                  - acl_name: "acl02"
+                    direction: "in"
 
     # After State
 
@@ -836,28 +836,29 @@ Examples
     # ntp serve ipv6 access-group acl02 in
     # localhost(config)#
 
-      - name: Replace
-        arista.eos.eos_ntp_global:
-          config:
-            qos_dscp: 15
-            authentication_keys:
-              - id: 2
-                algorithm: "md5"
-                encryption: 7
-                key: "123456"
-            servers:
-              - server: "11.21.1.1"
-                vrf: "vrf01"
-                burst: True
-                prefer: True
-                minpoll: 13
-            serve:
-              access_lists:
-                - afi: "ip"
-                  acls:
-                    - acl_name: "acl03"
-                      direction: "in"
-          state: replaced
+    - name: Replace
+      arista.eos.eos_ntp_global:
+        config:
+          qos_dscp: 15
+          authentication_keys:
+            - id: 2
+              algorithm: "md5"
+              encryption: 7
+              key: "123456"
+          servers:
+            - server: "11.21.1.1"
+              vrf: "vrf01"
+              burst: true
+              prefer: true
+              minpoll: 13
+          serve:
+            access_lists:
+              - afi: "ip"
+                acls:
+                  - acl_name: "acl03"
+                    direction: "in"
+        state: replaced
+
     # After State:
     # localhost(config)#show running-config | section ntp
     # ntp authentication-key 2 md5 7 123456
@@ -992,28 +993,29 @@ Examples
     # ntp serve ipv6 access-group acl02 in
     # localhost(config)#
 
-      - name: Replace
-        arista.eos.eos_ntp_global:
-          config:
-            qos_dscp: 15
-            authentication_keys:
-              - id: 2
-                algorithm: "md5"
-                encryption: 7
-                key: "123456"
-            servers:
-              - server: "11.21.1.1"
-                vrf: "vrf01"
-                burst: True
-                prefer: True
-                minpoll: 13
-            serve:
-              access_lists:
-                - afi: "ip"
-                  acls:
-                    - acl_name: "acl03"
-                      direction: "in"
-          state: overridden
+    - name: Replace
+      arista.eos.eos_ntp_global:
+        config:
+          qos_dscp: 15
+          authentication_keys:
+            - id: 2
+              algorithm: "md5"
+              encryption: 7
+              key: "123456"
+          servers:
+            - server: "11.21.1.1"
+              vrf: "vrf01"
+              burst: true
+              prefer: true
+              minpoll: 13
+          serve:
+            access_lists:
+              - afi: "ip"
+                acls:
+                  - acl_name: "acl03"
+                    direction: "in"
+        state: overridden
+
     # After State:
     # localhost(config)#show running-config | section ntp
     # ntp authentication-key 2 md5 7 123456
@@ -1149,9 +1151,9 @@ Examples
     # ntp serve ipv6 access-group acl02 in
     # localhost(config)#
 
-      - name: Delete  ntp-global
-        arista.eos.eos_ntp_global:
-          state: deleted
+    - name: Delete  ntp-global
+      arista.eos.eos_ntp_global:
+        state: deleted
 
     # After State:
     #  localhost(config)#show running-config | section ntp
@@ -1255,12 +1257,13 @@ Examples
     # ntp serve ip access-group acl01 in
     # ntp serve ipv6 access-group acl02 in
 
-      - name: parse configs
-        arista.eos.eos_ntp_global:
-          running_config: "{{ lookup('file', './parsed_ntp_global.cfg') }}"
-          state: parsed
-        tags:
-          - parsed
+    - name: parse configs
+      arista.eos.eos_ntp_global:
+        running_config: "{{ lookup('file', './parsed_ntp_global.cfg') }}"
+        state: parsed
+      tags:
+        - parsed
+
     # Module Execution
     # "parsed": {
     #         "authenticate": {
@@ -1344,13 +1347,14 @@ Examples
     # ntp serve ipv6 access-group acl02 in
     # localhost(config)#
 
+    - name: gather configs
+      arista.eos.eos_ntp_global:
+        state: gathered
+      tags:
+        - gathered
 
-      - name: gather configs
-        arista.eos.eos_ntp_global:
-          state: gathered
-        tags:
-          - gathered
     # Module Execution
+
     #   "gathered": {
     #         "authenticate": {
     #             "enable": true
@@ -1418,47 +1422,45 @@ Examples
     #     }
     # }
 
-
     # using rendered:
 
-      - name: Render provided configuration
-        arista.eos.eos_ntp_global:
-          config:
-            authenticate:
-              enable: true
-            authentication_keys:
-              - id: 2
-                algorithm: "sha1"
-                encryption: 7
-                key: "123456"
-              - id: 23
-                algorithm: "md5"
-                encryption: 7
-                key: "123456"
-            local_interface: "Ethernet1"
-            qos_dscp: 10
-            trusted_key: 23
-            servers:
-              - server: "10.1.1.1"
-                vrf: "vrf01"
-                burst: True
-                prefer: True
-              - server: "25.1.1.1"
-                vrf: "vrf01"
-                maxpoll: 15
-                key_id: 2
-            serve:
-              access_lists:
-                - afi: "ip"
-                  acls:
-                    - acl_name: "acl01"
-                      direction: "in"
-                - afi: "ipv6"
-                  acls:
-                     - acl_name: "acl02"
-                       direction: "in"
-          state: rendered
-        become: yes
+    - name: Render provided configuration
+      arista.eos.eos_ntp_global:
+        config:
+          authenticate:
+            enable: true
+          authentication_keys:
+            - id: 2
+              algorithm: "sha1"
+              encryption: 7
+              key: "123456"
+            - id: 23
+              algorithm: "md5"
+              encryption: 7
+              key: "123456"
+          local_interface: "Ethernet1"
+          qos_dscp: 10
+          trusted_key: 23
+          servers:
+            - server: "10.1.1.1"
+              vrf: "vrf01"
+              burst: true
+              prefer: true
+            - server: "25.1.1.1"
+              vrf: "vrf01"
+              maxpoll: 15
+              key_id: 2
+          serve:
+            access_lists:
+              - afi: "ip"
+                acls:
+                  - acl_name: "acl01"
+                    direction: "in"
+              - afi: "ipv6"
+                acls:
+                  - acl_name: "acl02"
+                    direction: "in"
+        state: rendered
 
     # Module Execution:
     # "rendered": [

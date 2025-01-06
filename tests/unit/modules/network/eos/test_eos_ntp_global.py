@@ -8,11 +8,10 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_ntp_global
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
 
@@ -26,9 +25,7 @@ class TestEosNtp_GlobalModule(TestEosModule):
         self.mock_get_resource_connection_config = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module_base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_execute_show_command = patch(
             "ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.ntp_global.ntp_global.Ntp_globalFacts.get_config",
@@ -234,6 +231,10 @@ class TestEosNtp_GlobalModule(TestEosModule):
                             iburst=True,
                             source="vlan500",
                         ),
+                        dict(
+                            server="110.22.2.2",
+                            local_interface="Management1",
+                        ),
                     ],
                     serve=dict(
                         access_lists=[
@@ -250,6 +251,7 @@ class TestEosNtp_GlobalModule(TestEosModule):
             "ntp serve ip access-group acl03 in",
             "ntp authentication-key 4 sha1 0 123456",
             "ntp server 110.21.1.1 iburst source Vlan500 version 3",
+            "ntp server 110.22.2.2 local-interface Management1",
             "ntp qos dscp 15",
         ]
         self.execute_module(changed=True, commands=sorted(commands))

@@ -29,9 +29,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     get_from_dict,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.snmp_server import (
     Snmp_serverTemplate,
 )
@@ -112,9 +110,7 @@ class Snmp_server(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {
-                k: v for k, v in iteritems(haved) if k in wantd or not wantd
-            }
+            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
             wantd = {}
 
         # if state is deleted, empty out wantd and set haved to wantd

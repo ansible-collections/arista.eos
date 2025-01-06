@@ -8,11 +8,10 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_ospfv2
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
 
@@ -36,16 +35,12 @@ class TestEosOspfv2Module(TestEosModule):
         self.mock_get_resource_connection_config = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
         self.mock_edit_config = patch(
             "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
@@ -600,6 +595,9 @@ class TestEosOspfv2Module(TestEosModule):
                                     ),
                                 ),
                             ],
+                            auto_cost=dict(
+                                reference_bandwidth=1000000,
+                            ),
                             default_information=dict(
                                 metric=100,
                                 metric_type=1,
@@ -647,6 +645,7 @@ class TestEosOspfv2Module(TestEosModule):
             "adjacency exchange-start threshold 20045623",
             "area 0.0.0.2 filter 10.1.1.0/24",
             "area 0.0.0.50  range 172.20.0.0/16 cost 34",
+            "auto-cost reference-bandwidth 1000000",
             "default-information originate metric 100 metric-type 1",
             "distance ospf intra-area 85",
             "max-lsa  80000 40 ignore-count 3  ignore-time 6  reset-time 20",

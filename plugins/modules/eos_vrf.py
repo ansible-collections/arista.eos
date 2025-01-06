@@ -127,7 +127,7 @@ EXAMPLES = """
     name: test
     rd: 1:200
     interfaces:
-    - Ethernet2
+      - Ethernet2
     state: present
 
 - name: Delete VRFs
@@ -138,20 +138,20 @@ EXAMPLES = """
 - name: Create aggregate of VRFs with purge
   arista.eos.eos_vrf:
     aggregate:
-    - name: test4
-      rd: 1:204
-    - name: test5
-      rd: 1:205
+      - name: test4
+        rd: 1:204
+      - name: test5
+        rd: 1:205
     state: present
-    purge: yes
+    purge: true
 
 - name: Delete aggregate of VRFs
   arista.eos.eos_vrf:
     aggregate:
-    - name: test2
-    - name: test3
-    - name: test4
-    - name: test5
+      - name: test2
+      - name: test3
+      - name: test4
+      - name: test5
     state: absent
 """
 
@@ -226,8 +226,7 @@ def map_obj_to_commands(updates, module):
                             commands.append("vrf %s" % w["name"])
                     elif set(w["interfaces"]) != obj_in_have["interfaces"]:
                         missing_interfaces = list(
-                            set(w["interfaces"])
-                            - set(obj_in_have["interfaces"]),
+                            set(w["interfaces"]) - set(obj_in_have["interfaces"]),
                         )
 
                         for i in missing_interfaces:
@@ -298,9 +297,7 @@ def map_params_to_obj(module):
 
             if item.get("interfaces"):
                 item["interfaces"] = [
-                    intf.replace(" ", "").lower()
-                    for intf in item.get("interfaces")
-                    if intf
+                    intf.replace(" ", "").lower() for intf in item.get("interfaces") if intf
                 ]
 
             if item.get("associated_interfaces"):
@@ -317,18 +314,19 @@ def map_params_to_obj(module):
                 "name": module.params["name"],
                 "state": module.params["state"],
                 "rd": module.params["rd"],
-                "interfaces": [
-                    intf.replace(" ", "").lower()
-                    for intf in module.params["interfaces"]
-                ]
-                if module.params["interfaces"]
-                else [],
-                "associated_interfaces": [
-                    intf.replace(" ", "").lower()
-                    for intf in module.params["associated_interfaces"]
-                ]
-                if module.params["associated_interfaces"]
-                else [],
+                "interfaces": (
+                    [intf.replace(" ", "").lower() for intf in module.params["interfaces"]]
+                    if module.params["interfaces"]
+                    else []
+                ),
+                "associated_interfaces": (
+                    [
+                        intf.replace(" ", "").lower()
+                        for intf in module.params["associated_interfaces"]
+                    ]
+                    if module.params["associated_interfaces"]
+                    else []
+                ),
             },
         )
 
@@ -357,8 +355,7 @@ def check_declarative_intent_params(want, module, result):
                 interfaces = obj_in_have.get("interfaces")
                 if interfaces is not None and i not in interfaces:
                     module.fail_json(
-                        msg="Interface %s not configured on vrf %s"
-                        % (i, w["name"]),
+                        msg="Interface %s not configured on vrf %s" % (i, w["name"]),
                     )
 
 

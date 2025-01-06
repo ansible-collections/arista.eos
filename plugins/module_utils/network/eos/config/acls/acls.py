@@ -20,6 +20,7 @@ import itertools
 import re
 import socket
 
+from ansible.module_utils._text import to_text
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
     ConfigBase,
 )
@@ -29,9 +30,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 
 
 class Acls(ConfigBase):
@@ -141,35 +140,53 @@ class Acls(ConfigBase):
         commands = []
         want = list(itertools.chain(*want))
         have = list(itertools.chain(*have))
+
+        # Flatten the configurations for comparison
         h_index = 0
-        config = list(want)
+        config = list(want)  # Start with a copy of `want`
+
         for w in want:
             access_list = re.findall(r"(ip.*) access-list (.*)", w)
             if access_list:
+                # Check if the whole ACL is already present
                 if w in have:
                     h_index = have.index(w)
             else:
+                # Check sequence-specific entries
                 for num, h in enumerate(have, start=h_index + 1):
                     if "access-list" not in h:
-                        seq_num = re.search(r"(\d+) (.*)", w)
-                        if seq_num:
-                            have_seq_num = re.search(r"(\d+) (.*)", h)
-                            if seq_num.group(1) == have_seq_num.group(
-                                1,
-                            ) and have_seq_num.group(2) != seq_num.group(2):
-                                negate_cmd = "no " + seq_num.group(1)
-                                config.insert(config.index(w), negate_cmd)
-                        if w in h:
-                            config.pop(config.index(w))
-                            break
+                        snum = re.search(r"(\d+) (.*)", w)
+                        if snum:
+                            have_snum = re.search(r"(\d+) (.*)", h)
+                            if have_snum:
+                                snum_group_2 = snum.group(2)
+                                have_snum_group_2 = have_snum.group(2)
+                                # Match sequence number and full content
+                                if (
+                                    snum.group(1) == have_snum.group(1)
+                                    and snum_group_2 == have_snum_group_2
+                                ):
+                                    # Entry already exists, skip
+                                    config.remove(w)
+                                    break
+                        else:
+                            have_snum = re.search(r"(\d+) (.*)", h)
+                            if have_snum:
+                                # Match sequence number and full content
+                                if w == have_snum.group(2):
+                                    config.remove(w)
+                                    break
+
+        # Generate commands for any remaining entries in `config`
         for c in config:
             access_list = re.findall(r"(ip.*) access-list (.*)", c)
             if access_list:
                 acl_index = config.index(c)
             else:
                 if config[acl_index] not in commands:
-                    commands.append(config[acl_index])
-                commands.append(c)
+                    commands.append(config[acl_index])  # Add ACL definition
+                commands.append(c)  # Add ACL entry
+
         return commands
 
     def set_state(self, want, have):
@@ -182,10 +199,7 @@ class Acls(ConfigBase):
                   to the desired configuration
         """
         commands = []
-        if (
-            self.state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if self.state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
                     self.state,
@@ -440,14 +454,8 @@ def set_commands(want, have):
                             want_aces = wacl["aces"]
                             for wace in wacl["aces"]:
                                 for hace in hacl.get("aces", []):
-                                    if (
-                                        "sequence" in wace.keys()
-                                        and "sequence" in hace.keys()
-                                    ):
-                                        if (
-                                            wace["sequence"]
-                                            == hace["sequence"]
-                                        ):
+                                    if "sequence" in wace.keys() and "sequence" in hace.keys():
+                                        if wace["sequence"] == hace["sequence"]:
                                             wace_updated = get_updated_ace(
                                                 wace,
                                                 hace,
@@ -537,17 +545,20 @@ def add_commands(want):
                 if "port_protocol" in ace["source"].keys():
                     for op, val in ace["source"]["port_protocol"].items():
                         if val.isdigit():
-                            val = socket.getservbyport(int(val))
-                        command = (
-                            command + " " + op + " " + val.replace("_", "-")
-                        )
+                            try:
+                                # if its a valid port number, then convert it to service name
+                                # eg: 8082 -> us-cli
+                                val = socket.getservbyport(int(val))
+                                command = command + " " + op + " " + val.replace("_", "-")
+                            except OSError:
+                                # if socket.getservbyport is unable to resolve the port name then directly use the port number
+                                # eg: 50702
+                                command = command + " " + op + " " + to_text(val)
             if "destination" in ace.keys():
                 if "any" in ace["destination"].keys():
                     command = command + " any"
                 elif "subnet_address" in ace["destination"].keys():
-                    command = (
-                        command + " " + ace["destination"]["subnet_address"]
-                    )
+                    command = command + " " + ace["destination"]["subnet_address"]
                 elif "host" in ace["destination"].keys():
                     command = command + " host " + ace["destination"]["host"]
                 elif "address" in ace["destination"].keys():
@@ -574,9 +585,7 @@ def add_commands(want):
                 for proto in ace["protocol_options"].keys():
                     if proto == "icmp" or proto == "icmpv6":
                         for icmp_msg in ace["protocol_options"][proto].keys():
-                            command = (
-                                command + " " + icmp_msg.replace("_", "-")
-                            )
+                            command = command + " " + icmp_msg.replace("_", "-")
                     elif proto == "ip" or proto == "ipv6":
                         command = (
                             command
@@ -584,9 +593,7 @@ def add_commands(want):
                             + ace["protocol_options"][proto]["nexthop_group"]
                         )
                     elif proto == "tcp":
-                        for flag, val in ace["protocol_options"][proto][
-                            "flags"
-                        ].items():
+                        for flag, val in ace["protocol_options"][proto]["flags"].items():
                             if val:
                                 command = command + " " + flag
             if "hop_limit" in ace.keys():

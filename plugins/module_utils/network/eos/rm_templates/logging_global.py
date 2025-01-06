@@ -25,9 +25,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
 def _tmplt_logging_format(config_data):
     command = ""
     if "hostname" in config_data["format"]:
-        command = (
-            "logging format hostname " + config_data["format"]["hostname"]
-        )
+        command = "logging format hostname " + config_data["format"]["hostname"]
     if "sequence_numbers" in config_data["format"]:
         command = "logging format sequence-numbers"
     return command
@@ -375,6 +373,7 @@ class Logging_globalTemplate(NetworkTemplate):
                 re.VERBOSE,
             ),
             "setval": 'logging source-interface {{ source_interface }}',
+            "compval": "source_interface",
             "result": {
                 "source_interface": "{{ val }}",
             },

@@ -11,11 +11,6 @@ releases:
       - description: Manage multiline banners on Arista EOS devices
         name: eos_banner
         namespace: ""
-      - description:
-          (deprecated, removed after 2023-01-29) Configure global BGP protocol
-          settings on Arista EOS.
-        name: eos_bgp
-        namespace: ""
       - description: Run arbitrary commands on an Arista EOS device
         name: eos_command
         namespace: ""
@@ -54,9 +49,6 @@ releases:
         namespace: ""
       - description: LLDP interfaces resource module
         name: eos_lldp_interfaces
-        namespace: ""
-      - description: Manage logging on network devices
-        name: eos_logging
         namespace: ""
       - description: OSPFv2 resource module
         name: eos_ospfv2
@@ -199,6 +191,43 @@ releases:
         name: eos_bgp_global
         namespace: ""
     release_date: "2021-02-01"
+  10.0.0:
+    changes:
+      bugfixes:
+        - Ensure IPv6 static route definitions are correctly filtered during facts gathering.
+        - This fix make sure to fetch timer with `lldp` string at the start.
+        - Update integration tests for parse operations to ensure that ordering or address
+          family (AF) does not affect assertions.
+        - Update the filter to accurately retrieve relevant static route configurations.
+      major_changes:
+        - Bumping `requires_ansible` to `>=2.15.0` due to the end-of-life status of
+          previous `ansible-core` versions.
+      release_summary:
+        With this release, the minimum required version of `ansible-core`
+        for this collection is `2.15.0`. The last version known to be compatible with
+        `ansible-core` versions below `2.15` is v9.0.0.
+    fragments:
+      - bump215.yaml
+      - fix_statis_routes_ds_issue.yaml
+      - lldp_timer_bugfixes.yaml
+    release_date: "2024-06-10"
+  10.0.1:
+    changes:
+      bugfixes:
+        - Adds a missing word in the 'bgp client-to-client reflection' command in eos_bgp_global
+          module.
+        - Fixes a typo in always-compare-med attribute in eos_bgp_global module.
+        - Handles exception when translating an unknown port to its service name.
+      doc_changes:
+        - Includes a new support related section in the README.
+    fragments:
+      - bgp_client.yaml
+      - fix_typo.yaml
+      - ignore_219.yaml
+      - port_exception.yaml
+      - pylint_fix.yaml
+      - readme.yaml
+    release_date: "2024-10-21"
   2.0.0:
     changes:
       bugfixes:
@@ -495,3 +524,152 @@ releases:
       - remove_provider.yaml
       - sanity.yaml
     release_date: "2022-10-13"
+  6.0.1:
+    changes:
+      bugfixes:
+        - fix ntp_global authenticate config.
+        - https://github.com/ansible-collections/arista.eos/issues/399.
+    fragments:
+      - fix_linting_failures.yaml
+      - fix_ntp_global_authenticate.yaml
+      - rm_base.yaml
+      - sanity_fixes.yaml
+      - trivial_changes.yaml
+    release_date: "2023-04-10"
+  6.1.0:
+    changes:
+      doc_changes:
+        - Update bgp examples with yaml callback result
+        - Update bgp_global examples with yaml callback result
+        - Update examples for ospfv3
+        - Update examples with yaml formatted output in ospf_interfaces.
+        - Update ospf_interfaces examples with yaml callback result
+        - Update ospfv2 examples with yaml callback result
+        - Update ospfv3 examples with yaml callback result
+        - Updateb bgp_address_family examples with yaml callback result
+      minor_changes:
+        - Add support for overridden operation in bgp_global resource module.
+    fragments:
+      - add_gha_periodic.yaml
+      - black.yaml
+      - boolean_normalization.yaml
+      - no-provider.yaml
+      - ospfv3_docs.yaml
+      - update_docs.yaml
+      - update_ospf_intefaces_docs.yaml
+    release_date: "2023-09-06"
+  6.1.1:
+    changes:
+      bugfixes:
+        - fix sanity issues w.r.t python27
+    fragments:
+      - fix_27_sanity.yaml
+      - sanity_fix.yaml
+    release_date: "2023-09-12"
+  6.1.2:
+    changes:
+      bugfixes:
+        - Skip compile testing for python <3.6.
+    fragments:
+      - conpile_test36.yaml
+    release_date: "2023-09-14"
+  6.2.0:
+    changes:
+      bugfixes:
+        - Fix command generated for local-interface with in ntp server attribute.
+        - Fix command generation for source_interface attribute.
+        - Fix secondary ip address parsing.
+        - fix line attribute fact generation and placement in ACE, when ACE is not fully
+          parsed.
+      doc_changes:
+        - Fix docs for static_routes and prefix_lists Resource modules.
+        - eos_interfaces - update examples and use YAML output for better readability.
+        - eos_l2_interfaces - update examples and use YAML output for better readability.
+        - eos_l3_interfaces - update examples and use YAML output for better readability.
+      minor_changes:
+        - arista_config - Relax restrictions on I(src) parameter so it can be used more
+          like I(lines).
+    fragments:
+      - Fix_config.yaml
+      - docs_fix.yaml
+      - eos_interface_l2_l3.yaml
+      - fix_logging_global_replaced.yaml
+      - fix_tox.yaml
+      - fix_virtual_ip_facts_issue.yaml
+      - ipv6_acl_facts_gather_fix.yaml
+      - lint_fixtures.yaml
+      - ntp_global_local_interface_fix.yaml
+      - sanity_job_fix.yaml
+      - trivial_lint.yaml
+    release_date: "2023-10-30"
+  6.2.1:
+    changes:
+      release_summary: Rereleased 6.2.0 with updated galaxy reference.
+    fragments:
+      - rerelease.yaml
+    release_date: "2023-10-30"
+  6.2.2:
+    changes:
+      bugfixes:
+        - correct the reference of string attribute 'reference_bandwith'.
+    fragments:
+      - ospf_v2_reference_bandwidth_fix.yaml
+    release_date: "2023-11-27"
+  7.0.0:
+    changes:
+      major_changes:
+        - Bumping `requires_ansible` to `>=2.14.0`, since previous ansible-core versions
+          are EoL now.
+      release_summary:
+        Starting from this release, the minimum `ansible-core` version
+        this collection requires is `2.14.0`. The last known version compatible with
+        ansible-core<2.14 is `v6.2.2`.
+    fragments:
+      - fix_downstream_tests.yaml
+    release_date: "2023-11-30"
+  7.1.0:
+    changes:
+      bugfixes:
+        - This fix is needed because static_routes and vlans are not returning anything
+          when resources are not configured.
+        - This got noticed in this issue (https://github.com/network-automation/toolkit/issues/47)
+        - correct a missing whitespace and add 'auth' string.
+        - correct the parsing of the elements in 'name_servers' in 'eos_system' module.
+        - when static_routes and vlans are not confirgured then return empty list.
+      doc_changes:
+        - eos_lag_interface - Updated examples for lag_interface module.
+    fragments:
+      - bugfixes_return_empty_data_structure_for_no_facts.yaml
+      - eos_system_element_parsing_fix.yaml
+      - lag_interface_docupdate.yml
+      - snmp_missing_whitespace_and_authentication_fix.yaml
+      - tests_trivial.yaml
+      - trivial_tests.yaml
+    release_date: "2024-03-06"
+  8.0.0:
+    changes:
+      major_changes:
+        - This release removes previously deprecated modules and attributes from this
+          collection. Please refer to the **Removed Features** section for details.
+      removed_features:
+        - Remove depreacted eos_bgp module which is replaced with eos_bgp_global and
+          eos_bgp_address_family.
+        - Remove deprecated eos_logging module which is replaced with eos_logging_global
+          resource module.
+        - Remove deprecated timers.throttle attribute.
+    fragments:
+      - remove_deprecated.yaml
+      - trivial_tests_updates.yaml
+    release_date: "2024-03-27"
+  9.0.0:
+    changes:
+      major_changes:
+        - Update the netcommon base version 6.1.0 to support cli_restore plugin.
+      minor_changes:
+        - Add support for cli_restore functionality.
+        - Please refer the PR to know more about core changes (https://github.com/ansible-collections/ansible.netcommon/pull/618).
+        - cli_restore module is part of netcommon.
+    fragments:
+      - 218sanity.yml
+      - add_restore_support.yaml
+    release_date: "2024-04-13"

@@ -8,11 +8,10 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_l3_interfaces
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
-from ansible_collections.arista.eos.tests.unit.modules.utils import (
-    set_module_args,
-)
+from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
 
@@ -36,16 +35,12 @@ class TestEosL3InterfacesModule(TestEosModule):
         self.mock_get_resource_connection_config = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base.get_resource_connection",
         )
-        self.get_resource_connection_config = (
-            self.mock_get_resource_connection_config.start()
-        )
+        self.get_resource_connection_config = self.mock_get_resource_connection_config.start()
 
         self.mock_get_resource_connection_facts = patch(
             "ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts.get_resource_connection",
         )
-        self.get_resource_connection_facts = (
-            self.mock_get_resource_connection_facts.start()
-        )
+        self.get_resource_connection_facts = self.mock_get_resource_connection_facts.start()
 
         self.mock_edit_config = patch(
             "ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers.CliProvider.edit_config",
@@ -300,6 +295,8 @@ class TestEosL3InterfacesModule(TestEosModule):
             "ip address 198.51.100.14/24",
             "interface Ethernet2",
             "ip address 203.0.113.27/24",
+            "interface Vlan100",
+            "ip address virtual 192.13.45.13/24 secondary",
         ]
         parsed_str = "\n".join(commands)
         set_module_args(dict(running_config=parsed_str, state="parsed"))
@@ -307,6 +304,10 @@ class TestEosL3InterfacesModule(TestEosModule):
         parsed_list = [
             {"name": "Ethernet1", "ipv4": [{"address": "198.51.100.14/24"}]},
             {"name": "Ethernet2", "ipv4": [{"address": "203.0.113.27/24"}]},
+            {
+                "name": "Vlan100",
+                "ipv4": [{"address": "192.13.45.13/24", "secondary": True, "virtual": True}],
+            },
         ]
         self.assertEqual(parsed_list, result["parsed"])
 

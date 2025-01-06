@@ -292,7 +292,7 @@ Examples
         name: test
         rd: 1:200
         interfaces:
-        - Ethernet2
+          - Ethernet2
         state: present
 
     - name: Delete VRFs
@@ -303,20 +303,20 @@ Examples
     - name: Create aggregate of VRFs with purge
       arista.eos.eos_vrf:
         aggregate:
-        - name: test4
-          rd: 1:204
-        - name: test5
-          rd: 1:205
+          - name: test4
+            rd: 1:204
+          - name: test5
+            rd: 1:205
         state: present
-        purge: yes
+        purge: true
 
     - name: Delete aggregate of VRFs
       arista.eos.eos_vrf:
         aggregate:
-        - name: test2
-        - name: test3
-        - name: test4
-        - name: test5
+          - name: test2
+          - name: test3
+          - name: test4
+          - name: test5
         state: absent
 
 

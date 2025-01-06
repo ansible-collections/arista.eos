@@ -294,7 +294,7 @@ def _tmplt_snmp_server_hosts(config_data):
     el = list(config_data["hosts"].values())[0]
     command = "snmp-server host " + el["host"]
     if el.get("vrf"):
-        command += " vrf" + el["vrf"]
+        command += " vrf " + el["vrf"]
     if el.get("informs"):
         command += " informs"
     if el.get("traps"):
@@ -334,16 +334,9 @@ def _tmplt_snmp_server_users_auth(config_data):
         command += " udp-port " + str(el["udp_port"])
     command += " " + el["version"]
     if el.get("auth"):
-        command += (
-            " " + el["auth"]["algorithm"] + " " + el["auth"]["auth_passphrase"]
-        )
+        command += " auth " + el["auth"]["algorithm"] + " " + el["auth"]["auth_passphrase"]
         if el["auth"].get("encryption"):
-            command += (
-                " priv "
-                + el["auth"]["encryption"]
-                + " "
-                + el["auth"]["priv_passphrase"]
-            )
+            command += " priv " + el["auth"]["encryption"] + " " + el["auth"]["priv_passphrase"]
     return command
 
 
@@ -358,11 +351,9 @@ def _tmplt_snmp_server_users_localized(config_data):
     if el.get("localized"):
         command += " localized " + el["localized"]["engineid"]
         el = el["localized"]
-        command += " " + el["algorithm"] + " " + el["auth_passphrase"]
+        command += " auth " + el["algorithm"] + " " + el["auth_passphrase"]
         if el.get("encryption"):
-            command += (
-                " priv " + el["encryption"] + " " + el["priv_passphrase"]
-            )
+            command += " priv " + el["encryption"] + " " + el["priv_passphrase"]
     return command
 
 

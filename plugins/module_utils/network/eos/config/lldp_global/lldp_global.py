@@ -24,9 +24,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     to_list,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 
 
 class Lldp_global(ConfigBase):
@@ -130,10 +128,7 @@ class Lldp_global(ConfigBase):
                   to the desired configuration
         """
         state = self._module.params["state"]
-        if (
-            state in ("merged", "replaced", "overridden", "rendered")
-            and not want
-        ):
+        if state in ("merged", "replaced", "overridden", "rendered") and not want:
             self._module.fail_json(
                 msg="value of config parameter must not be empty for state {0}".format(
                     state,

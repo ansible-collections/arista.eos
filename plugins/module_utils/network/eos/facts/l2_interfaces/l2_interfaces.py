@@ -18,9 +18,7 @@ import re
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.l2_interfaces.l2_interfaces import (
     L2_interfacesArgs,
@@ -73,9 +71,7 @@ class L2_interfacesFacts(object):
                 self.argument_spec,
                 {"config": objs},
             )
-            facts["l2_interfaces"] = [
-                utils.remove_empties(cfg) for cfg in params["config"]
-            ]
+            facts["l2_interfaces"] = [utils.remove_empties(cfg) for cfg in params["config"]]
         ansible_facts["ansible_network_resources"].update(facts)
 
         return ansible_facts

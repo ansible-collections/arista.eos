@@ -20,9 +20,7 @@ import re
 
 from copy import deepcopy
 
-from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import (
-    utils,
-)
+from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.acl_interfaces.acl_interfaces import (
     Acl_interfacesArgs,
@@ -68,9 +66,7 @@ class Acl_interfacesFacts(object):
             resource_delim,
             resource_delim,
         )
-        resources = [
-            p.strip() for p in re.findall(find_pattern, data, re.DOTALL)
-        ]
+        resources = [p.strip() for p in re.findall(find_pattern, data, re.DOTALL)]
         objs = []
         for resource in resources:
             if resource:
@@ -85,9 +81,7 @@ class Acl_interfacesFacts(object):
                 self.argument_spec,
                 {"config": objs},
             )
-            facts["acl_interfaces"] = [
-                utils.remove_empties(cfg) for cfg in params["config"]
-            ]
+            facts["acl_interfaces"] = [utils.remove_empties(cfg) for cfg in params["config"]]
 
         ansible_facts["ansible_network_resources"].update(facts)
         return ansible_facts

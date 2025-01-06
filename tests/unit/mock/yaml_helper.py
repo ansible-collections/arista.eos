@@ -149,11 +149,7 @@ class YamlTestUtils(object):
             )
 
         assert yaml_string == yaml_string_obj_from_stream
-        assert (
-            yaml_string
-            == yaml_string_obj_from_stream
-            == yaml_string_obj_from_string
-        )
+        assert yaml_string == yaml_string_obj_from_stream == yaml_string_obj_from_string
         assert (
             yaml_string
             == yaml_string_obj_from_stream

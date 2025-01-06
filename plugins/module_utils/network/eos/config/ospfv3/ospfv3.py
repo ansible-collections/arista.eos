@@ -29,9 +29,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     get_from_dict,
 )
 
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import (
-    Facts,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.facts import Facts
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.rm_templates.ospfv3 import (
     Ospfv3Template,
 )
@@ -149,30 +147,6 @@ class Ospfv3(ResourceModule):
     def _global_compare(self, want, have):
         for name, entry in iteritems(want):
             if name == "timers":
-                if entry.get("throttle"):
-                    throttle = entry.pop("throttle")
-                    modified = {}
-                    if throttle.get("lsa"):
-                        modified["lsa"] = {
-                            "max": throttle["max"],
-                            "min": throttle["min"],
-                            "initial": throttle["initial"],
-                            "direction": "tx",
-                        }
-                    if throttle.get("spf"):
-                        modified["spf"] = {
-                            "max": throttle["max"],
-                            "min": throttle["min"],
-                            "initial": throttle["initial"],
-                        }
-                    entry.update(modified)
-                    self._module.warn(
-                        " ** The 'timers' argument has been changed to have separate 'lsa' and 'spf' keys and 'throttle' has been deprecated. ** "
-                        " \n** Your task has been modified to use {0}. ** "
-                        " \n** timers.throttle will be removed after '2024-01-01' ** ".format(
-                            entry,
-                        ),
-                    )
                 if entry.get("lsa") and not isinstance(entry["lsa"], dict):
                     modified = {}
                     if not isinstance(entry["lsa"], int):
@@ -185,13 +159,6 @@ class Ospfv3(ResourceModule):
                             "lsa": {"direction": "rx", "min": entry["lsa"]},
                         },
                     }
-                    self._module.warn(
-                        " ** 'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards. ** "
-                        " \n** Your task has been modified to use {0}. ** "
-                        " \n** timers.lsa of type int will be removed after '2024-01-01' ** ".format(
-                            modified,
-                        ),
-                    )
                     entry["lsa"] = modified["timers"]["lsa"]
             if name in ["vrf", "address_family"]:
                 continue
@@ -242,30 +209,6 @@ class Ospfv3(ResourceModule):
         for name, entry in iteritems(wafs):
             begin = len(self.commands)
             if "timers" in entry:
-                if entry["timers"].get("throttle"):
-                    throttle = entry["timers"].pop("throttle")
-                    modified = {}
-                    if throttle.get("lsa"):
-                        modified["lsa"] = {
-                            "max": throttle["max"],
-                            "min": throttle["min"],
-                            "initial": throttle["initial"],
-                            "direction": "tx",
-                        }
-                    if throttle.get("spf"):
-                        modified["spf"] = {
-                            "max": throttle["max"],
-                            "min": throttle["min"],
-                            "initial": throttle["initial"],
-                        }
-                    entry["timers"].update(modified)
-                    self._module.warn(
-                        " ** The 'timers' argument has been changed to have separate 'lsa' and 'spf' keys and 'throttle' has been deprecated. ** "
-                        " \n** Your task has been modified to use {0}. ** "
-                        " \n** timers.throttle will be removed after '2024-01-01' ** ".format(
-                            entry["timers"],
-                        ),
-                    )
                 if entry["timers"].get("lsa") and not isinstance(
                     entry["timers"]["lsa"],
                     dict,
@@ -283,13 +226,6 @@ class Ospfv3(ResourceModule):
                             },
                         },
                     }
-                    self._module.warn(
-                        " ** 'timers lsa arrival' has changed to 'timers lsa rx min interval' from eos 4.23 onwards. ** "
-                        " \n** Your task has been modified to use {0}. ** "
-                        " \n** timers.lsa of type int will be removed after '2024-01-01' ** ".format(
-                            modified,
-                        ),
-                    )
                     entry["timers"]["lsa"] = modified["timers"]["lsa"]
             self._compare_lists(want=entry, have=hafs.get(name, {}))
             self._areas_compare(want=entry, have=hafs.get(name, {}))
@@ -298,11 +234,7 @@ class Ospfv3(ResourceModule):
                 want=entry,
                 have=hafs.pop(name, {}),
             )
-            if (
-                len(self.commands) != begin
-                and "afi" in entry
-                and entry["afi"] != "router"
-            ):
+            if len(self.commands) != begin and "afi" in entry and entry["afi"] != "router":
                 self._rotate_commands(begin=begin)
                 self.commands.insert(
                     begin,

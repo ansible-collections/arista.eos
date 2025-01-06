@@ -140,7 +140,7 @@ EXAMPLES = """
 # veos# show running-config | include lacp
 #
 
-#Using rendered:
+# Using rendered:
 
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_lacp:
@@ -184,7 +184,6 @@ EXAMPLES = """
 #   system:
 #     priority: 10
 #
-
 """
 RETURN = """
 before:
@@ -214,9 +213,7 @@ from ansible.module_utils.basic import AnsibleModule
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.lacp.lacp import (
     LacpArgs,
 )
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.lacp.lacp import (
-    Lacp,
-)
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.lacp.lacp import Lacp
 
 
 def main():
