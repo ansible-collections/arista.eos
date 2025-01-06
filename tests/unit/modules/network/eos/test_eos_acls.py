@@ -141,6 +141,7 @@ class TestEosAclsModule(TestEosModule):
                                         source=dict(any="true"),
                                         destination=dict(any="true"),
                                         protocol=6,
+                                        sequence=45,
                                     ),
                                 ],
                             ),
@@ -150,7 +151,7 @@ class TestEosAclsModule(TestEosModule):
                 state="merged",
             ),
         )
-        self.execute_module(changed=False, commands=[])
+        result = self.execute_module(changed=False)
 
     def test_eos_acls_replaced(self):
         set_module_args(
@@ -213,6 +214,44 @@ class TestEosAclsModule(TestEosModule):
             "20 permit ospf 40.2.0.0/8 any log",
             "ip access-list test3",
             "50 permit ospf 70.2.0.0/8 any log",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_acls_replaced_exception(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="test2",
+                                aces=[
+                                    dict(
+                                        sequence="11",
+                                        grant="permit",
+                                        protocol="tcp",
+                                        source=dict(
+                                            host="192.168.2.1",
+                                            port_protocol=dict(
+                                                eq="50702",
+                                            ),
+                                        ),
+                                        destination=dict(
+                                            host="192.168.1.1",
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "ip access-list test2",
+            "11 permit tcp host 192.168.2.1 eq 50702 host 192.168.1.1",
         ]
         self.execute_module(changed=True, commands=commands)
 
