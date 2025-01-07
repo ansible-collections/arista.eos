@@ -2261,7 +2261,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 r"""
                 \s*neighbor
                 \s+(?P<peer>\S+)
-                \s+peer-group
+                \s+peer\sgroup
                 \s*(?P<name>\S+)
                 *$""",
                 re.VERBOSE,
