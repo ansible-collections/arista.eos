@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - fix facts gathering for ebgp-multihop attribute.

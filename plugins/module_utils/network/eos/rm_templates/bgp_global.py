@@ -14,7 +14,6 @@ a list of parser definitions and associated functions that
 facilitates both facts gathering and native command generation for
 the given network resource.
 """
-
 import re
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
@@ -264,7 +263,7 @@ def _tmplt_bgp_neighbor(config_data):
     elif config_data["neighbor"].get("dont_capability_negotiate"):
         command += " dont-capability-negotiate"
     elif config_data["neighbor"].get("ebgp_multihop"):
-        command += " ebgp-multiphop"
+        command += " ebgp-multihop"
         if config_data["neighbor"]["ebgp_multihop"].get("ttl"):
             command += " {ttl}".format(**config_data["neighbor"]["ebgp_multihop"])
     elif config_data["neighbor"].get("encryption_password"):
@@ -1654,7 +1653,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s*neighbor
                 \s+(?P<peer>\S+)
                 \s+ebgp-multihop
-                \s*(?P<ttl>\d+)*
+                \s+(?P<ttl>\d+)*
                 $""",
                 re.VERBOSE,
             ),
