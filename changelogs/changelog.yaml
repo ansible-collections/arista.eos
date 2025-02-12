@@ -191,43 +191,6 @@ releases:
         name: eos_bgp_global
         namespace: ""
     release_date: "2021-02-01"
-  10.0.0:
-    changes:
-      bugfixes:
-        - Ensure IPv6 static route definitions are correctly filtered during facts gathering.
-        - This fix make sure to fetch timer with `lldp` string at the start.
-        - Update integration tests for parse operations to ensure that ordering or address
-          family (AF) does not affect assertions.
-        - Update the filter to accurately retrieve relevant static route configurations.
-      major_changes:
-        - Bumping `requires_ansible` to `>=2.15.0` due to the end-of-life status of
-          previous `ansible-core` versions.
-      release_summary:
-        With this release, the minimum required version of `ansible-core`
-        for this collection is `2.15.0`. The last version known to be compatible with
-        `ansible-core` versions below `2.15` is v9.0.0.
-    fragments:
-      - bump215.yaml
-      - fix_statis_routes_ds_issue.yaml
-      - lldp_timer_bugfixes.yaml
-    release_date: "2024-06-10"
-  10.0.1:
-    changes:
-      bugfixes:
-        - Adds a missing word in the 'bgp client-to-client reflection' command in eos_bgp_global
-          module.
-        - Fixes a typo in always-compare-med attribute in eos_bgp_global module.
-        - Handles exception when translating an unknown port to its service name.
-      doc_changes:
-        - Includes a new support related section in the README.
-    fragments:
-      - bgp_client.yaml
-      - fix_typo.yaml
-      - ignore_219.yaml
-      - port_exception.yaml
-      - pylint_fix.yaml
-      - readme.yaml
-    release_date: "2024-10-21"
   2.0.0:
     changes:
       bugfixes:
@@ -673,3 +636,57 @@ releases:
       - 218sanity.yml
       - add_restore_support.yaml
     release_date: "2024-04-13"
+  10.0.0:
+    changes:
+      bugfixes:
+        - Ensure IPv6 static route definitions are correctly filtered during facts gathering.
+        - This fix make sure to fetch timer with `lldp` string at the start.
+        - Update integration tests for parse operations to ensure that ordering or address
+          family (AF) does not affect assertions.
+        - Update the filter to accurately retrieve relevant static route configurations.
+      major_changes:
+        - Bumping `requires_ansible` to `>=2.15.0` due to the end-of-life status of
+          previous `ansible-core` versions.
+      release_summary:
+        With this release, the minimum required version of `ansible-core`
+        for this collection is `2.15.0`. The last version known to be compatible with
+        `ansible-core` versions below `2.15` is v9.0.0.
+    fragments:
+      - bump215.yaml
+      - fix_statis_routes_ds_issue.yaml
+      - lldp_timer_bugfixes.yaml
+    release_date: "2024-06-10"
+  10.0.1:
+    changes:
+      bugfixes:
+        - Adds a missing word in the 'bgp client-to-client reflection' command in eos_bgp_global
+          module.
+        - Fixes a typo in always-compare-med attribute in eos_bgp_global module.
+        - Handles exception when translating an unknown port to its service name.
+      doc_changes:
+        - Includes a new support related section in the README.
+    fragments:
+      - bgp_client.yaml
+      - fix_typo.yaml
+      - ignore_219.yaml
+      - port_exception.yaml
+      - pylint_fix.yaml
+      - readme.yaml
+    release_date: "2024-10-21"
+  10.1.1:
+    changes:
+      bugfixes:
+        - Fixed an issue in the `compare_configs` method where unnecessary negate commands
+          were generated for ACL entries already present in both `have` and `want` configurations.
+        - Improved validation logic for ACL sequence numbers and content matching to
+          ensure idempotency.
+        - Prevented redundant configuration updates for Access Control Lists.
+        - fix facts gathering for ebgp-multihop attribute.
+      minor_changes:
+        - Adds a new module `eos_vrf_global` in favor of `eos_vrf` legacy module to
+          manage VRF global configurations on Arista EOS devices.
+    fragments:
+      - add_vrf_global.yaml
+      - fix_acls_config_drift.yaml
+      - fix_eos_bgp_global.yaml
+    release_date: "2025-02-12"
