@@ -4,6 +4,22 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v10.1.1
+=======
+
+Minor Changes
+-------------
+
+- Adds a new module `eos_vrf_global` in favor of `eos_vrf` legacy module to manage VRF global configurations on Arista EOS devices.
+
+Bugfixes
+--------
+
+- Fixed an issue in the `compare_configs` method where unnecessary negate commands were generated for ACL entries already present in both `have` and `want` configurations.
+- Improved validation logic for ACL sequence numbers and content matching to ensure idempotency.
+- Prevented redundant configuration updates for Access Control Lists.
+- fix facts gathering for ebgp-multihop attribute.
+
 v10.0.1
 =======
 
