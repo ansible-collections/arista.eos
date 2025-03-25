@@ -60,6 +60,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                     hosts=[
                         dict(name="11.11.11.1", port=25),
                         dict(name="host01", port=514, protocol="tcp"),
+                        dict(name="192.0.2.1"),
                     ],
                     level=dict(facility="AAA", severity="alerts"),
                     persistent=dict(size=4096),
@@ -75,6 +76,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                                     port=514,
                                     protocol="tcp",
                                 ),
+                                dict(name="192.0.2.1"),
                             ],
                         ),
                     ],
@@ -97,6 +99,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                     hosts=[
                         dict(name="11.11.11.1", port=25),
                         dict(name="host01", port=514, protocol="tcp"),
+                        dict(name="192.0.2.1"),
                     ],
                     level=dict(facility="AAA", severity="alerts"),
                     persistent=dict(size=4096),
@@ -112,6 +115,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                                     port=514,
                                     protocol="tcp",
                                 ),
+                                dict(name="192.0.2.1"),
                             ],
                         ),
                     ],
@@ -134,6 +138,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                     hosts=[
                         dict(name="11.11.11.1", port=25),
                         dict(name="host01", port=514, protocol="tcp"),
+                        dict(name="192.0.2.1"),
                     ],
                     level=dict(facility="AAA", severity="alerts"),
                     persistent=dict(size=4096),
@@ -149,6 +154,7 @@ class TestEosLogging_GlobalModule(TestEosModule):
                                     port=514,
                                     protocol="tcp",
                                 ),
+                                dict(name="192.0.2.1"),
                             ],
                         ),
                     ],
@@ -434,3 +440,15 @@ class TestEosLogging_GlobalModule(TestEosModule):
             sorted(commands),
             result["rendered"],
         )
+
+
+class TestEOSLogging_GlobalModuleNew(TestEosLogging_GlobalModule):
+    def load_fixtures(self, commands=None, transport="cli", filename=None):
+        if filename is None:
+            filename = "eos_logging_global_config-new.cfg"
+
+        def load_from_file(*args, **kwargs):
+            output = load_fixture(filename)
+            return output
+
+        self.execute_show_command.side_effect = load_from_file
