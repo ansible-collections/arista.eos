@@ -94,7 +94,7 @@ def _tmplt_route_map_ip(config_data):
         command = "set ip next-hop "
         k = "ip"
     elif config_data.get("ipv6"):
-        command = "set ip next-hop "
+        command = "set ipv6 next-hop "
         k = "ipv6"
     if config_data[k].get("address"):
         command += config_data[k]["address"]
