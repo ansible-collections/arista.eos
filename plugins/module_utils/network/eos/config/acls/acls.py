@@ -253,7 +253,7 @@ class Acls(ConfigBase):
                                             "acls": [
                                                 {
                                                     "name": name,
-                                                    "standard":have_standard,
+                                                    "standard": have_standard,
                                                     "aces": [h_ace],
                                                 },
                                             ],
@@ -279,7 +279,7 @@ class Acls(ConfigBase):
                                                 ],
                                             },
                                         ]
-                          
+
                                         cmds = set_commands(w, have)
                                         config_cmds.append(
                                             list(itertools.chain(*cmds)),
