@@ -216,7 +216,7 @@ class Acls(ConfigBase):
             commands = self._state_replaced(want, have)
         return commands
 
-     def _state_replaced(self, want, have):
+    def _state_replaced(self, want, have):
         """The command generator when state is replaced
 
         :rtype: A list
