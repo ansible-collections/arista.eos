@@ -216,7 +216,7 @@ class Acls(ConfigBase):
             commands = self._state_replaced(want, have)
         return commands
 
-    def _state_replaced(self, want, have):
+     def _state_replaced(self, want, have):
         """The command generator when state is replaced
 
         :rtype: A list
@@ -228,12 +228,14 @@ class Acls(ConfigBase):
         remove_cmds = []
         ace_names = []
         diff = {}
+
         if not have:
             commands = set_commands(want, [])
         for w in want:
             afi = "ipv6" if w["afi"] == "ipv6" else "ipv4"
             for acl in w["acls"]:
                 name = acl["name"]
+                want_standard = True if acl.get("standard") == True else False
                 want_ace = acl["aces"]
                 for h in have:
                     if h["afi"] == afi:
@@ -242,6 +244,7 @@ class Acls(ConfigBase):
                                 if name not in ace_names:
                                     ace_names.append(name)
                                 h = {"afi": afi, "acls": [{"name": name}]}
+                                have_standard = True if h_acl.get("standard") == True else False
                                 for h_ace in h_acl.get("aces", []):
                                     diff = get_ace_diff(h_ace, want_ace)
                                     if diff:
@@ -250,6 +253,7 @@ class Acls(ConfigBase):
                                             "acls": [
                                                 {
                                                     "name": name,
+                                                    "standard":have_standard,
                                                     "aces": [h_ace],
                                                 },
                                             ],
@@ -269,11 +273,13 @@ class Acls(ConfigBase):
                                                 "acls": [
                                                     {
                                                         "name": name,
+                                                        "standard": want_standard,
                                                         "aces": [w_ace],
                                                     },
                                                 ],
                                             },
                                         ]
+                          
                                         cmds = set_commands(w, have)
                                         config_cmds.append(
                                             list(itertools.chain(*cmds)),
@@ -286,6 +292,7 @@ class Acls(ConfigBase):
                                             "acls": [
                                                 {
                                                     "name": name,
+                                                    "standard": want_standard,
                                                     "aces": [w_ace],
                                                 },
                                             ],
