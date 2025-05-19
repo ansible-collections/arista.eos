@@ -94,6 +94,7 @@ nodes:
       interface Management1
          ip address dhcp
          dhcp client accept default-route
+         no shutdown
       !
       ip routing
       !
