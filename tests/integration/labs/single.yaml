@@ -15,11 +15,7 @@ links:
 nodes:
   - boot_disk_size:
     configuration: |-
-      transceiver qsfp default-mode 4x10G
-      !
-      service routing protocols model ribd
-      !
-      hostname foo
+      hostname aristint
       ip domain lookup vrf ansible source-interface Management1
       ip name-server vrf default 192.0.2.1
       ip name-server vrf default 192.0.2.2
@@ -30,9 +26,9 @@ nodes:
       !
       no aaa root
       !
-      username admin privilege 15 role network-admin secret sha512 $6$Dq3slCu4l7sO/kMX$D97XDK3fxD9OYFyKcw7/YBZnaGtABzJSS8JAeqOYfibnCJcMns21U3MYCwX6LUO.NoZOx.zY4Sb7bD0Hq8ImQ0
-      username ansible privilege 15 secret sha512 $6$ET74E.GXvzCqabtF$ED1hZ6E7jhcc.gSBnwQKjxuBqJbrihlycG/mQVSbUYyKruaLc2GwJhenvh5yVOKr4A2GQ8c1bQx0HKijd1SGu0
-      username cisco privilege 15 secret sha512 $6$4C.0tcB6nZuaUrJa$/7ljxfdwAGgCKmOngKR/Xc0pktAfvRB85N9ZLXCLdGTRQO1KuMsd/hltsCG2/ekM7X4JOAZc0PhgJ6fP6nmAu/
+      username ansible privilege 15 role network-admin secret ansible
+      username admin privilege 15 role network-admin secret admin
+      username cisco privilege 15 secret cisco
       username zuul privilege 15 nopassword
       username zuul ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDI3XA0A84nUpCr9mfkrDjBdoNFtYMXqXMm2+WsGrOJUA2ESodUDDfTKmsA/xEygdCnj8JfSC3SYhc0uKHVe0RdG20mzntUqD50kB0STFeOHh
       3ee7FXmMxcLqLlyY9pJkn1V5WOi/D1Lbz8MwRUVBfqufryavwHla/9CPuAtPcut8mTUB0+Rapnv8W3n4dA6PqHNW1tylJUXj6P4trJPnFrdfMaIxc21tfd/QrMM4h90phW3zNILE0qF9UHpQxP0zew/LcD9rc+IhnbgC3DeC
@@ -57,42 +53,11 @@ nodes:
          speed 10full
          no switchport
       !
-      interface Ethernet3
-      !
-      interface Ethernet4
-      !
-      interface Ethernet5
-      !
-      interface Ethernet6
-      !
-      interface Ethernet7
-      !
-      interface Ethernet8
-      !
-      interface Ethernet9
-      !
-      interface Ethernet10
-      !
-      interface Ethernet11
-      !
-      interface Ethernet12
-      !
-      interface Loopback10
-      !
-      interface Loopback11
-      !
-      interface Loopback12
-      !
-      interface Loopback13
-      !
-      interface Loopback14
-      !
-      interface Loopback15
-      !
       interface Loopback1000
       !
       interface Management1
          ip address dhcp
+         no shutdown
          dhcp client accept default-route
       !
       ip routing
