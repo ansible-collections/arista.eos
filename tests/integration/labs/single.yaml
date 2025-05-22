@@ -28,7 +28,6 @@ nodes:
       !
       username ansible privilege 15 role network-admin secret ansible
       username admin privilege 15 role network-admin secret admin
-      username cisco privilege 15 secret cisco
       username zuul privilege 15 nopassword
       username zuul ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDI3XA0A84nUpCr9mfkrDjBdoNFtYMXqXMm2+WsGrOJUA2ESodUDDfTKmsA/xEygdCnj8JfSC3SYhc0uKHVe0RdG20mzntUqD50kB0STFeOHh
       3ee7FXmMxcLqLlyY9pJkn1V5WOi/D1Lbz8MwRUVBfqufryavwHla/9CPuAtPcut8mTUB0+Rapnv8W3n4dA6PqHNW1tylJUXj6P4trJPnFrdfMaIxc21tfd/QrMM4h90phW3zNILE0qF9UHpQxP0zew/LcD9rc+IhnbgC3DeC
