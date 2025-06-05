@@ -397,6 +397,61 @@ class TestEosAclsModule(TestEosModule):
         commands = ["no ip access-list test1"]
         self.execute_module(changed=True, commands=commands)
 
+    def test_eos_two_acls_idempotent(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="TEST-LIST-1",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        remark="test",
+                                    ),
+                                    dict(
+                                        sequence="20",
+                                        grant="permit",
+                                        source=dict(subnet_address="192.0.2.0/24"),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(eq="https"),
+                                        ),
+                                        protocol="tcp",
+                                        log="true",
+                                    ),
+                                ],
+                            ),
+                            dict(
+                                name="TEST-LIST-2",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        remark="test",
+                                    ),
+                                    dict(
+                                        sequence="20",
+                                        grant="permit",
+                                        log="true",
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(eq="https"),
+                                        ),
+                                        protocol="tcp",
+                                        source=dict(subnet_address="192.0.2.0/24"),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        self.execute_module(changed=False, commands=[], filename="eos_acls_idempotent.cfg")
+
     def test_eos_acls_gathered(self):
         set_module_args(dict(config=[], state="gathered"))
         result = self.execute_module(
