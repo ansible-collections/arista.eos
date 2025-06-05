@@ -140,6 +140,7 @@ options:
             port:
               description: Port of the syslog server.
               type: int
+              default: 514
         level:
           description: Configure logging severity
           type: dict
