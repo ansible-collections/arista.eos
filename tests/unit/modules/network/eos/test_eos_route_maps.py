@@ -114,6 +114,9 @@ class TestEosRoute_MapsModule(TestEosModule):
                                     tag=3,
                                     local_preference=51,
                                     evpn=True,
+                                    ipv6=dict(
+                                        address="10.1.1.1/32",
+                                    ),
                                 ),
                             ),
                         ],
@@ -132,6 +135,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             "set tag 3",
             "set local-preference 51",
             "set evpn next-hop unchanged",
+            "set ipv6 next-hop 10.1.1.1/32",
         ]
         self.execute_module(changed=True, commands=commands)
 
