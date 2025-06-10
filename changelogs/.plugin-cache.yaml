@@ -189,4 +189,4 @@ plugins:
   strategy: {}
   test: {}
   vars: {}
-version: 10.1.1
+version: 11.0.0

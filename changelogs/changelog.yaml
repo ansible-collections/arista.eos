@@ -690,3 +690,15 @@ releases:
       - fix_acls_config_drift.yaml
       - fix_eos_bgp_global.yaml
     release_date: "2025-02-12"
+  11.0.0:
+    changes:
+      major_changes:
+        - Bumping `requires_ansible` to `>=2.16.0`, since previous ansible-core versions
+          are EoL now.
+      release_summary:
+        "With this release, the minimum required version of `ansible-core`
+        for this collection is `2.16.0`. The last version known to be compatible with
+        `ansible-core` versions below `2.16` is v10.1.1."
+    fragments:
+      - bump216.yaml
+    release_date: "2025-04-11"

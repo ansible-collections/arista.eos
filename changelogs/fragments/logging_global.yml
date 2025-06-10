@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Fixed idempotency regarding logging port in differing versions of EOS
