@@ -932,7 +932,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*set\smetric
-                \s*(?P<val>\d+)*
+                \s*(?P<val>[+-]?\d+)*
                 \s*(?P<operation>\+\S+)*
                 \s*(?P<param>igp-metric|igp-nexthop-cost)*
                 $""",
@@ -945,7 +945,7 @@ class Route_mapsTemplate(NetworkTemplate):
                     {
                         "set": {
                             "metric": {
-                                "value": "{{ val }}",
+                                "value": "{{ val | default('') | tojson  }}",
                                 "add": "{{ operation.strip('+') }}",
                                 "igp_param": "{{ param }}",
                             },
