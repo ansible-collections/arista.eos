@@ -425,7 +425,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             "set metric 25 +igp-metric",
             "set as-path prepend last-as 2",
             "route-map mapmerge3 permit 5",
-            "set metric +20",
+            "set metric +20"
         ]
 
         result = self.execute_module(changed=False)
@@ -502,7 +502,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             "set metric 25 +igp-metric",
             "set as-path prepend last-as 2",
             "route-map mapmerge3 permit 5",
-            "set metric +20",
+            "set metric +20"
         ]
 
         parsed_str = "\n".join(commands)
