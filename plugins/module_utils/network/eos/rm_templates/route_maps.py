@@ -945,7 +945,7 @@ class Route_mapsTemplate(NetworkTemplate):
                     {
                         "set": {
                             "metric": {
-                                "value": "{{ val | tojson }}",
+                                "value": "{{ val | default('') | tojson  }}",
                                 "add": "{{ operation.strip('+') }}",
                                 "igp_param": "{{ param }}",
                             },
