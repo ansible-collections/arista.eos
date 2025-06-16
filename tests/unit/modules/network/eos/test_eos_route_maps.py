@@ -276,6 +276,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 sequence=5,
                                 set=dict(
                                     metric=dict(value="+20"),
+                                    community_attributes=dict(community=dict(number="20000:20000")),
                                 ),
                             ),
                         ],
@@ -405,6 +406,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 sequence=5,
                                 set=dict(
                                     metric=dict(value="+20"),
+                                    community_attributes=dict(community=dict(number="20000:20000")),
                                 ),
                             ),
                         ],
@@ -426,6 +428,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             "set as-path prepend last-as 2",
             "route-map mapmerge3 permit 5",
             "set metric +20",
+            "set community 20000:20000",
         ]
 
         result = self.execute_module(changed=False)
@@ -476,6 +479,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                     "sequence": 5,
                     "set": {
                         "metric": {"value": "+20"},
+                        "community_attributes": {"community": {"number": "20000:20000"}},
                     },
                 },
             ],
@@ -503,6 +507,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             "set as-path prepend last-as 2",
             "route-map mapmerge3 permit 5",
             "set metric +20",
+            "set community 20000:20000",
         ]
 
         parsed_str = "\n".join(commands)
@@ -549,6 +554,7 @@ class TestEosRoute_MapsModule(TestEosModule):
                         "sequence": 5,
                         "set": {
                             "metric": {"value": "+20"},
+                            "community_attributes": {"community": {"number": "20000:20000"}},
                         },
                     },
                 ],
