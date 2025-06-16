@@ -466,6 +466,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">514</div>
                 </td>
                 <td>
                         <div>Port of the syslog server.</div>
@@ -997,6 +998,7 @@ Parameters
                     </div>
                 </td>
                 <td>
+                        <b>Default:</b><br/><div style="color: blue">514</div>
                 </td>
                 <td>
                         <div>Port of the syslog server.</div>

@@ -94,7 +94,7 @@ def _tmplt_route_map_ip(config_data):
         command = "set ip next-hop "
         k = "ip"
     elif config_data.get("ipv6"):
-        command = "set ip next-hop "
+        command = "set ipv6 next-hop "
         k = "ipv6"
     if config_data[k].get("address"):
         command += config_data[k]["address"]
@@ -932,7 +932,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*set\smetric
-                \s*(?P<val>\d+)*
+                \s*(?P<val>[+-]?\d+)*
                 \s*(?P<operation>\+\S+)*
                 \s*(?P<param>igp-metric|igp-nexthop-cost)*
                 $""",
@@ -945,7 +945,7 @@ class Route_mapsTemplate(NetworkTemplate):
                     {
                         "set": {
                             "metric": {
-                                "value": "{{ val }}",
+                                "value": "{{ val | default('') | tojson  }}",
                                 "add": "{{ operation.strip('+') }}",
                                 "igp_param": "{{ param }}",
                             },
