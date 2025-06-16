@@ -127,7 +127,7 @@ EXAMPLES = """
     name: test
     rd: 1:200
     interfaces:
-    - Ethernet2
+      - Ethernet2
     state: present
 
 - name: Delete VRFs
@@ -138,20 +138,20 @@ EXAMPLES = """
 - name: Create aggregate of VRFs with purge
   arista.eos.eos_vrf:
     aggregate:
-    - name: test4
-      rd: 1:204
-    - name: test5
-      rd: 1:205
+      - name: test4
+        rd: 1:204
+      - name: test5
+        rd: 1:205
     state: present
     purge: true
 
 - name: Delete aggregate of VRFs
   arista.eos.eos_vrf:
     aggregate:
-    - name: test2
-    - name: test3
-    - name: test4
-    - name: test5
+      - name: test2
+      - name: test3
+      - name: test4
+      - name: test5
     state: absent
 """
 
@@ -314,16 +314,19 @@ def map_params_to_obj(module):
                 "name": module.params["name"],
                 "state": module.params["state"],
                 "rd": module.params["rd"],
-                "interfaces": [
-                    intf.replace(" ", "").lower() for intf in module.params["interfaces"]
-                ]
-                if module.params["interfaces"]
-                else [],
-                "associated_interfaces": [
-                    intf.replace(" ", "").lower() for intf in module.params["associated_interfaces"]
-                ]
-                if module.params["associated_interfaces"]
-                else [],
+                "interfaces": (
+                    [intf.replace(" ", "").lower() for intf in module.params["interfaces"]]
+                    if module.params["interfaces"]
+                    else []
+                ),
+                "associated_interfaces": (
+                    [
+                        intf.replace(" ", "").lower()
+                        for intf in module.params["associated_interfaces"]
+                    ]
+                    if module.params["associated_interfaces"]
+                    else []
+                ),
             },
         )
 

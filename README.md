@@ -2,15 +2,40 @@
 
 # Arista EOS Collection
 [![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/arista.eos) <!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/arista.eos)-->
+[![Codecov](https://codecov.io/gh/ansible-collections/arista.eos/branch/main/graph/badge.svg)](https://codecov.io/gh/ansible-collections/arista.eos)
+[![CI](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml/badge.svg?branch=main&event=schedule)](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml)
 
 The Ansible Arista EOS collection includes a variety of Ansible content to help automate the management of Arista EOS network appliances.
 
 This collection has been tested against Arista EOS 4.24.6F.
 
+## Support
+
+As a Red Hat Ansible [Certified Content](https://catalog.redhat.com/software/search?target_platforms=Red%20Hat%20Ansible%20Automation%20Platform), this collection is entitled to [support](https://access.redhat.com/support/) through [Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible) (AAP).
+
+If a support case cannot be opened with Red Hat and the collection has been obtained either from [Galaxy](https://galaxy.ansible.com/ui/) or [GitHub](https://github.com/ansible-collections/arista.eos), there is community support available at no charge.
+
+You can join us on [#network:ansible.com](https://matrix.to/#/#network:ansible.com) room or the [Ansible Forum Network Working Group](https://forum.ansible.com/g/network-wg).
+
+For more information you can check the communication section below.
+
+## Communication
+
+* Join the Ansible forum:
+  * [Get Help](https://forum.ansible.com/c/help/6): get help or help others.
+  * [Posts tagged with 'network'](https://forum.ansible.com/tag/network): subscribe to participate in collection-related conversations.
+  * [Ansible Network Automation Working Group](https://forum.ansible.com/g/network-wg): by joining the team you will automatically get subscribed to the posts tagged with [network](https://forum.ansible.com/tags/network).
+  * [Social Spaces](https://forum.ansible.com/c/chat/4): gather and interact with fellow enthusiasts.
+  * [News & Announcements](https://forum.ansible.com/c/news/5): track project-wide announcements including social events.
+
+* The Ansible [Bullhorn newsletter](https://docs.ansible.com/ansible/devel/community/communication.html#the-bullhorn): used to announce releases and important changes.
+
+For more information about communication, see the [Ansible communication guide](https://docs.ansible.com/ansible/devel/community/communication.html).
+
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.9.10**.
+This collection has been tested against following Ansible versions: **>=2.16.0**.
 
 For collections that support Ansible 2.9, please ensure you update your `network_os` to use the
 fully qualified collection name (for example, `cisco.ios.ios`).
@@ -41,7 +66,6 @@ Name | Description
 [arista.eos.eos_acl_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_acl_interfaces_module.rst)|ACL interfaces resource module
 [arista.eos.eos_acls](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_acls_module.rst)|ACLs resource module
 [arista.eos.eos_banner](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_banner_module.rst)|Manage multiline banners on Arista EOS devices
-[arista.eos.eos_bgp](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_module.rst)|(deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.
 [arista.eos.eos_bgp_address_family](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_address_family_module.rst)|Manages BGP address family resource module
 [arista.eos.eos_bgp_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_bgp_global_module.rst)|Manages BGP global resource module
 [arista.eos.eos_command](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_command_module.rst)|Run arbitrary commands on an Arista EOS device
@@ -58,7 +82,6 @@ Name | Description
 [arista.eos.eos_lldp](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_module.rst)|Manage LLDP configuration on Arista EOS network devices
 [arista.eos.eos_lldp_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_global_module.rst)|LLDP resource module
 [arista.eos.eos_lldp_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_lldp_interfaces_module.rst)|LLDP interfaces resource module
-[arista.eos.eos_logging](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_logging_module.rst)|Manage logging on network devices
 [arista.eos.eos_logging_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_logging_global_module.rst)|Manages logging resource module
 [arista.eos.eos_ntp_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ntp_global_module.rst)|Manages ntp resource module
 [arista.eos.eos_ospf_interfaces](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_ospf_interfaces_module.rst)|OSPF Interfaces Resource Module.
@@ -72,6 +95,7 @@ Name | Description
 [arista.eos.eos_user](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_user_module.rst)|Manage the collection of local users on EOS devices
 [arista.eos.eos_vlans](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vlans_module.rst)|VLANs resource module
 [arista.eos.eos_vrf](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vrf_module.rst)|Manage VRFs on Arista EOS network devices
+[arista.eos.eos_vrf_global](https://github.com/ansible-collections/arista.eos/blob/main/docs/arista.eos.eos_vrf_global_module.rst)|Resource module to configure VRF definitions.
 
 <!--end collection content-->
 
@@ -111,8 +135,6 @@ The following example task replaces configuration changes in the existing config
             trunk_vlans: 5-10, 15
       state: replaced
 ```
-
-**NOTE**: For Ansible 2.9, you may not see deprecation warnings when you run your playbooks with this collection. Use this documentation to track when a module is deprecated.
 
 ### See Also:
 

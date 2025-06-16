@@ -34,13 +34,15 @@ __metaclass__ = type
 DOCUMENTATION = """
 module: eos_l2_interfaces
 short_description: L2 interfaces resource module
-description: This module provides declarative management of Layer-2 interface on Arista
+description:
+  This module provides declarative management of Layer-2 interface on Arista
   EOS devices.
 version_added: 1.0.0
-author: Nathaniel Case (@qalthos)
+author: Nathaniel Case (@Qalthos)
 notes:
-- Tested against Arista EOS 4.24.6F
-- This module works with connection C(network_cli). See the L(EOS Platform Options,../network/user_guide/platform_eos.html).
+  - Tested against Arista EOS 4.24.6F
+  - This module works with connection C(network_cli).
+    See U(https://docs.ansible.com/ansible/latest/network/user_guide/platform_eos.html)
 options:
   config:
     description: A dictionary of Layer-2 interface options
@@ -49,275 +51,375 @@ options:
     suboptions:
       name:
         description:
-        - Full name of interface, e.g. Ethernet1.
+          - Full name of interface, e.g. Ethernet1.
         type: str
         required: true
       access:
         description:
-        - Switchport mode access command to configure the interface as a layer 2 access.
+          - Switchport mode access command to configure the interface as a layer 2 access.
         type: dict
         suboptions:
           vlan:
             description:
-            - Configure given VLAN in access port. It's used as the access VLAN ID.
+              - Configure given VLAN in access port. It's used as the access VLAN ID.
             type: int
       trunk:
         description:
-        - Switchport mode trunk command to configure the interface as a Layer 2 trunk.
+          - Switchport mode trunk command to configure the interface as a Layer 2 trunk.
         type: dict
         suboptions:
           native_vlan:
             description:
-            - Native VLAN to be configured in trunk port. It is used as the trunk
-              native VLAN ID.
+              - Native VLAN to be configured in trunk port. It is used as the trunk
+                native VLAN ID.
             type: int
           trunk_allowed_vlans:
             description:
-            - List of allowed VLANs in a given trunk port. These are the only VLANs
-              that will be configured on the trunk.
+              - List of allowed VLANs in a given trunk port. These are the only VLANs
+                that will be configured on the trunk.
             type: list
             elements: str
       mode:
         description:
-        - Mode in which interface needs to be configured.
-        - Access mode is not shown in interface facts, so idempotency will not be
-          maintained for switchport mode access and every time the output will come
-          as changed=True.
+          - Mode in which interface needs to be configured.
+          - Access mode is not shown in interface facts, so idempotency will not be
+            maintained for switchport mode access and every time the output will come
+            as changed=True.
         type: str
         choices:
-        - access
-        - trunk
+          - access
+          - trunk
   running_config:
     description:
-    - This option is used only with state I(parsed).
-    - The value of this option should be the output received from the EOS device by
-      executing the command B(show running-config | section ^interface).
-    - The state I(parsed) reads the configuration from C(running_config) option and
-      transforms it into Ansible structured data as per the resource module's argspec
-      and the value is then returned in the I(parsed) key within the result.
+      - This option is used only with state I(parsed).
+      - The value of this option should be the output received from the EOS device by
+        executing the command B(show running-config | section ^interface).
+      - The state I(parsed) reads the configuration from C(running_config) option and
+        transforms it into Ansible structured data as per the resource module's argspec
+        and the value is then returned in the I(parsed) key within the result.
     type: str
   state:
     choices:
-    - merged
-    - replaced
-    - overridden
-    - deleted
-    - parsed
-    - rendered
-    - gathered
+      - merged
+      - replaced
+      - overridden
+      - deleted
+      - parsed
+      - rendered
+      - gathered
     default: merged
     description:
-    - The state of the configuration after module completion
+      - The state of the configuration after module completion
     type: str
-
 """
 
 EXAMPLES = """
-
 # Using merged
 
 # Before state:
 # -------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    switchport access vlan 20
 # !
 # interface Ethernet2
-#    switchport trunk native vlan 20
-#    switchport mode trunk
+#    description Configured by Ansible
+#    shutdown
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
-# !
+#    dhcp client accept default-route
 
 - name: Merge provided configuration with device configuration.
   arista.eos.eos_l2_interfaces:
     config:
-    - name: Ethernet1
-      mode: trunk
-      trunk:
-        native_vlan: 10
-    - name: Ethernet2
-      mode: access
-      access:
-        vlan: 30
+      - name: Ethernet1
+        mode: trunk
+        trunk:
+          native_vlan: 10
+      - name: Ethernet2
+        mode: access
+        access:
+          vlan: 30
     state: merged
+
+# Task Output
+# -----------
+#
+# before:
+# - name: Ethernet1
+# - name: Ethernet2
+# - name: Management1
+# commands:
+# - interface Ethernet1
+# - switchport mode trunk
+# - switchport trunk native vlan 10
+# - interface Ethernet2
+# - switchport mode access
+# - switchport access vlan 30
+# after:
+# - mode: trunk
+#   name: Ethernet1
+#   trunk:
+#     native_vlan: 10
+# - access:
+#     vlan: 30
+#   name: Ethernet2
+# - name: Management1
 
 # After state:
 # ------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
 #    switchport trunk native vlan 10
 #    switchport mode trunk
 # !
 # interface Ethernet2
+#    description Configured by Ansible
+#    shutdown
 #    switchport access vlan 30
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
-# !
+#    dhcp client accept default-route
 
 # Using replaced
 
 # Before state:
 # -------------
 #
-# veos2#show running-config | s int
+# test#show running-config | section interface
 # interface Ethernet1
-#    switchport access vlan 20
+#    switchport trunk native vlan 10
+#    switchport mode trunk
 # !
 # interface Ethernet2
-#    switchport trunk native vlan 20
-#    switchport mode trunk
+#    description Configured by Ansible
+#    shutdown
+#    switchport access vlan 30
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
-# !
+#    dhcp client accept default-route
 
 - name: Replace device configuration of specified L2 interfaces with provided configuration.
   arista.eos.eos_l2_interfaces:
     config:
-    - name: Ethernet1
-      mode: trunk
-      trunk:
-        native_vlan: 20
-        trunk_allowed_vlans: 5-10, 15
+      - name: Ethernet1
+        mode: trunk
+        trunk:
+          native_vlan: 20
+          trunk_allowed_vlans: 5-10, 15
     state: replaced
+
+# Task Output
+# -----------
+#
+# before:
+# - mode: trunk
+#   name: Ethernet1
+#   trunk:
+#     native_vlan: 10
+# - access:
+#     vlan: 30
+#   name: Ethernet2
+# - name: Management1
+# commands:
+# - interface Ethernet1
+# - switchport trunk native vlan 20
+# - switchport trunk allowed vlan 10,15,5,6,7,8,9
+# after:
+# - mode: trunk
+#   name: Ethernet1
+#   trunk:
+#     native_vlan: 20
+#     trunk_allowed_vlans:
+#     - 5-10
+#     - '15'
+# - access:
+#     vlan: 30
+#   name: Ethernet2
+# - name: Management1
 
 # After state:
 # ------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
 #    switchport trunk native vlan 20
 #    switchport trunk allowed vlan 5-10,15
 #    switchport mode trunk
 # !
 # interface Ethernet2
-#    switchport trunk native vlan 20
-#    switchport mode trunk
+#    description Configured by Ansible
+#    shutdown
+#    switchport access vlan 30
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
-# !
+#    dhcp client accept default-route
 
 # Using overridden
 
 # Before state:
 # -------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    switchport access vlan 20
+#    switchport trunk native vlan 20
+#    switchport trunk allowed vlan 5-10,15
+#    switchport mode trunk
 # !
 # interface Ethernet2
-#    switchport trunk native vlan 20
-#    switchport mode trunk
+#    description Configured by Ansible
+#    shutdown
+#    switchport access vlan 30
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
-# !
+#    dhcp client accept default-route
 
 - name: Override device configuration of all L2 interfaces on device with provided
     configuration.
   arista.eos.eos_l2_interfaces:
     config:
-    - name: Ethernet2
-      mode: access
-      access:
-        vlan: 30
+      - name: Ethernet2
+        mode: access
+        access:
+          vlan: 30
     state: overridden
+
+# Task Output
+# -----------
+#
+# before:
+# - mode: trunk
+#   name: Ethernet1
+#   trunk:
+#     native_vlan: 20
+#     trunk_allowed_vlans:
+#     - 5-10
+#     - '15'
+# - access:
+#     vlan: 30
+#   name: Ethernet2
+# - name: Management1
+# commands:
+# - interface Ethernet1
+# - no switchport mode
+# - no switchport trunk allowed vlan
+# - no switchport trunk native vlan
+# - interface Ethernet2
+# - switchport mode access
+# after:
+# - name: Ethernet1
+# - access:
+#     vlan: 30
+#   name: Ethernet2
+# - name: Management1
 
 # After state:
 # ------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
 # !
 # interface Ethernet2
+#    description Configured by Ansible
+#    shutdown
 #    switchport access vlan 30
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
-# !
+#    dhcp client accept default-route
 
 # Using deleted
 
 # Before state:
 # -------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
-#    switchport access vlan 20
 # !
 # interface Ethernet2
-#    switchport trunk native vlan 20
-#    switchport mode trunk
+#    description Configured by Ansible
+#    shutdown
+#    switchport access vlan 30
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
-# !
+#    dhcp client accept default-route
 
 - name: Delete EOS L2 interfaces as in given arguments.
   arista.eos.eos_l2_interfaces:
     config:
-    - name: Ethernet1
-    - name: Ethernet2
+      - name: Ethernet1
+      - name: Ethernet2
     state: deleted
+
+# Task Output
+# -----------
+#
+# before:
+# - name: Ethernet1
+# - access:
+#     vlan: 30
+#   name: Ethernet2
+# - name: Management1
+# commands:
+# - interface Ethernet2
+# - no switchport access vlan
+# after:
+# - name: Ethernet1
+# - name: Ethernet2
+# - name: Management1
 
 # After state:
 # ------------
 #
-# veos#show running-config | section interface
+# test#show running-config | section interface
 # interface Ethernet1
 # !
 # interface Ethernet2
+#    description Configured by Ansible
+#    shutdown
 # !
 # interface Management1
 #    ip address dhcp
-#    ipv6 address auto-config
+#    dhcp client accept default-route
 
 # using rendered
 
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_l2_interfaces:
     config:
-    - name: Ethernet1
-      mode: trunk
-      trunk:
-        native_vlan: 10
-    - name: Ethernet2
-      mode: access
-      access:
-        vlan: 30
-    state: merged
+      - name: Ethernet1
+        mode: trunk
+        trunk:
+          native_vlan: 10
+      - name: Ethernet2
+        mode: access
+        access:
+          vlan: 30
+    state: rendered
 
-# Output :
-# ------------
+# Module Execution Result:
+# ------------------------
 #
-# - "interface Ethernet1"
-# - "switchport trunk native vlan 10"
-# - "switchport mode trunk"
-# - "interface Ethernet2"
-# - "switchport access vlan 30"
-# - "interface Management1"
-# - "ip address dhcp"
-# - "ipv6 address auto-config"
+# rendered:
+# - interface Ethernet1
+# - switchport mode trunk
+# - switchport trunk native vlan 10
+# - interface Ethernet2
+# - switchport mode access
+# - switchport access vlan 30
 
+# Using parsed
 
-# using parsed
-
-# parsed.cfg
-
+# File: parsed.cfg
+# ----------------
+#
 # interface Ethernet1
 #    switchport trunk native vlan 10
 #    switchport mode trunk
@@ -326,25 +428,28 @@ EXAMPLES = """
 #    switchport access vlan 30
 # !
 
-- name: Use parsed to convert native configs to structured data
+- name: Parse the commands for provided configuration
   arista.eos.l2_interfaces:
     running_config: "{{ lookup('file', 'parsed.cfg') }}"
     state: parsed
 
-# Output:
-#   parsed:
-#      - name: Ethernet1
-#        mode: trunk
-#        trunk:
-#          native_vlan: 10
-#      - name: Ethernet2
-#        mode: access
-#        access:
-#          vlan: 30
+# Module Execution Result:
+# ------------------------
+#
+# parsed:
+#  - name: Ethernet1
+#    mode: trunk
+#    trunk:
+#      native_vlan: 10
+#  - name: Ethernet2
+#    mode: access
+#    access:
+#      vlan: 30
 
+# Using gathered
 
-# Using gathered:
-# Existing config on the device:
+# Before state:
+# -------------
 #
 # veos#show running-config | section interface
 # interface Ethernet1
@@ -358,35 +463,66 @@ EXAMPLES = """
 - name: Gather interfaces facts from the device
   arista.eos.l2_interfaces:
     state: gathered
-# output:
-#   gathered:
-#      - name: Ethernet1
-#        mode: trunk
-#        trunk:
-#          native_vlan: 10
-#      - name: Ethernet2
-#        mode: access
-#        access:
-#          vlan: 30
 
+# Module Execution Result:
+# ------------------------
+#
+# gathered:
+# - name: Ethernet1
+#   mode: trunk
+#   trunk:
+#     native_vlan: 10
+# - name: Ethernet2
+#   mode: access
+#   access:
+#     vlan: 30
 """
 
 RETURN = """
 before:
-  description: The configuration as structured data prior to module invocation.
-  returned: always
-  type: list
-  sample: The configuration returned will always be in the same format of the parameters above.
+  description: The configuration prior to the module execution.
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 after:
-  description: The configuration as structured data after module completion.
+  description: The resulting configuration after module execution.
   returned: when changed
-  type: list
-  sample: The configuration returned will always be in the same format of the parameters above.
+  type: dict
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 commands:
   description: The set of commands pushed to the remote device.
-  returned: always
+  returned: when I(state) is C(merged), C(replaced), C(overridden), C(deleted) or C(purged)
   type: list
-  sample: ['interface Ethernet2', 'switchport access vlan 20']
+  sample:
+    - interface Ethernet1
+    - switchport mode trunk
+    - switchport access vlan 20
+rendered:
+  description: The provided configuration in the task rendered in device-native format (offline).
+  returned: when I(state) is C(rendered)
+  type: list
+  sample:
+    - interface Ethernet1
+    - switchport mode trunk
+    - switchport access vlan 20
+gathered:
+  description: Facts about the network resource gathered from the remote device as structured data.
+  returned: when I(state) is C(gathered)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
+parsed:
+  description: The device native config provided in I(running_config) option parsed into structured data as per module argspec.
+  returned: when I(state) is C(parsed)
+  type: list
+  sample: >
+    This output will always be in the same format as the
+    module argspec.
 """
 
 

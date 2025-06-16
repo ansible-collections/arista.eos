@@ -840,6 +840,7 @@ Parameters
                 </td>
                 <td>
                         <div>Route action.</div>
+                        <div style="font-size: small; color: darkgreen"><br/>aliases: mode</div>
                 </td>
             </tr>
             <tr>
@@ -921,7 +922,6 @@ Parameters
                 </td>
                 <td>
                         <div>Type of address fmaily</div>
-                        <div style="font-size: small; color: darkgreen"><br/>aliases: mode</div>
                 </td>
             </tr>
 
@@ -1040,137 +1040,101 @@ Examples
 
 .. code-block:: yaml
 
-    # Using merged
+    # Using Merged
 
-    # Before state
-
+    # Before state:
+    # -------------
     # veos(config)#show running-config | section bgp
     # veos(config)#
 
-      - name: Merge provided configuration with device configuration
-        arista.eos.eos_bgp_address_family:
-          config:
-            as_number: "10"
-            address_family:
-              - afi: "ipv4"
-                redistribute:
-                  - protocol: "ospfv3"
-                    ospf_route: "external"
-                network:
-                  - address: "1.1.1.0/24"
-                  - address: "1.5.1.0/24"
-                    route_map: "MAP01"
-              - afi: "ipv6"
-                bgp_params:
-                  additional_paths: "receive"
-                neighbor:
-                  - peer: "peer2"
-                    default_originate:
-                      always: True
-              - afi: "ipv6"
-                redistribute:
-                  - protocol: "isis"
-                    isis_level: "level-2"
-                route_target:
-                  mode: "export"
-                  target: "33:11"
-                vrf: "vrft"
-          state: merged
+    - name: Merge provided configuration with device configuration
+      arista.eos.eos_bgp_address_family:
+        config:
+          as_number: "10"
+          address_family:
+            - afi: "ipv4"
+              redistribute:
+                - protocol: "ospfv3"
+                  ospf_route: "external"
+              network:
+                - address: "1.1.1.0/24"
+                - address: "1.5.1.0/24"
+                  route_map: "MAP01"
+            - afi: "ipv6"
+              bgp_params:
+                additional_paths: "receive"
+              neighbor:
+                - peer: "peer2"
+                  default_originate:
+                    always: true
+            - afi: "ipv6"
+              redistribute:
+                - protocol: "isis"
+                  isis_level: "level-2"
+              route_target:
+                mode: "export"
+                target: "33:11"
+              vrf: "vrft"
+        state: merged
 
-    # After state:
 
-    # veos(config-router-bgp)#show running-config | section bgp
-    # router bgp 10
-    #    neighbor peer2 peer group
-    #    neighbor peer2 maximum-routes 12000
-    #    neighbor 1.1.1.1 maximum-routes 12000
-    #    !
-    #    address-family ipv4
-    #       neighbor 1.1.1.1 activate
-    #       network 1.1.1.0/24
-    #       network 1.5.1.0/24 route-map MAP01
-    #       redistribute ospfv3 match external
-    #    !
-    #    address-family ipv6
-    #       bgp additional-paths receive
-    #       neighbor peer2 activate
-    #       neighbor peer2 default-originate always
-    #    !
-    #    vrf vrft
-    #       address-family ipv6
-    #          route-target export 33:11
-    #          redistribute isis level-2
-    # veos(config-router-bgp)#
-
-    # Module Execution:
-
-    # "after": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "redistribute": [
-    #                     {
-    #                         "isis_level": "level-2",
-    #                         "protocol": "isis"
-    #                     }
-    #                 ],
-    #                 "route_target": {
-    #                     "mode": "export",
-    #                     "target": "33:11"
-    #                 },
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
+    # Task output:
+    # ------------
+    # before: {}
+    #
+    # commands:
+    # - router bgp 10
+    # - address-family ipv4
+    # - redistribute ospfv3 match external
+    # - network 1.1.1.0/24
+    # - network 1.5.1.0/24 route-map MAP01
+    # - exit
+    # - address-family ipv6
+    # - neighbor peer2 default-originate always
+    # - bgp additional-paths receive
+    # - exit
+    # - vrf vrft
+    # - address-family ipv6
+    # - redistribute isis level-2
+    # - route-target export 33:11
+    # - exit
+    # - exit
+    #
+    # after:
+    #     address_family:
+    #     - afi: ipv4
+    #       neighbor:
+    #       - activate: true
+    #         peer: 1.1.1.1
+    #       network:
+    #       - address: 1.1.1.0/24
+    #       - address: 1.5.1.0/24
+    #         route_map: MAP01
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv6
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - activate: true
+    #         default_originate:
+    #           always: true
+    #         peer: peer2
+    #     - afi: ipv6
+    #       redistribute:
+    #       - isis_level: level-2
+    #         protocol: isis
+    #       route_target:
+    #         action: export
+    #         target: '33:11'
+    #       vrf: vrft
+    #     as_number: '10'
     #     "before": {},
     #     "changed": true,
-    #     "commands": [
-    #         "router bgp 10",
-    #         "address-family ipv4",
-    #         "redistribute ospfv3 match external",
-    #         "network 1.1.1.0/24",
-    #         "network 1.5.1.0/24 route-map MAP01",
-    #         "exit",
-    #         "address-family ipv6",
-    #         "neighbor peer2 default-originate always",
-    #         "bgp additional-paths receive",
-    #         "exit",
-    #         "vrf vrft",
-    #         "address-family ipv6",
-    #         "redistribute isis level-2",
-    #         "route-target export 33:11",
-    #         "exit",
-    #         "exit"
-    #     ],
 
-    # Using replaced:
-
-    # Before State:
-
+    # After state:
+    # ------------
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
     #    neighbor peer2 peer group
@@ -1192,27 +1156,127 @@ Examples
     #       address-family ipv6
     #          route-target export 33:11
     #          redistribute isis level-2
-    # veos(config-router-bgp)#
+
+    # Using replaced
+
+    # Before state:
+    # -------------
+    # veos(config-router-bgp)#show running-config | section bgp
+    # router bgp 10
+    #    neighbor peer2 peer group
+    #    neighbor peer2 maximum-routes 12000
+    #    neighbor 1.1.1.1 maximum-routes 12000
+    #    !
+    #    address-family ipv4
+    #       neighbor 1.1.1.1 activate
+    #       network 1.1.1.0/24
+    #       network 1.5.1.0/24 route-map MAP01
+    #       redistribute ospfv3 match external
+    #    !
+    #    address-family ipv6
+    #       bgp additional-paths receive
+    #       neighbor peer2 activate
+    #       neighbor peer2 default-originate always
+    #    !
+    #    vrf vrft
+    #       address-family ipv6
+    #          route-target export 33:11
+    #          redistribute isis level-2
+
+    - name: Replace running config section with provided config
+      arista.eos.eos_bgp_address_family:
+        config:
+          as_number: "10"
+          address_family:
+            - afi: "ipv6"
+              vrf: "vrft"
+              redistribute:
+                - protocol: "ospfv3"
+                  ospf_route: "external"
+            - afi: "ipv6"
+              redistribute:
+                - protocol: "isis"
+                  isis_level: "level-2"
+        state: replaced
+
+    # Task output:
+    # ------------
+    # before:
+    #     address_family:
+    #     - afi: ipv4
+    #       neighbor:
+    #       - activate: true
+    #         peer: 1.1.1.1
+    #       network:
+    #       - address: 1.1.1.0/24
+    #       - address: 1.5.1.0/24
+    #         route_map: MAP01
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv6
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - activate: true
+    #         default_originate:
+    #           always: true
+    #         peer: peer2
+    #     - afi: ipv6
+    #       redistribute:
+    #       - isis_level: level-2
+    #         protocol: isis
+    #       route_target:
+    #         action: export
+    #         target: '33:11'
+    #       vrf: vrft
+    #     as_number: '10'
     #
+    # commands:
+    # - router bgp 10
+    # - vrf vrft
+    # - address-family ipv6
+    # - redistribute ospfv3 match external
+    # - no redistribute isis level-2
+    # - no route-target export 33:11
+    # - exit
+    # - exit
+    # - address-family ipv6
+    # - redistribute isis level-2
+    # - no neighbor peer2 activate
+    # - no bgp additional-paths receive
+    # - exit
+    #
+    # after:
+    #     address_family:
+    #     - afi: ipv4
+    #       neighbor:
+    #       - activate: true
+    #         peer: 1.1.1.1
+    #       network:
+    #       - address: 1.1.1.0/24
+    #       - address: 1.5.1.0/24
+    #         route_map: MAP01
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv6
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #       redistribute:
+    #       - isis_level: level-2
+    #         protocol: isis
+    #     - afi: ipv6
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #       vrf: vrft
+    #     as_number: '10'
 
-      - name: Replace
-        arista.eos.eos_bgp_address_family:
-          config:
-            as_number: "10"
-            address_family:
-              - afi: "ipv6"
-                vrf: "vrft"
-                redistribute:
-                  - protocol: "ospfv3"
-                    ospf_route: "external"
-              - afi: "ipv6"
-                redistribute:
-                  - protocol: "isis"
-                    isis_level: "level-2"
-          state: replaced
-
-    # After State:
-
+    # After state:
+    # ------------
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
     #    neighbor peer2 peer group
@@ -1232,145 +1296,11 @@ Examples
     #    vrf vrft
     #       address-family ipv6
     #          redistribute ospfv3 match external
-    # veos(config-router-bgp)#
-    #
-    #
-    # # Module Execution:
-    #
-    #     "after": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "neighbor": [
-    #                     {
-    #                         "activate": true,
-    #                         "peer": "1.1.1.1"
-    #                     }
-    #                 ],
-    #                 "network": [
-    #                     {
-    #                         "address": "1.1.1.0/24"
-    #                     },
-    #                     {
-    #                         "address": "1.5.1.0/24",
-    #                         "route_map": "MAP01"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "isis_level": "level-2",
-    #                         "protocol": "isis"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ],
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
-    #     "before": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "neighbor": [
-    #                     {
-    #                         "activate": true,
-    #                         "peer": "1.1.1.1"
-    #                     }
-    #                 ],
-    #                 "network": [
-    #                     {
-    #                         "address": "1.1.1.0/24"
-    #                     },
-    #                     {
-    #                         "address": "1.5.1.0/24",
-    #                         "route_map": "MAP01"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "activate": true,
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "redistribute": [
-    #                     {
-    #                         "isis_level": "level-2",
-    #                         "protocol": "isis"
-    #                     }
-    #                 ],
-    #                 "route_target": {
-    #                     "mode": "export",
-    #                     "target": "33:11"
-    #                 },
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
-    #     "changed": true,
-    #     "commands": [
-    #         "router bgp 10",
-    #         "vrf vrft",
-    #         "address-family ipv6",
-    #         "redistribute ospfv3 match external",
-    #         "no redistribute isis level-2",
-    #         "no route-target export 33:11",
-    #         "exit",
-    #         "exit",
-    #         "address-family ipv6",
-    #         "redistribute isis level-2",
-    #         "no neighbor peer2 activate",
-    #         "no bgp additional-paths receive",
-    #         "exit"
-    #     ],
 
     # Using overridden (overriding af at global context):
-    # Before state:
 
+    # Before state:
+    # -------------
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
     #    neighbor peer2 peer group
@@ -1390,23 +1320,83 @@ Examples
     #    vrf vrft
     #       address-family ipv6
     #          redistribute ospfv3 match external
-    # veos(config-router-bgp)#
 
-      - name: Overridden
-        arista.eos.eos_bgp_address_family:
-          config:
-            as_number: "10"
-            address_family:
-              - afi: "ipv4"
-                bgp_params:
-                  additional_paths: "receive"
-                neighbor:
-                  - peer: "peer2"
-                    default_originate:
-                      always: True
-          state: overridden
+    - name: Override running config with provided config
+      arista.eos.eos_bgp_address_family:
+        config:
+          as_number: "10"
+          address_family:
+            - afi: "ipv4"
+              bgp_params:
+                additional_paths: "receive"
+              neighbor:
+                - peer: "peer2"
+                  default_originate:
+                    always: true
+        state: overridden
 
-    # After State:
+
+    #
+    # Task output:
+    # ------------
+    # before:
+    #     address_family:
+    #     - afi: ipv4
+    #       neighbor:
+    #       - activate: true
+    #         peer: 1.1.1.1
+    #       network:
+    #       - address: 1.1.1.0/24
+    #       - address: 1.5.1.0/24
+    #         route_map: MAP01
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv6
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #       redistribute:
+    #       - isis_level: level-2
+    #         protocol: isis
+    #     - afi: ipv6
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #       vrf: vrft
+    #     as_number: '10'
+    #
+    # commands:
+    # - router bgp 10
+    # - address-family ipv4
+    # - no redistribute ospfv3 match external
+    # - no network 1.1.1.0/24
+    # - no network 1.5.1.0/24 route-map MAP01
+    # - neighbor peer2 default-originate always
+    # - no neighbor 1.1.1.1 activate
+    # - bgp additional-paths receive
+    # - exit
+    # - no address-family ipv6
+    #
+    # after:
+    #     address_family:
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #     - afi: ipv6
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #       vrf: vrft
+    #     as_number: '10'
+
+    # After state:
+    # ------------
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
     #    neighbor peer2 peer group
@@ -1420,113 +1410,11 @@ Examples
     #    vrf vrft
     #       address-family ipv6
     #          redistribute ospfv3 match external
-    # veos(config-router-bgp)#
-    #
-    # Module Execution:
-    #
-    # "after": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ],
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
-    #     "before": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "neighbor": [
-    #                     {
-    #                         "activate": true,
-    #                         "peer": "1.1.1.1"
-    #                     }
-    #                 ],
-    #                 "network": [
-    #                     {
-    #                         "address": "1.1.1.0/24"
-    #                     },
-    #                     {
-    #                         "address": "1.5.1.0/24",
-    #                         "route_map": "MAP01"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "isis_level": "level-2",
-    #                         "protocol": "isis"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ],
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
-    #     "changed": true,
-    #     "commands": [
-    #         "router bgp 10",
-    #         "address-family ipv4",
-    #         "no redistribute ospfv3 match external",
-    #         "no network 1.1.1.0/24",
-    #         "no network 1.5.1.0/24 route-map MAP01",
-    #         "neighbor peer2 default-originate always",
-    #         "no neighbor 1.1.1.1 activate",
-    #         "bgp additional-paths receive",
-    #         "exit",
-    #         "no address-family ipv6"
-    #     ],
 
     # using Overridden (overridding af in vrf context):
 
-    # Before State:
-
+    # Before state:
+    # -------------
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
     #    neighbor peer2 peer group
@@ -1550,26 +1438,101 @@ Examples
     #          route-target export 33:11
     #          redistribute isis level-2
     #          redistribute ospfv3 match external
-    # veos(config-router-bgp)#
 
+    - name: Override running config with provided config
+      arista.eos.eos_bgp_address_family:
+        config:
+          as_number: "10"
+          address_family:
+            - afi: "ipv4"
+              bgp_params:
+                additional_paths: "receive"
+              neighbor:
+                - peer: "peer2"
+                  default_originate:
+                    always: true
+              vrf: vrft
+        state: overridden
 
-      - name: Overridden
-        arista.eos.eos_bgp_address_family:
-          config:
-            as_number: "10"
-            address_family:
-              - afi: "ipv4"
-                bgp_params:
-                  additional_paths: "receive"
-                neighbor:
-                  - peer: "peer2"
-                    default_originate:
-                      always: True
-                vrf: vrft
-          state: overridden
+    # Task output:
+    # ------------
+    # before:
+    #     address_family:
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #       network:
+    #       - address: 1.1.1.0/24
+    #       - address: 1.5.1.0/24
+    #         route_map: MAP01
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv6
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #     - afi: ipv6
+    #       redistribute:
+    #       - isis_level: level-2
+    #         protocol: isis
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #       route_target:
+    #         action: export
+    #         target: '33:11'
+    #       vrf: vrft
+    #     as_number: '10'
+    #
+    # commands:
+    # - router bgp 10
+    # - vrf vrft
+    # - address-family ipv4
+    # - neighbor peer2 default-originate always
+    # - bgp additional-paths receive
+    # - exit
+    # - exit
+    # - vrf vrft
+    # - no address-family ipv6
+    #
+    # after:
+    #     address_family:
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #       network:
+    #       - address: 1.1.1.0/24
+    #       - address: 1.5.1.0/24
+    #         route_map: MAP01
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv6
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       vrf: vrft
+    #     as_number: '10'
 
-    # After State:
-
+    # After state:
+    # ------------
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
     #    neighbor peer2 peer group
@@ -1590,146 +1553,11 @@ Examples
     #    vrf vrft
     #       address-family ipv4
     #          bgp additional-paths receive
-    # veos(config-router-bgp)#
-    #
-    # Module Execution:
-    #
-    # "after": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ],
-    #                 "network": [
-    #                     {
-    #                         "address": "1.1.1.0/24"
-    #                     },
-    #                     {
-    #                         "address": "1.5.1.0/24",
-    #                         "route_map": "MAP01"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
-    #     "before": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ],
-    #                 "network": [
-    #                     {
-    #                         "address": "1.1.1.0/24"
-    #                     },
-    #                     {
-    #                         "address": "1.5.1.0/24",
-    #                         "route_map": "MAP01"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "redistribute": [
-    #                     {
-    #                         "isis_level": "level-2",
-    #                         "protocol": "isis"
-    #                     },
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ],
-    #                 "route_target": {
-    #                     "mode": "export",
-    #                     "target": "33:11"
-    #                 },
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
-    #     "changed": true,
-    #     "commands": [
-    #         "router bgp 10",
-    #         "vrf vrft",
-    #         "address-family ipv4",
-    #         "neighbor peer2 default-originate always",
-    #         "bgp additional-paths receive",
-    #         "exit",
-    #         "exit",
-    #         " vrf vrft",
-    #         "no address-family ipv6"
-    #     ],
 
-    # Using Deleted:
+    # Using deleted
 
+    # Before state:
+    # -------------
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
     #    neighbor peer2 peer group
@@ -1751,20 +1579,72 @@ Examples
     #    vrf vrft
     #       address-family ipv4
     #          bgp additional-paths receive
-    # veos(config-router-bgp)#
 
-      - name: Delete
-        arista.eos.eos_bgp_address_family:
-          config:
-            as_number: "10"
-            address_family:
-              - afi: "ipv6"
-                vrf: "vrft"
-              - afi: "ipv6"
-          state: deleted
+    - name: Delete running config for provided afi
+      arista.eos.eos_bgp_address_family:
+        config:
+          as_number: "10"
+          address_family:
+            - afi: "ipv6"
+              vrf: "vrft"
+            - afi: "ipv6"
+        state: deleted
 
-    # After State:
+    # Task output:
+    # ------------
+    # before:
+    #     address_family:
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #       network:
+    #       - address: 1.1.1.0/24
+    #       - address: 1.5.1.0/24
+    #         route_map: MAP01
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv6
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       vrf: vrft
+    #     as_number: '10'
+    #
+    # after:
+    #     address_family:
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #       network:
+    #       - address: 1.1.1.0/24
+    #       - address: 1.5.1.0/24
+    #         route_map: MAP01
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       vrf: vrft
+    #     as_number: '10'
 
+    # After state:
+    # ------------
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
     #    neighbor peer2 peer group
@@ -1782,111 +1662,12 @@ Examples
     #    vrf vrft
     #       address-family ipv4
     #          bgp additional-paths receive
-    # veos(config-router-bgp)#
-    #
-    # Module Execution:
-    #
-    # "after": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ],
-    #                 "network": [
-    #                     {
-    #                         "address": "1.1.1.0/24"
-    #                     },
-    #                     {
-    #                         "address": "1.5.1.0/24",
-    #                         "route_map": "MAP01"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
-    #     "before": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ],
-    #                 "network": [
-    #                     {
-    #                         "address": "1.1.1.0/24"
-    #                     },
-    #                     {
-    #                         "address": "1.5.1.0/24",
-    #                         "route_map": "MAP01"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
 
-    # Using parsed:
 
-    # parsed_bgp_address_family.cfg :
+    # Using parsed
 
+    # parsed.cfg
+    # ----------
     # router bgp 10
     #    neighbor n2 peer group
     #    neighbor n2 next-hop-unchanged
@@ -1920,82 +1701,52 @@ Examples
     #       address-family ipv6
     #          redistribute ospfv3 match external
 
-      - name: parse configs
-        arista.eos.eos_bgp_address_family:
-          running_config: "{{ lookup('file', './parsed_bgp_address_family.cfg') }}"
-          state: parsed
+    - name: parse running config and generate structred facts
+      arista.eos.eos_bgp_address_family:
+        running_config: "{{ lookup('file', './parsed_bgp_address_family.cfg') }}"
+        state: parsed
 
-    # Module Execution:
-    # "parsed": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "neighbor": [
-    #                     {
-    #                         "next_hop_unchanged": true,
-    #                         "peer": "n2"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "isis_level": "level-2",
-    #                         "protocol": "isis"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv4",
-    #                 "route_target": {
-    #                     "mode": "import",
-    #                     "target": "20:11"
-    #                 },
-    #                 "vrf": "bgp_10"
-    #             },
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "vrf": "vrft"
-    #             },
-    #             {
-    #                 "afi": "ipv6",
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ],
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     }
-    # }
+    # Task output:
+    # ------------
+    # parsed:
+    #     address_family:
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv6
+    #       neighbor:
+    #       - next_hop_unchanged: true
+    #         peer: n2
+    #       redistribute:
+    #       - isis_level: level-2
+    #         protocol: isis
+    #     - afi: ipv4
+    #       route_target:
+    #         action: import
+    #         target: '20:11'
+    #       vrf: bgp_10
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       vrf: vrft
+    #     - afi: ipv6
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #       vrf: vrft
+    #     as_number: '10'
 
-    # Using gathered:
+    # Using gathered
 
-    # Device config:
+    # running config
+    # --------------
     # veos(config-router-bgp)#show running-config | section bgp
     # router bgp 10
     #    neighbor peer2 peer group
@@ -2013,111 +1764,205 @@ Examples
     #    vrf vrft
     #       address-family ipv4
     #          bgp additional-paths receive
-    # veos(config-router-bgp)#
 
-      - name: gather configs
-        arista.eos.eos_bgp_address_family:
-          state: gathered
+    - name: gather running config
+      arista.eos.eos_bgp_address_family:
+        state: gathered
 
-    # Module Execution:
-    # "gathered": {
-    #         "address_family": [
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "neighbor": [
-    #                     {
-    #                         "default_originate": {
-    #                             "always": true
-    #                         },
-    #                         "peer": "peer2"
-    #                     }
-    #                 ],
-    #                 "network": [
-    #                     {
-    #                         "address": "1.1.1.0/24"
-    #                     },
-    #                     {
-    #                         "address": "1.5.1.0/24",
-    #                         "route_map": "MAP01"
-    #                     }
-    #                 ],
-    #                 "redistribute": [
-    #                     {
-    #                         "ospf_route": "external",
-    #                         "protocol": "ospfv3"
-    #                     }
-    #                 ]
-    #             },
-    #             {
-    #                 "afi": "ipv4",
-    #                 "bgp_params": {
-    #                     "additional_paths": "receive"
-    #                 },
-    #                 "vrf": "vrft"
-    #             }
-    #         ],
-    #         "as_number": "10"
-    #     },
+    # Task output:
+    # ------------
+    # gathered:
+    #     address_family:
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       neighbor:
+    #       - default_originate:
+    #           always: true
+    #         peer: peer2
+    #       network:
+    #       - address: 1.1.1.0/24
+    #       - address: 1.5.1.0/24
+    #         route_map: MAP01
+    #       redistribute:
+    #       - ospf_route: external
+    #         protocol: ospfv3
+    #     - afi: ipv4
+    #       bgp_params:
+    #         additional_paths: receive
+    #       vrf: vrft
+    #     as_number: '10'
 
-    # using rendered:
+    # using rendered
 
-      - name:  Render
-        arista.eos.eos_bgp_address_family:
-          config:
-            as_number: "10"
-            address_family:
-              - afi: "ipv4"
-                redistribute:
-                  - protocol: "ospfv3"
-                    ospf_route: "external"
-                network:
-                  - address: "1.1.1.0/24"
-                  - address: "1.5.1.0/24"
-                    route_map: "MAP01"
-              - afi: "ipv6"
-                bgp_params:
-                  additional_paths: "receive"
-                neighbor:
-                  - peer: "peer2"
-                    default_originate:
-                      always: True
-              - afi: "ipv6"
-                redistribute:
-                  - protocol: "isis"
-                    isis_level: "level-2"
-                route_target:
-                  mode: "export"
-                  target: "33:11"
-                vrf: "vrft"
+    - name: Render CLI commands for provided config
+      arista.eos.eos_bgp_address_family:
+        config:
+          as_number: "10"
+          address_family:
+            - afi: "ipv4"
+              redistribute:
+                - protocol: "ospfv3"
+                  ospf_route: "external"
+              network:
+                - address: "1.1.1.0/24"
+                - address: "1.5.1.0/24"
+                  route_map: "MAP01"
+            - afi: "ipv6"
+              bgp_params:
+                additional_paths: "receive"
+              neighbor:
+                - peer: "peer2"
+                  default_originate:
+                    always: true
+            - afi: "ipv6"
+              redistribute:
+                - protocol: "isis"
+                  isis_level: "level-2"
+              route_target:
+                mode: "export"
+                target: "33:11"
+              vrf: "vrft"
+        state: rendered
 
-          state: rendered
-
-    # Module Execution:
-
-    # "rendered": [
-    #         "router bgp 10",
-    #         "address-family ipv4",
-    #         "redistribute ospfv3 match external",
-    #         "network 1.1.1.0/24",
-    #         "network 1.5.1.0/24 route-map MAP01",
-    #         "exit",
-    #         "address-family ipv6",
-    #         "neighbor peer2 default-originate always",
-    #         "bgp additional-paths receive",
-    #         "exit",
-    #         "vrf vrft",
-    #         "address-family ipv6",
-    #         "redistribute isis level-2",
-    #         "route-target export 33:11",
-    #         "exit",
-    #         "exit"
-    #     ]
-    #
+    # Task output:
+    # ------------
+    # rendered:
+    # - router bgp 10
+    # - address-family ipv4
+    # - redistribute ospfv3 match external
+    # - network 1.1.1.0/24
+    # - network 1.5.1.0/24 route-map MAP01
+    # - exit
+    # - address-family ipv6
+    # - neighbor peer2 default-originate always
+    # - bgp additional-paths receive
+    # - exit
+    # - vrf vrft
+    # - address-family ipv6
+    # - redistribute isis level-2
+    # - route-target export 33:11
+    # - exit
+    # - exit
 
 
+
+Return Values
+-------------
+Common return values are documented `here <https://docs.ansible.com/ansible/latest/reference_appendices/common_return_values.html#common-return-values>`_, the following are the fields unique to this module:
+
+.. raw:: html
+
+    <table border=0 cellpadding=0 class="documentation-table">
+        <tr>
+            <th colspan="1">Key</th>
+            <th>Returned</th>
+            <th width="100%">Description</th>
+        </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>after</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when changed</td>
+                <td>
+                            <div>The resulting configuration after module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>before</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>
+                            <div>The configuration prior to the module execution.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>commands</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>merged</code>, <code>replaced</code>, <code>overridden</code>, <code>deleted</code> or <code>purged</code></td>
+                <td>
+                            <div>The set of commands pushed to the remote device.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router bgp 10&#x27;, &#x27;address-family ipv4&#x27;, &#x27;redistribute ospfv3 match external&#x27;, &#x27;network 1.1.1.0/24&#x27;]</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>gathered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>gathered</code></td>
+                <td>
+                            <div>Facts about the network resource gathered from the remote device as structured data.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>parsed</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">dictionary</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>parsed</code></td>
+                <td>
+                            <div>The device native config provided in <em>running_config</em> option parsed into structured data as per module argspec.</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">This output will always be in the same format as the module argspec.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="1">
+                    <div class="ansibleOptionAnchor" id="return-"></div>
+                    <b>rendered</b>
+                    <a class="ansibleOptionLink" href="#return-" title="Permalink to this return value"></a>
+                    <div style="font-size: small">
+                      <span style="color: purple">list</span>
+                    </div>
+                </td>
+                <td>when <em>state</em> is <code>rendered</code></td>
+                <td>
+                            <div>The provided configuration in the task rendered in device-native format (offline).</div>
+                    <br/>
+                        <div style="font-size: smaller"><b>Sample:</b></div>
+                        <div style="font-size: smaller; color: blue; word-wrap: break-word; word-break: break-all;">[&#x27;router bgp 10&#x27;, &#x27;address-family ipv4&#x27;, &#x27;redistribute ospfv3 match external&#x27;, &#x27;network 1.1.1.0/24&#x27;]</div>
+                </td>
+            </tr>
+    </table>
+    <br/><br/>
 
 
 Status

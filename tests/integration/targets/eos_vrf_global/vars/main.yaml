@@ -1,0 +1,73 @@
+---
+merged:
+  before: []
+  commands:
+    - vrf instance VRF4
+    - description VRF4 Description
+    - rd 3:4
+  after:
+    - name: VRF4
+      description: VRF4 Description
+      rd: "3:4"
+
+replaced:
+  before:
+    - name: VRF4
+      description: VRF4 Description
+      rd: "3:4"
+  commands:
+    - vrf instance VRF7
+    - description VRF7 description
+    - rd 6:9
+  after:
+    - name: VRF4
+      description: VRF4 Description
+      rd: "3:4"
+    - name: VRF7
+      description: VRF7 description
+      rd: "6:9"
+
+overridden:
+  before:
+    - name: VRF4
+      description: VRF4 Description
+      rd: "3:4"
+  commands:
+    - vrf instance VRF4
+    - no description VRF4 Description
+    - no rd 3:4
+    - vrf instance VRF6
+    - description VRF6 Description
+    - rd 9:8
+  after:
+    - name: VRF4
+    - name: VRF6
+      description: VRF6 Description
+      rd: "9:8"
+
+deleted:
+  before:
+    - name: VRF4
+      description: VRF4 Description
+      rd: "3:4"
+  commands:
+    - vrf instance VRF4
+    - no description VRF4 Description
+    - no rd 3:4
+  after:
+    - name: VRF4
+
+gathered:
+  after:
+    - name: VRF4
+      description: VRF4 Description
+      rd: "3:4"
+
+parsed:
+  after:
+    - name: test
+      description: "This is test VRF"
+      rd: "testing"
+    - name: my_vrf
+      description: "this is sample vrf for feature testing"
+      rd: "2:3"

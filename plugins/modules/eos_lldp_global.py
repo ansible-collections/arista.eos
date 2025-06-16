@@ -282,7 +282,6 @@ EXAMPLES = """
 #        management_address: False
 #        port_description: False
 #        system_description: True
-
 """
 RETURN = """
 before:

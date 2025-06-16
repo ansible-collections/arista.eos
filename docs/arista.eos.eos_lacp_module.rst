@@ -201,7 +201,7 @@ Examples
     # veos# show running-config | include lacp
     #
 
-    #Using rendered:
+    # Using rendered:
 
     - name: Use Rendered to convert the structured data to native config
       arista.eos.eos_lacp:

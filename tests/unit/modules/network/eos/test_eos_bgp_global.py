@@ -8,8 +8,9 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.modules import eos_bgp_global
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture
@@ -205,7 +206,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor peer1 peer group",
             "neighbor peer1 bfd c-bit",
             "neighbor peer1 maximum-routes 12000",
-            "neighbor peer1 ebgp-multiphop",
+            "neighbor peer1 ebgp-multihop",
             "neighbor peer1 send-community link-bandwidth divide ratio",
             "neighbor peer1 timers 5 10",
             "neighbor peer1 ttl maximum-hops 33",
@@ -234,6 +235,31 @@ class TestEosBgpglobalModule(TestEosModule):
             "route-target export 44:22",
             "ucmp link-bandwidth recursive mode 1 55",
             "update wait_for_convergence 50",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_bgp_global_merged_multihop(self):
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65535",
+                    router_id="192.168.1.1",
+                    neighbor=[
+                        dict(
+                            neighbor_address="10.2.2.1",
+                            peer_group="evpn",
+                            ebgp_multihop=dict(set=True, ttl=2),
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        commands = [
+            "router bgp 65535",
+            "neighbor 10.2.2.1 ebgp-multihop 2",
+            "neighbor 10.2.2.1 peer group",
+            "router-id 192.168.1.1",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -799,7 +825,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "neighbor peer2 peer group",
             "neighbor peer2 local-as 55 no-prepend replace-as fallback",
             "neighbor peer2 next-hop-v6-addr 5001::/64 in",
-            "neighbor peer2 ebgp-multiphop 10",
+            "neighbor peer2 ebgp-multihop 10",
             "neighbor peer2 enforce-first-as",
             "neighbor peer2 fall-over bfd",
             "neighbor peer2 graceful-restart-helper",
@@ -825,7 +851,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "bgp additional-paths send any",
             "bgp advertise-inactive",
             "bgp allowas-in 4",
-            "bgp always-comapre-med",
+            "bgp always-compare-med",
             "bgp auto-local-addr",
             "redistribute isis level-2",
             "network 6.6.6.0/24 route-map netmap1",
@@ -834,7 +860,7 @@ class TestEosBgpglobalModule(TestEosModule):
             "route-target export 44:22",
             "bgp bestpath ecmp-fast",
             "bgp bestpath med confed",
-            "bgp client-to-client",
+            "bgp client-to-client reflection",
             "bgp cluster-id 2",
             "bgp control-plane-filter default-allow",
             "bgp convergence slow-peer time 5",
