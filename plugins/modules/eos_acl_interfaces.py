@@ -59,7 +59,7 @@ options:
         suboptions:
           afi:
             description:
-            - Specifies the AFI for the ACL(s) to be configured on this interface.
+            - Specifies the AFI for the ACL(s) to be configured on this interfaces.
             type: str
             choices:
             - ipv4
