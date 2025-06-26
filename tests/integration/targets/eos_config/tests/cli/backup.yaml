@@ -97,6 +97,22 @@
     that:
       - result.changed == true
 
+- name: get the context diff with backup config
+  become: true
+  register: result
+  arista.eos.eos_config:
+    src: defaults/candidate.j2
+    backup: true
+    context_diff:
+      enable: true
+      context_lines: 10
+    backup_options:
+      filename: running_backup.cfg
+
+- ansible.builtin.assert:
+    that:
+      - result.context_diff is defined
+
 - name: check if the backup file-2 exist
   ansible.builtin.find:
     paths: "{{ role_path }}/backup/backup.cfg"
