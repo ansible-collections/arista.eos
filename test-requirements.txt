@@ -11,4 +11,3 @@ pytest-xdist
 rstcheck<4,>=3
 pytest-ansible
 pytest-cov
-typing-extensions
