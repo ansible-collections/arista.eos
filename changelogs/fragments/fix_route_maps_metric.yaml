@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fixed parsing of relative route-map metric adjustments in when extracting settings from device output.
