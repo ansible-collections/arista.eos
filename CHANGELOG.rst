@@ -4,6 +4,19 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v11.0.1
+=======
+
+Bugfixes
+--------
+
+- Fix route map community handling to include missing community_attributes level in the dictionary
+- Fixed idempotency regarding logging port in differing versions of EOS
+- Fixed idempotency when using `replaced` state on host with multiple ACLs present.
+- Fixed parsing of relative route-map metric adjustments in when extracting settings from device output.
+- Support colon-delimited format in BGP community strings
+- Update route_maps to correctly handle ipv6 next-hop address
+
 v11.0.0
 =======
 

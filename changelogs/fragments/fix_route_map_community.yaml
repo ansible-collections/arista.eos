@@ -1,4 +1,0 @@
----
-bugfixes:
-  - Fix route map community handling to include missing community_attributes level in the dictionary
-  - Support colon-delimited format in BGP community strings
