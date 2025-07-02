@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Fixed idempotency when using `replaced` state on host with multiple ACLs present.

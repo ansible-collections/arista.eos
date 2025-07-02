@@ -1,3 +1,0 @@
----
-bugfixes:
-  - Update route_maps to correctly handle ipv6 next-hop address
