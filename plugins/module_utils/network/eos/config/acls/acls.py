@@ -554,6 +554,8 @@ def add_commands(want):
                                 # if socket.getservbyport is unable to resolve the port name then directly use the port number
                                 # eg: 50702
                                 command = command + " " + op + " " + to_text(val)
+                        elif val:
+                            command = command + " " + op + " " + val.replace("_", "-")
             if "destination" in ace.keys():
                 if "any" in ace["destination"].keys():
                     command = command + " any"
