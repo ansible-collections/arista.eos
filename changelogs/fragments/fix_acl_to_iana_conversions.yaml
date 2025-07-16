@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - Improve condition to not always convert port numbers to IANA assigned names.
