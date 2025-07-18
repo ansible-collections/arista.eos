@@ -57,7 +57,6 @@
       - "description Ethernet_2"
 
   ansible.builtin.assert:
-
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.after)|length
         == 0
