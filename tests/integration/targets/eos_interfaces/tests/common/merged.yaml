@@ -38,3 +38,26 @@
     that:
       - ansible_facts.network_resources.interfaces|symmetric_difference(result.after)|length
         == 0
+
+- name: Test merge on shutdown interfaces with no enabled
+  register: result
+  become: true
+  arista.eos.eos_interfaces:
+    config:
+      - name: Ethernet2
+        description: Ethernet_2
+
+- become: true
+  arista.eos.eos_facts:
+    gather_network_resources: interfaces
+
+- vars:
+    commands:
+      - "interface Ethernet2"
+      - "description Ethernet_2"
+
+  ansible.builtin.assert:
+    that:
+      - ansible_facts.network_resources.interfaces|symmetric_difference(result.after)|length
+        == 0
+      - result.commands == commands

@@ -84,7 +84,6 @@ class TestEosInterfacesModule(TestEosModule):
             "interface Ethernet3",
             "description Ethernet_3",
             "switchport",
-            "no shutdown",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -240,9 +239,27 @@ class TestEosInterfacesModule(TestEosModule):
             "description Ethernet 1",
             "interface Management1",
             "no description",
-            "no shutdown",
             "interface Ethernet4",
             "speed auto",
+            "interface Ethernet5",
             "no shutdown",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_interfaces_merged_shutdown(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        name="Ethernet5",
+                        description="Ethernet_5",
+                    ),
+                ],
+                state="merged",
+            ),
+        )
+        commands = [
+            "interface Ethernet5",
+            "description Ethernet_5",
         ]
         self.execute_module(changed=True, commands=commands)
