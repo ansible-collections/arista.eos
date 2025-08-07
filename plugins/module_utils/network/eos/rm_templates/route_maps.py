@@ -89,11 +89,12 @@ def _tmplt_route_map_extcommunity_soo(config_data):
 
 def _tmplt_route_map_ip(config_data):
     config_data = config_data["entries"]["set"]
+    command = ""
     if config_data.get("ip"):
         command = "set ip next-hop "
         k = "ip"
     elif config_data.get("ipv6"):
-        command = "set ip next-hop "
+        command = "set ipv6 next-hop "
         k = "ipv6"
     if config_data[k].get("address"):
         command += config_data[k]["address"]
@@ -604,24 +605,26 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*set\scommunity
-                \s+(?P<num>\d+\s*)+
+                \s+(?P<num>(\d+(:\d+)?\s*))+
                 \s*(?P<action>additive|delete)*
                 \s*(?P<donot>local-as|no-advertise|no-export)*
                 $""",
                 re.VERBOSE,
             ),
-            "setval": "set community {{ entries.set.community.number }}" +
+            "setval": "set community {{ entries.set.community_attributes.community.number }}" +
                       "{{ (' ' + action) if action is defined }}{{  (' ' + donot) if donot is defined }}",
-            "compval": "entries.set.community",
+            "compval": "entries.set.community_attributes.community",
             "result": {
                 "entries": [
                     {
                         "set": {
-                            "community": {
-                                "number": "{{ num }}",
-                                "additive": "{{ True if action == 'additive' }}",
-                                "delete": "{{ True if action == 'delete' }}",
-                                '{{ "donot" }}': "{{ True if donot is defined }}",
+                            "community_attributes": {
+                                "community": {
+                                    "number": "{{ num }}",
+                                    "additive": "{{ True if action == 'additive' }}",
+                                    "delete": "{{ True if action == 'delete' }}",
+                                    '{{ "donot" }}': "{{ True if donot is defined }}",
+                                },
                             },
                         },
                     },
@@ -931,7 +934,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*set\smetric
-                \s*(?P<val>\d+)*
+                \s*(?P<val>[+-]?\d+)*
                 \s*(?P<operation>\+\S+)*
                 \s*(?P<param>igp-metric|igp-nexthop-cost)*
                 $""",
@@ -944,7 +947,7 @@ class Route_mapsTemplate(NetworkTemplate):
                     {
                         "set": {
                             "metric": {
-                                "value": "{{ val }}",
+                                "value": "{{ val | default('') | tojson  }}",
                                 "add": "{{ operation.strip('+') }}",
                                 "igp_param": "{{ param }}",
                             },

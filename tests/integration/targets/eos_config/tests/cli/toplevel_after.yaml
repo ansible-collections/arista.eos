@@ -7,6 +7,12 @@
   become: true
   arista.eos.eos_config:
     lines:
+      - no hostname
+
+- name: setup
+  become: true
+  arista.eos.eos_config:
+    lines:
       - snmp-server contact ansible
       - hostname {{ inventory_hostname_short }}
     match: none

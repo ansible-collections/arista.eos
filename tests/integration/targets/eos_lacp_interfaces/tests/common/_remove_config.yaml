@@ -1,0 +1,19 @@
+---
+- ansible.builtin.debug:
+    msg:
+      Start eos_lacp_interfaces _remove_config task with ansible_connection={{
+      ansible_connection }}
+
+- name: Setup - Remove lacp interfaces config
+  become: true
+  arista.eos.eos_config:
+    lines:
+      - "interface Ethernet1"
+      - "   no lacp port-priority"
+      - "   no lacp timer"
+      - "interface Ethernet2"
+      - "   no lacp timer"
+
+- ansible.builtin.debug:
+    msg: End eos_lacp_interfaces _remove_config ansible_connection={{
+      ansible_connection }}

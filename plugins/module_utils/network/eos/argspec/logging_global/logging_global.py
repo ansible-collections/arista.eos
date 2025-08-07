@@ -144,7 +144,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                         "add": {"type": "bool"},
                         "remove": {"type": "bool"},
                         "protocol": {"type": "str", "choices": ["tcp", "udp"]},
-                        "port": {"type": "int"},
+                        "port": {"type": "int", "default": 514},
                     },
                 },
                 "level": {
@@ -228,7 +228,7 @@ class Logging_globalArgs(object):  # pylint: disable=R0903
                                     "type": "str",
                                     "choices": ["tcp", "udp"],
                                 },
-                                "port": {"type": "int"},
+                                "port": {"type": "int", "default": 514},
                             },
                         },
                         "source_interface": {"type": "str"},

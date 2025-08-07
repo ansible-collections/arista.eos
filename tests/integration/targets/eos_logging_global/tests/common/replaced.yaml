@@ -32,7 +32,7 @@
 
     - ansible.builtin.assert:
         that:
-          - result.commands|length == 14
+          - result.commands|length == 16
           - result.changed == true
           - result.commands|symmetric_difference(replaced.commands) == []
           - result.after == replaced.after

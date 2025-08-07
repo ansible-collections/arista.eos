@@ -1,4 +1,10 @@
 ---
+- ansible.builtin.debug:
+    msg: START eos_lacp_interfaces overridden integration tests on connection={{
+      ansible_connection }}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - ansible.builtin.set_fact:
@@ -6,35 +12,44 @@
       - name: Ethernet1
         timer: fast
 
-- become: true
-  arista.eos.eos_facts:
-    gather_network_resources: lacp_interfaces
+- block:
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: lacp_interfaces
 
-- name: Overrides device configuration of all vlans with provided configuration
-  register: result
-  become: true
-  arista.eos.eos_lacp_interfaces:
-    config: "{{ config }}"
-    state: overridden
+    - name: Overrides device configuration of all vlans with provided configuration
+      register: result
+      become: true
+      arista.eos.eos_lacp_interfaces:
+        config: "{{ config }}"
+        state: overridden
 
-- ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lacp_interfaces|symmetric_difference(result.before)
-        == []
+    - ansible.builtin.assert:
+        that:
+          - ansible_facts.network_resources.lacp_interfaces|symmetric_difference(result.before)
+            == []
 
-- become: true
-  arista.eos.eos_facts:
-    gather_network_resources: lacp_interfaces
+    - become: true
+      arista.eos.eos_facts:
+        gather_network_resources: lacp_interfaces
 
-- ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lacp_interfaces|symmetric_difference(result.after)
-        == []
+    - ansible.builtin.assert:
+        that:
+          - ansible_facts.network_resources.lacp_interfaces|symmetric_difference(result.after)
+            == []
 
-- ansible.builtin.set_fact:
-    expected_config: "{{ config }}"
+    - ansible.builtin.set_fact:
+        expected_config: "{{ config }}"
 
-- ansible.builtin.assert:
-    that:
-      - expected_config|symmetric_difference(ansible_facts.network_resources.lacp_interfaces)
-        == []
+    - ansible.builtin.assert:
+        that:
+          - expected_config|symmetric_difference(ansible_facts.network_resources.lacp_interfaces)
+            == []
+
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.debug:
+    msg:
+      END eos_lacp_interfaces overridden integration tests on connection={{ ansible_connection
+      }}

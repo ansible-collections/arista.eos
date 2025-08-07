@@ -1,0 +1,46 @@
+---
+- ansible.builtin.debug:
+    msg: Start eos_vrf_global deleted integration tests connection={{ ansible_connection}}
+
+- ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.include_tasks: _populate.yaml
+
+- block:
+    - name: Delete given vrf configuration
+      become: true
+      register: result
+      arista.eos.eos_vrf_global: &deleted
+        config:
+          - name: VRF4
+        state: deleted
+
+    - ansible.builtin.assert:
+        that:
+          - result.changed == true
+
+    - name: Assert that correct set of commands were generated
+      ansible.builtin.assert:
+        that:
+          - "{{ deleted['commands'] | symmetric_difference(result['commands']) | length == 0 }}"
+
+    - name: Assert that before dicts are correctly generated
+      ansible.builtin.assert:
+        that:
+          - "{{ deleted['before'] | symmetric_difference(result['before']) | length == 0 }}"
+
+    - name: Assert that after dicts are correctly generated
+      ansible.builtin.assert:
+        that:
+          - deleted['after'] == result['after']
+
+    - name: Idempotency check
+      become: true
+      register: result
+      arista.eos.eos_vrf_global: *deleted
+    - ansible.builtin.assert:
+        that:
+          - result.commands|length == 0
+          - result.changed == false
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml

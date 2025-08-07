@@ -128,16 +128,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                         "timers": {
                             "type": "dict",
                             "options": {
-                                "throttle": {
-                                    "type": "dict",
-                                    "options": {
-                                        "max": {"type": "int"},
-                                        "initial": {"type": "int"},
-                                        "min": {"type": "int"},
-                                        "spf": {"type": "bool"},
-                                        "lsa": {"type": "bool"},
-                                    },
-                                },
                                 "spf": {
                                     "type": "dict",
                                     "options": {
@@ -357,16 +347,6 @@ class Ospfv3Args(object):  # pylint: disable=R0903
                                 "timers": {
                                     "type": "dict",
                                     "options": {
-                                        "throttle": {
-                                            "type": "dict",
-                                            "options": {
-                                                "max": {"type": "int"},
-                                                "initial": {"type": "int"},
-                                                "min": {"type": "int"},
-                                                "spf": {"type": "bool"},
-                                                "lsa": {"type": "bool"},
-                                            },
-                                        },
                                         "spf": {
                                             "type": "dict",
                                             "options": {

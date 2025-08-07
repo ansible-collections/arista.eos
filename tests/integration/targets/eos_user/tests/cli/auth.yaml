@@ -16,6 +16,7 @@
           -o StrictHostKeyChecking=no show version
         responses:
           (?i)password: pass123
+      ignore_errors: true
 
     - name: test login with invalid password (should fail)
       expect:

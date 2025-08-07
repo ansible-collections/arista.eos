@@ -44,7 +44,7 @@ class Static_routesFacts(object):
         self.generated_spec = utils.generate_dict(facts_argument_spec)
 
     def get_device_data(self, connection):
-        return connection.get("show running-config | grep route")
+        return connection.get("show running-config | include ^ip route|^ipv6 route")
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for static_routes
@@ -96,7 +96,7 @@ class Static_routesFacts(object):
                 if obj:
                     objs.append(obj)
         ansible_facts["ansible_network_resources"].pop("static_routes", None)
-        facts = {}
+        facts = {"static_routes": []}
         if objs:
             facts["static_routes"] = []
             params = utils.validate_config(

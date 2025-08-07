@@ -1,0 +1,15 @@
+---
+- ansible.builtin.debug: msg="START cli/network_resource_facts.yaml on connection={{ ansible_connection }}"
+
+- name: Gather arista network resource facts
+  arista.eos.eos_facts:
+    gather_subset: config
+    gather_network_resources:
+      - 'static_routes'
+  register: result
+
+- name: Assert that  facts gathered was correctly generated
+  ansible.builtin.assert:
+    that:
+      - "result['ansible_facts']['ansible_network_resources']['static_routes'] == []"
+- ansible.builtin.debug: msg="END cli/network_resource_facts.yaml on connection={{ ansible_connection }}"

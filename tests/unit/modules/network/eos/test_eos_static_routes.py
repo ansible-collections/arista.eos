@@ -10,11 +10,12 @@ __metaclass__ = type
 
 import itertools
 
+from unittest.mock import patch
+
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.config.static_routes.static_routes import (
     add_commands,
 )
 from ansible_collections.arista.eos.plugins.modules import eos_static_routes
-from ansible_collections.arista.eos.tests.unit.compat.mock import patch
 from ansible_collections.arista.eos.tests.unit.modules.utils import set_module_args
 
 from .eos_module import TestEosModule, load_fixture

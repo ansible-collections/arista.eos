@@ -4,6 +4,8 @@
       START eos_lacp_interfaces gathered integration tests on connection={{ ansible_connection
       }}
 
+- ansible.builtin.include_tasks: _remove_config.yaml
+
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - block:
@@ -21,3 +23,10 @@
     - ansible.builtin.assert:
         that:
           - ansible_facts.network_resources.lacp_interfaces == result.gathered
+  always:
+    - ansible.builtin.include_tasks: _remove_config.yaml
+
+- ansible.builtin.debug:
+    msg:
+      END eos_lacp_interfaces gathered integration tests on connection={{ ansible_connection
+      }}

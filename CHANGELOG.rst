@@ -4,6 +4,130 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v11.0.1
+=======
+
+Bugfixes
+--------
+
+- Fix route map community handling to include missing community_attributes level in the dictionary
+- Fixed idempotency regarding logging port in differing versions of EOS
+- Fixed idempotency when using `replaced` state on host with multiple ACLs present.
+- Fixed parsing of relative route-map metric adjustments in when extracting settings from device output.
+- Support colon-delimited format in BGP community strings
+- Update route_maps to correctly handle ipv6 next-hop address
+
+v11.0.0
+=======
+
+Release Summary
+---------------
+
+With this release, the minimum required version of `ansible-core` for this collection is `2.16.0`. The last version known to be compatible with `ansible-core` versions below `2.16` is v10.1.1.
+
+Major Changes
+-------------
+
+- Bumping `requires_ansible` to `>=2.16.0`, since previous ansible-core versions are EoL now.
+
+v10.1.1
+=======
+
+Minor Changes
+-------------
+
+- Adds a new module `eos_vrf_global` in favor of `eos_vrf` legacy module to manage VRF global configurations on Arista EOS devices.
+
+Bugfixes
+--------
+
+- Fixed an issue in the `compare_configs` method where unnecessary negate commands were generated for ACL entries already present in both `have` and `want` configurations.
+- Improved validation logic for ACL sequence numbers and content matching to ensure idempotency.
+- Prevented redundant configuration updates for Access Control Lists.
+- fix facts gathering for ebgp-multihop attribute.
+
+v10.0.1
+=======
+
+Bugfixes
+--------
+
+- Adds a missing word in the 'bgp client-to-client reflection' command in eos_bgp_global module.
+- Fixes a typo in always-compare-med attribute in eos_bgp_global module.
+- Handles exception when translating an unknown port to its service name.
+
+Documentation Changes
+---------------------
+
+- Includes a new support related section in the README.
+
+v10.0.0
+=======
+
+Release Summary
+---------------
+
+With this release, the minimum required version of `ansible-core` for this collection is `2.15.0`. The last version known to be compatible with `ansible-core` versions below `2.15` is v9.0.0.
+
+Major Changes
+-------------
+
+- Bumping `requires_ansible` to `>=2.15.0` due to the end-of-life status of previous `ansible-core` versions.
+
+Bugfixes
+--------
+
+- Ensure IPv6 static route definitions are correctly filtered during facts gathering.
+- This fix make sure to fetch timer with `lldp` string at the start.
+- Update integration tests for parse operations to ensure that ordering or address family (AF) does not affect assertions.
+- Update the filter to accurately retrieve relevant static route configurations.
+
+v9.0.0
+======
+
+Major Changes
+-------------
+
+- Update the netcommon base version 6.1.0 to support cli_restore plugin.
+
+Minor Changes
+-------------
+
+- Add support for cli_restore functionality.
+- Please refer the PR to know more about core changes (https://github.com/ansible-collections/ansible.netcommon/pull/618).
+- cli_restore module is part of netcommon.
+
+v8.0.0
+======
+
+Major Changes
+-------------
+
+- This release removes previously deprecated modules and attributes from this collection. Please refer to the **Removed Features** section for details.
+
+Removed Features (previously deprecated)
+----------------------------------------
+
+- Remove depreacted eos_bgp module which is replaced with eos_bgp_global and eos_bgp_address_family.
+- Remove deprecated eos_logging module which is replaced with eos_logging_global resource module.
+- Remove deprecated timers.throttle attribute.
+
+v7.1.0
+======
+
+Bugfixes
+--------
+
+- This fix is needed because static_routes and vlans are not returning anything when resources are not configured.
+- This got noticed in this issue (https://github.com/network-automation/toolkit/issues/47)
+- correct a missing whitespace and add 'auth' string.
+- correct the parsing of the elements in 'name_servers' in 'eos_system' module.
+- when static_routes and vlans are not confirgured then return empty list.
+
+Documentation Changes
+---------------------
+
+- eos_lag_interface - Updated examples for lag_interface module.
 
 v7.0.0
 ======
@@ -469,7 +593,6 @@ New Modules
 - eos_acl_interfaces - ACL interfaces resource module
 - eos_acls - ACLs resource module
 - eos_banner - Manage multiline banners on Arista EOS devices
-- eos_bgp - (deprecated, removed after 2023-01-29) Configure global BGP protocol settings on Arista EOS.
 - eos_command - Run arbitrary commands on an Arista EOS device
 - eos_config - Manage Arista EOS configuration sections
 - eos_eapi - Manage and configure Arista EOS eAPI.
@@ -483,7 +606,6 @@ New Modules
 - eos_lldp - Manage LLDP configuration on Arista EOS network devices
 - eos_lldp_global - LLDP resource module
 - eos_lldp_interfaces - LLDP interfaces resource module
-- eos_logging - Manage logging on network devices
 - eos_ospfv2 - OSPFv2 resource module
 - eos_static_routes - Static routes resource module
 - eos_system - Manage the system attributes on Arista EOS devices

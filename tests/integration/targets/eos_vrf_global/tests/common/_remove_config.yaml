@@ -1,0 +1,12 @@
+---
+- name: Remove VRF global configurations
+  become: true
+  register: result
+  arista.eos.eos_config:
+    lines:
+      - no vrf instance VRF4
+      - no vrf instance VRF6
+      - no vrf instance VRF7
+      - no vrf instance VRF1
+      - no vrf instance my_vrf
+      - no vrf instance test
