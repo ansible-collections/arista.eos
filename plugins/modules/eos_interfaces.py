@@ -66,7 +66,6 @@ options:
           - Ignored when I(speed) is set above C(1000).
         type: str
       enabled:
-        default: true
         description:
           - Administrative state of the interface.
           - Set the value to C(true) to administratively enable the interface or C(false)
