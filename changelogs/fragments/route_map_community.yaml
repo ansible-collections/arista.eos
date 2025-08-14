@@ -1,3 +1,4 @@
 ---
 bugfixes:
   - Fix regex in route_map module to support match community with or without exact-match
+  - Add unit and integration tests to verify the change
