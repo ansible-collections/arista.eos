@@ -4,6 +4,15 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v11.0.2
+=======
+
+Bugfixes
+--------
+
+- Update the ACL module to support using protocol names for source port
+- arista.eos.eos_interfaces - Improved handling of the `enabled` state to prevent incorrect `shutdown` or `no shutdown` commands during configuration changes
+
 v11.0.1
 =======
 
