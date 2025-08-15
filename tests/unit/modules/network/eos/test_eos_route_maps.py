@@ -58,7 +58,10 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 description="merged_map",
                                 action="permit",
                                 sequence=10,
-                                match=dict(router_id=22),
+                                match=dict(
+                                    router_id=22,
+                                    community=dict(community_list="list1"),
+                                ),
                             ),
                             dict(
                                 description="newmap",
@@ -152,7 +155,10 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 action="permit",
                                 sequence=10,
                                 set=dict(bgp=20),
-                                match=dict(router_id=22),
+                                match=dict(
+                                    router_id=22,
+                                    community=dict(community_list="list1"),
+                                ),
                             ),
                             dict(
                                 description="newmap",
@@ -219,6 +225,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             "route-map mapmerge permit 10",
             "match ipv6 resolved-next-hop prefix-list listr",
             "no match router-id prefix-list 22",
+            "no match community list1",
             "no set bgp bestpath as-path weight 20",
             "no description",
             "route-map mapmerge deny 90",
@@ -239,7 +246,10 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 description="merged_map",
                                 action="permit",
                                 sequence=10,
-                                match=dict(router_id=22),
+                                match=dict(
+                                    router_id=22,
+                                    community=dict(community_list="list1"),
+                                ),
                                 set=dict(bgp=20),
                             ),
                             dict(
@@ -338,6 +348,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             "match ipv6 address prefix-list test_prefix",
             "set metric igp-nexthop-cost",
             "no match router-id prefix-list 22",
+            "no match community list1",
             "no set bgp bestpath as-path weight 20",
             "no description",
             "route-map mapmerge deny 90",
@@ -371,7 +382,10 @@ class TestEosRoute_MapsModule(TestEosModule):
                                 description="merged_map",
                                 action="permit",
                                 sequence=10,
-                                match=dict(router_id=22),
+                                match=dict(
+                                    router_id=22,
+                                    community=dict(community_list="list1"),
+                                ),
                             ),
                             dict(
                                 description="newmap",
@@ -418,6 +432,7 @@ class TestEosRoute_MapsModule(TestEosModule):
             "route-map mapmerge permit 10",
             "description merged_map",
             "match router-id prefix-list 22",
+            "match community list1",
             "route-map mapmerge deny 25",
             "description newmap",
             "match interface Ethernet1",
@@ -449,7 +464,10 @@ class TestEosRoute_MapsModule(TestEosModule):
                 {
                     "action": "permit",
                     "description": "merged_map",
-                    "match": {"router_id": "22"},
+                    "match": {
+                        "router_id": "22",
+                        "community": {"community_list": "list1"},
+                    },
                     "sequence": 10,
                     "set": {"bgp": 20},
                 },
