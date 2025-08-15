@@ -1184,7 +1184,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*match\scommunity
-                \s+(?P<comm>.+\s)
+                \s+(?P<comm>\S+)
                 \s*(?P<mat>exact-match)*
                 $""",
                 re.VERBOSE,
