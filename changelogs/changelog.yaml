@@ -277,6 +277,19 @@ releases:
       - logging_global.yml
       - route_maps_ipv6.yaml
     release_date: "2025-07-01"
+  12.0.0:
+    changes:
+      bugfixes:
+        - Add unit and integration tests to verify the change
+        - Fix regex in route_map module to support match community with or without exact-match
+        - Update the ACL module to support using protocol names for source port
+        - arista.eos.eos_interfaces - Improved handling of the `enabled` state to prevent
+          incorrect `shutdown` or `no shutdown` commands during configuration changes
+    fragments:
+      - acl_protocol_name.yaml
+      - eos_interfaces.yaml
+      - route_map_community.yaml
+    release_date: "2025-08-19"
   2.0.0:
     changes:
       bugfixes:
