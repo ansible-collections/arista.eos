@@ -287,7 +287,7 @@ releases:
     - acl_protocol_name.yaml
     - eos_interfaces.yaml
     - route_map_community.yaml
-    release_date: '2025-08-18'
+    release_date: '2025-08-19'
   2.0.0:
     changes:
       bugfixes:
