@@ -39,7 +39,7 @@ class Prefix_listsTemplate(NetworkTemplate):
     def _tmplt_prefix_list_ip(config_data):
         command_set = []
         config_data = config_data["prefix_lists"].get("entries", {})
-        for k, v in items(config_data):
+        for k, v in config_data.items():
             command = ""
             if k != "seq":
                 command = "seq " + str(k) + " {action} {address}".format(**v)
@@ -55,7 +55,7 @@ class Prefix_listsTemplate(NetworkTemplate):
     def _tmplt_prefix_list_ip_del(config_data):
         command_set = []
         config_data = config_data["prefix_lists"].get("entries", {})
-        for k, v in items(config_data):
+        for k, v in config_data.items():
             command_set.append("seq " + str(k))
 
         return command_set
@@ -63,7 +63,7 @@ class Prefix_listsTemplate(NetworkTemplate):
     def _tmplt_prefix_list_resequence(config_data):
         command = "resequence"
         config_data = config_data["prefix_lists"].get("entries", {})
-        for k, v in items(config_data):
+        for k, v in config_data.items():
             if v["resequence"].get("start_seq"):
                 command += " " + str(v["resequence"]["start_seq"])
             if v["resequence"].get("step"):

@@ -60,7 +60,7 @@ class Prefix_listsFacts(object):
         )
         objs = prefix_lists_parser.parse()
         if objs:
-            for afi, pl in items(objs):
+            for afi, pl in objs.items():
                 if "prefix_lists" in pl:
                     pl["prefix_lists"] = sorted(
                         list(pl["prefix_lists"].values()),

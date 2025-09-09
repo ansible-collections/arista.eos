@@ -30,7 +30,7 @@ class Neighbors(CliProvider):
             if not config or cmd not in config:
                 neighbor_commands.append(cmd)
 
-            for key, value in items(item):
+            for key, value in item.items():
                 if value is not None:
                     meth = getattr(self, "_render_%s" % key, None)
                     if meth:
@@ -145,7 +145,7 @@ class AFNeighbors(CliProvider):
 
         for item in nbr_list:
             neighbor_commands = list()
-            for key, value in items(item):
+            for key, value in item.items():
                 if value is not None:
                     meth = getattr(self, "_render_%s" % key, None)
                     if meth:

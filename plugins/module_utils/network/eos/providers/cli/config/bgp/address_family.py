@@ -38,7 +38,7 @@ class AddressFamily(CliProvider):
                     indent=2,
                 )
 
-            for key, value in items(item):
+            for key, value in item.items():
                 if value is not None:
                     meth = getattr(self, "_render_%s" % key, None)
                     if meth:

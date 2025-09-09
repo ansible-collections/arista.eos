@@ -82,7 +82,7 @@ class Bgp_globalFacts(object):
 
         if objs:
             global_vals = objs.get("vrfs", {}).pop("vrf_", {})
-            for key, value in items(global_vals):
+            for key, value in global_vals.items():
                 objs[key] = value
 
             if "vrfs" in objs:

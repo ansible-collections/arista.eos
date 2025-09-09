@@ -77,20 +77,20 @@ class Vrf_global(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {k: v for k, v in items(haved) if k in wantd or not wantd}
+            haved = {k: v for k, v in haved.items() if k in wantd or not wantd}
             wantd = {}
 
         # remove superfluous config for overridden and deleted
         if self.state in ["overridden", "deleted"]:
-            for k, have in items(haved):
+            for k, have in haved.items():
                 if k not in wantd:
                     self._compare(want={}, have=have, vrf=k)
 
         if self.state == "purged":
-            for k, have in items(haved):
+            for k, have in haved.items():
                 self.purge(have)
 
-        for k, want in items(wantd):
+        for k, want in wantd.items():
             self._compare(want=want, have=haved.pop(k, {}), vrf=k)
 
     def _compare(self, want, have, vrf):

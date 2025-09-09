@@ -82,7 +82,7 @@ class Route_mapsFacts(object):
             objs = route_maps_parser.parse()
             if objs:
                 dict_update = {}
-                for k, v in items(objs):
+                for k, v in objs.items():
                     if k == "entries":
                         e_list = []
                         match_dict = {}
@@ -90,14 +90,12 @@ class Route_mapsFacts(object):
                         match_ipv6 = {}
                         set_dict = {}
                         for el in v:
-                            for entry_k, entry_v in items(el):
+                            for entry_k, entry_v in el.items():
                                 if entry_k == "match":
-                                    if "ip" in entry_v or "ipv6" in entry_v:
-                                        for ipk, ipv in items(entry_v):
-                                            if "ip" in entry_v:
-                                                match_ip.update(ipv)
-                                            if "ipv6" in entry_v:
-                                                match_ipv6.update(ipv)
+                                    if "ip" in entry_v:
+                                        match_ip.update(entry_v.get("ip", {}))
+                                    if "ipv6" in entry_v:
+                                        match_ipv6.update(entry_v.get("ipv6", {}))
                                         matchv = {
                                             "ip": match_ip,
                                             "ipv6": match_ipv6,

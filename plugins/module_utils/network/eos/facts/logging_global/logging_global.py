@@ -67,7 +67,7 @@ class Logging_globalFacts(object):
                     key=lambda k, sk="name": k[sk],
                 )
             if "vrfs" in objs:
-                for k, v in items(objs["vrfs"]):
+                for k, v in objs["vrfs"].items():
                     if "hosts" in v:
                         v["hosts"] = sorted(
                             list(v["hosts"].values()),

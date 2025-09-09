@@ -66,7 +66,7 @@ class Provider(CliProvider):
 
             context_commands = list()
 
-            for key, value in items(self.get_value("config")):
+            for key, value in self.get_value("config").items():
                 if value is not None:
                     meth = getattr(self, "_render_%s" % key, None)
                     if meth:

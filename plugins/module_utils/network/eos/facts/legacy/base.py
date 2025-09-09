@@ -43,7 +43,7 @@ class Default(FactsBase):
     def populate(self):
         super(Default, self).populate()
         data = self.responses[0]
-        for key, value in items(self.SYSTEM_MAP):
+        for key, value in self.SYSTEM_MAP.items():
             if key in data:
                 self.facts[value] = data[key]
 
@@ -135,10 +135,10 @@ class Interfaces(FactsBase):
 
     def populate_interfaces(self, data):
         facts = dict()
-        for key, value in items(data["interfaces"]):
+        for key, value in data["interfaces"].items():
             intf = dict()
 
-            for remote, local in items(self.INTERFACE_MAP):
+            for remote, local in self.INTERFACE_MAP.items():
                 if remote in value:
                     intf[local] = value[remote]
 
