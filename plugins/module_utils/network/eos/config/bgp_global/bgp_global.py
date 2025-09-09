@@ -103,7 +103,7 @@ class Bgp_global(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state in ["deleted", "purged"]:
             h_del = {}
-            for k, v in items(haved):
+            for k, v in haved.items():
                 if k in wantd or not wantd:
                     h_del.update({k: v})
             wantd = {}
@@ -113,12 +113,12 @@ class Bgp_global(ResourceModule):
             self._compare(want={}, have=self.have)
 
         if self.state == "purged":
-            for num, entry in items(haved):
+            for num, entry in haved.items():
                 self.commands.append(
                     self._tmplt.render({"as_number": num}, "router", True),
                 )
 
-        for k, want in items(wantd):
+        for k, want in wantd.items():
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -131,14 +131,14 @@ class Bgp_global(ResourceModule):
         self._compare_neighbor(want, have)
         self._compare_lists(want, have)
         self._compare_bgp_params(want, have)
-        for name, entry in items(want):
+        for name, entry in want.items():
             if name != "as_number":
                 self.compare(
                     parsers=self.parsers,
                     want={name: entry},
                     have={name: have.pop(name, {})},
                 )
-        for name, entry in items(have):
+        for name, entry in have.items():
             if name != "as_number":
                 self.compare(
                     parsers=self.parsers,
@@ -187,9 +187,9 @@ class Bgp_global(ResourceModule):
         ]
         wbgp = want.pop("bgp_params", {})
         hbgp = have.pop("bgp_params", {})
-        for name, entry in items(wbgp):
+        for name, entry in wbgp.items():
             if name == "bestpath":
-                for k, v in items(entry):
+                for k, v in entry.items():
                     h = {}
                     if hbgp.get(name):
                         h = {name: hbgp[name].pop(v, {})}
@@ -205,7 +205,7 @@ class Bgp_global(ResourceModule):
                 want={"bgp_params": {name: entry}},
                 have={"bgp_params": {name: hbgp.pop(name, {})}},
             )
-        for name, entry in items(hbgp):
+        for name, entry in hbgp.items():
             self.compare(
                 parsers=parsers,
                 want={},
@@ -216,7 +216,7 @@ class Bgp_global(ResourceModule):
         wvrf = want.pop("vrfs", {})
         hvrf = have.pop("vrfs", {})
         begin = len(self.commands)
-        for name, entry in items(wvrf):
+        for name, entry in wvrf.items():
             self._compare_neighbor(entry, hvrf.get(name, {}))
             self._compare_lists(entry, hvrf.get(name, {}))
             self._compare_bgp_params(entry, hvrf.get(name, {}))
@@ -235,7 +235,7 @@ class Bgp_global(ResourceModule):
                 )
                 self.commands.append("exit")
         begin_negate = len(self.commands)
-        for name, entry in items(hvrf):
+        for name, entry in hvrf.items():
             if name not in wvrf.keys():
                 if self._check_af(name):
                     self._module.fail_json(
@@ -330,7 +330,7 @@ class Bgp_global(ResourceModule):
         ]
         wneigh = want.pop("neighbor", {})
         hneigh = have.pop("neighbor", {})
-        for name, entry in items(wneigh):
+        for name, entry in wneigh.items():
             for k, v in entry.items():
                 if entry.get("peer"):
                     peer = entry["peer"]
@@ -345,7 +345,7 @@ class Bgp_global(ResourceModule):
                     want={"neighbor": {"neighbor_address": peer, k: v}},
                     have={"neighbor": h},
                 )
-        for name, entry in items(hneigh):
+        for name, entry in hneigh.items():
             if name not in wneigh.keys() and "peer_group" not in entry.keys():
                 self.commands.append("no neighbor " + name)
                 continue
@@ -365,7 +365,7 @@ class Bgp_global(ResourceModule):
         ]:
             wdict = want.pop(attrib, {})
             hdict = have.pop(attrib, {})
-            for key, entry in items(wdict):
+            for key, entry in wdict.items():
                 if entry != hdict.pop(key, {}):
                     self.addcmd(entry, attrib, False)
             # remove remaining items in have for replaced
@@ -373,7 +373,7 @@ class Bgp_global(ResourceModule):
                 self.addcmd(entry, attrib, True)
 
     def _bgp_global_list_to_dict(self, entry):
-        for name, proc in items(entry):
+        for name, proc in entry.items():
             if "neighbor" in proc:
                 neigh_dict = {}
                 for entry in proc.get("neighbor", []):

@@ -109,21 +109,21 @@ class Ospf_interfaces(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             h_del = {}
-            for k, v in items(haved):
+            for k, v in haved.items():
                 if k in wantd or not wantd:
                     h_del.update({k: v})
             haved = h_del
-            for k, have in items(haved):
+            for k, have in haved.items():
                 self._compare(want={}, have=have)
             wantd = {}
 
         # remove superfluous config for overridden
         if self.state == "overridden":
-            for k, have in items(haved):
+            for k, have in haved.items():
                 if k not in wantd:
                     self._compare(want={}, have=have)
 
-        for k, want in items(wantd):
+        for k, want in wantd.items():
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -172,7 +172,7 @@ class Ospf_interfaces(ResourceModule):
         for afi in ["ipv4", "ipv6"]:
             w_p = w_params.pop(afi, {})
             h_p = h_params.pop(afi, {})
-            for k, params in items(w_p):
+            for k, params in w_p.items():
                 if k == "afi":
                     continue
                 w = {"afi": afi, k: params}
@@ -182,7 +182,7 @@ class Ospf_interfaces(ResourceModule):
                     want={"ip_params": w},
                     have={"ip_params": h},
                 )
-            for k, params in items(h_p):
+            for k, params in h_p.items():
                 if k == "afi":
                     continue
                 w = {"afi": afi, k: None}
@@ -194,7 +194,7 @@ class Ospf_interfaces(ResourceModule):
                 )
 
     def _ospf_int_list_to_dict(self, entry):
-        for name, family in items(entry):
+        for name, family in entry.items():
             if family.get("ip_params"):
                 family_dict = {}
                 for entry in family["ip_params"]:

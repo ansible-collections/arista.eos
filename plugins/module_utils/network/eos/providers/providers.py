@@ -30,7 +30,7 @@ def register_provider(network_os, module_name):
                 if ct not in _registered_providers[network_os]:
                     _registered_providers[network_os][ct] = {}
             for item in to_list(module_name):
-                for entry in values(_registered_providers[network_os]):
+                for entry in _registered_providers[network_os].values():
                     entry[item] = cls
         finally:
             _provider_lock.release()
