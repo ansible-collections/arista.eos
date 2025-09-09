@@ -91,7 +91,6 @@ session_name:
 """
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.six import string_types
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     load_config,
@@ -105,13 +104,13 @@ def map_obj_to_commands(updates, module):
     state = module.params["state"]
 
     if state == "absent" and have.get("text"):
-        if isinstance(have["text"], string_types):
+        if isinstance(have["text"], str):
             commands.append("no banner %s" % module.params["banner"])
         elif have["text"].get("loginBanner") or have["text"].get("motd"):
             commands.append({"cmd": "no banner %s" % module.params["banner"]})
 
     elif state == "present":
-        if isinstance(have["text"], string_types):
+        if isinstance(have["text"], str):
             if want["text"] != have["text"]:
                 commands.append("banner %s" % module.params["banner"])
                 commands.extend(want["text"].strip().split("\n"))

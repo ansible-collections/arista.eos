@@ -11,7 +11,6 @@ __metaclass__ = type
 import platform
 import re
 
-from ansible.module_utils.six import iteritems
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_capabilities,
@@ -44,7 +43,7 @@ class Default(FactsBase):
     def populate(self):
         super(Default, self).populate()
         data = self.responses[0]
-        for key, value in iteritems(self.SYSTEM_MAP):
+        for key, value in items(self.SYSTEM_MAP):
             if key in data:
                 self.facts[value] = data[key]
 
@@ -136,10 +135,10 @@ class Interfaces(FactsBase):
 
     def populate_interfaces(self, data):
         facts = dict()
-        for key, value in iteritems(data["interfaces"]):
+        for key, value in items(data["interfaces"]):
             intf = dict()
 
-            for remote, local in iteritems(self.INTERFACE_MAP):
+            for remote, local in items(self.INTERFACE_MAP):
                 if remote in value:
                     intf[local] = value[remote]
 

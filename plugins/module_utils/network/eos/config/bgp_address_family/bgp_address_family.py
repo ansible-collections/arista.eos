@@ -20,7 +20,6 @@ created.
 
 import re
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -109,27 +108,27 @@ class Bgp_af(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             h_del = {}
-            for k, v in iteritems(haved):
+            for k, v in items(haved):
                 if k in wantd or not wantd:
                     h_del.update({k: v})
             haved = h_del
-            for wk, wv in iteritems(wantd):
+            for wk, wv in items(wantd):
                 self._compare(want=wv, have=haved.pop(wk, {}))
 
             wantd = {}
 
         # remove superfluous config for overridden
         if self.state == "overridden":
-            for k, have in iteritems(haved):
+            for k, have in items(haved):
                 if k not in wantd:
                     self._compare(want={}, have=have)
-        for k, want in iteritems(wantd):
+        for k, want in items(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _delete_af(self, want, have):
         waf = want.get("address_family", {})
         haf = have.get("address_family", {})
-        for hkey, entry in iteritems(haf):
+        for hkey, entry in items(haf):
             if hkey in waf.keys():
                 af_no_command = self._tmplt.render(
                     entry,
@@ -151,7 +150,7 @@ class Bgp_af(ResourceModule):
         the `want` and `have` data with the `parsers` defined
         for the Bgp_af network resource.
         """
-        for name, entry in iteritems(want):
+        for name, entry in items(want):
             if name != "as_number":
                 if self.state == "deleted":
                     self._delete_af(want, have)
@@ -171,7 +170,7 @@ class Bgp_af(ResourceModule):
     def _compare_af(self, want, have):
         waf = want.get("address_family", {})
         haf = have.get("address_family", {})
-        for name, entry in iteritems(waf):
+        for name, entry in items(waf):
             begin = len(self.commands)
             self._compare_lists(entry, have=haf.get(name, {}))
             self._compare_neighbor(entry, have=haf.get(name, {}))
@@ -193,7 +192,7 @@ class Bgp_af(ResourceModule):
                     self.commands.insert(begin, cmd)
                     self.commands.append("exit")
                     begin += 1
-        for name, entry in iteritems(haf):
+        for name, entry in items(haf):
             # skip superfluous configs for replaced
             if self.state in ["replaced"]:
                 if name in waf.keys():
@@ -241,20 +240,20 @@ class Bgp_af(ResourceModule):
         ]
         wneigh = want.get("neighbor", {})
         hneigh = have.get("neighbor", {})
-        for name, entry in iteritems(wneigh):
+        for name, entry in items(wneigh):
             self.compare(
                 parsers=parsers,
                 want={"neighbor": entry},
                 have={"neighbor": hneigh.pop(name, {})},
             )
-        for name, entry in iteritems(hneigh):
+        for name, entry in items(hneigh):
             self.compare(parsers=parsers, want={}, have={"neighbor": entry})
 
     def _compare_lists(self, want, have):
         for attrib in ["redistribute", "network"]:
             wdict = want.pop(attrib, {})
             hdict = have.pop(attrib, {})
-            for key, entry in iteritems(wdict):
+            for key, entry in items(wdict):
                 if entry != hdict.pop(key, {}):
                     self.addcmd(entry, attrib, False)
             # remove remaining items in have for replaced
@@ -262,7 +261,7 @@ class Bgp_af(ResourceModule):
                 self.addcmd(entry, attrib, True)
 
     def _bgp_af_list_to_dict(self, entry):
-        for name, proc in iteritems(entry):
+        for name, proc in items(entry):
             if "address_family" in proc:
                 addr_dict = {}
                 for entry in proc.get("address_family", []):

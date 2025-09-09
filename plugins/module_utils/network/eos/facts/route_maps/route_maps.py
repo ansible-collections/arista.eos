@@ -19,7 +19,6 @@ import re
 
 from copy import deepcopy
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.route_maps.route_maps import (
@@ -83,7 +82,7 @@ class Route_mapsFacts(object):
             objs = route_maps_parser.parse()
             if objs:
                 dict_update = {}
-                for k, v in iteritems(objs):
+                for k, v in items(objs):
                     if k == "entries":
                         e_list = []
                         match_dict = {}
@@ -91,10 +90,10 @@ class Route_mapsFacts(object):
                         match_ipv6 = {}
                         set_dict = {}
                         for el in v:
-                            for entry_k, entry_v in iteritems(el):
+                            for entry_k, entry_v in items(el):
                                 if entry_k == "match":
                                     if "ip" in entry_v or "ipv6" in entry_v:
-                                        for ipk, ipv in iteritems(entry_v):
+                                        for ipk, ipv in items(entry_v):
                                             if "ip" in entry_v:
                                                 match_ip.update(ipv)
                                             if "ipv6" in entry_v:

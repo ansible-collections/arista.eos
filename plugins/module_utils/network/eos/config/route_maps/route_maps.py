@@ -18,7 +18,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -86,25 +85,25 @@ class Route_maps(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             h_del = {}
-            for k, v in iteritems(haved):
+            for k, v in items(haved):
                 if k in wantd or not wantd:
                     h_del.update({k: v})
             haved = h_del
-            for rmap, val in iteritems(haved):
+            for rmap, val in items(haved):
                 self.addcmd({"route_map": rmap}, "route_map.name", True)
             wantd = {}
 
         # remove superfluous config for overridden
         if self.state in ["overridden"]:
-            for k, have in iteritems(haved):
-                for entry, val in iteritems(have.get("entries", {})):
+            for k, have in items(haved):
+                for entry, val in items(have.get("entries", {})):
                     if not wantd.get(k) or entry not in wantd[k].get(
                         "entries",
                         {},
                     ):
                         self._compare_maps(want={}, have={entry: val})
 
-        for k, want in iteritems(wantd):
+        for k, want in items(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -120,15 +119,15 @@ class Route_maps(ResourceModule):
         h_entries = have.get("entries", {})
         # overridden
         if not w_entries:
-            for k, v in iteritems(h_entries):
+            for k, v in items(h_entries):
                 self._compare_maps({}, {k: v})
-        for k, v in iteritems(w_entries):
+        for k, v in items(w_entries):
             before_maps = len(self.commands)
             self._compare_maps({k: v}, {k: h_entries.get(k, {})})
             after_maps = len(self.commands)
             self._compare_match(v, h_entries.get(k, {}))
             self._comapre_set(v, h_entries.get(k, {}))
-            for entry_k, entry_v in iteritems(v):
+            for entry_k, entry_v in items(v):
                 h = {}
                 if h_entries.get(k):
                     h = {"entries": {entry_k: h_entries[k].pop(entry_k, {})}}
@@ -137,7 +136,7 @@ class Route_maps(ResourceModule):
                     want={"entries": {entry_k: entry_v}},
                     have=h,
                 )
-            for h_k, h_v in iteritems(h_entries.pop(k, {})):
+            for h_k, h_v in items(h_entries.pop(k, {})):
                 self.compare(
                     parsers=self.parsers,
                     have={"entries": {h_k: h_v}},
@@ -157,13 +156,13 @@ class Route_maps(ResourceModule):
 
     def _compare_maps(self, want, have):
         map_in_want = []
-        for k, v in iteritems(want):
+        for k, v in items(want):
             map_name = k.split(" ")[0]
             map_in_want.append(map_name)
             w = {}
             h = {}
             h_entry = {}
-            for entry_k, entry_v in iteritems(v):
+            for entry_k, entry_v in items(v):
                 if entry_k not in [
                     "continue_sequence",
                     "sub_route_map",
@@ -182,7 +181,7 @@ class Route_maps(ResourceModule):
                 want={"route_map": map_name, "entries": w},
                 have=h_entry,
             )
-        for k, v in iteritems(have):
+        for k, v in items(have):
             map_name = k.split(" ")[0]
             if k not in want.keys() and self.state in [
                 "replaced",
@@ -241,9 +240,9 @@ class Route_maps(ResourceModule):
         ]
         w_match = want.pop("match", {})
         h_match = have.pop("match", {})
-        for k, v in iteritems(w_match):
+        for k, v in items(w_match):
             if k in ["ip", "ipv6"]:
-                for k_ip, v_ip in iteritems(v):
+                for k_ip, v_ip in items(v):
                     if h_match.get(k):
                         h = {k_ip: h_match[k].pop(k_ip, {})}
                     else:
@@ -265,9 +264,9 @@ class Route_maps(ResourceModule):
                 want={"entries": {"match": {k: v}}},
                 have={"entries": {"match": {k: h_match.pop(k, {})}}},
             )
-        for k, v in iteritems(h_match):
+        for k, v in items(h_match):
             if k in ["ip", "ipv6"]:
-                for hk, hv in iteritems(v):
+                for hk, hv in items(v):
                     self.compare(
                         parsers=[
                             "match.ip",
@@ -316,13 +315,13 @@ class Route_maps(ResourceModule):
 
         w_set = want.pop("set", {})
         h_set = have.pop("set", {})
-        for k, v in iteritems(w_set):
+        for k, v in items(w_set):
             self.compare(
                 parsers=parsers,
                 want={"entries": {"set": {k: v}}},
                 have={"entries": {"set": {k: h_set.pop(k, {})}}},
             )
-        for k, v in iteritems(h_set):
+        for k, v in items(h_set):
             self.compare(
                 parsers=parsers,
                 want={},
@@ -330,7 +329,7 @@ class Route_maps(ResourceModule):
             )
 
     def _route_maps_list_to_dict(self, entry):
-        for name, r_map in iteritems(entry):
+        for name, r_map in items(entry):
             if r_map.get("entries"):
                 map_dict = {}
                 for entry in r_map["entries"]:

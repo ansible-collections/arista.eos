@@ -18,7 +18,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -83,7 +82,7 @@ class Prefix_lists(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             h_del = {}
-            for k, v in iteritems(haved):
+            for k, v in items(haved):
                 if k in wantd or not wantd:
                     h_del.update({k: v})
             haved = h_del
@@ -91,10 +90,10 @@ class Prefix_lists(ResourceModule):
 
         # remove superfluous config for overridden and deleted
         if self.state in ["overridden", "deleted"]:
-            for k, have in iteritems(haved):
+            for k, have in items(haved):
                 if k not in wantd:
                     self._compare(want={}, have=have)
-        for k, want in iteritems(wantd):
+        for k, want in items(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -104,11 +103,11 @@ class Prefix_lists(ResourceModule):
         for the Prefix_lists network resource.
         """
         h_parent = {}
-        for k, v in iteritems(want):
+        for k, v in items(want):
             if k == "afi":
                 continue
             afi = want["afi"]
-            for pk, pv in iteritems(v):
+            for pk, pv in items(v):
                 begin = len(self.commands)
                 w_parent = {"afi": afi, "prefix_lists": {"name": pk}}
                 if pv.get("entries"):
@@ -125,11 +124,11 @@ class Prefix_lists(ResourceModule):
                             False,
                         ),
                     )
-        for hk, hv in iteritems(have):
+        for hk, hv in items(have):
             if hk == "afi":
                 continue
             h_afi = have["afi"]
-            for hpk, hpv in iteritems(hv):
+            for hpk, hpv in items(hv):
                 self.commands.append(
                     self._tmplt.render(
                         {"afi": h_afi, "prefix_lists": {"name": hpk}},
@@ -140,7 +139,7 @@ class Prefix_lists(ResourceModule):
 
     def _compare_prefix_lists(self, afi, pk, w_list, have):
         parser = ["prefixlist.entry", "prefixlist.resequence"]
-        for ek, ev in iteritems(w_list):
+        for ek, ev in items(w_list):
             if ek == "name":
                 continue
             h_child = {}
@@ -152,7 +151,7 @@ class Prefix_lists(ResourceModule):
                             w_list["entries"],
                             have["prefix_lists"][pk][ek],
                         )
-                    for seq, seq_val in iteritems(
+                    for seq, seq_val in items(
                         have["prefix_lists"][pk][ek],
                     ):
                         h_child = {
@@ -170,7 +169,7 @@ class Prefix_lists(ResourceModule):
         wl_child = {}
         hl_child = {}
         parser = ["prefixlist.entry", "prefixlist.resequence"]
-        for seq, ent in iteritems(w):
+        for seq, ent in items(w):
             seq_diff = {}
             wl_child = {"afi": afi, "prefix_lists": {"entries": {seq: ent}}}
             if h.get(seq):
@@ -198,7 +197,7 @@ class Prefix_lists(ResourceModule):
             self.compare(parsers=parser, want=wl_child, have=hl_child)
 
     def _prefix_lists_list_to_dict(self, entry):
-        for afi, plist in iteritems(entry):
+        for afi, plist in items(entry):
             if "prefix_lists" in plist:
                 pl_dict = {}
                 for el in plist["prefix_lists"]:

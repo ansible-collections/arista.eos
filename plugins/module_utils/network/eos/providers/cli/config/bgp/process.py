@@ -8,7 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import re
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.address_family import (
@@ -67,7 +66,7 @@ class Provider(CliProvider):
 
             context_commands = list()
 
-            for key, value in iteritems(self.get_value("config")):
+            for key, value in items(self.get_value("config")):
                 if value is not None:
                     meth = getattr(self, "_render_%s" % key, None)
                     if meth:

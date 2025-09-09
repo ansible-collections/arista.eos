@@ -172,7 +172,6 @@ import re
 import time
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.six import iteritems
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     load_config,
@@ -322,7 +321,7 @@ def map_params_to_obj(module):
         "state": module.params["state"],
     }
 
-    for key, value in iteritems(obj):
+    for key, value in items(obj):
         if value:
             validator = globals().get("validate_%s" % key)
             if validator:

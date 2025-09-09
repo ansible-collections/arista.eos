@@ -20,7 +20,6 @@ created.
 
 import re
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -110,16 +109,16 @@ class Snmp_server(ResourceModule):
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
-            haved = {k: v for k, v in iteritems(haved) if k in wantd or not wantd}
+            haved = {k: v for k, v in items(haved) if k in wantd or not wantd}
             wantd = {}
 
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             wantd = {}
-            for k, have in iteritems(haved):
+            for k, have in items(haved):
                 self._compare(want={}, have=have)
 
-        for k, want in iteritems(wantd):
+        for k, want in items(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -130,13 +129,13 @@ class Snmp_server(ResourceModule):
         """
         self._compare_hosts(want, have)
         self._compare_lists(want, have)
-        for name, entry in iteritems(want):
+        for name, entry in items(want):
             self.compare(
                 parsers=self.parsers,
                 want={name: entry},
                 have={name: have.pop(name, {})},
             )
-        for name, entry in iteritems(have):
+        for name, entry in items(have):
             self.compare(parsers=self.parsers, want={}, have={name: entry})
 
         self._modify_traps_negate()
@@ -171,7 +170,7 @@ class Snmp_server(ResourceModule):
         ]:
             wdict = get_from_dict(want, attrib) or {}
             hdict = get_from_dict(have, attrib) or {}
-            for key, entry in iteritems(wdict):
+            for key, entry in items(wdict):
                 # self.addcmd(entry, attrib, False)
                 self.compare(
                     parsers=parsers,
@@ -185,7 +184,7 @@ class Snmp_server(ResourceModule):
     def _compare_hosts(self, want, have):
         wdict = get_from_dict(want, "hosts") or {}
         hdict = get_from_dict(have, "hosts") or {}
-        for key, entry in iteritems(wdict):
+        for key, entry in items(wdict):
             # self.addcmd(entry, attrib, False)
             self.compare(
                 parsers="hosts",
@@ -193,7 +192,7 @@ class Snmp_server(ResourceModule):
                 have={"hosts": {key: hdict.pop(key, {})}},
             )
         # remove remaining items in have for replaced
-        for key, entry in iteritems(hdict):
+        for key, entry in items(hdict):
             self.compare(
                 parsers="hosts",
                 want={},
@@ -209,7 +208,7 @@ class Snmp_server(ResourceModule):
             "views": "view",
             "vrfs": "vrf",
         }
-        for k, v in iteritems(param_dict):
+        for k, v in items(param_dict):
             if k in entry:
                 a_dict = {}
                 for el in entry[k]:

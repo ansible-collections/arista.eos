@@ -8,7 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import re
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.providers import (
@@ -31,7 +30,7 @@ class Neighbors(CliProvider):
             if not config or cmd not in config:
                 neighbor_commands.append(cmd)
 
-            for key, value in iteritems(item):
+            for key, value in items(item):
                 if value is not None:
                     meth = getattr(self, "_render_%s" % key, None)
                     if meth:
@@ -146,7 +145,7 @@ class AFNeighbors(CliProvider):
 
         for item in nbr_list:
             neighbor_commands = list()
-            for key, value in iteritems(item):
+            for key, value in items(item):
                 if value is not None:
                     meth = getattr(self, "_render_%s" % key, None)
                     if meth:

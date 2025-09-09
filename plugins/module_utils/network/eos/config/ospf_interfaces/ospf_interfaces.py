@@ -17,7 +17,6 @@ is compared to the provided configuration (as dict) and the command set
 necessary to bring the current configuration to its desired end-state is
 created.
 """
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -110,21 +109,21 @@ class Ospf_interfaces(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             h_del = {}
-            for k, v in iteritems(haved):
+            for k, v in items(haved):
                 if k in wantd or not wantd:
                     h_del.update({k: v})
             haved = h_del
-            for k, have in iteritems(haved):
+            for k, have in items(haved):
                 self._compare(want={}, have=have)
             wantd = {}
 
         # remove superfluous config for overridden
         if self.state == "overridden":
-            for k, have in iteritems(haved):
+            for k, have in items(haved):
                 if k not in wantd:
                     self._compare(want={}, have=have)
 
-        for k, want in iteritems(wantd):
+        for k, want in items(wantd):
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -173,7 +172,7 @@ class Ospf_interfaces(ResourceModule):
         for afi in ["ipv4", "ipv6"]:
             w_p = w_params.pop(afi, {})
             h_p = h_params.pop(afi, {})
-            for k, params in iteritems(w_p):
+            for k, params in items(w_p):
                 if k == "afi":
                     continue
                 w = {"afi": afi, k: params}
@@ -183,7 +182,7 @@ class Ospf_interfaces(ResourceModule):
                     want={"ip_params": w},
                     have={"ip_params": h},
                 )
-            for k, params in iteritems(h_p):
+            for k, params in items(h_p):
                 if k == "afi":
                     continue
                 w = {"afi": afi, k: None}
@@ -195,7 +194,7 @@ class Ospf_interfaces(ResourceModule):
                 )
 
     def _ospf_int_list_to_dict(self, entry):
-        for name, family in iteritems(entry):
+        for name, family in items(entry):
             if family.get("ip_params"):
                 family_dict = {}
                 for entry in family["ip_params"]:
