@@ -20,18 +20,6 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
-from ansible.module_utils._text import to_text
-from ansible.module_utils.basic import AnsibleModule
-
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    load_config,
-    run_commands,
-)
-
-text_type = str
-string_types = (str,)
-
-
 DOCUMENTATION = """
 module: eos_banner
 author: Peter Sprygada (@privateip)
@@ -100,6 +88,17 @@ session_name:
   type: str
   sample: ansible_1479315771
 """
+
+from ansible.module_utils._text import to_text
+from ansible.module_utils.basic import AnsibleModule
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    load_config,
+    run_commands,
+)
+
+text_type = str
+string_types = (str,)
 
 
 def map_obj_to_commands(updates, module):
