@@ -298,7 +298,7 @@ class Ospfv3(ResourceModule):
                 self.addcmd(entry, attrib, True)
 
     def _ospf_list_to_dict(self, entry):
-        for name, proc in (entry.items() if hasattr(entry, "items") else []):
+        for name, proc in entry.items():
             for area in proc.get("areas", []):
                 if "ranges" in area:
                     range_dict = {}
