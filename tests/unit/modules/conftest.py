@@ -12,7 +12,6 @@ import pytest
 from ansible.module_utils._text import to_bytes
 from ansible.module_utils.common._collections_compat import MutableMapping
 
-text_type = str
 string_types = (str,)
 
 

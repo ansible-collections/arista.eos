@@ -97,7 +97,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     run_commands,
 )
 
-text_type = str
 string_types = (str,)
 
 
