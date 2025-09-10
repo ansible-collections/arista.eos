@@ -1,5 +1,5 @@
 ---
-name: "CI"
+name: "Release collection 🚀"
 
 concurrency:
   group: ${{ github.head_ref || github.run_id }}

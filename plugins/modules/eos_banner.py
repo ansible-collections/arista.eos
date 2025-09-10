@@ -20,6 +20,17 @@ from __future__ import absolute_import, division, print_function
 
 __metaclass__ = type
 
+from ansible.module_utils._text import to_text
+from ansible.module_utils.basic import AnsibleModule
+
+from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
+    load_config,
+    run_commands,
+)
+
+text_type = str
+string_types = (str,)
+
 
 DOCUMENTATION = """
 module: eos_banner
@@ -89,13 +100,6 @@ session_name:
   type: str
   sample: ansible_1479315771
 """
-from ansible.module_utils._text import to_text
-from ansible.module_utils.basic import AnsibleModule
-
-from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
-    load_config,
-    run_commands,
-)
 
 
 def map_obj_to_commands(updates, module):
@@ -104,13 +108,13 @@ def map_obj_to_commands(updates, module):
     state = module.params["state"]
 
     if state == "absent" and have.get("text"):
-        if isinstance(have["text"], str):
+        if isinstance(have["text"], string_types):
             commands.append("no banner %s" % module.params["banner"])
         elif have["text"].get("loginBanner") or have["text"].get("motd"):
             commands.append({"cmd": "no banner %s" % module.params["banner"]})
 
     elif state == "present":
-        if isinstance(have["text"], str):
+        if isinstance(have["text"], string_types):
             if want["text"] != have["text"]:
                 commands.append("banner %s" % module.params["banner"])
                 commands.extend(want["text"].strip().split("\n"))
