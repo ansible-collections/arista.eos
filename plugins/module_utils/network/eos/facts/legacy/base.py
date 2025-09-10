@@ -11,7 +11,6 @@ __metaclass__ = type
 import platform
 import re
 
-
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
     get_capabilities,
     run_commands,
