@@ -176,8 +176,12 @@ class Acls(ConfigBase):
             return acl_map
 
         # Flatten nested lists: 'have' and 'want' were created as lists of lists
-        have_flat = list(itertools.chain(*have)) if any(isinstance(i, list) for i in have) else list(have)
-        want_flat = list(itertools.chain(*want)) if any(isinstance(i, list) for i in want) else list(want)
+        have_flat = (
+            list(itertools.chain(*have)) if any(isinstance(i, list) for i in have) else list(have)
+        )
+        want_flat = (
+            list(itertools.chain(*want)) if any(isinstance(i, list) for i in want) else list(want)
+        )
 
         have_map = build_acl_map(have_flat)
         want_map = build_acl_map(want_flat)
