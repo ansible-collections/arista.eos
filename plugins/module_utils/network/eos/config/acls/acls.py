@@ -565,7 +565,7 @@ def add_commands(want):
                         + " "
                         + ace["source"]["wildcard_bits"]
                     )
-                if "port_protocol" in ace.get("source", {}):
+                if "port_protocol" in ace["source"].keys():
                     for op, val in ace["source"]["port_protocol"].items():
                         # coerce to string for uniform handling
                         sval = to_text(val)
@@ -596,17 +596,16 @@ def add_commands(want):
                         + ace["destination"]["wildcard_bits"]
                     )
                 if "port_protocol" in ace["destination"].keys():
-                    for op in ace["destination"]["port_protocol"].keys():
-                        command = (
-                            command
-                            + " "
-                            + op
-                            + " "
-                            + ace["destination"]["port_protocol"][op].replace(
-                                "_",
-                                "-",
-                            )
-                        )
+                    for op, val in ace["destination"]["port_protocol"].items():
+                        sval = to_text(val)
+                        if sval.isdigit():
+                            try:
+                                svc = socket.getservbyport(int(sval))
+                                command = command + " " + op + " " + svc.replace("_", "-")
+                            except OSError:
+                                command = command + " " + op + " " + sval
+                        elif sval:
+                            command = command + " " + op + " " + sval.replace("_", "-")
             if "protocol_options" in ace.keys():
                 for proto in ace["protocol_options"].keys():
                     if proto == "icmp" or proto == "icmpv6":
