@@ -233,6 +233,20 @@ options:
       converted on the switches using the Arista format HH:MM:SS.
       Example values - 10h, 10h19m5s, 1m60s, 10s
     type: str
+  commit_confirm:
+    description:
+    - When true, confirm a previously-staged (timed) commit using the provided session id.
+    type: bool
+    default: false
+  commit_label:
+    description:
+    - Optional label to attach to the commit (informational; behavior depends on EOS).
+    type: str
+  session:
+    description:
+    - Session id returned by a prior eos_config run when a commit timer was used.
+    - Example: ansible_168207712846
+    type: str
 """
 # noqa: E501
 
@@ -424,6 +438,10 @@ def main():
         running_config=dict(aliases=["config"]),
         intended_config=dict(),
         timer=dict(),
+        commit_confirm=dict(type="bool", default=False),
+        commit_label=dict(type="str"),
+        # when confirming a specific session the user can pass the session id
+        session=dict(type="str"),
     )
 
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
@@ -643,7 +661,28 @@ def main():
         else:
             result["warnings"] = msg
 
-    module.exit_json(**result)
+    # If user is calling module solely to confirm a previously-staged commit
+    # e.g. - name: Confirm staged commit
+    #       arista.eos.eos_config:
+    #         commit_confirm: true
+    #         session: "{{ eos.session }}"
+    if module.params["commit_confirm"] and not any((module.params["src"], module.params["lines"])):
+        sess = module.params.get("session")
+        if not sess:
+            module.fail_json(msg="commit_confirm requires 'session' parameter (session id from previous run).")
+        # run configure session <session> ; commit
+        confirm_cmds = [
+            {"command": "configure session %s" % sess, "output": "text"},
+            {"command": "commit", "output": "text"},
+        ]
+        try:
+            out = run_commands(module, confirm_cmds)
+        except ConnectionError as exc:
+            module.fail_json(msg="Failed to confirm commit: %s" % to_text(exc, errors="surrogate_then_replace"))
+        result["changed"] = True
+        result["commit_status"] = "confirmed"
+        result["confirm_output"] = out
+        module.exit_json(**result)
 
 
 if __name__ == "__main__":

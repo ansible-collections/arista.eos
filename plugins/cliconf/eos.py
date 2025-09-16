@@ -88,36 +88,19 @@ class Cliconf(CliconfBase):
         self._session_support = None
 
     @enable_mode
-    def get_config(self, source="running", flags=None, format="text"):
-        options_values = self.get_option_values()
-        if format not in options_values["format"]:
-            raise ValueError(
-                "'format' value %s is invalid. Valid values are %s"
-                % (format, ",".join(options_values["format"])),
-            )
-
-        lookup = {"running": "running-config", "startup": "startup-config"}
-        if source not in lookup:
-            raise ValueError(
-                "fetching configuration from %s is not supported" % source,
-            )
-
-        cmd = "show %s " % lookup[source]
-        if format and format != "text":
-            cmd += "| %s " % format
-
-        cmd += " ".join(to_list(flags))
-        cmd = cmd.strip()
-        return self.send_command(cmd)
-
-    @enable_mode
     def get_session_config(
         self,
         candidate=None,
         commit=True,
         replace=None,
         comment=None,
+        timer=None,
     ):
+        """
+        Load candidate into a configuration session and optionally commit.
+        `timer` is optional and, if provided, will cause commit timer to be used
+        (e.g. 'commit timer HH:MM:SS' on EOS).
+        """
         operations = self.get_device_operations()
         self.check_edit_config_capability(
             operations,
@@ -177,7 +160,8 @@ class Cliconf(CliconfBase):
                 resp["diff"] = out.strip()
 
             if commit:
-                self.commit()
+                # If a timer was supplied, forward it to commit()
+                self.commit(timer=timer)
             else:
                 self.discard_changes(session)
         else:
@@ -287,8 +271,19 @@ class Cliconf(CliconfBase):
             check_all=check_all,
         )
 
-    def commit(self):
-        self.send_command("commit")
+    def commit(self, timer=None):
+        """
+        Perform a commit on the device.
+
+        If `timer` is provided (string formatted as HH:MM:SS) this will
+        use the timed commit form supported by EOS:
+            commit timer <HH:MM:SS>
+        """
+        if timer:
+            # timer is expected to be already formatted as HH:MM:SS by the caller
+            self.send_command("commit timer %s" % timer)
+        else:
+            self.send_command("commit")
 
     def discard_changes(self, session=None):
         commands = ["end"]
