@@ -88,6 +88,29 @@ class Cliconf(CliconfBase):
         self._session_support = None
 
     @enable_mode
+    def get_config(self, source="running", flags=None, format="text"):
+        options_values = self.get_option_values()
+        if format not in options_values["format"]:
+            raise ValueError(
+                "'format' value %s is invalid. Valid values are %s"
+                % (format, ",".join(options_values["format"])),
+            )
+
+        lookup = {"running": "running-config", "startup": "startup-config"}
+        if source not in lookup:
+            raise ValueError(
+                "fetching configuration from %s is not supported" % source,
+            )
+
+        cmd = "show %s " % lookup[source]
+        if format and format != "text":
+            cmd += "| %s " % format
+
+        cmd += " ".join(to_list(flags))
+        cmd = cmd.strip()
+        return self.send_command(cmd)
+
+    @enable_mode
     def get_session_config(
         self,
         candidate=None,
