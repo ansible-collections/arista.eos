@@ -8,7 +8,6 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import re
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import to_list
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers.cli.config.bgp.neighbors import (
@@ -39,7 +38,7 @@ class AddressFamily(CliProvider):
                     indent=2,
                 )
 
-            for key, value in iteritems(item):
+            for key, value in item.items():
                 if value is not None:
                     meth = getattr(self, "_render_%s" % key, None)
                     if meth:

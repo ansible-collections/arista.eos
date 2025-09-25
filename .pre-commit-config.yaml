@@ -1,13 +1,13 @@
 ---
 repos:
   - repo: https://github.com/ansible-network/collection_prep
-    rev: 1.1.1
+    rev: da78082ea59b03ad16cd7dbee267f53e8ff50bb5
     hooks:
       # - id: autoversion # removed as being handled by GHA push and release drafter
       - id: update-docs
 
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+    rev: v6.0.0
     hooks:
       - id: check-merge-conflict
       - id: check-symlinks
@@ -46,6 +46,6 @@ repos:
       - id: black
 
   - repo: https://github.com/pycqa/flake8
-    rev: 7.2.0
+    rev: 7.3.0
     hooks:
       - id: flake8

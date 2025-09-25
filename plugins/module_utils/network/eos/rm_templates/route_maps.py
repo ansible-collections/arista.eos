@@ -605,24 +605,26 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*set\scommunity
-                \s+(?P<num>\d+\s*)+
+                \s+(?P<num>(\d+(:\d+)?\s*))+
                 \s*(?P<action>additive|delete)*
                 \s*(?P<donot>local-as|no-advertise|no-export)*
                 $""",
                 re.VERBOSE,
             ),
-            "setval": "set community {{ entries.set.community.number }}" +
+            "setval": "set community {{ entries.set.community_attributes.community.number }}" +
                       "{{ (' ' + action) if action is defined }}{{  (' ' + donot) if donot is defined }}",
-            "compval": "entries.set.community",
+            "compval": "entries.set.community_attributes.community",
             "result": {
                 "entries": [
                     {
                         "set": {
-                            "community": {
-                                "number": "{{ num }}",
-                                "additive": "{{ True if action == 'additive' }}",
-                                "delete": "{{ True if action == 'delete' }}",
-                                '{{ "donot" }}': "{{ True if donot is defined }}",
+                            "community_attributes": {
+                                "community": {
+                                    "number": "{{ num }}",
+                                    "additive": "{{ True if action == 'additive' }}",
+                                    "delete": "{{ True if action == 'delete' }}",
+                                    '{{ "donot" }}': "{{ True if donot is defined }}",
+                                },
                             },
                         },
                     },
@@ -1182,7 +1184,7 @@ class Route_mapsTemplate(NetworkTemplate):
             "getval": re.compile(
                 r"""
                 \s*match\scommunity
-                \s+(?P<comm>.+\s)
+                \s+(?P<comm>\S+)
                 \s*(?P<mat>exact-match)*
                 $""",
                 re.VERBOSE,
