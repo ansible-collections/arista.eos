@@ -1,7 +1,13 @@
 ---
 repos:
+  - repo: https://github.com/ansible-network/collection_prep
+    rev: da78082ea59b03ad16cd7dbee267f53e8ff50bb5
+    hooks:
+      # - id: autoversion # removed as being handled by GHA push and release drafter
+      - id: update-docs
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.4.0
+    rev: v6.0.0
     hooks:
       - id: check-merge-conflict
       - id: check-symlinks
@@ -12,30 +18,34 @@ repos:
       - id: trailing-whitespace
 
   - repo: https://github.com/asottile/add-trailing-comma
-    rev: v3.0.0
+    rev: v3.2.0
     hooks:
       - id: add-trailing-comma
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: "v3.0.0"
+    rev: "v4.0.0-alpha.8"
     hooks:
       - id: prettier
+        entry: env CI=1 bash -c "prettier --list-different . || ec=$? && prettier --loglevel=error --write . && exit $ec"
+        pass_filenames: false
+        args: []
         additional_dependencies:
           - prettier
           - prettier-plugin-toml
 
   - repo: https://github.com/PyCQA/isort
-    rev: 5.12.0
+    rev: 6.0.1
     hooks:
       - id: isort
         name: Sort import statements using isort
+        args: ["--filter-files"]
 
   - repo: https://github.com/psf/black
-    rev: 23.7.0
+    rev: 25.1.0
     hooks:
       - id: black
 
-  - repo: https://github.com/ansible-network/collection_prep
-    rev: 1.1.1
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.3.0
     hooks:
-      - id: update-docs
+      - id: flake8

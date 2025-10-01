@@ -112,10 +112,10 @@ EXAMPLES = """
 - name: Merge provided LAG attributes with existing device configuration
   arista.eos.eos_lag_interfaces:
     config:
-    - name: 5
-      members:
-      - member: Ethernet2
-        mode: on
+      - name: Port-Channel5
+        members:
+          - member: Ethernet2
+            mode: "on"
     state: merged
 
 # After state:
@@ -141,10 +141,10 @@ EXAMPLES = """
 - name: Replace all device configuration of specified LAGs with provided configuration
   arista.eos.eos_lag_interfaces:
     config:
-    - name: 5
-      members:
-      - member: Ethernet2
-        mode: on
+      - name: Port-Channel5
+        members:
+          - member: Ethernet2
+            mode: "on"
     state: replaced
 
 # After state:
@@ -169,10 +169,10 @@ EXAMPLES = """
 - name: Override all device configuration of all LAG attributes with provided configuration
   arista.eos.eos_lag_interfaces:
     config:
-    - name: 10
-      members:
-      - member: Ethernet2
-        mode: on
+      - name: Port-Channel10
+        members:
+          - member: Ethernet2
+            mode: "on"
     state: overridden
 
 # After state:
@@ -198,9 +198,9 @@ EXAMPLES = """
 - name: Delete LAG attributes of the given interfaces.
   arista.eos.eos_lag_interfaces:
     config:
-    - name: 5
-      members:
-      - member: Ethernet1
+      - name: Port-Channel5
+        members:
+          - member: Ethernet1
     state: deleted
 
 # After state:
@@ -226,24 +226,24 @@ EXAMPLES = """
 
 # Output:
 #   parsed:
-#     - name: 5
+#     - name: Port-Channel5
 #       members:
 #         - member: Ethernet2
-#           mode: on
+#           mode: "on"
 #         - member: Ethernet1
-#           mode: on
+#           mode: "on"
 
 # using rendered:
 
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_lag_interfaces:
     config:
-    - name: 5
-      members:
-      - member: Ethernet2
-        mode: on
-      - member: Ethernet1
-        mode: on
+      - name: Port-Channel5
+        members:
+          - member: Ethernet2
+            mode: "on"
+          - member: Ethernet1
+            mode: "on"
     state: rendered
 # -----------
 # Output
@@ -271,13 +271,12 @@ EXAMPLES = """
 
 # Output:
 #   gathered:
-#     - name: 5
+#     - name: Port-Channel5
 #       members:
 #         - member: Ethernet2
 #           mode: on
 #         - member: Ethernet1
 #           mode: on
-
 """
 
 RETURN = """

@@ -258,10 +258,10 @@ EXAMPLES = """
 - name: load an acl into the device
   arista.eos.eos_config:
     lines:
-    - 10 permit ip host 192.0.2.1 any log
-    - 20 permit ip host 192.0.2.2 any log
-    - 30 permit ip host 192.0.2.3 any log
-    - 40 permit ip host 192.0.2.4 any log
+      - 10 permit ip host 192.0.2.1 any log
+      - 20 permit ip host 192.0.2.2 any log
+      - 30 permit ip host 192.0.2.3 any log
+      - 40 permit ip host 192.0.2.4 any log
     parents: ip access-list test
     before: no ip access-list test
     replace: block
@@ -283,9 +283,7 @@ EXAMPLES = """
 - name: for idempotency, use full-form commands
   arista.eos.eos_config:
     lines:
-      # - shut
-    - shutdown
-    # parents: int eth1
+      - shutdown
     parents: interface Ethernet1
 
 - name: configurable backup path
@@ -448,9 +446,9 @@ def main():
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
 
     required_if = [
-        ("match", "strict", ["lines"]),
-        ("match", "exact", ["lines"]),
-        ("replace", "block", ["lines"]),
+        ("match", "strict", ["lines", "src"], True),
+        ("match", "exact", ["lines", "src"], True),
+        ("replace", "block", ["lines", "src"], True),
         ("replace", "config", ["src"]),
         ("diff_against", "intended", ["intended_config"]),
         ("diff_against", "validate_config", ["intended_config"]),

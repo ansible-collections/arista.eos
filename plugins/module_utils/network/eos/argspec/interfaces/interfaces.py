@@ -43,7 +43,6 @@ class InterfacesArgs(object):
                 "name": {"required": True, "type": "str"},
                 "description": {"required": False, "type": "str"},
                 "enabled": {
-                    "default": True,
                     "required": False,
                     "type": "bool",
                 },

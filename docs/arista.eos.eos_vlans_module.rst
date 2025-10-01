@@ -177,7 +177,7 @@ Examples
     - name: Delete attributes of the given VLANs.
       arista.eos.eos_vlans:
         config:
-        - vlan_id: 20
+          - vlan_id: 20
         state: deleted
 
     # After state:
@@ -203,8 +203,8 @@ Examples
     - name: Merge given VLAN attributes with device configuration
       arista.eos.eos_vlans:
         config:
-        - vlan_id: 20
-          state: suspend
+          - vlan_id: 20
+            state: suspend
         state: merged
 
     # After state:
@@ -234,8 +234,8 @@ Examples
     - name: Override device configuration of all VLANs with provided configuration
       arista.eos.eos_vlans:
         config:
-        - vlan_id: 20
-          state: suspend
+          - vlan_id: 20
+            state: suspend
         state: overridden
 
     # After state:
@@ -261,8 +261,8 @@ Examples
     - name: Replace all attributes of specified VLANs with provided configuration
       arista.eos.eos_vlans:
         config:
-        - vlan_id: 20
-          state: suspend
+          - vlan_id: 20
+            state: suspend
         state: replaced
 
     # After state:
@@ -303,10 +303,10 @@ Examples
     - name: Use Rendered to convert the structured data to native config
       arista.eos.eos_vlans:
         config:
-        - vlan_id: 10
-          name: ten
-        - vlan_id: 20
-          state: suspend
+          - vlan_id: 10
+            name: ten
+          - vlan_id: 20
+            state: suspend
         state: rendered
 
     # Output:

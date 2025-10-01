@@ -66,7 +66,7 @@ options:
       argument accepts either a list of DNS servers or a list of hashes that configure
       the name server and VRF name.  See examples.
     type: list
-    elements: str
+    elements: raw
   state:
     description:
     - State of the configuration values in the device's current active configuration.  When
@@ -96,22 +96,22 @@ EXAMPLES = """
 - name: configure DNS lookup sources with VRF support
   arista.eos.eos_system:
     lookup_source:
-    - interface: Management1
-      vrf: mgmt
-    - interface: Ethernet1
-      vrf: myvrf
+      - interface: Management1
+        vrf: mgmt
+      - interface: Ethernet1
+        vrf: myvrf
 
 - name: configure name servers
   arista.eos.eos_system:
     name_servers:
-    - 8.8.8.8
-    - 8.8.4.4
+      - 8.8.8.8
+      - 8.8.4.4
 
 - name: configure name servers with VRF support
   arista.eos.eos_system:
     name_servers:
-    - {server: 8.8.8.8, vrf: mgmt}
-    - {server: 8.8.4.4, vrf: mgmt}
+      - {server: 8.8.8.8, vrf: mgmt}
+      - {server: 8.8.4.4, vrf: mgmt}
 """
 
 RETURN = """
@@ -342,7 +342,7 @@ def main():
         # { interface: <str>, vrf: <str> }
         lookup_source=dict(type="list", elements="raw"),
         # { server: <str>; vrf: <str> }
-        name_servers=dict(type="list", elements="str"),
+        name_servers=dict(type="list", elements="raw"),
         state=dict(default="present", choices=["present", "absent"]),
     )
 

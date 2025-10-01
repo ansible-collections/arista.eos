@@ -166,7 +166,7 @@ EXAMPLES = """
 # Using state: gathered
 # Before state:
 # -------------
-#test#show running-config | section ^hostname
+# test#show running-config | section ^hostname
 # hostname eosTest
 # Gathered play:
 # --------------

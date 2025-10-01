@@ -14,7 +14,6 @@ a list of parser definitions and associated functions that
 facilitates both facts gathering and native command generation for
 the given network resource.
 """
-
 import re
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
@@ -60,7 +59,7 @@ def _tmplt_bgp_params(config_data):
         if config_data["bgp_params"]["allowas_in"].get("count"):
             command += " {count}".format(**config_data["bgp_params"]["allowas_in"])
     elif config_data["bgp_params"].get("always_compare_med"):
-        command += " always-comapre-med"
+        command += " always-compare-med"
     elif config_data["bgp_params"].get("asn"):
         command += " asn notaion {asn}".format(**config_data["bgp_params"])
     elif config_data["bgp_params"].get("auto_local_addr"):
@@ -86,15 +85,13 @@ def _tmplt_bgp_params(config_data):
             )
             command += " tie-break " + tie
     elif config_data["bgp_params"].get("client_to_client"):
-        command += " client-to-client"
+        command += " client-to-client reflection"
     elif config_data["bgp_params"].get("cluster_id"):
         command += " cluster-id {cluster_id}".format(**config_data["bgp_params"])
     elif config_data["bgp_params"].get("confederation"):
         command += " confederation"
         if config_data["bgp_params"]["confederation"].get("identifier"):
-            command += " identifier {identifier}".format(
-                **config_data["bgp_params"]["confederation"],
-            )
+            command += " identifier " + config_data["bgp_params"]["confederation"]["identifier"]
         else:
             command += " peers {peers}".format(**config_data["bgp_params"]["confederation"])
     elif config_data["bgp_params"].get("control_plane_filter"):
@@ -266,7 +263,7 @@ def _tmplt_bgp_neighbor(config_data):
     elif config_data["neighbor"].get("dont_capability_negotiate"):
         command += " dont-capability-negotiate"
     elif config_data["neighbor"].get("ebgp_multihop"):
-        command += " ebgp-multiphop"
+        command += " ebgp-multihop"
         if config_data["neighbor"]["ebgp_multihop"].get("ttl"):
             command += " {ttl}".format(**config_data["neighbor"]["ebgp_multihop"])
     elif config_data["neighbor"].get("encryption_password"):
@@ -1656,7 +1653,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s*neighbor
                 \s+(?P<peer>\S+)
                 \s+ebgp-multihop
-                \s*(?P<ttl>\d+)*
+                \s+(?P<ttl>\d+)*
                 $""",
                 re.VERBOSE,
             ),

@@ -376,10 +376,10 @@ Examples
     - name: load an acl into the device
       arista.eos.eos_config:
         lines:
-        - 10 permit ip host 192.0.2.1 any log
-        - 20 permit ip host 192.0.2.2 any log
-        - 30 permit ip host 192.0.2.3 any log
-        - 40 permit ip host 192.0.2.4 any log
+          - 10 permit ip host 192.0.2.1 any log
+          - 20 permit ip host 192.0.2.2 any log
+          - 30 permit ip host 192.0.2.3 any log
+          - 40 permit ip host 192.0.2.4 any log
         parents: ip access-list test
         before: no ip access-list test
         replace: block
@@ -401,9 +401,7 @@ Examples
     - name: for idempotency, use full-form commands
       arista.eos.eos_config:
         lines:
-          # - shut
-        - shutdown
-        # parents: int eth1
+          - shutdown
         parents: interface Ethernet1
 
     - name: configurable backup path

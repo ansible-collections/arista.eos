@@ -103,10 +103,10 @@ EXAMPLES = """
 - name: Merge provided configuration with running configuration
   arista.eos.eos_lldp_interfaces:
     config:
-    - name: Ethernet1
-      transmit: false
-    - name: Ethernet2
-      transmit: false
+      - name: Ethernet1
+        transmit: false
+      - name: Ethernet2
+        transmit: false
     state: merged
 
 #
@@ -140,8 +140,8 @@ EXAMPLES = """
     configuration
   arista.eos.eos_lldp_interfaces:
     config:
-    - name: Ethernet1
-      transmit: false
+      - name: Ethernet1
+        transmit: false
     state: replaced
 
 #
@@ -173,8 +173,8 @@ EXAMPLES = """
 - name: Override the LLDP configuration of all the interfaces with provided configuration
   arista.eos.eos_lldp_interfaces:
     config:
-    - name: Ethernet1
-      transmit: false
+      - name: Ethernet1
+        transmit: false
     state: overridden
 
 #
@@ -221,10 +221,10 @@ EXAMPLES = """
 - name: Use Rendered to convert the structured data to native config
   arista.eos.eos_lldp_interfaces:
     config:
-    - name: Ethernet1
-      transmit: false
-    - name: Ethernet2
-      transmit: false
+      - name: Ethernet1
+        transmit: false
+      - name: Ethernet2
+        transmit: false
     state: rendered
 
 #
@@ -282,7 +282,6 @@ EXAMPLES = """
 #       transmit: False
 #     - name: Ethernet2
 #       transmit: False
-
 """
 RETURN = """
 before:

@@ -174,8 +174,8 @@ EXAMPLES = """
 - name: set multiple users to privilege level 15
   arista.eos.eos_user:
     aggregate:
-    - name: netop
-    - name: netend
+      - name: netop
+      - name: netend
     privilege: 15
     state: present
 
@@ -208,7 +208,6 @@ from copy import deepcopy
 from functools import partial
 
 from ansible.module_utils.basic import AnsibleModule
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.utils import (
     remove_default_spec,
 )
@@ -405,7 +404,7 @@ def update_objects(want, have):
         if all((item is None, entry["state"] == "present")):
             updates.append((entry, {}))
         elif item:
-            for key, value in iteritems(entry):
+            for key, value in entry.items():
                 if value and value != item[key]:
                     updates.append((entry, item))
     return updates

@@ -299,6 +299,7 @@ class HttpApi:
 
         for item in to_list(commands):
             cmd_output = "text"
+            version = "latest"
             if isinstance(item, dict):
                 command = item["command"]
                 if "output" in item:
