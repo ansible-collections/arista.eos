@@ -104,7 +104,7 @@ def sanitize_session_label(label):
     """
     if not label:
         return None
-    safe = re.sub(r'[^A-Za-z0-9_-]', '_', str(label))
+    safe = re.sub(r"[^A-Za-z0-9_-]", "_", str(label))
     return safe[:48] or None
 
 

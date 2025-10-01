@@ -135,6 +135,40 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>commit_confirm</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">boolean</span>
+                    </div>
+                </td>
+                <td>
+                        <ul style="margin: 0; padding: 0"><b>Choices:</b>
+                                    <li><div style="color: blue"><b>no</b>&nbsp;&larr;</div></li>
+                                    <li>yes</li>
+                        </ul>
+                </td>
+                <td>
+                        <div>When true, confirm a previously-staged (timed) commit using the provided session id.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>commit_label</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Optional label to attach to the commit (informational; behavior depends on EOS).</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>defaults</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -318,6 +352,22 @@ Parameters
                 </td>
                 <td>
                         <div>When changes are made to the device running-configuration, the changes are not copied to non-volatile storage by default.  Using this argument will change that before.  If the argument is set to <em>always</em>, then the running-config will always be copied to the startup-config and the <em>modified</em> flag will always be set to True.  If the argument is set to <em>modified</em>, then the running-config will only be copied to the startup-config if it has changed since the last save to startup-config.  If the argument is set to <em>never</em>, the running-config will never be copied to the startup-config. If the argument is set to <em>changed</em>, then the running-config will only be copied to the startup-config if the task has made a change. <em>changed</em> was added in Ansible 2.5.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>session</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Session id returned by a prior eos_config run when a commit timer was used.</div>
+                        <div>{&#x27;Example&#x27;: &#x27;ansible_168207712846&#x27;}</div>
                 </td>
             </tr>
             <tr>

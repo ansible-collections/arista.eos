@@ -359,8 +359,8 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     get_connection,
     get_session_config,
     load_config,
-    run_commands,
     parse_timer,
+    run_commands,
 )
 
 
@@ -675,7 +675,9 @@ def main():
     if module.params["commit_confirm"] and not any((module.params["src"], module.params["lines"])):
         sess = module.params.get("session")
         if not sess:
-            module.fail_json(msg="commit_confirm requires 'session' parameter (session id from previous run).")
+            module.fail_json(
+                msg="commit_confirm requires 'session' parameter (session id from previous run)."
+            )
         # run configure session <session> ; commit
         confirm_cmds = [
             {"command": "configure session %s" % sess, "output": "text"},
@@ -684,7 +686,9 @@ def main():
         try:
             out = run_commands(module, confirm_cmds)
         except ConnectionError as exc:
-            module.fail_json(msg="Failed to confirm commit: %s" % to_text(exc, errors="surrogate_then_replace"))
+            module.fail_json(
+                msg="Failed to confirm commit: %s" % to_text(exc, errors="surrogate_then_replace")
+            )
         result["changed"] = True
         result["commit_status"] = "confirmed"
         result["confirm_output"] = out
