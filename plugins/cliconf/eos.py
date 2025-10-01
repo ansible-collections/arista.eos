@@ -118,6 +118,7 @@ class Cliconf(CliconfBase):
         replace=None,
         comment=None,
         timer=None,
+        **kwargs,
     ):
         """
         Load candidate into a configuration session and optionally commit.
@@ -140,8 +141,9 @@ class Cliconf(CliconfBase):
 
         resp = {}
         session = None
+        session_override = kwargs.get("session")
         if self.supports_sessions():
-            session = session_name()
+            session = session_override or session_name()
             resp.update({"session": session})
             self.send_command("configure session %s" % session)
             if replace:
@@ -200,9 +202,11 @@ class Cliconf(CliconfBase):
         commit=True,
         replace=None,
         comment=None,
+        timer=None,
+        session=None,
         **kwargs,
     ):
-        timer = kwargs.get("timer")
+        session_override = session
         operations = self.get_device_operations()
         self.check_edit_config_capability(
             operations,
@@ -219,7 +223,7 @@ class Cliconf(CliconfBase):
         resp = {}
         session = None
         if self.supports_sessions():
-            session = session_name()
+            session = session_override or session_name()
             resp.update({"session": session})
             self.send_command("configure session %s" % session)
             if replace:
@@ -264,6 +268,7 @@ class Cliconf(CliconfBase):
                 if timer:
                     self.send_command("commit timer %s" % timer)
                     resp["session_name"] = session
+                    resp["commit_status"] = "pending"
                 else:
                     self.commit()
             else:

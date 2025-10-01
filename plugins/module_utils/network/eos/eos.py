@@ -97,6 +97,17 @@ def session_name():
     return "ansible_%d" % (time.time() * 100)
 
 
+def sanitize_session_label(label):
+    """
+    Keep session name safe for EOS:
+    allow letters, digits, underscore, hyphen. Trim length to a reasonable size.
+    """
+    if not label:
+        return None
+    safe = re.sub(r'[^A-Za-z0-9_-]', '_', str(label))
+    return safe[:48] or None
+
+
 class Cli:
     def __init__(self, module):
         self._module = module
@@ -179,7 +190,13 @@ class Cli:
         conn = self._get_connection()
         try:
             timer = parse_timer(self._module)
-            response = conn.edit_config(commands, commit, replace, None, timer)
+            session_override = sanitize_session_label(self._module.params.get("commit_label"))
+            kwargs = {}
+            if session_override:
+                kwargs["session"] = session_override
+            if timer:
+                kwargs["timer"] = timer
+            response = conn.edit_config(commands, commit, replace, **kwargs)
         except ConnectionError as exc:
             message = getattr(exc, "err", to_text(exc))
             if "check mode is not supported without configuration session" in message:
@@ -381,7 +398,8 @@ class HttpApi:
         fallback to using configure() to load the commands.  If that happens,
         there will be no returned diff or session values
         """
-        session = session_name()
+        session_override = sanitize_session_label(self._module.params.get("commit_label"))
+        session = session_override or session_name()
         result = {"session": session}
         banner_cmd = None
         banner_input = []

@@ -362,6 +362,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     get_session_config,
     load_config,
     run_commands,
+    parse_timer,
 )
 
 
@@ -531,6 +532,13 @@ def main():
             )
 
             result["changed"] = True
+
+            # If a commit timer was requested, return clear status for UX
+            if module.params.get("timer") and commit:
+                normalized = parse_timer(module)
+                result["commit_status"] = "pending"
+                if normalized:
+                    result["rollback_in"] = normalized
 
             if module.params["diff_against"] == "session":
                 if "diff" in response:
