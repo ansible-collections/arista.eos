@@ -1,5 +1,5 @@
 ---
-name: "Integration tests with CML - libssh 💻"
+name: Integration tests 💻
 on:
   pull_request_target:
     branches: [main]
@@ -38,17 +38,24 @@ jobs:
           python3 -m pip install ansible
           ansible-galaxy collection install arista.eos
 
-      - name: Fetch pre-config playbook from PR
+      - name: Fetch pre-config playbook from PR or branch
         uses: actions/github-script@v6
         with:
           script: |
+            const fs = require('fs');
+            const ref = context.eventName === 'pull_request_target'
+              ? context.payload.pull_request.head.sha
+              : context.ref;
+
+            console.log(`Fetching pre-config.yml from ref: ${ref}`);
+
             const response = await github.rest.repos.getContent({
               owner: context.repo.owner,
               repo: context.repo.repo,
               path: 'tests/integration/pre-config.yml',
-              ref: context.payload.pull_request.head.sha
+              ref: ref
             });
-            const fs = require('fs');
+
             fs.writeFileSync('pre-config.yml', Buffer.from(response.data.content, 'base64').toString());
             console.log('Successfully fetched and wrote pre-config.yml');
       
