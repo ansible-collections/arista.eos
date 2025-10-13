@@ -23,8 +23,39 @@ jobs:
       virl_username: ${{ secrets.VIRL_USERNAME }}
       virl_password: ${{ secrets.VIRL_PASSWORD }}
 
-  integration-tests-libssh:
+  pre-configure-lab:
     needs: lab-create
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install Ansible and dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install ansible arista.eos
+
+      - name: Create Temporary Inventory
+        id: inventory
+        run: |
+          LAB_NODES_JSON='${{ needs.lab-create.outputs.lab_nodes_json }}'
+          INVENTORY_FILE=$(mktemp)
+          echo "[eos]" > $INVENTORY_FILE
+          IP_ADDR=$(echo $LAB_NODES_JSON | jq -r '.nodes."stable-2.16"')
+          echo "$IP_ADDR" >> $INVENTORY_FILE
+          echo "inventory_path=$INVENTORY_FILE" >> $GITHUB_OUTPUT
+
+      - name: Apply Pre-Configuration to vEOS Node
+        run: |
+          ansible-playbook tests/integration/pre-config.yml -i ${{ steps.inventory.outputs.inventory_path }}
+
+  integration-tests:
+    needs: [lab-create, pre-configure-lab]
     strategy:
       fail-fast: true
       matrix:
@@ -36,7 +67,7 @@ jobs:
 
   lab-destroy:
     if: ${{ always() }}
-    needs: integration-tests-libssh
+    needs: [integration-tests, pre-configure-lab]
     uses: ansible/ansible-content-actions/.github/workflows/cml_lab_destroy.yaml@main
     secrets:
       virl_host: ${{ secrets.VIRL_HOST }}

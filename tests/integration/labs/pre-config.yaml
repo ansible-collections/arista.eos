@@ -1,0 +1,21 @@
+---
+- name: Pre-configure Arista vEOS for Integration Tests
+  hosts: all
+  gather_facts: false
+  connection: ansible.netcommon.network_cli
+
+  # These vars are for the INITIAL connection, using the
+  # credentials baked into the CML vEOS image.
+  vars:
+    ansible_user: ansible
+    ansible_ssh_pass: admin
+    ansible_become: true
+    ansible_become_method: enable
+    ansible_network_os: arista.eos.eos
+
+  tasks:
+    - name: Ensure 'ansible' user has the correct password for tests
+      arista.eos.eos_user:
+        name: ansible
+        password: "ansible"
+        state: present
