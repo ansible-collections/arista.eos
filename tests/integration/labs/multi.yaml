@@ -110,12 +110,12 @@ nodes:
     x: -1320
     y: 120
     interfaces:
-      - {id: i0, label: port0, slot: 0, type: physical}
-      - {id: i1, label: port1, slot: 1, type: physical}
-      - {id: i2, label: port2, slot: 2, type: physical}
-      - {id: i3, label: port3, slot: 3, type: physical}
-      - {id: i4, label: port4, slot: 4, type: physical}
-      - {id: i5, label: port5, slot: 5, type: physical}
+      - { id: i0, label: port0, slot: 0, type: physical }
+      - { id: i1, label: port1, slot: 1, type: physical }
+      - { id: i2, label: port2, slot: 2, type: physical }
+      - { id: i3, label: port3, slot: 3, type: physical }
+      - { id: i4, label: port4, slot: 4, type: physical }
+      - { id: i5, label: port5, slot: 5, type: physical }
   - boot_disk_size: null
     configuration: []
     cpu_limit: null
@@ -131,7 +131,7 @@ nodes:
     x: -640
     y: 120
     interfaces:
-      - {id: i0, label: port, slot: 0, type: physical}
+      - { id: i0, label: port, slot: 0, type: physical }
 
 links:
   - id: l0
