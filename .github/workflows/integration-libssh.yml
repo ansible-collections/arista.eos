@@ -28,8 +28,10 @@ jobs:
     name: Pre-Configure Lab Devices
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout PR code
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -48,8 +50,18 @@ jobs:
           sudo apt-get update && sudo apt-get install -y jq
           LAB_NODES_JSON='${{ needs.lab-create.outputs.lab_nodes_json }}'
           INVENTORY_FILE=$(mktemp)
-          echo "[eos]" > $INVENTORY_FILE
-          echo $LAB_NODES_JSON | jq -r '.nodes | to_entries[] | .value' >> $INVENTORY_FILE
+          echo "[all:vars]" > $INVENTORY_FILE
+          echo "ansible_network_os=arista.eos.eos" >> $INVENTORY_FILE
+          echo "ansible_user=ansible" >> $INVENTORY_FILE
+          echo "ansible_ssh_pass=admin" >> $INVENTORY_FILE
+          echo "ansible_connection=ansible.netcommon.network_cli" >> $INVENTORY_FILE
+          echo "ansible_become=true" >> $INVENTORY_FILE
+          echo "ansible_become_method=enable" >> $INVENTORY_FILE
+          echo "" >> $INVENTORY_FILE
+          echo "[eos]" >> $INVENTORY_FILE
+          # Note: The following line assumes a single node for simplicity.
+          # Adjust if your pre-config logic needs to target multiple nodes differently.
+          echo $LAB_NODES_JSON | jq -r '.nodes."stable-2.16"' >> $INVENTORY_FILE
           echo "inventory_path=$INVENTORY_FILE" >> $GITHUB_OUTPUT
           echo "Created inventory file at $INVENTORY_FILE with content:"
           cat $INVENTORY_FILE
