@@ -52,7 +52,7 @@ jobs:
             const response = await github.rest.repos.getContent({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              path: 'tests/integration/labs/pre-config.yml',
+              path: 'tests/integration/pre-config.yml',
               ref: ref
             });
 
