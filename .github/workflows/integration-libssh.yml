@@ -17,7 +17,6 @@ jobs:
     uses: ansible/ansible-content-actions/.github/workflows/cml_lab_create.yaml@main
     with:
       topology_path: tests/integration/labs/multi.yaml
-      # lab_title_override: "Optional custom lab title"
     secrets:
       virl_host: ${{ secrets.VIRL_HOST }}
       virl_username: ${{ secrets.VIRL_USERNAME }}
@@ -28,12 +27,6 @@ jobs:
     name: Pre-Configure Lab Devices
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout PR code
-        uses: actions/checkout@v3
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -44,6 +37,25 @@ jobs:
           python3 -m pip install --upgrade pip
           python3 -m pip install ansible
           ansible-galaxy collection install arista.eos
+
+      - name: Fetch pre-config playbook from PR
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const response = await github.rest.repos.getContent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path: 'tests/integration/pre-config.yml',
+              ref: context.payload.pull_request.head.sha
+            });
+            const fs = require('fs');
+            fs.writeFileSync('pre-config.yml', Buffer.from(response.data.content, 'base64').toString());
+            console.log('Successfully fetched and wrote pre-config.yml');
+      
+      - name: Verify playbook exists
+        run: |
+          ls -l pre-config.yml
+          cat pre-config.yml
 
       - name: Create Temporary Inventory
         id: inventory
@@ -60,8 +72,6 @@ jobs:
           echo "ansible_become_method=enable" >> $INVENTORY_FILE
           echo "" >> $INVENTORY_FILE
           echo "[eos]" >> $INVENTORY_FILE
-          # Note: The following line assumes a single node for simplicity.
-          # Adjust if your pre-config logic needs to target multiple nodes differently.
           echo $LAB_NODES_JSON | jq -r '.nodes."stable-2.16"' >> $INVENTORY_FILE
           echo "inventory_path=$INVENTORY_FILE" >> $GITHUB_OUTPUT
           echo "Created inventory file at $INVENTORY_FILE with content:"
@@ -69,7 +79,7 @@ jobs:
 
       - name: Apply Pre-Configuration to vEOS Node
         run: |
-          ansible-playbook tests/integration/pre-config.yml -i ${{ steps.inventory.outputs.inventory_path }}
+          ansible-playbook pre-config.yml -i ${{ steps.inventory.outputs.inventory_path }}
 
   integration-tests:
     needs: [lab-create, pre-configure-lab]
