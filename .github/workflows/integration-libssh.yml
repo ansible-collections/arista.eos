@@ -69,8 +69,9 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y jq
           LAB_NODES_JSON='${{ needs.lab-create.outputs.lab_nodes_json }}'
+          CML_HOST='${{ secrets.VIRL_HOST }}'
           INVENTORY_FILE=$(mktemp)
-          # Get the IP and calculate the SSH port
+          # Get the internal IP to calculate the external port
           DEVICE_IP=$(echo "$LAB_NODES_JSON" | jq -r '.nodes."stable-2.16"')
           LAST_OCTET=$(echo "$DEVICE_IP" | cut -d . -f 4)
           SSH_PORT=$((LAST_OCTET + 2000))
@@ -86,7 +87,8 @@ jobs:
           echo "ansible_become_method=enable" >> $INVENTORY_FILE
           echo "" >> $INVENTORY_FILE
           echo "[eos]" >> $INVENTORY_FILE
-          echo "$DEVICE_IP" >> $INVENTORY_FILE
+          # In the inventory, target the PUBLIC CML host
+          echo "$CML_HOST" >> $INVENTORY_FILE
           
           # Set output and log
           echo "inventory_path=$INVENTORY_FILE" >> "$GITHUB_OUTPUT"
