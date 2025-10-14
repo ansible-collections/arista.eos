@@ -46,24 +46,14 @@ jobs:
             const ref = context.eventName === 'pull_request_target'
               ? context.payload.pull_request.head.sha
               : context.ref;
-
-            console.log(`Fetching pre-config.yaml from ref: ${ref}`);
-
             const response = await github.rest.repos.getContent({
               owner: context.repo.owner,
               repo: context.repo.repo,
               path: 'tests/integration/pre-config.yaml',
               ref: ref
             });
-
             fs.writeFileSync('pre-config.yaml', Buffer.from(response.data.content, 'base64').toString());
-            console.log('Successfully fetched and wrote pre-config.yaml');
       
-      - name: Verify playbook exists
-        run: |
-          ls -l pre-config.yaml
-          cat pre-config.yaml
-
       - name: Create Temporary Inventory
         id: inventory
         run: |
@@ -71,12 +61,10 @@ jobs:
           LAB_NODES_JSON='${{ needs.lab-create.outputs.lab_nodes_json }}'
           CML_HOST='${{ secrets.VIRL_HOST }}'
           INVENTORY_FILE=$(mktemp)
-          # Get the internal IP to calculate the external port
           DEVICE_IP=$(echo "$LAB_NODES_JSON" | jq -r '.nodes."stable-2.16"')
           LAST_OCTET=$(echo "$DEVICE_IP" | cut -d . -f 4)
           SSH_PORT=$((LAST_OCTET + 2000))
           
-          # Build the inventory file
           echo "[all:vars]" > $INVENTORY_FILE
           echo "ansible_network_os=arista.eos.eos" >> $INVENTORY_FILE
           echo "ansible_user=ansible" >> $INVENTORY_FILE
@@ -87,13 +75,9 @@ jobs:
           echo "ansible_become_method=enable" >> $INVENTORY_FILE
           echo "" >> $INVENTORY_FILE
           echo "[eos]" >> $INVENTORY_FILE
-          # In the inventory, target the PUBLIC CML host
           echo "$CML_HOST" >> $INVENTORY_FILE
           
-          # Set output and log
           echo "inventory_path=$INVENTORY_FILE" >> "$GITHUB_OUTPUT"
-          echo "Created inventory file at $INVENTORY_FILE with content:"
-          cat $INVENTORY_FILE
 
       - name: Apply Pre-Configuration to vEOS Node
         env:
@@ -107,7 +91,7 @@ jobs:
       fail-fast: true
       matrix:
         ansible_version: ["stable-2.16"]
-    uses: ansible/ansible-content-actions/.github/workflows/cml_network_integration.yaml@main
+    uses: ./.github/workflows/cml_network_integration.yaml
     with:
       ansible_version: ${{ matrix.ansible_version }}
       lab_nodes: '${{ needs.lab-create.outputs.lab_nodes_json }}'
