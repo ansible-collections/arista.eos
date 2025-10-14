@@ -105,9 +105,10 @@ jobs:
       - name: Build and install collection for ansible-test
         run: |
           ansible-galaxy collection build
-          ansible-galaxy collection install arista-eos-*.tar.gz --force
+          ansible-galaxy collection install arista-eos-*.tar.gz --force -p ./collections
 
       - name: Run Integration Tests
+        working-directory: ./collections/ansible_collections/arista/eos
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
