@@ -3,7 +3,7 @@
   hosts: eos
   gather_facts: false
   tasks:
-    - name: Change ansible user password to match test suite expectations
+    - name: Change 'ansible' user password to match test suite expectations
       arista.eos.eos_user:
         name: ansible
         configured_password: "ansible"
