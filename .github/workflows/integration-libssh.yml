@@ -85,7 +85,6 @@ jobs:
           echo "ansible_port=$SSH_PORT" >> $INVENTORY_FILE
           echo "ansible_become=true" >> $INVENTORY_FILE
           echo "ansible_become_method=enable" >> $INVENTORY_FILE
-          echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> $INVENTORY_FILE
           echo "" >> $INVENTORY_FILE
           echo "[eos]" >> $INVENTORY_FILE
           # In the inventory, target the PUBLIC CML host
@@ -97,6 +96,8 @@ jobs:
           cat $INVENTORY_FILE
 
       - name: Apply Pre-Configuration to vEOS Node
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: False
         run: |
           ansible-playbook pre-config.yaml -i ${{ steps.inventory.outputs.inventory_path }} -v
 
