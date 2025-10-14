@@ -46,7 +46,6 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install ansible-pylibssh paramiko scp "ansible-core~=2.16.0"
-          ansible-galaxy collection install arista.eos
 
       - name: Calculate Dynamic Ports
         id: ports
@@ -77,6 +76,10 @@ jobs:
           echo "Pre-config inventory:"
           cat $INVENTORY_FILE
 
+      - name: Install Collections for Pre-Config
+        run: |
+          ansible-galaxy collection install arista.eos ansible.netcommon
+
       - name: Apply Pre-Configuration to vEOS Node
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
@@ -104,6 +107,10 @@ jobs:
           
       - name: Build and install collection for ansible-test
         run: |
+          # Install dependencies into the local collections path first
+          ansible-galaxy collection install ansible.netcommon -p ./collections
+
+          # Now build and install the local collection into the same path
           ansible-galaxy collection build
           ansible-galaxy collection install arista-eos-*.tar.gz --force -p ./collections
 
