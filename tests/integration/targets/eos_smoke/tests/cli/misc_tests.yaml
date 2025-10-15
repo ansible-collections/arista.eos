@@ -4,17 +4,18 @@
 
 # test become and unbecome
 - block:
-    - name: command that does require become (should fail)
+    - name: command with privilege 15 does not require become
       arista.eos.eos_command:
         commands: show running-config
       become: false
       ignore_errors: true
       register: result
 
-    - ansible.builtin.assert:
+    - name: ansible.builtin.assert
+      ansible.builtin.assert:
         that:
-          - "result.failed == true"
-          - '"privileged mode required" in result.msg'
+          - result.failed == false
+          - result.stdout is defined
 
     - name: command that doesn't require become
       arista.eos.eos_command:

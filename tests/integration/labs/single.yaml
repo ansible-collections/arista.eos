@@ -1,0 +1,192 @@
+---
+lab:
+  description: ""
+  notes: ""
+  title: arista.eos.eos
+  version: 0.2.2
+links:
+  - id: l0
+    n1: n1
+    n2: n0
+    i1: i0
+    i2: i0
+    conditioning: {}
+    label: veos-4.240-management1<->ext-conn-0-port
+nodes:
+  - boot_disk_size:
+    configuration: |-
+      transceiver qsfp default-mode 4x10G
+      !
+      service routing protocols model ribd
+      !
+      hostname foo
+      ip domain lookup vrf ansible source-interface Management1
+      ip name-server vrf default 192.0.2.1
+      ip name-server vrf default 192.0.2.2
+      !
+      snmp-server engineID remote 1.1.1.1 12345678ab
+      !
+      spanning-tree mode mstp
+      !
+      no aaa root
+      !
+      username admin privilege 15 role network-admin secret sha512 $6$Dq3slCu4l7sO/kMX$D97XDK3fxD9OYFyKcw7/YBZnaGtABzJSS8JAeqOYfibnCJcMns21U3MYCwX6LUO.NoZOx.zY4Sb7bD0Hq8ImQ0
+      username ansible privilege 15 secret sha512 $6$ET74E.GXvzCqabtF$ED1hZ6E7jhcc.gSBnwQKjxuBqJbrihlycG/mQVSbUYyKruaLc2GwJhenvh5yVOKr4A2GQ8c1bQx0HKijd1SGu0
+      username cisco privilege 15 secret sha512 $6$4C.0tcB6nZuaUrJa$/7ljxfdwAGgCKmOngKR/Xc0pktAfvRB85N9ZLXCLdGTRQO1KuMsd/hltsCG2/ekM7X4JOAZc0PhgJ6fP6nmAu/
+      username zuul privilege 15 nopassword
+      username zuul ssh-key ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDI3XA0A84nUpCr9mfkrDjBdoNFtYMXqXMm2+WsGrOJUA2ESodUDDfTKmsA/xEygdCnj8JfSC3SYhc0uKHVe0RdG20mzntUqD50kB0STFeOHh
+      3ee7FXmMxcLqLlyY9pJkn1V5WOi/D1Lbz8MwRUVBfqufryavwHla/9CPuAtPcut8mTUB0+Rapnv8W3n4dA6PqHNW1tylJUXj6P4trJPnFrdfMaIxc21tfd/QrMM4h90phW3zNILE0qF9UHpQxP0zew/LcD9rc+IhnbgC3DeC
+      QDyiqJOsJRDo58RuwWmQHCF0SfiFQJ4qwrc6TFSJqSdi2aRY0S/vRMbXkD+6Hg2KWQyz6Z6EpY7RARletqJwNnzuuhXr2HSCj5QALe+0U/aUEX+dnydYBX6Nqa+0Rz/qV5aUk4YP1C2/dBCAdbYXPotBT6QBfekE428mJV8M
+      r7G/M7kwZ8v9WjytyJ8/FYNuekYDWonk6QTwDgQhMTiQI3Yxnu3ID63BL959lfUIv96bsifVI6/D36KTAdFi/dl7Omn5MZ9A5JXA7l+yEJKf4pcPTpQcPbjGSKyaPu0uffEjV9CTr3+VMwzq1uenxGDQ9cT/ud4pEEjwU/ih
+      r6yttouTCvDu9ydrflHljUXxf+X00NW7HkrHnvS43AGnxQzi9g2lTOC9yDlDGbQjmnVjec7w== zuul-executor
+      !
+      no vlan 1
+      !
+      vlan 10
+         name ten
+      !
+      vlan 20
+         name twenty
+         state suspend
+      !
+      interface Ethernet1
+         speed forced 40gfull
+         no switchport
+      !
+      interface Ethernet2
+         speed 10full
+         no switchport
+      !
+      interface Ethernet3
+      !
+      interface Ethernet4
+      !
+      interface Ethernet5
+      !
+      interface Ethernet6
+      !
+      interface Ethernet7
+      !
+      interface Ethernet8
+      !
+      interface Ethernet9
+      !
+      interface Ethernet10
+      !
+      interface Ethernet11
+      !
+      interface Ethernet12
+      !
+      interface Loopback10
+      !
+      interface Loopback11
+      !
+      interface Loopback12
+      !
+      interface Loopback13
+      !
+      interface Loopback14
+      !
+      interface Loopback15
+      !
+      interface Loopback1000
+      !
+      interface Management1
+         ip address dhcp
+         dhcp client accept default-route
+      !
+      ip routing
+      !
+      management api http-commands
+         protocol http
+         protocol unix-socket
+         no shutdown
+      !
+      end
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n1
+    image_definition: null
+    label: veos-4.240
+    node_definition: veos64-4.24.0F
+    parameters: {}
+    ram: null
+    tags: []
+    x: 80
+    y: 0
+    interfaces:
+      - id: i0
+        label: management1
+        slot: 0
+        type: physical
+      - id: i1
+        label: Ethernet1
+        slot: 1
+        type: physical
+      - id: i2
+        label: Ethernet2
+        slot: 2
+        type: physical
+      - id: i3
+        label: Ethernet3
+        slot: 3
+        type: physical
+      - id: i4
+        label: Ethernet4
+        slot: 4
+        type: physical
+      - id: i5
+        label: Ethernet5
+        slot: 5
+        type: physical
+      - id: i6
+        label: Ethernet6
+        slot: 6
+        type: physical
+      - id: i7
+        label: Ethernet7
+        slot: 7
+        type: physical
+      - id: i8
+        label: Ethernet8
+        slot: 8
+        type: physical
+      - id: i9
+        label: Ethernet9
+        slot: 9
+        type: physical
+      - id: i10
+        label: Ethernet10
+        slot: 10
+        type: physical
+      - id: i11
+        label: Ethernet11
+        slot: 11
+        type: physical
+      - id: i12
+        label: Ethernet12
+        slot: 12
+        type: physical
+  - boot_disk_size:
+    configuration: []
+    cpu_limit:
+    cpus:
+    data_volume:
+    hide_links: false
+    id: n1
+    image_definition:
+    label: ext-conn-0
+    node_definition: external_connector
+    parameters: {}
+    ram:
+    tags: []
+    x: 160
+    y: 0
+    interfaces:
+      - id: i0
+        label: port
+        slot: 0
+        type: physical
+annotations: []
