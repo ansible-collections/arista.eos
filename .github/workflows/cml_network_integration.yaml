@@ -138,7 +138,7 @@ jobs:
           dest_host="54.190.208.146"
           out_file="$RUNNER_TEMP/inventory-$ANSIBLE_VERSION_KEY.ini"
           ansible localhost -c local -m template -a "src=tests/integration/labs/inventory.j2 dest=$out_file mode=0644" \
-            -e "host_label=$ANSIBLE_VERSION_KEY ansible_host=$dest_host ansible_ssh_port=$ssh_port ansible_httpapi_port=$http_port ansible_netconf_port=$netconf_port ansible_network_cli_ssh_type=$CLI_SSH_TYPE" # <-- FIX IS HERE
+            -e "host_label=$ANSIBLE_VERSION_KEY ansible_host=$dest_host ansible_ssh_port=$ssh_port ansible_httpapi_port=$http_port ansible_netconf_port=$netconf_port ansible_network_cli_ssh_type=$CLI_SSH_TYPE"
           echo "inventory_path=$out_file" >> "$GITHUB_OUTPUT"
 
       - name: Run ansible-test network-integration
