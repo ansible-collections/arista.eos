@@ -223,6 +223,74 @@ class TestEosAclsModule(TestEosModule):
         ]
         self.execute_module(changed=True, commands=commands)
 
+    def test_eos_acls_replaced_standard(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="test-standard",
+                                standard=True,
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        grant="permit",
+                                        source=dict(
+                                            host="192.168.1.1",
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "ip access-list standard test-standard",
+            "10 permit host 192.168.1.1",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_acls_replaced_extended(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="test-extended",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        grant="permit",
+                                        protocol="tcp",
+                                        source=dict(
+                                            host="192.168.1.1",
+                                        ),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(eq="80"),
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "ip access-list test-extended",
+            "10 permit tcp host 192.168.1.1 any eq 80",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
     def test_eos_acls_replaced_exception(self):
         set_module_args(
             dict(
