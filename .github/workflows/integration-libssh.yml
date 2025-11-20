@@ -52,7 +52,7 @@ jobs:
               path: 'tests/integration/pre-config.yaml',
               ref: ref
             });
-            fs.writeFileSync('pre-config.yaml', Buffer.from(response.data.content, 'base64').toString());  
+            fs.writeFileSync('pre-config.yaml', Buffer.from(response.data.content, 'base64').toString());
       - name: Create Temporary Inventory
         id: inventory
         run: |
