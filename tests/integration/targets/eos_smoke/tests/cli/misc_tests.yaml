@@ -10,8 +10,7 @@
       become: false
       register: result
 
-    - name: ansible.builtin.assert
-      ansible.builtin.assert:
+    - ansible.builtin.assert:
         that:
           - result.changed == false
           - result.stdout is defined
