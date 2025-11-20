@@ -1,0 +1,103 @@
+---
+name: Integration tests 💻
+on:
+  pull_request_target:
+    branches: [main]
+    types:
+      - labeled
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - "plugins/**"
+      - "tests/integration/**"
+  workflow_dispatch:
+jobs:
+  lab-create:
+    uses: ansible/ansible-content-actions/.github/workflows/cml_lab_create.yaml@main
+    with:
+      topology_path: tests/integration/labs/multi.yaml
+    secrets:
+      virl_host: ${{ secrets.VIRL_HOST }}
+      virl_username: ${{ secrets.VIRL_USERNAME }}
+      virl_password: ${{ secrets.VIRL_PASSWORD }}
+
+  pre-configure-lab:
+    needs: lab-create
+    name: Pre-Configure Lab Devices
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install Ansible and dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install ansible ansible-pylibssh
+          ansible-galaxy collection install arista.eos
+
+      - name: Fetch pre-config playbook from PR or branch
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const ref = context.eventName === 'pull_request_target'
+              ? context.payload.pull_request.head.sha
+              : context.ref;
+            const response = await github.rest.repos.getContent({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              path: 'tests/integration/pre-config.yaml',
+              ref: ref
+            });
+            fs.writeFileSync('pre-config.yaml', Buffer.from(response.data.content, 'base64').toString());  
+      - name: Create Temporary Inventory
+        id: inventory
+        run: |
+          sudo apt-get update && sudo apt-get install -y jq
+          LAB_NODES_JSON='${{ needs.lab-create.outputs.lab_nodes_json }}'
+          CML_HOST='${{ secrets.VIRL_HOST }}'
+          INVENTORY_FILE=$(mktemp)
+          DEVICE_IP=$(echo "$LAB_NODES_JSON" | jq -r '.nodes."stable-2.16"')
+          LAST_OCTET=$(echo "$DEVICE_IP" | cut -d . -f 4)
+          SSH_PORT=$((LAST_OCTET + 2000))
+          echo "[all:vars]" > $INVENTORY_FILE
+          echo "ansible_network_os=arista.eos.eos" >> $INVENTORY_FILE
+          echo "ansible_user=ansible" >> $INVENTORY_FILE
+          echo "ansible_ssh_pass=admin" >> $INVENTORY_FILE
+          echo "ansible_connection=ansible.netcommon.network_cli" >> $INVENTORY_FILE
+          echo "ansible_port=$SSH_PORT" >> $INVENTORY_FILE
+          echo "ansible_become=true" >> $INVENTORY_FILE
+          echo "ansible_become_method=enable" >> $INVENTORY_FILE
+          echo "" >> $INVENTORY_FILE
+          echo "[eos]" >> $INVENTORY_FILE
+          echo "$CML_HOST" >> $INVENTORY_FILE
+          echo "inventory_path=$INVENTORY_FILE" >> "$GITHUB_OUTPUT"
+      - name: Apply Pre-Configuration to vEOS Node
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: False
+        run: |
+          ansible-playbook pre-config.yaml -i ${{ steps.inventory.outputs.inventory_path }} -v
+
+  integration-tests:
+    needs: [lab-create, pre-configure-lab]
+    strategy:
+      fail-fast: true
+      matrix:
+        ansible_version: ["stable-2.16"]
+    uses: ./.github/workflows/cml_network_integration.yaml
+    with:
+      ansible_version: ${{ matrix.ansible_version }}
+      lab_nodes: '${{ needs.lab-create.outputs.lab_nodes_json }}'
+      http_var_name: ansible_httpapi_port
+
+  lab-destroy:
+    if: ${{ always() }}
+    needs: [integration-tests, pre-configure-lab]
+    uses: ansible/ansible-content-actions/.github/workflows/cml_lab_destroy.yaml@main
+    secrets:
+      virl_host: ${{ secrets.VIRL_HOST }}
+      virl_username: ${{ secrets.VIRL_USERNAME }}
+      virl_password: ${{ secrets.VIRL_PASSWORD }}
