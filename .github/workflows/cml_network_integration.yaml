@@ -23,6 +23,11 @@ on:
         description: Python version to provision in the VM
         required: false
         type: string
+      http_var_name:
+        description: Optional variable name to use instead of ansible_http_port
+        required: false
+        type: string
+        default: ""
     secrets: {}
 
 jobs:
@@ -109,6 +114,10 @@ jobs:
           echo "$LAB_NODES"
           echo
 
+      - name: Debug libssh and pylibssh versions
+        shell: bash
+        run: python -c "from pylibsshext import __full_version__; print(__full_version__)"
+
       - name: Generate inventory from lab_nodes and template
         id: render_inventory
         shell: bash
@@ -135,12 +144,24 @@ jobs:
           https_port=$((last_octet + 4000))
           http_port=$((last_octet + 8000))
           netconf_port=$((last_octet + 3000))
-          # Note: This dest_host IP may need to be parameterized if it changes
           dest_host="54.190.208.146"
           out_file="$RUNNER_TEMP/inventory-$ANSIBLE_VERSION_KEY.ini"
+
+          http_key="${{ inputs.http_var_name }}"
+          if [ -z "$http_key" ]; then
+            http_key="ansible_http_port"
+          fi
+
           ansible localhost -c local -m template -a "src=tests/integration/labs/inventory.j2 dest=$out_file mode=0644" \
-            -e "host_label=$ANSIBLE_VERSION_KEY ansible_host=$dest_host ansible_ssh_port=$ssh_port ansible_httpapi_port=$http_port ansible_netconf_port=$netconf_port ansible_network_cli_ssh_type=$CLI_SSH_TYPE"
+            -e "host_label=$ANSIBLE_VERSION_KEY ansible_host=$dest_host ansible_ssh_port=$ssh_port $http_key=$http_port ansible_netconf_port=$netconf_port ansible_network_cli_ssh_type=$CLI_SSH_TYPE"
           echo "inventory_path=$out_file" >> "$GITHUB_OUTPUT"
+
+      # - name: Debug inventory
+      #   shell: bash
+      #   run: |
+      #     echo "Inventory path: ${{ steps.render_inventory.outputs.inventory_path }}"
+      #     echo
+      #     cat "${{ steps.render_inventory.outputs.inventory_path }}"
 
       - name: Run ansible-test network-integration
         run: ansible-test network-integration --inventory "${{ steps.render_inventory.outputs.inventory_path }}" -vvvv
