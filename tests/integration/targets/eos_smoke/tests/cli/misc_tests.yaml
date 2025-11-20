@@ -8,14 +8,14 @@
       arista.eos.eos_command:
         commands: show running-config
       become: false
-      ignore_errors: true
       register: result
 
     - name: ansible.builtin.assert
       ansible.builtin.assert:
         that:
-          - result.failed == false
+          - result.changed == false
           - result.stdout is defined
+        fail_msg: "Command should have succeeded for privilege 15 user, but it failed."
 
     - name: command that doesn't require become
       arista.eos.eos_command:
