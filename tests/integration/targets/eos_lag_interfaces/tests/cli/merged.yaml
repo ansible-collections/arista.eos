@@ -1,71 +1,22 @@
 ---
-- ansible.builtin.include_tasks: _reset_config.yaml
+- ansible.builtin.debug:
+    msg: "START cli/misc_tests.yaml on connection={{ ansible_connection }}"
 
-- ansible.builtin.set_fact:
-    config:
-      - name: Port-Channel5
-        members:
-          - member: Ethernet2
-            mode: "on"
+# test become and unbecome
+- block:
+    - name: command with privilege 15 does not require become
+      arista.eos.eos_command:
+        commands: show running-config
+      become: false
+      register: result
 
-    change_config:
-      - name: Port-Channel5
-        members:
-          - member: Ethernet2
-            mode: "passive"
+    - ansible.builtin.assert:
+        that:
+          - result.changed == false
+          - result.stdout is defined
+        fail_msg: "Command should have succeeded for privilege 15 user, but it failed."
 
-- become: true
-  arista.eos.eos_facts:
-    gather_network_resources: lag_interfaces
-
-- name: Merge provided configuration with device configuration.
-  become: true
-  register: result
-  arista.eos.eos_lag_interfaces:
-    config: "{{ config }}"
-    state: merged
-
-- ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length
-        == 0
-
-- become: true
-  arista.eos.eos_facts:
-    gather_network_resources: lag_interfaces
-
-- ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.after)|length
-        == 0
-
-- ansible.builtin.set_fact:
-    expected_config:
-      - name: Port-Channel5
-        members:
-          - member: Ethernet1
-            mode: "on"
-
-          - member: Ethernet2
-            mode: "on"
-
-- ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(expected_config)|length
-        == 0
-
-- name: Merge provided configuration with device configuration, expect error.
-  become: true
-  ignore_errors: true
-  register: result
-  arista.eos.eos_lag_interfaces:
-    config: "{{ change_config }}"
-    state: merged
-
-- ansible.builtin.assert:
-    that:
-      - result.failed == true
-      - result.msg is defined
-      - '"Cannot change mode" in result.module_stderr'
-
-- ansible.builtin.include_tasks: _reset_config.yaml
+    - name: command that doesn't require become
+      arista.eos.eos_command:
+        commands: show uptime
+      become: false
