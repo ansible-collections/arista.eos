@@ -52,8 +52,7 @@ jobs:
               path: 'tests/integration/pre-config.yaml',
               ref: ref
             });
-            fs.writeFileSync('pre-config.yaml', Buffer.from(response.data.content, 'base64').toString());
-      
+            fs.writeFileSync('pre-config.yaml', Buffer.from(response.data.content, 'base64').toString());  
       - name: Create Temporary Inventory
         id: inventory
         run: |
@@ -64,7 +63,6 @@ jobs:
           DEVICE_IP=$(echo "$LAB_NODES_JSON" | jq -r '.nodes."stable-2.16"')
           LAST_OCTET=$(echo "$DEVICE_IP" | cut -d . -f 4)
           SSH_PORT=$((LAST_OCTET + 2000))
-          
           echo "[all:vars]" > $INVENTORY_FILE
           echo "ansible_network_os=arista.eos.eos" >> $INVENTORY_FILE
           echo "ansible_user=ansible" >> $INVENTORY_FILE
@@ -76,9 +74,7 @@ jobs:
           echo "" >> $INVENTORY_FILE
           echo "[eos]" >> $INVENTORY_FILE
           echo "$CML_HOST" >> $INVENTORY_FILE
-          
           echo "inventory_path=$INVENTORY_FILE" >> "$GITHUB_OUTPUT"
-
       - name: Apply Pre-Configuration to vEOS Node
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
