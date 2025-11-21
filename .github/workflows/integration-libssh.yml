@@ -78,7 +78,7 @@ jobs:
       - name: Apply Pre-Configuration to vEOS Node
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
-          ANSIBLE_TEST_PASSWORD: ${{ secrets.ANSIBLE_TEST_PASSWORD }} 
+          ANSIBLE_TEST_PASSWORD: ${{ secrets.ANSIBLE_TEST_PASSWORD }}
         run: |
           ansible-playbook pre-config.yaml -i ${{ steps.inventory.outputs.inventory_path }} -v
 
