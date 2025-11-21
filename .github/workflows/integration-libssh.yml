@@ -57,7 +57,7 @@ jobs:
         id: inventory
         run: |
           sudo apt-get update && sudo apt-get install -y jq
-          LAB_NODES_JSON='${{ needs.lab-create.outputs.lab_nodes_json }}'
+          LAB_NODES_JSON="${{ needs.lab-create.outputs.lab_nodes_json }}"
           CML_HOST='${{ secrets.VIRL_HOST }}'
           INVENTORY_FILE=$(mktemp)
           DEVICE_IP=$(echo "$LAB_NODES_JSON" | jq -r '.nodes."stable-2.16"')
@@ -90,7 +90,7 @@ jobs:
     uses: ./.github/workflows/cml_network_integration.yaml
     with:
       ansible_version: ${{ matrix.ansible_version }}
-      lab_nodes: '${{ needs.lab-create.outputs.lab_nodes_json }}'
+      lab_nodes: "${{ needs.lab-create.outputs.lab_nodes_json }}"
       http_var_name: ansible_httpapi_port
 
   lab-destroy:
