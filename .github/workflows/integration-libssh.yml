@@ -18,9 +18,9 @@ jobs:
     with:
       topology_path: tests/integration/labs/multi.yaml
     secrets:
-      virl_host: "${{ secrets.VIRL_HOST }}"
-      virl_username: "${{ secrets.VIRL_USERNAME }}"
-      virl_password: "${{ secrets.VIRL_PASSWORD }}"
+      virl_host: ${{ secrets.VIRL_HOST }}
+      virl_username: ${{ secrets.VIRL_USERNAME }}
+      virl_password: ${{ secrets.VIRL_PASSWORD }}
 
   pre-configure-lab:
     needs: lab-create
@@ -52,7 +52,7 @@ jobs:
               path: 'tests/integration/pre-config.yaml',
               ref: ref
             });
-            fs.writeFileSync('pre-config.yaml', Buffer.from(response.data.content, 'base64').toString());
+            fs.writeFileSync('pre-config.yaml', Buffer.from(response.data.content, 'base64').toString());  
       - name: Create Temporary Inventory
         id: inventory
         run: |
@@ -97,8 +97,7 @@ jobs:
     if: ${{ always() }}
     needs: [integration-tests, pre-configure-lab]
     uses: ansible/ansible-content-actions/.github/workflows/cml_lab_destroy.yaml@main
-
     secrets:
-      virl_host: "${{ secrets.VIRL_HOST }}"
-      virl_username: "${{ secrets.VIRL_USERNAME }}"
-      virl_password: "${{ secrets.VIRL_PASSWORD }}"
+      virl_host: ${{ secrets.VIRL_HOST }}
+      virl_username: ${{ secrets.VIRL_USERNAME }}
+      virl_password: ${{ secrets.VIRL_PASSWORD }}
