@@ -35,7 +35,7 @@
           - result.stdout is defined
           - result.json is defined
 
-    - name: command with privilege 15 does not require become
+    - name: command with privilege 15 (should fail)
       become: false
       register: result
       ansible.netcommon.cli_command:
