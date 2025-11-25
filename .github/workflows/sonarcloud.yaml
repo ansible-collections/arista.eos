@@ -1,3 +1,4 @@
+---
 name: SonarCloud
 on: # yamllint disable-line rule:truthy
   push:
