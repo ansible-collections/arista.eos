@@ -4,7 +4,7 @@
 
 # test become and unbecome
 - block:
-    - name: command with privilege 15 does not require become
+    - name: command with privilege 15 (should fail)
       arista.eos.eos_command:
         commands: show running-config
       become: false
