@@ -88,7 +88,7 @@ jobs:
       fail-fast: true
       matrix:
         ansible_version: ["stable-2.16"]
-    uses: ./.github/workflows/cml_network_integration.yaml
+    uses: ansible/ansible-content-actions/.github/workflows/cml_network_integration.yaml@main
     with:
       ansible_version: ${{ matrix.ansible_version }}
       lab_nodes: '${{ needs.lab-create.outputs.lab_nodes_json }}'
