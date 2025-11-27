@@ -39,7 +39,7 @@ jobs:
           ansible-galaxy collection install arista.eos
 
       - name: Fetch pre-config playbook from PR or branch
-        uses: actions/github-script@v6
+        uses: actions/github-script@v8
         with:
           script: |
             const fs = require('fs');
