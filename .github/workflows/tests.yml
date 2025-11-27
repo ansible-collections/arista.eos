@@ -64,8 +64,8 @@ jobs:
       - build-import
       - sanity
       - unit-galaxy
-      - unit-source
       - ansible-lint
+      - unit-source
       - sonar
     runs-on: ubuntu-latest
     steps:
@@ -73,6 +73,7 @@ jobs:
           python -c "assert 'failure' not in
           set([
           '${{ needs.changelog.result }}',
+          '${{ needs.build-import.result }}',
           '${{ needs.sanity.result }}',
           '${{ needs.unit-galaxy.result }}',
           '${{ needs.ansible-lint.result }}',
