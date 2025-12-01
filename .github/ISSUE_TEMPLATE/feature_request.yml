@@ -29,5 +29,7 @@ body:
         - label: Terminal Plugin
         - label: Module Utils
         - label: Documentation
-        - label: Other
+        - label: Collection Release
+        - label: CI Maintenance
+        - label: Workflow Maintenance
 
