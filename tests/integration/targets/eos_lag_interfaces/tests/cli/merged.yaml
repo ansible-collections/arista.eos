@@ -66,6 +66,6 @@
     that:
       - result.failed == true
       - result.msg is defined
-      - '"Cannot change mode" in result.module_stderr'
+      - '"Cannot change mode" in result.msg'
 
 - ansible.builtin.include_tasks: _reset_config.yaml
