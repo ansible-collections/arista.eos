@@ -353,7 +353,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         },
                         "encryption_password": {
                             "type": "dict",
-                            "no_log": True,
                             "options": {
                                 "password": {"type": "str", "no_log": True},
                                 "type": {"type": "int", "choices": [0, 7]},
@@ -815,7 +814,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "encryption_password": {
                                     "type": "dict",
-                                    "no_log": True,
                                     "options": {
                                         "password": {
                                             "type": "str",
@@ -850,6 +848,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "graceful_restart": {"type": "bool"},
                                 "enforce_first_as": {"type": "bool"},
                                 "send_community": {
+                                    "set": {"type": "bool"},
                                     "type": "dict",
                                     "options": {
                                         "community_attribute": {"type": "str"},
