@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - eos_config - fixed handling of multiline inputs for route control-function code update_ospf_intefaces_docs.yaml
