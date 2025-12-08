@@ -140,7 +140,7 @@ class Static_routesFacts(object):
         conf_list = conf.split("\n")
         for conf_elem in conf_list:
             matches = re.findall(
-                r"(ip|ipv6) route ([\d\.\/:]+|vrf) (.+)$",
+                r"(ip|ipv6) route ([\d\.\/:a-f]+|vrf) (.+)$",
                 conf_elem,
             )
             if matches:
