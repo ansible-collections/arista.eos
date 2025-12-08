@@ -1,0 +1,55 @@
+---
+- ansible.builtin.debug:
+    msg: START eos_cliconf integration tests on connection={{ ansible_connection }}
+
+- block:
+    - name: Ensure interface is absent before test
+      arista.eos.eos_config:
+        lines:
+          - no interface Loopback777
+      ignore_errors: true
+
+    - name: Stage description with a 2-minute timer and a label (session name)
+      arista.eos.eos_config:
+        lines:
+          - interface Loopback777
+          - "description TestCommitTimer"
+        timer: 2m
+        commit_label: commit_timer_confirm
+      register: stage
+
+    - name: Assert staging returned session and pending status
+      ansible.builtin.assert:
+        that:
+          - stage.session is defined
+          - stage.commit_status == 'pending'
+          - stage.rollback_in is defined
+
+    - name: Confirm the staged commit using eos_config
+      arista.eos.eos_config:
+        commit_confirm: true
+        session: "{{ stage.session }}"
+      register: confirm
+
+    - name: Assert confirm status
+      ansible.builtin.assert:
+        that:
+          - confirm.commit_status == 'confirmed'
+
+    - name: Verify description is present after confirm
+      arista.eos.eos_command:
+        commands:
+          - show running-config section interface Loopback777
+      register: rc
+
+    - name: Check description exists
+      ansible.builtin.assert:
+        that:
+          - rc.stdout[0] is search("description TestCommitTimer")
+
+  always:
+    - name: Cleanup interface
+      arista.eos.eos_config:
+        lines:
+          - no interface Loopback777
+      ignore_errors: true
