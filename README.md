@@ -1,7 +1,7 @@
 
 
 # Arista EOS Collection
-[![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/arista.eos) <!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/arista.eos)-->
+<!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/arista.eos)-->
 [![CI](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml/badge.svg?branch=main&event=schedule)](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml)
 [![Integration tests 💻](https://github.com/ansible-collections/arista.eos/actions/workflows/integration-libssh.yml/badge.svg?branch=main)](https://github.com/ansible-collections/arista.eos/actions/workflows/integration-libssh.yml)
 
