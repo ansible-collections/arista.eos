@@ -137,56 +137,83 @@ class Acls(ConfigBase):
         return to_config
 
     def compare_configs(self, have, want):
+        """
+        Compare `have` and `want` configs of ACLs in a per-ACL manner to avoid
+        cross-ACL interference. Returns the list of commands required to bring
+        device config (`have`) to desired config (`want`).
+
+        `have` and `want` are lists of lists/strings produced by add_commands() / set_commands().
+        We assume each ACL block starts with a header like "ip access-list <name>" or "ip access-list standard <name>"
+        followed by sequence lines like "10 permit ...".
+        """
         commands = []
-        want = list(itertools.chain(*want))
-        have = list(itertools.chain(*have))
 
-        # Flatten the configurations for comparison
-        h_index = 0
-        config = list(want)  # Start with a copy of `want`
+        # Helper to split a list of lines into dict keyed by (afi, acl_name) -> [header_line, entry_line, ...]
+        def build_acl_map(lines):
+            acl_map = {}
+            current_key = None
+            for line in lines:
+                # normalize header detection: the add_commands uses "ip access-list ..." (afi already ip/ipv6)
+                header_match = re.match(r"^(ip(?:v6)?\s+access-list(?:\s+standard)?\s+)(.+)$", line)
+                if header_match:
+                    # determine afi ("ip" or "ipv6") from the header or keep as "ip"
+                    header_prefix = header_match.group(1).strip()
+                    name = header_match.group(2).strip()
+                    # deduce afi from header prefix (presence of 'ipv6' implies ipv6)
+                    afi = "ipv6" if header_prefix.startswith("ipv6") else "ipv4"
+                    current_key = (afi, name)
+                    acl_map.setdefault(current_key, []).append(line)
+                else:
+                    # non-header lines belong to the last header we saw; if none, ignore
+                    if current_key:
+                        acl_map.setdefault(current_key, []).append(line)
+                    else:
+                        # Fallback: try to detect entries that include sequence numbers but no header
+                        seq_match = re.match(r"^\s*(\d+)\s+(.+)$", line)
+                        if seq_match:
+                            # can't attach without header — skip
+                            continue
+            return acl_map
 
-        for w in want:
-            access_list = re.findall(r"(ip.*) access-list (.*)", w)
-            if access_list:
-                # Check if the whole ACL is already present
-                if w in have:
-                    h_index = have.index(w)
-            else:
-                # Check sequence-specific entries
-                for num, h in enumerate(have, start=h_index + 1):
-                    if "access-list" not in h:
-                        snum = re.search(r"(\d+) (.*)", w)
-                        if snum:
-                            have_snum = re.search(r"(\d+) (.*)", h)
-                            if have_snum:
-                                snum_group_2 = snum.group(2)
-                                have_snum_group_2 = have_snum.group(2)
-                                # Match sequence number and full content
-                                if (
-                                    snum.group(1) == have_snum.group(1)
-                                    and snum_group_2 == have_snum_group_2
-                                ):
-                                    # Entry already exists, skip
-                                    config.remove(w)
-                                    break
-                        else:
-                            have_snum = re.search(r"(\d+) (.*)", h)
-                            if have_snum:
-                                # Match sequence number and full content
-                                if w == have_snum.group(2):
-                                    config.remove(w)
-                                    break
+        # Flatten nested lists: 'have' and 'want' were created as lists of lists
+        have_flat = (
+            list(itertools.chain(*have)) if any(isinstance(i, list) for i in have) else list(have)
+        )
+        want_flat = (
+            list(itertools.chain(*want)) if any(isinstance(i, list) for i in want) else list(want)
+        )
 
-        # Generate commands for any remaining entries in `config`
-        for c in config:
-            access_list = re.findall(r"(ip.*) access-list (.*)", c)
-            if access_list:
-                acl_index = config.index(c)
-            else:
-                if config[acl_index] not in commands:
-                    commands.append(config[acl_index])  # Add ACL definition
-                commands.append(c)  # Add ACL entry
+        have_map = build_acl_map(have_flat)
+        want_map = build_acl_map(want_flat)
 
+        # For each ACL that is present in want_map, ensure header exists and add missing entries
+        for key, want_lines in want_map.items():
+            afi, name = key
+            have_lines = have_map.get(key, [])
+
+            # first ensure ACL header exists on device
+            # want_lines[0] is header line as produced by add_commands()
+            want_header = want_lines[0]
+            if not have_lines:
+                # ACL not present at all on device — add the full block (header + entries)
+                commands.append(want_header)
+                commands.extend(want_lines[1:])
+                continue
+
+            # Build sets of entry strings (sequence+content) for quick comparison
+            wanted_entries = [entry.strip() for entry in want_lines[1:]]  # skip header
+            have_entries = [entry.strip() for entry in have_lines[1:]]
+
+            # Add any missing entries from want to device (preserve order from want)
+            for entry in wanted_entries:
+                if entry not in have_entries:
+                    # If header is not already queued, ensure it's added once
+                    if want_header not in commands:
+                        commands.append(want_header)
+                    commands.append(entry)
+
+        # Note: This function implements 'merged' semantics: it only adds missing entries.
+        # Removal/override behavior is handled elsewhere in the module logic.
         return commands
 
     def set_state(self, want, have):
@@ -544,18 +571,19 @@ def add_commands(want):
                     )
                 if "port_protocol" in ace["source"].keys():
                     for op, val in ace["source"]["port_protocol"].items():
-                        if val.isdigit():
+                        # coerce to string for uniform handling
+                        sval = to_text(val)
+                        if sval.isdigit():
                             try:
-                                # if its a valid port number, then convert it to service name
-                                # eg: 8082 -> us-cli
-                                val = socket.getservbyport(int(val))
-                                command = command + " " + op + " " + val.replace("_", "-")
+                                # try to convert numeric port to a well-known service name
+                                svc = socket.getservbyport(int(sval))
+                                command = command + " " + op + " " + svc.replace("_", "-")
                             except OSError:
-                                # if socket.getservbyport is unable to resolve the port name then directly use the port number
-                                # eg: 50702
-                                command = command + " " + op + " " + to_text(val)
-                        elif val:
-                            command = command + " " + op + " " + val.replace("_", "-")
+                                # unable to resolve => keep numeric port
+                                command = command + " " + op + " " + sval
+                        elif sval:
+                            # textual service name (e.g. "http"), normalize underscore -> dash
+                            command = command + " " + op + " " + sval.replace("_", "-")
             if "destination" in ace.keys():
                 if "any" in ace["destination"].keys():
                     command = command + " any"
@@ -572,17 +600,16 @@ def add_commands(want):
                         + ace["destination"]["wildcard_bits"]
                     )
                 if "port_protocol" in ace["destination"].keys():
-                    for op in ace["destination"]["port_protocol"].keys():
-                        command = (
-                            command
-                            + " "
-                            + op
-                            + " "
-                            + ace["destination"]["port_protocol"][op].replace(
-                                "_",
-                                "-",
-                            )
-                        )
+                    for op, val in ace["destination"]["port_protocol"].items():
+                        sval = to_text(val)
+                        if sval.isdigit():
+                            try:
+                                svc = socket.getservbyport(int(sval))
+                                command = command + " " + op + " " + svc.replace("_", "-")
+                            except OSError:
+                                command = command + " " + op + " " + sval
+                        elif sval:
+                            command = command + " " + op + " " + sval.replace("_", "-")
             if "protocol_options" in ace.keys():
                 for proto in ace["protocol_options"].keys():
                     if proto == "icmp" or proto == "icmpv6":
