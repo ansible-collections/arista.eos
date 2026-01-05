@@ -226,6 +226,27 @@ options:
           in C(filename) within I(backup) directory.
         type: path
     type: dict
+  timer:
+    description:
+    - This argument will configure a commit timer which will need to be confirmed
+      before it is automatically rolled back. I(timer) is define as HhMmSs and will be
+      converted on the switches using the Arista format HH:MM:SS.
+      Example values - 10h, 10h19m5s, 1m60s, 10s
+    type: str
+  commit_confirm:
+    description:
+    - When true, confirm a previously-staged (timed) commit using the provided session id.
+    type: bool
+    default: false
+  commit_label:
+    description:
+    - Optional label to attach to the commit (informational; behavior depends on EOS).
+    type: str
+  session:
+    description:
+    - Session id returned by a prior eos_config run when a commit timer was used.
+    - Example: ansible_168207712846
+    type: str
 """
 # noqa: E501
 
@@ -272,6 +293,15 @@ EXAMPLES = """
     backup_options:
       filename: backup.cfg
       dir_path: /home/user
+
+- name: deploying with a commit timer
+  arista.eos.eos_config:
+    timer: 1m
+  register: eos
+
+- name: commit using the session id
+  arista.eos.eos_command:
+    commands: configure session {{ eos.session }} commit
 """
 
 RETURN = """
@@ -310,6 +340,11 @@ time:
   returned: when backup is true
   type: str
   sample: "22:28:34"
+session:
+  description: Unique session ID to use when confirming changes with commit timer
+  returned: always
+  type: str
+  sample: "ansible_168207712846"
 """
 from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
@@ -324,6 +359,7 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     get_connection,
     get_session_config,
     load_config,
+    parse_timer,
     run_commands,
 )
 
@@ -400,6 +436,11 @@ def main():
         diff_ignore_lines=dict(type="list", elements="str"),
         running_config=dict(aliases=["config"]),
         intended_config=dict(),
+        timer=dict(),
+        commit_confirm=dict(type="bool", default=False),
+        commit_label=dict(type="str"),
+        # when confirming a specific session the user can pass the session id
+        session=dict(type="str"),
     )
 
     mutually_exclusive = [("lines", "src"), ("parents", "src")]
@@ -489,6 +530,13 @@ def main():
             )
 
             result["changed"] = True
+
+            # If a commit timer was requested, return clear status for UX
+            if module.params.get("timer") and commit:
+                normalized = parse_timer(module)
+                result["commit_status"] = "pending"
+                if normalized:
+                    result["rollback_in"] = normalized
 
             if module.params["diff_against"] == "session":
                 if "diff" in response:
@@ -619,7 +667,32 @@ def main():
         else:
             result["warnings"] = msg
 
-    module.exit_json(**result)
+    # If user is calling module solely to confirm a previously-staged commit
+    # e.g. - name: Confirm staged commit
+    #       arista.eos.eos_config:
+    #         commit_confirm: true
+    #         session: "{{ eos.session }}"
+    if module.params["commit_confirm"] and not any((module.params["src"], module.params["lines"])):
+        sess = module.params.get("session")
+        if not sess:
+            module.fail_json(
+                msg="commit_confirm requires 'session' parameter (session id from previous run)."
+            )
+        # run configure session <session> ; commit
+        confirm_cmds = [
+            {"command": "configure session %s" % sess, "output": "text"},
+            {"command": "commit", "output": "text"},
+        ]
+        try:
+            out = run_commands(module, confirm_cmds)
+        except ConnectionError as exc:
+            module.fail_json(
+                msg="Failed to confirm commit: %s" % to_text(exc, errors="surrogate_then_replace")
+            )
+        result["changed"] = True
+        result["commit_status"] = "confirmed"
+        result["confirm_output"] = out
+        module.exit_json(**result)
 
 
 if __name__ == "__main__":

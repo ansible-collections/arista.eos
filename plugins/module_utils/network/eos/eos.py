@@ -33,7 +33,10 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import json
 import os
+import re
 import time
+
+from datetime import timedelta
 
 from ansible.module_utils._text import to_text
 from ansible.module_utils.connection import Connection, ConnectionError
@@ -48,6 +51,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 
 _DEVICE_CONNECTION = None
+
+_TIMER_REGEX = re.compile(
+    r"(^(?P<hour>\d+)h)?((?P<min>\d+)m)?((?P<sec>\d+)s)?$",
+)
 
 
 def get_connection(module):
@@ -88,6 +95,17 @@ def transform_commands(module):
 def session_name():
     """Generate a unique string to be used as a configuration session name."""
     return "ansible_%d" % (time.time() * 100)
+
+
+def sanitize_session_label(label):
+    """
+    Keep session name safe for EOS:
+    allow letters, digits, underscore, hyphen. Trim length to a reasonable size.
+    """
+    if not label:
+        return None
+    safe = re.sub(r"[^A-Za-z0-9_-]", "_", str(label))
+    return safe[:48] or None
 
 
 class Cli:
@@ -171,7 +189,14 @@ class Cli:
         """Loads the config commands onto the remote device"""
         conn = self._get_connection()
         try:
-            response = conn.edit_config(commands, commit, replace)
+            timer = parse_timer(self._module)
+            session_override = sanitize_session_label(self._module.params.get("commit_label"))
+            kwargs = {}
+            if session_override:
+                kwargs["session"] = session_override
+            if timer:
+                kwargs["timer"] = timer
+            response = conn.edit_config(commands, commit, replace, **kwargs)
         except ConnectionError as exc:
             message = getattr(exc, "err", to_text(exc))
             if "check mode is not supported without configuration session" in message:
@@ -374,7 +399,8 @@ class HttpApi:
         fallback to using configure() to load the commands.  If that happens,
         there will be no returned diff or session values
         """
-        session = session_name()
+        session_override = sanitize_session_label(self._module.params.get("commit_label"))
+        session = session_override or session_name()
         result = {"session": session}
         banner_cmd = None
         banner_input = []
@@ -412,7 +438,12 @@ class HttpApi:
             "configure session %s" % session,
             "show session-config diffs",
         ]
-        if commit:
+
+        timer = parse_timer(self._module)
+
+        if commit and timer:
+            commands.append("commit timer %s" % timer)
+        elif commit:
             commands.append("commit")
         else:
             commands.append("abort")
@@ -490,6 +521,35 @@ class HttpApi:
             )
 
         return json.loads(capabilities)
+
+
+def parse_timer(module):
+    """Parse commit timer as "HhMmSs" format.
+    Eg 10h, 10h19m5s, 1m60s, 10s
+    Returns Arista compatible string
+    of form "HH:MM:SS"
+    Value must be non-zero and below 24 hours
+    """
+    timer = module.params["timer"]
+
+    if timer is not None:
+        match = _TIMER_REGEX.match(timer)
+        if not match:
+            module.fail_json(
+                msg="Invalid value for commit timer %r" % timer,
+            )
+        vals = match.groupdict()
+        total_secs = (
+            int(vals["hour"] or 0) * 60 * 60 + int(vals["min"] or 0) * 60 + int(vals["sec"] or 0)
+        )
+
+        td = timedelta(seconds=total_secs)
+
+        if not (timedelta(0) < td < timedelta(hours=24)):
+            module.fail_json(
+                msg="commit timer must be > 0 and < 24 hours",
+            )
+        return str(td)
 
 
 def is_json(cmd):
