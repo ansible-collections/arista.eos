@@ -58,13 +58,18 @@ options:
   src:
     description:
     - The I(src) argument provides a path to the configuration file to load into the
-      remote system.  The path can either be a full system path to the configuration
+      remote system. The path can either be a full system path to the configuration
       file if the value starts with / or relative to the root of the implemented role
       or playbook. This argument is mutually exclusive with the I(lines) and I(parents)
       arguments. It can be a Jinja2 template as well. The configuration lines in the source
       file should be similar to how it will appear if present in the running-configuration
-      (live switch config) of the device i ncluding the indentation to ensure idempotency
+      (live switch config) of the device including the indentation to ensure idempotency
       and correct diff. Arista EOS device config has 3 spaces indentation.
+    - Post ansible-core 2.18 templating option have changed, src is backported to render template files by
+      default. It is advised to use the ansible.builtin.template lookup plugin.
+    - The functionality of src rendering templates inherently would be deprecated on a release after
+      2028-01-01.
+    - See [2.19 Porting Guide](https://docs.ansible.com/projects/ansible-core/devel/porting_guides/porting_guide_core_2.19.html)
     type: path
   before:
     description:
@@ -253,6 +258,28 @@ EXAMPLES = """
   arista.eos.eos_config:
     backup: true
     src: eos_template.j2
+
+# This functionality would be deprecated on a release after 2028-01-01
+# src attribute would still support handing configuration files (path)
+# rendering template as by the src template would be deprecated.
+
+- name: Apply configuration from file - not recommended tests backward compatibility
+  register: result
+  cisco.eos.eos_config:
+    src: basic/config_src_not_recommended.j2
+
+# This is the recommended way.
+
+- name: Template a file - recommended way
+  ansible.builtin.template:
+    src: basic/config_src_recommended.j2
+    dest: /tmp/config_src_recommended.j2
+    mode: "0644"
+
+- name: Apply configuration from file
+  register: result
+  cisco.eos.eos_config:
+    src: /tmp/config_src_recommended.j2
 
 - name: diff the running config against a master config
   arista.eos.eos_config:

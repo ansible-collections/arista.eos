@@ -2,7 +2,7 @@
 authors:
   - Ansible Network Community (ansible-network)
 dependencies:
-  "ansible.netcommon": ">=8.1.0"
+  "ansible.netcommon": ">=8.2.2"
 license_file: LICENSE
 name: eos
 description: Ansible Network Collection for Arista EOS devices.
@@ -11,4 +11,14 @@ readme: README.md
 repository: https://github.com/ansible-collections/arista.eos
 issues: https://github.com/ansible-collections/arista.eos/issues
 tags: [arista, eos, networking, eapi]
+build_ignore:
+  - .yamllint
+  - .prettierignore
+  - .pre-commit-config.yaml
+  - .isort.cfg
+  - .gitignore
+  - .flake8
+  - .ansible-lint
+  - sonar-project.properties
+  - .github/
 version: 12.0.0
