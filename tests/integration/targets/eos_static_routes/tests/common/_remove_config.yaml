@@ -9,6 +9,9 @@
       - "no ip route 23.1.0.0/16 Nexthop-Group testgrp tag 42"
       - "no ip route 155.55.1.0/24 Nexthop-Group testgrp tag 100"
       - "no ip route 122.1.19.0/24 Nexthop-Group testgrp 21"
+      - "no ip route 192.168.1.0/24 Management1"
+      - "no ip route 192.168.2.0/24 Management1"
+      - "no ip route 192.168.3.0/24 Management1"
       - "no ipv6 route 1000:10::/64 Ethernet1 67 tag 98"
       - "no ipv6 route 1000:10::/64 Ethernet1 55"
 

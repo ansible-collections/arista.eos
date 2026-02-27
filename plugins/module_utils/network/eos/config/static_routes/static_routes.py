@@ -170,18 +170,37 @@ class Static_routes(ConfigBase):
         commands = []
         haveconfigs = []
         vrf = get_vrf(want)
-        dest = get_dest(want)
+        want_afis = set()
+        if want:
+            for w in want:
+                if "address_families" in w.keys():
+                    for af in w["address_families"]:
+                        want_afis.add(af.get("afi"))
+
         for h in have:
-            return_command = add_commands(h)
-            for command in return_command:
-                for d in dest:
-                    if d in command:
-                        if vrf is None:
-                            if "vrf" not in command:
-                                haveconfigs.append(command)
-                        else:
-                            if vrf in command:
-                                haveconfigs.append(command)
+            have_vrf = h.get("vrf") if "vrf" in h.keys() and h["vrf"] else None
+            if vrf != have_vrf:
+                continue
+
+            if "address_families" in h.keys():
+                for h_af in h["address_families"]:
+                    h_afi = h_af.get("afi")
+                    # Include if AFI matches one in want, or if want has no AFI specified
+                    if not want_afis or h_afi in want_afis:
+                        # Create a temporary config with just this AFI to generate commands
+                        temp_config = {
+                            "vrf": h.get("vrf"),
+                            "address_families": [h_af],
+                        }
+                        return_command = add_commands(temp_config)
+                        for command in return_command:
+                            haveconfigs.append(command)
+            elif not want_afis:
+                # If no AFI specified in want, include all
+                return_command = add_commands(h)
+                for command in return_command:
+                    haveconfigs.append(command)
+
         wantconfigs = set_commands(want, have)
 
         removeconfigs = list(set(haveconfigs) - set(wantconfigs))

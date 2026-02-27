@@ -1,0 +1,3 @@
+---
+bugfixes:
+  - "eos_static_routes - Fix issue where ``state: replaced`` did not delete routes not present in the config (https://github.com/ansible-collections/arista.eos/issues/532)."

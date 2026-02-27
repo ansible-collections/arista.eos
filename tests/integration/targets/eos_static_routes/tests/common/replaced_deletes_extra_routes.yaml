@@ -1,0 +1,90 @@
+---
+# Integration test for Issue #532: state replaced should delete routes not in want config
+- ansible.builtin.debug:
+    msg: Start eos_static_routes replaced integration test - delete extra routes ansible_connection={{ ansible_connection }}
+
+- ansible.builtin.include_tasks: _populate.yaml
+
+- ansible.builtin.set_fact:
+    # Setup: Create multiple routes including some that should be deleted
+    setup_config:
+      - address_families:
+          - afi: ipv4
+            routes:
+              - dest: 192.168.1.0/24
+                next_hops:
+                  - interface: Management1
+              - dest: 192.168.2.0/24
+                next_hops:
+                  - interface: Management1
+              - dest: 192.168.3.0/24
+                next_hops:
+                  - interface: Management1
+
+- name: Setup - Create multiple routes
+  become: true
+  arista.eos.eos_static_routes:
+    config: "{{ setup_config }}"
+    state: merged
+
+- name: Replace with subset of routes (should delete 192.168.2.0/24 and 192.168.3.0/24)
+  become: true
+  register: result
+  arista.eos.eos_static_routes: &id001
+    config:
+      - address_families:
+          - afi: ipv4
+            routes:
+              - dest: 192.168.1.0/24
+                next_hops:
+                  - interface: Management1
+    state: replaced
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'no ip route 192.168.2.0/24 Management1' in result.commands"
+      - "'no ip route 192.168.3.0/24 Management1' in result.commands"
+      # Note: 192.168.1.0/24 was already present from setup, so a correct
+      # implementation should NOT need to re-add it; instead we validate final state below.
+      - "'no ip route 192.168.1.0/24 Management1' not in result.commands"
+    fail_msg: "BUG: state replaced should delete routes not in want config (and must not delete desired routes)"
+    success_msg: "Routes not in want config are correctly deleted"
+
+- become: true
+  arista.eos.eos_facts:
+    gather_network_resources: static_routes
+
+# Global/static routes in EOS facts often omit the 'vrf' key; filter to default VRF only.
+- name: Verify device configuration - only 192.168.1.0/24 should remain
+  ansible.builtin.set_fact:
+    remaining_routes: "{{ ansible_facts.network_resources.static_routes |
+      rejectattr('vrf', 'defined') | list |
+      map(attribute='address_families') | list |
+      flatten |
+      selectattr('afi', 'equalto', 'ipv4') |
+      map(attribute='routes') | list |
+      flatten |
+      map(attribute='dest') | list }}"
+
+- ansible.builtin.assert:
+    that:
+      - "'192.168.1.0/24' in remaining_routes"
+      - "'192.168.2.0/24' not in remaining_routes"
+      - "'192.168.3.0/24' not in remaining_routes"
+    fail_msg: "Device still has routes that should have been deleted. Remaining routes: {{ remaining_routes }}"
+    success_msg: "Device configuration is correct - only 192.168.1.0/24 remains"
+
+- name: Idempotency check
+  become: true
+  register: result
+  arista.eos.eos_static_routes: *id001
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+      - result.commands | length == 0
+    fail_msg: "Idempotency check failed"
+    success_msg: "Idempotency check passed"
+
+- ansible.builtin.include_tasks: _remove_config.yaml

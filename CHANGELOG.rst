@@ -4,6 +4,14 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v12.0.1
+=======
+
+Bugfixes
+--------
+
+- Fix eos_vrf module to properly check existing interface configuration before making changes (https://github.com/ansible-collections/arista.eos/issues/546)
+
 v12.0.0
 =======
 

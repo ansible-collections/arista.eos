@@ -290,6 +290,17 @@ releases:
       - eos_interfaces.yaml
       - route_map_community.yaml
     release_date: "2025-08-19"
+  12.0.1:
+    changes:
+      bugfixes:
+        - Fix eos_vrf module to properly check existing interface configuration before
+          making changes (https://github.com/ansible-collections/arista.eos/issues/546)
+    fragments:
+      - add_ci_integration_tc_support.yaml
+      - add_ignore_2.21.yaml
+      - fix_eos_vrf_idempotency.yaml
+      - fix_sanity.yaml
+    release_date: "2026-02-16"
   2.0.0:
     changes:
       bugfixes:
