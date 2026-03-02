@@ -17,7 +17,6 @@
 #
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -96,7 +95,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     load_config,
     run_commands,
 )
-
 
 string_types = (str,)
 
