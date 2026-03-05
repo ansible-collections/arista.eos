@@ -20,6 +20,9 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
     NetworkTemplate,
 )
 
+# Template placeholder used in parser result dicts (avoids string literal duplication for Sonar S1192)
+_ROUTE_MAP_NAME = "{{ name }}"
+
 
 def _tmplt_router_bgp_cmd(config_data):
     command = "router bgp {as_number}".format(**config_data)
@@ -2310,7 +2313,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "neighbor_address": "{{ peer }}",
                                 "prefix_list": {
-                                    "name": "{{ name }}",
+                                    "name": _ROUTE_MAP_NAME,
                                     "direction": "{{ dir }}",
                                 },
                             },
@@ -2340,7 +2343,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "neighbor_address": "{{ peer }}",
                                 "route_map": {
-                                    "name": "{{ name }}",
+                                    "name": _ROUTE_MAP_NAME,
                                     "direction": "{{ dir }}",
                                 },
                             },
@@ -2371,7 +2374,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                                 "neighbor_address": "{{ peer }}",
                                 "route_maps": [
                                     {
-                                        "name": "{{ name }}",
+                                        "name": _ROUTE_MAP_NAME,
                                         "direction": "{{ dir }}",
                                     },
                                 ],

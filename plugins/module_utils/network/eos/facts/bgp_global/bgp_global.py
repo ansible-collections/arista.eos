@@ -39,39 +39,40 @@ class Bgp_globalFacts(object):
         """
         return connection.get("show running-config | section router\\sbgp ")
 
+    def _add_route_map_to_neighbor(self, objs, vrf_key, peer, name, direction):
+        """Add one route-map entry to the given neighbor in objs; no-op if vrf/neighbor missing."""
+        vrf_dict = objs.get("vrfs", {}).get(vrf_key)
+        if not vrf_dict or "neighbor" not in vrf_dict:
+            return
+        if peer not in vrf_dict["neighbor"]:
+            return
+        neighbor = vrf_dict["neighbor"][peer]
+        if "route_maps" not in neighbor:
+            neighbor["route_maps"] = []
+        neighbor["route_maps"].append({"name": name, "direction": direction})
+        neighbor.pop("route_map", None)
+
     def _collect_neighbor_route_maps(self, lines, objs):
         """Scan config lines for 'neighbor X route-map Y in|out' and set route_maps list per neighbor."""
         if not objs or "vrfs" not in objs:
             return
-        # Match: neighbor <peer> route-map <name> in|out
         neighbor_route_map_re = re.compile(
             r"^\s*neighbor\s+(\S+)\s+route-map\s+(\S+)\s+(in|out)\s*$",
         )
-        current_vrf_key = "vrf_"  # global
+        current_vrf_key = "vrf_"
         for line in lines:
             stripped = line.strip()
             if stripped.startswith("vrf "):
                 current_vrf_key = "vrf_" + stripped.split(None, 1)[1]
                 continue
             if stripped.startswith("exit") and current_vrf_key != "vrf_":
-                # Exiting a vrf block; next neighbor lines are global again
                 current_vrf_key = "vrf_"
                 continue
             match = neighbor_route_map_re.match(stripped)
             if not match:
                 continue
             peer, name, direction = match.groups()
-            vrf_dict = objs["vrfs"].get(current_vrf_key)
-            if not vrf_dict or "neighbor" not in vrf_dict:
-                continue
-            if peer not in vrf_dict["neighbor"]:
-                continue
-            neighbor = vrf_dict["neighbor"][peer]
-            if "route_maps" not in neighbor:
-                neighbor["route_maps"] = []
-            neighbor["route_maps"].append({"name": name, "direction": direction})
-            # Remove single route_map if present so route_maps is the source of truth
-            neighbor.pop("route_map", None)
+            self._add_route_map_to_neighbor(objs, current_vrf_key, peer, name, direction)
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for Bgp_global network resource
