@@ -5,6 +5,8 @@
 
 from __future__ import absolute_import, division, print_function
 
+import re
+
 
 __metaclass__ = type
 
@@ -37,6 +39,41 @@ class Bgp_globalFacts(object):
         This method exists solely to allow the unit test framework to mock device connection calls.
         """
         return connection.get("show running-config | section router\\sbgp ")
+
+    def _add_route_map_to_neighbor(self, objs, vrf_key, peer, name, direction):
+        """Add one route-map entry to the given neighbor in objs; no-op if vrf/neighbor missing."""
+        vrf_dict = objs.get("vrfs", {}).get(vrf_key)
+        if not vrf_dict or "neighbor" not in vrf_dict:
+            return
+        if peer not in vrf_dict["neighbor"]:
+            return
+        neighbor = vrf_dict["neighbor"][peer]
+        if "route_maps" not in neighbor:
+            neighbor["route_maps"] = []
+        neighbor["route_maps"].append({"name": name, "direction": direction})
+        neighbor.pop("route_map", None)
+
+    def _collect_neighbor_route_maps(self, lines, objs):
+        """Scan config lines for 'neighbor X route-map Y in|out' and set route_maps list per neighbor."""
+        if not objs or "vrfs" not in objs:
+            return
+        neighbor_route_map_re = re.compile(
+            r"^\s*neighbor\s+(\S+)\s+route-map\s+(\S+)\s+(in|out)\s*$",
+        )
+        current_vrf_key = "vrf_"
+        for line in lines:
+            stripped = line.strip()
+            if stripped.startswith("vrf "):
+                current_vrf_key = "vrf_" + stripped.split(None, 1)[1]
+                continue
+            if stripped.startswith("exit") and current_vrf_key != "vrf_":
+                current_vrf_key = "vrf_"
+                continue
+            match = neighbor_route_map_re.match(stripped)
+            if not match:
+                continue
+            peer, name, direction = match.groups()
+            self._add_route_map_to_neighbor(objs, current_vrf_key, peer, name, direction)
 
     def populate_facts(self, connection, ansible_facts, data=None):
         """Populate the facts for Bgp_global network resource
@@ -79,6 +116,10 @@ class Bgp_globalFacts(object):
             module=self._module,
         )
         objs = bgp_global_parser.parse()
+
+        # Collect all neighbor route-map lines (in and out) per peer per context
+        # so we can set route_maps as a list; EOS allows both "in" and "out" per neighbor.
+        self._collect_neighbor_route_maps(bgp_global_config, objs)
 
         if objs:
             global_vals = objs.get("vrfs", {}).pop("vrf_", {})
