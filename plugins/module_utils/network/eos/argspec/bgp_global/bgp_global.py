@@ -30,6 +30,30 @@ __metaclass__ = type
 The arg spec for the eos_bgp_global module
 """
 
+# Shared neighbor option specs (used in config.neighbor and config.vrfs[].neighbor)
+_PREFIX_LIST_OPTION = {
+    "type": "dict",
+    "options": {
+        "direction": {"type": "str", "choices": ["in", "out"]},
+        "name": {"type": "str"},
+    },
+}
+_ROUTE_MAP_OPTION = {
+    "type": "dict",
+    "options": {
+        "direction": {"type": "str", "choices": ["in", "out"]},
+        "name": {"type": "str"},
+    },
+}
+_ROUTE_MAPS_OPTION = {
+    "type": "list",
+    "elements": "dict",
+    "options": {
+        "direction": {"type": "str", "choices": ["in", "out"], "required": True},
+        "name": {"type": "str", "required": True},
+    },
+}
+
 
 class Bgp_globalArgs(object):  # pylint: disable=R0903
     """The arg spec for the eos_bgp_global module"""
@@ -317,16 +341,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                         "peer_group": {"type": "str"},
                         "out_delay": {"type": "int"},
                         "import_localpref": {"type": "int"},
-                        "prefix_list": {
-                            "type": "dict",
-                            "options": {
-                                "direction": {
-                                    "type": "str",
-                                    "choices": ["in", "out"],
-                                },
-                                "name": {"type": "str"},
-                            },
-                        },
+                        "prefix_list": _PREFIX_LIST_OPTION,
                         "dont_capability_negotiate": {"type": "bool"},
                         "update_source": {"type": "str"},
                         "export_localpref": {"type": "int"},
@@ -422,28 +437,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "keepalive": {"type": "int"},
                             },
                         },
-                        "route_map": {
-                            "type": "dict",
-                            "options": {
-                                "direction": {
-                                    "type": "str",
-                                    "choices": ["in", "out"],
-                                },
-                                "name": {"type": "str"},
-                            },
-                        },
-                        "route_maps": {
-                            "type": "list",
-                            "elements": "dict",
-                            "options": {
-                                "direction": {
-                                    "type": "str",
-                                    "choices": ["in", "out"],
-                                    "required": True,
-                                },
-                                "name": {"type": "str", "required": True},
-                            },
-                        },
+                        "route_map": _ROUTE_MAP_OPTION,
+                        "route_maps": _ROUTE_MAPS_OPTION,
                         "remote_as": {"type": "str"},
                     },
                 },
@@ -789,16 +784,7 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 "peer_group": {"type": "str"},
                                 "out_delay": {"type": "int"},
                                 "import_localpref": {"type": "int"},
-                                "prefix_list": {
-                                    "type": "dict",
-                                    "options": {
-                                        "direction": {
-                                            "type": "str",
-                                            "choices": ["in", "out"],
-                                        },
-                                        "name": {"type": "str"},
-                                    },
-                                },
+                                "prefix_list": _PREFIX_LIST_OPTION,
                                 "dont_capability_negotiate": {"type": "bool"},
                                 "update_source": {"type": "str"},
                                 "export_localpref": {"type": "int"},
@@ -901,28 +887,8 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                         "keepalive": {"type": "int"},
                                     },
                                 },
-                                "route_map": {
-                                    "type": "dict",
-                                    "options": {
-                                        "direction": {
-                                            "type": "str",
-                                            "choices": ["in", "out"],
-                                        },
-                                        "name": {"type": "str"},
-                                    },
-                                },
-                                "route_maps": {
-                                    "type": "list",
-                                    "elements": "dict",
-                                    "options": {
-                                        "direction": {
-                                            "type": "str",
-                                            "choices": ["in", "out"],
-                                            "required": True,
-                                        },
-                                        "name": {"type": "str", "required": True},
-                                    },
-                                },
+                                "route_map": _ROUTE_MAP_OPTION,
+                                "route_maps": _ROUTE_MAPS_OPTION,
                                 "remote_as": {"type": "str"},
                             },
                         },
