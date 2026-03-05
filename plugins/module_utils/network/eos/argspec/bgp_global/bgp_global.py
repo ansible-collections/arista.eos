@@ -431,13 +431,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                 },
                                 "name": {"type": "str"},
                             },
-                            "deprecated": True,
-                            "deprecation": {
-                                "version": "7.0.0",
-                                "date": "2025-01-01",
-                                "collection_name": "arista.eos",
-                                "reason": "Use route_maps to specify both in and out route-maps per neighbor.",
-                            },
                         },
                         "route_maps": {
                             "type": "list",
@@ -916,13 +909,6 @@ class Bgp_globalArgs(object):  # pylint: disable=R0903
                                             "choices": ["in", "out"],
                                         },
                                         "name": {"type": "str"},
-                                    },
-                                    "deprecated": True,
-                                    "deprecation": {
-                                        "version": "7.0.0",
-                                        "date": "2025-01-01",
-                                        "collection_name": "arista.eos",
-                                        "reason": "Use route_maps to specify both in and out route-maps per neighbor.",
                                     },
                                 },
                                 "route_maps": {

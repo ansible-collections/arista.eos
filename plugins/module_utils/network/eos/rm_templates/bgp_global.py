@@ -2351,8 +2351,35 @@ class Bgp_globalTemplate(NetworkTemplate):
         },
         {
             "name": "neighbor.route_maps",
+            "getval": re.compile(
+                r"""
+                \s*neighbor
+                \s+(?P<peer>\S+)
+                \s+route-map
+                \s+(?P<name>\S+)
+                \s+(?P<dir>in|out)
+                *$""",
+                re.VERBOSE,
+            ),
             "setval": _tmplt_bgp_neighbor,
             "compval": "neighbor.route_maps",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbor": {
+                            "{{ peer }}": {
+                                "neighbor_address": "{{ peer }}",
+                                "route_maps": [
+                                    {
+                                        "name": "{{ name }}",
+                                        "direction": "{{ dir }}",
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                },
+            },
         },
         {
             "name": "neighbor.route_reflector_client",
