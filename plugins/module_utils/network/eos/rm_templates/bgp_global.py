@@ -20,6 +20,7 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.r
     NetworkTemplate,
 )
 
+
 # Template placeholder used in parser result dicts (avoids string literal duplication for Sonar S1192)
 _ROUTE_MAP_NAME = "{{ name }}"
 
