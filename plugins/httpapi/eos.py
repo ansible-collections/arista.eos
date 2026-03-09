@@ -3,7 +3,6 @@
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 DOCUMENTATION = """
@@ -35,7 +34,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 from ansible_collections.ansible.netcommon.plugins.plugin_utils.httpapi_base import HttpApiBase
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import session_name
-
 
 OPTIONS = {
     "format": ["text", "json"],
