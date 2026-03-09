@@ -589,7 +589,7 @@ def main():
                         None,
                         flags=flags,
                     )
-                    replace = module.params["replace"] == "config"
+                    replace = module.params["replace"] == "line"
                     after = get_session_config(
                         module,
                         contents.split("\n"),
