@@ -340,7 +340,8 @@ class HttpApi:
             # Bypass NetworkConfig entirely for full config replace and return candidate lines
             # with only basic filtering.
             config_lines = [
-                line for line in candidate.split("\n")
+                line
+                for line in candidate.split("\n")
                 if line.strip() and not line.strip().startswith("!")
             ]
             diff["config_diff"] = "\n".join(config_lines)
@@ -425,7 +426,9 @@ class HttpApi:
 
             # banner is always a multiline eAPI block; code is multiline only
             # within control-functions.
-            if stripped.startswith("banner") or (in_control_functions and stripped.startswith("code")):
+            if stripped.startswith("banner") or (
+                in_control_functions and stripped.startswith("code")
+            ):
                 multiline_cmd = stripped
                 multiline_input = []
                 continue
