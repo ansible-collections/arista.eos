@@ -36,6 +36,12 @@ notes:
   L(Network FAQ,../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands).
 - To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they
   appear if present in the running configuration on device including the indentation.
+- Multiline block commands such as C(banner) and C(code unit) (Routing Control Functions / RCF)
+  require I(replace=config) when using the eAPI transport. In this mode the module bypasses
+  the standard line-diff engine, which cannot preserve brace-delimited syntax, and instead
+  sends the full candidate configuration to the device using a configuration session with
+  C(rollback clean-config). The block content is automatically packaged into the eAPI
+  C(cmd)/C(input) dict form required by the device.
 options:
   lines:
     description:
@@ -103,7 +109,12 @@ options:
       the replace argument is set to I(line) then the modified lines are pushed to
       the device in configuration mode.  If the replace argument is set to I(block)
       then the entire command block is pushed to the device in configuration mode
-      if any line is not correct.
+      if any line is not correct.  If the replace argument is set to I(config) then
+      the entire candidate configuration replaces the running configuration using a
+      configuration session with C(rollback clean-config). This mode must be used when
+      the candidate configuration contains multiline block commands such as C(banner)
+      or C(code)/C(code unit) (Routing Control Functions / RCF), as these require the
+      eAPI C(cmd)/C(input) dict format and cannot be processed by the line-diff engine.
     type: str
     default: line
     choices:

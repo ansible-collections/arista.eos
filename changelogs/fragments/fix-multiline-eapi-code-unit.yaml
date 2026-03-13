@@ -1,0 +1,6 @@
+bugfixes:
+  - eos_config - extend multiline eAPI block detection to include ``code`` and
+    ``code unit`` (Routing Control Functions / RCF) in addition to ``banner``;
+    also bypass ``NetworkConfig`` in config-replace mode which was dropping
+    closing brace lines from RCF function bodies, causing EOS compilation failures
+    (https://github.com/ansible-collections/arista.eos/issues/632).
