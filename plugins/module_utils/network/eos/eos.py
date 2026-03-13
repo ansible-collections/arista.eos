@@ -50,7 +50,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 _DEVICE_CONNECTION = None
 
 
-
 def get_connection(module):
     global _DEVICE_CONNECTION
     if not _DEVICE_CONNECTION:

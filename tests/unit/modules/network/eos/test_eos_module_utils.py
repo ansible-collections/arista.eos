@@ -39,7 +39,7 @@ def _make_api():
 
 class TestHttpApiGetDiff(unittest.TestCase):
     def _get_diff(self, candidate, diff_replace="config", running=""):
-        api, _ = _make_api()
+        api, _conn = _make_api()
         return api.get_diff(
             candidate=candidate,
             running=running,
@@ -97,7 +97,7 @@ class TestHttpApiGetDiff(unittest.TestCase):
         """Non-config replace mode still computes a NetworkConfig diff."""
         running = "hostname localhost\n"
         candidate = "hostname switch01\n"
-        api, _ = _make_api()
+        api, _conn = _make_api()
         result = api.get_diff(
             candidate=candidate,
             running=running,
@@ -215,7 +215,7 @@ class TestHttpApiEditConfig(unittest.TestCase):
             "some other command",
         ]
         commands = self._sent_commands(config)
-        dict_cmds = self._dict_commands(commands) 
+        dict_cmds = self._dict_commands(commands)
         self.assertEqual(len(dict_cmds), 0)
         self.assertIn("code command", commands)
 
