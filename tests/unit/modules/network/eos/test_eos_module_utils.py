@@ -9,6 +9,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 
 import unittest
+
 from unittest.mock import MagicMock, patch
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import (
@@ -140,7 +141,7 @@ class TestHttpApiEditConfig(unittest.TestCase):
             "banner login",
             "line one",
             "line two",
-            "EOF"
+            "EOF",
         ]
         commands = self._sent_commands(config)
         dict_cmds = self._dict_commands(commands)
@@ -168,9 +169,7 @@ class TestHttpApiEditConfig(unittest.TestCase):
         self.assertEqual(dict_cmds[0]["cmd"], "code unit RCF")
         self.assertEqual(
             dict_cmds[0]["input"],
-            "         function foo() {\n"
-            "             return true;\n"
-            "         }",
+            "         function foo() {\n" "             return true;\n" "         }",
         )
 
     def test_multiple_code_unit_blocks(self):
