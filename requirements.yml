@@ -1,0 +1,5 @@
+---
+collections:
+  - name: ansible.netcommon
+    version: ">=8.1.0"
+  - name: ansible.utils
