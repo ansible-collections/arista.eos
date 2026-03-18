@@ -169,7 +169,7 @@ class TestHttpApiEditConfig(unittest.TestCase):
         self.assertEqual(dict_cmds[0]["cmd"], "code unit RCF")
         self.assertEqual(
             dict_cmds[0]["input"],
-            "         function foo() {\n" "             return true;\n" "         }",
+            "         function foo() {\n             return true;\n         }",
         )
 
     def test_multiple_code_unit_blocks(self):
