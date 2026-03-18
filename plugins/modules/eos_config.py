@@ -57,15 +57,26 @@ options:
     elements: str
   src:
     description:
-    - The I(src) argument provides a path to the configuration file to load into the
-      remote system.  The path can either be a full system path to the configuration
-      file if the value starts with / or relative to the root of the implemented role
-      or playbook. This argument is mutually exclusive with the I(lines) and I(parents)
-      arguments. It can be a Jinja2 template as well. The configuration lines in the source
-      file should be similar to how it will appear if present in the running-configuration
-      (live switch config) of the device i ncluding the indentation to ensure idempotency
+    - Specifies the source path to the file that contains the configuration or configuration
+      template to load.  The path to the source file can either be the full path on
+      the Ansible control host or a relative path from the playbook or role root directory. This
+      argument is mutually exclusive with I(lines), I(parents), and I(content). The configuration lines in the
+      source file should be similar to how it will appear if present in the running-configuration
+      (live switch config) of the device including the indentation to ensure idempotency
       and correct diff. Arista EOS device config has 3 spaces indentation.
+    - "NOTE: The I(src) parameter will no longer process Jinja2 templates starting in January 2028.
+      To use templated configurations, render the template using C(ansible.builtin.template) lookup
+      and pass the result to the I(content) parameter instead."
     type: path
+  content:
+    description:
+    - Configuration content to apply to the device. This should be the rendered configuration
+      text, not a file path.
+    - This is the recommended way to provide templated configurations. Use C(ansible.builtin.template)
+      lookup to render your Jinja2 template and pass the output to this parameter.
+    - This argument is mutually exclusive with I(src), I(lines), and I(parents).
+    - 'Example: C(content: "{{ lookup(''ansible.builtin.template'', ''config.j2'') }}")'
+    type: str
   before:
     description:
     - The ordered set of commands to push on to the command stack if a change needs
@@ -249,10 +260,31 @@ EXAMPLES = """
   arista.eos.eos_config:
     src: eos.cfg
 
-- name: render a Jinja2 template onto an Arista switch
+- name: Render a Jinja2 template onto an Arista switch (DEPRECATED - use content parameter)
   arista.eos.eos_config:
     backup: true
     src: eos_template.j2
+
+- name: Apply templated configuration using content parameter (RECOMMENDED)
+  arista.eos.eos_config:
+    content: "{{ lookup('ansible.builtin.template', 'eos_template.j2') }}"
+    backup: true
+
+- name: Apply templated configuration with backup options (RECOMMENDED)
+  arista.eos.eos_config:
+    content: "{{ lookup('ansible.builtin.template', 'eos_template.j2') }}"
+    backup: true
+    backup_options:
+      filename: backup.cfg
+      dir_path: /home/user
+
+- name: Load configuration from pre-rendered template
+  arista.eos.eos_config:
+    content: |
+      interface Ethernet1
+         description Uplink to Core
+         ip address 10.1.1.1/24
+         no shutdown
 
 - name: diff the running config against a master config
   arista.eos.eos_config:
@@ -332,6 +364,8 @@ def get_candidate(module):
     candidate = ""
     if module.params["src"]:
         candidate = module.params["src"]
+    elif module.params["content"]:
+        candidate = module.params["content"]
     elif module.params["lines"]:
         candidate_obj = NetworkConfig(indent=3)
         parents = module.params["parents"] or list()
@@ -371,6 +405,7 @@ def main():
     backup_spec = dict(filename=dict(), dir_path=dict(type="path"))
     argument_spec = dict(
         src=dict(type="path"),
+        content=dict(type="str"),
         lines=dict(aliases=["commands"], type="list", elements="str"),
         parents=dict(type="list", elements="str"),
         before=dict(type="list", elements="str"),
@@ -402,12 +437,12 @@ def main():
         intended_config=dict(),
     )
 
-    mutually_exclusive = [("lines", "src"), ("parents", "src")]
+    mutually_exclusive = [("lines", "src", "content"), ("parents", "src", "content")]
 
     required_if = [
-        ("match", "strict", ["lines", "src"], True),
-        ("match", "exact", ["lines", "src"], True),
-        ("replace", "block", ["lines", "src"], True),
+        ("match", "strict", ["lines", "src", "content"], True),
+        ("match", "exact", ["lines", "src", "content"], True),
+        ("replace", "block", ["lines", "src", "content"], True),
         ("replace", "config", ["src"]),
         ("diff_against", "intended", ["intended_config"]),
         ("diff_against", "validate_config", ["intended_config"]),
@@ -446,7 +481,7 @@ def main():
         if module.params["backup"]:
             result["__backup__"] = contents
 
-    if any((module.params["src"], module.params["lines"])):
+    if any((module.params["src"], module.params["lines"], module.params["content"])):
         match = module.params["match"]
         replace = module.params["replace"]
         path = module.params["parents"]
@@ -605,14 +640,14 @@ def main():
                 )
 
     if result.get("changed") and any(
-        (module.params["src"], module.params["lines"]),
+        (module.params["src"], module.params["lines"], module.params["content"]),
     ):
         msg = (
             "To ensure idempotency and correct diff the input configuration lines should be"
             " similar to how they appear if present in"
             " the running configuration on device"
         )
-        if module.params["src"]:
+        if module.params["src"] or module.params["content"]:
             msg += " including the indentation"
         if "warnings" in result:
             result["warnings"].append(msg)
