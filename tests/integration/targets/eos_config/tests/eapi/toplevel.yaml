@@ -1,6 +1,9 @@
 ---
 - ansible.builtin.debug: msg="START eapi/toplevel.yaml"
 
+- ansible.builtin.debug:
+    msg: " debug_komal {{ inventory_hostname_short }}"
+
 - name: setup
   become: true
   arista.eos.eos_config:

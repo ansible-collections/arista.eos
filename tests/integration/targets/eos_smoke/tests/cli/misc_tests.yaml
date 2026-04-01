@@ -7,7 +7,7 @@
     - name: command with privilege 15 (should fail)
       arista.eos.eos_command:
         commands: show running-config
-      become: false
+      become: true
       register: result
 
     - ansible.builtin.assert:
