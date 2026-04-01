@@ -29,7 +29,7 @@
 
 - ansible.builtin.debug:
     msg: " debug_komal {{ inventory_hostname_short }}"
-    
+
 - name: teardown
   become: true
   arista.eos.eos_config:
