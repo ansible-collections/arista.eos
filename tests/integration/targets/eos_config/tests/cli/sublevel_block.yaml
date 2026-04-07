@@ -1,63 +1,63 @@
 ---
 - ansible.builtin.debug:
-    msg="START cli/sublevel_block.yaml on connection={{ ansible_connection
-    }}"
+      msg="START cli/sublevel_block.yaml on connection={{ ansible_connection
+      }}"
 
 - name: setup
   become: true
   arista.eos.eos_config:
-    lines:
-      - 10 permit ip host 192.0.2.1 any log
-      - 20 permit ip host 192.0.2.2 any log
-      - 30 permit ip host 192.0.2.3 any log
-    parents: ip access-list test
-    before: no ip access-list test
-    after: exit
-    match: none
+      lines:
+          - 10 permit ip host 192.0.2.1 any log
+          - 20 permit ip host 192.0.2.2 any log
+          - 30 permit ip host 192.0.2.3 any log
+      parents: ip access-list test
+      before: no ip access-list test
+      after: exit
+      match: none
 
 - name: configure sub level command using block resplace
   become: true
   register: result
   arista.eos.eos_config:
-    lines:
-      - 10 permit ip host 192.0.2.1 any log
-      - 20 permit ip host 192.0.2.2 any log
-      - 30 permit ip host 192.0.2.3 any log
-      - 40 permit ip host 192.0.2.4 any log
-    parents: ip access-list test
-    replace: block
-    after: exit
+      lines:
+          - 10 permit ip host 192.0.2.1 any log
+          - 20 permit ip host 192.0.2.2 any log
+          - 30 permit ip host 192.0.2.3 any log
+          - 40 permit ip host 192.0.2.4 any log
+      parents: ip access-list test
+      replace: block
+      after: exit
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
-      - "'ip access-list test' in result.updates"
-      - "'10 permit ip host 192.0.2.1 any log' in result.updates"
-      - "'20 permit ip host 192.0.2.2 any log' in result.updates"
-      - "'30 permit ip host 192.0.2.3 any log' in result.updates"
-      - "'40 permit ip host 192.0.2.4 any log' in result.updates"
+      that:
+          - result.changed == true
+          - "'ip access-list test' in result.updates"
+          - "'10 permit ip host 192.0.2.1 any log' in result.updates"
+          - "'20 permit ip host 192.0.2.2 any log' in result.updates"
+          - "'30 permit ip host 192.0.2.3 any log' in result.updates"
+          - "'40 permit ip host 192.0.2.4 any log' in result.updates"
 
 - name: check sub level command using block replace
   become: true
   register: result
   arista.eos.eos_config:
-    lines:
-      - 10 permit ip host 192.0.2.1 any log
-      - 20 permit ip host 192.0.2.2 any log
-      - 30 permit ip host 192.0.2.3 any log
-      - 40 permit ip host 192.0.2.4 any log
-    parents: ip access-list test
-    replace: block
-    after: exit
+      lines:
+          - 10 permit ip host 192.0.2.1 any log
+          - 20 permit ip host 192.0.2.2 any log
+          - 30 permit ip host 192.0.2.3 any log
+          - 40 permit ip host 192.0.2.4 any log
+      parents: ip access-list test
+      replace: block
+      after: exit
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
+      that:
+          - result.changed == false
 
 - name: teardown
   become: true
   arista.eos.eos_config:
-    lines: no ip access-list test
-    match: none
+      lines: no ip access-list test
+      match: none
 
 - ansible.builtin.debug: msg="END cli/sublevel_block.yaml on connection={{ ansible_connection }}"

@@ -2,37 +2,37 @@
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Ethernet1
-        mode: trunk
-        trunk:
-          native_vlan: 10
+      config:
+          - name: Ethernet1
+            mode: trunk
+            trunk:
+                native_vlan: 10
 
-      - name: Ethernet2
-        access:
-          vlan: 30
+          - name: Ethernet2
+            access:
+                vlan: 30
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: l2_interfaces
+      gather_network_resources: l2_interfaces
 
 - name: Merge provided configuration with device configuration
   register: result
   become: true
   arista.eos.eos_l2_interfaces:
-    config: "{{ config }}"
-    state: merged
+      config: "{{ config }}"
+      state: merged
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before)
-        == []
+      that:
+          - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.before)
+            == []
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: l2_interfaces
+      gather_network_resources: l2_interfaces
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.after)
-        == []
+      that:
+          - ansible_facts.network_resources.l2_interfaces|symmetric_difference(result.after)
+            == []

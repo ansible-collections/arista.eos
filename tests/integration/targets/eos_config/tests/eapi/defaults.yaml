@@ -4,39 +4,39 @@
 - name: setup
   become: true
   arista.eos.eos_config:
-    commands:
-      - no description
-      - shutdown
-    parents:
-      - interface Ethernet2
-    match: none
+      commands:
+          - no description
+          - shutdown
+      parents:
+          - interface Ethernet2
+      match: none
 
 - name: configure device with defaults included
   become: true
   register: result
   arista.eos.eos_config:
-    src: defaults/config.j2
-    defaults: true
+      src: defaults/config.j2
+      defaults: true
 
 - ansible.builtin.debug: var=result
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
-      - result.updates is defined
+      that:
+          - result.changed == true
+          - result.updates is defined
 
 - name: check device with defaults included
   become: true
   register: result
   arista.eos.eos_config:
-    src: defaults/config.j2
-    defaults: true
+      src: defaults/config.j2
+      defaults: true
 
 - ansible.builtin.debug: var=result
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - result.updates is not defined
+      that:
+          - result.changed == false
+          - result.updates is not defined
 
 - ansible.builtin.debug: msg="END eapi/defaults.yaml"

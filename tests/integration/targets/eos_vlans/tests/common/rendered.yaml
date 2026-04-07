@@ -1,20 +1,20 @@
 ---
 - ansible.builtin.set_fact:
-    config:
-      - vlan_id: 10
-        name: ten
-      - vlan_id: 20
-        state: suspend
+      config:
+          - vlan_id: 10
+            name: ten
+          - vlan_id: 20
+            state: suspend
 
 - name: Use rendered state to convert task input to device specific commands
   register: result
   become: true
   arista.eos.eos_vlans:
-    config: "{{ config }}"
-    state: rendered
+      config: "{{ config }}"
+      state: rendered
 
 - name: Assert
   ansible.builtin.assert:
-    that:
-      - rendered.sort() == result.rendered.sort()
-      - result['changed'] == false
+      that:
+          - rendered.sort() == result.rendered.sort()
+          - result['changed'] == false

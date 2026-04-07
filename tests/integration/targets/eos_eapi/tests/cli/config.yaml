@@ -4,41 +4,41 @@
 - name: Setup
   become: true
   arista.eos.eos_config:
-    lines: no management api http-commands
-    match: none
+      lines: no management api http-commands
+      match: none
 
 - name: Get running-config
   become: true
   register: config
   arista.eos.eos_command:
-    commands: show running-config
+      commands: show running-config
 
 - name: Set config
   become: true
   register: config
   arista.eos.eos_eapi:
-    config: "{{ config.stdout[0] }}"
+      config: "{{ config.stdout[0] }}"
 
 - name: Ensure that this triggered a change
   ansible.builtin.assert:
-    that:
-      - config.changed == true
+      that:
+          - config.changed == true
 
 - name: Get running-config again
   become: true
   register: config
   arista.eos.eos_command:
-    commands: show running-config
+      commands: show running-config
 
 - name: Set config
   become: true
   register: config
   arista.eos.eos_eapi:
-    config: "{{ config.stdout[0] }}"
+      config: "{{ config.stdout[0] }}"
 
 - name: Idempotency check
   ansible.builtin.assert:
-    that:
-      - config.changed == false
+      that:
+          - config.changed == false
 
 - ansible.builtin.debug: msg="END cli/config.yaml on connection={{ ansible_connection }}"

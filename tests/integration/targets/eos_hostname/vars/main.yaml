@@ -1,18 +1,18 @@
 ---
 merged:
-  commands:
-    - hostname eos_test
+    commands:
+        - hostname eos_test
 
 replaced:
-  before:
-    hostname: "eos_test"
-  after:
-    hostname: "eos"
-  commands:
-    - hostname eos
+    before:
+        hostname: "eos_test"
+    after:
+        hostname: "eos"
+    commands:
+        - hostname eos
 
 deleted:
-  before:
-    hostname: "eos_test"
-  commands:
-    - no hostname eos_test
+    before:
+        hostname: "eos_test"
+    commands:
+        - no hostname eos_test

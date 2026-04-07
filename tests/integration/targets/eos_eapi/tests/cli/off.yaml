@@ -5,40 +5,40 @@
   become: true
   register: eos_eapi_output
   arista.eos.eos_eapi:
-    enable_http: false
-    enable_https: false
-    enable_local_http: false
-    enable_socket: false
+      enable_http: false
+      enable_https: false
+      enable_local_http: false
+      enable_socket: false
 
 - ansible.builtin.debug: var=eos_eapi_output
 
 - register: http_config
   arista.eos.eos_command:
-    commands:
-      - show management api http-commands | json
+      commands:
+          - show management api http-commands | json
 
 - ansible.builtin.debug: var=http_config
 
 - name: Expect all EAPI endpoints to be in off state
   ansible.builtin.assert:
-    that:
-      - http_config.stdout[0].httpServer.running == false
-      - http_config.stdout[0].httpsServer.running == false
-      - http_config.stdout[0].localHttpServer.running == false
-      - http_config.stdout[0].unixSocketServer.running == false
+      that:
+          - http_config.stdout[0].httpServer.running == false
+          - http_config.stdout[0].httpsServer.running == false
+          - http_config.stdout[0].localHttpServer.running == false
+          - http_config.stdout[0].unixSocketServer.running == false
 
 - name: Turn all endpoints off again
   become: true
   register: eos_eapi_output
   arista.eos.eos_eapi:
-    enable_http: false
-    enable_https: false
-    enable_local_http: false
-    enable_socket: false
+      enable_http: false
+      enable_https: false
+      enable_local_http: false
+      enable_socket: false
 
 - name: Expect action to be idempotent
   ansible.builtin.assert:
-    that:
-      - eos_eapi_output.changed == false
+      that:
+          - eos_eapi_output.changed == false
 
 - ansible.builtin.debug: msg="END CLI/OFF.YAML"

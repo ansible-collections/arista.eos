@@ -2,8 +2,8 @@
 - name: Setup
   become: true
   arista.eos.eos_acl_interfaces:
-    config:
-      - name: "{{ interfaces_lst['int1'] }}"
+      config:
+          - name: "{{ interfaces_lst['int1'] }}"
 
-      - name: "{{ interfaces_lst['int2'] }}"
-    state: deleted
+          - name: "{{ interfaces_lst['int2'] }}"
+      state: deleted

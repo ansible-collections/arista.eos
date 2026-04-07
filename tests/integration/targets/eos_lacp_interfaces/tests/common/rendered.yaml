@@ -1,32 +1,32 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      START eos_lacp_interfaces rendered integration tests on connection={{ ansible_connection
-      }}
+      msg:
+          START eos_lacp_interfaces rendered integration tests on connection={{ ansible_connection
+          }}
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Ethernet1
-        timer: fast
-      - name: Ethernet2
-        timer: normal
+      config:
+          - name: Ethernet1
+            timer: fast
+          - name: Ethernet2
+            timer: normal
 
 - name: Use rendered state to convert task input to device specific commands
   register: result
   become: true
   arista.eos.eos_lacp_interfaces:
-    config: "{{ config }}"
-    state: rendered
+      config: "{{ config }}"
+      state: rendered
 
 - ansible.builtin.set_fact:
-    rendered:
-      - "interface Ethernet1"
-      - "lacp timer fast"
-      - "interface Ethernet2"
-      - "lacp timer normal"
+      rendered:
+          - "interface Ethernet1"
+          - "lacp timer fast"
+          - "interface Ethernet2"
+          - "lacp timer normal"
 
 - name: Assert
   ansible.builtin.assert:
-    that:
-      - rendered|symmetric_difference(result.rendered) == []
-      - result['changed'] == false
+      that:
+          - rendered|symmetric_difference(result.rendered) == []
+          - result['changed'] == false

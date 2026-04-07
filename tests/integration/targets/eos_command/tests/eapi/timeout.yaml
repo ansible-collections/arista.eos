@@ -5,15 +5,15 @@
   register: result
   ignore_errors: true
   arista.eos.eos_command:
-    commands:
-      - show version
-    wait_for:
-      - result[0].version foo 4.15
-    retries: 1
+      commands:
+          - show version
+      wait_for:
+          - result[0].version foo 4.15
+      retries: 1
 
 - ansible.builtin.assert:
-    that:
-      - result.failed == true
-      - result.msg is defined
+      that:
+          - result.failed == true
+          - result.msg is defined
 
 - ansible.builtin.debug: msg="END eapi/timeout.yaml"

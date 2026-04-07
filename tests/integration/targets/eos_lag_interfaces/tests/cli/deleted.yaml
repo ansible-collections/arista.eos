@@ -2,31 +2,31 @@
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Port-Channel5
+      config:
+          - name: Port-Channel5
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lag_interfaces
+      gather_network_resources: lag_interfaces
 
 - name: Delete EOS L3 interfaces as in given arguments.
   become: true
   register: result
   arista.eos.eos_lag_interfaces:
-    config: "{{ config }}"
-    state: deleted
+      config: "{{ config }}"
+      state: deleted
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length
-        == 0
+      that:
+          - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length
+            == 0
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lag_interfaces
+      gather_network_resources: lag_interfaces
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lag_interfaces == []
+      that:
+          - ansible_facts.network_resources.lag_interfaces == []
 
 - ansible.builtin.include_tasks: _reset_config.yaml

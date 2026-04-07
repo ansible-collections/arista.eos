@@ -2,27 +2,27 @@
 - name: Reset initial config
   become: true
   arista.eos.eos_config:
-    lines:
-      - "lldp timer 3000"
-      - "lldp hold-time 100"
-      - "lldp timer reinitialization 5"
-      - "no lldp tlv transmit management-address"
-      - "no lldp tlv transmit system-description"
-      - "lldp tlv transmit port-description"
+      lines:
+          - "lldp timer 3000"
+          - "lldp hold-time 100"
+          - "lldp timer reinitialization 5"
+          - "no lldp tlv transmit management-address"
+          - "no lldp tlv transmit system-description"
+          - "lldp tlv transmit port-description"
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lldp_global
+      gather_network_resources: lldp_global
 
 - ansible.builtin.set_fact:
-    expected_config:
-      timer: 3000
-      holdtime: 100
-      reinit: 5
-      tlv_select:
-        management_address: false
-        system_description: false
+      expected_config:
+          timer: 3000
+          holdtime: 100
+          reinit: 5
+          tlv_select:
+              management_address: false
+              system_description: false
 
 - ansible.builtin.assert:
-    that:
-      - expected_config == ansible_facts.network_resources.lldp_global
+      that:
+          - expected_config == ansible_facts.network_resources.lldp_global

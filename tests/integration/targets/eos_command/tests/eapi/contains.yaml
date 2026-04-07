@@ -4,16 +4,16 @@
 - name: test contains operator
   register: result
   arista.eos.eos_command:
-    commands:
-      - show version
-      - show interfaces Management1 | json
-    wait_for:
-      - result[0] contains EOS
-      - result[1].interfaces.Management1.name contains Manage
+      commands:
+          - show version
+          - show interfaces Management1 | json
+      wait_for:
+          - result[0] contains EOS
+          - result[1].interfaces.Management1.name contains Manage
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - result.stdout is defined
+      that:
+          - result.changed == false
+          - result.stdout is defined
 
 - ansible.builtin.debug: msg="END eapi/contains.yaml on connection={{ ansible_connection }}"

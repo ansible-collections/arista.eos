@@ -1,8 +1,8 @@
 ---
 authors:
-  - Ansible Network Community (ansible-network)
+    - Ansible Network Community (ansible-network)
 dependencies:
-  "ansible.netcommon": ">=8.1.0"
+    "ansible.netcommon": ">=8.1.0"
 license_file: LICENSE
 name: eos
 description: Ansible Network Collection for Arista EOS devices.

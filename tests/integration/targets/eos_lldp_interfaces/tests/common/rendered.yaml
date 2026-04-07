@@ -1,32 +1,32 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      START eos_lldp_interfaces rendered integration tests on connection={{ ansible_connection
-      }}
+      msg:
+          START eos_lldp_interfaces rendered integration tests on connection={{ ansible_connection
+          }}
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Ethernet1
-        transmit: false
-      - name: Ethernet2
-        transmit: false
+      config:
+          - name: Ethernet1
+            transmit: false
+          - name: Ethernet2
+            transmit: false
 
 - name: Use rendered state to convert task input to device specific commands
   register: result
   become: true
   arista.eos.eos_lldp_interfaces:
-    config: "{{ config }}"
-    state: rendered
+      config: "{{ config }}"
+      state: rendered
 
 - ansible.builtin.set_fact:
-    rendered:
-      - "interface Ethernet1"
-      - "no lldp transmit"
-      - "interface Ethernet2"
-      - "no lldp transmit"
+      rendered:
+          - "interface Ethernet1"
+          - "no lldp transmit"
+          - "interface Ethernet2"
+          - "no lldp transmit"
 
 - name: Assert
   ansible.builtin.assert:
-    that:
-      - rendered|symmetric_difference(result.rendered) == []
-      - result['changed'] == false
+      that:
+          - rendered|symmetric_difference(result.rendered) == []
+          - result['changed'] == false

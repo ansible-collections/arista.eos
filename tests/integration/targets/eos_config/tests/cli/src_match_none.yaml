@@ -1,39 +1,39 @@
 ---
 - ansible.builtin.debug:
-    msg="START cli/src_match_none.yaml on connection={{ ansible_connection
-    }}"
+      msg="START cli/src_match_none.yaml on connection={{ ansible_connection
+      }}"
 
 - name: setup
   become: true
   arista.eos.eos_config:
-    commands:
-      - no description
-      - no shutdown
-    parents:
-      - interface Ethernet2
-    match: none
+      commands:
+          - no description
+          - no shutdown
+      parents:
+          - interface Ethernet2
+      match: none
 
 - name: configure device with config
   become: true
   register: result
   arista.eos.eos_config:
-    src: basic/config.j2
-    match: none
+      src: basic/config.j2
+      match: none
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
+      that:
+          - result.changed == true
 
 - name: check device with config
   become: true
   register: result
   arista.eos.eos_config:
-    src: basic/config.j2
-    defaults: true
+      src: basic/config.j2
+      defaults: true
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - result.updates is not defined
+      that:
+          - result.changed == false
+          - result.updates is not defined
 
 - ansible.builtin.debug: msg="END cli/src_match_none.yaml on connection={{ ansible_connection }}"

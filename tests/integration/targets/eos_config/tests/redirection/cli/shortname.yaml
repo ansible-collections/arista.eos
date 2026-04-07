@@ -5,34 +5,34 @@
   register: result
   become: true
   arista.eos.config:
-    src: basic/config.j2
+      src: basic/config.j2
 
 - ansible.builtin.assert:
-    that:
-      # make sure that the template content was read and not the path
-      - result.failed == false
+      that:
+          # make sure that the template content was read and not the path
+          - result.failed == false
 
 - name: use module alias to take configuration backup
   register: result
   become: true
   arista.eos.config:
-    backup: true
-    backup_options:
-      filename: backup_with_alias.cfg
-      dir_path: "{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}"
+      backup: true
+      backup_options:
+          filename: backup_with_alias.cfg
+          dir_path: "{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}"
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
+      that:
+          - result.changed == true
 
 - name: check if the backup file-4 exist
   ansible.builtin.find:
-    paths: "{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}/backup_with_alias.cfg"
+      paths: "{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}/backup_with_alias.cfg"
   register: backup_file
   connection: local
 
 - ansible.builtin.assert:
-    that:
-      - backup_file.files is defined
+      that:
+          - backup_file.files is defined
 
 - ansible.builtin.debug: msg="END redirection/shortname.yaml on connection={{ ansible_connection }}"

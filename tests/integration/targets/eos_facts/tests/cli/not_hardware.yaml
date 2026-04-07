@@ -5,17 +5,17 @@
   become: true
   register: result
   arista.eos.eos_facts:
-    gather_subset:
-      - "!hardware"
+      gather_subset:
+          - "!hardware"
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - "'config' in result.ansible_facts.ansible_net_gather_subset"
-      - "'default' in result.ansible_facts.ansible_net_gather_subset"
-      - "'interfaces' in result.ansible_facts.ansible_net_gather_subset"
-      - "'hardware' not in result.ansible_facts.ansible_net_gather_subset"
-      - result.ansible_facts.ansible_net_interfaces.Management1
-      - result.ansible_facts.ansible_net_filesystems is not defined
+      that:
+          - result.changed == false
+          - "'config' in result.ansible_facts.ansible_net_gather_subset"
+          - "'default' in result.ansible_facts.ansible_net_gather_subset"
+          - "'interfaces' in result.ansible_facts.ansible_net_gather_subset"
+          - "'hardware' not in result.ansible_facts.ansible_net_gather_subset"
+          - result.ansible_facts.ansible_net_interfaces.Management1
+          - result.ansible_facts.ansible_net_filesystems is not defined
 
 - ansible.builtin.debug: msg="END cli/not_hardware.yaml on connection={{ ansible_connection }}"

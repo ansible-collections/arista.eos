@@ -4,65 +4,65 @@
 - name: setup
   become: true
   arista.eos.eos_config:
-    lines:
-      - no ip domain lookup source-interface
-      - vrf instance ansible
-    match: none
+      lines:
+          - no ip domain lookup source-interface
+          - vrf instance ansible
+      match: none
 
 - name: configure lookup_source
   become: true
   register: result
   arista.eos.eos_system:
-    lookup_source: Management1
+      lookup_source: Management1
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
-      - "'ip domain lookup source-interface Management1' in result.commands"
+      that:
+          - result.changed == true
+          - "'ip domain lookup source-interface Management1' in result.commands"
 
 - name: verify lookup_source
   become: true
   register: result
   arista.eos.eos_system:
-    lookup_source: Management1
+      lookup_source: Management1
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
+      that:
+          - result.changed == false
 
 - name: change to vrf
   become: true
   register: result
   arista.eos.eos_system:
-    lookup_source:
-      - interface: Management1
-        vrf: ansible
+      lookup_source:
+          - interface: Management1
+            vrf: ansible
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
-      - "'no ip domain lookup source-interface Management1' in result.commands"
-      - "'ip domain lookup vrf ansible source-interface Management1' in result.commands"
-      - result.commands|length == 2
+      that:
+          - result.changed == true
+          - "'no ip domain lookup source-interface Management1' in result.commands"
+          - "'ip domain lookup vrf ansible source-interface Management1' in result.commands"
+          - result.commands|length == 2
 
 - name: verify change to vrf
   become: true
   register: result
   arista.eos.eos_system:
-    lookup_source:
-      - interface: Management1
-        vrf: ansible
+      lookup_source:
+          - interface: Management1
+            vrf: ansible
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
+      that:
+          - result.changed == false
 
 - name: teardown
   become: true
   arista.eos.eos_config:
-    lines:
-      - no ip domain lookup source-interface
-      - no vrf instance ansible
-    match: none
+      lines:
+          - no ip domain lookup source-interface
+          - no vrf instance ansible
+      match: none
 
 - ansible.builtin.debug: msg="END eapi/set_lookup_source.yaml"

@@ -2,8 +2,8 @@
 - name: Setup
   become: true
   arista.eos.eos_acls:
-    config:
-      - afi: ipv4
+      config:
+          - afi: ipv4
 
-      - afi: ipv6
-    state: deleted
+          - afi: ipv6
+      state: deleted

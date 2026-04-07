@@ -2,18 +2,18 @@
 - name: Reset initial config
   become: true
   arista.eos.eos_config:
-    lines:
-      - "lacp system-priority 10"
+      lines:
+          - "lacp system-priority 10"
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lacp
+      gather_network_resources: lacp
 
 - ansible.builtin.set_fact:
-    expected_config:
-      system:
-        priority: 10
+      expected_config:
+          system:
+              priority: 10
 
 - ansible.builtin.assert:
-    that:
-      - expected_config == ansible_facts.network_resources.lacp
+      that:
+          - expected_config == ansible_facts.network_resources.lacp

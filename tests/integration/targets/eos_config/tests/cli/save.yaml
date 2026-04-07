@@ -4,22 +4,22 @@
 - name: setup
   become: true
   arista.eos.eos_config:
-    commands:
-      - no description
-      - no shutdown
-    parents:
-      - interface Ethernet2
-    match: none
+      commands:
+          - no description
+          - no shutdown
+      parents:
+          - interface Ethernet2
+      match: none
 
 - name: save config always
   become: true
   register: result
   arista.eos.eos_config: &id001
-    save_when: always
+      save_when: always
 
 - ansible.builtin.assert: &id002
-    that:
-      - result.changed == true
+      that:
+          - result.changed == true
 
 - name: save should always run
   become: true

@@ -1,38 +1,38 @@
 ---
 - ansible.builtin.debug:
-    msg="START cli/set_domain_name.yaml on connection={{ ansible_connection
-    }}"
+      msg="START cli/set_domain_name.yaml on connection={{ ansible_connection
+      }}"
 
 - name: setup
   become: true
   arista.eos.eos_config:
-    lines: no dns domain
-    match: none
+      lines: no dns domain
+      match: none
 
 - name: configure domain_name
   become: true
   register: result
   arista.eos.eos_system:
-    domain_name: eng.ansible.com
+      domain_name: eng.ansible.com
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
+      that:
+          - result.changed == true
 
 - name: verify domain_name
   become: true
   register: result
   arista.eos.eos_system:
-    domain_name: eng.ansible.com
+      domain_name: eng.ansible.com
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
+      that:
+          - result.changed == false
 
 - name: teardown
   become: true
   arista.eos.eos_config:
-    lines: no dns domain
-    match: none
+      lines: no dns domain
+      match: none
 
 - ansible.builtin.debug: msg="END cli/set_domain_name.yaml on connection={{ ansible_connection }}"

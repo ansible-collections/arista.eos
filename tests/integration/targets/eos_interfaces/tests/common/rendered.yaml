@@ -1,28 +1,28 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      START eos_interfaces rendered integration tests on connection={{ ansible_connection
-      }}
+      msg:
+          START eos_interfaces rendered integration tests on connection={{ ansible_connection
+          }}
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Ethernet1
-        enabled: true
-      - name: Ethernet2
-        description: Configured by Ansible
-        speed: "10"
-        duplex: full
-        enabled: false
+      config:
+          - name: Ethernet1
+            enabled: true
+          - name: Ethernet2
+            description: Configured by Ansible
+            speed: "10"
+            duplex: full
+            enabled: false
 
 - name: Use rendered state to convert task input to device specific commands
   register: result
   become: true
   arista.eos.eos_interfaces:
-    config: "{{ config }}"
-    state: rendered
+      config: "{{ config }}"
+      state: rendered
 
 - name: Assert
   ansible.builtin.assert:
-    that:
-      - rendered|symmetric_difference(result.rendered) == []
-      - result['changed'] == false
+      that:
+          - rendered|symmetric_difference(result.rendered) == []
+          - result['changed'] == false

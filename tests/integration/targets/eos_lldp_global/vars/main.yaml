@@ -1,17 +1,17 @@
 ---
 parsed:
-  config:
-    holdtime: 100
-    timer: 3000
-    reinit: 5
-    tlv_select:
-      management_address: false
-      system_description: false
+    config:
+        holdtime: 100
+        timer: 3000
+        reinit: 5
+        tlv_select:
+            management_address: false
+            system_description: false
 
 rendered:
-  - "lldp hold-time 100"
-  - "lldp timer None"
-  - "no lldp tlv transmit port-description"
-  - "lldp tlv transmit system-description"
-  - "no lldp tlv transmit management-address"
-  - "lldp timer reinitialization None"
+    - "lldp hold-time 100"
+    - "lldp timer None"
+    - "no lldp tlv transmit port-description"
+    - "lldp tlv transmit system-description"
+    - "no lldp tlv transmit management-address"
+    - "lldp timer reinitialization None"

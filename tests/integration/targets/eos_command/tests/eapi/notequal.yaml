@@ -4,29 +4,29 @@
 - name: test neq operator
   register: result
   arista.eos.eos_command:
-    commands:
-      - show version
-      - show interfaces Management1 | json
-    wait_for:
-      - result[1].interfaces.Management1.name neq Ethernet
+      commands:
+          - show version
+          - show interfaces Management1 | json
+      wait_for:
+          - result[1].interfaces.Management1.name neq Ethernet
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - result.stdout is defined
+      that:
+          - result.changed == false
+          - result.stdout is defined
 
 - name: test != operator
   register: result
   arista.eos.eos_command:
-    commands:
-      - show version
-      - show interfaces Management1 | json
-    wait_for:
-      - result[1].interfaces.Management1.name != Ethernet
+      commands:
+          - show version
+          - show interfaces Management1 | json
+      wait_for:
+          - result[1].interfaces.Management1.name != Ethernet
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - result.stdout is defined
+      that:
+          - result.changed == false
+          - result.stdout is defined
 
 - ansible.builtin.debug: msg="END eapi/notequal.yaml on connection={{ ansible_connection }}"

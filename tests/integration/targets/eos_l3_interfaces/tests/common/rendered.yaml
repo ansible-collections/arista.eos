@@ -1,23 +1,23 @@
 ---
 - ansible.builtin.set_fact:
-    config:
-      - name: Ethernet1
-        ipv4:
-          - address: 198.51.100.14/24
+      config:
+          - name: Ethernet1
+            ipv4:
+                - address: 198.51.100.14/24
 
-      - name: Ethernet2
-        ipv4:
-          - address: 203.0.113.27/24
+          - name: Ethernet2
+            ipv4:
+                - address: 203.0.113.27/24
 
 - name: Use rendered state to convert task input to device specific commands
   register: result
   become: true
   arista.eos.eos_l3_interfaces:
-    config: "{{ config }}"
-    state: rendered
+      config: "{{ config }}"
+      state: rendered
 
 - name: Assert
   ansible.builtin.assert:
-    that:
-      - rendered|symmetric_difference(result.rendered) == []
-      - result['changed'] == false
+      that:
+          - rendered|symmetric_difference(result.rendered) == []
+          - result['changed'] == false

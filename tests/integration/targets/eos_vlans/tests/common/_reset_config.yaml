@@ -2,29 +2,29 @@
 - name: Reset initial config
   become: true
   arista.eos.eos_config:
-    lines:
-      - "no vlan 1-4094"
-      - "vlan 10"
-      - "   name ten"
-      - "vlan 20"
-      - "   name twenty"
-    match: none
+      lines:
+          - "no vlan 1-4094"
+          - "vlan 10"
+          - "   name ten"
+          - "vlan 20"
+          - "   name twenty"
+      match: none
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: vlans
+      gather_network_resources: vlans
 
 - ansible.builtin.set_fact:
-    expected_config:
-      - vlan_id: 10
-        name: ten
-        state: active
+      expected_config:
+          - vlan_id: 10
+            name: ten
+            state: active
 
-      - vlan_id: 20
-        name: twenty
-        state: active
+          - vlan_id: 20
+            name: twenty
+            state: active
 
 - ansible.builtin.assert:
-    that:
-      - expected_config|symmetric_difference(ansible_facts.network_resources.vlans)
-        == []
+      that:
+          - expected_config|symmetric_difference(ansible_facts.network_resources.vlans)
+            == []

@@ -3,7 +3,7 @@
   register: result
   become: true
   arista.eos.eos_config:
-    lines:
-      - vrf instance VRF4
-      - description VRF4 Description
-      - rd 3:4
+      lines:
+          - vrf instance VRF4
+          - description VRF4 Description
+          - rd 3:4
