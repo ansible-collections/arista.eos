@@ -27,12 +27,9 @@
     that:
       - result.changed == false
 
-<<<<<<< HEAD
 - ansible.builtin.debug:
     msg: " debug_komal {{ inventory_hostname_short }}"
 
-=======
->>>>>>> 041a483 (fixed eos downstream test?)
 - name: teardown
   become: true
   arista.eos.eos_config:
