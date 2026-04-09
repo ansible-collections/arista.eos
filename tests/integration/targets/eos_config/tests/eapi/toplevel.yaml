@@ -1,13 +1,10 @@
 ---
 - ansible.builtin.debug: msg="START eapi/toplevel.yaml"
 
-- ansible.builtin.debug:
-    msg: " debug_komal {{ inventory_hostname_short }}"
-
 - name: setup
   become: true
   arista.eos.eos_config:
-    lines: hostname {{ inventory_hostname_short }}
+    lines: hostname switch
     match: none
 
 - name: configure top level command
@@ -34,7 +31,7 @@
 - name: teardown
   become: true
   arista.eos.eos_config:
-    lines: hostname {{ inventory_hostname_short }}
+    lines: hostname switch
     match: none
 
 - ansible.builtin.debug: msg="END eapi/toplevel.yaml"

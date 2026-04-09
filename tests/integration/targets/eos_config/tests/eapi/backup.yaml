@@ -17,12 +17,14 @@
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
   connection: local
+  become: false
 
 - name: delete backup files
   file:
     path: "{{ item.path }}"
     state: absent
   with_items: "{{backup_files.files|default([])}}"
+  become: false
 
 - name: configure device with config
   become: true
@@ -42,6 +44,7 @@
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
   connection: local
+  become: false
 
 - ansible.builtin.assert:
     that:
