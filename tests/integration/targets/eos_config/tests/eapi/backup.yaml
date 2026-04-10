@@ -16,7 +16,7 @@
     paths: "{{ role_path }}/backup"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
-  connection: local
+  delegate_to: localhost
   become: false
 
 - name: delete backup files
@@ -24,6 +24,7 @@
     path: "{{ item.path }}"
     state: absent
   with_items: "{{backup_files.files|default([])}}"
+  delegate_to: localhost
   become: false
 
 - name: configure device with config
@@ -43,7 +44,7 @@
     paths: "{{ role_path }}/backup"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
-  connection: local
+  delegate_to: localhost
   become: false
 
 - ansible.builtin.assert:

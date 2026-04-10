@@ -8,19 +8,23 @@
   with_items:
     - "{{ role_path }}/backup_test_dir/"
     - "{{ role_path }}/backup/backup.cfg"
+  delegate_to: localhost
+  become: false
 
 - name: collect any backup files
   ansible.builtin.find:
     paths: "{{ role_path }}/backup"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
-  connection: local
+  delegate_to: localhost
 
 - name: delete backup files
   file:
     path: "{{ item.path }}"
     state: absent
   with_items: "{{backup_files.files|default([])}}"
+  delegate_to: localhost
+  become: false
 
 - name: take config backup
   become: true
@@ -37,7 +41,7 @@
     paths: "{{ role_path }}/backup"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
-  connection: local
+  delegate_to: localhost
 
 - ansible.builtin.assert:
     that:
@@ -60,7 +64,7 @@
   ansible.builtin.find:
     paths: "{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}/backup.cfg"
   register: backup_file
-  connection: local
+  delegate_to: localhost
 
 - ansible.builtin.assert:
     that:
@@ -82,7 +86,7 @@
   ansible.builtin.find:
     paths: "{{ role_path }}/backup/backup.cfg"
   register: backup_file
-  connection: local
+  delegate_to: localhost
 
 - ansible.builtin.assert:
     that:
@@ -105,7 +109,7 @@
     paths: "{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_file
-  connection: local
+  delegate_to: localhost
 
 - ansible.builtin.assert:
     that:
