@@ -18,6 +18,8 @@
   register: backup_files
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: delete backup files
   file:
@@ -26,6 +28,8 @@
   with_items: "{{backup_files.files|default([])}}"
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: configure device with config
   become: true
@@ -46,6 +50,8 @@
   register: backup_files
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:

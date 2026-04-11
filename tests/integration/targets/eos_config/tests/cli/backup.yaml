@@ -8,6 +8,8 @@
   register: backup_files
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: setup
   become: true
@@ -26,6 +28,8 @@
   register: backup_files
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: delete backup files
   file:
@@ -34,6 +38,8 @@
   with_items: "{{backup_files.files|default([])}}"
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: configure device with config
   become: true
@@ -54,6 +60,8 @@
   register: backup_files
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:
@@ -68,6 +76,8 @@
     - "{{ role_path }}/backup/backup.cfg"
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: take configuration backup in custom filename and directory path
   become: true
@@ -88,6 +98,8 @@
   register: backup_file
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:
@@ -111,6 +123,8 @@
   register: backup_file
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:
@@ -135,6 +149,8 @@
   register: backup_file
   delegate_to: localhost
   become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:
