@@ -5,6 +5,8 @@
     patterns: "{{ testcase }}.yaml"
   register: shortname_test_cases
   delegate_to: localhost
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: Set test_items for redirection
   ansible.builtin.set_fact:

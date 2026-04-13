@@ -17,6 +17,8 @@
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
   delegate_to: localhost
+  vars:
+    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -27,6 +29,8 @@
     state: absent
   with_items: "{{backup_files.files|default([])}}"
   delegate_to: localhost
+  vars:
+    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -49,6 +53,8 @@
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
   delegate_to: localhost
+  vars:
+    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos

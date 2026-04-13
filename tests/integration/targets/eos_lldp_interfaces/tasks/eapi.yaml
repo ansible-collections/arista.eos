@@ -5,6 +5,8 @@
     patterns: "{{ testcase }}.yaml"
     use_regex: true
   delegate_to: localhost
+  vars:
+    ansible_network_os: arista.eos.eos
   register: test_cases
 
 - name: Collect all eapi test cases
@@ -13,6 +15,8 @@
     patterns: "{{ testcase }}.yaml"
     use_regex: true
   delegate_to: localhost
+  vars:
+    ansible_network_os: arista.eos.eos
   register: eapi_cases
 
 - name: Set files
