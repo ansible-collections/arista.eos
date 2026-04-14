@@ -7,8 +7,6 @@
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -29,8 +27,6 @@
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -41,8 +37,6 @@
     state: absent
   with_items: "{{backup_files.files|default([])}}"
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -65,8 +59,6 @@
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -83,8 +75,6 @@
     - "{{ role_path }}/backup_test_dir/"
     - "{{ role_path }}/backup/backup.cfg"
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -107,8 +97,6 @@
     paths: "{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}/backup.cfg"
   register: backup_file
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -134,8 +122,6 @@
     paths: "{{ role_path }}/backup/backup.cfg"
   register: backup_file
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -162,8 +148,6 @@
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_file
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos

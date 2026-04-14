@@ -9,8 +9,6 @@
     - "{{ role_path }}/backup_test_dir/"
     - "{{ role_path }}/backup/backup.cfg"
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
@@ -30,8 +28,6 @@
     state: absent
   with_items: "{{backup_files.files|default([])}}"
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
   become: false
   vars:
     ansible_network_os: arista.eos.eos
