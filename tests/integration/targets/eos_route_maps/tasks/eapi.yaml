@@ -6,8 +6,6 @@
     use_regex: true
   register: test_cases
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
 
 - name: Collect all eapi test cases
   ansible.builtin.find:
@@ -16,8 +14,6 @@
     use_regex: true
   register: eapi_cases
   delegate_to: localhost
-  vars:
-    ansible_network_os: arista.eos.eos
 
 - name: Set files
   ansible.builtin.set_fact:
