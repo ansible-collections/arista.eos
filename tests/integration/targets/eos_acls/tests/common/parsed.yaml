@@ -1,8 +1,8 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      START eos_acls parsed integration tests on connection={{ ansible_connection
-      }}
+      msg:
+          START eos_acls parsed integration tests on connection={{ ansible_connection
+          }}
 
 - ansible.builtin.include_tasks: _parsed_cfg.yaml
 
@@ -10,22 +10,22 @@
   become: true
   register: acls_facts
   arista.eos.eos_facts:
-    gather_subset:
-      - default
-    gather_network_resources:
-      - acls
+      gather_subset:
+          - default
+      gather_network_resources:
+          - acls
 
 - name: Provide the running configuration for parsing (config to be parsed)
   become: true
   register: result
   arista.eos.eos_acls:
-    running_config: "{{ lookup('file', '_parsed.cfg') }}"
-    state: parsed
+      running_config: "{{ lookup('file', '_parsed.cfg') }}"
+      state: parsed
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - ansible_facts.network_resources.acls|symmetric_difference(result.parsed)
-        == []
+      that:
+          - result.changed == false
+          - ansible_facts.network_resources.acls|symmetric_difference(result.parsed)
+            == []
 
 - ansible.builtin.include_tasks: _remove_config.yaml

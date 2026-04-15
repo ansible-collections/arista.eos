@@ -8,8 +8,8 @@
 # hit remove_default_spec() validate_ip_address() validate_prefix() ComplexList
 - name: setup - remove config used in test
   arista.eos.eos_config:
-    lines:
-      - no ip route 192.168.3.0/24 192.168.0.1
+      lines:
+          - no ip route 192.168.3.0/24 192.168.0.1
   become: true
 
 # - name: configure static route

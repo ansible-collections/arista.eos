@@ -5,37 +5,37 @@
   become: true
   register: eos_eapi_output
   arista.eos.eos_eapi:
-    enable_http: false
-    http_port: 81
-    https_port: 4443
-    enable_local_http: true
-    enable_https: true
-    local_http_port: 8181
+      enable_http: false
+      http_port: 81
+      https_port: 4443
+      enable_local_http: true
+      enable_https: true
+      local_http_port: 8181
 
 - register: http_config
   arista.eos.eos_command:
-    commands:
-      - show management api http-commands | json
+      commands:
+          - show management api http-commands | json
 
 - name: Expect endpoint ports to be set
   ansible.builtin.assert:
-    that:
-      - http_config.stdout[0].httpServer.port == 80
-      - http_config.stdout[0].httpsServer.port == 4443
-      - http_config.stdout[0].localHttpServer.port == 8181
+      that:
+          - http_config.stdout[0].httpServer.port == 80
+          - http_config.stdout[0].httpsServer.port == 4443
+          - http_config.stdout[0].localHttpServer.port == 8181
 
 - name: Change endpoint ports again
   become: true
   register: eos_eapi_output
   arista.eos.eos_eapi:
-    http_port: 80
-    https_port: 4443
-    enable_local_http: true
-    local_http_port: 8181
+      http_port: 80
+      https_port: 4443
+      enable_local_http: true
+      local_http_port: 8181
 
 - name: Expect action to be idempotent
   ansible.builtin.assert:
-    that:
-      - eos_eapi_output.changed == false
+      that:
+          - eos_eapi_output.changed == false
 
 - ansible.builtin.debug: msg="END CLI/CONFIGURE.YAML"

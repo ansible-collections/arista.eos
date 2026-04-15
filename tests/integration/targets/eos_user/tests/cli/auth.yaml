@@ -1,41 +1,41 @@
 ---
 - block:
-    - name: Create user with password
-      become: true
-      arista.eos.eos_user:
-        name: auth_user
-        privilege: 15
-        role: network-operator
-        state: present
-        configured_password: pass123
+      - name: Create user with password
+        become: true
+        arista.eos.eos_user:
+            name: auth_user
+            privilege: 15
+            role: network-operator
+            state: present
+            configured_password: pass123
 
-    - name: test login
-      expect:
-        command:
-          ssh auth_user@{{ ansible_ssh_host }} -o UserKnownHostsFile=/dev/null
-          -o StrictHostKeyChecking=no show version
-        responses:
-          (?i)password: pass123
-      ignore_errors: true
+      - name: test login
+        expect:
+            command:
+                ssh auth_user@{{ ansible_ssh_host }} -o UserKnownHostsFile=/dev/null
+                -o StrictHostKeyChecking=no show version
+            responses:
+                (?i)password: pass123
+        ignore_errors: true
 
-    - name: test login with invalid password (should fail)
-      expect:
-        command:
-          ssh auth_user@{{ ansible_ssh_host }} -o UserKnownHostsFile=/dev/null
-          -o StrictHostKeyChecking=no show version
-        responses:
-          (?i)password: badpass
-      ignore_errors: true
-      register: results
+      - name: test login with invalid password (should fail)
+        expect:
+            command:
+                ssh auth_user@{{ ansible_ssh_host }} -o UserKnownHostsFile=/dev/null
+                -o StrictHostKeyChecking=no show version
+            responses:
+                (?i)password: badpass
+        ignore_errors: true
+        register: results
 
-    - name: check that attempt failed
-      ansible.builtin.assert:
-        that:
-          - results.failed
+      - name: check that attempt failed
+        ansible.builtin.assert:
+            that:
+                - results.failed
   always:
-    - name: delete user
-      become: true
-      register: result
-      arista.eos.eos_user:
-        name: auth_user
-        state: absent
+      - name: delete user
+        become: true
+        register: result
+        arista.eos.eos_user:
+            name: auth_user
+            state: absent

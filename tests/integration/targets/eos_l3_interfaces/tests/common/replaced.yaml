@@ -2,44 +2,44 @@
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Ethernet2
-        ipv4:
-          - address: 203.0.113.205/31
-    other_config:
-      - name: Ethernet1
-        ipv4:
-          - address: 192.0.2.12/24
+      config:
+          - name: Ethernet2
+            ipv4:
+                - address: 203.0.113.205/31
+      other_config:
+          - name: Ethernet1
+            ipv4:
+                - address: 192.0.2.12/24
 
-          - address: 203.0.113.27/31
-            secondary: true
+                - address: 203.0.113.27/31
+                  secondary: true
 
-      - name: Management1
-        ipv4:
-          - address: dhcp
+          - name: Management1
+            ipv4:
+                - address: dhcp
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: l3_interfaces
+      gather_network_resources: l3_interfaces
 
 - name: Replace device configuration of specified L3 interfaces with provided configuration.
   register: result
   become: true
   arista.eos.eos_l3_interfaces:
-    config: "{{ config }}"
-    state: replaced
+      config: "{{ config }}"
+      state: replaced
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
-        == []
+      that:
+          - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
+            == []
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: l3_interfaces
+      gather_network_resources: l3_interfaces
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after)
-        == []
+      that:
+          - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after)
+            == []
   become: true

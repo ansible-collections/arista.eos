@@ -2,37 +2,37 @@
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Ethernet1
-    expected_config:
-      - name: Ethernet2
-        transmit: false
+      config:
+          - name: Ethernet1
+      expected_config:
+          - name: Ethernet2
+            transmit: false
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lldp_interfaces
+      gather_network_resources: lldp_interfaces
 
 - name: Returns interface lldp parameterss to default parameters
   register: result
   become: true
   arista.eos.eos_lldp_interfaces:
-    config: "{{ config }}"
-    state: deleted
+      config: "{{ config }}"
+      state: deleted
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.before)
-        == []
+      that:
+          - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.before)
+            == []
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lldp_interfaces
+      gather_network_resources: lldp_interfaces
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.after)
-        == []
+      that:
+          - ansible_facts.network_resources.lldp_interfaces|symmetric_difference(result.after)
+            == []
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lldp_interfaces == expected_config
+      that:
+          - ansible_facts.network_resources.lldp_interfaces == expected_config

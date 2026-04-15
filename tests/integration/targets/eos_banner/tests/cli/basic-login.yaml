@@ -4,21 +4,21 @@
 - name: Remove previous login banner
   become: true
   arista.eos.eos_config:
-    lines: no banner login
+      lines: no banner login
 
 - name: Create login banner
   become: true
   register: result
   arista.eos.eos_banner: &id001
-    banner: login
-    text: "Junk login banner\n   \nover multiple lines\n"
-    state: present
+      banner: login
+      text: "Junk login banner\n   \nover multiple lines\n"
+      state: present
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
-      - "'banner login' in result.commands[0]"
-      - "'ansible_1' in result.session_name"
+      that:
+          - result.changed == true
+          - "'banner login' in result.commands[0]"
+          - "'ansible_1' in result.session_name"
 
 - name: Create login banner again (idempotent)
   become: true
@@ -26,23 +26,23 @@
   arista.eos.eos_banner: *id001
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - result.commands | length == 0
-      - result.session_name is not defined
+      that:
+          - result.changed == false
+          - result.commands | length == 0
+          - result.session_name is not defined
 
 - name: Remove login
   become: true
   register: result
   arista.eos.eos_banner: &id002
-    banner: login
-    state: absent
+      banner: login
+      state: absent
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
-      - "'no banner login' in result.commands"
-      - "'ansible_1' in result.session_name"
+      that:
+          - result.changed == true
+          - "'no banner login' in result.commands"
+          - "'ansible_1' in result.session_name"
 
 - name: Remove login again (idempotent)
   become: true
@@ -50,7 +50,7 @@
   arista.eos.eos_banner: *id002
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - result.commands | length == 0
-      - result.session_name is not defined
+      that:
+          - result.changed == false
+          - result.commands | length == 0
+          - result.session_name is not defined

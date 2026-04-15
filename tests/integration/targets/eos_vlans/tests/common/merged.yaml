@@ -2,46 +2,46 @@
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - ansible.builtin.set_fact:
-    config:
-      - vlan_id: 20
-        state: suspend
+      config:
+          - vlan_id: 20
+            state: suspend
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: vlans
+      gather_network_resources: vlans
 
 - name: Merge provided configuration with device configuration
   register: result
   become: true
   arista.eos.eos_vlans:
-    config: "{{ config }}"
-    state: merged
+      config: "{{ config }}"
+      state: merged
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.vlans|symmetric_difference(result.before)
-        == []
+      that:
+          - ansible_facts.network_resources.vlans|symmetric_difference(result.before)
+            == []
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: vlans
+      gather_network_resources: vlans
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.vlans|symmetric_difference(result.after)
-        == []
+      that:
+          - ansible_facts.network_resources.vlans|symmetric_difference(result.after)
+            == []
 
 - ansible.builtin.set_fact:
-    expected_config:
-      - vlan_id: 10
-        name: ten
-        state: active
+      expected_config:
+          - vlan_id: 10
+            name: ten
+            state: active
 
-      - vlan_id: 20
-        name: twenty
-        state: suspend
+          - vlan_id: 20
+            name: twenty
+            state: suspend
 
 - ansible.builtin.assert:
-    that:
-      - expected_config|symmetric_difference(ansible_facts.network_resources.vlans)
-        == []
+      that:
+          - expected_config|symmetric_difference(ansible_facts.network_resources.vlans)
+            == []

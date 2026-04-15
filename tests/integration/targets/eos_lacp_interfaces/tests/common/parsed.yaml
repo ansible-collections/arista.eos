@@ -1,24 +1,24 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      START eos_lacp_interfaces parsed integration tests on connection={{ ansible_connection
-      }}
+      msg:
+          START eos_lacp_interfaces parsed integration tests on connection={{ ansible_connection
+          }}
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Ethernet1
-        timer: fast
-        port_priority: 30
-      - name: Ethernet2
+      config:
+          - name: Ethernet1
+            timer: fast
+            port_priority: 30
+          - name: Ethernet2
 
 - name: Provide the running configuration for parsing (config to be parsed)
   become: true
   register: result
   arista.eos.eos_lacp_interfaces:
-    running_config: "{{ lookup('file', '_parsed.cfg') }}"
-    state: parsed
+      running_config: "{{ lookup('file', '_parsed.cfg') }}"
+      state: parsed
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - config == result['parsed']
+      that:
+          - result.changed == false
+          - config == result['parsed']

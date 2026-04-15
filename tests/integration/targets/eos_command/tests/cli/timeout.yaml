@@ -5,14 +5,14 @@
   register: result
   ignore_errors: true
   arista.eos.eos_command:
-    commands:
-      - show version
-    wait_for:
-      - result[0] contains bad_value_string
+      commands:
+          - show version
+      wait_for:
+          - result[0] contains bad_value_string
 
 - ansible.builtin.assert:
-    that:
-      - result.failed == true
-      - result.msg is defined
+      that:
+          - result.failed == true
+          - result.msg is defined
 
 - ansible.builtin.debug: msg="END cli/timeout.yaml on connection={{ ansible_connection }}"

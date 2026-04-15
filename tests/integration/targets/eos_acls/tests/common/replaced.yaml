@@ -1,121 +1,121 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      Start eos_acls replaced integration tests ansible_connection={{ ansible_connection
-      }}
+      msg:
+          Start eos_acls replaced integration tests ansible_connection={{ ansible_connection
+          }}
 
 - ansible.builtin.include_tasks: _populate.yaml
 
 - ansible.builtin.set_fact:
-    config:
-      - afi: ipv4
-        acls:
-          - name: test1
-            aces:
-              - sequence: 10
-                grant: permit
-                protocol: ospf
-                source:
-                  any: true
-                destination:
-                  any: true
-                log: true
-
-          - name: test4
-            aces:
-              - grant: permit
-                sequence: 10
-                source:
-                  any: true
-                  port_protocol:
-                    eq: smtp
-                destination:
-                  any: true
-                  port_protocol:
-                    eq: www
-                protocol: tcp
-                ttl:
-                  eq: "55"
-
-          - name: test2
-            aces:
-              - sequence: 11
-                grant: permit
-                protocol: tcp
-                source:
-                  host: 192.168.2.1
-                  port_protocol:
-                    eq: "50702"
-                destination:
-                  host: 192.168.1.1
-      - afi: ipv6
-        acls:
-          - name: test2
-            standard: true
-            aces:
-              - grant: permit
-                sequence: 10
-                log: "true"
-                source:
-                  any: true
-
-- block:
-    - name: replace attributes with given acls.
-      become: true
-      register: result
-      arista.eos.eos_acls: &id001
-        config:
+      config:
           - afi: ipv4
             acls:
-              - name: test1
-                aces:
-                  - grant: permit
-                    sequence: 10
-                    protocol: ospf
-                    source:
-                      any: true
-                    destination:
-                      any: true
-                    log: true
-              - name: test2
-                aces:
-                  - sequence: 11
-                    grant: permit
-                    protocol: tcp
-                    source:
-                      host: 192.168.2.1
-                      port_protocol:
-                        eq: "50702"
-                    destination:
-                      host: 192.168.1.1
-        state: replaced
+                - name: test1
+                  aces:
+                      - sequence: 10
+                        grant: permit
+                        protocol: ospf
+                        source:
+                            any: true
+                        destination:
+                            any: true
+                        log: true
 
-    - become: true
-      arista.eos.eos_facts:
-        gather_network_resources: acls
+                - name: test4
+                  aces:
+                      - grant: permit
+                        sequence: 10
+                        source:
+                            any: true
+                            port_protocol:
+                                eq: smtp
+                        destination:
+                            any: true
+                            port_protocol:
+                                eq: www
+                        protocol: tcp
+                        ttl:
+                            eq: "55"
 
-    - ansible.builtin.assert:
-        that:
-          - result.commands|length == 7
-          - result.changed == true
-          - ansible_facts.network_resources.acls|symmetric_difference(result.after)
-            == []
-      become: true
+                - name: test2
+                  aces:
+                      - sequence: 11
+                        grant: permit
+                        protocol: tcp
+                        source:
+                            host: 192.168.2.1
+                            port_protocol:
+                                eq: "50702"
+                        destination:
+                            host: 192.168.1.1
+          - afi: ipv6
+            acls:
+                - name: test2
+                  standard: true
+                  aces:
+                      - grant: permit
+                        sequence: 10
+                        log: "true"
+                        source:
+                            any: true
 
-    - name: Idempotency check
-      become: true
-      register: result
-      arista.eos.eos_acls: *id001
+- block:
+      - name: replace attributes with given acls.
+        become: true
+        register: result
+        arista.eos.eos_acls: &id001
+            config:
+                - afi: ipv4
+                  acls:
+                      - name: test1
+                        aces:
+                            - grant: permit
+                              sequence: 10
+                              protocol: ospf
+                              source:
+                                  any: true
+                              destination:
+                                  any: true
+                              log: true
+                      - name: test2
+                        aces:
+                            - sequence: 11
+                              grant: permit
+                              protocol: tcp
+                              source:
+                                  host: 192.168.2.1
+                                  port_protocol:
+                                      eq: "50702"
+                              destination:
+                                  host: 192.168.1.1
+            state: replaced
 
-    - become: true
-      arista.eos.eos_facts:
-        gather_network_resources: acls
+      - become: true
+        arista.eos.eos_facts:
+            gather_network_resources: acls
 
-    - ansible.builtin.assert:
-        that:
-          - result.changed == false
-          - result.commands|length == 0
-          - ansible_facts.network_resources.acls|symmetric_difference(result.before)
-            == []
+      - ansible.builtin.assert:
+            that:
+                - result.commands|length == 7
+                - result.changed == true
+                - ansible_facts.network_resources.acls|symmetric_difference(result.after)
+                  == []
+        become: true
+
+      - name: Idempotency check
+        become: true
+        register: result
+        arista.eos.eos_acls: *id001
+
+      - become: true
+        arista.eos.eos_facts:
+            gather_network_resources: acls
+
+      - ansible.builtin.assert:
+            that:
+                - result.changed == false
+                - result.commands|length == 0
+                - ansible_facts.network_resources.acls|symmetric_difference(result.before)
+                  == []
   always:
-    - ansible.builtin.include_tasks: _remove_config.yaml
+      - ansible.builtin.include_tasks: _remove_config.yaml

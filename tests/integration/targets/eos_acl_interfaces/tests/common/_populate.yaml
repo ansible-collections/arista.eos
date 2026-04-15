@@ -2,26 +2,26 @@
 - name: Setup
   become: true
   arista.eos.eos_acl_interfaces:
-    config:
-      - name: "{{ interfaces_lst['int1'] }}"
-        access_groups:
-          - afi: ipv4
-            acls:
-              - name: aclv401
-                direction: in
+      config:
+          - name: "{{ interfaces_lst['int1'] }}"
+            access_groups:
+                - afi: ipv4
+                  acls:
+                      - name: aclv401
+                        direction: in
 
-              - name: aclv402
-                direction: out
+                      - name: aclv402
+                        direction: out
 
-          - afi: ipv6
-            acls:
-              - name: aclv601
-                direction: out
+                - afi: ipv6
+                  acls:
+                      - name: aclv601
+                        direction: out
 
-      - name: "{{ interfaces_lst['int2'] }}"
-        access_groups:
-          - afi: ipv6
-            acls:
-              - name: aclv601
-                direction: in
-    state: merged
+          - name: "{{ interfaces_lst['int2'] }}"
+            access_groups:
+                - afi: ipv6
+                  acls:
+                      - name: aclv601
+                        direction: in
+      state: merged

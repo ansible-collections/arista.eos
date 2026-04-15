@@ -2,47 +2,47 @@
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - ansible.builtin.set_fact:
-    config1:
-      - name: Ethernet2
-        description: Configured by Ansible
-        speed: "10"
-        duplex: full
-        enabled: false
-    config2:
-      - name: Ethernet1
-        mode: layer3
-        enabled: true
-        description: Config to be reverted
+      config1:
+          - name: Ethernet2
+            description: Configured by Ansible
+            speed: "10"
+            duplex: full
+            enabled: false
+      config2:
+          - name: Ethernet1
+            mode: layer3
+            enabled: true
+            description: Config to be reverted
 
 - name: Merge provided configuration with device configuration( Base config )
   register: baseconfig
   become: true
   arista.eos.eos_interfaces:
-    config: "{{ config1 }}"
-    state: merged
+      config: "{{ config1 }}"
+      state: merged
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: interfaces
+      gather_network_resources: interfaces
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.interfaces|symmetric_difference(baseconfig.after) == []
+      that:
+          - ansible_facts.network_resources.interfaces|symmetric_difference(baseconfig.after) == []
 
 - name: Apply the provided configuration (config to be reverted)
   become: true
   register: result
   arista.eos.eos_interfaces:
-    config: "{{ config2 }}"
-    state: merged
+      config: "{{ config2 }}"
+      state: merged
 
 - name: Revert back to base config using facts round trip
   become: true
   register: revert
   arista.eos.eos_interfaces:
-    config: "{{ ansible_facts['network_resources']['interfaces'] }}"
-    state: overridden
+      config: "{{ ansible_facts['network_resources']['interfaces'] }}"
+      state: overridden
 
 - name: Assert that config was reverted
   ansible.builtin.assert:
-    that: "{{ baseconfig['after'] | symmetric_difference(revert['after']) == [] }}"
+      that: "{{ baseconfig['after'] | symmetric_difference(revert['after']) == [] }}"

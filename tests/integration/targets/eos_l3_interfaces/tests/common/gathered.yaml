@@ -1,24 +1,24 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      START eos_l3_interfaces gathered integration tests on connection={{ ansible_connection
-      }}
+      msg:
+          START eos_l3_interfaces gathered integration tests on connection={{ ansible_connection
+          }}
 
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - block:
-    - name: Gathered the provided configuration with the exisiting running configuration
-      become: true
-      register: result
-      arista.eos.eos_l3_interfaces:
-        config:
-        state: gathered
+      - name: Gathered the provided configuration with the exisiting running configuration
+        become: true
+        register: result
+        arista.eos.eos_l3_interfaces:
+            config:
+            state: gathered
 
-    - become: true
-      arista.eos.eos_facts:
-        gather_network_resources: l3_interfaces
+      - become: true
+        arista.eos.eos_facts:
+            gather_network_resources: l3_interfaces
 
-    - ansible.builtin.assert:
-        that:
-          - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.gathered)|length
-            == 0
+      - ansible.builtin.assert:
+            that:
+                - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.gathered)|length
+                  == 0

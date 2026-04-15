@@ -2,37 +2,37 @@
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Ethernet1
-        ipv4:
-          - address: 198.51.100.14/24
+      config:
+          - name: Ethernet1
+            ipv4:
+                - address: 198.51.100.14/24
 
-      - name: Ethernet2
-        ipv4:
-          - address: 203.0.113.227/31
+          - name: Ethernet2
+            ipv4:
+                - address: 203.0.113.227/31
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: l3_interfaces
+      gather_network_resources: l3_interfaces
 
 - name: Merge provided configuration with device configuration.
   register: result
   become: true
   arista.eos.eos_l3_interfaces:
-    config: "{{ config }}"
-    state: merged
+      config: "{{ config }}"
+      state: merged
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
-        == []
+      that:
+          - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.before)
+            == []
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: l3_interfaces
+      gather_network_resources: l3_interfaces
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after)
-        == []
+      that:
+          - ansible_facts.network_resources.l3_interfaces|symmetric_difference(result.after)
+            == []
   become: true

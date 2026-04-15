@@ -1,61 +1,61 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      START eos_acl_interfaces empty_config integration tests on connection={{
-      ansible_connection }}
+      msg:
+          START eos_acl_interfaces empty_config integration tests on connection={{
+          ansible_connection }}
 
 - name: Merged with empty config should give appropriate error message
   register: result
   ignore_errors: true
   arista.eos.eos_acl_interfaces:
-    config:
-    state: merged
+      config:
+      state: merged
 
 - ansible.builtin.assert:
-    that:
-      - result.msg == 'value of config parameter must not be empty for state merged'
+      that:
+          - result.msg == 'value of config parameter must not be empty for state merged'
 
 - name: Replaced with empty config should give appropriate error message
   register: result
   ignore_errors: true
   arista.eos.eos_acl_interfaces:
-    config:
-    state: replaced
+      config:
+      state: replaced
 
 - ansible.builtin.assert:
-    that:
-      - result.msg == 'value of config parameter must not be empty for state replaced'
+      that:
+          - result.msg == 'value of config parameter must not be empty for state replaced'
 
 - name: Overridden with empty config should give appropriate error message
   register: result
   ignore_errors: true
   arista.eos.eos_acl_interfaces:
-    config:
-    state: overridden
+      config:
+      state: overridden
 
 - ansible.builtin.assert:
-    that:
-      - result.msg == 'value of config parameter must not be empty for state overridden'
+      that:
+          - result.msg == 'value of config parameter must not be empty for state overridden'
 
 - name: Rendered with empty config should give appropriate error message
   register: result
   ignore_errors: true
   arista.eos.eos_acl_interfaces:
-    config:
-    state: rendered
+      config:
+      state: rendered
 
 - ansible.builtin.assert:
-    that:
-      - result.msg == 'value of config parameter must not be empty for state rendered'
+      that:
+          - result.msg == 'value of config parameter must not be empty for state rendered'
 
 - name: Parsed with empty config should give appropriate error message
   register: result
   ignore_errors: true
   arista.eos.eos_acl_interfaces:
-    running_config:
-    state: parsed
+      running_config:
+      state: parsed
 
 - ansible.builtin.assert:
-    that:
-      - result.msg == 'value of running_config parameter must not be empty for state
-        parsed'
+      that:
+          - result.msg == 'value of running_config parameter must not be empty for state
+            parsed'

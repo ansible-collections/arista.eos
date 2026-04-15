@@ -3,9 +3,9 @@
   hosts: eos
   gather_facts: false
   tasks:
-    - name: Change 'ansible' user password to match test suite expectations
-      arista.eos.eos_user:
-        name: ansible
-        configured_password: "{{ lookup('env', 'ANSIBLE_TEST_PASSWORD') }}"
-        update_password: always
-        state: present
+      - name: Change 'ansible' user password to match test suite expectations
+        arista.eos.eos_user:
+            name: ansible
+            configured_password: "{{ lookup('env', 'ANSIBLE_TEST_PASSWORD') }}"
+            update_password: always
+            state: present

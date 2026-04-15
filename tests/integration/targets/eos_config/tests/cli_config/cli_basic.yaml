@@ -1,22 +1,22 @@
 ---
 - ansible.builtin.debug:
-    msg="START cli_config/cli_basic.yaml on connection={{ ansible_connection
-    }}"
+      msg="START cli_config/cli_basic.yaml on connection={{ ansible_connection
+      }}"
 
 - name: setup
   become: true
   ansible.netcommon.cli_config: &id002
-    config: "interface Ethernet2\nno description\nno shutdown\n"
+      config: "interface Ethernet2\nno description\nno shutdown\n"
 
 - name: configure device with config
   register: result
   become: true
   ansible.netcommon.cli_config: &id001
-    config: "{{ lookup('template', 'basic/config.j2') }}"
+      config: "{{ lookup('template', 'basic/config.j2') }}"
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
+      that:
+          - result.changed == true
 
 - name: Idempotence
   register: result
@@ -24,13 +24,13 @@
   ansible.netcommon.cli_config: *id001
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
+      that:
+          - result.changed == false
 
 - name: teardown
   become: true
   ansible.netcommon.cli_config: *id002
 
 - ansible.builtin.debug:
-    msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection
-    }}"
+      msg="END cli_config/cli_basic.yaml on connection={{ ansible_connection
+      }}"

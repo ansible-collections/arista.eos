@@ -1,39 +1,39 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      Start eos_acl_interfaces rendered integration tests ansible_connection={{
-      ansible_connection }}
+      msg:
+          Start eos_acl_interfaces rendered integration tests ansible_connection={{
+          ansible_connection }}
 
 - block:
-    - name: render given acl interfaces configuration
-      become: true
-      register: result
-      arista.eos.eos_acl_interfaces:
-        config:
-          - name: "{{ interfaces_lst['int1'] }}"
-            access_groups:
-              - afi: ipv4
-                acls:
-                  - name: aclv401
-                    direction: in
+      - name: render given acl interfaces configuration
+        become: true
+        register: result
+        arista.eos.eos_acl_interfaces:
+            config:
+                - name: "{{ interfaces_lst['int1'] }}"
+                  access_groups:
+                      - afi: ipv4
+                        acls:
+                            - name: aclv401
+                              direction: in
 
-                  - name: aclv402
-                    direction: out
+                            - name: aclv402
+                              direction: out
 
-              - afi: ipv6
-                acls:
-                  - name: aclv601
-                    direction: out
+                      - afi: ipv6
+                        acls:
+                            - name: aclv601
+                              direction: out
 
-          - name: "{{ interfaces_lst['int2'] }}"
-            access_groups:
-              - afi: ipv6
-                acls:
-                  - name: aclv601
-                    direction: in
-        state: rendered
+                - name: "{{ interfaces_lst['int2'] }}"
+                  access_groups:
+                      - afi: ipv6
+                        acls:
+                            - name: aclv601
+                              direction: in
+            state: rendered
 
-    - ansible.builtin.assert:
-        that:
-          - result.changed == false
-          - result.rendered|symmetric_difference(merged.commands) == []
+      - ansible.builtin.assert:
+            that:
+                - result.changed == false
+                - result.rendered|symmetric_difference(merged.commands) == []

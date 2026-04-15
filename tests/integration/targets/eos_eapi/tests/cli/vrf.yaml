@@ -6,37 +6,37 @@
   register: eos_eapi_output
   ignore_errors: true
   arista.eos.eos_eapi:
-    vrf: foobar
+      vrf: foobar
 
 - name: Ensure that setting VRF failed
   ansible.builtin.assert:
-    that:
-      - eos_eapi_output.failed == true
-      - eos_eapi_output.changed == false
-      - eos_eapi_output.msg == "vrf `foobar` is not configured on the system"
+      that:
+          - eos_eapi_output.failed == true
+          - eos_eapi_output.changed == false
+          - eos_eapi_output.msg == "vrf `foobar` is not configured on the system"
 
 - name: Set VRF to default
   become: true
   register: eos_eapi_output
   ignore_errors: true
   arista.eos.eos_eapi:
-    vrf: default
+      vrf: default
 
 - name: Set VRF to default again (idempotent)
   become: true
   register: eos_eapi_output
   arista.eos.eos_eapi:
-    vrf: default
+      vrf: default
 
 - name: Ensure idempotent
   ansible.builtin.assert:
-    that:
-      - eos_eapi_output.changed == false
+      that:
+          - eos_eapi_output.changed == false
 
 - name: DEBUG show vrf
   register: eos_eapi_output
   when: false
   arista.eos.eos_command:
-    commands: show vrf
+      commands: show vrf
 
 - ansible.builtin.debug: msg="END cli/vrf.yaml on connection={{ ansible_connection }}"

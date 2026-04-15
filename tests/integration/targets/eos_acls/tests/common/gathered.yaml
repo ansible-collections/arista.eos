@@ -1,37 +1,37 @@
 ---
 - ansible.builtin.debug:
-    msg:
-      START eos_acls gathered integration tests on connection={{ ansible_connection
-      }}
+      msg:
+          START eos_acls gathered integration tests on connection={{ ansible_connection
+          }}
 
 - ansible.builtin.include_tasks: _populate.yaml
 
 - block:
-    - name: Gathered the provided configuration with the exisiting running configuration
-      become: true
-      register: result
-      arista.eos.eos_acls: &id001
-        config:
-        state: gathered
+      - name: Gathered the provided configuration with the exisiting running configuration
+        become: true
+        register: result
+        arista.eos.eos_acls: &id001
+            config:
+            state: gathered
 
-    - become: true
-      arista.eos.eos_facts:
-        gather_network_resources: acls
+      - become: true
+        arista.eos.eos_facts:
+            gather_network_resources: acls
 
-    - name: Assert
-      ansible.builtin.assert:
-        that:
-          - ansible_facts.network_resources.acls | symmetric_difference(result.gathered)
-            == []
+      - name: Assert
+        ansible.builtin.assert:
+            that:
+                - ansible_facts.network_resources.acls | symmetric_difference(result.gathered)
+                  == []
 
-    - name: Gather the existing running configuration (IDEMPOTENT)
-      become: true
-      register: result
-      arista.eos.eos_acls: *id001
+      - name: Gather the existing running configuration (IDEMPOTENT)
+        become: true
+        register: result
+        arista.eos.eos_acls: *id001
 
-    - name: Assert that the previous task was idempotent
-      ansible.builtin.assert:
-        that:
-          - result['changed'] == false
+      - name: Assert that the previous task was idempotent
+        ansible.builtin.assert:
+            that:
+                - result['changed'] == false
   always:
-    - ansible.builtin.include_tasks: _remove_config.yaml
+      - ansible.builtin.include_tasks: _remove_config.yaml

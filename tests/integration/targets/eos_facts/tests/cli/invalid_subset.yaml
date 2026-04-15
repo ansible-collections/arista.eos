@@ -1,20 +1,20 @@
 ---
 - ansible.builtin.debug:
-    msg="START cli/invalid_subset.yaml on connection={{ ansible_connection
-    }}"
+      msg="START cli/invalid_subset.yaml on connection={{ ansible_connection
+      }}"
 
 - name: test invalid subset (foobar)
   become: true
   register: result
   ignore_errors: true
   arista.eos.eos_facts:
-    gather_subset:
-      - foobar
+      gather_subset:
+          - foobar
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
-      - result.failed == true
-      - "'Subset must be one of' in result.msg"
+      that:
+          - result.changed == false
+          - result.failed == true
+          - "'Subset must be one of' in result.msg"
 
 - ansible.builtin.debug: msg="END cli/invalid_subset.yaml on connection={{ ansible_connection }}"

@@ -2,48 +2,48 @@
 - ansible.builtin.include_tasks: _reset_config.yaml
 
 - ansible.builtin.set_fact:
-    config:
-      - name: Port-Channel10
-        members:
-          - member: Ethernet2
-            mode: "on"
-    other_config:
-      - name: Port-Channel5
-        members:
-          - member: Ethernet1
-            mode: "on"
+      config:
+          - name: Port-Channel10
+            members:
+                - member: Ethernet2
+                  mode: "on"
+      other_config:
+          - name: Port-Channel5
+            members:
+                - member: Ethernet1
+                  mode: "on"
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lag_interfaces
+      gather_network_resources: lag_interfaces
 
 - name: Replace device configuration of specified LAGs with provided configuration.
   become: true
   register: result
   arista.eos.eos_lag_interfaces:
-    config: "{{ config }}"
-    state: replaced
+      config: "{{ config }}"
+      state: replaced
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length
-        == 0
+      that:
+          - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.before)|length
+            == 0
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lag_interfaces
+      gather_network_resources: lag_interfaces
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.after)|length
-        == 0
+      that:
+          - ansible_facts.network_resources.lag_interfaces|symmetric_difference(result.after)|length
+            == 0
 
 - ansible.builtin.set_fact:
-    expected_config: "{{ config + other_config }}"
+      expected_config: "{{ config + other_config }}"
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lag_interfaces|symmetric_difference(expected_config)|length
-        == 0
+      that:
+          - ansible_facts.network_resources.lag_interfaces|symmetric_difference(expected_config)|length
+            == 0
 
 - ansible.builtin.include_tasks: _reset_config.yaml

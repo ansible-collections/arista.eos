@@ -4,38 +4,38 @@
 - name: setup
   become: true
   arista.eos.eos_config:
-    lines: no ip access-list test
-    match: none
+      lines: no ip access-list test
+      match: none
 
 - name: configure sub level command
   become: true
   register: result
   arista.eos.eos_config:
-    lines: 10 permit ip any any log
-    parents: ip access-list test
-    after: exit
+      lines: 10 permit ip any any log
+      parents: ip access-list test
+      after: exit
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == true
-      - "'ip access-list test' in result.updates"
-      - "'10 permit ip any any log' in result.updates"
+      that:
+          - result.changed == true
+          - "'ip access-list test' in result.updates"
+          - "'10 permit ip any any log' in result.updates"
 
 - name: configure sub level command idempotent check
   become: true
   register: result
   arista.eos.eos_config:
-    lines: 10 permit ip any any log
-    parents: ip access-list test
+      lines: 10 permit ip any any log
+      parents: ip access-list test
 
 - ansible.builtin.assert:
-    that:
-      - result.changed == false
+      that:
+          - result.changed == false
 
 - name: teardown
   become: true
   arista.eos.eos_config:
-    lines: no ip access-list test
-    match: none
+      lines: no ip access-list test
+      match: none
 
 - ansible.builtin.debug: msg="END eapi/sublevel.yaml"

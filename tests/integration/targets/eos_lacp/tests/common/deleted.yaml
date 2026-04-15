@@ -3,26 +3,26 @@
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lacp
+      gather_network_resources: lacp
 
 - name: Returns lacp to default parameters
   register: result
   become: true
   arista.eos.eos_lacp:
-    state: deleted
+      state: deleted
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lacp == result.before
+      that:
+          - ansible_facts.network_resources.lacp == result.before
 
 - become: true
   arista.eos.eos_facts:
-    gather_network_resources: lacp
+      gather_network_resources: lacp
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lacp == result.after
+      that:
+          - ansible_facts.network_resources.lacp == result.after
 
 - ansible.builtin.assert:
-    that:
-      - ansible_facts.network_resources.lacp == {}
+      that:
+          - ansible_facts.network_resources.lacp == {}
