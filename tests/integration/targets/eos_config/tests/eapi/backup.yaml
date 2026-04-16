@@ -16,13 +16,20 @@
     paths: "{{ role_path }}/backup"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
-  connection: local
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: delete backup files
   file:
     path: "{{ item.path }}"
     state: absent
   with_items: "{{backup_files.files|default([])}}"
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: configure device with config
   become: true
@@ -41,7 +48,10 @@
     paths: "{{ role_path }}/backup"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
-  connection: local
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:

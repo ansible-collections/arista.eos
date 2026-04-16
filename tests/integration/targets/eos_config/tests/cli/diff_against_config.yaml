@@ -5,7 +5,7 @@
 - name: setup
   become: true
   arista.eos.eos_config:
-    lines: hostname {{ inventory_hostname_short }}
+    lines: hostname switch
     match: none
 
 - block:
@@ -42,7 +42,7 @@
     - name: teardown
       become: true
       arista.eos.eos_config:
-        lines: hostname {{ inventory_hostname_short }}
+        lines: hostname switch
         match: none
 
 - ansible.builtin.debug: msg="END cli/diff_against_config.yaml on connection={{ ansible_connection }}"
