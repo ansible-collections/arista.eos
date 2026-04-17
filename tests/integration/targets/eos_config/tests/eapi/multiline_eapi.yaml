@@ -1,0 +1,194 @@
+---
+# Integration tests for multiline eAPI block handling (banner + code unit / RCF).
+#
+# Rationale: edit_config() in eos.py assembles {"cmd": ..., "input": ...} dicts
+# for commands that require multiline input over eAPI.  These tests exercise that
+# path end-to-end on a real device so we catch any breakage that unit tests
+# (which mock the connection) cannot.
+
+- ansible.builtin.debug:
+    msg: "START eapi/multiline_eapi.yaml on connection={{ ansible_connection }}"
+
+# ---------------------------------------------------------------------------
+# Teardown helper — run first to guarantee a clean slate
+# ---------------------------------------------------------------------------
+
+- name: teardown - remove login banner
+  become: true
+  arista.eos.eos_config:
+    lines: no banner login
+    match: none
+
+# ---------------------------------------------------------------------------
+# Banner block — regression guard for existing multiline eAPI behaviour
+# ---------------------------------------------------------------------------
+
+- name: Set login banner with multiline text via eos_config
+  become: true
+  register: result
+  arista.eos.eos_config:
+    lines:
+      - "banner login"
+      - "This is the first line."
+      - "This is the second line."
+      - "EOF"
+    match: none
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+      - "'banner login' in result.updates"
+      - "'This is the first line.' in result.updates"
+      - "'This is the second line.' in result.updates"
+
+- name: Verify banner content was applied to the device
+  register: banner_output
+  arista.eos.eos_command:
+    commands:
+      - show banner login
+
+- ansible.builtin.assert:
+    that:
+      - "'This is the first line.' in banner_output.stdout[0]"
+      - "'This is the second line.' in banner_output.stdout[0]"
+    fail_msg: >-
+      Banner text not found on device after eAPI apply.
+      Device output: {{ banner_output.stdout[0] }}
+
+- name: Set same login banner again (idempotency check)
+  become: true
+  register: result
+  arista.eos.eos_config:
+    lines:
+      - "banner login"
+      - "This is the first line."
+      - "This is the second line."
+      - "EOF"
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+    fail_msg: >-
+      Expected changed=false on second identical banner application
+      but got changed={{ result.changed }}.  The multiline eAPI block
+      may not have been assembled correctly, causing a spurious diff.
+
+- name: teardown - remove login banner
+  become: true
+  arista.eos.eos_config:
+    lines: no banner login
+    match: none
+
+# ---------------------------------------------------------------------------
+# Code unit / RCF block — validates brace preservation over eAPI
+#
+# Prior to this fix, NetworkConfig stripped lines consisting only of `}` so
+# the closing brace of a function body was silently dropped when sent via
+# eAPI, producing invalid RCF syntax on the device.
+#
+# code unit blocks require replace=config because that is the only path
+# that bypasses NetworkConfig (which strips `}`) before the lines reach
+# edit_config for multiline eAPI block assembly.
+# ---------------------------------------------------------------------------
+
+- name: rcf teardown - remove code unit if present from a prior run
+  become: true
+  ignore_errors: true
+  arista.eos.eos_config:
+    lines:
+      - no code unit ANSIBLE_TEST_RCF
+    parents:
+      - router general
+      - control-functions
+    match: none
+
+- name: rcf - snapshot entire running config
+  register: snapshot
+  arista.eos.eos_command:
+    commands:
+      - show running-config
+
+- name: rcf - create temp file on controller
+  delegate_to: localhost
+  ansible.builtin.tempfile:
+    suffix: .cfg
+  register: rcf_tmpfile
+
+- name: rcf - write snapshot + RCF block to temp file
+  delegate_to: localhost
+  ansible.builtin.copy:
+    content: "{{ snapshot.stdout[0] | regex_replace('\nend\\s*$', '') }}\n{{ rcf_block }}"
+    dest: "{{ rcf_tmpfile.path }}"
+  vars:
+    rcf_block: |
+      router general
+         control-functions
+            code unit ANSIBLE_TEST_RCF
+               function testFunc() {
+                   return true;
+               }
+            EOF
+
+- name: rcf - push snapshot + RCF block via replace=config
+  become: true
+  register: result
+  arista.eos.eos_config:
+    src: "{{ rcf_tmpfile.path }}"
+    replace: config
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == true
+    fail_msg: >-
+      Expected changed=true after applying RCF code unit via replace=config,
+      but got changed={{ result.changed }}.
+
+- name: rcf - verify code unit content on device, including closing brace
+  register: rcf_output
+  arista.eos.eos_command:
+    commands:
+      - show running-config | section router general
+
+- ansible.builtin.assert:
+    that:
+      - "'ANSIBLE_TEST_RCF' in rcf_output.stdout[0]"
+      - "'function testFunc()' in rcf_output.stdout[0]"
+      - "'return true;' in rcf_output.stdout[0]"
+      - "'}' in rcf_output.stdout[0]"
+    fail_msg: >-
+      RCF code unit content not found on device after eAPI apply.
+      Closing brace may have been dropped.
+      Device output: {{ rcf_output.stdout[0] }}
+
+- name: rcf - apply same config again (idempotency check)
+  become: true
+  register: result
+  arista.eos.eos_config:
+    src: "{{ rcf_tmpfile.path }}"
+    replace: config
+
+- ansible.builtin.assert:
+    that:
+      - result.changed == false
+    fail_msg: >-
+      Expected changed=false on second identical RCF apply
+      but got changed={{ result.changed }}.
+
+- name: rcf teardown - remove code unit
+  become: true
+  arista.eos.eos_config:
+    lines:
+      - no code unit ANSIBLE_TEST_RCF
+    parents:
+      - router general
+      - control-functions
+    match: none
+
+- name: rcf teardown - remove temp config file from controller
+  delegate_to: localhost
+  ansible.builtin.file:
+    path: "{{ rcf_tmpfile.path }}"
+    state: absent
+
+- ansible.builtin.debug:
+    msg: "END eapi/multiline_eapi.yaml"
