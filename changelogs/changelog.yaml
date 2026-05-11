@@ -301,6 +301,38 @@ releases:
       - fix_eos_vrf_idempotency.yaml
       - fix_sanity.yaml
     release_date: "2026-02-16"
+  12.1.0:
+    changes:
+      bugfixes:
+        - "eos_bgp_global - Support specifying both incoming and outgoing route-maps
+          per BGP neighbor.
+          Added ``route_maps`` (list of dicts with ``name`` and ``direction``) so users
+          can set
+          e.g. ``route-map MAP_IN in`` and ``route-map MAP_OUT out`` for the same neighbor.
+          The single ``route_map`` option is deprecated in favor of ``route_maps``.
+          Fixes https://github.com/ansible-collections/arista.eos/issues/538."
+        - "eos_static_routes - Fix issue where ``state: replaced`` did not delete routes
+          not present in the config (https://github.com/ansible-collections/arista.eos/issues/532)."
+      deprecated_features:
+        - The ``src`` parameter's automatic Jinja2 template processing is deprecated
+          and will be removed in march 2028 from eos_config module
+        - Use the ``content`` parameter with ``ansible.builtin.template`` lookup instead.
+      minor_changes:
+        - Added ``content`` parameter to support pre-rendered template configurations
+          in eos_config module
+        - Replace deprecated imports from ansible.module_utils._text with ansible.module_utils.common.text.converters.
+        - Updated ansible.netcommon dependency minimum required version from >=8.1.0
+          to >=8.5.2.
+        - which provides a cleaner alternative to the deprecated template auto-processing
+          behavior of the ``src`` parameter.
+    fragments:
+      - content-parameter-eos-config.yml
+      - eos_bgp_global_route_maps_in_out.yaml
+      - fix_static_routes_replaced.yaml
+      - netcommon_bump_version.yaml
+      - sanity-fix-222.yaml
+      - update_text_imports.yaml
+    release_date: "2026-05-08"
   2.0.0:
     changes:
       bugfixes:
