@@ -11,6 +11,6 @@ readme: README.md
 repository: https://github.com/ansible-collections/arista.eos
 issues: https://github.com/ansible-collections/arista.eos/issues
 tags: [arista, eos, networking, eapi]
-version: 12.1.0
+version: 12.1.1
 build_ignore:
   - .ansible-lint
