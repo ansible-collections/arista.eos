@@ -1,6 +1,0 @@
-bugfixes:
-  - Removed deprecated action plugins for modules that no longer exist (static_route, vlan, linkagg, l2_interface, l3_interface, logging, interface, bgp).
-  - Renamed all remaining action plugins with ``eos_`` prefix to follow naming conventions.
-  - Added runtime routing in ``meta/runtime.yml`` to map old plugin names to the new ``eos_``-prefixed ones.
-  - Removed sanity ignore files for EOL ansible-core versions (2.14 through 2.22).
-  - Trimmed obsolete entries from remaining sanity ignore files.
