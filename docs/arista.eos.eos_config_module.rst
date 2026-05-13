@@ -135,6 +135,24 @@ Parameters
             <tr>
                 <td colspan="2">
                     <div class="ansibleOptionAnchor" id="parameter-"></div>
+                    <b>content</b>
+                    <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
+                    <div style="font-size: small">
+                        <span style="color: purple">string</span>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                        <div>Configuration content to apply to the device. This should be the rendered configuration text, not a file path.</div>
+                        <div>This is the recommended way to provide templated configurations. Use <code>ansible.builtin.template</code> lookup to render your Jinja2 template and pass the output to this parameter.</div>
+                        <div>This argument is mutually exclusive with <em>src</em>, <em>lines</em>, and <em>parents</em>.</div>
+                        <div>Example: <code>content: &quot;{{ lookup(&#x27;ansible.builtin.template&#x27;, &#x27;config.j2&#x27;</code> }}&quot;)</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="ansibleOptionAnchor" id="parameter-"></div>
                     <b>defaults</b>
                     <a class="ansibleOptionLink" href="#parameter-" title="Permalink to this option"></a>
                     <div style="font-size: small">
@@ -332,7 +350,8 @@ Parameters
                 <td>
                 </td>
                 <td>
-                        <div>The <em>src</em> argument provides a path to the configuration file to load into the remote system.  The path can either be a full system path to the configuration file if the value starts with / or relative to the root of the implemented role or playbook. This argument is mutually exclusive with the <em>lines</em> and <em>parents</em> arguments. It can be a Jinja2 template as well. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration (live switch config) of the device i ncluding the indentation to ensure idempotency and correct diff. Arista EOS device config has 3 spaces indentation.</div>
+                        <div>Specifies the source path to the file that contains the configuration or configuration template to load.  The path to the source file can either be the full path on the Ansible control host or a relative path from the playbook or role root directory. This argument is mutually exclusive with <em>lines</em>, <em>parents</em>, and <em>content</em>. The configuration lines in the source file should be similar to how it will appear if present in the running-configuration (live switch config) of the device including the indentation to ensure idempotency and correct diff. Arista EOS device config has 3 spaces indentation.</div>
+                        <div>NOTE: The <em>src</em> parameter will no longer process Jinja2 templates starting in January 2028. To use templated configurations, render the template using <code>ansible.builtin.template</code> lookup and pass the result to the <em>content</em> parameter instead.</div>
                 </td>
             </tr>
     </table>
@@ -373,10 +392,31 @@ Examples
       arista.eos.eos_config:
         src: eos.cfg
 
-    - name: render a Jinja2 template onto an Arista switch
+    - name: Render a Jinja2 template onto an Arista switch (DEPRECATED - use content parameter)
       arista.eos.eos_config:
         backup: true
         src: eos_template.j2
+
+    - name: Apply templated configuration using content parameter (RECOMMENDED)
+      arista.eos.eos_config:
+        content: "{{ lookup('ansible.builtin.template', 'eos_template.j2') }}"
+        backup: true
+
+    - name: Apply templated configuration with backup options (RECOMMENDED)
+      arista.eos.eos_config:
+        content: "{{ lookup('ansible.builtin.template', 'eos_template.j2') }}"
+        backup: true
+        backup_options:
+          filename: backup.cfg
+          dir_path: /home/user
+
+    - name: Load configuration from pre-rendered template
+      arista.eos.eos_config:
+        content: |
+          interface Ethernet1
+             description Uplink to Core
+             ip address 10.1.1.1/24
+             no shutdown
 
     - name: diff the running config against a master config
       arista.eos.eos_config:

@@ -191,6 +191,78 @@ class TestEosConfigModule(TestEosModule):
 
         self.assertEqual(config, result["commands"], result["commands"])
 
+    def test_eos_config_content(self):
+        content = load_fixture("eos_config_candidate.cfg")
+        args = dict(content=content)
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(content, self.running_config),
+        )
+        set_module_args(args)
+
+        result = self.execute_module(changed=True)
+        config = [
+            "hostname switch01",
+            "interface Ethernet1",
+            "description test interface",
+            "no shutdown",
+            "ip routing",
+        ]
+        self.assertEqual(
+            sorted(config),
+            sorted(result["commands"]),
+            result["commands"],
+        )
+
+    def test_eos_config_content_and_lines_fails(self):
+        args = dict(content="foo", lines=["foo"])
+        set_module_args(args)
+        self.execute_module(failed=True)
+
+    def test_eos_config_content_and_src_fails(self):
+        args = dict(content="foo", src="foo")
+        set_module_args(args)
+        self.execute_module(failed=True)
+
+    def test_eos_config_content_and_parents_fails(self):
+        args = dict(content="foo", parents=["foo"])
+        set_module_args(args)
+        self.execute_module(failed=True)
+
+    def test_eos_replace_block_content(self):
+        content = load_fixture("eos_config_candidate.cfg")
+        args = dict(content=content, replace="block")
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(content, self.running_config),
+        )
+        set_module_args(args)
+
+        result = self.execute_module(changed=True)
+        config = [
+            "hostname switch01",
+            "interface Ethernet1",
+            "description test interface",
+            "no shutdown",
+            "ip routing",
+        ]
+        self.assertEqual(
+            sorted(config),
+            sorted(result["commands"]),
+            result["commands"],
+        )
+
+    def test_eos_config_match_exact_with_content(self):
+        content = "hostname switch01\nip routing"
+        args = dict(content=content, match="exact")
+        self.conn.get_diff = MagicMock(
+            return_value=self.cliconf_obj.get_diff(
+                content,
+                self.running_config,
+                diff_match="exact",
+            ),
+        )
+        set_module_args(args)
+        self.execute_module(changed=True)
+
     def test_eos_config_src_and_lines_fails(self):
         args = dict(src="foo", lines="foo")
         set_module_args(args)

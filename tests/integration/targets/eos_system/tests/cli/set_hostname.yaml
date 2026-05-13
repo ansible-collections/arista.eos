@@ -30,7 +30,7 @@
 - name: teardown
   become: true
   arista.eos.eos_config:
-    lines: hostname {{ inventory_hostname }}
+    lines: hostname switch
     match: none
 
 - ansible.builtin.debug: msg="END cli/set_hostname.yaml on connection={{ ansible_connection }}"

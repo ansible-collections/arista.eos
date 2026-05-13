@@ -4,6 +4,50 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v12.1.1
+=======
+
+Release Summary
+---------------
+
+Release v12.1.1 standardizes action plugin naming with the ``eos_`` prefix, removes deprecated action plugins for deleted modules, adds runtime routing in ``meta/runtime.yml`` for backward compatibility, and cleans up sanity ignore files for EOL ansible-core versions (2.14-2.22). The preceding v12.1.0 release added the ``content`` parameter to ``eos_config``, dual route-map support in ``eos_bgp_global``, a ``state: replaced`` fix in ``eos_static_routes``, and bumped ``ansible.netcommon`` to ``>=8.5.2``.
+
+Bugfixes
+--------
+
+- Added runtime routing in ``meta/runtime.yml`` to map old plugin names to the new ``eos_``-prefixed ones.
+- Removed deprecated action plugins for modules that no longer exist (static_route, vlan, linkagg, l2_interface, l3_interface, logging, interface, bgp).
+- Removed sanity ignore files for EOL ansible-core versions (2.14 through 2.22).
+- Renamed all remaining action plugins with ``eos_`` prefix to follow naming conventions.
+- Trimmed obsolete entries from remaining sanity ignore files.
+
+v12.1.0
+=======
+
+Minor Changes
+-------------
+
+- Added ``content`` parameter to support pre-rendered template configurations in eos_config module
+- Replace deprecated imports from ansible.module_utils._text with ansible.module_utils.common.text.converters.
+- Updated ansible.netcommon dependency minimum required version from >=8.1.0 to >=8.5.2.
+- which provides a cleaner alternative to the deprecated template auto-processing behavior of the ``src`` parameter.
+
+Deprecated Features
+-------------------
+
+- The ``src`` parameter's automatic Jinja2 template processing is deprecated and will be removed in march 2028 from eos_config module
+- Use the ``content`` parameter with ``ansible.builtin.template`` lookup instead.
+
+Bugfixes
+--------
+
+- eos_bgp_global - Support specifying both incoming and outgoing route-maps per BGP neighbor.
+  Added ``route_maps`` (list of dicts with ``name`` and ``direction``) so users can set
+  e.g. ``route-map MAP_IN in`` and ``route-map MAP_OUT out`` for the same neighbor.
+  The single ``route_map`` option is deprecated in favor of ``route_maps``.
+  Fixes https://github.com/ansible-collections/arista.eos/issues/538.
+- eos_static_routes - Fix issue where ``state: replaced`` did not delete routes not present in the config (https://github.com/ansible-collections/arista.eos/issues/532).
+
 v12.0.1
 =======
 
@@ -14,16 +58,6 @@ Bugfixes
 
 v12.0.0
 =======
-
-Release Summary
----------------
-
-With this release, the minimum required version of `ansible.netcommon` for this collection is `>=8.1.0`. The last version known to be compatible with `ansible-core<=2.18.x` is ansible.netcommon `v8.0.1` and arista.eos `v11.0.0`.
-
-Major Changes
--------------
-
-- Bumping `dependencies` of ansible.netcommon to `>=8.1.0`, since previous versions of the dependency had compatibility issues with `ansible-core>=2.19`.
 
 Bugfixes
 --------

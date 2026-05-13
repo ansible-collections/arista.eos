@@ -875,3 +875,128 @@ class TestEosBgpglobalModule(TestEosModule):
             sorted(rendered_cmds),
             result["rendered"],
         )
+
+    def test_eos_bgp_global_merged_route_maps_in_out(self):
+        """Test merged with route_maps (both in and out) per neighbor - issue #538."""
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65000",
+                    router_id="192.0.2.1",
+                    neighbor=[
+                        dict(
+                            neighbor_address="192.0.2.2",
+                            remote_as="65000",
+                            route_maps=[
+                                dict(name="MAP_INCOMING", direction="in"),
+                                dict(name="MAP_OUTGOING", direction="out"),
+                            ],
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        # Use fixture that has neighbor but no route-maps yet, so merge adds them
+        result = self.execute_module(
+            changed=True,
+            filename="eos_bgp_global_route_maps_no_maps_config.cfg",
+        )
+        self.assertIn("neighbor 192.0.2.2 route-map MAP_INCOMING in", result["commands"])
+        self.assertIn("neighbor 192.0.2.2 route-map MAP_OUTGOING out", result["commands"])
+
+    def test_eos_bgp_global_merged_route_maps_idempotent(self):
+        """Test merged with route_maps is idempotent when config matches device."""
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65000",
+                    router_id="192.0.2.1",
+                    neighbor=[
+                        dict(
+                            neighbor_address="192.0.2.2",
+                            remote_as="65000",
+                            route_maps=[
+                                dict(name="MAP_INCOMING", direction="in"),
+                                dict(name="MAP_OUTGOING", direction="out"),
+                            ],
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        self.execute_module(
+            changed=False,
+            commands=[],
+            filename="eos_bgp_global_route_maps_config.cfg",
+        )
+
+    def test_eos_bgp_global_gathered_route_maps(self):
+        """Test gathered parses both in and out route-maps into route_maps list."""
+        set_module_args(dict(state="gathered"))
+        result = self.execute_module(
+            changed=False,
+            filename="eos_bgp_global_route_maps_config.cfg",
+        )
+        gathered = result["gathered"]
+        self.assertIn("neighbor", gathered)
+        neighbors = gathered["neighbor"]
+        self.assertEqual(len(neighbors), 1)
+        neighbor = neighbors[0]
+        self.assertIn("route_maps", neighbor)
+        route_maps = neighbor["route_maps"]
+        self.assertEqual(len(route_maps), 2)
+        names_dirs = {(rm["name"], rm["direction"]) for rm in route_maps}
+        self.assertIn(("MAP_INCOMING", "in"), names_dirs)
+        self.assertIn(("MAP_OUTGOING", "out"), names_dirs)
+
+    def test_eos_bgp_global_rendered_route_maps(self):
+        """Test rendered outputs both neighbor route-map in and out commands."""
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65000",
+                    router_id="192.0.2.1",
+                    neighbor=[
+                        dict(
+                            neighbor_address="192.0.2.2",
+                            remote_as="65000",
+                            route_maps=[
+                                dict(name="MAP_IN", direction="in"),
+                                dict(name="MAP_OUT", direction="out"),
+                            ],
+                        ),
+                    ],
+                ),
+                state="rendered",
+            ),
+        )
+        result = self.execute_module(changed=False)
+        rendered = result["rendered"]
+        self.assertIn("neighbor 192.0.2.2 route-map MAP_IN in", rendered)
+        self.assertIn("neighbor 192.0.2.2 route-map MAP_OUT out", rendered)
+
+    def test_eos_bgp_global_route_maps_deprecated_route_map_normalized(self):
+        """Test deprecated route_map (single) is normalized to route_maps and still works."""
+        set_module_args(
+            dict(
+                config=dict(
+                    as_number="65000",
+                    router_id="192.0.2.1",
+                    neighbor=[
+                        dict(
+                            neighbor_address="192.0.2.2",
+                            remote_as="65000",
+                            route_map=dict(name="MAP_SINGLE", direction="out"),
+                        ),
+                    ],
+                ),
+                state="merged",
+            ),
+        )
+        result = self.execute_module(
+            changed=True,
+            filename="eos_bgp_global_route_maps_config.cfg",
+        )
+        self.assertIn("neighbor 192.0.2.2 route-map MAP_SINGLE out", result["commands"])

@@ -5,7 +5,7 @@
 
 - name: setup
   arista.eos.eos_config:
-    lines: hostname {{ inventory_hostname_short }}
+    lines: hostname switch
     match: none
   become: true
 
@@ -35,7 +35,7 @@
 
 - name: teardown
   arista.eos.eos_config:
-    lines: hostname {{ inventory_hostname_short }}
+    lines: hostname switch
     match: none
   become: true
 
