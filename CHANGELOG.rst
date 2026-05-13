@@ -4,6 +4,23 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v12.1.1
+=======
+
+Release Summary
+---------------
+
+Release v12.1.1 standardizes action plugin naming with the ``eos_`` prefix, removes deprecated action plugins for deleted modules, adds runtime routing in ``meta/runtime.yml`` for backward compatibility, and cleans up sanity ignore files for EOL ansible-core versions (2.14-2.22). The preceding v12.1.0 release added the ``content`` parameter to ``eos_config``, dual route-map support in ``eos_bgp_global``, a ``state: replaced`` fix in ``eos_static_routes``, and bumped ``ansible.netcommon`` to ``>=8.5.2``.
+
+Bugfixes
+--------
+
+- Added runtime routing in ``meta/runtime.yml`` to map old plugin names to the new ``eos_``-prefixed ones.
+- Removed deprecated action plugins for modules that no longer exist (static_route, vlan, linkagg, l2_interface, l3_interface, logging, interface, bgp).
+- Removed sanity ignore files for EOL ansible-core versions (2.14 through 2.22).
+- Renamed all remaining action plugins with ``eos_`` prefix to follow naming conventions.
+- Trimmed obsolete entries from remaining sanity ignore files.
+
 v12.1.0
 =======
 

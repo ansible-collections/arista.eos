@@ -304,13 +304,11 @@ releases:
   12.1.0:
     changes:
       bugfixes:
-        - "eos_bgp_global - Support specifying both incoming and outgoing route-maps
-          per BGP neighbor.
-          Added ``route_maps`` (list of dicts with ``name`` and ``direction``) so users
-          can set
-          e.g. ``route-map MAP_IN in`` and ``route-map MAP_OUT out`` for the same neighbor.
-          The single ``route_map`` option is deprecated in favor of ``route_maps``.
-          Fixes https://github.com/ansible-collections/arista.eos/issues/538."
+        - eos_bgp_global - Support specifying both incoming and outgoing route-maps
+          per BGP neighbor. Added ``route_maps`` (list of dicts with ``name`` and ``direction``)
+          so users can set e.g. ``route-map MAP_IN in`` and ``route-map MAP_OUT out``
+          for the same neighbor. The single ``route_map`` option is deprecated in favor
+          of ``route_maps``. Fixes https://github.com/ansible-collections/arista.eos/issues/538.
         - "eos_static_routes - Fix issue where ``state: replaced`` did not delete routes
           not present in the config (https://github.com/ansible-collections/arista.eos/issues/532)."
       deprecated_features:
@@ -333,6 +331,28 @@ releases:
       - sanity-fix-222.yaml
       - update_text_imports.yaml
     release_date: "2026-05-08"
+  12.1.1:
+    changes:
+      release_summary: >-
+        Release v12.1.1 standardizes action plugin naming with the ``eos_`` prefix,
+        removes deprecated action plugins for deleted modules, adds runtime routing
+        in ``meta/runtime.yml`` for backward compatibility, and cleans up sanity ignore
+        files for EOL ansible-core versions (2.14-2.22). The preceding v12.1.0 release
+        added the ``content`` parameter to ``eos_config``, dual route-map support in
+        ``eos_bgp_global``, a ``state: replaced`` fix in ``eos_static_routes``, and
+        bumped ``ansible.netcommon`` to ``>=8.5.2``.
+      bugfixes:
+        - Added runtime routing in ``meta/runtime.yml`` to map old plugin names to the
+          new ``eos_``-prefixed ones.
+        - Removed deprecated action plugins for modules that no longer exist (static_route,
+          vlan, linkagg, l2_interface, l3_interface, logging, interface, bgp).
+        - Removed sanity ignore files for EOL ansible-core versions (2.14 through 2.22).
+        - Renamed all remaining action plugins with ``eos_`` prefix to follow naming
+          conventions.
+        - Trimmed obsolete entries from remaining sanity ignore files.
+    fragments:
+      - action_plugin.yaml
+    release_date: "2026-05-12"
   2.0.0:
     changes:
       bugfixes:
