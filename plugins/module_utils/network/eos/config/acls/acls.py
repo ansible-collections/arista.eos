@@ -279,22 +279,16 @@ class Acls(ConfigBase):
                                             list(itertools.chain(*cmds)),
                                         )
                         if name not in ace_names:
-                            for w_ace in want_ace:
-                                w = [
-                                    {
-                                        "afi": afi,
-                                        "acls": [
-                                            {
-                                                "name": name,
-                                                "aces": [w_ace],
-                                            },
-                                        ],
-                                    },
-                                ]
-                                cmds = set_commands(w, have)
-                                config_cmds.append(
-                                    list(itertools.chain(*cmds)),
-                                )
+                            w = [
+                                {
+                                    "afi": afi,
+                                    "acls": [acl],
+                                },
+                            ]
+                            cmds = set_commands(w, have)
+                            config_cmds.append(
+                                list(itertools.chain(*cmds)),
+                            )
 
         if remove_cmds:
             remove_cmds = list(itertools.chain(*remove_cmds))
