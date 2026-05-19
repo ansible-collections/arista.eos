@@ -24,8 +24,12 @@ jobs:
 
   pre-configure-lab:
     needs: lab-create
-    name: Pre-Configure Lab Devices
+    name: "Pre-Configure ${{ matrix.ansible_version }}"
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ansible_version: ["stable-2.19", "stable-2.20", "stable-2.21", "milestone", "devel"]
     steps:
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -59,26 +63,23 @@ jobs:
           sudo apt-get update && sudo apt-get install -y jq
           LAB_NODES_JSON='${{ needs.lab-create.outputs.lab_nodes_json }}'
           CML_HOST='${{ secrets.VIRL_HOST }}'
+          DEVICE_IP=$(echo "$LAB_NODES_JSON" | jq -r '.nodes."${{ matrix.ansible_version }}"')
+          LAST_OCTET=$(echo "$DEVICE_IP" | cut -d . -f 4)
+          SSH_PORT=$((LAST_OCTET + 2000))
           INVENTORY_FILE=$(mktemp)
           echo "[all:vars]" > $INVENTORY_FILE
           echo "ansible_network_os=arista.eos.eos" >> $INVENTORY_FILE
           echo "ansible_user=ansible" >> $INVENTORY_FILE
           echo "ansible_ssh_pass=admin" >> $INVENTORY_FILE
           echo "ansible_connection=ansible.netcommon.network_cli" >> $INVENTORY_FILE
+          echo "ansible_port=$SSH_PORT" >> $INVENTORY_FILE
           echo "ansible_become=true" >> $INVENTORY_FILE
           echo "ansible_become_method=enable" >> $INVENTORY_FILE
           echo "" >> $INVENTORY_FILE
           echo "[eos]" >> $INVENTORY_FILE
-          for NODE_LABEL in stable-2.19 stable-2.20 stable-2.21 milestone devel; do
-            DEVICE_IP=$(echo "$LAB_NODES_JSON" | jq -r ".nodes.\"$NODE_LABEL\"")
-            if [ "$DEVICE_IP" != "null" ] && [ -n "$DEVICE_IP" ]; then
-              LAST_OCTET=$(echo "$DEVICE_IP" | cut -d . -f 4)
-              SSH_PORT=$((LAST_OCTET + 2000))
-              echo "$CML_HOST ansible_port=$SSH_PORT" >> $INVENTORY_FILE
-            fi
-          done
+          echo "$CML_HOST" >> $INVENTORY_FILE
           echo "inventory_path=$INVENTORY_FILE" >> "$GITHUB_OUTPUT"
-      - name: Apply Pre-Configuration to vEOS Nodes
+      - name: Apply Pre-Configuration to vEOS Node
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
           ANSIBLE_TEST_PASSWORD: ${{ secrets.ANSIBLE_TEST_PASSWORD }}
