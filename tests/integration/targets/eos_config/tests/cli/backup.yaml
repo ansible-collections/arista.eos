@@ -6,7 +6,10 @@
     paths: "{{ role_path }}/backup"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
-  connection: local
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: setup
   become: true
@@ -23,13 +26,20 @@
     paths: "{{ role_path }}/backup"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
-  connection: local
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: delete backup files
   file:
     path: "{{ item.path }}"
     state: absent
   with_items: "{{backup_files.files|default([])}}"
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: configure device with config
   become: true
@@ -48,7 +58,10 @@
     paths: "{{ role_path }}/backup"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_files
-  connection: local
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:
@@ -61,6 +74,10 @@
   with_items:
     - "{{ role_path }}/backup_test_dir/"
     - "{{ role_path }}/backup/backup.cfg"
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - name: take configuration backup in custom filename and directory path
   become: true
@@ -79,7 +96,10 @@
   ansible.builtin.find:
     paths: "{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}/backup.cfg"
   register: backup_file
-  connection: local
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:
@@ -101,7 +121,10 @@
   ansible.builtin.find:
     paths: "{{ role_path }}/backup/backup.cfg"
   register: backup_file
-  connection: local
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:
@@ -124,7 +147,10 @@
     paths: "{{ role_path }}/backup_test_dir/{{ inventory_hostname_short }}"
     pattern: "{{ inventory_hostname_short }}_config*"
   register: backup_file
-  connection: local
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_network_os: arista.eos.eos
 
 - ansible.builtin.assert:
     that:

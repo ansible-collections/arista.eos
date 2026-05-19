@@ -15,7 +15,6 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.logging_global.logging_global import (
@@ -68,7 +67,7 @@ class Logging_globalFacts(object):
                     key=lambda k, sk="name": k[sk],
                 )
             if "vrfs" in objs:
-                for k, v in iteritems(objs["vrfs"]):
+                for k, v in objs["vrfs"].items():
                     if "hosts" in v:
                         v["hosts"] = sorted(
                             list(v["hosts"].values()),

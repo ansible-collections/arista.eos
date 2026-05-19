@@ -18,7 +18,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -93,10 +92,10 @@ class Logging_global(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             wantd = {}
-            for k, have in iteritems(haved):
+            for k, have in haved.items():
                 self._compare(want={}, have=have)
 
-        for k, want in iteritems(wantd):
+        for k, want in wantd.items():
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -112,24 +111,24 @@ class Logging_global(ResourceModule):
     def _hosts_compare(self, want, have):
         host_want = want.pop("hosts", {})
         host_have = have.pop("hosts", {})
-        for name, entry in iteritems(host_want):
+        for name, entry in host_want.items():
             h = {}
             if host_have:
                 h = {"hosts": host_have.pop(name, {})}
             self.compare(parsers="host", want={"hosts": entry}, have=h)
-        for name, entry in iteritems(host_have):
+        for name, entry in host_have.items():
             self.compare(parsers="host", want={}, have={"hosts": entry})
 
     def _vrfs_hosts_compare(self, vrf, want, have):
         host_want = want.pop("hosts", {})
         host_have = have.pop("hosts", {})
-        for name, entry in iteritems(host_want):
+        for name, entry in host_want.items():
             h = {}
             if host_have:
                 h = {"vrfs": {"name": vrf, "hosts": host_have.pop(name, {})}}
             w = {"vrfs": {"name": vrf, "hosts": entry}}
             self.compare(parsers="vrf.host", want=w, have=h)
-        for name, entry in iteritems(host_have):
+        for name, entry in host_have.items():
             self.compare(
                 parsers="vrf.host",
                 want={},
@@ -139,7 +138,7 @@ class Logging_global(ResourceModule):
     def _vrfs_compare(self, want, have):
         vrf_want = want.pop("vrfs", {})
         vrf_have = have.pop("vrfs", {})
-        for name, entry in iteritems(vrf_want):
+        for name, entry in vrf_want.items():
             self._vrfs_hosts_compare(
                 name,
                 want=entry,
@@ -164,7 +163,7 @@ class Logging_global(ResourceModule):
                     },
                 }
                 self.compare(parsers="vrf.source_interface", want=w, have=h)
-        for name, entry in iteritems(vrf_have):
+        for name, entry in vrf_have.items():
             self._vrfs_hosts_compare(name, want={}, have=entry)
             self.compare(
                 parsers="vrf.source_interface",
@@ -184,5 +183,5 @@ class Logging_global(ResourceModule):
             for el in entry["vrfs"]:
                 vrf_dict.update({el["name"]: el})
             entry["vrfs"] = vrf_dict
-            for k, v in iteritems(entry["vrfs"]):
+            for k, v in entry["vrfs"].items():
                 self._logging_global_list_to_dict(v)

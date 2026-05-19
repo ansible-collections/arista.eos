@@ -19,7 +19,7 @@
 
     - ansible.builtin.assert:
         that:
-          - result.commands|length == 9
+          - result.commands|length == 11
           - result.changed == true
           - ansible_facts.network_resources.logging_global == result.after
           - result.after == {}

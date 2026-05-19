@@ -14,7 +14,7 @@
   arista.eos.eos_config:
     lines:
       - snmp-server contact ansible
-      - hostname {{ inventory_hostname_short }}
+      - hostname switch
     match: none
 
 - name: configure top level command with before
@@ -46,7 +46,7 @@
   arista.eos.eos_config:
     lines:
       - no snmp-server contact
-      - hostname {{ inventory_hostname_short }}
+      - hostname switch
     match: none
 
 - ansible.builtin.debug: msg="END cli/toplevel_before.yaml on connection={{ ansible_connection }}"

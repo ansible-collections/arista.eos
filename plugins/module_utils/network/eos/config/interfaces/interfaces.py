@@ -158,6 +158,8 @@ class Interfaces(ConfigBase):
         """
         commands = []
         for key, desired in want.items():
+            if desired.get("enabled") is None:
+                desired["enabled"] = True
             interface_name = normalize_interface(key)
             if interface_name in have:
                 extant = have[interface_name]
@@ -188,6 +190,8 @@ class Interfaces(ConfigBase):
                 desired = want[key]
             else:
                 desired = dict()
+            if desired.get("enabled") is None:
+                desired["enabled"] = True
 
             add_config = dict_diff(extant, desired)
             del_config = dict_diff(desired, extant)
@@ -209,6 +213,8 @@ class Interfaces(ConfigBase):
         """
         commands = []
         for key, desired in want.items():
+            if desired.get("enabled") is None:
+                desired.pop("enabled")
             interface_name = normalize_interface(key)
             if interface_name in have:
                 extant = have[interface_name]

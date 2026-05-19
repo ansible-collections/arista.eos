@@ -14,12 +14,15 @@ a list of parser definitions and associated functions that
 facilitates both facts gathering and native command generation for
 the given network resource.
 """
-
 import re
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.network_template import (
     NetworkTemplate,
 )
+
+
+# Template placeholder used in parser result dicts (avoids string literal duplication for Sonar S1192)
+_ROUTE_MAP_NAME = "{{ name }}"
 
 
 def _tmplt_router_bgp_cmd(config_data):
@@ -264,7 +267,7 @@ def _tmplt_bgp_neighbor(config_data):
     elif config_data["neighbor"].get("dont_capability_negotiate"):
         command += " dont-capability-negotiate"
     elif config_data["neighbor"].get("ebgp_multihop"):
-        command += " ebgp-multiphop"
+        command += " ebgp-multihop"
         if config_data["neighbor"]["ebgp_multihop"].get("ttl"):
             command += " {ttl}".format(**config_data["neighbor"]["ebgp_multihop"])
     elif config_data["neighbor"].get("encryption_password"):
@@ -368,6 +371,14 @@ def _tmplt_bgp_neighbor(config_data):
         command += " prefix-list {name} {direction}".format(
             **config_data["neighbor"]["prefix_list"],
         )
+    elif config_data["neighbor"].get("route_maps"):
+        # Multiple route-maps (in and out) per neighbor; return list of commands.
+        # Base class prepends "no " when negate=True.
+        peer = config_data["neighbor"]["neighbor_address"]
+        return [
+            "neighbor %s route-map %s %s" % (peer, rm["name"], rm["direction"])
+            for rm in config_data["neighbor"]["route_maps"]
+        ]
     elif config_data["neighbor"].get("route_map"):
         command += " route-map {name} {direction}".format(**config_data["neighbor"]["route_map"])
     elif config_data["neighbor"].get("route_reflector_client"):
@@ -1654,7 +1665,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                 \s*neighbor
                 \s+(?P<peer>\S+)
                 \s+ebgp-multihop
-                \s*(?P<ttl>\d+)*
+                \s+(?P<ttl>\d+)*
                 $""",
                 re.VERBOSE,
             ),
@@ -2303,7 +2314,7 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "neighbor_address": "{{ peer }}",
                                 "prefix_list": {
-                                    "name": "{{ name }}",
+                                    "name": _ROUTE_MAP_NAME,
                                     "direction": "{{ dir }}",
                                 },
                             },
@@ -2333,9 +2344,41 @@ class Bgp_globalTemplate(NetworkTemplate):
                             "{{ peer }}": {
                                 "neighbor_address": "{{ peer }}",
                                 "route_map": {
-                                    "name": "{{ name }}",
+                                    "name": _ROUTE_MAP_NAME,
                                     "direction": "{{ dir }}",
                                 },
+                            },
+                        },
+                    },
+                },
+            },
+        },
+        {
+            "name": "neighbor.route_maps",
+            "getval": re.compile(
+                r"""
+                \s*neighbor
+                \s+(?P<peer>\S+)
+                \s+route-map
+                \s+(?P<name>\S+)
+                \s+(?P<dir>in|out)
+                *$""",
+                re.VERBOSE,
+            ),
+            "setval": _tmplt_bgp_neighbor,
+            "compval": "neighbor.route_maps",
+            "result": {
+                "vrfs": {
+                    '{{ "vrf_" + vrf|d() }}': {
+                        "neighbor": {
+                            "{{ peer }}": {
+                                "neighbor_address": "{{ peer }}",
+                                "route_maps": [
+                                    {
+                                        "name": _ROUTE_MAP_NAME,
+                                        "direction": "{{ dir }}",
+                                    },
+                                ],
                             },
                         },
                     },

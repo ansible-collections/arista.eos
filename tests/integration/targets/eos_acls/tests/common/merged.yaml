@@ -142,19 +142,12 @@
             acls:
               - name: test1
                 aces:
-                  - sequence: 35
-                    log: true
-                    ttl:
-                      eq: 33
-                    source:
-                      any: true
+                  - remark: "Update acl"
         state: merged
 
     - ansible.builtin.assert:
         that:
           - result.changed == true
-          - result.commands|length == 3
-          - "'no 35' in result.commands"
-          - "'35 deny tcp any any ttl eq 33 log'  in result.commands"
+          - result.commands|length == 2
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

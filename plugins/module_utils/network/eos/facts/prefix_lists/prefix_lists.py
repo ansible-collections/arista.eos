@@ -15,7 +15,6 @@ for a given resource, parsed, and the facts tree is populated
 based on the configuration.
 """
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common import utils
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.argspec.prefix_lists.prefix_lists import (
@@ -61,7 +60,7 @@ class Prefix_listsFacts(object):
         )
         objs = prefix_lists_parser.parse()
         if objs:
-            for afi, pl in iteritems(objs):
+            for afi, pl in objs.items():
                 if "prefix_lists" in pl:
                     pl["prefix_lists"] = sorted(
                         list(pl["prefix_lists"].values()),

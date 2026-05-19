@@ -2,8 +2,8 @@
 - ansible.builtin.debug: msg="START cli/default_facts.yaml on connection={{ ansible_connection }}"
 
 - name: test getting default facts
-  become: true
   register: result
+  become: true
   arista.eos.eos_facts:
 
 - ansible.builtin.assert:
@@ -12,7 +12,8 @@
       - "'default' in result.ansible_facts.ansible_net_gather_subset"
       - "'config' not in result.ansible_facts.ansible_net_gather_subset"
       - result.ansible_facts.ansible_net_hostname is defined
-      - result.ansible_facts.ansible_net_image is defined
+      # Commenting this out as it is not available in downstream device run, works in local test
+      # - result.ansible_facts.ansible_net_image is defined
       - result.ansible_facts.ansible_net_model is defined
       - result.ansible_facts.ansible_net_python_version is defined
       - result.ansible_facts.ansible_net_serialnum is defined

@@ -253,6 +253,99 @@ class TestEosStaticRoutesModule(TestEosModule):
         )
         self.execute_module(changed=False, commands=[])
 
+    def test_eos_static_routes_replaced_deletes_extra_routes(self):
+        """Test that state replaced deletes routes not in want config (Issue #532)"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        address_families=[
+                            dict(
+                                afi="ipv4",
+                                routes=[
+                                    dict(
+                                        dest="0.0.0.0/0",
+                                        next_hops=[
+                                            dict(interface="172.16.16.1"),
+                                        ],
+                                    ),
+                                    dict(
+                                        dest="10.10.0.0/16",
+                                        next_hops=[
+                                            dict(interface="172.16.16.1"),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        # Use a fixture that includes extra IPv4 routes in the global table.
+        # - Device has (global IPv4): 0.0.0.0/0, 10.10.0.0/16, 10.1.1.2/32, 10.0.0.0/8
+        # - Want (global IPv4): 0.0.0.0/0, 10.10.0.0/16
+        # Expected: delete the extra IPv4 routes not in want.
+        #
+        # NOTE: 'replaced' is scoped; it should not delete:
+        # - IPv6 routes when want only specifies ipv4
+        # - VRF-scoped routes when want is global (vrf is None)
+        commands = [
+            "no ip route 10.0.0.0/8 10.1.1.1",
+            "no ip route 10.1.1.2/32 172.16.16.1",
+        ]
+        self.execute_module(
+            changed=True,
+            commands=commands,
+            filename="eos_static_routes_issue532.cfg",
+        )
+
+    def test_eos_static_routes_replaced_deletes_multiple_routes(self):
+        """Test that state replaced deletes multiple routes not in want config"""
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        address_families=[
+                            dict(
+                                afi="ipv4",
+                                routes=[
+                                    dict(
+                                        dest="0.0.0.0/0",
+                                        next_hops=[
+                                            dict(interface="172.16.16.1"),
+                                        ],
+                                    ),
+                                    dict(
+                                        dest="10.10.0.0/16",
+                                        next_hops=[
+                                            dict(interface="172.16.16.2"),
+                                        ],
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        # Fixture includes extra IPv4 routes and an existing 10.10.0.0/16 next hop.
+        # Want changes 10.10.0.0/16 next hop from 172.16.16.1 -> 172.16.16.2,
+        # and should delete the extra IPv4 routes not in want.
+        commands = [
+            "no ip route 10.0.0.0/8 10.1.1.1",
+            "no ip route 10.1.1.2/32 172.16.16.1",
+            "no ip route 10.10.0.0/16 172.16.16.1",
+            "ip route 10.10.0.0/16 172.16.16.2",
+        ]
+        self.execute_module(
+            changed=True,
+            commands=commands,
+            filename="eos_static_routes_issue532.cfg",
+        )
+
     def test_eos_static_routes_overridden(self):
         set_module_args(
             dict(

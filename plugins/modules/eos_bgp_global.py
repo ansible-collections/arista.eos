@@ -529,7 +529,10 @@ options:
                   description: prefix list name.
                   type: str
             route_map:
-              description: Route map reference.
+              description:
+                - Route map reference.
+                - Deprecated, use I(route_maps) to specify both in and out route-maps per neighbor.
+                - This attribute will be removed after 2027-02-17.
               type: dict
               suboptions:
                 direction:
@@ -539,6 +542,20 @@ options:
                 name:
                   description: Route map name.
                   type: str
+            route_maps:
+              description: List of route-maps to apply to the neighbor (in and/or out).
+              type: list
+              elements: dict
+              suboptions:
+                name:
+                  description: Name of the route-map.
+                  type: str
+                  required: true
+                direction:
+                  description: Direction of the route-map (inbound or outbound).
+                  type: str
+                  required: true
+                  choices: ['in', 'out']
             route_reflector_client:
               description: Configure peer as a route reflector client.
               type: bool
@@ -1192,7 +1209,10 @@ options:
                       description: prefix list name.
                       type: str
                 route_map:
-                  description: Route map reference.
+                  description:
+                    - Route map reference.
+                    - Deprecated, use I(route_maps) to specify both in and out route-maps per neighbor.
+                    - This attribute will be removed after 2027-02-17.
                   type: dict
                   suboptions:
                     direction:
@@ -1202,6 +1222,20 @@ options:
                     name:
                       description: Route map name.
                       type: str
+                route_maps:
+                  description: List of route-maps to apply to the neighbor (in and/or out).
+                  type: list
+                  elements: dict
+                  suboptions:
+                    name:
+                      description: Name of the route-map.
+                      type: str
+                      required: true
+                    direction:
+                      description: Direction of the route-map (inbound or outbound).
+                      type: str
+                      required: true
+                      choices: ['in', 'out']
                 route_reflector_client:
                   description: Configure peer as a route reflector client.
                   type: bool

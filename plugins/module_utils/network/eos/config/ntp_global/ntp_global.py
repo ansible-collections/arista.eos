@@ -18,7 +18,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -83,11 +82,11 @@ class Ntp_global(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             wantd = {}
-            for k, have in iteritems(haved):
+            for k, have in haved.items():
                 if k not in wantd:
                     self._compare(want={}, have=have)
 
-        for k, want in iteritems(wantd):
+        for k, want in wantd.items():
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -113,7 +112,7 @@ class Ntp_global(ResourceModule):
     def _authentication_keys_compare(self, want, have):
         w = want.pop("authentication_keys", {})
         h = have.pop("authentication_keys", {})
-        for name, entry in iteritems(w):
+        for name, entry in w.items():
             h_key = {}
             if h.get(name):
                 h_key = {"authentication_keys": h.pop(name)}
@@ -122,7 +121,7 @@ class Ntp_global(ResourceModule):
                 want={"authentication_keys": entry},
                 have=h_key,
             )
-        for name, entry in iteritems(h):
+        for name, entry in h.items():
             self.compare(
                 parsers="authentication_keys",
                 want={},
@@ -132,7 +131,7 @@ class Ntp_global(ResourceModule):
     def _servers_compare(self, want, have):
         w = want.pop("servers", {})
         h = have.pop("servers", {})
-        for name, entry in iteritems(w):
+        for name, entry in w.items():
             if entry.get("source"):
                 entry["source"] = normalize_interface(entry["source"])
             h_key = {}
@@ -143,13 +142,13 @@ class Ntp_global(ResourceModule):
                 want={"servers": entry},
                 have=h_key,
             )
-        for name, entry in iteritems(h):
+        for name, entry in h.items():
             self.compare(parsers="servers", want={}, have={"servers": entry})
 
     def _serve_compare(self, want, have):
         serve_want = want.pop("serve", {})
         serve_have = have.pop("serve", {})
-        for name, entry in iteritems(serve_want):
+        for name, entry in serve_want.items():
             if name == "all" and entry:
                 w = {"serve": {"all": True}}
                 self.compare(
@@ -158,19 +157,17 @@ class Ntp_global(ResourceModule):
                     have={"serve": {"all": serve_have.pop("all", False)}},
                 )
             else:
-                for k_afi, v_afi in iteritems(entry):
-                    for k, v in iteritems(v_afi):
+                for k_afi, v_afi in entry.items():
+                    for k, v in v_afi.items():
                         afi = v_afi["afi"]
                         if k == "afi":
                             continue
                         h = {}
                         if k == "acls":
-                            for ace, ace_entry in iteritems(v):
+                            for ace, ace_entry in v.items():
                                 if serve_have.get("access_lists"):
-                                    for hk, hv in iteritems(
-                                        serve_have["access_lists"],
-                                    ):
-                                        for h_k, h_v in iteritems(hv):
+                                    for hk, hv in serve_have["access_lists"].items():
+                                        for h_k, h_v in hv.items():
                                             h_afi = hv["afi"]
                                             if h_k == "afi":
                                                 continue
@@ -194,17 +191,17 @@ class Ntp_global(ResourceModule):
                                     },
                                 }
                                 self.compare(parsers="serve", want=w, have=h)
-        for k, v in iteritems(serve_have):
+        for k, v in serve_have.items():
             if k == "all" and v:
                 h = {"serve": {"all": True}}
                 self.compare(parsers="serve_all", want={}, have=h)
             else:
-                for k_afi, v_afi in iteritems(v):
-                    for k, v in iteritems(v_afi):
+                for k_afi, v_afi in v.items():
+                    for k, v in v_afi.items():
                         hafi = v_afi["afi"]
                         if k == "afi":
                             continue
-                        for k_acl, v_acl in iteritems(v):
+                        for k_acl, v_acl in v.items():
                             h = {
                                 "serve": {
                                     "access_lists": {

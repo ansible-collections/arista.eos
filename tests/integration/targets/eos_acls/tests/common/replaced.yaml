@@ -113,8 +113,8 @@
 
     - ansible.builtin.assert:
         that:
-          - result.changed == true
-          - result.commands|length == 2
+          - result.changed == false
+          - result.commands|length == 0
           - ansible_facts.network_resources.acls|symmetric_difference(result.before)
             == []
   always:

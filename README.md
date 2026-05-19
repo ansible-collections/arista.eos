@@ -1,9 +1,9 @@
 
 
 # Arista EOS Collection
-[![CI](https://zuul-ci.org/gated.svg)](https://dashboard.zuul.ansible.com/t/ansible/project/github.com/ansible-collections/arista.eos) <!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/arista.eos)-->
-[![Codecov](https://codecov.io/gh/ansible-collections/arista.eos/branch/main/graph/badge.svg)](https://codecov.io/gh/ansible-collections/arista.eos)
+<!--[![Codecov](https://img.shields.io/codecov/c/github/ansible-collections/vyos)](https://codecov.io/gh/ansible-collections/arista.eos)-->
 [![CI](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml/badge.svg?branch=main&event=schedule)](https://github.com/ansible-collections/arista.eos/actions/workflows/tests.yml)
+[![Integration tests 💻](https://github.com/ansible-collections/arista.eos/actions/workflows/integration-libssh.yml/badge.svg?branch=main)](https://github.com/ansible-collections/arista.eos/actions/workflows/integration-libssh.yml)
 
 The Ansible Arista EOS collection includes a variety of Ansible content to help automate the management of Arista EOS network appliances.
 
@@ -35,10 +35,8 @@ For more information about communication, see the [Ansible communication guide](
 <!--start requires_ansible-->
 ## Ansible version compatibility
 
-This collection has been tested against following Ansible versions: **>=2.15.0**.
+This collection has been tested against the following Ansible versions: **>=2.16.0**.
 
-For collections that support Ansible 2.9, please ensure you update your `network_os` to use the
-fully qualified collection name (for example, `cisco.ios.ios`).
 Plugins and modules within a collection may be tested with only specific Ansible versions.
 A collection may contain metadata that identifies these versions.
 PEP440 is the schema used to describe the versions of Ansible.
@@ -148,7 +146,7 @@ We welcome community contributions to this collection. If you find problems, ple
 You can also join us on:
 
 - IRC - the ``#ansible-network`` [irc.libera.chat](https://libera.chat/) channel
-- Slack - https://ansiblenetwork.slack.com
+- Slack - [Ansible Network](https://ansiblenetwork.slack.com)
 
 See the [Ansible Community Guide](https://docs.ansible.com/ansible/latest/community/index.html) for details on contributing to Ansible.
 

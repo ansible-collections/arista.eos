@@ -18,7 +18,6 @@ necessary to bring the current configuration to its desired end-state is
 created.
 """
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -104,7 +103,7 @@ class Bgp_global(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state in ["deleted", "purged"]:
             h_del = {}
-            for k, v in iteritems(haved):
+            for k, v in haved.items():
                 if k in wantd or not wantd:
                     h_del.update({k: v})
             wantd = {}
@@ -114,12 +113,12 @@ class Bgp_global(ResourceModule):
             self._compare(want={}, have=self.have)
 
         if self.state == "purged":
-            for num, entry in iteritems(haved):
+            for num, entry in haved.items():
                 self.commands.append(
                     self._tmplt.render({"as_number": num}, "router", True),
                 )
 
-        for k, want in iteritems(wantd):
+        for k, want in wantd.items():
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -132,14 +131,14 @@ class Bgp_global(ResourceModule):
         self._compare_neighbor(want, have)
         self._compare_lists(want, have)
         self._compare_bgp_params(want, have)
-        for name, entry in iteritems(want):
+        for name, entry in want.items():
             if name != "as_number":
                 self.compare(
                     parsers=self.parsers,
                     want={name: entry},
                     have={name: have.pop(name, {})},
                 )
-        for name, entry in iteritems(have):
+        for name, entry in have.items():
             if name != "as_number":
                 self.compare(
                     parsers=self.parsers,
@@ -188,9 +187,9 @@ class Bgp_global(ResourceModule):
         ]
         wbgp = want.pop("bgp_params", {})
         hbgp = have.pop("bgp_params", {})
-        for name, entry in iteritems(wbgp):
+        for name, entry in wbgp.items():
             if name == "bestpath":
-                for k, v in iteritems(entry):
+                for k, v in entry.items():
                     h = {}
                     if hbgp.get(name):
                         h = {name: hbgp[name].pop(v, {})}
@@ -206,7 +205,7 @@ class Bgp_global(ResourceModule):
                 want={"bgp_params": {name: entry}},
                 have={"bgp_params": {name: hbgp.pop(name, {})}},
             )
-        for name, entry in iteritems(hbgp):
+        for name, entry in hbgp.items():
             self.compare(
                 parsers=parsers,
                 want={},
@@ -217,7 +216,7 @@ class Bgp_global(ResourceModule):
         wvrf = want.pop("vrfs", {})
         hvrf = have.pop("vrfs", {})
         begin = len(self.commands)
-        for name, entry in iteritems(wvrf):
+        for name, entry in wvrf.items():
             self._compare_neighbor(entry, hvrf.get(name, {}))
             self._compare_lists(entry, hvrf.get(name, {}))
             self._compare_bgp_params(entry, hvrf.get(name, {}))
@@ -236,7 +235,7 @@ class Bgp_global(ResourceModule):
                 )
                 self.commands.append("exit")
         begin_negate = len(self.commands)
-        for name, entry in iteritems(hvrf):
+        for name, entry in hvrf.items():
             if name not in wvrf.keys():
                 if self._check_af(name):
                     self._module.fail_json(
@@ -318,6 +317,7 @@ class Bgp_global(ResourceModule):
             "neighbor.peer_group",
             "neighbor.prefix_list",
             "neighbor.route_map",
+            "neighbor.route_maps",
             "neighbor.route_reflector_client",
             "neighbor.route_to_peer",
             "neighbor.send_community",
@@ -331,12 +331,30 @@ class Bgp_global(ResourceModule):
         ]
         wneigh = want.pop("neighbor", {})
         hneigh = have.pop("neighbor", {})
-        for name, entry in iteritems(wneigh):
+        for name, entry in wneigh.items():
+            peer = entry.get("peer") or entry["neighbor_address"]
             for k, v in entry.items():
-                if entry.get("peer"):
-                    peer = entry["peer"]
-                else:
-                    peer = entry["neighbor_address"]
+                if k == "route_maps":
+                    # Compare route_maps list: add each want item, remove each have item not in want
+                    want_rms = v or []
+                    have_rms = (hneigh.get(name) or {}).pop("route_maps", None) or []
+                    want_set = {(rm["name"], rm["direction"]) for rm in want_rms}
+                    have_set = {(rm["name"], rm["direction"]) for rm in have_rms}
+                    for rm in want_rms:
+                        if (rm["name"], rm["direction"]) not in have_set:
+                            self.compare(
+                                parsers=parsers,
+                                want={"neighbor": {"neighbor_address": peer, "route_map": rm}},
+                                have={"neighbor": {"neighbor_address": peer}},
+                            )
+                    for rm in have_rms:
+                        if (rm["name"], rm["direction"]) not in want_set:
+                            self.compare(
+                                parsers=parsers,
+                                want={},
+                                have={"neighbor": {"neighbor_address": peer, "route_map": rm}},
+                            )
+                    continue
                 if hneigh.get(name):
                     h = {"neighbor_address": peer, k: hneigh[name].pop(k, {})}
                 else:
@@ -346,15 +364,19 @@ class Bgp_global(ResourceModule):
                     want={"neighbor": {"neighbor_address": peer, k: v}},
                     have={"neighbor": h},
                 )
-        for name, entry in iteritems(hneigh):
+        for name, entry in hneigh.items():
             if name not in wneigh.keys() and "peer_group" not in entry.keys():
                 self.commands.append("no neighbor " + name)
                 continue
+            peer = entry.get("neighbor_address", name)
             for k, v in entry.items():
+                if k == "route_maps":
+                    # Already handled in want loop (we pop from have when processing want)
+                    continue
                 self.compare(
                     parsers=parsers,
                     want={},
-                    have={"neighbor": {"neighbor_address": name, k: v}},
+                    have={"neighbor": {"neighbor_address": peer, k: v}},
                 )
 
     def _compare_lists(self, want, have):
@@ -366,7 +388,7 @@ class Bgp_global(ResourceModule):
         ]:
             wdict = want.pop(attrib, {})
             hdict = have.pop(attrib, {})
-            for key, entry in iteritems(wdict):
+            for key, entry in wdict.items():
                 if entry != hdict.pop(key, {}):
                     self.addcmd(entry, attrib, False)
             # remove remaining items in have for replaced
@@ -374,7 +396,7 @@ class Bgp_global(ResourceModule):
                 self.addcmd(entry, attrib, True)
 
     def _bgp_global_list_to_dict(self, entry):
-        for name, proc in iteritems(entry):
+        for name, proc in entry.items():
             if "neighbor" in proc:
                 neigh_dict = {}
                 for entry in proc.get("neighbor", []):
@@ -382,6 +404,11 @@ class Bgp_global(ResourceModule):
                         peer = entry["peer"]
                     else:
                         peer = entry["neighbor_address"]
+                    # Normalize: convert deprecated route_map (single) to route_maps list
+                    if "route_map" in entry and entry.get("route_map"):
+                        if "route_maps" not in entry:
+                            entry["route_maps"] = [entry["route_map"]]
+                        entry.pop("route_map", None)
                     neigh_dict.update({peer: entry})
                 proc["neighbor"] = neigh_dict
 

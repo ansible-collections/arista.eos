@@ -4,6 +4,111 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v12.1.1
+=======
+
+Release Summary
+---------------
+
+Release v12.1.1 standardizes action plugin naming with the ``eos_`` prefix, removes deprecated action plugins for deleted modules, adds runtime routing in ``meta/runtime.yml`` for backward compatibility, and cleans up sanity ignore files for EOL ansible-core versions (2.14-2.22). The preceding v12.1.0 release added the ``content`` parameter to ``eos_config``, dual route-map support in ``eos_bgp_global``, a ``state: replaced`` fix in ``eos_static_routes``, and bumped ``ansible.netcommon`` to ``>=8.5.2``.
+
+Bugfixes
+--------
+
+- Added runtime routing in ``meta/runtime.yml`` to map old plugin names to the new ``eos_``-prefixed ones.
+- Removed deprecated action plugins for modules that no longer exist (static_route, vlan, linkagg, l2_interface, l3_interface, logging, interface, bgp).
+- Removed sanity ignore files for EOL ansible-core versions (2.14 through 2.22).
+- Renamed all remaining action plugins with ``eos_`` prefix to follow naming conventions.
+- Trimmed obsolete entries from remaining sanity ignore files.
+
+v12.1.0
+=======
+
+Minor Changes
+-------------
+
+- Added ``content`` parameter to support pre-rendered template configurations in eos_config module
+- Replace deprecated imports from ansible.module_utils._text with ansible.module_utils.common.text.converters.
+- Updated ansible.netcommon dependency minimum required version from >=8.1.0 to >=8.5.2.
+- which provides a cleaner alternative to the deprecated template auto-processing behavior of the ``src`` parameter.
+
+Deprecated Features
+-------------------
+
+- The ``src`` parameter's automatic Jinja2 template processing is deprecated and will be removed in march 2028 from eos_config module
+- Use the ``content`` parameter with ``ansible.builtin.template`` lookup instead.
+
+Bugfixes
+--------
+
+- eos_bgp_global - Support specifying both incoming and outgoing route-maps per BGP neighbor.
+  Added ``route_maps`` (list of dicts with ``name`` and ``direction``) so users can set
+  e.g. ``route-map MAP_IN in`` and ``route-map MAP_OUT out`` for the same neighbor.
+  The single ``route_map`` option is deprecated in favor of ``route_maps``.
+  Fixes https://github.com/ansible-collections/arista.eos/issues/538.
+- eos_static_routes - Fix issue where ``state: replaced`` did not delete routes not present in the config (https://github.com/ansible-collections/arista.eos/issues/532).
+
+v12.0.1
+=======
+
+Bugfixes
+--------
+
+- Fix eos_vrf module to properly check existing interface configuration before making changes (https://github.com/ansible-collections/arista.eos/issues/546)
+
+v12.0.0
+=======
+
+Bugfixes
+--------
+
+- Add unit and integration tests to verify the change
+- Fix regex in route_map module to support match community with or without exact-match
+- Update the ACL module to support using protocol names for source port
+- arista.eos.eos_interfaces - Improved handling of the `enabled` state to prevent incorrect `shutdown` or `no shutdown` commands during configuration changes
+
+v11.0.1
+=======
+
+Bugfixes
+--------
+
+- Fix route map community handling to include missing community_attributes level in the dictionary
+- Fixed idempotency regarding logging port in differing versions of EOS
+- Fixed idempotency when using `replaced` state on host with multiple ACLs present.
+- Fixed parsing of relative route-map metric adjustments in when extracting settings from device output.
+- Support colon-delimited format in BGP community strings
+- Update route_maps to correctly handle ipv6 next-hop address
+
+v11.0.0
+=======
+
+Release Summary
+---------------
+
+With this release, the minimum required version of `ansible-core` for this collection is `2.16.0`. The last version known to be compatible with `ansible-core` versions below `2.16` is v10.1.1.
+
+Major Changes
+-------------
+
+- Bumping `requires_ansible` to `>=2.16.0`, since previous ansible-core versions are EoL now.
+
+v10.1.1
+=======
+
+Minor Changes
+-------------
+
+- Adds a new module `eos_vrf_global` in favor of `eos_vrf` legacy module to manage VRF global configurations on Arista EOS devices.
+
+Bugfixes
+--------
+
+- Fixed an issue in the `compare_configs` method where unnecessary negate commands were generated for ACL entries already present in both `have` and `want` configurations.
+- Improved validation logic for ACL sequence numbers and content matching to ensure idempotency.
+- Prevented redundant configuration updates for Access Control Lists.
+- fix facts gathering for ebgp-multihop attribute.
+
 v10.0.1
 =======
 

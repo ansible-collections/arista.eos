@@ -99,7 +99,10 @@ class TestEosAclsModule(TestEosModule):
                                         source=dict(
                                             subnet_address="30.2.0.0/8",
                                         ),
-                                        destination=dict(any="true"),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(eq="50000"),
+                                        ),
                                         log="true",
                                     ),
                                 ],
@@ -112,7 +115,7 @@ class TestEosAclsModule(TestEosModule):
         )
         commands = [
             "ipv6 access-list standard test2",
-            "10 permit tcp 30.2.0.0/8 any established log",
+            "10 permit tcp 30.2.0.0/8 any eq 50000 established log",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -141,6 +144,7 @@ class TestEosAclsModule(TestEosModule):
                                         source=dict(any="true"),
                                         destination=dict(any="true"),
                                         protocol=6,
+                                        sequence=45,
                                     ),
                                 ],
                             ),
@@ -150,7 +154,7 @@ class TestEosAclsModule(TestEosModule):
                 state="merged",
             ),
         )
-        self.execute_module(changed=False, commands=[])
+        result = self.execute_module(changed=False)
 
     def test_eos_acls_replaced(self):
         set_module_args(
@@ -179,7 +183,10 @@ class TestEosAclsModule(TestEosModule):
                                         source=dict(
                                             subnet_address="40.2.0.0/8",
                                         ),
-                                        destination=dict(any="true"),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(eq="50000"),
+                                        ),
                                         log="true",
                                     ),
                                 ],
@@ -210,9 +217,77 @@ class TestEosAclsModule(TestEosModule):
             "no 35",
             "no 45",
             "10 permit ospf 30.2.0.0/8 any log",
-            "20 permit ospf 40.2.0.0/8 any log",
+            "20 permit ospf 40.2.0.0/8 any eq 50000 log",
             "ip access-list test3",
             "50 permit ospf 70.2.0.0/8 any log",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_acls_replaced_standard(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="test-standard",
+                                standard=True,
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        grant="permit",
+                                        source=dict(
+                                            host="198.51.100.1",
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "ip access-list standard test-standard",
+            "10 permit host 198.51.100.1",
+        ]
+        self.execute_module(changed=True, commands=commands)
+
+    def test_eos_acls_replaced_extended(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="test-extended",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        grant="permit",
+                                        protocol="tcp",
+                                        source=dict(
+                                            host="198.51.100.1",
+                                        ),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(eq="80"),
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        commands = [
+            "ip access-list test-extended",
+            "10 permit tcp host 198.51.100.1 any eq 80",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -231,13 +306,13 @@ class TestEosAclsModule(TestEosModule):
                                         grant="permit",
                                         protocol="tcp",
                                         source=dict(
-                                            host="192.168.2.1",
+                                            host="198.51.100.2",
                                             port_protocol=dict(
                                                 eq="50702",
                                             ),
                                         ),
                                         destination=dict(
-                                            host="192.168.1.1",
+                                            host="198.51.100.1",
                                         ),
                                     ),
                                 ],
@@ -250,7 +325,7 @@ class TestEosAclsModule(TestEosModule):
         )
         commands = [
             "ip access-list test2",
-            "11 permit tcp host 192.168.2.1 eq 50702 host 192.168.1.1",
+            "11 permit tcp host 198.51.100.2 eq 50702 host 198.51.100.1",
         ]
         self.execute_module(changed=True, commands=commands)
 
@@ -396,6 +471,61 @@ class TestEosAclsModule(TestEosModule):
         commands = ["no ip access-list test1"]
         self.execute_module(changed=True, commands=commands)
 
+    def test_eos_two_acls_idempotent(self):
+        set_module_args(
+            dict(
+                config=[
+                    dict(
+                        afi="ipv4",
+                        acls=[
+                            dict(
+                                name="TEST-LIST-1",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        remark="test",
+                                    ),
+                                    dict(
+                                        sequence="20",
+                                        grant="permit",
+                                        source=dict(subnet_address="192.0.2.0/24"),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(eq="https"),
+                                        ),
+                                        protocol="tcp",
+                                        log="true",
+                                    ),
+                                ],
+                            ),
+                            dict(
+                                name="TEST-LIST-2",
+                                aces=[
+                                    dict(
+                                        sequence="10",
+                                        remark="test",
+                                    ),
+                                    dict(
+                                        sequence="20",
+                                        grant="permit",
+                                        log="true",
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(eq="https"),
+                                        ),
+                                        protocol="tcp",
+                                        source=dict(subnet_address="192.0.2.0/24"),
+                                    ),
+                                ],
+                            ),
+                        ],
+                    ),
+                ],
+                state="replaced",
+            ),
+        )
+        self.execute_module(changed=False, commands=[], filename="eos_acls_idempotent.cfg")
+
     def test_eos_acls_gathered(self):
         set_module_args(dict(config=[], state="gathered"))
         result = self.execute_module(
@@ -432,7 +562,10 @@ class TestEosAclsModule(TestEosModule):
                                         grant="permit",
                                         sequence="45",
                                         source=dict(any="true"),
-                                        destination=dict(any="true"),
+                                        destination=dict(
+                                            any="true",
+                                            port_protocol=dict(eq="50000"),
+                                        ),
                                         protocol=6,
                                     ),
                                 ],
@@ -443,7 +576,7 @@ class TestEosAclsModule(TestEosModule):
                 state="rendered",
             ),
         )
-        commands = ["ip access-list test1", "45 permit tcp any any"]
+        commands = ["ip access-list test1", "45 permit tcp any any eq 50000"]
         result = self.execute_module(changed=False)
         self.assertEqual(
             sorted(result["rendered"]),

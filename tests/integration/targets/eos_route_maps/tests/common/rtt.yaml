@@ -18,6 +18,8 @@
                 sequence: 10
                 match:
                   router_id: 22
+                  community:
+                    community_list: "community-list"
               - description: "newmap"
                 action: "deny"
                 sequence: 25
@@ -47,7 +49,7 @@
 
     - ansible.builtin.assert:
         that:
-          - baseconfig.commands|length == 12
+          - baseconfig.commands|length == 13
           - baseconfig.changed == true
           - baseconfig.commands|symmetric_difference(merged.commands) == []
           - baseconfig.after|symmetric_difference(ansible_facts['network_resources']['route_maps']) == []

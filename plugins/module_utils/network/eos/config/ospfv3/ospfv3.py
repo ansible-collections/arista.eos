@@ -20,7 +20,6 @@ created.
 
 import re
 
-from ansible.module_utils.six import iteritems
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.rm_base.resource_module import (
     ResourceModule,
 )
@@ -112,7 +111,7 @@ class Ospfv3(ResourceModule):
         # if state is deleted, empty out wantd and set haved to wantd
         if self.state == "deleted":
             h_del = {}
-            for k, v in iteritems(haved):
+            for k, v in haved.items():
                 if k in wantd or not wantd:
                     h_del.update({k: v})
             wantd = {}
@@ -120,11 +119,11 @@ class Ospfv3(ResourceModule):
 
         # remove superfluous config for overridden and deleted
         if self.state in ["overridden", "deleted"]:
-            for k, have in iteritems(haved):
+            for k, have in haved.items():
                 if k not in wantd and have.get("vrf") == k:
                     self.commands.append(self._tmplt.render(have, "vrf", True))
 
-        for k, want in iteritems(wantd):
+        for k, want in wantd.items():
             self._compare(want=want, have=haved.pop(k, {}))
 
     def _compare(self, want, have):
@@ -145,7 +144,7 @@ class Ospfv3(ResourceModule):
             self.commands.append("exit")
 
     def _global_compare(self, want, have):
-        for name, entry in iteritems(want):
+        for name, entry in want.items():
             if name == "timers":
                 if entry.get("lsa") and not isinstance(entry["lsa"], dict):
                     modified = {}
@@ -186,7 +185,7 @@ class Ospfv3(ResourceModule):
                         have={name: h.pop(name, {})},
                     )
         # remove remaining items in have for replaced
-        for name, entry in iteritems(have):
+        for name, entry in have.items():
             if name in ["vrf", "address_family"]:
                 continue
             if not isinstance(entry, dict):
@@ -206,7 +205,7 @@ class Ospfv3(ResourceModule):
     def _af_compare(self, want, have):
         wafs = want.get("address_family", {})
         hafs = have.get("address_family", {})
-        for name, entry in iteritems(wafs):
+        for name, entry in wafs.items():
             begin = len(self.commands)
             if "timers" in entry:
                 if entry["timers"].get("lsa") and not isinstance(
@@ -241,7 +240,7 @@ class Ospfv3(ResourceModule):
                     self._tmplt.render(entry, "address_family", False),
                 )
                 self.commands.append("exit")
-        for name, entry in iteritems(hafs):
+        for name, entry in hafs.items():
             self.addcmd(entry, "address_family", True)
 
     def _rotate_commands(self, begin=0):
@@ -258,9 +257,9 @@ class Ospfv3(ResourceModule):
     def _areas_compare(self, want, have):
         wareas = want.get("areas", {})
         hareas = have.get("areas", {})
-        for name, entry in iteritems(wareas):
+        for name, entry in wareas.items():
             self._area_compare(want=entry, have=hareas.pop(name, {}))
-        for name, entry in iteritems(hareas):
+        for name, entry in hareas.items():
             self._area_compare(want={}, have=entry)
 
     def _area_compare(self, want, have):
@@ -278,7 +277,7 @@ class Ospfv3(ResourceModule):
         for attrib in ["ranges"]:
             wdict = want.get(attrib, {})
             hdict = have.get(attrib, {})
-            for key, entry in iteritems(wdict):
+            for key, entry in wdict.items():
                 if entry != hdict.pop(key, {}):
                     entry["area_id"] = want["area_id"]
                     self.addcmd(entry, "area.{0}".format(attrib), False)
@@ -291,7 +290,7 @@ class Ospfv3(ResourceModule):
         for attrib in ["redistribute"]:
             wdict = get_from_dict(want, attrib) or {}
             hdict = get_from_dict(have, attrib) or {}
-            for key, entry in iteritems(wdict):
+            for key, entry in wdict.items():
                 if entry != hdict.pop(key, {}):
                     self.addcmd(entry, attrib, False)
             # remove remaining items in have for replaced
@@ -299,7 +298,7 @@ class Ospfv3(ResourceModule):
                 self.addcmd(entry, attrib, True)
 
     def _ospf_list_to_dict(self, entry):
-        for name, proc in iteritems(entry):
+        for name, proc in entry.items():
             for area in proc.get("areas", []):
                 if "ranges" in area:
                     range_dict = {}

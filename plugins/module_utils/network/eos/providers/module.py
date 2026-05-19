@@ -6,8 +6,8 @@ from __future__ import absolute_import, division, print_function
 
 
 __metaclass__ = type
-from ansible.module_utils._text import to_text
 from ansible.module_utils.basic import AnsibleModule
+from ansible.module_utils.common.text.converters import to_text
 from ansible.module_utils.connection import Connection
 
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.providers import providers

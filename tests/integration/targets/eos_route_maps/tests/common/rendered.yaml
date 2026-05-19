@@ -16,6 +16,8 @@
                 sequence: 10
                 match:
                   router_id: 22
+                  community:
+                    community_list: "community-list"
               - description: "newmap"
                 action: "deny"
                 sequence: 25
