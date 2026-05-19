@@ -27,7 +27,7 @@ jobs:
     name: "Pre-Configure ${{ matrix.ansible_version }}"
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         ansible_version: ["stable-2.19", "stable-2.20", "stable-2.21", "milestone", "devel"]
     steps:
