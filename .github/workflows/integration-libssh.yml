@@ -1,5 +1,5 @@
 ---
-name: Integration tests 💻
+name: "Integration tests with CML - libssh 💻"
 on:
   pull_request_target:
     branches: [main]
@@ -60,34 +60,37 @@ jobs:
           LAB_NODES_JSON='${{ needs.lab-create.outputs.lab_nodes_json }}'
           CML_HOST='${{ secrets.VIRL_HOST }}'
           INVENTORY_FILE=$(mktemp)
-          DEVICE_IP=$(echo "$LAB_NODES_JSON" | jq -r '.nodes."stable-2.16"')
-          LAST_OCTET=$(echo "$DEVICE_IP" | cut -d . -f 4)
-          SSH_PORT=$((LAST_OCTET + 2000))
           echo "[all:vars]" > $INVENTORY_FILE
           echo "ansible_network_os=arista.eos.eos" >> $INVENTORY_FILE
           echo "ansible_user=ansible" >> $INVENTORY_FILE
           echo "ansible_ssh_pass=admin" >> $INVENTORY_FILE
           echo "ansible_connection=ansible.netcommon.network_cli" >> $INVENTORY_FILE
-          echo "ansible_port=$SSH_PORT" >> $INVENTORY_FILE
           echo "ansible_become=true" >> $INVENTORY_FILE
           echo "ansible_become_method=enable" >> $INVENTORY_FILE
           echo "" >> $INVENTORY_FILE
           echo "[eos]" >> $INVENTORY_FILE
-          echo "$CML_HOST" >> $INVENTORY_FILE
+          for NODE_LABEL in stable-2.19 stable-2.20 stable-2.21 milestone devel; do
+            DEVICE_IP=$(echo "$LAB_NODES_JSON" | jq -r ".nodes.\"$NODE_LABEL\"")
+            if [ "$DEVICE_IP" != "null" ] && [ -n "$DEVICE_IP" ]; then
+              LAST_OCTET=$(echo "$DEVICE_IP" | cut -d . -f 4)
+              SSH_PORT=$((LAST_OCTET + 2000))
+              echo "$CML_HOST ansible_port=$SSH_PORT" >> $INVENTORY_FILE
+            fi
+          done
           echo "inventory_path=$INVENTORY_FILE" >> "$GITHUB_OUTPUT"
-      - name: Apply Pre-Configuration to vEOS Node
+      - name: Apply Pre-Configuration to vEOS Nodes
         env:
           ANSIBLE_HOST_KEY_CHECKING: False
           ANSIBLE_TEST_PASSWORD: ${{ secrets.ANSIBLE_TEST_PASSWORD }}
         run: |
           ansible-playbook pre-config.yaml -i ${{ steps.inventory.outputs.inventory_path }} -v
 
-  integration-tests:
+  integration-tests-libssh:
     needs: [lab-create, pre-configure-lab]
     strategy:
       fail-fast: true
       matrix:
-        ansible_version: ["stable-2.16"]
+        ansible_version: ["stable-2.19", "stable-2.20", "stable-2.21", "milestone", "devel"]
     uses: ansible/ansible-content-actions/.github/workflows/cml_network_integration.yaml@main
     with:
       ansible_version: ${{ matrix.ansible_version }}
@@ -96,7 +99,7 @@ jobs:
 
   lab-destroy:
     if: ${{ always() }}
-    needs: [integration-tests, pre-configure-lab]
+    needs: [integration-tests-libssh, pre-configure-lab]
     uses: ansible/ansible-content-actions/.github/workflows/cml_lab_destroy.yaml@main
     secrets:
       virl_host: ${{ secrets.VIRL_HOST }}

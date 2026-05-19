@@ -2,7 +2,7 @@
 lab:
   description: "Upstream test lab for arista.eos"
   notes: "Upstream test lab for arista.eos"
-  title: arista.eos.eos-stable-2.16
+  title: arista.eos.eos-wip
   version: 0.2.2
 
 annotations:
@@ -26,7 +26,7 @@ annotations:
 
 nodes:
   - boot_disk_size: null
-    configuration: |-
+    configuration: &conf |-
       hostname aristint
       ip domain lookup vrf ansible source-interface Management1
       ip name-server vrf default 192.0.2.1
@@ -74,13 +74,121 @@ nodes:
     cpus: null
     data_volume: null
     hide_links: false
-    id: n3
+    id: n0
     image_definition: null
-    label: stable-2.16
+    label: devel
+    node_definition: veos64-4.24.0F
+    ram: null
+    tags: []
+    x: -1200
+    y: -40
+    interfaces:
+      - id: i0
+        label: management1
+        slot: 0
+        type: physical
+      - id: i1
+        label: Ethernet1
+        slot: 1
+        type: physical
+      - id: i2
+        label: Ethernet2
+        slot: 2
+        type: physical
+  - boot_disk_size: null
+    configuration: *conf
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n1
+    image_definition: null
+    label: milestone
     node_definition: veos64-4.24.0F
     ram: null
     tags: []
     x: -1440
+    y: -40
+    interfaces:
+      - id: i0
+        label: management1
+        slot: 0
+        type: physical
+      - id: i1
+        label: Ethernet1
+        slot: 1
+        type: physical
+      - id: i2
+        label: Ethernet2
+        slot: 2
+        type: physical
+  - boot_disk_size: null
+    configuration: *conf
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n2
+    image_definition: null
+    label: stable-2.20
+    node_definition: veos64-4.24.0F
+    ram: null
+    tags: []
+    x: -1520
+    y: 120
+    interfaces:
+      - id: i0
+        label: management1
+        slot: 0
+        type: physical
+      - id: i1
+        label: Ethernet1
+        slot: 1
+        type: physical
+      - id: i2
+        label: Ethernet2
+        slot: 2
+        type: physical
+  - boot_disk_size: null
+    configuration: *conf
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n3
+    image_definition: null
+    label: stable-2.21
+    node_definition: veos64-4.24.0F
+    ram: null
+    tags: []
+    x: -1440
+    y: 280
+    interfaces:
+      - id: i0
+        label: management1
+        slot: 0
+        type: physical
+      - id: i1
+        label: Ethernet1
+        slot: 1
+        type: physical
+      - id: i2
+        label: Ethernet2
+        slot: 2
+        type: physical
+  - boot_disk_size: null
+    configuration: *conf
+    cpu_limit: null
+    cpus: null
+    data_volume: null
+    hide_links: false
+    id: n4
+    image_definition: null
+    label: stable-2.19
+    node_definition: veos64-4.24.0F
+    ram: null
+    tags: []
+    x: -1200
     y: 280
     interfaces:
       - id: i0
@@ -116,6 +224,8 @@ nodes:
       - { id: i3, label: port3, slot: 3, type: physical }
       - { id: i4, label: port4, slot: 4, type: physical }
       - { id: i5, label: port5, slot: 5, type: physical }
+      - { id: i6, label: port6, slot: 6, type: physical }
+      - { id: i7, label: port7, slot: 7, type: physical }
   - boot_disk_size: null
     configuration: []
     cpu_limit: null
@@ -141,10 +251,38 @@ links:
     i2: i0
     conditioning: {}
     label: unmanaged-switch-0-port0<->ext-conn-0-port
+  - id: l1
+    n1: n5
+    n2: n0
+    i1: i1
+    i2: i0
+    conditioning: {}
+    label: unmanaged-switch-0-port1<->devel-management1
+  - id: l2
+    n1: n5
+    n2: n1
+    i1: i2
+    i2: i0
+    conditioning: {}
+    label: unmanaged-switch-0-port2<->milestone-management1
+  - id: l3
+    n1: n5
+    n2: n2
+    i1: i3
+    i2: i0
+    conditioning: {}
+    label: unmanaged-switch-0-port3<->stable-2.20-management1
   - id: l4
     n1: n5
     n2: n3
     i1: i4
     i2: i0
     conditioning: {}
-    label: unmanaged-switch-0-port4<->stable-2.16-management1
+    label: unmanaged-switch-0-port4<->stable-2.21-management1
+  - id: l5
+    n1: n5
+    n2: n4
+    i1: i5
+    i2: i0
+    conditioning: {}
+    label: unmanaged-switch-0-port5<->stable-2.19-management1
