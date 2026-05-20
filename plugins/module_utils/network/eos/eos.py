@@ -384,7 +384,7 @@ class HttpApi:
             commands.append("rollback clean-config")
 
         for command in config:
-            if command.startswith(("banner", "code unit")):
+            if command.startswith(("banner", "code unit")) or command == "code":
                 multiline_cmd = command
                 multiline_input = []
             elif multiline_cmd:
