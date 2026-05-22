@@ -218,6 +218,50 @@ class TestHttpApiEditConfig(unittest.TestCase):
         self.assertEqual(len(dict_cmds), 0)
         self.assertIn("code command", commands)
 
+    def test_non_multiline_code_forms_not_assembled(self):
+        """`code unit X (delete|replace|insert) block function …`,
+        `code unit X source pulled-from …`, and `code unit X command-tag …`
+        are single-line commands that reorganize or reference existing
+        functions and take no body — none should be assembled as a
+        multiline eAPI block."""
+        for line in [
+            "code unit RCF delete block function foo @LBL",
+            "code unit RCF replace block function foo @LBL",
+            "code unit RCF insert block function foo before @LBL",
+            "code unit RCF insert block function foo after @LBL",
+            "code unit RCF source pulled-from http://example.com/rcf.txt",
+            "code unit RCF command-tag MYTAG",
+        ]:
+            with self.subTest(line=line):
+                config = [
+                    "router general",
+                    "   control-functions",
+                    "      " + line,
+                    "      hardware next-hop fast-failover",
+                ]
+                commands = self._sent_commands(config)
+                dict_cmds = self._dict_commands(commands)
+                self.assertEqual(len(dict_cmds), 0)
+                self.assertIn("      " + line, commands)
+
+    def test_code_block_after_non_multiline_code_line(self):
+        """A non-multiline `code …` line (e.g. delete) must not flip the
+        control functions context off — a real `code unit X` block that
+        follows still gets assembled as multiline."""
+        config = [
+            "router general",
+            "   control-functions",
+            "      code unit RCF delete block function foo @LBL",
+            "      code unit RCF",
+            "         function bar() { return true; }",
+            "      EOF",
+        ]
+        commands = self._sent_commands(config)
+        dict_cmds = self._dict_commands(commands)
+        self.assertEqual(len(dict_cmds), 1)
+        self.assertEqual(dict_cmds[0]["cmd"], "code unit RCF")
+        self.assertIn("      code unit RCF delete block function foo @LBL", commands)
+
     def test_context_exits_after_last_code_block(self):
         """After the final EOF in control-functions, subsequent 'code' lines elsewhere
         in the config are not treated as multiline blocks."""

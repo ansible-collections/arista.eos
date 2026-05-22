@@ -33,6 +33,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import json
 import os
+import re
 import time
 
 from ansible.module_utils.common.text.converters import to_text
@@ -48,6 +49,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 
 _DEVICE_CONNECTION = None
+
+# Only bare `code` or `code unit NAME` opens a multiline RCF block. Other
+# `code …` forms (delete/source/command-tag) are single-line commands
+_MULTILINE_CODE_RE = re.compile(r"^code(?:\s+unit\s+\S+)?$")
 
 
 def get_connection(module):
@@ -417,7 +422,7 @@ class HttpApi:
             # have exited it (any other command).
             if after_eof:
                 after_eof = False
-                in_control_functions = stripped.startswith("code")
+                in_control_functions = bool(_MULTILINE_CODE_RE.match(stripped))
 
             # Track entry into the control-functions context so that subsequent
             # code blocks are recognised as multiline commands.
@@ -425,9 +430,10 @@ class HttpApi:
                 in_control_functions = True
 
             # banner is always a multiline eAPI block; code is multiline only
-            # within control-functions.
+            # within control-functions, and only for the bare `code [unit NAME]`
+            # form that opens a new RCF body.
             if stripped.startswith("banner") or (
-                in_control_functions and stripped.startswith("code")
+                in_control_functions and _MULTILINE_CODE_RE.match(stripped)
             ):
                 multiline_cmd = stripped
                 multiline_input = []
