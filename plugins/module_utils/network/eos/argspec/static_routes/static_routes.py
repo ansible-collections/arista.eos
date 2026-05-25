@@ -27,7 +27,6 @@ The arg spec for the eos_static_routes module
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 
