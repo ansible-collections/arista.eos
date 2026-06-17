@@ -29,7 +29,6 @@
 #
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 import json
 import os
@@ -45,7 +44,6 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
     ComplexList,
     to_list,
 )
-
 
 _DEVICE_CONNECTION = None
 
