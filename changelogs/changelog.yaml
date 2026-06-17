@@ -333,14 +333,6 @@ releases:
     release_date: "2026-05-08"
   12.1.1:
     changes:
-      release_summary: >-
-        Release v12.1.1 standardizes action plugin naming with the ``eos_`` prefix,
-        removes deprecated action plugins for deleted modules, adds runtime routing
-        in ``meta/runtime.yml`` for backward compatibility, and cleans up sanity ignore
-        files for EOL ansible-core versions (2.14-2.22). The preceding v12.1.0 release
-        added the ``content`` parameter to ``eos_config``, dual route-map support in
-        ``eos_bgp_global``, a ``state: replaced`` fix in ``eos_static_routes``, and
-        bumped ``ansible.netcommon`` to ``>=8.5.2``.
       bugfixes:
         - Added runtime routing in ``meta/runtime.yml`` to map old plugin names to the
           new ``eos_``-prefixed ones.
@@ -350,9 +342,28 @@ releases:
         - Renamed all remaining action plugins with ``eos_`` prefix to follow naming
           conventions.
         - Trimmed obsolete entries from remaining sanity ignore files.
+      release_summary:
+        "Release v12.1.1 standardizes action plugin naming with the
+        ``eos_`` prefix, removes deprecated action plugins for deleted modules, adds
+        runtime routing in ``meta/runtime.yml`` for backward compatibility, and cleans
+        up sanity ignore files for EOL ansible-core versions (2.14-2.22). The preceding
+        v12.1.0 release added the ``content`` parameter to ``eos_config``, dual route-map
+        support in ``eos_bgp_global``, a ``state: replaced`` fix in ``eos_static_routes``,
+        and bumped ``ansible.netcommon`` to ``>=8.5.2``."
     fragments:
       - action_plugin.yaml
     release_date: "2026-05-12"
+  12.1.2:
+    changes:
+      bugfixes:
+        - "eos_acls - Fix issue where ``state: replaced`` did not generate the ``standard``
+          keyword for standard ACLs (https://github.com/ansible-collections/arista.eos/issues/608)."
+    fragments:
+      - add_codecov.yml
+      - add_stale_closure_workflow.yml
+      - fix_acl_standard_replaced.yaml
+      - update_integration_libssh_multi_version.yaml
+    release_date: "2026-06-12"
   2.0.0:
     changes:
       bugfixes:
