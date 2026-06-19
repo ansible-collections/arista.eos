@@ -4,6 +4,14 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v12.1.2
+=======
+
+Bugfixes
+--------
+
+- eos_acls - Fix issue where ``state: replaced`` did not generate the ``standard`` keyword for standard ACLs (https://github.com/ansible-collections/arista.eos/issues/608).
+
 v12.1.1
 =======
 
@@ -41,11 +49,7 @@ Deprecated Features
 Bugfixes
 --------
 
-- eos_bgp_global - Support specifying both incoming and outgoing route-maps per BGP neighbor.
-  Added ``route_maps`` (list of dicts with ``name`` and ``direction``) so users can set
-  e.g. ``route-map MAP_IN in`` and ``route-map MAP_OUT out`` for the same neighbor.
-  The single ``route_map`` option is deprecated in favor of ``route_maps``.
-  Fixes https://github.com/ansible-collections/arista.eos/issues/538.
+- eos_bgp_global - Support specifying both incoming and outgoing route-maps per BGP neighbor. Added ``route_maps`` (list of dicts with ``name`` and ``direction``) so users can set e.g. ``route-map MAP_IN in`` and ``route-map MAP_OUT out`` for the same neighbor. The single ``route_map`` option is deprecated in favor of ``route_maps``. Fixes https://github.com/ansible-collections/arista.eos/issues/538.
 - eos_static_routes - Fix issue where ``state: replaced`` did not delete routes not present in the config (https://github.com/ansible-collections/arista.eos/issues/532).
 
 v12.0.1
