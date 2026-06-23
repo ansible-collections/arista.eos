@@ -1,0 +1,3 @@
+---
+trivial:
+  - Update not_hardware.yaml check to boolean

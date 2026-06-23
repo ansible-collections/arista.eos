@@ -15,7 +15,7 @@
       - "'default' in result.ansible_facts.ansible_net_gather_subset"
       - "'interfaces' in result.ansible_facts.ansible_net_gather_subset"
       - "'hardware' not in result.ansible_facts.ansible_net_gather_subset"
-      - result.ansible_facts.ansible_net_interfaces.Management1
+      - result.ansible_facts.ansible_net_interfaces.Management1 is defined
       - result.ansible_facts.ansible_net_filesystems is not defined
 
 - ansible.builtin.debug: msg="END eapi/not_hardware.yaml on connection={{ ansible_connection }}"
