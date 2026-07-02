@@ -33,6 +33,7 @@ from __future__ import absolute_import, division, print_function
 __metaclass__ = type
 import json
 import os
+import re
 import time
 
 from ansible.module_utils.common.text.converters import to_text
@@ -48,6 +49,10 @@ from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.u
 
 
 _DEVICE_CONNECTION = None
+
+# Only bare `code` or `code unit NAME` opens a multiline RCF block. Other
+# `code …` forms (delete/source/command-tag) are single-line commands
+_MULTILINE_CODE_RE = re.compile(r"^code(?:\s+unit\s+\S+)?$")
 
 
 def get_connection(module):
@@ -334,11 +339,24 @@ class HttpApi:
     ):
         diff = {}
 
+        if diff_replace == "config":
+            # NetworkConfig strips lines consisting only of `}` or `;` which breaks
+            # brace-delimited block syntax used `code unit` (Routing Control Function / RCF) syntax.
+            # Bypass NetworkConfig entirely for full config replace and return candidate lines
+            # with only basic filtering.
+            config_lines = [
+                line
+                for line in candidate.split("\n")
+                if line.strip() and not line.strip().startswith("!")
+            ]
+            diff["config_diff"] = "\n".join(config_lines)
+            return diff
+
         # prepare candidate configuration
         candidate_obj = NetworkConfig(indent=3)
         candidate_obj.load(candidate)
 
-        if running and diff_match != "none" and diff_replace != "config":
+        if running and diff_match != "none":
             # running configuration
             running_obj = NetworkConfig(
                 indent=3,
@@ -376,30 +394,52 @@ class HttpApi:
         """
         session = session_name()
         result = {"session": session}
-        banner_cmd = None
-        banner_input = []
-
         commands = ["configure session %s" % session]
         if replace:
             commands.append("rollback clean-config")
 
+        multiline_cmd = None
+        multiline_input = []
+        in_control_functions = False
+        after_eof = False
+
         for command in config:
-            if command.startswith("banner"):
-                banner_cmd = command
-                banner_input = []
-            elif banner_cmd:
-                if command == "EOF":
-                    command = {
-                        "cmd": banner_cmd,
-                        "input": "\n".join(banner_input),
-                    }
-                    banner_cmd = None
-                    commands.append(command)
+            stripped = command.strip()
+
+            # Accumulate lines into the open multiline block until EOF closes it.
+            if multiline_cmd is not None:
+                if stripped == "EOF":
+                    commands.append({"cmd": multiline_cmd, "input": "\n".join(multiline_input)})
+                    multiline_cmd = None
+                    multiline_input = []
+                    after_eof = True
                 else:
-                    banner_input.append(command)
-                    continue
-            else:
-                commands.append(command)
+                    multiline_input.append(command)
+                continue
+
+            # The line immediately after a code block EOF determines whether we
+            # are still inside control-functions (another code block follows) or
+            # have exited it (any other command).
+            if after_eof:
+                after_eof = False
+                in_control_functions = bool(_MULTILINE_CODE_RE.match(stripped))
+
+            # Track entry into the control-functions context so that subsequent
+            # code blocks are recognised as multiline commands.
+            if stripped == "control-functions":
+                in_control_functions = True
+
+            # banner is always a multiline eAPI block; code is multiline only
+            # within control-functions, and only for the bare `code [unit NAME]`
+            # form that opens a new RCF body.
+            if stripped.startswith("banner") or (
+                in_control_functions and _MULTILINE_CODE_RE.match(stripped)
+            ):
+                multiline_cmd = stripped
+                multiline_input = []
+                continue
+
+            commands.append(command)
 
         try:
             response = self._connection.send_request(commands)

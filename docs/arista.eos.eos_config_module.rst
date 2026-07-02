@@ -298,7 +298,7 @@ Parameters
                         </ul>
                 </td>
                 <td>
-                        <div>Instructs the module on the way to perform the configuration on the device.  If the replace argument is set to <em>line</em> then the modified lines are pushed to the device in configuration mode.  If the replace argument is set to <em>block</em> then the entire command block is pushed to the device in configuration mode if any line is not correct.</div>
+                        <div>Instructs the module on the way to perform the configuration on the device.  If the replace argument is set to <em>line</em> then the modified lines are pushed to the device in configuration mode.  If the replace argument is set to <em>block</em> then the entire command block is pushed to the device in configuration mode if any line is not correct.  If the replace argument is set to <em>config</em> then the entire candidate configuration replaces the running configuration using a configuration session with <code>rollback clean-config</code>. This mode must be used when the candidate configuration contains multiline block commands such as <code>banner</code> or <code>code</code>/<code>code unit</code> (Routing Control Functions / RCF), as these require the eAPI <code>cmd</code>/<code>input</code> dict format and cannot be processed by the line-diff engine.</div>
                 </td>
             </tr>
             <tr>
@@ -365,6 +365,7 @@ Notes
    - Tested against Arista EOS 4.24.6F
    - Abbreviated commands are NOT idempotent, see `Network FAQ <../network/user_guide/faq.html#why-do-the-config-modules-always-return-changed-true-with-abbreviated-commands>`_.
    - To ensure idempotency and correct diff the configuration lines in the relevant module options should be similar to how they appear if present in the running configuration on device including the indentation.
+   - Multiline block commands such as ``banner`` and ``code unit`` (Routing Control Functions / RCF) require *replace=config* when using the eAPI transport. In this mode the module bypasses the standard line-diff engine, which cannot preserve brace-delimited syntax, and instead sends the full candidate configuration to the device using a configuration session with ``rollback clean-config``. The block content is automatically packaged into the eAPI ``cmd``/``input`` dict form required by the device.
 
 
 
