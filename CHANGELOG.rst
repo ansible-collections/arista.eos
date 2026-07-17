@@ -4,6 +4,22 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v12.2.0
+=======
+
+Minor Changes
+-------------
+
+- Remediate deprecated ``warnings`` parameter in ``exit_json`` calls by using ``emit_warnings`` from ``ansible.netcommon`` across all arista.eos modules to address deprecation warning from ansible-core 2.23.
+- Remediate deprecated `ansible.module_utils.common._collections_compat` module and replaced with `collections.abc` from the Python standard library.
+- Updated all ``ConfigBase``-based resource modules (``eos_acl_interfaces``, ``eos_acls``, ``eos_interfaces``, ``eos_l2_interfaces``, ``eos_l3_interfaces``, ``eos_lacp``, ``eos_lacp_interfaces``, ``eos_lag_interfaces``, ``eos_lldp_global``, ``eos_lldp_interfaces``, ``eos_ospfv2``, ``eos_static_routes``, ``eos_vlans``) to emit warnings via ``AnsibleModule.warn()`` before calling ``exit_json``.
+- Updated all standalone modules (``eos_banner``, ``eos_command``, ``eos_config``, ``eos_eapi``, ``eos_facts``, ``eos_lldp``, ``eos_user``, ``eos_vrf``) to emit warnings via ``AnsibleModule.warn()`` before calling ``exit_json``.
+
+Bugfixes
+--------
+
+- eos_config - extend multiline eAPI block detection to include ``code`` and ``code unit`` (Routing Control Functions / RCF) in addition to ``banner``; also bypass ``NetworkConfig`` in config-replace mode which was dropping closing brace lines from RCF function bodies, causing EOS compilation failures (https://github.com/ansible-collections/arista.eos/issues/632).
+
 v12.1.2
 =======
 

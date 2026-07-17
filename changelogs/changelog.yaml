@@ -364,6 +364,38 @@ releases:
       - fix_acl_standard_replaced.yaml
       - update_integration_libssh_multi_version.yaml
     release_date: "2026-06-12"
+  12.2.0:
+    changes:
+      bugfixes:
+        - "eos_config - extend multiline eAPI block detection to include ``code`` and
+          ``code unit`` (Routing Control Functions / RCF) in addition to ``banner``;
+          also bypass ``NetworkConfig`` in config-replace mode which was dropping
+          closing brace lines from RCF function bodies, causing EOS compilation failures
+          (https://github.com/ansible-collections/arista.eos/issues/632)."
+      minor_changes:
+        - "Remediate deprecated ``warnings`` parameter in ``exit_json`` calls by using
+          ``emit_warnings`` from ``ansible.netcommon`` across all arista.eos modules to
+          address deprecation warning from ansible-core 2.23."
+        - "Remediate deprecated `ansible.module_utils.common._collections_compat` module
+          and replaced with `collections.abc` from the Python standard library."
+        - "Updated all ``ConfigBase``-based resource modules (``eos_acl_interfaces``,
+          ``eos_acls``, ``eos_interfaces``, ``eos_l2_interfaces``, ``eos_l3_interfaces``,
+          ``eos_lacp``, ``eos_lacp_interfaces``, ``eos_lag_interfaces``,
+          ``eos_lldp_global``, ``eos_lldp_interfaces``, ``eos_ospfv2``,
+          ``eos_static_routes``, ``eos_vlans``) to emit warnings via
+          ``AnsibleModule.warn()`` before calling ``exit_json``."
+        - "Updated all standalone modules (``eos_banner``, ``eos_command``,
+          ``eos_config``, ``eos_eapi``, ``eos_facts``, ``eos_lldp``, ``eos_user``,
+          ``eos_vrf``) to emit warnings via ``AnsibleModule.warn()`` before calling
+          ``exit_json``."
+    fragments:
+      - ci_pull_request_trigger.yaml
+      - disable_auto_release_workflow.yaml
+      - fix-multiline-eapi-code-unit.yaml
+      - fix_integration_test.yml
+      - remediate_deprecated_warnings.yaml
+      - tox_skip_cleanup.yml
+    release_date: "2026-07-17"
   2.0.0:
     changes:
       bugfixes:
