@@ -1,0 +1,2 @@
+trivial:
+  - Remove unused pycrypto from unit test requirements.
