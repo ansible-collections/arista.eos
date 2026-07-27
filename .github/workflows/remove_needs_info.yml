@@ -8,4 +8,3 @@ on:  # yamllint disable-line rule:truthy
 jobs:
   remove_label:
     uses: ansible/ansible-content-actions/.github/workflows/remove_needs_info.yml@main
-
