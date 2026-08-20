@@ -74,7 +74,7 @@ class TerminalModule(TerminalBase):
         cmd = {"command": "enable"}
         if passwd:
             cmd["prompt"] = to_text(
-                r"[\r\n]?[Pp]assword: $",
+                r"[\r\n]?[Pp]assword: ?$",
                 errors="surrogate_or_strict",
             )
             cmd["answer"] = passwd

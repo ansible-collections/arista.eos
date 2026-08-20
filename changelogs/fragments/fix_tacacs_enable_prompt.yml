@@ -1,0 +1,2 @@
+bugfixes:
+  - eos terminal plugin - Fix on_become enable prompt failing with TACACS+ authentication due to missing trailing space in password prompt (https://github.com/ansible-collections/arista.eos/issues/665).
