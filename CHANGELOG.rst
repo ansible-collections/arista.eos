@@ -4,6 +4,15 @@ Arista Eos Collection Release Notes
 
 .. contents:: Topics
 
+v12.3.0
+=======
+
+Bugfixes
+--------
+
+- eos terminal plugin - Fix on_become enable prompt failing with TACACS+ authentication due to missing trailing space in password prompt (https://github.com/ansible-collections/arista.eos/issues/665).
+- eos_acls - Fix state replaced putting ACEs under wrong ACL context when multiple ACLs require changes and a new ACL sorts alphabetically before an existing one (https://github.com/ansible-collections/arista.eos/issues/643).
+
 v12.2.0
 =======
 
