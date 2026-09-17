@@ -1,2 +1,0 @@
-bugfixes:
-  - eos_acls - Fix state replaced putting ACEs under wrong ACL context when multiple ACLs require changes and a new ACL sorts alphabetically before an existing one (https://github.com/ansible-collections/arista.eos/issues/643).
