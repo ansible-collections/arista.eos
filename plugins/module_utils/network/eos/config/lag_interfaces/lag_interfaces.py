@@ -14,7 +14,6 @@ from __future__ import absolute_import, division, print_function
 
 import re
 
-
 __metaclass__ = type
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.cfg.base import (
