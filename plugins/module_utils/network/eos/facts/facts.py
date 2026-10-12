@@ -9,7 +9,6 @@ calls the appropriate facts gathering function
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 from ansible_collections.ansible.netcommon.plugins.module_utils.network.common.facts.facts import (
@@ -94,7 +93,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.vlans
 from ansible_collections.arista.eos.plugins.module_utils.network.eos.facts.vrf_global.vrf_global import (
     Vrf_globalFacts,
 )
-
 
 FACT_LEGACY_SUBSETS = dict(
     default=Default,

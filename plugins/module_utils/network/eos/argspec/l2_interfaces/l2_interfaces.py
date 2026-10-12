@@ -26,7 +26,6 @@ The arg spec for the eos_l2_interfaces module
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 
