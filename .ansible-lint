@@ -1,2 +1,7 @@
----
 profile: production
+exclude_paths:
+  - changelogs
+  - docs
+  - .github
+warn_list:
+  - no-log-password
