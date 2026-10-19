@@ -17,7 +17,6 @@
 #
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 
@@ -139,7 +138,6 @@ from ansible_collections.arista.eos.plugins.module_utils.network.eos.eos import 
     get_config,
     load_config,
 )
-
 
 _CONFIGURED_VRFS = None
 
