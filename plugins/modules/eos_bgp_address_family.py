@@ -28,7 +28,6 @@ The module file for eos_bgp_address_family
 
 from __future__ import absolute_import, division, print_function
 
-
 __metaclass__ = type
 
 DOCUMENTATION = """
