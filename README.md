@@ -9,15 +9,19 @@ The Ansible Arista EOS collection includes a variety of Ansible content to help 
 
 This collection has been tested against Arista EOS 4.24.6F.
 
+## Requirements
+
+- Python 3.10 or later.
+- The `ansible.netcommon` collection, version 8.5.2 or later.
+- The Python packages `ansible-pylibssh` and `paramiko`, listed in the collection's [requirements.txt](https://github.com/ansible-collections/arista.eos/blob/main/requirements.txt).
+
+`ansible-pylibssh` provides the libssh backend for `ansible.netcommon.network_cli`. The `paramiko` backend is now deprecated. Refer to the following [forum post](https://forum.ansible.com/t/deprecation-notice-paramiko-deprecated-for-network-cli-migrate-to-libssh-ansible-pylibssh/45782) for more information.
+
 ## Support
 
-As a Red Hat Ansible [Certified Content](https://catalog.redhat.com/software/search?target_platforms=Red%20Hat%20Ansible%20Automation%20Platform), this collection is entitled to [support](https://access.redhat.com/support/) through [Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible) (AAP).
+As Red Hat Ansible [Certified Content](https://catalog.redhat.com/software/search?target_platforms=Red%20Hat%20Ansible%20Automation%20Platform), it is entitled to [support](https://access.redhat.com/support/) through [Ansible Automation Platform](https://www.redhat.com/en/technologies/management/ansible) (AAP). Red Hat customers can open a support case by selecting the **Create issue** button in the top right corner of this collection's page in Automation Hub.
 
-If a support case cannot be opened with Red Hat and the collection has been obtained either from [Galaxy](https://galaxy.ansible.com/ui/) or [GitHub](https://github.com/ansible-collections/arista.eos), there is community support available at no charge.
-
-You can join us on [#network:ansible.com](https://matrix.to/#/#network:ansible.com) room or the [Ansible Forum Network Working Group](https://forum.ansible.com/g/network-wg).
-
-For more information you can check the communication section below.
+If you obtained this collection from [Ansible Galaxy](https://galaxy.ansible.com/ui/) or [GitHub](https://github.com/ansible-collections/arista.eos), community support is available at no charge. Join us on the [#network:ansible.com Matrix room](https://matrix.to/#/#network:ansible.com) or the [Ansible Forum Network Working Group](https://forum.ansible.com/g/network-wg).
 
 ## Communication
 
@@ -101,17 +105,53 @@ Click the ``Content`` button to see the list of content included in this collect
 
 ## Installing this collection
 
-You can install the Arista EOS collection with the Ansible Galaxy CLI:
+Install the certified Arista EOS collection from Red Hat Ansible Automation Hub. Access to certified content requires a Red Hat account with an active Ansible Automation Platform subscription and an Automation Hub offline token. In the Red Hat Hybrid Cloud Console, go to **Automation Hub > Connect Hub**, load the offline token, and store it securely. See the [Red Hat token management instructions](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.6/secure-token_management_hub).
 
-    ansible-galaxy collection install arista.eos
+Configure your `ansible.cfg` to use the hosted Automation Hub service:
 
-You can also include it in a `requirements.yml` file and install it with `ansible-galaxy collection install -r requirements.yml`, using the format:
+```ini
+[galaxy]
+server_list = automation_hub
+
+[galaxy_server.automation_hub]
+url = https://console.redhat.com/api/automation-hub/content/published/
+auth_url = https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token
+token = <your_automation_hub_token>
+```
+
+Keep the token secret and out of source control. Then install the collection:
+
+```bash
+ansible-galaxy collection install arista.eos --server automation_hub
+```
+
+For a `requirements.yml` file, identify Automation Hub as the source:
+
+```yaml
+---
+collections:
+  - name: arista.eos
+    source: automation_hub
+```
+
+Install the requirements with `ansible-galaxy collection install -r requirements.yml`.
+
+### Installing from Ansible Galaxy for community use
+
+For community use outside Red Hat supported environments, install the collection from Ansible Galaxy:
+
+```bash
+ansible-galaxy collection install arista.eos
+```
+
+You can also add it to a `requirements.yml` file:
 
 ```yaml
 ---
 collections:
   - name: arista.eos
 ```
+
 ## Using this collection
 
 
