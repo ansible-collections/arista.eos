@@ -1,0 +1,4 @@
+---
+trivial:
+  - Fix sanity runs for devel and milestone by adding
+    ignore-2.23 file in tests/sanity
