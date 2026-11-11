@@ -32,7 +32,7 @@ jobs:
         ansible_version: ["stable-2.19", "stable-2.20", "stable-2.21", "milestone", "devel"]
     steps:
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
 
