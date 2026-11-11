@@ -3093,7 +3093,7 @@ Examples
                 vrf: "vrf01"
                 redistribute:
                   - routes: "connected"
-        state: overriden
+        state: overridden
 
     # Task output:
     # ------------
