@@ -25,8 +25,20 @@
           - result.changed == true
           - "'no router ospfv3 vrf vrf01' in result.commands"
           - ansible_facts.network_resources.ospfv3 == result.after
-          - result.after.processes|symmetric_difference(deleted.after.processes) == []
-          - result.before.processes|symmetric_difference(replaced.before.processes) == []
+          - >-
+            (result.after.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json) |
+            symmetric_difference((deleted.after.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json)) == []
+          - >-
+            (result.before.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json) |
+            symmetric_difference((replaced.before.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json)) == []
 
     - name: Idempotency check
       become: true

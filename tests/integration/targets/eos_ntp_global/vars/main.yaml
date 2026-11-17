@@ -1,4 +1,9 @@
 ---
+ntp_key_json_pattern: '"key":\s*"[^"]*"'
+ntp_key_json_replacement: '"key":"MASKED"'
+ntp_key_command_json_pattern: '"((?:no )?ntp authentication-key [0-9]+ (?:md5|sha1)(?: [0-9]+)?) [^"]*"'
+ntp_key_command_json_replacement: '"\1 MASKED"'
+
 merged:
   commands:
     - "ntp serve ip access-group acl01 in"

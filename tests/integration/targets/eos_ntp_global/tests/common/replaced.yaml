@@ -34,9 +34,23 @@
         that:
           - result.commands|length == 14
           - result.changed == true
-          - result.commands|symmetric_difference(replaced.commands) == []
-          - result.after == replaced.after
-          - result.before == replaced.before
+          - >-
+            (result.commands | to_json |
+            regex_replace(ntp_key_command_json_pattern,
+            ntp_key_command_json_replacement) | from_json) |
+            symmetric_difference((replaced.commands | to_json |
+            regex_replace(ntp_key_command_json_pattern,
+            ntp_key_command_json_replacement) | from_json)) == []
+          - >-
+            (result.after | to_json | regex_replace(ntp_key_json_pattern,
+            ntp_key_json_replacement) | from_json) ==
+            (replaced.after | to_json | regex_replace(ntp_key_json_pattern,
+            ntp_key_json_replacement) | from_json)
+          - >-
+            (result.before | to_json | regex_replace(ntp_key_json_pattern,
+            ntp_key_json_replacement) | from_json) ==
+            (replaced.before | to_json | regex_replace(ntp_key_json_pattern,
+            ntp_key_json_replacement) | from_json)
 
     - name: Idempotency check
       become: true

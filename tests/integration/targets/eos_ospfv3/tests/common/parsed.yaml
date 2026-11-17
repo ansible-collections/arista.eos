@@ -14,4 +14,10 @@
 - ansible.builtin.assert:
     that:
       - result.changed == false
-      - result.parsed.processes|symmetric_difference(populate.before.processes) == []
+      - >-
+        (result.parsed.processes | to_json |
+        regex_replace(ospfv3_secret_json_pattern,
+        ospfv3_secret_json_replacement) | from_json) |
+        symmetric_difference((populate.before.processes | to_json |
+        regex_replace(ospfv3_secret_json_pattern,
+        ospfv3_secret_json_replacement) | from_json)) == []

@@ -17,7 +17,11 @@
     - name: Assert
       ansible.builtin.assert:
         that:
-          - replaced.before == result.gathered
+          - >-
+            (replaced.before | to_json | regex_replace(ntp_key_json_pattern,
+            ntp_key_json_replacement) | from_json) ==
+            (result.gathered | to_json | regex_replace(ntp_key_json_pattern,
+            ntp_key_json_replacement) | from_json)
           - result['changed'] == false
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

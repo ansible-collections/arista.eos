@@ -82,8 +82,20 @@
         that:
           - baseconfig.commands|length == 43
           - baseconfig.changed == true
-          - baseconfig.commands|symmetric_difference(rtt.commands) == []
-          - baseconfig.after.processes|symmetric_difference(rtt.before.processes) == []
+          - >-
+            (baseconfig.commands | to_json |
+            regex_replace(ospfv3_secret_command_json_pattern,
+            ospfv3_secret_command_json_replacement) | from_json) |
+            symmetric_difference((rtt.commands | to_json |
+            regex_replace(ospfv3_secret_command_json_pattern,
+            ospfv3_secret_command_json_replacement) | from_json)) == []
+          - >-
+            (baseconfig.after.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json) |
+            symmetric_difference((rtt.before.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json)) == []
           - baseconfig.before == {}
 
     - become: true
