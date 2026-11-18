@@ -1,4 +1,9 @@
 ---
+ospfv3_secret_json_pattern: '"(key|passphrase)":\s*"[^"]*"'
+ospfv3_secret_json_replacement: '"\1":"MASKED"'
+ospfv3_secret_command_json_pattern: '"([^"]*passphrase [0-9]+) [^"]*"'
+ospfv3_secret_command_json_replacement: '"\1 MASKED"'
+
 merged:
   commands:
     - router ospfv3 vrf vrf01

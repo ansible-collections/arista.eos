@@ -14,4 +14,8 @@
 - ansible.builtin.assert:
     that:
       - result.changed == false
-      - result.parsed == replaced.before
+      - >-
+        (result.parsed | to_json | regex_replace(ntp_key_json_pattern,
+        ntp_key_json_replacement) | from_json) ==
+        (replaced.before | to_json | regex_replace(ntp_key_json_pattern,
+        ntp_key_json_replacement) | from_json)

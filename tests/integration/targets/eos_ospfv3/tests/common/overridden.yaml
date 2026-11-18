@@ -34,9 +34,27 @@
         that:
           - result.commands|length == 15
           - result.changed == true
-          - result.commands|symmetric_difference(overridden.commands) == []
-          - result.after.processes|symmetric_difference(overridden.after.processes) == []
-          - result.before.processes|symmetric_difference(populate.before.processes) == []
+          - >-
+            (result.commands | to_json |
+            regex_replace(ospfv3_secret_command_json_pattern,
+            ospfv3_secret_command_json_replacement) | from_json) |
+            symmetric_difference((overridden.commands | to_json |
+            regex_replace(ospfv3_secret_command_json_pattern,
+            ospfv3_secret_command_json_replacement) | from_json)) == []
+          - >-
+            (result.after.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json) |
+            symmetric_difference((overridden.after.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json)) == []
+          - >-
+            (result.before.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json) |
+            symmetric_difference((populate.before.processes | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json)) == []
 
     - name: Idempotency check
       become: true

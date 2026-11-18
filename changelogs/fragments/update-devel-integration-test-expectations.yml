@@ -1,0 +1,3 @@
+---
+trivial:
+  - Normalize generated authentication fields in NTP and OSPFv3 integration assertions for Ansible devel.

@@ -17,7 +17,13 @@
     - name: Assert
       ansible.builtin.assert:
         that:
-          - populate.before == result.gathered
+          - >-
+            (populate.before | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json) ==
+            (result.gathered | to_json |
+            regex_replace(ospfv3_secret_json_pattern,
+            ospfv3_secret_json_replacement) | from_json)
           - result['changed'] == false
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

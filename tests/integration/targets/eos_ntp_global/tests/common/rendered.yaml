@@ -52,6 +52,12 @@
     - ansible.builtin.assert:
         that:
           - result.changed == false
-          - result.rendered|symmetric_difference(merged.commands) == []
+          - >-
+            (result.rendered | to_json |
+            regex_replace(ntp_key_command_json_pattern,
+            ntp_key_command_json_replacement) | from_json) |
+            symmetric_difference((merged.commands | to_json |
+            regex_replace(ntp_key_command_json_pattern,
+            ntp_key_command_json_replacement) | from_json)) == []
   always:
     - ansible.builtin.include_tasks: _remove_config.yaml

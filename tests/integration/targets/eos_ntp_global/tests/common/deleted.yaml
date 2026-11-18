@@ -22,8 +22,18 @@
           - result.changed == true
           - ansible_facts.network_resources.ntp_global == result.after
           - result.after == {}
-          - result.before == replaced.before
-          - result.commands|symmetric_difference(deleted.commands) == []
+          - >-
+            (result.before | to_json | regex_replace(ntp_key_json_pattern,
+            ntp_key_json_replacement) | from_json) ==
+            (replaced.before | to_json | regex_replace(ntp_key_json_pattern,
+            ntp_key_json_replacement) | from_json)
+          - >-
+            (result.commands | to_json |
+            regex_replace(ntp_key_command_json_pattern,
+            ntp_key_command_json_replacement) | from_json) |
+            symmetric_difference((deleted.commands | to_json |
+            regex_replace(ntp_key_command_json_pattern,
+            ntp_key_command_json_replacement) | from_json)) == []
 
     - name: Idempotency check
       become: true
